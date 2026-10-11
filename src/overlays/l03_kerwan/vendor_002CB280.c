@@ -4,7 +4,6 @@
 #include "hero.h"
 #include "moby.h"
 
-typedef u32 u128_CB280 __attribute__((mode(TI), aligned(16)));
 struct Manip;
 struct GifEntry;
 struct AnimSeq;
@@ -444,7 +443,6 @@ void func_L03_002CBBD0(struct Moby *m) {
     m->unkA4 = 0xFF;
     func_L00_0025E590(m, v->anim);
 }
-typedef u32 u128_CD270 __attribute__((mode(TI), aligned(16)));
 struct Manip;
 struct GifEntry;
 struct AnimSeq;
@@ -704,7 +702,6 @@ void func_L03_002D44C8(void *arg, int mode) {
         try_set_help_message(8, 0xBC9);
     }
 }
-typedef u32 u128_D4560 __attribute__((mode(TI), aligned(16)));
 struct Manip;
 struct GifEntry;
 struct AnimSeq;
@@ -1058,7 +1055,6 @@ char *func_L03_002D5650(char *a, char *pos, char *parent, int n, float f0, float
     }
     return m;
 }
-typedef u32 u128_D5790 __attribute__((mode(TI), aligned(16)));
 struct Manip_D5790;
 struct GifEntry_D5790;
 struct AnimSeq_D5790;
@@ -1280,7 +1276,6 @@ void func_L03_002DC3E8(struct Moby *m) {
     func_001F9BF0_DC3E8(a, &m->pos, old);
     func_L00_002617B0_DC3E8(v + 0x20, a, &m->rot, &m->rot);
 }
-typedef u32 u128_DC560 __attribute__((mode(TI), aligned(16)));
 struct Manip_DC560;
 struct GifEntry_DC560;
 struct AnimSeq_DC560;
@@ -1325,7 +1320,6 @@ struct Moby *func_L03_002DC560_r(struct RailPath_DC560 *path, float dist) {
     }
     return m;
 }
-typedef u32 u128_DC648 __attribute__((mode(TI), aligned(16)));
 struct Manip;
 struct GifEntry;
 struct AnimSeq;
@@ -1918,7 +1912,6 @@ void func_L03_002E08E8(Moby *moby) {
         break;
     }
 }
-typedef u32 u128_E1598 __attribute__((mode(TI), aligned(16)));
 extern s32 D_L03_0015F6A8 MACRO_ADDR;
 struct L03Cutscene {
     char pad0[0x30];
@@ -2004,7 +1997,6 @@ void func_L03_002E3D10(char *m) {
         break;
     }
 }
-typedef u32 u128_2ECBA8 __attribute__((mode(TI), aligned(16)));
 extern Hero D_0013F450_2ECBA8 __asm__("D_0013F450");
 extern void func_001F9BD8_2ECBA8(void *, void *, void *) __asm__("func_001F9BD8");
 extern void func_001F9CA0_2ECBA8(void *, void *, void *) __asm__("func_001F9CA0");

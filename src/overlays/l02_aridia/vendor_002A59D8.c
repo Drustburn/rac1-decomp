@@ -886,7 +886,6 @@ void func_L02_002D8B80(unsigned char *moby) {
     }
     func_L00_0025B178(moby);
 }
-typedef u32 u128_D99F0 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
@@ -1810,7 +1809,6 @@ void func_L02_002E0B68(char *moby) {
   }
  }
 }
-typedef u32 u128_E0D80 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */

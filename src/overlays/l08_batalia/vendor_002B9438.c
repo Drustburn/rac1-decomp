@@ -509,7 +509,6 @@ void func_L08_002D6C58(char *moby, int a1, int count) {
 INCLUDE_ASM("asm/overlays", func_L08_002D7010);
 INCLUDE_ASM("asm/overlays", func_L08_002D7758);
 INCLUDE_ASM("asm/overlays", func_L08_002DB438);
-typedef u32 u128_DB468 __attribute__((mode(TI), aligned(16)));
 extern struct Hero D_0013F450_DB468 __asm__("D_0013F450");
 extern short D_L08_00161A00_DB468 SDATA(D_L08_00161A00);
 extern float D_L08_001D7320_DB468[4] __asm__("D_L08_001D7320");
@@ -585,7 +584,6 @@ void func_L08_002DB468(struct Moby *moby) {
             *(short *)(q + 0xA) = func_001FA898_DB468(func_001F9878_DB468(func_002140F8_DB468(30.0f, 60.0f)));
     }
 }
-typedef u32 u128_DB768 __attribute__((mode(TI), aligned(16)));
 extern float func_00214158(void);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);

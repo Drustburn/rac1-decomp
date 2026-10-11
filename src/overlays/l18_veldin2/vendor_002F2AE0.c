@@ -2178,7 +2178,6 @@ void func_L18_002F7DC0(char *m) {
     func_L18_002F7CD8(m, t, v);
 }
 typedef struct { f32 x; f32 y; f32 z; } Vec3_2F7F00;
-typedef int u128_2F7F00 __attribute__((mode(TI)));
 /* Pvars of the boss while it circles its arena node. */
 typedef struct {
     u8 pad0[0x344];

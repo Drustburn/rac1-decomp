@@ -810,7 +810,6 @@ void func_L06_002F69D0(Moby *m) {
 INCLUDE_ASM("asm/overlays", func_L06_002F71A8);
 INCLUDE_ASM("asm/overlays", func_L06_002F78A0);
 INCLUDE_ASM("asm/overlays", func_L06_002F8200);
-typedef u32 u128_F8430 __attribute__((mode(TI), aligned(16)));
 extern void func_001F9C30(void *, void *, f32);
 extern void func_L00_00258DB0_F8430(void *, f32, f32) __asm__("func_L00_00258DB0");
 extern f32 D_L06_00161EA0_F8430 SDATA(D_L06_00161EA0);

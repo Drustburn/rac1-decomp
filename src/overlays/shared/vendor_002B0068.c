@@ -4,7 +4,6 @@
 #include "hero.h"
 #include "moby.h"
 
-typedef u32 u128_B0068 __attribute__((mode(TI), aligned(16)));
 extern struct Hero D_0013F450_B0068 __asm__("D_0013F450");
 typedef int OvlQuad_B0068 __attribute__((mode(TI)));
 typedef struct {

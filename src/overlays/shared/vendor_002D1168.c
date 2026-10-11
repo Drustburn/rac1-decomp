@@ -1207,7 +1207,6 @@ void func_L00_002D6CE0_r(Moby *m) {
         }
     }
 }
-typedef unsigned int u128_6e38 __attribute__((mode(TI), aligned(16)));
 
 typedef struct {
     u8 p0[0x60];

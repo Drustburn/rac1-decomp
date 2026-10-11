@@ -81,7 +81,6 @@ INCLUDE_ASM("asm/overlays", func_L00_00262BC0);
 LINKER_REMNANT("asm/overlays", func_L00_00262DE8);
 INCLUDE_ASM("asm/overlays", func_L00_00262DF0);
 INCLUDE_ASM("asm/overlays", func_L00_002630A8);
-typedef u32 u128_633D8 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     s32 count; /* 0x00 */
     u8 pad4[0xC];
@@ -334,7 +333,6 @@ void func_L00_00263DB0(int a) {
     ShowBanner(t.v[a], scale_ticks(0x49C));
 }
 LINKER_REMNANT("asm/overlays", func_L00_00264130);
-typedef u32 u128_64140 __attribute__((mode(TI), aligned(16)));
 extern struct Hero D_0013F450;
 typedef struct MobyBound {
     u8 pad0[0xA];

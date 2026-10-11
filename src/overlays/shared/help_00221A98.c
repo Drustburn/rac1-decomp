@@ -5,7 +5,6 @@
 #include "moby.h"
 
 INCLUDE_ASM("asm/overlays", func_L00_00221A98);
-typedef u32 u128_21D50 __attribute__((mode(TI), aligned(16)));
 struct Moby;
 extern struct Hero D_0013F450_21D50 __asm__("D_0013F450");
 struct Manip_21D50;

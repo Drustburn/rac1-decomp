@@ -622,7 +622,6 @@ unsigned char *func_L07_0030C918(void *pos, float *dir, int a, int b) {
     }
     return m;
 }
-typedef int u128_30CA88 __attribute__((mode(TI)));
 /* Pvars of a flying bolt. */
 typedef struct {
     unsigned char pad0[0x30];
@@ -732,7 +731,6 @@ char *func_L07_0030CE70(char *pos, char *vec, int c, short d) {
     }
     return m;
 }
-typedef u32 u128_0CFA8 __attribute__((mode(TI), aligned(16)));
 struct AnimSeq_0CFA8;
 typedef struct {
     char _pad00[0x10];

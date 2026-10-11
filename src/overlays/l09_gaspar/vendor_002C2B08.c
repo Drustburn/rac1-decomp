@@ -428,7 +428,6 @@ char *func_L09_002EBA58(void) {
     }
     return moby;
 }
-typedef u32 u128_EBD30 __attribute__((mode(TI), aligned(16)));
 struct Manip_EBD30;
 struct GifEntry_EBD30;
 struct AnimSeq_EBD30;

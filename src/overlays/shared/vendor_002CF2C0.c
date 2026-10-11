@@ -53,7 +53,6 @@ typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
 } AnimSeq;
-typedef u32 u128_F6588 __attribute__((mode(TI), aligned(16)));
 extern struct Hero D_0013F450_F6588 __asm__("D_0013F450");
 typedef struct {
     s32 path; /* -1, or an index into D_L05_001B0930 */
@@ -759,7 +758,6 @@ void func_L05_0032AA50(char *m) {
 }
 void func_L05_0032A9D0_32ABF0(float a, float b, float c, float d, float e, float f, float g, float h) __asm__("func_L05_0032A9D0");
 void func_L05_0032AA50_32ABF0(char *m) __asm__("func_L05_0032AA50");
-typedef u32 u128_32ABF0 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     Vec4 pos; /* 0x00 */
     u8 pad10[0x20];

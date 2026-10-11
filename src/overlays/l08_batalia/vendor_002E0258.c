@@ -959,7 +959,6 @@ void func_L08_002E33F0(char *moby) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L08_002E35C8);
-typedef u32 u128_E3860 __attribute__((mode(TI), aligned(16)));
 void func_L08_002E30E8_E3860(struct Moby *moby) __asm__("func_L08_002E30E8");
 extern f32 func_L00_001FF860(f32, f32);
 typedef struct {
@@ -1839,7 +1838,6 @@ void func_L08_002E9F78(char *a) {
         if (m != 0) func_L00_00251E30(m);
     }
 }
-typedef u32 u128_EA0A8 __attribute__((mode(TI), aligned(16)));
 extern void func_L00_00250800_EA0A8(void *, int, void *) __asm__("func_L00_00250800");
 void func_L08_002E9B60_EA0A8(char *moby) __asm__("func_L08_002E9B60");
 extern float func_001FA748_EA0A8(float, float) __asm__("func_001FA748");

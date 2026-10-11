@@ -1259,7 +1259,6 @@ void func_L02_002F0458(Moby *m) {
     }
 }
 LINKER_REMNANT("asm/overlays", func_L02_002F9E40);
-typedef u32 u128_F9E50 __attribute__((mode(TI), aligned(16)));
 struct Moby;
 extern struct Hero D_0013F450_F9E50 __asm__("D_0013F450");
 struct Manip_F9E50;

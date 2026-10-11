@@ -1229,7 +1229,6 @@ void func_L06_00305468(char *moby)
 void func_L06_003054C8(char *arg) {
     arg[0x20] = 5;
 }
-typedef int u128_3054D8 __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_3054D8;
 typedef struct Data_3054D8 {
     /* 0x00 */ int cut;
