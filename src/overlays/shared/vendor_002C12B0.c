@@ -30,13 +30,6 @@ float func_00214D28(void *, float, float);
 void func_0020D678(void *);
 
 typedef struct {
-    char pad0[0x10];
-    float pos[4];
-    unsigned char state;
-    char pad21[0x1F];
-    float rot[4];
-} Moby_C2A80;
-typedef struct {
     char pad0[0x28];
     float f28;
 } Cam_C2A80;
@@ -48,9 +41,9 @@ void func_L00_002C2A80(void *mv) {
     switch (m[0x20]) {
     case 0:
         func_00214358_C2A80(m + 0x10, 0, 0.5f);
-        ((Moby_C2A80 *)m)->rot[0] = 1.5707964f;
-        ((Moby_C2A80 *)m)->rot[1] = 3.1415927f;
-        ((Moby_C2A80 *)m)->pos[2] = D_L00_00173F40_C2A80.f28 + D_L00_001618F8_C2A80;
+        ((Moby *)m)->rot.x = 1.5707964f;
+        ((Moby *)m)->rot.y = 3.1415927f;
+        ((Moby *)m)->pos.z = D_L00_00173F40_C2A80.f28 + D_L00_001618F8_C2A80;
         m[0x20] = 1;
         break;
     case 1: {
@@ -907,9 +900,6 @@ struct Hero {
     s16 unk22FC; /* 0x22FC */
 };
 extern struct Hero D_0013F450_C4E00 __asm__("D_0013F450");
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 typedef struct {
     u8 pad0[0x18];
     s32 moby; /* 0x18: passed to FUN_002141f8 (reads moby+0x34, moby+0x78); 0 when no moby was hit */
@@ -1276,28 +1266,14 @@ void func_L00_002C7128(char *m) {
 typedef unsigned int Q_2C74B8 __attribute__((mode(TI)));
 typedef union { struct { float x, y, z, w; } f; Q_2C74B8 q; } V_2C74B8 __attribute__((aligned(16)));
 typedef struct { V_2C74B8 row[3]; } M3_2C74B8;
-typedef struct Moby_2C74B8 Moby_2C74B8;
 typedef struct HookData_2C74B8 { char pad0[4]; float speed; } HookData_2C74B8;
 typedef struct Data_2C74B8 {
     char pad0[0x14];
-    Moby_2C74B8 *hook;
+    Moby *hook;
     float spin;
     float scale;
     float size;
 } Data_2C74B8;
-struct Moby_2C74B8 {
-    char pad0[0x10];
-    V_2C74B8 pos;
-    unsigned char state;
-    char pad21[0x32];
-    unsigned char anim_state;
-    char pad54[0x1C];
-    unsigned char anim_flags;
-    char pad71[7];
-    void *data;
-    char pad7C[0x44];
-    M3_2C74B8 rot;
-};
 typedef struct Hero_2C74B8 {
     char pad0[0x80];
     V_2C74B8 pos;
@@ -1312,15 +1288,15 @@ typedef struct Hero_2C74B8 {
     char pad578[0x3C];
     int f5B4;
     char pad5B8[0x3AC];
-    Moby_2C74B8 *f964;
+    Moby *f964;
     int f968;
     char pad96C[0xC];
     int f978;
     char pad97C[0xC];
     int f988;
     char pad98C[4];
-    Moby_2C74B8 *f990;
-    Moby_2C74B8 *f994;
+    Moby *f990;
+    Moby *f994;
     char pad998[4];
     short f99C;
     char pad99E[0x702];
@@ -1342,7 +1318,7 @@ extern float D_0015EE6C_2C74B8 __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_0015EE60_2C74B8 __asm__("D_0015EE60") MACRO_ADDR;
 
 extern int func_L00_00222B80_2C74B8(int, int) __asm__("func_L00_00222B80");
-extern Moby_2C74B8 *func_L00_002C82E8_2C74B8(void *, float) __asm__("func_L00_002C82E8");
+extern Moby *func_L00_002C82E8_2C74B8(void *, float) __asm__("func_L00_002C82E8");
 extern void func_L00_001EE2E0_2C74B8(int, int, float, void *, int, float, int, float, int) __asm__("func_L00_001EE2E0");
 extern int func_001F9850_2C74B8(int) __asm__("func_001F9850");
 extern void func_00213DE0_2C74B8(void *, int, int, int) __asm__("func_00213DE0");
@@ -1361,8 +1337,8 @@ extern void func_L00_002C7128_2C74B8(char *) __asm__("func_L00_002C7128");
 
 /* Swingshot (class 208) update: keeps the hook at the glove, shows the targets, fires the hook to the swing target
    or the grind target, swings the hero, and reels the hook back. */
-void func_L00_002C74B8_r(Moby_2C74B8 *m) __asm__("func_L00_002C74B8");
-void func_L00_002C74B8_r(Moby_2C74B8 *m) {
+void func_L00_002C74B8_r(Moby *m) __asm__("func_L00_002C74B8");
+void func_L00_002C74B8_r(Moby *m) {
     V_2C74B8 v0;
     V_2C74B8 v10;
     Data_2C74B8 *d;
@@ -1372,11 +1348,11 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
 
     if (m == 0) return;
     if (((Hero_2C74B8 *)D_0013F450_2C74B8)->camera_mode == 1) func_L00_00222B80_2C74B8(30, 1);
-    d = m->data;
+    d = (void *)m->pvars;
     if (d == 0) return;
     hd = 0;
     if (!d->hook) d->hook = func_L00_002C82E8_2C74B8(m, D_0015EE6C_2C74B8 * 24.0f);
-    if (d->hook) hd = d->hook->data;
+    if (d->hook) hd = (void *)d->hook->pvars;
     if ((((Hero_2C74B8 *)D_0013F450_2C74B8)->camera_mode == 1 || ((Hero_2C74B8 *)D_0013F450_2C74B8)->camera_mode == 30) &&
         ((Hero_2C74B8 *)D_0013F450_2C74B8)->f198 >= 2) {
         func_L00_001EE2E0_2C74B8((int)m, 0xFF0000FF, 1.0f, 0, 0x24, 0.0f, -1, 90.0f, 4);
@@ -1388,13 +1364,13 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
     switch (m->state) {
     case 0:
     case 1:
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
             m->state = 1;
         }
         if (d->hook) {
             func_L00_00250800_2C74B8(m, 0, &d->hook->pos);
-            d->hook->rot = m->rot;
+            (*(M3_2C74B8 *)&d->hook->unkC0) = (*(M3_2C74B8 *)&m->unkC0);
         }
         if (((Hero_2C74B8 *)D_0013F450_2C74B8)->camera_mode == 0x24 ||
             (((Hero_2C74B8 *)D_0013F450_2C74B8)->move_mode == 0xF && ((Hero_2C74B8 *)D_0013F450_2C74B8)->f5B4)) {
@@ -1403,7 +1379,7 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
                 d->scale = 1.0f;
                 d->spin = 0.0f;
                 hd->speed = D_0015EE6C_2C74B8 * 24.0f;
-                if (m->anim_state != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
+                if (m->prev_seq != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
                 func_0022ED80_2C74B8(0, 0, m);
                 m->state = 2;
             }
@@ -1416,15 +1392,15 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
             d->size = 0.280000001f;
             d->scale = 1.0f;
             d->spin = 0.0f;
-            if (m->anim_state != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
+            if (m->prev_seq != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
             func_0022ED80_2C74B8(0, 0, m);
             m->state = 9;
         }
         break;
     case 2:
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F9BF0_2C74B8(&v0, &((Hero_2C74B8 *)D_0013F450_2C74B8)->f964->pos, &d->hook->pos);
         speed = hd->speed;
@@ -1467,8 +1443,8 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
             m->state = 6;
             break;
         }
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
         d->spin = d->spin + 0.69813168f;
@@ -1495,8 +1471,8 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
         break;
     case 5:
         qcopy(&d->hook->pos, &((Hero_2C74B8 *)D_0013F450_2C74B8)->f964->pos);
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         d->size = d->size * (D_0015EE60_2C74B8 * -0.100000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
@@ -1517,7 +1493,7 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
             func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
         } else {
             qcopy(&d->hook->pos, &v10);
-            if (m->anim_state != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
+            if (m->prev_seq != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
             m->state = 1;
         }
         break;
@@ -1525,8 +1501,8 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
         break;
     case 9:
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F9BF0_2C74B8(&v0, &((Hero_2C74B8 *)D_0013F450_2C74B8)->f994->pos, &d->hook->pos);
         if (hd->speed < func_001F9CB8_2C74B8(&v0)) {
@@ -1543,8 +1519,8 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
         m->state = 11;
         break;
     case 11:
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
         d->spin = d->spin + 0.69813168f;
@@ -1557,8 +1533,8 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
     case 12:
         if (((Hero_2C74B8 *)D_0013F450_2C74B8)->f994)
             qcopy(&d->hook->pos, &((Hero_2C74B8 *)D_0013F450_2C74B8)->f994->pos);
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         d->size = d->size * (D_0015EE60_2C74B8 * -0.600000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
@@ -1566,16 +1542,16 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
         if (((Hero_2C74B8 *)D_0013F450_2C74B8)->camera_mode != 0x2C) m->state = 13;
         break;
     case 13:
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
         hd->speed = D_0015EE6C_2C74B8 * 80.0f;
         m->state = 14;
         break;
     case 14:
-        if (m->anim_flags & 2) {
-            if (m->anim_state != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_L00_00250800_2C74B8(m, 0, &v10);
         func_001F9BF0_2C74B8(&v0, &v10, &d->hook->pos);
@@ -1585,7 +1561,7 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
             func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
         } else {
             qcopy(&d->hook->pos, &v10);
-            if (m->anim_state != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
+            if (m->prev_seq != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
             m->state = 1;
         }
         if (((Hero_2C74B8 *)D_0013F450_2C74B8)->camera_mode == 0x2C && hd) {
@@ -1593,7 +1569,7 @@ void func_L00_002C74B8_r(Moby_2C74B8 *m) {
             d->scale = 1.0f;
             d->size = 0.0f;
             d->spin = 0.0f;
-            if (m->anim_state != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
+            if (m->prev_seq != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
             m->state = 9;
         }
         break;
