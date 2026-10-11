@@ -1260,7 +1260,50 @@ void func_L08_002DE738(M46 *m) {
     }
 }
 LINKER_REMNANT("asm/overlays", func_L08_002DF750);
-INCLUDE_ASM("asm/overlays", func_L08_002DF758);
+extern Moby *func_0020D348_mb(s32) __asm__("func_0020D348");
+extern float D_L08_00167640[];
+extern float func_001F9D48_DF758(void *, void *) __asm__("func_001F9D48");
+extern void func_L00_00251328(void *, int, int, int);
+extern int D_L08_00161AC4 SDATA(D_L08_00161AC4);
+extern int D_L08_00161AC8 SDATA(D_L08_00161AC8);
+extern int D_L08_00161ACC SDATA(D_L08_00161ACC);
+extern float D_L08_00161AD0 SDATA(D_L08_00161AD0);
+
+/* Adapted from Lombyte (the US decompilation): FUN_L08_002de3e0. */
+Moby *func_L08_002DF758(void *pos, Moby *target, void *velocity, float pitch, float yaw) {
+    Moby *moby = func_0020D348_mb(0x1B3);
+    char *data;
+    float *reference;
+    float distance;
+    float scale;
+    Moby *target_copy = target;
+    void *velocity_copy = velocity;
+    if (moby != 0) {
+        data = (char *)moby->pvars;
+        qcopy(&moby->pos, pos);
+        reference = D_L08_00167640;
+        distance = func_001F9D48_DF758(reference, &moby->pos);
+        reference = (float *)((char *)reference - 0x140);
+        moby->rot.y = -func_L00_001FF860(distance, reference[82] - moby->pos.z);
+        *(volatile float *)&moby->rot.z = func_L00_001FF860(reference[80] - moby->pos.x,
+                                                             reference[81] - moby->pos.y);
+        scale = moby->pclass->scale;
+        scale *= D_L08_00161AD0;
+        moby->unk30 = 0xFF;
+        moby->unk31 = 1;
+        *(volatile u8 *)&moby->state = 1;
+        moby->unk32 = 0xFF;
+        moby->scale = scale;
+        func_L00_00251328(moby, D_L08_00161AC4, D_L08_00161AC8, D_L08_00161ACC);
+        *(float *)(data + 0x40) = pitch;
+        *(float *)(data + 0x48) = 70.0f;
+        *(float *)(data + 0x44) = yaw;
+        *(Moby **)(data + 0x4C) = target_copy;
+        qcopy(data + 0x20, velocity_copy);
+        func_L00_00251E30(moby);
+    }
+    return moby;
+}
 INCLUDE_ASM("asm/overlays", func_L08_002DF8A0);
 extern float func_L00_00258C80(float lo, float hi);
 extern float func_001F9CE8(void *);
