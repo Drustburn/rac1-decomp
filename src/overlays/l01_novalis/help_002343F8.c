@@ -7,42 +7,6 @@
 #include "moby.h"
 
 typedef int Q_2343F8 __attribute__((mode(TI)));
-typedef struct {
-    char pad00[0x80];
-    float position[4];
-    float rotation[4];
-    char padA0[0x40];
-    float velocity[4];
-    float contact[4];
-    float external[4];
-    float delta[4];
-    float vertical_delta[4];
-    float horizontal_delta[4];
-    float frame_delta[4];
-    char pad150[0x10];
-    float speed;
-    float horizontal_speed;
-    float vertical_speed;
-    float slope;
-    char pad170[0x5C];
-    int unconstrained;
-    char pad1D0[0x64];
-    float speed_limit;
-    char pad238[4];
-    int contact_state;
-    char pad240[0x17];
-    unsigned char contact_flag;
-    char pad258[0x84];
-    float gravity_limit;
-    char pad2E0[0x218];
-    int physics_mode;
-    char pad4FC[0x424];
-    float extra_step[4];
-    char pad930[0x1754];
-    int state;
-    char pad2088[4];
-    int mode;
-} MovementPlayer_2343F8;
 
 extern char D_0013E633[];
 extern float D_0015EE6C MACRO_ADDR;
@@ -70,11 +34,11 @@ void func_L01_002343F8(void) {
     Vec4 previous;
     Vec4 work;
     Vec4 plane;
-    MovementPlayer_2343F8 *contact_player;
-    MovementPlayer_2343F8 *motion_player;
-    MovementPlayer_2343F8 *cap_player;
+    Hero *contact_player;
+    Hero *motion_player;
+    Hero *cap_player;
     float *position = (float *)(D_0013E633 + 0xE9D);
-    MovementPlayer_2343F8 *player;
+    Hero *player;
     float *vertical;
     float *horizontal;
     float *extra_step;
@@ -85,17 +49,17 @@ void func_L01_002343F8(void) {
     float magnitude;
 
     qcopy(previous.f, position);
-    player = (MovementPlayer_2343F8 *)((char *)position - 0x80);
-    func_L00_00234800(player->physics_mode, (char *)position + 0x70, (char *)position + 0x10);
-    if (player->state == 34 || player->state == 20) {
+    player = (Hero *)((char *)position - 0x80);
+    func_L00_00234800(player->unk4F8, (char *)position + 0x70, (char *)position + 0x10);
+    if (player->state.current == 34 || player->state.current == 20) {
         float limit;
 
-        if (!player->unconstrained) {
+        if (!player->unk1CC) {
             float length;
 
             position = (float *)((char *)position + 0x60);
             length = func_L00_00234250(position);
-            limit = player->speed_limit - 0.02f;
+            limit = player->unk234 - 0.02f;
             if (limit < length) func_L00_001FF4B0(position, position, limit);
         }
         position = (float *)(D_0013E633 + 0xEFD);
@@ -106,13 +70,13 @@ void func_L01_002343F8(void) {
             func_L00_002343A0(position, position, limit);
         }
     } else {
-        if (!player->unconstrained) {
+        if (!player->unk1CC) {
             float length;
             float limit;
 
             position = (float *)((char *)position + 0x60);
             length = FastVecLength(position);
-            limit = player->speed_limit - 0.02f;
+            limit = player->unk234 - 0.02f;
             if (limit < length) func_L00_001FF4B0(position, position, limit);
         }
     }
@@ -121,9 +85,9 @@ void func_L01_002343F8(void) {
     extra_step = (float *)((char *)position + 0x8A0);
     FastVecAdd(position, position, extra_step);
     clear_u64_value(extra_step);
-    contact_player = (MovementPlayer_2343F8 *)((char *)position - 0x80);
-    contact_player->contact_flag = 0;
-    contact_player->contact_state = 0;
+    contact_player = (Hero *)((char *)position - 0x80);
+    contact_player->unk257 = 0;
+    contact_player->coll_hit_moby = 0;
     if (FastVecLength((char *)position + 0x70) <= 0.0001f) {
         func_L00_00213E60();
         func_L01_002333D8();
@@ -158,13 +122,13 @@ void func_L01_002343F8(void) {
     magnitude = FastVecDot(vertical, plane.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
     func_L00_001FF4B0(vertical, plane.f, magnitude);
-    motion_player = (MovementPlayer_2343F8 *)((char *)position - 0x110);
-    motion_player->speed = FastVecLength(position);
+    motion_player = (Hero *)((char *)position - 0x110);
+    motion_player->motion.speed_xy = FastVecLength(position);
     magnitude = func_001F9CE8(position);
     work.q = *(Q_2343F8 *)position;
-    motion_player->horizontal_speed = magnitude;
-    motion_player->vertical_speed = func_L00_00213A08(work.f);
-    if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
+    motion_player->motion.unk164 = magnitude;
+    motion_player->motion.unk168 = func_L00_00213A08(work.f);
+    if (motion_player->motion.unk168 < 0.0f) motion_player->motion.unk168 = 0.0f;
     qcopy(work.f, new_position);
     contact = (float *)((char *)position - 0x20);
     external = (float *)((char *)position - 0x10);
@@ -172,82 +136,33 @@ void func_L01_002343F8(void) {
         float saved;
 
         FastVecAdd(new_position, new_position, contact);
-        saved = motion_player->contact[3];
+        saved = motion_player->motion.unkF0.f[3];
         clear_u64_value(contact);
-        motion_player->contact[3] = saved;
+        motion_player->motion.unkF0.f[3] = saved;
         func_L00_00213E60();
         func_L01_002333D8();
         FastVecSub(external, new_position, previous.f);
         func_L00_002136A8();
     }
     FastVecSub((char *)position + 0x30, new_position, work.f);
-    motion_player->frame_delta[3] = motion_player->contact[3];
-    motion_player->contact[3] = 0.0f;
+    motion_player->motion.unk140.f[3] = motion_player->motion.unkF0.f[3];
+    motion_player->motion.unkF0.f[3] = 0.0f;
     FastVecSub(external, new_position, previous.f);
-    motion_player->slope = 0.0f;
-    if (motion_player->horizontal_speed > 0.004f) {
-        motion_player->slope = motion_player->external[2] / motion_player->horizontal_speed;
-        if (motion_player->slope > 0.5f) motion_player->slope = 0.5f;
-        else if (motion_player->slope < -0.5f) motion_player->slope = -0.5f;
+    motion_player->motion.unk16C = 0.0f;
+    if (motion_player->motion.unk164 > 0.004f) {
+        motion_player->motion.unk16C = motion_player->motion.unk100.f[2] / motion_player->motion.unk164;
+        if (motion_player->motion.unk16C > 0.5f) motion_player->motion.unk16C = 0.5f;
+        else if (motion_player->motion.unk16C < -0.5f) motion_player->motion.unk16C = -0.5f;
     }
-    cap_player = (MovementPlayer_2343F8 *)(D_0013E633 + 0xE1D);
+    cap_player = (Hero *)(D_0013E633 + 0xE1D);
     magnitude = D_0015EE6C * 52.0f;
-    if (magnitude < cap_player->speed) {
-        FastVecScale(cap_player->external, cap_player->external, magnitude / cap_player->speed);
-        cap_player->speed = D_0015EE6C * 52.0f;
+    if (magnitude < cap_player->motion.speed_xy) {
+        FastVecScale(cap_player->motion.unk100.f, cap_player->motion.unk100.f, magnitude / cap_player->motion.speed_xy);
+        cap_player->motion.speed_xy = D_0015EE6C * 52.0f;
     }
 }
 typedef int HopQ __attribute__((mode(TI)));
 
-typedef struct {
-    unsigned char pad0[0x98];
-    float f98;
-    unsigned char pad9C[0x44];
-    Vec4 vE0;
-    unsigned char padF0[0x60];
-    Vec4 v150;
-    float f160;
-    float f164;
-    unsigned char pad168[0x8];
-    Vec4 v170;
-    float f180;
-    unsigned char pad184[0xC];
-    float f190;
-    float f194;
-    int i198;
-    unsigned char pad19C[0x16C];
-    short s308;
-    short s30A;
-    unsigned char pad30C[0xE8];
-    float f3F4;
-    unsigned char pad3F8[0x1C];
-    float f414;
-    unsigned char pad418[0x6];
-    short s41E;
-    unsigned char pad420[0x18];
-    float f438;
-    float f43C;
-    unsigned char pad440[0xC];
-    int i44C;
-    int i450;
-    float f454;
-    float f458;
-    float f45C;
-    unsigned char pad460[0x10];
-    Vec4 v470;
-    unsigned char pad480[0x20];
-    float f4A0;
-    unsigned char pad4A4[0x47C];
-    Vec4 v920;
-    unsigned char pad930[0x14];
-    float f944;
-    unsigned char pad948[0x160];
-    float fAA8;
-    unsigned char padAAC[0x15D8];
-    int i2084;
-    unsigned char pad2088[0x4];
-    int i208C;
-} HopPlayer;
 
 extern char D_0013E633[];
 extern float D_0015EE64 MACRO_ADDR;
@@ -283,97 +198,97 @@ void func_L01_002351A8(void) {
     float arg;
     int state;
 
-    state = ((HopPlayer *)(D_0013E633 + 0xE1D))->i2084;
+    state = ((Hero *)(D_0013E633 + 0xE1D))->state.current;
     if (state == 10) {
         func_L00_00213970(0.7f, D_0015EE6C * 0.0f);
-        qcopy(&((HopPlayer *)(D_0013E633 + 0xE1D))->v150, &((HopPlayer *)(D_0013E633 + 0xE1D))->v920);
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->f194 = ((HopPlayer *)(D_0013E633 + 0xE1D))->f164;
+        qcopy(&((Hero *)(D_0013E633 + 0xE1D))->motion.unk150, &((Hero *)(D_0013E633 + 0xE1D))->move_impulse);
+        ((Hero *)(D_0013E633 + 0xE1D))->ground_speed = ((Hero *)(D_0013E633 + 0xE1D))->motion.unk164;
     } else if (state == 16) {
-        if (scale_ticks(0x36) < ((HopPlayer *)(D_0013E633 + 0xE1D))->i198) {
-            func_00214D28(&((HopPlayer *)(D_0013E633 + 0xE1D))->f4A0, D_0015EE70 * 25.0f, D_0015EE70 * 7.0f);
+        if (scale_ticks(0x36) < ((Hero *)(D_0013E633 + 0xE1D))->state_timer) {
+            func_00214D28(&((Hero *)(D_0013E633 + 0xE1D))->unk4A0, D_0015EE70 * 25.0f, D_0015EE70 * 7.0f);
         }
-        if (((HopPlayer *)(D_0013E633 + 0xE1D))->i198 < scale_ticks(0x37)) {
-            ((HopPlayer *)(D_0013E633 + 0xE1D))->f190 = ((HopPlayer *)(D_0013E633 + 0xE1D))->f3F4;
+        if (((Hero *)(D_0013E633 + 0xE1D))->state_timer < scale_ticks(0x37)) {
+            ((Hero *)(D_0013E633 + 0xE1D))->target_speed = ((Hero *)(D_0013E633 + 0xE1D))->unk3F4;
         } else {
-            ((HopPlayer *)(D_0013E633 + 0xE1D))->f190 = D_0015EE6C * 3.5f;
+            ((Hero *)(D_0013E633 + 0xE1D))->target_speed = D_0015EE6C * 3.5f;
         }
         func_L00_00212740(D_0015EE70 * 44.0f, D_0015EE70 * 45.0f);
-        func_L00_00234420(((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, 0.0f);
-        func_L00_00233F88(((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, ((HopPlayer *)(D_0013E633 + 0xE1D))->f194);
+        func_L00_00234420(((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, 0.0f);
+        func_L00_00233F88(((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, ((Hero *)(D_0013E633 + 0xE1D))->ground_speed);
     } else if (state == 0x1C) {
-        if (scale_ticks(0x28) < ((HopPlayer *)(D_0013E633 + 0xE1D))->i198) {
+        if (scale_ticks(0x28) < ((Hero *)(D_0013E633 + 0xE1D))->state_timer) {
             func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
             func_L01_00234970(D_0015EE70 * 20.0f);
         }
-        if (13.0f <= ((HopPlayer *)(D_0013E633 + 0xE1D))->fAA8 && ((HopPlayer *)(D_0013E633 + 0xE1D))->fAA8 <= 30.0f) {
-            if (27.0f < ((HopPlayer *)(D_0013E633 + 0xE1D))->fAA8) {
-                func_00214D28(&((HopPlayer *)(D_0013E633 + 0xE1D))->f45C, 0.0f, D_0015EE70 * 8.0f);
+        if (13.0f <= ((Hero *)(D_0013E633 + 0xE1D))->unkAA8 && ((Hero *)(D_0013E633 + 0xE1D))->unkAA8 <= 30.0f) {
+            if (27.0f < ((Hero *)(D_0013E633 + 0xE1D))->unkAA8) {
+                func_00214D28(&((Hero *)(D_0013E633 + 0xE1D))->unk45C, 0.0f, D_0015EE70 * 8.0f);
             } else {
-                func_00214D28(&((HopPlayer *)(D_0013E633 + 0xE1D))->f45C, D_0015EE6C * 2.0f, D_0015EE70 * 8.0f);
+                func_00214D28(&((Hero *)(D_0013E633 + 0xE1D))->unk45C, D_0015EE6C * 2.0f, D_0015EE70 * 8.0f);
             }
         }
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[0] = FastCos(((HopPlayer *)(D_0013E633 + 0xE1D))->f98) * ((HopPlayer *)(D_0013E633 + 0xE1D))->f45C;
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[1] = FastSin(((HopPlayer *)(D_0013E633 + 0xE1D))->f98) * ((HopPlayer *)(D_0013E633 + 0xE1D))->f45C;
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[0] = FastCos(((Hero *)(D_0013E633 + 0xE1D))->motion.rot.f[2]) * ((Hero *)(D_0013E633 + 0xE1D))->unk45C;
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[1] = FastSin(((Hero *)(D_0013E633 + 0xE1D))->motion.rot.f[2]) * ((Hero *)(D_0013E633 + 0xE1D))->unk45C;
     } else if (state == 11 || state == 12) {
         if (D_0015EE84 != 0xE) {
             if (func_L00_0020DB30(3) == 3) {
-                if (((HopPlayer *)(D_0013E633 + 0xE1D))->i198 == scale_ticks(5)) {
+                if (((Hero *)(D_0013E633 + 0xE1D))->state_timer == scale_ticks(5)) {
                     func_L00_00217570(1, 0);
                 }
             }
         }
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->f180 = ((HopPlayer *)(D_0013E633 + 0xE1D))->f43C;
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.unk180 = ((Hero *)(D_0013E633 + 0xE1D))->unk43C;
         func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.981317f);
-        if (((HopPlayer *)(D_0013E633 + 0xE1D))->i450 != 3) {
-            ((HopPlayer *)(D_0013E633 + 0xE1D))->f194 = ((HopPlayer *)(D_0013E633 + 0xE1D))->f454;
+        if (((Hero *)(D_0013E633 + 0xE1D))->unk450 != 3) {
+            ((Hero *)(D_0013E633 + 0xE1D))->ground_speed = ((Hero *)(D_0013E633 + 0xE1D))->unk454;
         } else {
-            ((HopPlayer *)(D_0013E633 + 0xE1D))->f194 = 0.0f;
+            ((Hero *)(D_0013E633 + 0xE1D))->ground_speed = 0.0f;
         }
-        if (((HopPlayer *)(D_0013E633 + 0xE1D))->i2084 == 11) {
-            if (((HopPlayer *)(D_0013E633 + 0xE1D))->s41E != 0 && ((HopPlayer *)(D_0013E633 + 0xE1D))->i44C < scale_ticks(0xC)) {
-                func_00214D28(&((HopPlayer *)(D_0013E633 + 0xE1D))->f458, 0.0f, D_0015EE70 * 8.0f);
+        if (((Hero *)(D_0013E633 + 0xE1D))->state.current == 11) {
+            if (((Hero *)(D_0013E633 + 0xE1D))->unk41E != 0 && ((Hero *)(D_0013E633 + 0xE1D))->unk44C < scale_ticks(0xC)) {
+                func_00214D28(&((Hero *)(D_0013E633 + 0xE1D))->unk458, 0.0f, D_0015EE70 * 8.0f);
             } else {
-                func_00214D28(&((HopPlayer *)(D_0013E633 + 0xE1D))->f458, D_0015EE6C * 4.2f, D_0015EE70 * 8.0f);
+                func_00214D28(&((Hero *)(D_0013E633 + 0xE1D))->unk458, D_0015EE6C * 4.2f, D_0015EE70 * 8.0f);
             }
         }
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[0] = FastCos(((HopPlayer *)(D_0013E633 + 0xE1D))->f438) * ((HopPlayer *)(D_0013E633 + 0xE1D))->f458;
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[1] = FastSin(((HopPlayer *)(D_0013E633 + 0xE1D))->f438) * ((HopPlayer *)(D_0013E633 + 0xE1D))->f458;
-        a = ((HopPlayer *)(D_0013E633 + 0xE1D))->f454 * FastSin(FastDiffRots(((HopPlayer *)(D_0013E633 + 0xE1D))->f43C, ((HopPlayer *)(D_0013E633 + 0xE1D))->f438));
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[0] += FastCos(((HopPlayer *)(D_0013E633 + 0xE1D))->f43C) * a;
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[1] += FastSin(((HopPlayer *)(D_0013E633 + 0xE1D))->f43C) * a;
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[0] = FastCos(((Hero *)(D_0013E633 + 0xE1D))->unk438) * ((Hero *)(D_0013E633 + 0xE1D))->unk458;
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[1] = FastSin(((Hero *)(D_0013E633 + 0xE1D))->unk438) * ((Hero *)(D_0013E633 + 0xE1D))->unk458;
+        a = ((Hero *)(D_0013E633 + 0xE1D))->unk454 * FastSin(FastDiffRots(((Hero *)(D_0013E633 + 0xE1D))->unk43C, ((Hero *)(D_0013E633 + 0xE1D))->unk438));
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[0] += FastCos(((Hero *)(D_0013E633 + 0xE1D))->unk43C) * a;
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[1] += FastSin(((Hero *)(D_0013E633 + 0xE1D))->unk43C) * a;
         func_L00_00213970(0.7f, D_0015EE6C * 0.0f);
-        qcopy(&((HopPlayer *)(D_0013E633 + 0xE1D))->v150, &((HopPlayer *)(D_0013E633 + 0xE1D))->v920);
+        qcopy(&((Hero *)(D_0013E633 + 0xE1D))->motion.unk150, &((Hero *)(D_0013E633 + 0xE1D))->move_impulse);
     } else if (state == 0x11) {
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->f180 = ((HopPlayer *)(D_0013E633 + 0xE1D))->v470.f[3];
-        qcopy(&((HopPlayer *)(D_0013E633 + 0xE1D))->v170, &((HopPlayer *)(D_0013E633 + 0xE1D))->v470);
-        if (scale_ticks(9) < ((HopPlayer *)(D_0013E633 + 0xE1D))->i198) {
+        ((Hero *)(D_0013E633 + 0xE1D))->motion.unk180 = ((Hero *)(D_0013E633 + 0xE1D))->unk470.f[3];
+        qcopy(&((Hero *)(D_0013E633 + 0xE1D))->motion.unk170, &((Hero *)(D_0013E633 + 0xE1D))->unk470);
+        if (scale_ticks(9) < ((Hero *)(D_0013E633 + 0xE1D))->state_timer) {
             func_L00_002124E8(-1, D_0015EE64 * 0.042f, D_0015EE64 * 0.2f, D_0015EE6C * 11.868238f);
         }
-        if (scale_ticks(9) <= ((HopPlayer *)(D_0013E633 + 0xE1D))->i198) {
-            if (((HopPlayer *)(D_0013E633 + 0xE1D))->s308 == 0) {
-                ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[0] = FastCos(((HopPlayer *)(D_0013E633 + 0xE1D))->f180) * (D_0015EE6C * 4.9f);
-                ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f[1] = FastSin(((HopPlayer *)(D_0013E633 + 0xE1D))->f180) * (D_0015EE6C * 4.9f);
+        if (scale_ticks(9) <= ((Hero *)(D_0013E633 + 0xE1D))->state_timer) {
+            if (((Hero *)(D_0013E633 + 0xE1D))->unk308 == 0) {
+                ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[0] = FastCos(((Hero *)(D_0013E633 + 0xE1D))->motion.unk180) * (D_0015EE6C * 4.9f);
+                ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f[1] = FastSin(((Hero *)(D_0013E633 + 0xE1D))->motion.unk180) * (D_0015EE6C * 4.9f);
             } else {
-                func_L00_00234420(((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, 0.0f);
-                func_L00_001FF4B0(&tmp, &((HopPlayer *)(D_0013E633 + 0xE1D))->v170, D_0015EE6C * 4.9f);
-                FastVecAdd(((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, &tmp);
+                func_L00_00234420(((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, 0.0f);
+                func_L00_001FF4B0(&tmp, &((Hero *)(D_0013E633 + 0xE1D))->motion.unk170, D_0015EE6C * 4.9f);
+                FastVecAdd(((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, &tmp);
             }
         }
-        ((HopPlayer *)(D_0013E633 + 0xE1D))->f194 = ((HopPlayer *)(D_0013E633 + 0xE1D))->f164;
+        ((Hero *)(D_0013E633 + 0xE1D))->ground_speed = ((Hero *)(D_0013E633 + 0xE1D))->motion.unk164;
     } else {
-        func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, ((HopPlayer *)(D_0013E633 + 0xE1D))->f414);
+        func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, ((Hero *)(D_0013E633 + 0xE1D))->unk414);
         func_L00_00213970(0.7f, D_0015EE6C * 0.0f);
-        qcopy(&((HopPlayer *)(D_0013E633 + 0xE1D))->v150, &((HopPlayer *)(D_0013E633 + 0xE1D))->v920);
+        qcopy(&((Hero *)(D_0013E633 + 0xE1D))->motion.unk150, &((Hero *)(D_0013E633 + 0xE1D))->move_impulse);
         arg = D_0015EE70 * 20.0f;
-        if (((HopPlayer *)(D_0013E633 + 0xE1D))->f190 < D_L01_0017C2D0[0] * D_0015EE6C * 0.2f) {
-            if (((HopPlayer *)(D_0013E633 + 0xE1D))->i208C == 2) {
-                d = ((HopPlayer *)(D_0013E633 + 0xE1D))->f944;
-                speed = func_001F9CE8(((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f);
+        if (((Hero *)(D_0013E633 + 0xE1D))->target_speed < D_L01_0017C2D0[0] * D_0015EE6C * 0.2f) {
+            if (((Hero *)(D_0013E633 + 0xE1D))->state.control_mode == 2) {
+                d = ((Hero *)(D_0013E633 + 0xE1D))->unk944;
+                speed = func_001F9CE8(((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f);
                 func_00214D28(&speed, 0.0f, d);
-                func_L00_001FF500(((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, ((HopPlayer *)(D_0013E633 + 0xE1D))->vE0.f, speed);
+                func_L00_001FF500(((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, ((Hero *)(D_0013E633 + 0xE1D))->motion.velocity.f, speed);
                 return;
             }
-            if (((HopPlayer *)(D_0013E633 + 0xE1D))->s30A != 0) {
+            if (((Hero *)(D_0013E633 + 0xE1D))->unk30A != 0) {
                 arg = D_0015EE70 * 6.0f;
             } else {
                 arg = D_0015EE70 * 2.0f;

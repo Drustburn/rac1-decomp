@@ -2518,42 +2518,6 @@ void func_L00_00213E60(void) {
     }
 }
 typedef int Q_213F38 __attribute__((mode(TI)));
-typedef struct {
-    char pad00[0x80];
-    float position[4];
-    float rotation[4];
-    char padA0[0x40];
-    float velocity[4];
-    float contact[4];
-    float external[4];
-    float delta[4];
-    float vertical_delta[4];
-    float horizontal_delta[4];
-    float frame_delta[4];
-    char pad150[0x10];
-    float speed;
-    float horizontal_speed;
-    float vertical_speed;
-    float slope;
-    char pad170[0x5C];
-    int unconstrained;
-    char pad1D0[0x64];
-    float speed_limit;
-    char pad238[4];
-    int contact_state;
-    char pad240[0x17];
-    unsigned char contact_flag;
-    char pad258[0x84];
-    float gravity_limit;
-    char pad2E0[0x218];
-    int physics_mode;
-    char pad4FC[0x424];
-    float extra_step[4];
-    char pad930[0x1754];
-    int state;
-    char pad2088[4];
-    int mode;
-} MovementPlayer_213F38;
 
 extern void func_L00_00234800(int, void *, void *);
 extern float func_L00_002342F8(float *);
@@ -2569,9 +2533,9 @@ void func_L00_00213F38(void) {
     Vec4 previous;
     Vec4 work;
     Vec4 plane;
-    MovementPlayer_213F38 *contact_player;
-    MovementPlayer_213F38 *motion_player;
-    MovementPlayer_213F38 *cap_player;
+    Hero *contact_player;
+    Hero *motion_player;
+    Hero *cap_player;
     float *base = (float *)(D_0013E633 + 0xE9D);
     float *contact;
     float *vertical;
@@ -2585,16 +2549,16 @@ void func_L00_00213F38(void) {
 
     qcopy(previous.f, base);
     position = (float *)((char *)base - 0x80);
-    func_L00_00234800(((MovementPlayer_213F38 *)position)->physics_mode, (char *)base + 0x70, (char *)base + 0x10);
-    if (((MovementPlayer_213F38 *)position)->state == 34 || ((MovementPlayer_213F38 *)position)->state == 20) {
+    func_L00_00234800(((Hero *)position)->unk4F8, (char *)base + 0x70, (char *)base + 0x10);
+    if (((Hero *)position)->state.current == 34 || ((Hero *)position)->state.current == 20) {
         float limit;
 
-        if (!((MovementPlayer_213F38 *)position)->unconstrained) {
+        if (!((Hero *)position)->unk1CC) {
             float length;
 
             contact = (float *)((char *)base + 0x60);
             length = func_L00_00234250(contact);
-            limit = ((MovementPlayer_213F38 *)position)->speed_limit - 0.02f;
+            limit = ((Hero *)position)->unk234 - 0.02f;
             if (limit < length) func_L00_001FF4B0(contact, contact, limit);
         }
         position = (float *)(D_0013E633 + 0xEFD);
@@ -2604,25 +2568,25 @@ void func_L00_00213F38(void) {
             if (limit > 0.0f) limit = 0.0f;
             func_L00_002343A0(position, position, limit);
         }
-    } else if (((MovementPlayer_213F38 *)position)->mode == 15) {
-        if (!((MovementPlayer_213F38 *)position)->unconstrained) {
+    } else if (((Hero *)position)->state.control_mode == 15) {
+        if (!((Hero *)position)->unk1CC) {
             float length;
             float limit;
 
             vertical = (float *)((char *)base + 0x60);
             length = func_001F9CE8(vertical);
-            limit = ((MovementPlayer_213F38 *)position)->speed_limit - 0.02f;
+            limit = ((Hero *)position)->unk234 - 0.02f;
             if (limit < length) func_L00_001FF500(vertical, vertical, limit);
         }
-    } else if (((MovementPlayer_213F38 *)position)->mode != 13) {
-        if (((MovementPlayer_213F38 *)position)->mode != 14) {
-            if (!((MovementPlayer_213F38 *)position)->unconstrained) {
+    } else if (((Hero *)position)->state.control_mode != 13) {
+        if (((Hero *)position)->state.control_mode != 14) {
+            if (!((Hero *)position)->unk1CC) {
                 float length;
                 float limit;
 
                 vertical = (float *)((char *)base + 0x60);
                 length = FastVecLength(vertical);
-                limit = ((MovementPlayer_213F38 *)position)->speed_limit - 0.02f;
+                limit = ((Hero *)position)->unk234 - 0.02f;
                 if (limit < length) func_L00_001FF4B0(vertical, vertical, limit);
             }
         }
@@ -2632,9 +2596,9 @@ void func_L00_00213F38(void) {
     extra_step = (float *)((char *)position + 0x8A0);
     FastVecAdd(position, position, extra_step);
     clear_u64_value(extra_step);
-    contact_player = (MovementPlayer_213F38 *)((char *)position - 0x80);
-    contact_player->contact_flag = 0;
-    contact_player->contact_state = 0;
+    contact_player = (Hero *)((char *)position - 0x80);
+    contact_player->unk257 = 0;
+    contact_player->coll_hit_moby = 0;
     if (FastVecLength((char *)position + 0x70) <= 0.0001f) {
         func_L00_00213E60();
         func_L00_00212E70();
@@ -2669,13 +2633,13 @@ void func_L00_00213F38(void) {
     magnitude = FastVecDot(vertical, plane.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
     func_L00_001FF4B0(vertical, plane.f, magnitude);
-    motion_player = (MovementPlayer_213F38 *)((char *)position - 0x110);
-    motion_player->speed = FastVecLength(position);
+    motion_player = (Hero *)((char *)position - 0x110);
+    motion_player->motion.speed_xy = FastVecLength(position);
     magnitude = func_001F9CE8(position);
     work.q = *(Q_213F38 *)position;
-    motion_player->horizontal_speed = magnitude;
-    motion_player->vertical_speed = func_L00_00213A08((void *)work.f);
-    if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
+    motion_player->motion.unk164 = magnitude;
+    motion_player->motion.unk168 = func_L00_00213A08((void *)work.f);
+    if (motion_player->motion.unk168 < 0.0f) motion_player->motion.unk168 = 0.0f;
     qcopy(work.f, new_position);
     contact = (float *)((char *)position - 0x20);
     external = (float *)((char *)position - 0x10);
@@ -2683,29 +2647,29 @@ void func_L00_00213F38(void) {
         float saved;
 
         FastVecAdd(new_position, new_position, contact);
-        saved = motion_player->contact[3];
+        saved = motion_player->motion.unkF0.f[3];
         clear_u64_value(contact);
-        motion_player->contact[3] = saved;
+        motion_player->motion.unkF0.f[3] = saved;
         func_L00_00213E60();
         func_L00_00212E70();
         func_001F9BF0_12E70(external, new_position, previous.f);
         func_L00_002136A8();
     }
     func_001F9BF0_12E70((char *)position + 0x30, new_position, work.f);
-    motion_player->frame_delta[3] = motion_player->contact[3];
-    motion_player->contact[3] = 0.0f;
+    motion_player->motion.unk140.f[3] = motion_player->motion.unkF0.f[3];
+    motion_player->motion.unkF0.f[3] = 0.0f;
     func_001F9BF0_12E70(external, new_position, previous.f);
-    motion_player->slope = 0.0f;
-    if (motion_player->horizontal_speed > 0.004f) {
-        motion_player->slope = motion_player->external[2] / motion_player->horizontal_speed;
-        if (motion_player->slope > 0.5f) motion_player->slope = 0.5f;
-        else if (motion_player->slope < -0.5f) motion_player->slope = -0.5f;
+    motion_player->motion.unk16C = 0.0f;
+    if (motion_player->motion.unk164 > 0.004f) {
+        motion_player->motion.unk16C = motion_player->motion.unk100.f[2] / motion_player->motion.unk164;
+        if (motion_player->motion.unk16C > 0.5f) motion_player->motion.unk16C = 0.5f;
+        else if (motion_player->motion.unk16C < -0.5f) motion_player->motion.unk16C = -0.5f;
     }
-    cap_player = (MovementPlayer_213F38 *)(D_0013E633 + 0xE1D);
+    cap_player = (Hero *)(D_0013E633 + 0xE1D);
     magnitude = D_0015EE6C * 52.0f;
-    if (magnitude < cap_player->speed) {
-        FastVecScale(cap_player->external, cap_player->external, magnitude / cap_player->speed);
-        cap_player->speed = D_0015EE6C * 52.0f;
+    if (magnitude < cap_player->motion.speed_xy) {
+        FastVecScale(cap_player->motion.unk100.f, cap_player->motion.unk100.f, magnitude / cap_player->motion.speed_xy);
+        cap_player->motion.speed_xy = D_0015EE6C * 52.0f;
     }
 }
 // Scales four vectors by s and a float field by s.
