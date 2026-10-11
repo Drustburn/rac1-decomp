@@ -2329,7 +2329,32 @@ void func_L14_002D87A0(char *m) {
     func_L00_00250800(m, 6, d + 0x200);
     AddDrawCallback(func_L14_002D8500, m);
 }
-INCLUDE_ASM("asm/overlays", func_L14_002DF5F8);
+extern void func_L14_002DF6B8_m(Moby *, f32, f32) __asm__("func_L14_002DF6B8");
+extern float D_L14_00161BCC SDATA(D_L14_00161BCC);
+
+/* Adapted from Lombyte (the US decompilation): FUN_L14_002de1f8. */
+void func_L14_002DF5F8(Moby *moby) {
+    char *data = (char *)moby->pvars;
+    void *rotation;
+    Vec4 old_rotation;
+    qcopy(&old_rotation, &moby->rot);
+
+    if (moby->state == 0) {
+        moby->state = 1;
+        moby->unkBC = 0;
+        moby->flags |= 0x100;
+        moby->pos.z += 0.35f;
+        *(int *)(data + 0x5C) = 1;
+        *(int *)(data + 0x70) = 0;
+        qzero(data + 0x60);
+        qzero(&moby->rot);
+        rotation = &moby->rot;
+    } else {
+        rotation = &moby->rot;
+    }
+    func_L14_002DF6B8_m(moby, D_L14_00161BCC, 8.0f);
+    func_L00_002617B0(data + 0x20, D_L14_0015F660, &old_rotation, rotation);
+}
 typedef int u128_s07 __attribute__((mode(TI)));
 extern short D_L14_00161BD4;
 extern short D_L14_00161BD0;
