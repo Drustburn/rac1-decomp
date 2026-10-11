@@ -1735,7 +1735,54 @@ int func_L11_003194C0(char *moby, void **out) {
     }
     return count;
 }
-INCLUDE_ASM("asm/overlays", func_L11_00319510);
+struct L11ChainVars_19510 {
+    u8 pad0[0x60];
+    s32 path_index;          /* 0x60 */
+    s32 count;               /* 0x64 */
+    s32 point;               /* 0x68 */
+    u8 pad6C[0x78];
+    s16 group;               /* 0xE4 */
+};
+
+/* Adapted from Lombyte (the US decompilation): FUN_L11_003180a0. */
+void func_L11_00319510(void *mp, int table_index) {
+    Moby *moby = mp;
+    short group = ((struct L11ChainVars_19510 *)moby->pvars)->group;
+    u16 *list = (u16 *)D_L11_001AC540[group];
+    short count = 0;
+    short offset = 0;
+    short stride;
+    char *table;
+    u16 entry;
+    int idx;
+
+    if (list == 0)
+        return;
+    do {
+        entry = *list;
+        idx = entry & 0x7FFF;
+        if (((Moby *)D_L11_00160058_m)[idx].oclass == 0x527)
+            count++;
+        list++;
+    } while ((short)entry >= 0);
+
+    table = *(char **)(D_L11_001B11B0 + table_index * 4);
+    stride = *(int *)table / count;
+    list = (u16 *)D_L11_001AC540[group];
+    do {
+        Moby *m;
+        idx = *list & 0x7FFF;
+        m = (Moby *)((idx << 8) + (u32)D_L11_00160058_m);
+        if (m->oclass == 0x527) {
+            struct L11ChainVars_19510 *data = (struct L11ChainVars_19510 *)m->pvars;
+            qcopy_nc(&m->pos, table + offset * 16 + 0x10);
+            data->count = offset;
+            data->path_index = table_index;
+            data->point = 0;
+            offset += stride;
+        }
+    } while (*(short *)list++ >= 0);
+}
 extern short D_L11_001623D0;
 extern short D_L11_001623E0;
 extern short D_L11_001623F0;
