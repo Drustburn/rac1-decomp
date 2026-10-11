@@ -364,7 +364,71 @@ void func_0022DB48(void *arg0, void *arg1, void *arg2) {
     truncate_float_to_s32(-func_001FA058_a(v[0], v[1]) * 180.0f * t * 0.31830987f);
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_0022DBE8);
+typedef u32 u128_2DBE8 __attribute__((mode(TI), aligned(16)));
+typedef struct {
+    s32 x0;
+    u8 x4;
+    u8 pad5[0x6B];
+} SndVoice_2DBE8;
+typedef struct {
+    u128_2DBE8 q[4];
+    s32 x40;
+    s32 x44;
+    s32 vol[6];
+    u8 pad60[0x10];
+    SndVoice_2DBE8 voices[30];
+} SndState_2DBE8;
+extern int D_0015EEE8 MACRO_ADDR;
+extern int D_0015EEEC MACRO_ADDR;
+extern int D_0015EEF0 MACRO_ADDR;
+extern void func_0012DB68(void);
+extern void func_0012E380(int);
+extern void func_0012E3C0(int, int);
+extern void func_0012F0E8(int, int);
+extern void func_0012E3F8(int, int, int);
+extern void func_0012E348(int, int);
+extern void func_002161E0(void);
+
+void func_0022DBE8(void) {
+    s32 i;
+    s32 p;
+    s32 end;
+    s32 v;
+
+    for (i = 0; i < 4; i++) {
+        qzero(&((SndState_2DBE8 *)D_0013E650)->q[i]);
+    }
+    ((SndState_2DBE8 *)D_0013E650)->x40 = 0;
+    ((SndState_2DBE8 *)D_0013E650)->x44 = 0;
+    p = (s32)D_0013E650;
+    end = p + 0xD20;
+    do {
+        ((SndVoice_2DBE8 *)p)[1].x0 = 0;
+        ((SndVoice_2DBE8 *)p)[1].x4 = 0;
+        p += 0x70;
+    } while (p < end);
+    func_0012DB68();
+    func_0012E380(D_0015EEE8 == 0);
+    func_0012E3C0(0, 1);
+    func_0012F0E8(2, 4);
+    func_0012E3F8(1, 0x18, 0x2F);
+    func_0012E3F8(2, 0x18, 0x2F);
+    func_0012E3F8(4, 0x18, 0x2F);
+    v = D_0015EEF0;
+    ((SndState_2DBE8 *)D_0013E650)->vol[0] = (v * 8) / 10;
+    ((SndState_2DBE8 *)D_0013E650)->vol[1] = D_0015EEEC;
+    ((SndState_2DBE8 *)D_0013E650)->vol[2] = (v * 8) / 10;
+    ((SndState_2DBE8 *)D_0013E650)->vol[3] = (v * 7) / 10;
+    ((SndState_2DBE8 *)D_0013E650)->vol[4] = (v * 7) / 10;
+    ((SndState_2DBE8 *)D_0013E650)->vol[5] = v;
+    func_002161E0();
+    func_0012E348(0, ((SndState_2DBE8 *)D_0013E650)->vol[0]);
+    func_0012E348(1, ((SndState_2DBE8 *)D_0013E650)->vol[1]);
+    func_0012E348(2, ((SndState_2DBE8 *)D_0013E650)->vol[2]);
+    func_0012E348(3, ((SndState_2DBE8 *)D_0013E650)->vol[3]);
+    func_0012E348(4, ((SndState_2DBE8 *)D_0013E650)->vol[4]);
+    func_0012E348(5, ((SndState_2DBE8 *)D_0013E650)->vol[5]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/text", func_0022DD68); /* sound_update */
 
