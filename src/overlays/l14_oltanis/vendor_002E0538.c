@@ -1430,7 +1430,43 @@ void func_L14_002F19C0(Moby *moby) {
     FastVecSub(v20, (*(float (*)[4])&moby->pos), v00);
     func_L00_002617B0(d->f20, v20, v10, (*(float (*)[4])&moby->rot));
 }
-INCLUDE_ASM("asm/overlays", func_L14_002F24C8);
+extern float func_001F9D10(void *, void *);
+struct L14PathPoint_2F24C8 {
+    char pad0[0x30];
+    float pos[4];
+    char pad40[0x30];
+    float rot[4];
+};
+extern struct L14PathPoint_2F24C8 *D_L14_001601AC_p __asm__("D_L14_001601AC") MACRO_ADDR;
+struct L14PickVars_2F24C8 {
+    char pad0[0x60];
+    float pos[4];
+    float rot[4];
+    int points[5];
+    char pad94[0x20];
+    short picked;
+};
+
+/* Adapted from Lombyte (the US decompilation): FUN_L14_002f1040. */
+void func_L14_002F24C8(char *m) {
+    Moby *moby = (Moby *)m;
+    struct L14PickVars_2F24C8 *d = (struct L14PickVars_2F24C8 *)moby->pvars;
+    int i;
+    d->picked = -1;
+    for (i = 0; i < 5; i++) {
+        if (func_001F9D10(&moby->pos, D_L14_001601AC_p[d->points[i]].pos) < 1.0f) {
+            d->picked = i;
+            break;
+        }
+    }
+    moby->state = 1;
+    {
+        int k = d->points[d->picked];
+        struct L14PathPoint_2F24C8 *t = D_L14_001601AC_p;
+        qcopy(d->pos, t[k].pos);
+        qcopy(d->rot, t[k].rot);
+    }
+}
 extern float func_001F9D10(void *, void *);
 extern float D_0015EE6C_f __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_0015EE70 MACRO_ADDR;
