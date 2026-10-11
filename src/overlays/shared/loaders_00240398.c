@@ -2,6 +2,7 @@
 #include "common.h"
 #include "include_asm.h"
 #include "moby.h"
+#include "hero.h"
 
 typedef struct G137C80_240398 {
     char pad[0x12CC];
@@ -376,11 +377,6 @@ typedef struct {
     int f34;
     int f38;
 } Ship_422D8;
-typedef struct {
-    char pad0[0x2080];
-    Moby *f2080;
-    char pad2084[0x28C];
-} Hero_422D8;
 
 extern void func_002176C8_422D8(void *, int, int) __asm__("func_002176C8");
 extern void func_00118D80(int);
@@ -431,7 +427,7 @@ extern G137C80_422D8 D_00137C80_422D8 __asm__("D_00137C80");
    name of its own its store lands in a branch delay slot where retail has a nop (8 bytes short), so it is
    reached as element 1 of the pair. Nothing else in the project names D_0015EF50. */
 extern char *D_0015EF4C_422D8[2] __asm__("D_0015EF4C") MACRO_ADDR;
-extern Hero_422D8 D_0013F450;
+extern Hero D_0013F450;
 extern char D_L00_00166D80[];
 extern char D_L00_0018EEC0[];
 extern float D_0015EE60 MACRO_ADDR;
@@ -1689,7 +1685,7 @@ char *func_L00_002422D8(int arg0) {
     }
     D_L00_0016190C = 0;
     if (D_0013E130.f0 != 0) {
-        *(long *)((int *)&D_0013E130.f0->spawn_frame) = *(long *)((int *)&D_0013F450.f2080->spawn_frame);
+        *(long *)((int *)&D_0013E130.f0->spawn_frame) = *(long *)((int *)&D_0013F450.moby->spawn_frame);
     }
     switch (D_0015EE84) {
     case 2:
