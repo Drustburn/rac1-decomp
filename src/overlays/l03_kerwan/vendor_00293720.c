@@ -1098,9 +1098,6 @@ typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
 } AnimSeq;
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 void func_L03_0029E370_9ED60(struct Moby *moby) __asm__("func_L03_0029E370");
 typedef int OvlQuad __attribute__((mode(TI)));
 void func_L03_0029DB88_9ED60(struct Moby *moby) __asm__("func_L03_0029DB88");
@@ -1324,24 +1321,16 @@ void func_L03_0029ED60(char *moby) {
         break;
     }
 }
-typedef struct {
-    Vec4f bsphere;
-    Vec4f pos;
-    u8 pad20[0x20];
-    Vec4f rot;
-    u8 pad50[0x28];
-    u8 *pvars;
-} Moby_2BC038;
 typedef int OvlQuad_2BC038 __attribute__((mode(TI)));
 char *func_0020D348_2BC038(int) __asm__("func_0020D348");
 float func_00214158_2BC038(void) __asm__("func_00214158");
 void func_L00_00251328_2BC038(char *, int, int, int) __asm__("func_L00_00251328");
 void func_L00_00251E30_2BC038(char *) __asm__("func_L00_00251E30");
-char *func_L03_002BC038_r(Moby_2BC038 *parent, int unused, int color, int a3, int a4, float f, float scale) __asm__("func_L03_002BC038");
+char *func_L03_002BC038_r(Moby *parent, int unused, int color, int a3, int a4, float f, float scale) __asm__("func_L03_002BC038");
 
 /* Spawns a child effect (moby 0xEB) on the parent: copies its position and rotation, then sets the colour, timers and scale.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l03/gameplay/entities/00292578.c, FUN_L03_002bad40. */
-char *func_L03_002BC038_r(Moby_2BC038 *parent, int unused, int color, int a3, int a4, float f, float scale) {
+char *func_L03_002BC038_r(Moby *parent, int unused, int color, int a3, int a4, float f, float scale) {
     char *m = func_0020D348_2BC038(0xEB);
     if (m) {
         char *d = *(char **)(m + 0x78);

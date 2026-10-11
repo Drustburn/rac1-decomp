@@ -39,10 +39,6 @@ extern void func_00214D28_F7700(float *, float, float) __asm__("func_00214D28");
 extern s32 func_L00_0025EFC0_F7700(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32) __asm__("func_L00_0025EFC0");
 extern s32 func_L00_0025E860_F7700(void *, void *, s32 *, f32 *, s32, f32) __asm__("func_L00_0025E860");
 extern f32 func_L00_0025C918_F7700(f32 *value, f32 target, f32 *speed, f32 accel, f32 decel, f32 max) __asm__("func_L00_0025C918");
-typedef struct {
-    u8 pad0[0xA6];
-    s16 type;
-} Moby_F7700;
 
 /* Grind rail: measures its paths once, then while the hero is in control mode 0x10 snaps it to the nearest path point in range and pulls it along, faster on level 1 the more rail is left.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002f6328.c, FUN_L01_002f6328. */
@@ -394,10 +390,6 @@ extern s32 func_001160D8_F9908(void) __asm__("func_001160D8");
 extern f32 func_001F9878_F9908(f32) __asm__("func_001F9878");
 extern s32 func_001FA898_F9908(f32) __asm__("func_001FA898");
 extern void func_L00_00251E30_F9908(struct Moby *) __asm__("func_L00_00251E30");
-typedef struct {
-    u8 pad0[0xA6];
-    s16 type;
-} Moby_F9908;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002f6328.c, FUN_L01_002f8530. */
 struct Moby *func_L01_002F9908(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 a4,
@@ -444,9 +436,6 @@ struct Moby *func_L01_002F9908(Vec4f *pos, Vec4f *vel, s32 oclass, s32 a3, s32 a
     }
     return m;
 }
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 extern f32 D_0015EE6C MACRO_ADDR;
 extern f32 func_001F9CB8(void *);
 extern f32 func_L00_001FF860(f32, f32);
@@ -487,10 +476,6 @@ extern s32 func_L00_001F10E0(f32, void *, s32, void *);
 extern void func_L00_001FF610(void *, void *, void *);
 extern s32 func_L00_00258BC8(s32, s32);
 extern void func_L00_0026DD70(void *, void *, s32, s32, f32, s32);
-typedef struct {
-    u8 pad0[0xA6];
-    s16 type;
-} Moby_2F7700;
 
 /* Debris update: falls and spins, bounces off what it hits with a random kick, bursts into 40 sparks once it comes to rest (or its unk10 timer runs out), or fades out over unk28 frames when unk20 is set.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002f6328.c, FUN_L01_002f8718. */
@@ -904,10 +889,6 @@ void func_L01_003004F0(char *m)
     func_L00_00263950(m, d + 0x50, 0, rate * D_0015EE64, head_rate * D_0015EE64);
     func_L00_00263950(m, d + 0xD0, 1, rate * D_0015EE64, head_rate * D_0015EE64);
 }
-typedef struct {
-    u8 pad0[0xA6];
-    s16 type;
-} Moby_015F8;
 extern char D_0013F4D0_015F8[] __asm__("D_0013F4D0");
 extern s32 D_0014C290_015F8[][64] __asm__("D_0014C290");
 extern int func_00215570_015F8(void *, int) __asm__("func_00215570");
@@ -1080,30 +1061,6 @@ typedef struct {
     u8 pad0[0x24];
     f32 scale;
 } Class_00309078;
-typedef struct {
-    Vec4f bsphere;
-    Vec4f pos;
-    u8 state;
-    u8 pad21[3];
-    Class_00309078 *pclass;
-    void *next;
-    f32 scale;
-    u8 unk30;
-    u8 unk31;
-    s16 unk32;
-    u16 flags;
-    u16 unk36;
-    u8 pad38[8];
-    Vec4f rot;
-    u8 frame;
-    u8 prev_frame;
-    u8 seq;
-    u8 prev_seq;
-    u8 pad54[0x1C];
-    u8 unk70;
-    u8 pad71[7];
-    u8 *pvars;
-} Moby_00309078;
 
 extern Hero hero_00309078 __asm__("D_0013F450");
 extern u8 D_0014BFC0_00309078[] __asm__("D_0014BFC0");
@@ -1127,14 +1084,14 @@ extern void clear_vec_00309078(void *) __asm__("func_001F9BC0");
 extern void func_001F4E08_00309078(s32) __asm__("func_001F4E08");
 extern void func_L01_00231A68_00309078(void) __asm__("func_L01_00231A68");
 extern int voice_00309078(int, int, void *) __asm__("func_0022ED80");
-extern void set_seq_00309078(Moby_00309078 *, s32, s32, s32) __asm__("func_00213DE0");
+extern void set_seq_00309078(Moby *, s32, s32, s32) __asm__("func_00213DE0");
 extern void func_L00_00232C10_00309078(f32, s32, s32) __asm__("func_L00_00232C10");
 extern void func_L00_00264DB8_00309078(s32, s32) __asm__("func_L00_00264DB8");
-extern void func_L01_00309848_00309078(Moby_00309078 *) __asm__("func_L01_00309848");
-extern void func_L01_00309928_00309078(Moby_00309078 *) __asm__("func_L01_00309928");
-extern void func_L01_00309758_00309078(Moby_00309078 *) __asm__("func_L01_00309758");
-extern void func_L01_00309BB8_00309078(Moby_00309078 *) __asm__("func_L01_00309BB8");
-extern void func_L01_00309DC8_00309078(Moby_00309078 *) __asm__("func_L01_00309DC8");
+extern void func_L01_00309848_00309078(Moby *) __asm__("func_L01_00309848");
+extern void func_L01_00309928_00309078(Moby *) __asm__("func_L01_00309928");
+extern void func_L01_00309758_00309078(Moby *) __asm__("func_L01_00309758");
+extern void func_L01_00309BB8_00309078(Moby *) __asm__("func_L01_00309BB8");
+extern void func_L01_00309DC8_00309078(Moby *) __asm__("func_L01_00309DC8");
 extern f32 dist_00309078(void *, void *) __asm__("func_001F9D48");
 extern s32 ticks_00309078(s32) __asm__("func_001F9850");
 extern float cos_00309078(float) __asm__("func_001F9F90");
@@ -1153,7 +1110,7 @@ extern void save_00309078(int, int) __asm__("func_0020BFC8");
 
 /* Update of the Novalis collectible that starts a short cutscene: spins and bobs at its spawn point until the hero touches it, then plays the pickup camera, marks its flag collected, saves and removes itself.
    Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/entities/002f6328.c, FUN_L01_00307ca0. */
-void func_L01_00309078(Moby_00309078 *moby) {
+void func_L01_00309078(Moby *moby) {
     Vars_00309078 *vars = (Vars_00309078 *)moby->pvars;
     Hero *h;
     Vec4f at;
@@ -1180,7 +1137,7 @@ void func_L01_00309078(Moby_00309078 *moby) {
         func_L01_00309848_00309078(moby);
         return;
     case 1:
-        moby->scale = moby->pclass->scale * D_L01_00161FA0_00309078;
+        moby->scale = ((Class_00309078 *)moby->pclass)->scale * D_L01_00161FA0_00309078;
         moby->pos.z = vars->home.z + D_L01_00161FA4_00309078 + D_L01_00161FA8_00309078 * sin_00309078(moby->rot.w);
         moby->rot.x = add_rot_00309078(moby->rot.x, D_L01_00161FB0_00309078 * 0.017453292f * D_0015EE6C_00309078);
         moby->rot.y = add_rot_00309078(moby->rot.y, D_L01_00161FB4_00309078 * 0.017453292f * D_0015EE6C_00309078);
