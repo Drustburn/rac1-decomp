@@ -13,14 +13,8 @@
  */
 
 #include "common.h"
+#include "vector.h"
 
-/* A float vector with 4-byte alignment (no 128-bit member). */
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4f;
 
 struct Manip;
 struct GifEntry;

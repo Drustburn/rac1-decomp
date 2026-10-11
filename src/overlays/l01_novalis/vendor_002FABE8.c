@@ -2,6 +2,7 @@
 #include "common.h"
 #include "include_asm.h"
 #include "moby.h"
+#include "vector.h"
 
 INCLUDE_ASM("asm/overlays", func_L01_002FABE8);
 typedef struct {
@@ -298,7 +299,6 @@ void func_L01_002FB588_r(struct Moby *moby, u128_2FB588 *where, s32 sound, f32 s
         func_L00_002D4CE8_2FB588(((BurstLight_2FB588 *)D_L01_001E3720_2FB588), pos_p, 0, 0);
     }
 }
-typedef struct { float f[4]; } Vec4 __attribute__((aligned(16)));
 typedef struct {
     Vec4 vel;
     void *coll;
