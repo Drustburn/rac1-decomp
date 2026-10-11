@@ -1147,97 +1147,13 @@ INCLUDE_ASM("asm/overlays", func_L12_003061E0);
 INCLUDE_ASM("asm/overlays", func_L12_00306890);
 extern f32 D_0015EE6C MACRO_ADDR;
 extern f32 D_0015EE70 MACRO_ADDR;
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4f_07730;
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
-struct MobyClass_07730 {
-    u8 pad_0[0xC];
-    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
-    u8 pad_D[3];
-    u32 unk10; /* copied into Moby.unk94 when a moby is (re)classed */
-    u8 pad_14[0x8];
-    void *unk1C; /* word table, indexed id * 4 + 4 (0024eec0) */
-    struct GifEntry *gifs; /* patched by patch_moby_gifs */
-    f32 scale; /* default draw scale: copied into Moby.scale, divides it */
-    s32 unk28;
-    void **callbacks; /* function-pointer table, called with the moby */
-    u8 pad_30[0x14];
-    u16 flags; /* initial Moby.flags */
-    s16 unk46; /* class category; 5 is tested by targeting code */
-    struct AnimSeq *seqs[1]; /* animation sequences, indexed by Moby.seq */
-};
-struct Moby_07730 {
-    Vec4f_07730 bsphere;
-    Vec4f_07730 pos;
-    u8 state; /* >= 0xFE: dead, waiting to respawn */
-    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
-    u8 unk22; /* class slot: pclass = D_L00_00197300[unk22] (FUN_L00_002cf218) */
-    u8 unk23; /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
-    struct MobyClass_07730 *pclass;
-    struct Moby_07730 *next;
-    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
-    u8 unk30; /* set to 0xFF (0x7F for beams) by spawners */
-    u8 unk31; /* set to 1 by spawners */
-    s16 unk32; /* set to 0xFF (0x7F for beams) by spawners */
-    u16 flags;
-    u16 unk36; /* set to 0x7F80 by spawners */
-    u64 spawn_frame; /* frame count at which it may respawn */
-    Vec4f_07730 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
-    u8 frame; /* animation frame */
-    u8 prev_frame; /* frame index in prev_seq */
-    u8 seq; /* animation sequence id */
-    u8 prev_seq;
-    f32 unk54;
-    f32 unk58;
-    u8 pad5C[8];
-    struct Manip *manips;
-    void *cur_frame_data;
-    void *prev_frame_data;
-    u8 unk70;
-    u8 unk71; /* set to 0xFF when a moby changes class */
-    u8 unk72;
-    u8 unk73;
-    void (*update)(struct Moby_07730 *moby);
-    u8 *pvars;
-    u8 unk7C;
-    u8 pad7D;
-    u8 unk7E;
-    u8 unk7F; /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
-    u8 pad80[0x10];
-    s32 unk90;
-    u32 unk94; /* set from the class header's word 0x10 */
-    s32 unk98; /* set to 1 while a carrier holds the moby (FUN_L00_002c7a58) */
-    u8 pad9C[8];
-    u8 unkA4;
-    u8 padA5;
-    s16 oclass;
-    u8 padA8[8];
-    u8 unkB0; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
-    u8 padB1;
-    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
-    s16 unkB4;
-    u8 padB6[2];
-    void *unkB8; /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
-    u8 unkBC;
-    u8 padBD[3];
-    Vec4f_07730 unkC0; /* 0xC0: first row of a matrix built from rot (FUN_001fa030) */
-    Vec4f_07730 unkD0;
-    Vec4f_07730 unkE0;
-    u8 padF0[0x10];
-};
 extern char * D_L12_00160058_07730 __asm__("D_L12_00160058") MACRO_ADDR;
 extern int D_L12_001FB948[];
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l12/gameplay/vendor/003028c8.c, FUN_L12_00306350. */
-void func_L12_00307730(struct Moby_07730 *moby, int slot) {
+void func_L12_00307730(struct Moby *moby, int slot) {
     char *data = (char *)moby->pvars;
-    struct Moby_07730 *selected;
+    struct Moby *selected;
     float *speed;
     int offset;
     float initial_speed;
@@ -1250,7 +1166,7 @@ void func_L12_00307730(struct Moby_07730 *moby, int slot) {
         selected = moby;
         offset = 0x44;
     } else {
-        selected = (struct Moby_07730 *)(D_L12_00160058_07730 + D_L12_001FB948[slot] * 0x100);
+        selected = (struct Moby *)(D_L12_00160058_07730 + D_L12_001FB948[slot] * 0x100);
         offset = slot * 4;
     }
 
@@ -1421,9 +1337,6 @@ void func_L12_00308E98(char *m) {
         }
     }
 }
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 void func_0020D678(void *obj);
 extern short D_0015EE84;
 extern unsigned char D_0014C150[];
@@ -1582,9 +1495,6 @@ void func_L12_0030D248(char *m) {
     VU1_addGSregister(6, GetEffectTex(0x30));
     func_L11_0031FCC8(1);
 }
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 extern float D_L12_00162188_0D3D0[2] __asm__("D_L12_00162188") MACRO_ADDR;
 void func_L12_0030D248_0D3D0(struct Moby *m) __asm__("func_L12_0030D248");
 extern int D_L12_00162170_0D3D0 SDATA(D_L12_00162170);
