@@ -504,9 +504,6 @@ void func_L14_002AF918(char *moby) {
         }
     }
 }
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
@@ -1175,40 +1172,13 @@ typedef struct Class_2B5938 {
     int f10;
 } Class_2B5938;
 
-typedef struct Moby_2B5938 {
-    char pad00[0x10];
-    float pos[4];               /* 0x10 */
-    unsigned char state;        /* 0x20 */
-    char pad21[3];
-    Class_2B5938 *cls;          /* 0x24 */
-    char pad28[8];
-    unsigned char f30;          /* 0x30 */
-    unsigned char f31;          /* 0x31 */
-    char pad32[2];
-    unsigned short f34;         /* 0x34 */
-    char pad36[0x12];
-    float rot;                  /* 0x48 */
-    char pad4C[6];
-    unsigned char f52;          /* 0x52 */
-    unsigned char f53;          /* 0x53 */
-    char pad54[0x1C];
-    unsigned char f70;          /* 0x70 */
-    char pad71[7];
-    struct Data_2B5938 *d;      /* 0x78 */
-    char pad7C[3];
-    unsigned char f7F;          /* 0x7F */
-    char pad80[0x14];
-    int f94;                    /* 0x94 */
-    char pad98[0x1A];
-    short fB2;                  /* 0xB2 */
-} Moby_2B5938;
 
 typedef struct Data_2B5938 {
     char pad00[0x40];
     float f40[2];               /* 0x40 */
     float f48;                  /* 0x48 */
     char pad4C[0x64];
-    Moby_2B5938 *fB0;           /* 0xB0 */
+    Moby *fB0;           /* 0xB0 */
     int fB4;                    /* 0xB4 */
     char padB8[0x18];
     int fD0;                    /* 0xD0 */
@@ -1300,8 +1270,8 @@ extern void func_L00_0025F4A8_2B5938(void *, void *, void *, float, float, int, 
                                      int, float, int, int, int, int) __asm__("func_L00_0025F4A8");
 
 /* Update of the minibomber (moby class 31): flies along its paths, turns at the ends, dives and drops bombs. */
-void func_L14_002B5938(Moby_2B5938 *moby) {
-    Data_2B5938 *d = moby->d;
+void func_L14_002B5938(Moby *moby) {
+    Data_2B5938 *d = (struct Data_2B5938 *)moby->pvars;
     float v[12];
     float *tgt;
     char *buf;
@@ -1311,9 +1281,9 @@ void func_L14_002B5938(Moby_2B5938 *moby) {
     float g;
     float spd;
 
-    if (moby->f70 & 2) {
-        if (moby->f52 == moby->f53 && moby->f52 != 0) {
-            if (moby->f52 == 2) {
+    if (moby->unk70 & 2) {
+        if (moby->seq == moby->prev_seq && moby->seq != 0) {
+            if (moby->seq == 2) {
                 func_00213DE0(moby, 0, 0, 10);
             } else {
                 func_00213D28(moby, 0, 0);
@@ -1326,8 +1296,8 @@ void func_L14_002B5938(Moby_2B5938 *moby) {
     func_L14_002B6AA0((char *)moby, tgt, d->f17C, d->f170, d->f174, d->f178, d->f154, d->f158, d->f15C);
     func_L14_002B6678((char *)moby);
     func_L14_002B7028((char *)moby);
-    if (moby->f31 != 0) {
-        if (FastVecDist(moby->pos, D_L14_001675C0) < 40.0f && moby->state != 0 && moby->state != 1 &&
+    if (moby->unk31 != 0) {
+        if (FastVecDist(&moby->pos, D_L14_001675C0) < 40.0f && moby->state != 0 && moby->state != 1 &&
             moby->state != 9) {
             func_L00_0025B178(moby);
         }
@@ -1336,69 +1306,69 @@ void func_L14_002B5938(Moby_2B5938 *moby) {
     case 0: {
         PathNode_2B5938 *path;
         if (d->fD0 == -1) {
-            STUB_printf(D_L14_001FC160, moby->fB2);
+            STUB_printf(D_L14_001FC160, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
         path = D_L14_001B0F30_2B5938[d->fD0];
         if (path->n == 0) {
-            STUB_printf(D_L14_001FC188, moby->fB2);
+            STUB_printf(D_L14_001FC188, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
         if (d->fD4 == -1) {
-            STUB_printf(D_L14_001FC1C8, moby->fB2);
+            STUB_printf(D_L14_001FC1C8, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
         if (D_L14_001B0F30_2B5938[d->fD4]->n == 0) {
-            STUB_printf(D_L14_001FC1F0, moby->fB2);
+            STUB_printf(D_L14_001FC1F0, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
         if (d->fD8 == -1) {
-            STUB_printf(D_L14_001FC230, moby->fB2);
+            STUB_printf(D_L14_001FC230, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
         if (D_L14_001B0F30_2B5938[d->fD8]->n == 0) {
-            STUB_printf(D_L14_001FC258, moby->fB2);
+            STUB_printf(D_L14_001FC258, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
         if (d->f150 == -1) {
-            STUB_printf(D_L14_001FC290, moby->fB2);
+            STUB_printf(D_L14_001FC290, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
         if (D_L14_001B0F30_2B5938[d->f150]->n == 0) {
-            STUB_printf(D_L14_001FC2B8, moby->fB2);
+            STUB_printf(D_L14_001FC2B8, (*(short *)&moby->save_id));
             DeleteMoby(moby);
             return;
         }
-        qcopy(moby->pos, path + 1);
-        FastVecSub(v, path + 2, moby->pos);
+        qcopy(&moby->pos, path + 1);
+        FastVecSub(v, path + 2, &moby->pos);
         buf = d->f110;
-        moby->rot = func_L00_001FF860(v[0], v[1]);
+        moby->rot.z = func_L00_001FF860(v[0], v[1]);
         d->f160 = *(float *)&D_L14_00161608;
         d->f164 = 0.0f;
         d->f168 = 0.0f;
         d->f16C = 0.0f;
         func_L14_002B6800((char *)moby);
         d->f108 = -1;
-        moby->f30 = 0x80;
+        moby->unk30 = 0x80;
         moby->state = 1;
         func_L14_002B6EE8((char *)moby);
         FastMemSet(buf, 0, 0x40);
         AttachManipulator(moby, 0, buf);
-        moby->f7F = 0x20;
+        moby->unk7F = 0x20;
         break;
     }
     case 1:
         if (d->fB4 != 2) {
             moby->state = 2;
-            moby->f34 &= 0xFFBE;
-            moby->f94 = moby->cls->f10;
+            moby->flags &= 0xFFBE;
+            moby->unk94 = ((Class_2B5938 *)moby->pclass)->f10;
             func_L14_002B6F68((char *)moby);
         }
         break;
@@ -1458,7 +1428,7 @@ void func_L14_002B5938(Moby_2B5938 *moby) {
         tg = 0.0f;
         a = func_00214220(tg, d->f104, (float)d->f102 / func_001FA888(scale_ticks(D_L14_00161628)));
         func_L00_001FFED8(d->f120, 2, a);
-        if (func_001F9D48(moby->pos, d->fB0->pos) < D_L14_00161638) {
+        if (func_001F9D48(&moby->pos, &d->fB0->pos) < D_L14_00161638) {
             if (d->f10C == 0) {
                 d->fE8 = 0;
                 d->fEC = 0.0f;
@@ -1475,7 +1445,7 @@ void func_L14_002B5938(Moby_2B5938 *moby) {
             moby->state = 3;
             func_L14_002B6E80((char *)moby);
         } else if (FastDecTimer(&d->f102) != 0) {
-            if (moby->f53 != 2) {
+            if (moby->prev_seq != 2) {
                 moby->state = 5;
                 d->f102 = scale_ticks(D_L14_00161624);
                 d->f104 = 0.0f;
@@ -1519,10 +1489,10 @@ void func_L14_002B5938(Moby_2B5938 *moby) {
         break;
     case 5: {
         PathNode_2B5938 *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
-        tg = FastSubRots(func_L00_001FF860(q[1].v[0] - moby->pos[0], q[1].v[1] - moby->pos[1]), moby->rot);
+        tg = FastSubRots(func_L00_001FF860(q[1].v[0] - moby->pos.x, q[1].v[1] - moby->pos.y), moby->rot.z);
         a = func_00214220(tg, d->f104, (float)d->f102 / func_001FA888(scale_ticks(D_L14_00161624)));
         func_L00_001FFED8(d->f120, 2, a);
-        if (moby->f53 == 2) {
+        if (moby->prev_seq == 2) {
             moby->state = 4;
             d->f102 = scale_ticks(D_L14_00161628);
         } else if (FastDecTimer(&d->f102) != 0) {
@@ -1559,15 +1529,15 @@ void func_L14_002B5938(Moby_2B5938 *moby) {
     case 9: {
         int i;
         func_L00_00250800(moby, 2, v);
-        func_L14_002BC560((char *)moby, moby->rot, (char *)v);
+        func_L14_002BC560((char *)moby, moby->rot.z, (char *)v);
         func_L00_00250800(moby, 3, v);
-        func_L14_002BC560((char *)moby, FastAddRots(moby->rot, 3.1415927f), (char *)v);
-        func_L00_0025F4A8_2B5938(moby, d->f40, moby->pos, 0.0f, 0.0f, 5, 2, 6, 4.0f, 1.0f, 9.0f, 1.0f, 1, 15.0f, 1, 1,
+        func_L14_002BC560((char *)moby, FastAddRots(moby->rot.z, 3.1415927f), (char *)v);
+        func_L00_0025F4A8_2B5938(moby, d->f40, &moby->pos, 0.0f, 0.0f, 5, 2, 6, 4.0f, 1.0f, 9.0f, 1.0f, 1, 15.0f, 1, 1,
                                  -1, 0);
         i = d->f108;
         if (i != -1) {
             char *e = D_0013E633 + 0x1D + i * 0x70;
-            if (*(Moby_2B5938 **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
+            if (*(Moby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                 func_L00_0028EBF0(i);
             }
         }
@@ -1786,10 +1756,6 @@ void func_L14_002B6BB8(char *m, float *input, float angle) {
     }
     func_L00_002D4CE8(D_L14_001D8BD0, saved, 0, 0);
 }
-typedef struct {
-    char pad00[0x78];
-    char *pvars;
-} Moby_2B6E80;
 extern int *D_L14_001B0F30[];
 typedef struct {
     char pad00[0xD0];
@@ -1805,11 +1771,11 @@ typedef struct {
     int pathB;
 } Mover_2B6E80;
 extern void func_001F9BC0(void *);
-void func_L14_002B6E80_r(Moby_2B6E80 *moby) __asm__("func_L14_002B6E80");
+void func_L14_002B6E80_r(Moby *moby) __asm__("func_L14_002B6E80");
 
 /* Picks the mover's active path, puts it on the path's last segment (node, weight, t = 0) and clears its offset vector. Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l14/gameplay/entities/002460f8.c, FUN_L14_002b5c30. */
-void func_L14_002B6E80_r(Moby_2B6E80 *moby) {
-    Mover_2B6E80 *d = (Mover_2B6E80 *)moby->pvars;
+void func_L14_002B6E80_r(Moby *moby) {
+    Mover_2B6E80 *d = (Mover_2B6E80 *)((char *)moby->pvars);
     int *p;
     int n;
     if (d->alt == 0)
@@ -1841,23 +1807,15 @@ void func_L14_002B6EE8(char *moby)
     }
     *(int *)(data + 0x108) = -1;
 }
-typedef struct {
-    Vec4f bsphere;
-    Vec4f pos;
-    u8 pad20[0x20];
-    Vec4f rot;
-    u8 pad50[0x28];
-    u8 *pvars;
-} Moby_2B6F68;
 extern int *D_L14_001B0F30[];
 extern float func_L00_001FF860(float, float);
 extern void func_001F9BC0(void *);
 extern short D_L14_00161608;
 extern void func_001F9BF0(void *, void *, void *);
-void func_L14_002B6F68_r(Moby_2B6F68 *moby) __asm__("func_L14_002B6F68");
+void func_L14_002B6F68_r(Moby *moby) __asm__("func_L14_002B6F68");
 
 /* Resets the mover's path state, puts the moby on the first node of its active path facing the second, and clears its offset vector. Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l14/gameplay/entities/002460f8.c, FUN_L14_002b5d18. */
-void func_L14_002B6F68_r(Moby_2B6F68 *moby) {
+void func_L14_002B6F68_r(Moby *moby) {
     float f = (*(float *)&D_L14_00161608) * 1.5f;
     char *d = (char *)moby->pvars;
     char *p;
@@ -1880,13 +1838,6 @@ void func_L14_002B6F68_r(Moby_2B6F68 *moby) {
     *(int *)(d + 0xE4) = 0;
     clear_u64_value(d + 0xF0);
 }
-struct Moby_2B7028 {
-    Vec4f bsphere;
-    Vec4f pos; /* 0x10 */
-    u8 state; /* 0x20 */
-    u8 pad21[0x9F];
-    Vec4f unkC0; /* 0xC0 */
-};
 typedef struct {
     unsigned char pad0[4];
     int w4;
@@ -1909,10 +1860,10 @@ extern void func_001F9BD8_2B7028(void *, void *, void *) __asm__("func_001F9BD8"
 extern P_2B7028 *func_L00_0026DEA0_2B7028(void *, float, float, float, int, void *, float, int) __asm__("func_L00_0026DEA0");
 extern float D_L14_0015F660_2B7028[] __asm__("D_L14_0015F660") MACRO_ADDR;
 
-void func_L14_002B7028_r(struct Moby_2B7028 *m) __asm__("func_L14_002B7028");
+void func_L14_002B7028_r(struct Moby *m) __asm__("func_L14_002B7028");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l14/gameplay/entities/002460f8.c, FUN_L14_002b5dd8. */
-void func_L14_002B7028_r(struct Moby_2B7028 *m) {
+void func_L14_002B7028_r(struct Moby *m) {
     float off[4];
     float pos[4];
     int i;
@@ -2024,8 +1975,6 @@ typedef union {
     f32 f[4];
     s32 i[4];
 } Vec4;
-struct Manip;
-struct GifEntry;
 typedef struct {
     char _pad00[0x48];
     AnimSeq *seqs[1]; /* 0x48 */
@@ -2239,8 +2188,6 @@ int func_L14_002D77E0(char *m) {
     func_001F9C08(m + 0x10, ent + 0x10, D_L14_001B0F30_a[*(int *)(d + 0x84)] + 0x10, t * *(float *)(d + 0x70));
     return ok;
 }
-struct Manip;
-struct GifEntry;
 extern unsigned short * D_L14_001AC2C0_D7880[] __asm__("D_L14_001AC2C0");
 extern char * D_L14_00160098_D7880 __asm__("D_L14_00160098") MACRO_ADDR;
 extern char * D_L14_0015F7EC_D7880 __asm__("D_L14_0015F7EC") MACRO_ADDR;

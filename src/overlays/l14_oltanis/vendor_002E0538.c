@@ -77,16 +77,6 @@ typedef struct Data_2EC3E8 {
     short timer2;                 /* 0x50A */
     float rate2;                  /* 0x50C */
 } Data_2EC3E8;
-typedef struct Moby_2EC3E8 {
-    char pad0[0x20];
-    unsigned char state;          /* 0x20 */
-    char pad21[0x27];
-    float rotz;                   /* 0x48 */
-    char pad4C[0x2C];
-    Data_2EC3E8 *data;            /* 0x78 */
-    char pad7C[0x36];
-    short fB2;                    /* 0xB2 */
-} Moby_2EC3E8;
 typedef struct Hero_2EC3E8 {
     char pad0[0x308];
     short f308;                   /* 0x308 */
@@ -107,7 +97,7 @@ extern void func_001F9BD8_2EC3E8(void *, void *, void *) __asm__("func_001F9BD8"
 extern int func_00215570_2EC3E8(void *, int) __asm__("func_00215570");
 extern void func_0020D678_2EC3E8(void *) __asm__("func_0020D678");
 extern int func_001E9730_2EC3E8() __asm__("func_001E9730");
-extern void func_L14_002EC7E8_2EC3E8(Moby_2EC3E8 *, int, void *) __asm__("func_L14_002EC7E8");
+extern void func_L14_002EC7E8_2EC3E8(Moby *, int, void *) __asm__("func_L14_002EC7E8");
 extern void func_L14_002EC9C8_2EC3E8(void *) __asm__("func_L14_002EC9C8");
 extern float D_0015EE6C_2EC3E8 __asm__("D_0015EE6C") MACRO_ADDR;
 typedef struct Push_2EC3E8 {
@@ -128,25 +118,25 @@ extern char D_0013E633_2EC3E8[] __asm__("D_0013E633");
 
 /* Update for moby class 610: checks its volumes and path node on the first call and seeds 48 entries, then pushes
  * the hero along the moby's heading while he stands in the volume. */
-void func_L14_002EC3E8(Moby_2EC3E8 *m) {
-    Data_2EC3E8 *d = m->data;
+void func_L14_002EC3E8(Moby *m) {
+    Data_2EC3E8 *d = (Data_2EC3E8 *)m->pvars;
     float sv[4];
     int i;
 
     if (m->state == 0) {
         m->state = 1;
         if (d->vol0 < 0) {
-            func_001E9730_2EC3E8(D_L14_001FCCF0_2EC3E8, m->fB2);
+            func_001E9730_2EC3E8(D_L14_001FCCF0_2EC3E8, (*(short *)&m->save_id));
             func_0020D678_2EC3E8(m);
             return;
         }
         if (d->node < 0) {
-            func_001E9730_2EC3E8(D_L14_001FCD50_2EC3E8, m->fB2);
+            func_001E9730_2EC3E8(D_L14_001FCD50_2EC3E8, (*(short *)&m->save_id));
             func_0020D678_2EC3E8(m);
             return;
         }
         if (d->vol500 < 0) {
-            func_001E9730_2EC3E8(D_L14_001FCDA8_2EC3E8, m->fB2);
+            func_001E9730_2EC3E8(D_L14_001FCDA8_2EC3E8, (*(short *)&m->save_id));
             func_0020D678_2EC3E8(m);
             return;
         }
@@ -156,8 +146,8 @@ void func_L14_002EC3E8(Moby_2EC3E8 *m) {
         d->f1C = func_001F9CB8_2EC3E8(D_L14_001601AC_2EC3E8 + (d->node << 7) + 0x20);
         d->timer2 = func_001F9850_2EC3E8(d->ticks);
         d->rate2 = 1.0f / func_001FA888_2EC3E8(d->timer2);
-        sv[0] = func_001F9F90_2EC3E8(m->rotz);
-        sv[1] = func_001F9FA8_2EC3E8(m->rotz);
+        sv[0] = func_001F9F90_2EC3E8(m->rot.z);
+        sv[1] = func_001F9FA8_2EC3E8(m->rot.z);
         sv[2] = 0.0f;
         for (i = 0; i < 0x30; i++) {
             func_L14_002EC7E8_2EC3E8(m, i, sv);
@@ -165,8 +155,8 @@ void func_L14_002EC3E8(Moby_2EC3E8 *m) {
     }
     if (func_00215570_2EC3E8(D_0013E633_2EC3E8 + 0xE9D, d->vol500)) {
         Hero_2EC3E8 *h;
-        D_L14_00162300_2EC3E8.x = func_001F9F90_2EC3E8(m->rotz) * (D_L14_00161CD8_2EC3E8 * D_0015EE6C_2EC3E8);
-        D_L14_00162300_2EC3E8.y = func_001F9FA8_2EC3E8(m->rotz) * (D_L14_00161CD8_2EC3E8 * D_0015EE6C_2EC3E8);
+        D_L14_00162300_2EC3E8.x = func_001F9F90_2EC3E8(m->rot.z) * (D_L14_00161CD8_2EC3E8 * D_0015EE6C_2EC3E8);
+        D_L14_00162300_2EC3E8.y = func_001F9FA8_2EC3E8(m->rot.z) * (D_L14_00161CD8_2EC3E8 * D_0015EE6C_2EC3E8);
         D_L14_00162300_2EC3E8.z = 0.0f;
         D_L14_00162300_2EC3E8.f10 = 1.0f;
         func_L14_002EC9C8_2EC3E8(m);
@@ -177,8 +167,8 @@ void func_L14_002EC3E8(Moby_2EC3E8 *m) {
             func_001F9938_2EC3E8(&d->timer2);
             t = (1.0f - func_001FA888_2EC3E8(d->timer2) * d->rate2) * (d->speed * D_0015EE6C_2EC3E8);
             d->active = 1;
-            sv[0] = func_001F9F90_2EC3E8(m->rotz) * t;
-            sv[1] = func_001F9FA8_2EC3E8(m->rotz) * t;
+            sv[0] = func_001F9F90_2EC3E8(m->rot.z) * t;
+            sv[1] = func_001F9FA8_2EC3E8(m->rot.z) * t;
             sv[2] = 0.0f;
             func_001F9BD8_2EC3E8(D_0013E633_2EC3E8 + 0xF0D, D_0013E633_2EC3E8 + 0xF0D, sv);
             d->timer = func_001F9850_2EC3E8(D_L14_00161CD4_2EC3E8);
@@ -202,14 +192,12 @@ void func_L14_002EC3E8(Moby_2EC3E8 *m) {
         }
         u = func_001FA888_2EC3E8(d->timer) * d->rate;
         t = (d->speed * D_0015EE6C_2EC3E8 - 0.0f) * u + 0.0f;
-        sv[0] = func_001F9F90_2EC3E8(m->rotz) * t;
-        sv[1] = func_001F9FA8_2EC3E8(m->rotz) * t;
+        sv[0] = func_001F9F90_2EC3E8(m->rot.z) * t;
+        sv[1] = func_001F9FA8_2EC3E8(m->rot.z) * t;
         sv[2] = 0.0f;
         func_001F9BD8_2EC3E8(D_0013E633_2EC3E8 + 0xF0D, D_0013E633_2EC3E8 + 0xF0D, sv);
     }
 }
-struct Manip;
-struct GifEntry;
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
@@ -274,9 +262,6 @@ void func_L14_002EC7E8(struct Moby *m, int i, void *dir) {
     d->n3E0[i] = 0;
 }
 INCLUDE_ASM("asm/overlays", func_L14_002EC9C8);
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
@@ -1767,32 +1752,6 @@ void func_L14_002FDE28(char *m) {
     }
 }
 typedef float Vec_2FE038[4] __attribute__((aligned(16)));
-typedef struct Moby_2FE038 {
-    char pad0[0x10];
-    Vec_2FE038 pos;
-    unsigned char state;
-    char pad1[0x3];
-    struct Moby_2FE038 * f24;
-    char pad2[0x8];
-    unsigned char b30;
-    char pad3[0x1];
-    short h32;
-    unsigned short flags;
-    char pad4[0xA];
-    Vec_2FE038 rot;
-    char pad5[0x28];
-    struct Jet_2FE038 * pd;
-    char pad6[0x18];
-    int f94;
-    char pad7[0xC];
-    unsigned char bA4;
-    char pad8[0xD];
-    unsigned short hB2;
-    char pad9[0xC];
-    Vec_2FE038 fC0;
-    char pad10[0x10];
-    Vec_2FE038 fE0;
-} Moby_2FE038;
 typedef struct Jet_2FE038 {
     char pad0[0x4];
     int f4;
@@ -1839,14 +1798,14 @@ typedef struct Voice_2FE038 {
     char p0[0x74];
     unsigned char on;
     char p1[0x88 - 0x75];
-    Moby_2FE038 *owner;
+    Moby *owner;
 } Voice_2FE038;
 typedef struct Skill_2FE038 {
     char p0[0x18];
     unsigned char f18;
 } Skill_2FE038;
 
-extern void func_L14_002FF6C0_2FE038(Moby_2FE038 *) __asm__("func_L14_002FF6C0");
+extern void func_L14_002FF6C0_2FE038(Moby *) __asm__("func_L14_002FF6C0");
 extern void *func_L00_0025B478_2FE038(void *, int, int) __asm__("func_L00_0025B478");
 extern int func_0022EE28_2FE038(int, int, int) __asm__("func_0022EE28");
 extern void func_L00_00264DB8_2FE038(int, int) __asm__("func_L00_00264DB8");
@@ -1854,7 +1813,7 @@ extern void func_L00_00260108_2FE038(void *, void *, int, float, float) __asm__(
 extern void func_L00_0028EBF0_2FE038(int) __asm__("func_L00_0028EBF0");
 extern int func_001E9730_2FE038() __asm__("func_001E9730");
 extern void func_0020D678_2FE038(void *) __asm__("func_0020D678");
-extern void func_L14_002FDD18_2FE038(Moby_2FE038 *) __asm__("func_L14_002FDD18");
+extern void func_L14_002FDD18_2FE038(Moby *) __asm__("func_L14_002FDD18");
 extern int func_001F9850_2FE038(int) __asm__("func_001F9850");
 extern int func_00215570_2FE038(void *, int) __asm__("func_00215570");
 extern float func_001F9D48_2FE038(void *, void *) __asm__("func_001F9D48");
@@ -1862,12 +1821,12 @@ extern float func_L00_001FF860_2FE038(float, float) __asm__("func_L00_001FF860")
 extern float func_001FA850_2FE038(float, float) __asm__("func_001FA850");
 extern int func_L00_001EFFF0_2FE038(void *, void *, int, void *, int) __asm__("func_L00_001EFFF0");
 extern void func_L10_002F6E10_2FE038(int) __asm__("func_L10_002F6E10");
-extern int func_L14_002FEDA0_2FE038(Moby_2FE038 *) __asm__("func_L14_002FEDA0");
+extern int func_L14_002FEDA0_2FE038(Moby *) __asm__("func_L14_002FEDA0");
 extern void func_001F9C30_2FE038(void *, void *, float) __asm__("func_001F9C30");
 extern void func_001F9BD8_2FE038(void *, void *, void *) __asm__("func_001F9BD8");
-extern void func_L06_00304590_2FE038(Moby_2FE038 *) __asm__("func_L06_00304590");
+extern void func_L06_00304590_2FE038(Moby *) __asm__("func_L06_00304590");
 extern int func_001F9908_2FE038(int *) __asm__("func_001F9908");
-extern void func_L14_002FE798_2FE038(Moby_2FE038 *) __asm__("func_L14_002FE798");
+extern void func_L14_002FE798_2FE038(Moby *) __asm__("func_L14_002FE798");
 extern int func_L00_0028EB98_2FE038(void *, int) __asm__("func_L00_0028EB98");
 extern int func_0022ED80_2FE038(int, int, void *) __asm__("func_0022ED80");
 extern Lvl_2FE038 D_L14_001BBCC0_2FE038 __asm__("D_L14_001BBCC0");
@@ -1875,7 +1834,7 @@ extern int D_0015EE84_2FE038 __asm__("D_0015EE84") MACRO_ADDR;
 extern unsigned char D_0014C150_2FE038[] __asm__("D_0014C150");
 extern char D_0014C290_2FE038[] __asm__("D_0014C290");
 extern char *D_L14_00160098_2FE038 __asm__("D_L14_00160098") MACRO_ADDR;
-extern Moby_2FE038 *D_L14_001B0F30_2FE038[] __asm__("D_L14_001B0F30");
+extern Moby *D_L14_001B0F30_2FE038[] __asm__("D_L14_001B0F30");
 extern int D_0015EF08_2FE038 __asm__("D_0015EF08") MACRO_ADDR;
 extern int D_L14_0016205C_2FE038 SDATA(D_L14_0016205C);
 extern char D_L14_001FD208_2FE038[] __asm__("D_L14_001FD208");
@@ -1889,22 +1848,22 @@ extern int D_L14_001BAF60_2FE038[] __asm__("D_L14_001BAF60");
 /* Oltanis jet (pilotable gunship) moby update: removes itself once collected, reacts to a hit, then a state
    machine on m->state: 0 sets up from its path, 1 waits for the hero to board it, 2 flies and drags its
    rider, 3 respawns it on its path; then the shared tail and its engine sound. */
-void func_L14_002FE038(Moby_2FE038 *m) {
+void func_L14_002FE038(Moby *m) {
     Vec_2FE038 vt;
     Vec_2FE038 vb;
-    Jet_2FE038 *d = m->pd;
+    Jet_2FE038 *d = (struct Jet_2FE038 *)m->pvars;
     unsigned short id;
 
     if (m->state == 0
-        && (D_L14_001BBCC0_2FE038.collected[(short)(id = m->hB2)] != 0
+        && (D_L14_001BBCC0_2FE038.collected[(short)(id = m->save_id)] != 0
             || (*(int *)(D_0014C290_2FE038 + (((short)id >> 5) * 4 + (D_0015EE84_2FE038 << 8))) >> (id & 0x1F)) & 1)) {
-        func_L14_002FF6C0_2FE038((Moby_2FE038 *)(D_L14_00160098_2FE038 + (d->f8C << 8)));
+        func_L14_002FF6C0_2FE038((Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8)));
         func_0020D678_2FE038(m);
         return;
     }
     {
         void *r = func_L00_0025B478_2FE038(m, 0x800000, 0);
-        m->bA4 = 0xFF;
+        m->unkA4 = 0xFF;
         if (r != 0 && d->f8C == -1 && m->state != 3) {
             if (D_0015EE84_2FE038 == 0xE) {
                 D_0015EF08_2FE038 = D_0015EF08_2FE038 + 1;
@@ -1915,9 +1874,9 @@ void func_L14_002FE038(Moby_2FE038 *m) {
                 }
             }
             m->state = 3;
-            func_L00_00260108_2FE038(m, m->pos, -1, 5.0f, 13.0f);
+            func_L00_00260108_2FE038(m, (*(Vec_2FE038 *)&m->pos), -1, 5.0f, 13.0f);
             m->flags |= 0x41;
-            m->f94 = 0;
+            m->unk94 = 0;
             if (d->f6C != -1 && ((Voice_2FE038 *)(D_0013E650_2FE038 + d->f6C * 0x70))->owner == m
                 && ((Voice_2FE038 *)(D_0013E650_2FE038 + d->f6C * 0x70))->on != 0) {
                 func_L00_0028EBF0_2FE038(d->f6C);
@@ -1928,12 +1887,12 @@ void func_L14_002FE038(Moby_2FE038 *m) {
     switch (m->state) {
     case 0:
         if (d->f68 == -1) {
-            func_001E9730_2FE038(D_L14_001FD208_2FE038, (short)m->hB2);
+            func_001E9730_2FE038(D_L14_001FD208_2FE038, (short)m->save_id);
             func_0020D678_2FE038(m);
             return;
         }
         if (*(int *)D_L14_001B0F30_2FE038[d->f68] == 0) {
-            func_001E9730_2FE038(D_L14_001FD240_2FE038, (short)m->hB2);
+            func_001E9730_2FE038(D_L14_001FD240_2FE038, (short)m->save_id);
             func_0020D678_2FE038(m);
             return;
         }
@@ -1944,16 +1903,16 @@ void func_L14_002FE038(Moby_2FE038 *m) {
         func_L14_002FDD18_2FE038(m);
         if (d->f8C != 0) {
             m->state = 1;
-            m->b30 = 0xFF;
+            m->unk30 = 0xFF;
             m->flags |= 0x41;
-            m->f94 = 0;
-            ((Moby_2FE038 *)(D_L14_00160098_2FE038 + (d->f8C << 8)))->flags |= 0x41;
+            m->unk94 = 0;
+            ((Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8)))->flags |= 0x41;
             d->f94 = 0;
         } else {
             m->state = 2;
-            m->b30 = 0x80;
+            m->unk30 = 0x80;
         }
-        m->h32 = 0x80;
+        m->unk32 = 0x80;
         d->f6C = -1;
         d->f7C = func_001F9850_2FE038(D_L14_0016205C_2FE038);
         break;
@@ -1967,28 +1926,28 @@ void func_L14_002FE038(Moby_2FE038 *m) {
                 if (c == b && ((Hero_2FE038 *)(D_0013E633_2FE038 + 0xE1D))->h30C == 0
                     && ((Hero_2FE038 *)(D_0013E633_2FE038 + 0xE1D))->w2FC == 0
                     && func_00215570_2FE038(((Hero_2FE038 *)(D_0013E633_2FE038 + 0xE1D))->pos, d->fA4) != 0) {
-                    Moby_2FE038 *jet = (Moby_2FE038 *)(D_L14_00160098_2FE038 + (d->f8C << 8));
-                    Moby_2FE038 *seat = (Moby_2FE038 *)(D_L14_00160098_2FE038 + (jet->pd->f4 << 8));
+                    Moby *jet = (Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8));
+                    Moby *seat = (Moby *)(D_L14_00160098_2FE038 + (((struct Jet_2FE038 *)jet->pvars)->f4 << 8));
                     float pitch, yaw;
-                    qcopy(vt, seat->pos);
+                    qcopy(vt, (*(Vec_2FE038 *)&seat->pos));
                     vt[2] = vt[2] + 4.0f;
                     pitch = func_001FA850_2FE038(((Cam_2FE038 *)D_L14_00167480_2FE038)->f154,
                                                  -func_L00_001FF860_2FE038(func_001F9D48_2FE038(((Cam_2FE038 *)D_L14_00167480_2FE038)->pos, vt),
                                                                            vt[2] - ((Cam_2FE038 *)D_L14_00167480_2FE038)->pos[2]));
                     yaw = func_001FA850_2FE038(((Cam_2FE038 *)D_L14_00167480_2FE038)->f158,
-                                               func_L00_001FF860_2FE038(seat->pos[0] - ((Cam_2FE038 *)D_L14_00167480_2FE038)->pos[0],
-                                                                        seat->pos[1] - ((Cam_2FE038 *)D_L14_00167480_2FE038)->pos[1]));
+                                               func_L00_001FF860_2FE038((*(Vec_2FE038 *)&seat->pos)[0] - ((Cam_2FE038 *)D_L14_00167480_2FE038)->pos[0],
+                                                                        (*(Vec_2FE038 *)&seat->pos)[1] - ((Cam_2FE038 *)D_L14_00167480_2FE038)->pos[1]));
                     if (yaw < 0.48869219f && pitch < 0.34906584f
                         && func_L00_001EFFF0_2FE038(((Cam_2FE038 *)D_L14_00167480_2FE038)->pos, vt, 0x12, seat, 0) == 0) {
-                        *(int *)(D_0014C290_2FE038 + (((short)m->hB2 >> 5) * 4 + (D_0015EE84_2FE038 << 8))) |= 1 << (m->hB2 & 0x1F);
-                        D_L14_001BAF60_2FE038[(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
+                        *(int *)(D_0014C290_2FE038 + (((short)m->save_id >> 5) * 4 + (D_0015EE84_2FE038 << 8))) |= 1 << (m->save_id & 0x1F);
+                        D_L14_001BAF60_2FE038[(short)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
                         m->flags &= 0xFFBE;
-                        m->f94 = *(int *)((char *)m->f24 + 0x10);
+                        m->unk94 = *(int *)((char *)((struct Moby *)m->pclass) + 0x10);
                         jet->flags &= 0xFFBE;
                         m->state = 2;
                         func_L10_002F6E10_2FE038(d->f90);
-                        seat->h32 = 0xFF;
-                        seat->b30 = 0xFF;
+                        seat->unk32 = 0xFF;
+                        seat->unk30 = 0xFF;
                     }
                 }
             }
@@ -2003,14 +1962,14 @@ void func_L14_002FE038(Moby_2FE038 *m) {
             if (d->f94 == 0 && d->f60 >= 0x38) {
                 d->f94 = 1;
             }
-            func_001F9C30_2FE038(vb, m->fC0, 0.21f);
-            func_001F9C30_2FE038(vt, m->fE0, -1.24f);
+            func_001F9C30_2FE038(vb, (*(Vec_2FE038 *)&m->unkC0), 0.21f);
+            func_001F9C30_2FE038(vt, (*(Vec_2FE038 *)&m->unkE0), -1.24f);
             func_001F9BD8_2FE038(vb, vb, vt);
-            func_001F9BD8_2FE038(vb, m->pos, vb);
+            func_001F9BD8_2FE038(vb, (*(Vec_2FE038 *)&m->pos), vb);
             {
-            Moby_2FE038 *jet = (Moby_2FE038 *)(D_L14_00160098_2FE038 + (d->f8C << 8));
-            qcopy(jet->pos, vb);
-            qcopy(jet->rot, m->rot);
+            Moby *jet = (Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8));
+            qcopy((*(Vec_2FE038 *)&jet->pos), vb);
+            qcopy((*(Vec_2FE038 *)&jet->rot), (*(Vec_2FE038 *)&m->rot));
             if (d->f94 == 1) {
                 func_L06_00304590_2FE038(jet);
                 d->f94 = 2;
@@ -2020,15 +1979,15 @@ void func_L14_002FE038(Moby_2FE038 *m) {
         break;
     case 3:
         if (func_001F9908_2FE038(&d->f7C) != 0) {
-            Moby_2FE038 *p = D_L14_001B0F30_2FE038[d->f68];
+            Moby *p = D_L14_001B0F30_2FE038[d->f68];
             m->flags &= 0xFFBE;
-            m->f94 = *(int *)((char *)m->f24 + 0x10);
+            m->unk94 = *(int *)((char *)((struct Moby *)m->pclass) + 0x10);
             d->f7C = func_001F9850_2FE038(D_L14_0016205C_2FE038);
             m->state = 2;
             d->f60 = 0;
             d->f64 = 0;
-            qcopy(m->pos, p->pos);
-            m->rot[2] = func_L00_001FF860_2FE038(*(float *)((char *)p + 0x20) - p->pos[0], *(float *)((char *)p + 0x24) - p->pos[1]);
+            qcopy((*(Vec_2FE038 *)&m->pos), (*(Vec_2FE038 *)&p->pos));
+            (*(Vec_2FE038 *)&m->rot)[2] = func_L00_001FF860_2FE038(*(float *)((char *)p + 0x20) - (*(Vec_2FE038 *)&p->pos)[0], *(float *)((char *)p + 0x24) - (*(Vec_2FE038 *)&p->pos)[1]);
             d->f80 = d->f84 = d->f88 = d->f70 = d->f74 = d->f78 = 0.0f;
         }
         break;
