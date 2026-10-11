@@ -87,13 +87,14 @@ struct HeroItemSlot {
     s32 unk20;                     /* 0x20 */
     s32 state;                     /* 0x24: 0 empty, 2 ready, 3 released */
     s32 item_id;                   /* 0x28: item in the slot */
-    u8 pad_2C[0x4];
+    f32 unk2C;                     /* 0x2C */
     f32 unk30;                     /* 0x30 */
     f32 unk34;                     /* 0x34 */
     s32 unk38;                     /* 0x38 */
     s16 unk3C;                     /* 0x3C */
     u16 unk3E;                     /* 0x3E */
-    u8 pad_40[0x10];
+    s32 unk40;                     /* 0x40: items[6]: aim lock (func_L00_002B33E8) */
+    u8 pad_44[0xC];
 };
 
 /*
@@ -267,7 +268,14 @@ struct Hero {
     s16 unk30A;                    /* 0x30A */
     union { s16 s; u16 u; } unk30C; /* 0x30C: read signed, incremented unsigned */
     union { s16 s; u16 u; } air_frames; /* 0x30E: frames off the ground, 0 on landing */
-    u8 pad_310[0xA0];
+    Vec4 unk310;                   /* 0x310 */
+    Vec4 unk320;                   /* 0x320 */
+    Vec4 unk330;                   /* 0x330 */
+    u8 pad_340[0x10];
+    Vec4 unk350;                   /* 0x350 */
+    void *unk360;                  /* 0x360 */
+    s32 unk364;                    /* 0x364 */
+    u8 pad_368[0x48];
     f32 unk3B0;                    /* 0x3B0 */
     union { f32 f; s32 i; } unk3B4; /* 0x3B4: written as a float and zeroed as an int */
     s16 unk3B8;                    /* 0x3B8 */
@@ -337,12 +345,12 @@ struct Hero {
     s32 unk4C4;                    /* 0x4C4 */
     u8 pad_4C8[0x8];
     Vec4 unk4D0;                   /* 0x4D0 */
-    u8 pad_4E0[0x4];
+    f32 unk4E0;                    /* 0x4E0 */
     f32 unk4E4;                    /* 0x4E4 */
     s32 unk4E8;                    /* 0x4E8 */
     f32 unk4EC;                    /* 0x4EC */
     f32 unk4F0;                    /* 0x4F0 */
-    u8 pad_4F4[0x4];
+    u32 unk4F4;                    /* 0x4F4 */
     s32 unk4F8;                    /* 0x4F8: first argument of FUN_L00_00233f80 (FUN_L01_00233de0) */
     u8 pad_4FC[0x4];
     Vec4 unk500;                   /* 0x500 */
@@ -396,7 +404,8 @@ struct Hero {
     f32 unk610;                    /* 0x610 */
     f32 unk614;                    /* 0x614 */
     union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
-    u8 pad_61C[0x54];
+    u8 pad_61C[0x24];
+    Vec4 unk640[3];                /* 0x640: matrix */
     f32 unk670;                    /* 0x670 */
     f32 unk674;                    /* 0x674 */
     u8 pad_678[0xC];
@@ -429,7 +438,9 @@ struct Hero {
     Vec4 unk770;                   /* 0x770 */
     Vec4 unk780;                   /* 0x780 */
     Vec4 unk790;                   /* 0x790 */
-    u8 pad_7A0[0x30];
+    s16 unk7A0[8];                 /* 0x7A0 */
+    s16 unk7B0[8];                 /* 0x7B0 */
+    s16 unk7C0[8];                 /* 0x7C0 */
     f32 unk7D0[0x20];              /* 0x7D0 */
     u8 pad_850[0x4];
     f32 unk854;                    /* 0x854 */
@@ -462,7 +473,7 @@ struct Hero {
     f32 unk8A4;                    /* 0x8A4 */
     s32 unk8A8;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
     s16 unk8AC;                    /* 0x8AC */
-    u8 pad_8AE[0x1];
+    u8 unk8AE;                     /* 0x8AE */
     u8 unk8AF;                     /* 0x8AF */
     s16 unk8B0;                    /* 0x8B0 */
     s16 unk8B2;                    /* 0x8B2 */
@@ -472,10 +483,11 @@ struct Hero {
     s16 unk8BE;                    /* 0x8BE */
     s32 unk8C0;                    /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
     s32 unk8C4;                    /* 0x8C4 */
-    u8 pad_8C8[0x4];
+    s16 unk8C8;                    /* 0x8C8 */
+    s16 unk8CA;                    /* 0x8CA */
     s16 unk8CC;                    /* 0x8CC */
     u8 unk8CE;                     /* 0x8CE */
-    u8 pad_8CF[0x1];
+    u8 unk8CF;                     /* 0x8CF */
     Vec4 unk8D0;                   /* 0x8D0 */
     s32 unk8E0;                    /* 0x8E0 */
     f32 unk8E4;                    /* 0x8E4 */
@@ -623,7 +635,8 @@ struct Hero {
     u8 pad_1618[0x8];
     void *unk1620;                 /* 0x1620 */
     void *unk1624;                 /* 0x1624 */
-    u8 pad_1628[0x8];
+    f32 unk1628;                   /* 0x1628: phase of the hero moby's colour pulse (func_L00_002086C8) */
+    u8 pad_162C[0x4];
     s32 unk1630;                   /* 0x1630 */
     s16 unk1634;                   /* 0x1634 */
     s16 unk1636;                   /* 0x1636 */
@@ -675,7 +688,10 @@ struct Hero {
     struct Moby *unk2040;          /* 0x2040: nearest oclass 0x25D moby (FUN_L00_002d2ee8) */
     f32 unk2044;                   /* 0x2044: distance to unk2040; 100000 when none */
     s32 unk2048;                   /* 0x2048 */
-    u8 pad_204C[0x34];
+    u8 pad_204C[0x4];
+    struct Moby *unk2050[10];      /* 0x2050 */
+    s32 unk2078;                   /* 0x2078 */
+    s32 unk207C;                   /* 0x207C */
     struct Moby *moby;             /* 0x2080: the hero's moby */
     struct HeroState state;        /* 0x2084 */
     u8 unk20A4;                    /* 0x20A4 */
@@ -695,7 +711,8 @@ struct Hero {
     u8 unk20B2;                    /* 0x20B2 */
     u8 unk20B3;                    /* 0x20B3 */
     u8 unk20B4;                    /* 0x20B4 */
-    u8 pad_20B5[0x3];
+    u8 unk20B5;                    /* 0x20B5: wrench combo step (func_L00_002B9AD8) */
+    u8 pad_20B6[0x2];
     s32 pending_item[7];           /* 0x20B8: per slot: item to switch to */
     s32 selected_item[7];          /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];             /* 0x20F0: per slot: item kept while another is forced in */

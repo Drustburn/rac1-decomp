@@ -832,7 +832,7 @@ void func_L00_002BDAF0(Moby *m) {
             func_001F9C30_2BDAF0(&v0, &m->unkD0, -1.0f);
         } else {
             v0.x = 1.0f;
-            func_001F9EC0_2BDAF0(&v0, &v0, &((Hero *)D_0013F450_2BDAF0)->pad_61C[36]);
+            func_001F9EC0_2BDAF0(&v0, &v0, ((Hero *)D_0013F450_2BDAF0)->unk640[0].f);
         }
         p->yaw = func_L00_001FF860_2BDAF0(v0.x, v0.y);
         p->pitch = func_L00_001FF860_2BDAF0(func_001F9CE8_2BDAF0(&v0), v0.z);
