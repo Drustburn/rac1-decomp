@@ -145,7 +145,7 @@ void func_L00_002B33E8_r(Moby *m) {
         }
     }
     if (hero_2B33E8.items[6].unk40) {
-        data->target = ((Moby **)&hero_2B33E8.items)[138];
+        data->target = hero_2B33E8.items[6].unk48;
         data->target_timer = func_001F9850_2B33E8(20);
         data->target_height = D_L00_00173F68_2B33E8 - data->target->pos.z;
     }
@@ -162,7 +162,7 @@ void func_L00_002B33E8_r(Moby *m) {
         }
         if (func_L00_00234638_2B33E8(-1, 1)) {
             best = 0;
-            if (hero_2B33E8.items[6].unk40) yaw = ((float *)&hero_2B33E8.items)[139];
+            if (hero_2B33E8.items[6].unk40) yaw = hero_2B33E8.items[6].unk4C;
             else yaw = func_L00_001FF860_2B33E8(velocity.f.x, velocity.f.y);
             pitch = -func_L00_001FF860_2B33E8(func_001F9CE8_2B33E8(&velocity), velocity.f.z);
             yaw0 = yaw;
@@ -1090,7 +1090,7 @@ void func_L00_002B5C98_r(Moby *m) {
         func_001F9EC0_2B5C98(&velocity, &velocity, &hero_2B5C98.unk640);
         func_L00_00250800_2B5C98(m, 0, &launch);
     }
-    if (hero_2B5C98.items[6].unk40) yaw = ((float *)&hero_2B5C98.items)[139];
+    if (hero_2B5C98.items[6].unk40) yaw = hero_2B5C98.items[6].unk4C;
     else yaw = func_L00_001FF860_2B5C98(velocity.f.x, velocity.f.y);
     pitch = -func_L00_001FF860_2B5C98(func_001F9CE8_2B5C98(&velocity), velocity.f.z);
     yaw0 = yaw;

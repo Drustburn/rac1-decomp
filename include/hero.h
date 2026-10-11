@@ -94,7 +94,9 @@ struct HeroItemSlot {
     s16 unk3C;                     /* 0x3C */
     u16 unk3E;                     /* 0x3E */
     s32 unk40;                     /* 0x40: items[6]: aim lock (func_L00_002B33E8) */
-    u8 pad_44[0xC];
+    u8 pad_44[0x4];
+    struct Moby *unk48;            /* 0x48: items[6]: aim target (func_L00_002B33E8) */
+    f32 unk4C;                     /* 0x4C: items[6]: aim yaw (func_L00_002CDAB8) */
 };
 
 /*
@@ -706,7 +708,7 @@ struct Hero {
     u8 unk20AD;                    /* 0x20AD */
     u8 unk20AE;                    /* 0x20AE */
     u8 unk20AF;                    /* 0x20AF */
-    s8 unk20B0;                    /* 0x20B0 */
+    u8 unk20B0;                    /* 0x20B0: a 0/1 flag; read unsigned by func_L00_002E0E50 (Lombyte: s8) */
     u8 unk20B1;                    /* 0x20B1 */
     u8 unk20B2;                    /* 0x20B2 */
     u8 unk20B3;                    /* 0x20B3 */

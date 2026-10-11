@@ -286,7 +286,7 @@ void func_L16_00227818(void) {
                         } else if (D_0013F450.unkA98 & 2) {
                             int keep = 0;
                             if (D_0013F450.unk20A8 != 0 && D_0013F450.unk20AA != 0) {
-                                if (((unsigned char *)D_0013F450.moby)[0x53] == D_0013F450.unk2294 || (*(int *)&D_0013F450.unkD08[0]) != 0) {
+                                if (((unsigned char *)D_0013F450.moby)[0x53] == D_0013F450.unk2294 || ((int)D_0013F450.unkD08[0]) != 0) {
                                     keep = 1;
                                 }
                             }
@@ -317,7 +317,7 @@ void func_L16_00227818(void) {
                         } else {
                             int anim = D_L16_00179FA0[id].f24;
                             if (((unsigned char *)D_0013F450.moby)[0x53] != anim) {
-                                if ((*(int *)&D_0013F450.unkD08[0]) != 0) {
+                                if (((int)D_0013F450.unkD08[0]) != 0) {
                                     D_0013F450.unkD14 = 1;
                                 }
                                 D_0013F450.unk2294 = anim;
@@ -1520,7 +1520,7 @@ void func_L16_00227818(void) {
                             func_L16_0021EA88(0x3D, 1);
                             break;
                         }
-                        first = (*(int *)&D_0013F450.ground_moby) == 0;
+                        first = ((int)D_0013F450.ground_moby) == 0;
                         one = 1;
                         if (!(scale_ticks(0x5A) > D_0013F450.state_timer)) {
                             if (func_L16_0021EA88(0, 0)) {

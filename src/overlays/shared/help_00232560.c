@@ -1158,11 +1158,11 @@ void func_L00_00234800(void) {
             ((Hero *)(D_0013E633_234800 + 0xE1D))->unk364 &= ~1;
             ((Hero *)(D_0013E633_234800 + 0xE1D))->unk364 &= ~2;
         }
-    } else if (((Hero *)(D_0013E633_234800 + 0xE1D))->state.current == 0x1C && (*(void **)&((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8) != 0) {
-        ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360 = (*(void **)&((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8);
+    } else if (((Hero *)(D_0013E633_234800 + 0xE1D))->state.current == 0x1C && ((void *)((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8) != 0) {
+        ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360 = (void *)((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8;
         mode = 1;
-    } else if (((Hero *)(D_0013E633_234800 + 0xE1D))->state.control_mode == 3 && (*(void **)&((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8) != 0) {
-        ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360 = (*(void **)&((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8);
+    } else if (((Hero *)(D_0013E633_234800 + 0xE1D))->state.control_mode == 3 && ((void *)((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8) != 0) {
+        ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360 = (void *)((Hero *)(D_0013E633_234800 + 0xE1D))->unk4F8;
         mode = 1;
     } else if (((Hero *)(D_0013E633_234800 + 0xE1D))->unk360 != 0) {
         mode = 1;
@@ -1189,15 +1189,15 @@ void func_L00_00234800(void) {
                 v20.x += func_001F9F90_234800(func_001FA748_234800(((Hero *)(D_0013E633_234800 + 0xE1D))->unk4E4, 3.1415925f)) * 0.45f;
                 v20.y += func_001F9FA8_234800(func_001FA748_234800(((Hero *)(D_0013E633_234800 + 0xE1D))->unk4E4, 3.1415925f)) * 0.45f;
                 v20.z -= -1.43f;
-                func_L00_00261478_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk4D0, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v30, &v40);
-                func_L00_00261478_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &v20, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v20, &v40);
-                func_L00_002616E0_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk4D0, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &v40);
-                func_L00_002616E0_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &v20, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk330, &v40);
+                func_L00_00261478_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk4D0, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v30, &v40);
+                func_L00_00261478_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &v20, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v20, &v40);
+                func_L00_002616E0_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk4D0, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &v40);
+                func_L00_002616E0_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &v20, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk330, &v40);
             } else if (plat->i3C & 4) {
-                func_L00_002616E0_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &v20);
+                func_L00_002616E0_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &v20);
             } else {
-                func_L00_00261478_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v30, &v40);
-                func_L00_002616E0_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &v30, &v40, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &v20);
+                func_L00_00261478_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v30, &v40);
+                func_L00_002616E0_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &v30, &v40, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &v20);
             }
             ((Hero *)(D_0013E633_234800 + 0xE1D))->unk364 |= 1;
         }
@@ -1206,7 +1206,7 @@ void func_L00_00234800(void) {
     }
     if ((((Hero *)(D_0013E633_234800 + 0xE1D))->state.control_mode == 0 || ((Hero *)(D_0013E633_234800 + 0xE1D))->state.control_mode == 12) && ((Hero *)(D_0013E633_234800 + 0xE1D))->motion.unk184 == 0.0f && ((Hero *)(D_0013E633_234800 + 0xE1D))->air_frames.s == 0) {
         if (!(((Hero *)(D_0013E633_234800 + 0xE1D))->unk364 & 2)) {
-            func_L00_002616E0_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v20, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk320);
+            func_L00_002616E0_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v20, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk320);
             ((Hero *)(D_0013E633_234800 + 0xE1D))->unk364 |= 2;
         }
     } else {
@@ -1230,14 +1230,14 @@ void func_L00_00234800(void) {
         }
         qcopy(&v30, &v20);
     } else if (mode == 1) {
-        func_L00_00261478_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v0, &v10);
+        func_L00_00261478_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v0, &v10);
         ((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot.f[2] = v10.z;
         func_001F9BF0_234800(&v20, &v0, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos);
         qcopy((Vec_234800 *)(D_0013E633_234800 + 0x116D), &v20);
     } else if (mode == 2) {
-        func_L00_00261478_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v40, &v50);
-        func_L00_00261568_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk320, &v60, &v70);
-        func_L00_00261568_234800((*(int *)&((Hero *)(D_0013E633_234800 + 0xE1D))->moby), ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk330, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk320, &v80, &v90);
+        func_L00_00261478_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.pos, &((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot, &v40, &v50);
+        func_L00_00261568_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk310, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk320, &v60, &v70);
+        func_L00_00261568_234800((int)((Hero *)(D_0013E633_234800 + 0xE1D))->moby, ((Hero *)(D_0013E633_234800 + 0xE1D))->unk360, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk330, &((Hero *)(D_0013E633_234800 + 0xE1D))->unk320, &v80, &v90);
         if ((((Hero *)(D_0013E633_234800 + 0xE1D))->state.current == 1 || ((Hero *)(D_0013E633_234800 + 0xE1D))->state.current == 0x1E) && ((Hero *)(D_0013E633_234800 + 0xE1D))->unk20A5 != 0) {
             ((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot.f[2] = v50.z;
         } else if (((Hero *)(D_0013E633_234800 + 0xE1D))->unk364 & 2) {

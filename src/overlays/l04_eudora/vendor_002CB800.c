@@ -1319,7 +1319,7 @@ void func_L04_002E57F8(Moby *moby) {
         }
 
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, data->f4) != 0
-            && ((*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || (*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)
+            && (((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || ((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)
             && D_L04_00179610[0] == 0 && D_L04_00179610[9] == -1) {
             if (D_0013D5E2 == 0) {
                 Help_2E57F8 *b = (Help_2E57F8 *)(D_0014171B + 0x34D);
@@ -1377,7 +1377,7 @@ void func_L04_002E57F8(Moby *moby) {
         }
 
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, data->f50) != 0
-            && ((*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || (*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)
+            && (((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || ((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)
             && D_L04_00179610[0] == 0 && D_L04_00179610[9] == -1) {
             int t = scale_ticks(D_0015EFA4) - D_00141992 * 600;
             if (scale_ticks(0x34BC0) < t) {
@@ -1412,7 +1412,7 @@ void func_L04_002E57F8(Moby *moby) {
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, data->f30) != 0) {
             Help_2E57F8 *h = (Help_2E57F8 *)(D_0014171B + 0x22D);
             if (h[0x19].count == 0
-                && ((*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || (*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)) {
+                && (((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || ((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)) {
                 int n;
                 h[0x19].count++;
                 n = scale_ticks(D_0015EFA4) / 600;
@@ -1424,18 +1424,18 @@ void func_L04_002E57F8(Moby *moby) {
         }
 
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, data->f2C) != 0 && D_00141A10 == 0
-            && (*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) >= 2 && (*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) != 9
+            && ((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) >= 2 && ((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) != 9
             && data->f28 == 0) {
             data->f24++;
             data->f28 = scale_ticks(0xB4);
         } else if (data->f28 != 0) {
-            if ((*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || (*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9) {
+            if (((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || ((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9) {
                 data->f28 = 0;
             }
         }
 
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, data->f2C) != 0 && D_00141A10 == 0
-            && ((*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || (*(unsigned int *)&((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)
+            && (((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) < 2 || ((unsigned int)((Hero *)(D_0013E633 + 0xE1D))->state.control_mode) == 9)
             && data->f24 >= 3
             && D_L04_00179610[0] == 0 && D_L04_00179610[9] == -1) {
             Help_2E57F8 *b = (Help_2E57F8 *)(D_0014171B + 0x34D);

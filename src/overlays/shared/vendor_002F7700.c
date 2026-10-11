@@ -2595,7 +2595,7 @@ void func_L01_00316730(Cam_316730 *cam) {
         func_L00_0025E860(D_L01_001B0C30_316730[pi], v0, &c->idx, &c->t, 1.0f, 0);
         qcopy(b->pos, v0);
         path = D_L01_001B0C30_316730[pi];
-        dist = path->nodes[seg].w * (frac / (*(Path_316730 **)&((Hero *)(D_0013E633 + 0xE1D))->unk560)->nodes[seg].w);
+        dist = path->nodes[seg].w * (frac / ((Path_316730 *)((Hero *)(D_0013E633 + 0xE1D))->unk560)->nodes[seg].w);
         FastVecSub(v50, &path->nodes[seg + 1], &path->nodes[seg]);
         func_L00_001FF4B0(v40, v50, dist);
         FastVecAdd(v60, &path->nodes[seg], v40);
@@ -2695,7 +2695,7 @@ void func_L01_00316730(Cam_316730 *cam) {
 
             hseg = ((Hero *)(D_0013E633 + 0xE1D))->unk564;
             hfrac = ((Hero *)(D_0013E633 + 0xE1D))->unk568;
-            func_L00_0025E860((*(Path_316730 **)&((Hero *)(D_0013E633 + 0xE1D))->unk560), v30, &hseg, &hfrac, p->f38, 1);
+            func_L00_0025E860((Path_316730 *)((Hero *)(D_0013E633 + 0xE1D))->unk560, v30, &hseg, &hfrac, p->f38, 1);
             func_L00_0025EFC0(path, v30, v0, &seg, &frac, 0, 20.0f, 1.0f, 0.0f);
         }
         cam->pos[0] = Cam_InterpValues(cam->pos[0], v0[0], &d->vel[0], k, 0.175f, 0.0f);
@@ -2719,7 +2719,7 @@ void func_L01_00316730(Cam_316730 *cam) {
 
         hseg = ((Hero *)(D_0013E633 + 0xE1D))->unk564;
         hfrac = ((Hero *)(D_0013E633 + 0xE1D))->unk568;
-        func_L00_0025E860((*(Path_316730 **)&((Hero *)(D_0013E633 + 0xE1D))->unk560), v40, &hseg, &hfrac, spd, 1);
+        func_L00_0025E860((Path_316730 *)((Hero *)(D_0013E633 + 0xE1D))->unk560, v40, &hseg, &hfrac, spd, 1);
     }
     func_L00_001FF4B0(v10, D_L01_00167330, b->f4C);
     FastVecAdd(v30, v10, v40);

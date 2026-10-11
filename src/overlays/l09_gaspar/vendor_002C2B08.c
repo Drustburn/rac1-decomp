@@ -1359,7 +1359,7 @@ void func_L09_002F9A50(Moby *moby)
         data->baseZ = (*(Vec_2F9A50 *)&moby->pos).z;
     }
     if (((Hero *)(D_0013E633_2F9A50 + 0xE1D))->air_frames.s == 0 &&
-        (*(int *)&((Hero *)(D_0013E633_2F9A50 + 0xE1D))->ground_moby) == (int)moby) {
+        ((int)((Hero *)(D_0013E633_2F9A50 + 0xE1D))->ground_moby) == (int)moby) {
         if (data->timer == 0) {
             func_0022ED80_2F9A50(0, 0, moby);
         }

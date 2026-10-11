@@ -501,7 +501,7 @@ void func_L05_0030FCC0(Moby *moby) {
         v40[2] = 0.0f;
         qcopy(v50, hero->motion.pos.f);
         v50[2] += 0.75f;
-        func_L00_0025AC00((void *)(*(int *)&hero->moby), (int)moby, 1, v50, v40, v40[2]);
+        func_L00_0025AC00((void *)((int)hero->moby), (int)moby, 1, v50, v40, v40[2]);
     }
     FastVecSub(v30, &moby->pos, v10);
     func_L00_002617B0(d->f20, v30, v20, &moby->rot);

@@ -1886,7 +1886,7 @@ void func_L14_002FE038(Moby *m) {
             if (b == a) {
                 c = D_0014C150_2FE038[d->fA0 + (D_0015EE84_2FE038 << 4)];
                 if (c == b && ((Hero *)(D_0013E633_2FE038 + 0xE1D))->unk30C.s == 0
-                    && (*(int *)&((Hero *)(D_0013E633_2FE038 + 0xE1D))->ground_moby) == 0
+                    && ((int)((Hero *)(D_0013E633_2FE038 + 0xE1D))->ground_moby) == 0
                     && func_00215570_2FE038((*(Vec_2FE038 *)&((Hero *)(D_0013E633_2FE038 + 0xE1D))->motion.pos), d->fA4) != 0) {
                     Moby *jet = (Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8));
                     Moby *seat = (Moby *)(D_L14_00160098_2FE038 + (((struct Jet_2FE038 *)jet->pvars)->f4 << 8));
