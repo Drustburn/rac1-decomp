@@ -40,15 +40,6 @@ typedef struct MobyData_2B94B0 {
     int f2C;
 } MobyData_2B94B0;
 
-typedef struct Moby_2B94B0 {
-    char pad0[0x10];
-    float pos[4];
-    unsigned char state;
-    char pad21[0x27];
-    float f48;
-    char pad4C[0x2C];
-    MobyData_2B94B0 *data;
-} Moby_2B94B0;
 
 typedef struct Hero_2B94B0 {
     char pad0[0x80];
@@ -106,15 +97,15 @@ extern char D_0013F450_2B94B0[] __asm__("D_0013F450");
 extern char D_0013DE6E_2B94B0[] __asm__("D_0013DE6E");
 
 /* Level 8 moby update (class 152): state machine that steers the moby toward the hero and fires its event. */
-void func_L08_002B94B0(Moby_2B94B0 *m)
+void func_L08_002B94B0(Moby *m)
 {
-    MobyData_2B94B0 *d = m->data;
+    MobyData_2B94B0 *d = (MobyData_2B94B0 *)m->pvars;
     float A[4], F[4], B[4], C[4], P[4], E[4];
     float f20, t, f;
     int hit, ok, n;
 
     d->ticks++;
-    if (m->state != 0) m->pos[2] = d->f8;
+    if (m->state != 0) m->pos.z = d->f8;
     switch (m->state) {
     case 0:
         func_L08_002B9438_2B94B0(m);
@@ -122,7 +113,7 @@ void func_L08_002B94B0(Moby_2B94B0 *m)
         else m->state = 2;
         break;
     case 1:
-        qcopy(P, m->pos);
+        qcopy(P, &m->pos);
         d->vel[2] = d->vel[2] - D_0015EE70_2B94B0 * 9.8f;
         f20 = func_001F9CB8_2B94B0(d->vel);
         if (D_L08_001614DC_2B94B0 * 1.8f * D_0015EE60_2B94B0 < f20) {
@@ -164,16 +155,16 @@ void func_L08_002B94B0(Moby_2B94B0 *m)
         } else {
             qcopy(P, A);
         }
-        qcopy(m->pos, P);
+        qcopy(&m->pos, P);
     case 2:
         hit = 0;
-        m->f48 = func_001FA748_2B94B0(m->f48, d->fC);
+        m->rot.z = func_001FA748_2B94B0(m->rot.z, d->fC);
         if (((Hero_2B94B0 *)D_0013F450_2B94B0)->f208C == 15) {
-            if (func_001F9D48_2B94B0(((Hero_2B94B0 *)D_0013F450_2B94B0)->v510, m->pos) < 0.5f) hit = 1;
-            if (func_001F9D48_2B94B0(((Hero_2B94B0 *)D_0013F450_2B94B0)->v520, m->pos) < 0.5f) hit = 1;
-            if (func_001F9D48_2B94B0(((Hero_2B94B0 *)D_0013F450_2B94B0)->v530, m->pos) < 0.5f) hit = 1;
-        } else if (func_001F9D48_2B94B0(m->pos, ((Hero_2B94B0 *)D_0013F450_2B94B0)->pos) < ((Hero_2B94B0 *)D_0013F450_2B94B0)->f2288) {
-            if (func_001F9B88_2B94B0(m->pos[2] - ((Hero_2B94B0 *)D_0013F450_2B94B0)->pos[2]) < ((Hero_2B94B0 *)D_0013F450_2B94B0)->f228C) hit = 1;
+            if (func_001F9D48_2B94B0(((Hero_2B94B0 *)D_0013F450_2B94B0)->v510, &m->pos) < 0.5f) hit = 1;
+            if (func_001F9D48_2B94B0(((Hero_2B94B0 *)D_0013F450_2B94B0)->v520, &m->pos) < 0.5f) hit = 1;
+            if (func_001F9D48_2B94B0(((Hero_2B94B0 *)D_0013F450_2B94B0)->v530, &m->pos) < 0.5f) hit = 1;
+        } else if (func_001F9D48_2B94B0(&m->pos, ((Hero_2B94B0 *)D_0013F450_2B94B0)->pos) < ((Hero_2B94B0 *)D_0013F450_2B94B0)->f2288) {
+            if (func_001F9B88_2B94B0(m->pos.z - ((Hero_2B94B0 *)D_0013F450_2B94B0)->pos[2]) < ((Hero_2B94B0 *)D_0013F450_2B94B0)->f228C) hit = 1;
         }
         if (hit == 0) break;
         if (d->target != 0) d->target->fA = 0;
@@ -194,8 +185,8 @@ void func_L08_002B94B0(Moby_2B94B0 *m)
     n = D_L08_001614F0_2B94B0;
     t = (float)(d->ticks % n) / (float)(n - 1) * 6.2831855f - 3.1415927f;
     f = func_001F9FA8_2B94B0(t);
-    d->f8 = m->pos[2];
-    m->pos[2] = m->pos[2] + D_L08_001614F4_2B94B0 * f;
+    d->f8 = m->pos.z;
+    m->pos.z = m->pos.z + D_L08_001614F4_2B94B0 * f;
 }
 extern char *func_0020D348(int);
 extern int func_001F9850(int);
@@ -225,7 +216,6 @@ char *func_L08_002D35E8(int arg, char *pos, char *vec) {
 }
 INCLUDE_ASM("asm/overlays", func_L08_002D36F8);
 INCLUDE_ASM("asm/overlays", func_L08_002D55E0);
-typedef struct Moby_2D5FA8 Moby_2D5FA8;
 typedef struct {
     char pad0[0x20];
     float health;
@@ -250,8 +240,8 @@ typedef struct {
     char pad130[0x24];
     int path;
     char pad158[8];
-    Moby_2D5FA8 *partA;
-    Moby_2D5FA8 *partB;
+    Moby *partA;
+    Moby *partB;
     char pad168[8];
     float yaw;
     float yaw_speed;
@@ -260,22 +250,7 @@ typedef struct {
     char pad180[4];
     int part_id;
 } Data_2D5FA8;
-struct Moby_2D5FA8 {
-    char pad0[0x10];
-    float pos[4];
-    unsigned char state;
-    char pad21[0x1F];
-    float rot[4];
-    char pad50[3];
-    unsigned char f53;
-    char pad54[0x24];
-    Data_2D5FA8 *data;
-    char pad7C[0x28];
-    unsigned char alpha;
-    char padA5[1];
-    short oclass;
-};
-typedef struct { char pad0[0x20]; Moby_2D5FA8 *moby; } Hit_2D5FA8;
+typedef struct { char pad0[0x20]; Moby *moby; } Hit_2D5FA8;
 typedef struct { int count; char pad4[0xC]; char list[1]; } Path_2D5FA8;
 
 extern int D_0015EE84_2D5FA8 __asm__("D_0015EE84") MACRO_ADDR;
@@ -289,21 +264,21 @@ extern float D_L08_0015F660_2D5FA8[] __asm__("D_L08_0015F660") MACRO_ADDR;
 extern Path_2D5FA8 *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0FB0");
 extern char D_0013E633_2D5FA8[] __asm__("D_0013E633") NOT_SDA;
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D50F") NOT_SDA;
-extern Hit_2D5FA8 *find_2D5FA8(Moby_2D5FA8 *, int, int) __asm__("func_L00_0025B478");
+extern Hit_2D5FA8 *find_2D5FA8(Moby *, int, int) __asm__("func_L00_0025B478");
 extern Hit_2D5FA8 *pick_2D5FA8(Hit_2D5FA8 *, Hit_2D5FA8 *, Hit_2D5FA8 *, int) __asm__("func_L05_0028AA68");
-extern int damage_2D5FA8(Moby_2D5FA8 *, Hit_2D5FA8 *, float *, int, int *, float *, int, int) __asm__("func_L00_0025B4D0");
+extern int damage_2D5FA8(Moby *, Hit_2D5FA8 *, float *, int, int *, float *, int, int) __asm__("func_L00_0025B4D0");
 extern int ticks_2D5FA8(int) __asm__("func_001F9850");
-extern void animate_2D5FA8(Moby_2D5FA8 *, int, int, int) __asm__("func_00213DE0");
+extern void animate_2D5FA8(Moby *, int, int, int) __asm__("func_00213DE0");
 extern void zero_2D5FA8(void *) __asm__("func_001F9BC0");
-extern void burst_2D5FA8(Moby_2D5FA8 *, float *, float *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("func_L00_0025F4A8");
-extern void *spawn_2D5FA8(Moby_2D5FA8 *, int, float *, float *, int, int, float, float *, float *, float *) __asm__("func_L00_00265050");
+extern void burst_2D5FA8(Moby *, float *, float *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("func_L00_0025F4A8");
+extern void *spawn_2D5FA8(Moby *, int, float *, float *, int, int, float, float *, float *, float *) __asm__("func_L00_00265050");
 extern int sound_2D5FA8(int, int, int) __asm__("func_0022EE28");
 extern void voice_2D5FA8(int, int) __asm__("func_L00_00264DB8");
-extern void explode_2D5FA8(Moby_2D5FA8 *, int, int) __asm__("func_L00_002584A8");
-extern void delete_2D5FA8(Moby_2D5FA8 *) __asm__("func_0020D678");
-extern int event_2D5FA8(int, int, Moby_2D5FA8 *) __asm__("func_0022ED80");
-extern void effects_start_2D5FA8(Moby_2D5FA8 *, short *) __asm__("func_L00_0025E4B0");
-extern int follow_2D5FA8(float, Moby_2D5FA8 *, float *, int, int, char *, int) __asm__("func_L00_00260FB0");
+extern void explode_2D5FA8(Moby *, int, int) __asm__("func_L00_002584A8");
+extern void delete_2D5FA8(Moby *) __asm__("func_0020D678");
+extern int event_2D5FA8(int, int, Moby *) __asm__("func_0022ED80");
+extern void effects_start_2D5FA8(Moby *, short *) __asm__("func_L00_0025E4B0");
+extern int follow_2D5FA8(float, Moby *, float *, int, int, char *, int) __asm__("func_L00_00260FB0");
 extern void subtract_2D5FA8(float *, float *, float *) __asm__("func_001F9BF0");
 extern float angle_2D5FA8(float, float) __asm__("func_L00_001FF860");
 extern float length_2D5FA8(float *) __asm__("func_001F9CE8");
@@ -311,11 +286,11 @@ extern float angle_delta_2D5FA8(float, float) __asm__("func_001FA790");
 extern float approach_2D5FA8(float *, float, float *, float, float, float) __asm__("func_L00_0025CE58");
 extern void rotation_2D5FA8(float *, int, float) __asm__("func_L00_001FFED8");
 extern void matmul_2D5FA8(float *, float *, float *) __asm__("func_001FA588");
-extern void effects_update_2D5FA8(Moby_2D5FA8 *, short *) __asm__("func_L00_0025E590");
+extern void effects_update_2D5FA8(Moby *, short *) __asm__("func_L00_0025E590");
 
 /* Per-frame update of a batalia turret moby: damage, its death state and its two helper parts. */
-void func_L08_002D5FA8(Moby_2D5FA8 *m) {
-    Data_2D5FA8 *d = m->data;
+void func_L08_002D5FA8(Moby *m) {
+    Data_2D5FA8 *d = (Data_2D5FA8 *)m->pvars;
     Hit_2D5FA8 *t;
     Hit_2D5FA8 *u;
     Hit_2D5FA8 *c;
@@ -360,23 +335,23 @@ void func_L08_002D5FA8(Moby_2D5FA8 *m) {
                 d->tint = 0xE6;
                 d->timer = ticks_2D5FA8(0x1E);
             }
-            if (m->state == 0xC && m->f53 != 1) {
+            if (m->state == 0xC && m->prev_seq != 1) {
                 animate_2D5FA8(m, 1, 0, 0);
             }
         } else {
             int dead = 0x63;
             if (m->state != dead) {
-                qcopy(vec, m->pos);
+                qcopy(vec, &m->pos);
                 vec[2] += 3.0f;
                 d->tint = 0xFA;
                 zero_2D5FA8(d->f120);
                 burst_2D5FA8(m, d->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, one, -1, 0);
-                spawn_2D5FA8(m, 0x6C0, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C1, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C2, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C3, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C4, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                if (m->f53 != one) animate_2D5FA8(m, 1, 0, 3);
+                spawn_2D5FA8(m, 0x6C0, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6C1, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6C2, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6C3, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6C4, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                if (m->prev_seq != one) animate_2D5FA8(m, 1, 0, 3);
                 m->state = dead;
                 d->health = 6.0f;
                 d->flags &= 0xFFFD;
@@ -398,16 +373,16 @@ void func_L08_002D5FA8(Moby_2D5FA8 *m) {
                         }
                     }
                 }
-                qcopy(vec, m->pos);
+                qcopy(vec, &m->pos);
                 vec[2] += 1.0f;
                 explode_2D5FA8(m, 0, -1);
                 event_2D5FA8(2, 0, m);
                 burst_2D5FA8(m, d->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-                spawn_2D5FA8(m, 0x6FE, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FE, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FF, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FF, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FF, m->pos, m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6FE, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6FE, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6FF, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6FF, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(m, 0x6FF, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
                 if (d->partA != 0) delete_2D5FA8(d->partA);
                 if (d->partB != 0) delete_2D5FA8(d->partB);
                 delete_2D5FA8(m);
@@ -417,15 +392,15 @@ void func_L08_002D5FA8(Moby_2D5FA8 *m) {
         effects_start_2D5FA8(m, &d->anim0);
     }
 
-    m->alpha = 0xFF;
-    if (d->partA != 0) d->partA->alpha = 0xFF;
-    if (d->partB != 0) d->partB->alpha = 0xFF;
+    m->unkA4 = 0xFF;
+    if (d->partA != 0) d->partA->unkA4 = 0xFF;
+    if (d->partB != 0) d->partB->unkA4 = 0xFF;
 
     follow_2D5FA8(100.0f, m, d->target, 0, 0, D_L08_001B0FB0_2D5FA8[d->path]->list, D_L08_001B0FB0_2D5FA8[d->path]->count);
     if (d->fF0 == 0) d->fF0 = *(int *)(D_0013E633_2D5FA8 + 0x2E9D);
     if (d->mode != 2) {
         float yaw, len, pitch;
-        subtract_2D5FA8(vec, d->target, m->pos);
+        subtract_2D5FA8(vec, d->target, (float *)&m->pos);
         vec[2] -= 3.0f;
         yaw = angle_2D5FA8(vec[0], vec[1]);
         len = length_2D5FA8(vec);
@@ -435,7 +410,7 @@ void func_L08_002D5FA8(Moby_2D5FA8 *m) {
         } else if (pitch < -0.7853982f) {
             pitch = -0.7853982f;
         }
-        yaw = angle_delta_2D5FA8(yaw, m->rot[2]);
+        yaw = angle_delta_2D5FA8(yaw, m->rot.z);
         approach_2D5FA8(&d->yaw, yaw, &d->yaw_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
         approach_2D5FA8(&d->pitch, pitch, &d->pitch_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
     } else {
@@ -1232,9 +1207,6 @@ typedef union {
     f32 f[4];
     s32 i[4];
 } Vec4;
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 extern float func_00214158(void);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
