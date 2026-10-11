@@ -1,4 +1,5 @@
 #include "common.h"
+#include "hero.h"
 #include "structs.h"
 
 /*
@@ -461,14 +462,8 @@ typedef struct {
     VoiceVector_2EB08 value;
     u8 pad10[0x60];
 } VoicePositionRecord_2EB08;
-typedef struct {
-    u8 pad0[0x1090];
-    VoiceMoby_2EB08 *item0_moby;
-    u8 pad1094[0xFEC];
-    VoiceMoby_2EB08 *moby;
-} Hero_2EB08;
 extern VoicePool_2EB08 D_0013E650_2EB08 __asm__("D_0013E650");
-extern Hero_2EB08 D_0013F450_2EB08 __asm__("D_0013F450");
+extern Hero D_0013F450_2EB08 __asm__("D_0013F450");
 extern VoicePositionRecord_2EB08 D_0013E6E0_2EB08[] __asm__("D_0013E6E0");
 extern u8 D_0013E6C0_2EB08[] __asm__("D_0013E6C0");
 extern void func_001F9BC0_2EB08(VoiceVector_2EB08 *) __asm__("func_001F9BC0");
@@ -516,10 +511,10 @@ check_moby:
     if (moby == 0) {
         goto find_free_slot;
     }
-    if (D_0013F450_2EB08.moby == moby) {
+    if (((VoiceMoby_2EB08 *)D_0013F450_2EB08.moby) == moby) {
         goto use_extended_pool;
     }
-    if (D_0013F450_2EB08.item0_moby == moby) {
+    if (((VoiceMoby_2EB08 *)D_0013F450_2EB08.items[0].moby) == moby) {
         goto use_extended_pool;
     }
     if (moby->class_id != 0x472) {

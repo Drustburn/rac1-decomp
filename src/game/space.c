@@ -1,4 +1,5 @@
 #include "common.h"
+#include "vector.h"
 #include "structs.h"
 
 /*
@@ -1973,11 +1974,6 @@ void func_00233308(void) {
 }
 
 typedef u32 u128_33AB8 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_33AB8 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4;
 typedef float FloatVector4[4] __attribute__((aligned(16)));
 typedef struct {
     s16 vertex_index;
