@@ -113,16 +113,15 @@ extern int func_L00_001F3958(void);
 extern float func_L00_001FF860(float, float);
 extern void func_001252C0(void *, void *);
 
-typedef struct { float x, y, z, w; } V4;
 typedef struct { char pad[0x98]; float ang; } G98;
 
 // Builds two view-offset vectors from a stored position and the camera angle, tests them against the level, and possibly realigns the aim vector.
 void func_L06_00229868(int arg) {
     char *p = (char *)D_0013E633 + 0xE1D;
-    V4 a0;
-    V4 u;
-    V4 a1;
-    V4 w;
+    Vec4f a0;
+    Vec4f u;
+    Vec4f a1;
+    Vec4f w;
     float sa;
     float sb;
     char *r;

@@ -191,7 +191,6 @@ extern float D_L05_001614A0_2D8388 SDATA(D_L05_001614A0);
 extern int D_L05_001614A4_2D8388 SDATA(D_L05_001614A4);
 extern float D_L05_001614A8_2D8388 SDATA(D_L05_001614A8);
 extern float D_L05_001614AC_2D8388 SDATA(D_L05_001614AC);
-typedef struct { float x, y, z, w; } Vec_2D8388;
 typedef union { u128_2D8388 q; float f[4]; } Buf_2D8388;
 typedef struct {
     /* 0x000 */ int path;
@@ -200,7 +199,7 @@ typedef struct {
     /* 0x00C */ float fC;
     /* 0x010 */ int pad10[3];
     /* 0x01C */ float f1C;
-    /* 0x020 */ Vec_2D8388 trail[3][16];
+    /* 0x020 */ Vec4f trail[3][16];
     /* 0x320 */ short f320;
     /* 0x322 */ unsigned short f322;
     /* 0x324 */ int *f324;
