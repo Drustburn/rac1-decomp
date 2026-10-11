@@ -2403,18 +2403,12 @@ void func_L03_002C8398(Moby *m) {
         }
     }
 }
-struct Hero_2CA970 {
-    u8 pad_0[0x80];
-    struct { struct { f32 f[4]; } pos; } motion; /* 0x80: world position */
-    u8 pad_90[0x1000];
-    struct { void *moby; } items[1]; /* 0x1090: slot 0 is the equipped gadget */
-};
 extern int func_001F9850_2CA970(int) __asm__("func_001F9850");
 extern int func_001F9938_2CA970(void *) __asm__("func_001F9938");
 extern int func_0022ED80_2CA970(int, int, int) __asm__("func_0022ED80");
 typedef int OvlQuad_2CA970 __attribute__((mode(TI)));
 extern float func_L00_001FF860_2CA970(float, float) __asm__("func_L00_001FF860");
-extern struct Hero_2CA970 D_0013F450_2CA970 __asm__("D_0013F450");
+extern Hero D_0013F450_2CA970 __asm__("D_0013F450");
 extern float D_0015EE6C_2CA970 __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_0015EE70_2CA970 __asm__("D_0015EE70") MACRO_ADDR;
 extern void *func_L00_0025B478_2CA970(void *, int, int) __asm__("func_L00_0025B478");
