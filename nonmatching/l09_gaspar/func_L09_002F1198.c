@@ -1,9 +1,10 @@
 /* NON_MATCHING func_L09_002F1198 -- src/overlays/l09_gaspar/vendor_002C2B08.c
- * Best so far: BYTES 95/500 (81.0% of the bytes match), checked 2026-10-12.
+ * Best so far: BYTES 55/500 (89.0% of the bytes match), checked 2026-10-12.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
  *   func_L09_002F1198: effect moby spawner (class 0x1A1): random angle and speed, direction from atan2 of the velo
+ *   gen5/p07 = 55/500 (size ok). Left: pi/ang/dir float regs rotated (retail pi=f21 ang=f22 dir=f23), second pi-di
  */
 extern Moby *func_0020D348_a(int) __asm__("func_0020D348");
 extern float func_002140F8_a(float, float) __asm__("func_002140F8");
@@ -28,6 +29,7 @@ char *func_L09_002F1198(void *a0, void *a1, void *a2, float lo, float hi) {
     float spd;
     float dir;
     float t;
+    float q;
     float pi;
 
     obj = func_0020D348_a(0x1A1);
@@ -42,7 +44,9 @@ char *func_L09_002F1198(void *a0, void *a1, void *a2, float lo, float hi) {
         obj->pos.y = func_001F9FA8_a(ang) * spd;
         obj->pos.z = 0;
         func_L00_001FF4B0_a(out, p, dir * D_0015EE6C_a);
-        func_L00_001FF4B0_a(&tmp, vel, (pi - dir) * (pi - dir) * 0.25f * D_0015EE6C_a);
+        q = pi - dir;
+        q = q * q * 0.25f * D_0015EE6C_a;
+        func_L00_001FF4B0_a(&tmp, vel, q);
         func_001F9BD8_a(out, out, &tmp);
         out->z = 0;
         func_001F9BD8_a(p, p, src);
@@ -52,8 +56,8 @@ char *func_L09_002F1198(void *a0, void *a1, void *a2, float lo, float hi) {
         obj->rot.z = func_L00_001FF860_a(out->x, out->y);
         t = pi - dir;
         t = t + t + 1.0f;
-        obj->unk30 = 0xFF;
         obj->unk32 = 0xFF;
+        obj->unk30 = 0xFF;
         obj->unk31 = 1;
         obj->scale = obj->scale * t;
         func_L00_00251E30_a(obj, 1);
