@@ -548,7 +548,6 @@ extern int D_0015EF74 MACRO_ADDR;
    func_00118D80 is the kernel's FlushCache. */
 extern int func_00122630(void *, short, short, short, short, short, short, short);
 extern int func_00122958(void *, void *);
-extern void func_00118D80(int);
 extern int func_00120858(int, unsigned short);
 
 typedef struct {

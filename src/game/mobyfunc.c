@@ -218,7 +218,6 @@ Moby *func_0020D348(int oClass) {
     return 0;
 }
 
-extern void func_001F99B0();
 extern unsigned char D_001B3E40[] NOT_SDA;
 extern int D_001B3900[];
 extern void *D_001B3580[];
@@ -653,7 +652,6 @@ void func_0020DC40(void) {
 }
 
 extern int D_001B6880[];
-extern void *D_001B3580[];
 extern short D_001B6100[];
 
 /* A class's joint records (the list at class+0x20): the joint's tag
@@ -792,7 +790,6 @@ void func_0020E040(void) {
     FastMemSet((void *)0x70003A00, (void *)0x40000000, 0x380);
 }
 
-extern void func_001F9A98(void *, void *, int);
 extern char D_001B3200[];
 
 /* StashMobyClassDists(void) */
@@ -814,12 +811,8 @@ extern char D_0010FAA0[];
 extern int D_0015F704 MACRO_ADDR;
 extern char D_00100080[];
 extern int D_0015EF78 MACRO_ADDR;
-extern int D_0016000C MACRO_ADDR;
-extern int D_0015EF74 MACRO_ADDR;
 extern char D_0015FFD0[];
-extern int D_00160040 MACRO_ADDR;
 extern int D_00160014 MACRO_ADDR;
-extern int D_00161000 MACRO_ADDR;
 extern int D_00161008 MACRO_ADDR;
 
 /* DrawMobysSetup(void). What an older note here called a dead
@@ -858,13 +851,11 @@ void func_0020E180(int arg0, int arg1) {
 }
 
 extern void func_0020DC40(void);
-extern void func_001F2558(void *, int);
 extern void func_0020DFF8(void);
 extern void func_00212508(void);
 extern char D_0015FFE0[];
 extern char D_0015FFF0[];
 extern int D_00160038 MACRO_ADDR;
-extern int D_00160040 MACRO_ADDR;
 
 /* DrawMobysCleanUp. The empty profiling markers take (void *, int);
    DmaMobyTextures and func_00212508 take nothing. With the arguments
@@ -886,10 +877,6 @@ void func_0020E200(void) {
 }
 
 extern int D_0018A3D8;
-extern int D_00160018 MACRO_ADDR;
-extern int D_00160014 MACRO_ADDR;
-extern int D_00161000 MACRO_ADDR;
-extern int D_00161008 MACRO_ADDR;
 extern char D_001E8730[];
 extern void func_0020E0C8(void);
 extern void func_0020E200(void);

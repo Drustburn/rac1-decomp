@@ -352,7 +352,6 @@ void func_00239838(void) {
     func_001FBAB8(0xE2, 0, 0xE6, 0x40, 0x200, 0x80, 0);
 }
 
-extern void func_001FBAB8(int, int, int, int, int, int, int);
 extern int D_001611A8 MACRO_ADDR;
 extern int D_001E66E4;
 
@@ -718,9 +717,6 @@ void func_0023A948(int a, int b, float f) {
 /* Retail carries 4 bytes of inter-function padding after this endlabel. */
 __asm__(".section .text\n\tnop\n");
 
-extern void func_001FB498(void);
-extern void func_001F3008(void);
-extern void func_001F3140(void);
 
 void func_0023AA08(void) {
     PutDrawBufferLarge();

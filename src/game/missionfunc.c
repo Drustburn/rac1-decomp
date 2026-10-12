@@ -302,7 +302,6 @@ int func_0020CB80(void) {
 }
 
 extern int D_0013D9B4 NOT_SDA;
-extern unsigned char D_0013D490[];
 
 int func_0020CBA8(void) {
     if (D_0013D9B4 != 0 && gSpecialItems[0x20] != 0 && gSpecialItems[0x21] != 0) return 1;
@@ -367,7 +366,6 @@ int func_0020CCD0(void) {
     return 0;
 }
 
-extern int D_0013D9B4 NOT_SDA;
 extern unsigned char D_0013D4B0 NOT_SDA;
 
 int func_0020CD28(void) {

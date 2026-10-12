@@ -1195,8 +1195,6 @@ extern char D_0013D390[];
 /* menu.cpp's state word and flags. Stored through the assembler's lui
    macro, and $gp-relative where the access sits in a delay slot (see
    tools/check_macro_slots.py). */
-extern int D_0015EFB0 MACRO_ADDR;
-extern int D_0015EFB4 MACRO_ADDR;
 extern int D_0013D3AC;
 
 /* Word view of the D_0013D390 record: indexing an int array here, rather
@@ -1377,7 +1375,6 @@ void func_002094E0(void) {
 }
 
 extern char D_0013D390[];
-extern int D_0015EFB0 MACRO_ADDR;
 
 /* Dispatch-table handler for menu.cpp's D_0013D390 state record. First,
    guarded by unkDC>=3 || unkE4>=0, clears a per-index slot in the

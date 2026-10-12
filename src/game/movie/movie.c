@@ -37,7 +37,6 @@ void func_0023BB40(void) {
     func_00118BC0(1);
 }
 extern int func_0023C2B0(char *);
-extern char *D_0016130C MACRO_ADDR;
 
 /* isAudioOK -- true when the audio decoder at offset 0xD9100 of the movie state holds 0x1000
  * bytes or more. */

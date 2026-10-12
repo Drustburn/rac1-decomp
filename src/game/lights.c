@@ -250,7 +250,6 @@ void func_002023E0(int i) {
     }
 }
 
-extern void func_002023E0(int);
 extern void func_002027C0(int);
 
 /* RefreshPointLight */

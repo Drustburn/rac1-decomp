@@ -279,7 +279,6 @@ int func_00205790(void) {
 
 extern int D_001A01F0[];
 
-extern void func_001F9A98(void *, void *, int);
 extern int D_001A01F0[];
 
 /* Same three parallel arrays func_002054E0 walks: 0x278/4 = 0x9E,

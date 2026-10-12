@@ -432,11 +432,9 @@ INCLUDE_ASM("asm/nonmatchings/text", func_0022F738);
 
 extern void func_00234C98_l(int, long) __asm__("func_00234C98");
 extern long D_00160680 MACRO_ADDR;
-extern char D_001D9B40[];
 extern float D_001D9E20[];
 extern float D_001D9DE0[][4];
 extern short D_001605F0;
-extern void func_001F7EF8(void *, int, int);
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 
 /* Its 0x8000000044 is built as ps2eeas built it (tools/ps2eeas_dli.py). */
@@ -1797,16 +1795,11 @@ extern void func_0022EFE8(void);
 extern void func_00216D88(void);
 extern void func_0012E318(int);
 extern void func_001FB448(int, int, int);
-extern void func_00209E68(void);
-extern void func_00209070(void);
 extern int func_00204BE8(void);
 extern void func_002350A8(void);
 extern void func_00232EF0(int, int, int, int, int);
 extern void func_00232278(void);
 extern int func_0012F4A8(int);
-extern void func_002349B8(void);
-extern void func_00234948(void);
-extern void func_001FB598(void);
 extern void func_001FB8A8(void);
 extern void func_00218908(void);
 extern void func_00230A90(void);

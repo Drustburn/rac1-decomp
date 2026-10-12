@@ -129,9 +129,6 @@ extern void func_0011A690(const char *, ...);
 extern char D_00152880[]; /* "0.%d" */
 extern char D_00152888[]; /* "e+%d" */
 extern char D_00152890[]; /* "e%d" */
-extern void *D_0012FD00;
-extern long func_0011E6D8(double);
-extern void func_0011A690(const char *, ...);
 
 /* printfloat (libkernl.a:kprintf.o): the kprintf %f formatter. Prints a
    leading '-' through the putchar hook (D_0012FD00) if negative, then
@@ -203,7 +200,6 @@ void func_0011A690(const char *fmt, ...) {
  * under 2.9-ee; under 2.95.3 the frame comes out 0x90 against retail's
  * 0xB0 (the $f12-$f18 save again, as with sprintf, 00116248.c).
  */
-extern void *D_0012FD00;
 extern void func_00119DC0();
 
 int func_0011A6C8(const char *fmt, ...) {
@@ -454,7 +450,6 @@ void func_0011AE20(int mode) {
 }
 
 extern void func_0011AA00(void);
-extern int D_0012FD08 NOT_SDA;
 
 void func_0011AFC0(void) {
     func_0011AA00();
@@ -1096,7 +1091,6 @@ int func_0011BEB8(void) {
 
 extern void func_001153FC(void *, int, int);
 extern int D_0012FD94;
-extern char D_001580A8[];
 
 int func_0011BF48(void) {
     D_0012FD94 = 0;
@@ -1417,7 +1411,6 @@ struct FsReadRequest {
     s32 slot;
 };
 extern struct FsReadRequest D_00156980_1C5C0 __asm__("D_00156980");
-extern volatile s32 D_0012FD10[];
 extern s32 D_0012FD94_1C5C0[] __asm__("D_0012FD94");
 extern s32 D_0012FDA4_1C5C0[] __asm__("D_0012FDA4");
 extern u8 D_001575C0_1C5C0[] __asm__("D_001575C0");
@@ -1515,7 +1508,6 @@ struct FsWriteRequest {
     s32 slot;
 };
 extern struct FsWriteRequest D_00156980_1C820 __asm__("D_00156980");
-extern volatile s32 D_0012FD10[];
 extern s32 D_0012FD94_1C820[] __asm__("D_0012FD94");
 extern s32 D_0012FDA4_1C820[] __asm__("D_0012FDA4");
 extern u8 D_001575C0_1C820[] __asm__("D_001575C0");
@@ -1527,7 +1519,6 @@ extern s32 func_0011BC70_1C820(void) __asm__("func_0011BC70");
 extern s32 func_00118C70_1C820(struct SemaphoreParameters2 *) __asm__("func_00118C70");
 extern s32 func_00118C80_1C820(s32) __asm__("func_00118C80");
 extern s32 func_00118CB0(s32);
-extern s32 func_00118C90(s32);
 extern void func_0011AD70(void *, s32);
 extern s32 func_0011B4C8(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 
@@ -1632,8 +1623,6 @@ extern int D_0012FDAC;
 /* func_0011CB40: matched only with -fno-schedule-insns, which the rest of its object does not build with (docs/BUILD_FIDELITY.md, "Removed"). */
 INCLUDE_ASM("asm/nonmatchings/core_text", func_0011CB40);
 
-extern int D_0012FDAC;
-extern char D_00158140[];
 extern int D_00158180;
 extern int D_001581C0;
 

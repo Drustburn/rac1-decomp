@@ -695,7 +695,6 @@ int func_0022ED80(int idx, int arg1, int arg2) {
 }
 
 extern char *D_0015F714 MACRO_ADDR;
-extern int func_0022EB08(void *, int, int, int, int);
 
 int func_0022EE28(int idx, int arg1, int arg2) {
     int h;

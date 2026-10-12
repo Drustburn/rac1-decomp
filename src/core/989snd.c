@@ -307,8 +307,6 @@ int func_0012DFB0(void) {
     return 1;
 }
 
-extern short D_0015ED84;
-extern short D_0015ED80;
 
 /* snd_PrepareReturnBuffer */
 void func_0012E038(void *arg0, int arg1) {
@@ -367,18 +365,11 @@ unsigned int func_0012E060(int arg0, int arg1) {
 
 LINKER_REMNANT("asm/remnants/core_text", func_0012E1B8);
 
-extern short D_0015EDC8;
-extern short D_0015ED88;
 extern short D_0015EDD0;
 extern long D_0015EDD8 MACRO_ADDR;
-extern unsigned int D_0015EE00 MACRO_ADDR;
 extern int D_00137C40;
-extern int D_0015ECE8;
 extern char D_00153FC0[];
 extern char D_00153FF8[];
-extern char D_00153E20[];
-extern int func_0012EF48(int);
-extern int func_0012DDC0(void);
 
 /* Start an IOP stream (command 0x57) for arg0, unless one is already
    pending (D_0015EDC8) or the CD is busy (func_0012EF48); the reply word
@@ -644,9 +635,6 @@ void func_0012E820_r(int cmd, int size, unsigned char *data, int cb, long cb_dat
 /* gp-relative, no retail symbol: gp 0x166D00 - 0x7F40 = 0x15EDC0
    (message-queue index) and gp 0x166D00 - 0x7F60 = 0x15EDA0 (array of
    pointers to the per-queue message-count int). */
-extern short D_0015EDC0;
-extern short D_0015EDA0;
-extern int func_0012DDC0(void);
 
 /* snd_PostMessage */
 void func_0012EAE0(void) {
@@ -662,14 +650,12 @@ INCLUDE_ASM("asm/nonmatchings/core_text", func_0012EB18); /* snd_SendCurrentBatc
 
 /* gp-relative: declared small so -G2 places it in the small-data area,
    accessed as the word it really is. gp 0x166D00 - 0x7F3C = 0x15EDC4. */
-extern short D_0015EDC4;
 
 /* snd_UnkFunction_0012eaf0 */
 void func_0012EC30(void) {
     *(int *)&D_0015EDC4 = 1;
 }
 
-extern int func_0012DDC0(void);
 
 /*
  * Close, not exact (2/32), same size. Retail saves/restores $ra with
@@ -776,9 +762,7 @@ void func_0012EE70(int arg0) {
 
 /* gp-relative, no retail symbol: gp 0x166D00 - 0x7F74 = 0x15ED8C
    (streaming-enabled flag, see func_0012F030/func_0012F068). */
-extern short D_0015ED8C;
 extern short D_0015ED94;
-extern short D_0015ED98;
 
 typedef struct {
     volatile unsigned int count;
@@ -812,9 +796,7 @@ int func_0012EE98(int arg0, int arg1, int arg2) {
     return 1;
 }
 
-extern int func_00120F30(int);
 extern void func_00118D80(int);
-extern int func_0012DDC0(void);
 
 /* snd_StreamSafeCdSync */
 int func_0012EF48(int arg0) {
@@ -869,7 +851,6 @@ int func_0012F030(void) {
 /* gp-relative, no retail symbol: gp 0x166D00 - 0x7F74 = 0x15ED8C
    (streaming-enabled flag, same as func_0012F030's) and
    gp 0x166D00 - 0x7F70 = 0x15ED90 (cached callback value). */
-extern short D_0015ED8C;
 extern short D_0015ED90;
 extern int func_00120978(void);
 

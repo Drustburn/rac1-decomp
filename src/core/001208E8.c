@@ -238,7 +238,6 @@ extern int D_001313F0;
 INCLUDE_ASM("asm/nonmatchings/core_text", func_00120B28);
 
 extern int D_001313D4;
-extern volatile int D_00131414_v __asm__("D_00131414");
 /* DeleteSema returns int; declared void, the lui after each call would take
    $v0 instead of retail's $v1. */
 extern int func_00118C80_i(int) __asm__("func_00118C80");
@@ -306,7 +305,6 @@ typedef struct {
 extern int func_00120B28(void);
 extern int func_00118CC0(int);
 extern int func_00118BF0(int, void *);
-extern int func_00120F30(int);
 extern void func_0011AE20(int);
 extern int func_0011B2F8(void *, unsigned int, int);
 extern void func_0011A6C8();
@@ -366,7 +364,6 @@ int func_00120D28(int arg0) {
 extern int func_0011B4C8();
 extern int func_00120D28(int);
 extern void func_00118C90(int);
-extern char D_00132590[];
 extern int D_00131440;
 
 /*
@@ -420,7 +417,6 @@ int func_00120F30(int arg0) {
     return 0;
 }
 
-extern void func_0011A6C8();
 extern int func_0011B6B8(void *);
 extern char D_00153000[];
 extern char D_00132E08[];

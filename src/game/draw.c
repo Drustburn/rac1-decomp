@@ -487,10 +487,8 @@ void func_001F2BC8(void) {
    types (-1 and a pointer) and both callers are byte-exact, so
    neither may be edited. Codegen is identical either way -- int and
    pointer are both 32-bit in the same arg register. */
-extern void func_001F99B0();
 extern void func_001F2BC8(void);
 extern int D_0018C434 NOT_SDA;
-extern char D_001940C0[];
 
 /* UpdateOcclusion(void) */
 void func_001F2FB8(void) {
@@ -552,9 +550,7 @@ __asm__(".section .text\n\tnop\n");
 INCLUDE_ASM("asm/nonmatchings/text", func_001F3140); /* UpdateViewContext(void) */
 
 extern int D_0013E600[];
-extern int D_0018CE00[];
 extern float func_001FA888(int);
-extern void func_001F3140(void);
 
 /* Sets the screen size: the GS viewport record at D_0013E600 gets width,
    height, their halves and the four <<4 edges around the 0x800 centre;
@@ -615,7 +611,6 @@ extern int D_0015F568 MACRO_ADDR;
 extern int D_0015F56C MACRO_ADDR;
 extern int D_0015F570 MACRO_ADDR;
 extern int D_0015F574 MACRO_ADDR;
-extern int D_0015F728 MACRO_ADDR;
 extern int D_00161290 MACRO_ADDR;
 extern int D_00161294 MACRO_ADDR;
 extern int D_00161298 MACRO_ADDR;
@@ -645,7 +640,6 @@ extern int *D_00161000 MACRO_ADDR;
 extern void func_00234C98(int, long);
 extern char D_0013D0C0[];
 extern char D_0013D010[];
-extern int D_0018CE00[];
 
 /* ResetGsRegisters(void) */
 void func_001F3C10(void) {
@@ -969,7 +963,6 @@ void func_001F3D78(void) {
 
 extern int D_0015F6FC;
 extern short D_0015F534;              /* SDA, gp -0x77CC */
-extern void func_001FB530(void);
 extern void func_001F3D78(void);
 
 extern int D_0015F6FC_m __asm__("D_0015F6FC") MACRO_ADDR;
@@ -988,7 +981,6 @@ LINKER_REMNANT("asm/remnants/text", func_001F4628);
 
 extern int *D_00161000 MACRO_ADDR;
 extern int *D_0015F550 MACRO_ADDR;
-extern int D_0015EF78 MACRO_ADDR;
 extern int D_0015EF74 MACRO_ADDR;
 extern int D_0015F55C MACRO_ADDR;
 extern int D_0015EF8C MACRO_ADDR;
@@ -1056,7 +1048,6 @@ void func_001F4630(int arg0) {
 __asm__(".section .text\n\tnop\n");
 
 extern int *D_00161000 MACRO_ADDR;
-extern int *D_0015F550 MACRO_ADDR;
 extern int *D_0015F554 MACRO_ADDR;
 extern int D_0018A3DC;
 extern void func_0020C2F8(void);
@@ -1223,16 +1214,11 @@ void func_001F4C30(void) {
     }
 }
 
-extern void func_00234AC8(int mask);
 extern int func_00122598_i(int) __asm__("func_00122598");
-extern void func_002348E8(void);
 extern void func_00234948(void);
 extern void func_002349B8(void);
 extern void func_001FB498(void);
-extern void func_001FB530(void);
 extern void func_001FB598(void);
-extern void func_001F55C0(int, int, int, int);
-extern void func_00234C98(int, long);
 extern int *D_00161000 MACRO_ADDR;
 extern int D_0015F538 MACRO_ADDR;
 extern char D_0013CED0[];
@@ -1495,9 +1481,7 @@ void func_001F5368(void) {
 
 #undef STRIPES
 
-extern void func_001F5650(int, int, int, int, unsigned long);
 extern int D_0015EF88 MACRO_ADDR;
-extern short D_00151880[];
 
 /* GS register writes around an overlay: blend register 0x42 from the
    64-bit word at +8 while it is set, and when the colour at +4 has an
@@ -1525,7 +1509,6 @@ void func_001F54E8(char *arg0) {
    restores the default register set. The parameters are int, widened in
    the expression: with long parameters the scheduler hoists the last
    dsll one slot early (it was a 6/144 near-miss that way). */
-extern void func_00234C98(int, long);
 extern int *D_00161000 MACRO_ADDR;
 extern char D_0013CD90[];
 
@@ -1538,8 +1521,6 @@ void func_001F55C0(int a, int b, int c, int d) {
     D_00161000 += 4;
 }
 
-extern char D_00160920[];
-extern char D_00160930[];
 
 /* DrawRectOverlay: append a GIF packet drawing the rectangle x0..x1,
    y0..y1 (in 16ths, offset by the viewport origin D_0013E600[4]/[5]
@@ -2268,12 +2249,10 @@ void func_001F7648(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, i
 INCLUDE_ASM("asm/nonmatchings/text", func_001F7680);
 
 extern short D_0015F448;              /* SDA, gp -0x78B8 */
-extern int D_0015F704 MACRO_ADDR;
 extern unsigned short D_0010E800 NOT_SDA;
 extern char D_0010E810[];
 extern char D_00187180[];
 extern void func_001FA1C0(float *, float);
-extern void func_00234B48(void *, int);
 extern void func_00234FA8(void);
 
 /* Build the VU1 setup packet: load microprogram 7 if another is
@@ -2371,9 +2350,7 @@ void func_001F7A50(int a, int b, int flag, float f) {
 
 __asm__(".section .text\n\tnop\n");
 
-extern void func_001FB498(void);
 extern void func_001F3008(void);
-extern void func_001F3140(void);
 
 void func_001F7B40(void) {
     PutDrawBufferLarge();

@@ -5995,7 +5995,6 @@ extern int D_0013CBE4;
    the whole function, to see if that lets the allocator pick the
    per-block register retail uses instead of one merged pseudo. */
 extern int D_0015EFB0_m __asm__("D_0015EFB0") MACRO_ADDR;
-extern int D_0013CBE4;
 extern char D_001D5F70[] NOT_SDA;
 
 int func_00222B00(void) {
@@ -6235,7 +6234,6 @@ int func_00223140(char *arg0) {
 }
 
 extern int D_0015EFB4_m __asm__("D_0015EFB4") MACRO_ADDR;
-extern int D_0015EFA0 MACRO_ADDR;
 extern int D_0015F6CC MACRO_ADDR;
 extern char D_001D5240[];
 extern void func_001FBC80(int, void *, int);
@@ -6246,7 +6244,6 @@ extern void func_001F9A00(void *, void *, int);
 extern void func_00209CE8(int);
 extern void func_0020BFC8(int, int);
 extern int func_001F98C0(int);
-extern void func_001F4E08(int);
 extern unsigned char D_0013F450[];
 extern void func_00228268(void);
 
@@ -6718,7 +6715,6 @@ int func_00223E40(char *arg0) {
     return 2;
 }
 
-extern void func_00226D50(int);
 
 int func_00223FD0(void *arg0) {
     func_00226D50(1);
@@ -7343,7 +7339,6 @@ typedef struct HandGadgetPlayerState {
     u8 ammo_capacity;
 } HandGadgetPlayerState;
 extern HandGadgetPlayerState D_0013F450_255F8 __asm__("D_0013F450");
-extern s32 D_00160050 MACRO_ADDR;
 extern HandGadgetDefinition D_001864D0_255F8[] __asm__("D_001864D0");
 extern u8 * D_001B3580_255F8[] __asm__("D_001B3580");
 extern u8 D_001B3E40[];
@@ -7354,9 +7349,7 @@ extern HandGadgetManipulator D_001D61A0_255F8 __asm__("D_001D61A0");
 extern HandGadgetManipulator D_001D61E0_255F8 __asm__("D_001D61E0");
 extern float D_001D6220[];
 extern s32 D_001D6238_255F8[] __asm__("D_001D6238");
-extern void func_001E97F0(s32, s32);
 extern void func_001E97F8(Moby *, s32);
-extern void func_00205270(s32, s32);
 extern void func_0020D960_255F8(s32, s32, HandGadgetManipulator *) __asm__("func_0020D960");
 extern void func_0020D9D8_255F8(s32, HandGadgetManipulator *) __asm__("func_0020D9D8");
 extern void func_00213DE0(void *, int, int, int);
@@ -7660,7 +7653,6 @@ typedef struct {
 } PauseClassRec;
 
 extern PauseClassRec D_001864D0_r[] __asm__("D_001864D0");
-extern void func_00213DE0(void *, int, int, int);
 extern void func_0020D9D8(int, void *);
 extern void func_0020D960(int, int, void *);
 
@@ -7820,7 +7812,6 @@ void func_002260A8(void *preview) {
     moby->binding_state = 0;
 }
 
-extern void func_00213DE0(void *, int, int, int);
 
 /* Moby 0x259 update: while flag 0x02 is set, keep its animation on 1 (or,
    for class 0x25F in state 6, run the 6 animation until its timer +0x20
@@ -7972,7 +7963,6 @@ void func_00226410(struct AmmoPreviewMoby *moby) {
    error. */
 extern unsigned char D_001B3E40[] NOT_SDA;
 extern void *func_0020D348(void);
-extern void func_0020ED48(void *);
 extern void func_0020E340(void *, int, int, int, int);
 
 extern void *func_0020D348_c(int) __asm__("func_0020D348");
@@ -8556,7 +8546,6 @@ void func_00227DB0(s32 slot) {
 }
 
 extern int D_0015F6D0 MACRO_ADDR;
-extern int D_0015EF24 MACRO_ADDR;
 extern int D_0015EE80 MACRO_ADDR;
 
 void func_00228110(void) {

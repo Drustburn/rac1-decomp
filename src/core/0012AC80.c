@@ -1307,7 +1307,6 @@ int func_0012C4C0(void *arg0, int arg1, int arg2) {
 extern int func_00128A58(void *, int);
 extern void func_0012C468(void *, void *);
 extern char D_00153BE8[];
-extern void func_00128590(void *);
 extern void func_00128560(void *, unsigned int);
 extern void func_0012C990(void *, int, int);
 extern char D_001330C0[];
@@ -1407,7 +1406,6 @@ void func_0012C990(void *arg, int cmd, int addr) {
     func_0012BC78(*(void **)(mp + 0x858), cb);
 }
 
-extern int func_00128A58(void *, int);
 extern void func_0012C468(void *, void *);
 extern char D_00153C00[];
 extern char D_00153C28[];
@@ -1466,7 +1464,6 @@ void func_0012CA70(void *arg0) {
     *(int *)(s + 0x138) += vbv_ext << 10;
 }
 
-extern int func_00128A58(void *, int);
 
 /*
  * MPEG-2 sequence_display_extension(): video_format (3 bits), then

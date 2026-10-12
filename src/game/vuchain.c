@@ -433,7 +433,6 @@ void func_002349B8(void) {
 
 extern short D_00160FE0;              /* SDA, gp -0x5D20 */
 extern char D_001E8D10[];
-extern void func_001F9988(int);
 extern void func_001F2568(void);
 
 /* VU1_syncChain(int) */

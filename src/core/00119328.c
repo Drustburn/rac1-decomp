@@ -120,7 +120,6 @@ extern int func_00118BE0(void);
 extern int func_00118BA0(int, int);
 extern void func_001194C8(void *);
 extern int D_0012FCF8;
-extern int D_00154600;
 extern char D_00154200[];
 extern char D_00166D00[];
 extern int D_00154608[];

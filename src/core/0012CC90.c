@@ -379,7 +379,6 @@ char *func_0012D2A0(void) {
 }
 
 extern char *func_0012D2A0(void);
-extern signed char D_001331D8[];
 
 int func_0012D340(void) {
     if (D_001331D8[0] == 0) {

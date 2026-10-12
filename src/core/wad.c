@@ -170,7 +170,6 @@ extern void func_0012DDC0(void);
 
 extern unsigned char D_0015EE58[4] MACRO_ADDR;
 extern int func_00121750(int, int, void *, void *);
-extern int func_00120F30(int);
 extern void func_00122598(int);
 extern int func_00121930(void);
 
@@ -196,11 +195,6 @@ int func_0012F348(int lba, int sectors, void *buf) {
 }
 
 typedef struct { char b[4]; } StreamHdr;
-extern unsigned char D_0015EE58[4] MACRO_ADDR;
-extern int func_00121750(int, int, void *, void *);
-extern int func_00120F30(int);
-extern void func_00122598(int);
-extern int func_00121930(void);
 extern int D_00137C80[];
 
 /* Same request/poll/retry shape as func_0012F348 above, reading 6 fixed

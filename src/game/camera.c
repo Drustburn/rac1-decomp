@@ -701,7 +701,6 @@ extern char D_0018C418[];
 extern char D_00187390[];
 extern float D_0015EE60 MACRO_ADDR;
 extern float func_00214220(float, float, float);
-extern void func_00215328(void *, void *);
 extern void func_001FA5C8(void *, void *, void *, float);
 extern void func_001FA6C0(void *, void *);
 extern void func_001FA480(void *, void *);
@@ -889,7 +888,6 @@ int func_001ED080(void *arg0, void *arg1) {
 }
 
 extern int D_0018C42C;
-extern char D_00187390[];
 extern int func_001ECEA0(void *, void *);
 extern int func_001ED080(void *, void *);
 
@@ -921,15 +919,12 @@ void func_001ED658(char *arg0) {
     }
 }
 
-extern void func_001F9908(int *arg0);
 extern float func_001FA888(int arg0);
 extern float func_001FA7D8(float x);
 extern float func_001F9F90(float x);
 extern void func_001F9DC0(void *dst, void *src, float len);
 extern void func_001F9BD8(void *dst, void *a, void *b);
 extern char D_001873B0[];
-extern char D_00187390[];
-extern char D_00187180[];
 
 /* Camera shake update. arg0: +0 amplitude, +4 sample (out), +8 countdown,
    +0xC longest countdown. With the active camera (D_001871C0) in state 6
@@ -1258,7 +1253,6 @@ extern void func_001ECC48(void *);
 extern void func_001FA460(void *, void *);
 extern void func_002153E8(void *, void *);
 extern void func_001EE858(void *);
-extern void func_001F9CA0(void *, void *, void *);
 
 /* Camera update, once per frame: count the frame, run the camera
    steps, then (unless the D_0018C418 freeze flag is set) take the view

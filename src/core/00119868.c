@@ -317,7 +317,6 @@ struct TtyMmio {
     u32 unk8;
 };
 extern struct TtyInitState D_00154B50;
-extern u8 D_00154B80[];
 extern u8 D_00154CC0[];
 extern s32 func_00118D80();
 extern s32 func_00119868_tty(int) __asm__("func_00119868");

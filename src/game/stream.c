@@ -666,7 +666,6 @@ void func_00217EC0(void) {
 LINKER_REMNANT("asm/remnants/text", func_00217ED8);
 
 extern int D_001CDAE0 NOT_SDA;
-extern char D_0013CA40[];
 extern void func_00124650(void);
 extern void func_00124B88(int);
 extern int func_00124BC8(void *, void *);

@@ -746,7 +746,6 @@ LINKER_REMNANT("asm/remnants/text", func_00215378);
 
 extern float func_001F9FA8(float);  /* sin of a half-angle */
 extern float func_001F9F90(float);  /* cos of a half-angle */
-extern void func_001F9C30(void *, void *, float);
 
 /* Axis-angle -> quaternion: the xyz part is axis scaled by sin(angle/2)
    (done by func_001F9C30, which writes through arg0), and w at +0xC is
@@ -972,7 +971,6 @@ void func_00215A10(float *arg0, int *arg1) {
     FastVecScale(arg0, v, scale);
 }
 
-extern int func_001FA898_r(float) __asm__("func_001FA898");
 
 /* Rounds arg1 to arg0 decimal places: round(arg1 * 10^arg0) / 10^arg0.
    arg1 is updated in place throughout, so it stays in $f12 as retail

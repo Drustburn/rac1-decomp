@@ -117,7 +117,6 @@ done:
     return 0;
 }
 
-extern char D_00158528[];
 extern int D_0012FDB4;
 
 /* Twin of func_0011BEB8 on a different slot/handle pair. */

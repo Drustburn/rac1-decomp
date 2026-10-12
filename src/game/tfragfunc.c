@@ -434,10 +434,7 @@ void func_00234620(void) {
     }
 }
 
-extern int D_00161000 MACRO_ADDR;
 extern int D_0015EF78 MACRO_ADDR;
-extern int D_0015EF74 MACRO_ADDR;
-extern int D_00160FBC MACRO_ADDR;
 extern char D_00160F70[];
 extern char D_00160F80[];
 extern char D_001E1600[];

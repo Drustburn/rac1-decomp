@@ -375,9 +375,7 @@ void func_00236A98(void) {
 }
 
 extern void func_00236A98(void);
-extern char D_001E3300[];
 extern char D_001E4500[];
-extern char D_001E2D00[];
 extern char D_001E4100[];
 
 void func_00236B58(void) {
@@ -396,10 +394,7 @@ void func_00236BB0(void) {
     LightTies(D_001E4700);
 }
 
-extern int D_00161000 MACRO_ADDR;
 extern int D_0015EF78 MACRO_ADDR;
-extern int D_0015EF74 MACRO_ADDR;
-extern int D_00161068 MACRO_ADDR;
 extern int D_0018A3C8;
 extern char D_00161030[];
 extern char D_00161040[];

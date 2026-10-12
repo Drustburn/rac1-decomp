@@ -141,8 +141,6 @@ extern char D_00153A80[];
 extern void func_00116248_4(void *, char *, int, int) __asm__("func_00116248");
 extern void func_0012C468_a(void *, void *) __asm__("func_0012C468");
 
-extern int func_0011D960(void);
-extern void func_0011D9A8(void);
 extern void func_00128560();
 extern void func_0012BC78();
 

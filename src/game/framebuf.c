@@ -192,7 +192,6 @@ void func_001FB608(int a, int b, int c) {
 /* Retail carries 4 bytes of inter-function padding after this endlabel. */
 __asm__(".section .text\n\tnop\n");
 
-extern int *D_00161000 MACRO_ADDR;
 extern char D_00151A00[];
 
 /* AA_BlurPass(void) */
