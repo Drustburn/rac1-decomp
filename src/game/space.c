@@ -799,7 +799,6 @@ extern f32 resident_data_0015EE60 __asm__("D_0015EE60") MACRO_ADDR;
 extern f32 resident_data_0015EE6C __asm__("D_0015EE6C") MACRO_ADDR;
 extern f32 resident_data_0015EE70 __asm__("D_0015EE70") MACRO_ADDR;
 extern s32 resident_data_0015EE80 __asm__("D_0015EE80") MACRO_ADDR;
-extern s32 resident_data_0015EE84 __asm__("D_0015EE84") MACRO_ADDR;
 extern u8 resident_data_0015EEB4[4] __asm__("D_0015EEB4") MACRO_ADDR;
 extern f32 resident_data_0015F53C __asm__("D_0015F53C") MACRO_ADDR;
 extern f32 resident_data_0015F540 __asm__("D_0015F540") MACRO_ADDR;
@@ -1057,7 +1056,7 @@ void func_00230A90(void) {
             resident_call_0020ED48(object);
             if (object->class_id == 0) {
                 if (resident_data_0013E130.state == 0) {
-                    if (resident_data_0015EE84 == 10 && resident_data_0013D5C8[6] == 0) {
+                    if (D_0015EE84_305A0 == 10 && resident_data_0013D5C8[6] == 0) {
                         object->unk7F = 0;
                     } else if (resident_data_0018CC20.time <= resident_call_001F98C0(0x3E)) {
                         object->unk7F = 0x18;
@@ -1065,7 +1064,7 @@ void func_00230A90(void) {
                         object->unk7F = 0;
                     }
                 } else if (resident_call_001F98C0(360) < resident_data_0018CC20.time) {
-                    if (resident_data_0015EE84 == 10 && resident_data_0013D5C8[6] == 0) {
+                    if (D_0015EE84_305A0 == 10 && resident_data_0013D5C8[6] == 0) {
                         object->unk7F = 0;
                     } else {
                         object->unk7F = 0x18;
@@ -1094,8 +1093,8 @@ void func_00230A90(void) {
             }
             if (object->class_id == 0) {
                 resident_call_001E9790(object);
-                if ((resident_data_0015EE84 == 10 && resident_data_0013D5C8[6] != 0) ||
-                    resident_data_0015EE84 == 13) {
+                if ((D_0015EE84_305A0 == 10 && resident_data_0013D5C8[6] != 0) ||
+                    D_0015EE84_305A0 == 13) {
                     if (resident_data_0013E130.attachment == 0) {
                         resident_data_0013E130.attachment = resident_call_0020D348(0x509);
                         resident_data_0013E130.attachment->selected_index = 0x40;

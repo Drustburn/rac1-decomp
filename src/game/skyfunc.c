@@ -746,7 +746,6 @@ struct Shell_2CC40 {
 };
 extern s32 D_00160510_2CC40 SDATA(D_00160510);
 extern u8 D_0013D1F0[];
-extern s32 D_0015EF88_2CC40 __asm__("D_0015EF88") MACRO_ADDR;
 extern void func_0022D7E0_2CC40(struct SkyTile_2CC40 *tiles, s32 count, u8 *visibility) __asm__("func_0022D7E0");
 extern void func_0020C210_2CC40(s32 address, s32 qwc, s32 destination) __asm__("func_0020C210");
 extern void func_0020C230_2CC40(void) __asm__("func_0020C230");
@@ -807,5 +806,5 @@ void func_0022CC40_r(struct Shell_2CC40 *shell) {
     }
 
     func_00234C98_2CC40(0x47, 0x3180B);
-    func_00234C98_2CC40(0x4E, (D_0015EF88_2CC40 >> 13) | 0x1000000 | ((s64)1 << 32));
+    func_00234C98_2CC40(0x4E, (D_0015EF88_2C5A0 >> 13) | 0x1000000 | ((s64)1 << 32));
 }

@@ -363,7 +363,6 @@ int func_00205918(void) {
 
 extern int *D_001602E0;
 
-extern int *D_001602E0_m __asm__("D_001602E0") MACRO_ADDR;
 
 /* The global is read at both uses in the loop, giving retail's two
    pointers, and through a MACRO_ADDR alias. */

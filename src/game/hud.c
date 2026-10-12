@@ -597,7 +597,6 @@ void func_001FFFB8(void) {
 
 LINKER_REMNANT("asm/remnants/text", func_00200190);
 
-extern char D_0019A4E8_raw[] __asm__("D_0019A4E8");
 
 /* GetIconFrame(iconId, sub): finds the icon's {id, count, base} row
    (func_001FF668 gives its index) in the arena's +0x1C table; frame =
@@ -987,7 +986,6 @@ void func_00200CA0(long arg0, int arg1, int arg2, int arg3, int arg4,
 }
 
 extern int *D_00161000 MACRO_ADDR;
-extern char D_0019A4E8_raw[] __asm__("D_0019A4E8");
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BD8(float *, float *, float *);

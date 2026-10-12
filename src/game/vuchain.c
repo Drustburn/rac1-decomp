@@ -394,7 +394,6 @@ void func_00234948(void) {
 }
 
 extern int D_00161014 MACRO_ADDR;
-extern int D_0016100C_m __asm__("D_0016100C") MACRO_ADDR;
 extern short D_00160FE0;
 extern char D_001E8CF8[];
 extern int *func_001232E0(int);

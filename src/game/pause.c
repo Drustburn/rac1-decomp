@@ -1208,7 +1208,6 @@ extern struct PadState D_0013CA40_1BB90 __asm__("D_0013CA40");
 /* gp-relative here, so not the plain rnc/globals.h spellings. */
 extern s32 D_0015EE84_1BB90 __asm__("D_0015EE84") MACRO_ADDR;
 extern s32 D_0015EE88_1BB90 __asm__("D_0015EE88") MACRO_ADDR;
-extern s32 D_0015EFB4_1BB90 __asm__("D_0015EFB4") MACRO_ADDR;
 extern s32 D_001602B4_1BB90 SDATA(D_001602B4);
 extern s32 *D_001602E0_1BB90 SDATA(D_001602E0);
 extern s32 D_00199578_1BB90[] __asm__("D_00199578");
@@ -1278,7 +1277,7 @@ s32 func_0021BB90(struct MenuScreen_1BB90 *menu) {
             return -1;
         }
     }
-    if ((D_0013CA40_1BB90.pressed_unmasked & 0x40) && ((D_0015EFB4_1BB90 ^ 1) & 1)) {
+    if ((D_0013CA40_1BB90.pressed_unmasked & 0x40) && ((D_0015EFB4_1A1A0 ^ 1) & 1)) {
         /* Index through menu-> directly: locals for items/selected change
            which register keeps the copy of selected that actions 6 and 9 reuse. */
         switch (menu->data.list.items[menu->data.list.selected].action) {
@@ -1292,12 +1291,12 @@ s32 func_0021BB90(struct MenuScreen_1BB90 *menu) {
         case 4:
             func_0022ED80_1BB90(0, 0x11, menu->moby);
             D_001D5F70_1BB90.unk150 = 0;
-            D_0015EFB4_1BB90 = (D_0015EFB4_1BB90 | 2) & ~4;
+            D_0015EFB4_1A1A0 = (D_0015EFB4_1A1A0 | 2) & ~4;
             func_001FBC80_1BB90(3, menu->data.list.items[menu->data.list.selected].param.value, 0);
             break;
         case 5:
             func_0022ED80_1BB90(0, 0x11, menu->moby);
-            D_0015EFB4_1BB90 = (D_0015EFB4_1BB90 | 4) & ~2;
+            D_0015EFB4_1A1A0 = (D_0015EFB4_1A1A0 | 4) & ~2;
             func_001FBC80_1BB90(3, menu->data.list.items[menu->data.list.selected].param.value, 0);
             D_001D5F70_1BB90.unk150 = 1;
             break;
@@ -1765,7 +1764,6 @@ struct MapState_1CE60 {
 
 extern struct MapState_1CE60 D_001A01F0_1CE60 __asm__("D_001A01F0");
 
-extern s32 D_0015EE84_1CE60 __asm__("D_0015EE84") MACRO_ADDR;
 
 struct MenuScreen_1CE60;
 
@@ -1893,7 +1891,6 @@ struct Hdr16_1CE60 {
     s16 unk8;
 };
 
-extern struct PadState D_0013CA40_1CE60 __asm__("D_0013CA40");
 extern struct Hdr16_1CE60 D_001517D0_1CE60 __asm__("D_001517D0");
 extern u8 D_001CF9F8_1CE60[] __asm__("D_001CF9F8");
 extern u8 D_001CF798_1CE60[] __asm__("D_001CF798");
@@ -1954,12 +1951,12 @@ s32 func_0021CE60(struct MenuScreen_1CE60 *screen) {
     func_00205C70_1CE60();
     if (!(screen->data_1CE60.raw.unk34 & 0x40)) {
         prev = D_001A01F0_1CE60.level;
-        if (D_0013CA40_1CE60.pressed_unmasked & 0xD00) {
+        if (D_0013CA40_1BB90.pressed_unmasked & 0xD00) {
             if (D_001D5F70_1CE60.close_locked == 0) {
                 return 1;
             }
         }
-        if (D_0013CA40_1CE60.pressed_unmasked & 0x10) {
+        if (D_0013CA40_1BB90.pressed_unmasked & 0x10) {
             if (D_001D5F70_1CE60.current->back != 0) {
                 D_001D5F70_1CE60.next = D_001D5F70_1CE60.current->back;
                 return 0;
@@ -1967,10 +1964,10 @@ s32 func_0021CE60(struct MenuScreen_1CE60 *screen) {
                 return -1;
             }
         }
-        if (D_0013CA40_1CE60.pressed_unmasked & 0x40) {
+        if (D_0013CA40_1BB90.pressed_unmasked & 0x40) {
             D_001D5F70_1CE60.next = (struct MenuPage_1CE60 *)D_001CF9F8_1CE60;
         }
-        if ((D_0013CA40_1CE60.pressed_unmasked & 0x20) && D_001A01F0_1CE60.level != 0) {
+        if ((D_0013CA40_1BB90.pressed_unmasked & 0x20) && D_001A01F0_1CE60.level != 0) {
             D_001D5F70_1CE60.unkF0 = (struct MenuPage_1CE60 *)D_001CF798_1CE60;
             D_001D5F70_1CE60.unkF4 = 0xB;
             D_001D5F70_1CE60.close_request = 3;
@@ -1980,7 +1977,7 @@ s32 func_0021CE60(struct MenuScreen_1CE60 *screen) {
         }
         idx = func_00205A50_1CE60(D_001A01F0_1CE60.level);
         if (idx >= 0) {
-            if (D_0013CA40_1CE60.pressed_unmasked & 8) {
+            if (D_0013CA40_1BB90.pressed_unmasked & 8) {
                 if (idx < 0x13) {
                     t = D_001602E0_1CE60[idx + 1];
                     if (t != 0) {
@@ -1988,7 +1985,7 @@ s32 func_0021CE60(struct MenuScreen_1CE60 *screen) {
                     }
                 }
             }
-            if ((D_0013CA40_1CE60.pressed_unmasked & 4) && idx != 0) {
+            if ((D_0013CA40_1BB90.pressed_unmasked & 4) && idx != 0) {
                 if (D_001602E0_1CE60[idx - 1] != 0) {
                     D_001A01F0_1CE60.level = D_001602E0_1CE60[idx - 1];
                 }
@@ -2021,7 +2018,7 @@ s32 func_0021CE60(struct MenuScreen_1CE60 *screen) {
         if (buf != 0) {
             base = (u8 *)D_001A01F0_1CE60.hdr;
             a = base + hdr->unk0 + 8;
-            if (D_001A01F0_1CE60.level == D_0015EE84_1CE60) {
+            if (D_001A01F0_1CE60.level == D_0015EE84_1BB90) {
                 func_00205C08_1CE60(pal, pix, pal, D_001A01F0_1CE60.mask);
             } else {
                 if (D_0013DE60_1CE60[D_001A01F0_1CE60.level] != 0) {
@@ -2069,7 +2066,7 @@ s32 func_0021CE60(struct MenuScreen_1CE60 *screen) {
         if (pick != -1) {
             next = func_00205918_1CE60();
             if (next != -1) {
-                k = (D_0015EE84_1CE60 + D_001A01F0_1CE60.unk230 == 0) ? 0 : 0x100;
+                k = (D_0015EE84_1BB90 + D_001A01F0_1CE60.unk230 == 0) ? 0 : 0x100;
                 if (k == next) {
                     func_00234238_1CE60(D_001A01F0_1CE60.slot[pick], D_001A01F0_1CE60.unk22C, 0,
                                        D_001A01F0_1CE60.unk234, 0);
@@ -2472,7 +2469,6 @@ extern s32 D_0015EEEC_1DB30 __asm__("D_0015EEEC") MACRO_ADDR;
 extern s32 D_0015EEF0_1DB30 __asm__("D_0015EEF0") MACRO_ADDR;
 extern s32 D_0015EEE8_1DB30 __asm__("D_0015EEE8") MACRO_ADDR;
 extern s32 D_001A0414_1DB30 __asm__("D_001A0414") NOT_SDA;
-extern s32 *D_001602E0_1DB30 __asm__("D_001602E0") MACRO_ADDR;
 extern s32 func_0022ED80_1DB30(s32 flags, s32 sound_index,
                                            s32 sound_owner) __asm__("func_0022ED80");
 void func_0012E380_1DB30(s32 menu) __asm__("func_0012E380");
@@ -2511,7 +2507,7 @@ s32 func_0021DB30(struct SoundMenu_1DB30 *menu) {
     if ((menu->selected_option != previous_selection) || (D_001D5F70_1DB30.current->pending_focus != 0)) {
         func_0022ED80_1DB30(1, 0x11, menu->sound_owner);
         if (menu->flags & 0x20) {
-            D_001A0414_1DB30 = D_001602E0_1DB30[menu->selected_option];
+            D_001A0414_1DB30 = D_001602E0_1CE60[menu->selected_option];
         }
     }
     previous_music_volume = D_0015EEEC_1DB30;
@@ -2559,9 +2555,6 @@ typedef struct {
     s32 selected_option;
 } SoundMenu_1DE08;
 
-extern s32 D_0015EEE8_1DE08 __asm__("D_0015EEE8") MACRO_ADDR;
-extern s32 D_0015EEEC_1DE08 __asm__("D_0015EEEC") MACRO_ADDR;
-extern s32 D_0015EEF0_1DE08 __asm__("D_0015EEF0") MACRO_ADDR;
 
 extern void func_001F4630_1DE08(s32) __asm__("func_001F4630");
 extern void func_001F4748_1DE08(void) __asm__("func_001F4748");
@@ -2601,7 +2594,7 @@ s32 func_0021DE08(SoundMenu_1DE08 *menu) {
                         0x80696969, 0);
     func_00201640_1DE08(slider_left, row_height - 6, menu->width - 0x41, row_height + 6,
                         0x80383838, 0);
-    slider_length = (menu->width - slider_padding) * D_0015EEF0_1DE08 / 1024;
+    slider_length = (menu->width - slider_padding) * D_0015EEF0_1DB30 / 1024;
     func_00201190_1DE08(func_00200198_1DE08(0xE99E, 8), slider_left << 4,
                         (row_height - 6) << 4, (center_x + 8 + slider_length) << 4,
                         (row_height + 5) << 4, 0, 0xA0, 0x1F0, 0x150, 0x80);
@@ -2614,7 +2607,7 @@ s32 func_0021DE08(SoundMenu_1DE08 *menu) {
                         0x80696969, 0);
     func_00201640_1DE08(slider_left, second_row - 6, menu->width - 0x41, second_row + 6,
                         0x80383838, 0);
-    slider_length = (menu->width - slider_padding) * D_0015EEEC_1DE08 / 1024;
+    slider_length = (menu->width - slider_padding) * D_0015EEEC_1DB30 / 1024;
     func_00201190_1DE08(func_00200198_1DE08(0xE99E, 9), slider_left << 4,
                         (second_row - 6) << 4, (center_x + 8 + slider_length) << 4,
                         (second_row + 5) << 4, 0, 0xA0, 0x1F0, 0x150, 0x80);
@@ -2624,7 +2617,7 @@ s32 func_0021DE08(SoundMenu_1DE08 *menu) {
                         menu->selected_option == 2 ? 0x8020FFFF : 0x80FFA888,
                         func_001FE540_1DE08(0x5219), -1);
     func_001F68E8_1DE08(center_x + 8, second_row - 8, 0x80FFA888,
-                        func_001FE540_1DE08(D_0015EEE8_1DE08 != 0 ? 0x521B : 0x521A), -1);
+                        func_001FE540_1DE08(D_0015EEE8_1DB30 != 0 ? 0x521B : 0x521A), -1);
     func_001F4748_1DE08();
     return 2;
 }
@@ -4567,8 +4560,6 @@ struct MemoryCardState_209A0 {
 
 extern struct MemoryCardState_209A0 D_0013D390_209A0 __asm__("D_0013D390");
 
-extern s16 D_001517D8_209A0[] __asm__("D_001517D8");
-extern s32 D_001A0414_209A0[] __asm__("D_001A0414");
 
 extern s32 func_001F9968_209A0(s32) __asm__("func_001F9968");
 extern s64 func_00205660_209A0(s32, s32, u8 *, u8 *, s32, s32) __asm__("func_00205660");
@@ -4600,7 +4591,7 @@ s32 func_002209A0(struct MenuScreen_209A0 *stream) {
             return 0;
         }
     } else if (flags & 2) {
-        idx = D_001A0414_209A0[0];
+        idx = D_001A0414_1BB90[0];
     } else if (flags & 4) {
         idx = D_001D5F70_209A0.current->focus->data.grid.selected_cell;
     } else if (flags & 0x100) {
@@ -4635,7 +4626,7 @@ s32 func_002209A0(struct MenuScreen_209A0 *stream) {
         if (stream->data.stream.buffer[0] == 0) {
             break;
         }
-        if (D_001517D8_209A0[0] != 0) {
+        if (D_001517D8_1A1A0[0] != 0) {
             break;
         }
         if (stream->data.stream.entries[idx].sector_count == 0) {
@@ -4665,7 +4656,7 @@ s32 func_002209A0(struct MenuScreen_209A0 *stream) {
         break;
     case 1:
     case 3:
-        if (D_001517D8_209A0[0] != 0) {
+        if (D_001517D8_1A1A0[0] != 0) {
             break;
         }
         func_002270B0_209A0(stream->data.stream.buffer[0]);
@@ -4937,9 +4928,6 @@ typedef struct {
 extern LanguageResourceOffsets_20DF0 D_001E8B00_20DF0 __asm__("D_001E8B00");
 
 extern u8 D_0013D510_20DF0[] __asm__("D_0013D510");
-extern s16 D_001517D8_20DF0[] __asm__("D_001517D8");
-extern s32 D_0015EE88_20DF0 __asm__("D_0015EE88") MACRO_ADDR;
-extern s32 D_001A0414_20DF0[] __asm__("D_001A0414");
 extern s32 func_001F98C0_20DF0() __asm__("func_001F98C0");
 extern s32 func_0020C468_20DF0() __asm__("func_0020C468");
 extern s32 func_00217628_20DF0() __asm__("func_00217628");
@@ -4998,7 +4986,7 @@ s32 func_00220DF0(struct MenuScreen_20DF0 *stream) {
         goto process_stream_state;
     } else {
         if (selection_flags & 2) {
-            resource_index = D_001A0414_20DF0[0];
+            resource_index = D_001A0414_1BB90[0];
         } else if (selection_flags & 4) {
             resource_index = D_001D5F70_20DF0.current->focus->data.grid.selected_cell;
         } else if (selection_flags & 0x100) {
@@ -5042,7 +5030,7 @@ s32 func_00220DF0(struct MenuScreen_20DF0 *stream) {
         } else if (selection_flags & 0x1000) {
             language_offsets = D_001E8B00_20DF0;
             resource_index = *stream->data.stream.language_base +
-                             language_offsets.values[D_0015EE88_20DF0];
+                             language_offsets.values[D_0015EE88_1BB90];
         } else {
             item_selection = D_001D5F70_20DF0.current->focus;
             resource_index = item_selection->data.list.selected;
@@ -5063,7 +5051,7 @@ s32 func_00220DF0(struct MenuScreen_20DF0 *stream) {
         switch (stream_state) {
         case 0:
             primary_buffer = stream->data.stream.buffer[0];
-            if (primary_buffer != 0 && D_001517D8_20DF0[0] == 0) {
+            if (primary_buffer != 0 && D_001517D8_1A1A0[0] == 0) {
                 primary_entry_offset = resource_index * 8;
                 if (*(s32 *)((u8 *)(primary_entry_offset + (s32)stream->data.stream.entries) + 0x4) !=
                     0) {
@@ -5103,7 +5091,7 @@ s32 func_00220DF0(struct MenuScreen_20DF0 *stream) {
         case 1:
         case 3:
         case 5:
-            if (D_001517D8_20DF0[0] == 0) {
+            if (D_001517D8_1A1A0[0] == 0) {
                 stream_flags = stream->data.stream.flags;
                 if (stream_flags & 0x20) {
                     completed_buffer_slot = &stream->data.stream.buffer[0];
@@ -5128,7 +5116,7 @@ s32 func_00220DF0(struct MenuScreen_20DF0 *stream) {
                     secondary_buffer = stream->data.stream.buffer[1];
                     if (secondary_buffer == 0) {
                         stream->data.stream.state = 0;
-                    } else if (D_001517D8_20DF0[0] == 0) {
+                    } else if (D_001517D8_1A1A0[0] == 0) {
                         secondary_entry_offset = resource_index * 8;
                         if (*(s32 *)((u8 *)(secondary_entry_offset + (s32)stream->data.stream.entries) +
                                      0x4) != 0) {
@@ -5178,7 +5166,7 @@ s32 func_00220DF0(struct MenuScreen_20DF0 *stream) {
                     replacement_buffer = stream->data.stream.buffer[0];
                     if (replacement_buffer == 0) {
                         stream->data.stream.state = -1;
-                    } else if (D_001517D8_20DF0[0] == 0) {
+                    } else if (D_001517D8_1A1A0[0] == 0) {
                         replacement_entry_offset = resource_index * 8;
                         if (*(s32 *)((u8 *)(replacement_entry_offset +
                                             (s32)stream->data.stream.entries) +
@@ -5994,7 +5982,6 @@ extern int D_0013CBE4;
 /* variation: separate "g" local per arm (shadowed), not shared across
    the whole function, to see if that lets the allocator pick the
    per-block register retail uses instead of one merged pseudo. */
-extern int D_0015EFB0_m __asm__("D_0015EFB0") MACRO_ADDR;
 extern char D_001D5F70[] NOT_SDA;
 
 int func_00222B00(void) {
@@ -6728,7 +6715,6 @@ int func_00224010(void *arg0) {
     return 0;
 }
 
-extern int D_0015EFB4_mm __asm__("D_0015EFB4") MACRO_ADDR;
 extern int D_0015EF34 MACRO_ADDR;
 extern int D_0015FF4C MACRO_ADDR;
 extern int D_0015EE98 MACRO_ADDR;
@@ -6744,7 +6730,6 @@ extern SaveWord2 D_0015EF98_s __asm__("D_0015EF98") MACRO_ADDR;
 extern char D_001D28F8[];
 extern int D_001D29C0;
 extern void func_00227C78(int, int);
-extern int D_0015EFB0_mm __asm__("D_0015EFB0") MACRO_ADDR;
 
 /* Save-slot menu handler (func_002243E8's sibling): on entry it may arm
    a save (0x4FB5 prompt), then while the prompt is up it either aborts
@@ -6803,7 +6788,7 @@ int func_00224040(char *arg0) {
                 char *d2 = D_0013D390;
                 char *g4 = D_001D5F70;
 
-                D_0015EFB4_mm |= 0x80;
+                D_0015EFB4_m |= 0x80;
                 *(int *)(d2 + 0xFC) = 0;
                 func_001FBC80(3, *(void **)(g4 + 4), 0);
                 return 0;
@@ -6840,7 +6825,7 @@ int func_00224040(char *arg0) {
             }
         }
     }
-    if (D_0015EFB0_mm != 0x10 && D_0015EFB0_mm != 1) {
+    if (D_0015EFB0_m != 0x10 && D_0015EFB0_m != 1) {
         char *g2 = D_001D5F70;
         *(int *)(g2 + 8) = *(int *)(*(char **)(g2 + 4) + 0x38);
         return 0;
@@ -7330,7 +7315,6 @@ typedef struct HandGadgetAnimation {
     s32 attachment2_class;
     s32 attachment2_animation;
 } HandGadgetAnimation;
-extern u8 D_0013D5C8_255F8[] __asm__("D_0013D5C8");
 typedef struct HandGadgetPlayerState {
     u8 pad0[0x10B8];
     s32 equipped_gadget;
@@ -7504,7 +7488,7 @@ s32 func_002255F8(HandGadgetState *hand) {
     }
     moby = hand->class_0197_moby;
     previous_class_0197 = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = (D_0013D5C8_255F8[0x23]) ? (0x197) : (-1);
+    requested_class = (D_0013D5C8_1E950[0x23]) ? (0x197) : (-1);
     if (previous_class_0197 != requested_class) {
         moby = func_002267C0_255F8(moby);
         if (requested_class != (-1)) {
@@ -7519,7 +7503,7 @@ s32 func_002255F8(HandGadgetState *hand) {
     }
     moby = hand->class_0266_moby;
     previous_class_0266 = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = (D_0013D5C8_255F8[0x21]) ? (0x266) : (-1);
+    requested_class = (D_0013D5C8_1E950[0x21]) ? (0x266) : (-1);
     if (previous_class_0266 != requested_class) {
         moby = func_002267C0_255F8(moby);
         if (requested_class != (-1)) {
@@ -7534,7 +7518,7 @@ s32 func_002255F8(HandGadgetState *hand) {
     }
     moby = hand->class_026a_moby;
     previous_class = (moby != 0) ? (moby->oclass) : (-1);
-    requested_class = (D_0013D5C8_255F8[0x22]) ? (0x26A) : (-1);
+    requested_class = (D_0013D5C8_1E950[0x22]) ? (0x26A) : (-1);
     if (previous_class != requested_class) {
         moby = func_002267C0_255F8(moby);
         if (requested_class != (-1)) {
@@ -7755,7 +7739,6 @@ typedef struct {
     f32 basis[12];
     f32 cached_vector[4];
 } PauseMoby_260A8;
-extern char D_001864D0_260A8b[] __asm__("D_001864D0");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/fun_00224e18.c, update_menu_preview_pose_and_attachments. */
 void func_002260A8(void *preview) {
@@ -7786,15 +7769,15 @@ void func_002260A8(void *preview) {
         DetachManipulator(source_moby_address, D_001D61A0);
     }
     if (!is_second_preview_moby) {
-        func_001E9800(D_001864D0_260A8b, D_001864D0,
+        func_001E9800(D_001864D0_a, D_001864D0,
                         moby->resource_address, 0, source_moby_address);
         moby->primary_binding = D_001864D0;
         moby->secondary_binding = D_001864D0;
     } else {
-        func_001E9800(D_001864D0, D_001864D0_260A8b,
+        func_001E9800(D_001864D0, D_001864D0_a,
                         moby->resource_address, 0, source_moby_address);
-        moby->primary_binding = D_001864D0_260A8b;
-        moby->secondary_binding = D_001864D0_260A8b;
+        moby->primary_binding = D_001864D0_a;
+        moby->secondary_binding = D_001864D0_a;
     }
     if (first_attachment_active) {
         AttachManipulator(source_moby_address, 0x17, D_001D61E0);
@@ -8450,9 +8433,7 @@ typedef struct {
 
 extern Checkpoints_27DB0 D_0013D390_27DB0 __asm__("D_0013D390");
 extern u8 D_0013D490_27DB0[] __asm__("D_0013D490");
-extern u8 D_0013D510_27DB0[] __asm__("D_0013D510");
 extern s32 D_0013D530_27DB0[] __asm__("D_0013D530");
-extern u8 D_0013D5C8_27DB0[] __asm__("D_0013D5C8");
 extern u8 D_0013E620_27DB0[] __asm__("D_0013E620");
 extern u8 D_0014BFC0_27DB0[] __asm__("D_0014BFC0");
 extern s32 D_00141FA0_27DB0[] __asm__("D_00141FA0");
@@ -8490,12 +8471,12 @@ void func_00227DB0(s32 slot) {
     s32 j;
 
     func_001F9A00_27DB0((void *)0x70000000, D_0013E620_27DB0, 0x28);
-    func_001F9A00_27DB0((void *)0x70000030, D_0013D5C8_27DB0, 0x25);
+    func_001F9A00_27DB0((void *)0x70000030, D_0013D5C8_1E950, 0x25);
     func_001F9A00_27DB0((void *)0x70000060, D_0013D530_27DB0, 0x94);
     func_001F9A00_27DB0((void *)0x70000100, D_0014BFC0_27DB0, 0x50);
     func_001F9A00_27DB0((void *)0x70000150, D_00141FA0_27DB0, 0x20);
     func_001F9A00_27DB0((void *)0x70000170, D_0015EED0_27DB0, 0xC);
-    func_001F9A00_27DB0((void *)0x70000180, D_0013D510_27DB0, 0x20);
+    func_001F9A00_27DB0((void *)0x70000180, D_0013D510_20DF0, 0x20);
     func_001F9A00_27DB0((void *)0x700001A0, D_0015EEB0_27DB0, 0xC);
     func_001F9A00_27DB0((void *)0x700001B0, D_0015EEC0_27DB0, 0xC);
     saved = D_0015EE98_27DB0;
@@ -8506,16 +8487,16 @@ void func_00227DB0(s32 slot) {
     func_00209DC0_27DB0();
     func_001F9A00_27DB0(D_0013E620_27DB0, (void *)0x70000000, 0x28);
     for (j = 0; D_001D5F20_27DB0[j] != -1; j++) {
-        D_0013D5C8_27DB0[D_001D5F20_27DB0[j]] = bytes[D_001D5F20_27DB0[j]];
+        D_0013D5C8_1E950[D_001D5F20_27DB0[j]] = bytes[D_001D5F20_27DB0[j]];
     }
     func_001F9A00_27DB0(D_0013D530_27DB0, (void *)0x70000060, 0x94);
     func_001F9A00_27DB0(D_0014BFC0_27DB0, (void *)0x70000100, 0x50);
     for (i = 0; i < 8; i++) {
         s32 item = items[i];
-        D_00141FA0_27DB0[i] = D_0013D5C8_27DB0[item] ? item : 0;
+        D_00141FA0_27DB0[i] = D_0013D5C8_1E950[item] ? item : 0;
     }
     func_001F9A00_27DB0(D_0015EED0_27DB0, (void *)0x70000170, 0xC);
-    func_001F9A00_27DB0(D_0013D510_27DB0, (void *)0x70000180, 0x20);
+    func_001F9A00_27DB0(D_0013D510_20DF0, (void *)0x70000180, 0x20);
     func_001F9A00_27DB0(D_0015EEB0_27DB0, (void *)0x700001A0, 0xC);
     func_001F9A00_27DB0(D_0015EEC0_27DB0, (void *)0x700001B0, 0xC);
     D_0015EE98_27DB0 = saved;

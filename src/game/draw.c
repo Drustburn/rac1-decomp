@@ -965,7 +965,6 @@ extern int D_0015F6FC;
 extern short D_0015F534;              /* SDA, gp -0x77CC */
 extern void func_001F3D78(void);
 
-extern int D_0015F6FC_m __asm__("D_0015F6FC") MACRO_ADDR;
 
 /* D_0015F6FC is read through a MACRO_ADDR alias: retail's one-register
    lui $2 / lw $2 (an older note filed it as an allocator question). */
