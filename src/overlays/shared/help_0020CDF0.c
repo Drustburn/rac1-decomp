@@ -1601,7 +1601,65 @@ void func_L00_00211A38(void) {
     func_L00_0025C918(p + 5, p + 6, *(float *)(t + 0x230),
         D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.0f);
 }
-INCLUDE_ASM("asm/overlays", func_L00_00211D28);
+#include "pad.h"
+extern Hero D_0013F450_211D28 __asm__("D_0013F450");
+extern struct PadState D_0013CA40_211D28 __asm__("D_0013CA40");
+extern char func_L00_00233CC0_a(void) __asm__("func_L00_00233CC0");
+extern float func_L00_00211EE8_a(void) __asm__("func_L00_00211EE8");
+extern float func_001F9CE8_a(void *) __asm__("func_001F9CE8");
+extern void func_L00_002180F8_a(void) __asm__("func_L00_002180F8");
+extern void func_001FA218_a(void *, void *) __asm__("func_001FA218");
+extern void func_001FA190_a(void *) __asm__("func_001FA190");
+extern void func_001FA4A0_a(void *, void *) __asm__("func_001FA4A0");
+extern void func_L00_00211A38_a(void) __asm__("func_L00_00211A38");
+extern void func_L00_00221A98_a(void) __asm__("func_L00_00221A98");
+extern void func_L00_00221D50_a(void) __asm__("func_L00_00221D50");
+
+/* Hero per-frame input update: the stick axes from the pad (the d-pad bits stand in below 0.25), the
+   voice and input history rings, then the hero's matrices. */
+void func_L00_00211D28(void) {
+    int raw;
+    int l;
+    int r;
+    int l2;
+    int r2;
+
+    D_0013F450_211D28.unk20B3 = func_L00_00233CC0_a();
+    D_0013F450_211D28.unk229C = func_L00_00211EE8_a();
+    D_0013F450_211D28.unk240 = 0;
+    D_0013F450_211D28.unk1D20 = D_0013CA40_211D28.analog[2];
+    D_0013F450_211D28.unk1D24 = D_0013CA40_211D28.analog[3];
+    if (func_001F9CE8_a(&D_0013F450_211D28.unk1D20) < 0.25f) {
+        raw = D_0013CA40_211D28.raw_held;
+        l = (raw >> 13) & 1;
+        r = (raw >> 15) & 1;
+        r = l - r;
+        D_0013F450_211D28.unk1D20 = (float)r;
+        l2 = (raw >> 14) & 1;
+        r2 = (raw >> 12) & 1;
+        r2 = l2 - r2;
+        D_0013F450_211D28.unk1D24 = (float)r2;
+    }
+    func_L00_002180F8_a();
+    D_0013F450_211D28.unk2128[D_0013F450_211D28.unk21A8] = D_0013F450_211D28.motion.rot.f[2];
+    D_0013F450_211D28.unk21A8 = (D_0013F450_211D28.unk21A8 + 1) % 32;
+    D_0013F450_211D28.unk21AC = D_0013F450_211D28.unk21AC + 1;
+    if (D_0013F450_211D28.unk21AC > 0x20) {
+        D_0013F450_211D28.unk21AC = 0x20;
+    }
+    qcopy_nc(&D_0013F450_211D28.unk1B00[D_0013F450_211D28.unk21B0], &D_0013F450_211D28.motion.pos);
+    D_0013F450_211D28.unk21B0 = (D_0013F450_211D28.unk21B0 + 1) % 32;
+    D_0013F450_211D28.unk21B4 = D_0013F450_211D28.unk21B4 + 1;
+    if (D_0013F450_211D28.unk21B4 > 0x20) {
+        D_0013F450_211D28.unk21B4 = 0x20;
+    }
+    func_001FA218_a(&D_0013F450_211D28, &D_0013F450_211D28.motion.rot);
+    func_001FA190_a(D_0013F450_211D28.unk40);
+    func_001FA4A0_a(D_0013F450_211D28.unk40, &D_0013F450_211D28);
+    func_L00_00211A38_a();
+    func_L00_00221A98_a();
+    func_L00_00221D50_a();
+}
 extern float func_001F9CE8(void *);
 
 /* The xy length of the vector at D_0013F450 + 0x1D20, capped at 1. */

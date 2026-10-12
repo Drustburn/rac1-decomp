@@ -352,3 +352,11 @@ what the function does and, if needed, why the C is shaped that way.
     - The last two bytes were the bottom block's order: write `for (i = 7; i >= 0; p++, i--, off += 4)` with
       the stores in the arms and `continue`, and the order of the three updates decides which one reorg puts
       in the delay slot (the scheduler orders ties by insn number).
+
+17. **A result that lands in the second operand's register** (func_L00_00211D28, 2026-10-12). Local allocation
+    ties the result of `a - b` to a dying first operand, so `subu $v1,$v1,$a0` comes out where retail has
+    `subu $v1,$a0,$v1`. Retail's form is a named temporary reused for the result, `r = l - r;` (declare `l`
+    and `r` once, set both from the bit tests, then subtract into `r`). Written as one expression, or with a
+    third temporary, it did not change. A two-function test file compiled by hand
+    (`wine .../ee-gcc2953.exe -O2 -G2 -S`) shows this in seconds: a first operand that stays live afterwards
+    ties the result to the second, which is how the rule was found.
