@@ -1377,7 +1377,7 @@ void func_L15_0029FF90(Moby29FF90 *moby) {
 }
 extern char *func_L00_0025B478(void *, int, int);
 extern void func_L00_00273F80(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale);
-extern void func_L15_002A3B98(void);
+extern void func_L15_002A3B98(char *);
 extern void func_L00_0025A8E8_m(void *, void *, int, float, float, float, int, int, int) __asm__("func_L00_0025A8E8");
 extern int D_L15_00161B40_m __asm__("D_L15_00161B40") MACRO_ADDR;
 extern short D_L15_00161540;
@@ -1522,7 +1522,73 @@ int func_L15_002A3A48(int idx, void *pos) {
     } while (*p++ >= 0);
     return 0;
 }
-INCLUDE_ASM("asm/overlays", func_L15_002A3B98);
+typedef int u128_2A3B98 __attribute__((mode(TI)));
+extern int func_001F4868(int);
+extern void func_001F9BC0(float *);
+extern void func_001FA218(float *, float *);
+extern void func_L00_001FD1D8(void *, void *, int);
+extern float D_L15_001CE490_x[] __asm__("D_L15_001CE490");
+extern float D_L15_001CE390_x[] __asm__("D_L15_001CE390");
+extern int D_L15_001AC140_x[] __asm__("D_L15_001AC140");
+extern char D_L15_00167300_x[] __asm__("D_L15_00167300");
+extern int D_L15_00160058_m_x __asm__("D_L15_00160058") MACRO_ADDR;
+extern short D_L15_00161544_x __asm__("D_L15_00161544");
+
+/* Draw callback: for each moby in the room's list (not one in state 1), turns it to face the camera at
+   D_L15_00167300 + 0x140 and sends its model matrix, one row of four at a time, to func_L00_001FD1D8. */
+void func_L15_002A3B98(char *m) {
+    float mtx[16];
+    int cols[4];
+    float t[8];
+    long g[4];
+    float A[4];
+    float B[16];
+    short *p;
+    char *c;
+    int i, j, k;
+    g[1] = func_001F4868(8);
+    g[2] = 0xFF9000000260L;
+    g[3] = 0x8000000044L;
+    g[0] = 0;
+    {
+        float *sp_ = D_L15_001CE490_x;
+        float *d1 = t + 1;
+        float *d0 = t;
+        for (i = 3; i >= 0; i--) {
+            *d0 = sp_[0];
+            *d1 = sp_[1];
+            sp_ += 2;
+            d0 += 2;
+            d1 += 2;
+        }
+    }
+    p = (short *)D_L15_001AC140_x[*(unsigned char *)(m + 0x21)];
+    do {
+        char *o = (char *)D_L15_00160058_m_x + ((*(unsigned short *)p & 0x7FFF) << 8);
+        c = D_L15_00167300_x;
+        if (*(unsigned char *)(o + 0x20) != 1) {
+            char *pos = o + 0x10;
+            float d;
+            func_001F9BC0(A);
+            A[2] = func_L00_001FF860(*(float *)(c + 0x140) - *(float *)(o + 0x10), *(float *)(c + 0x144) - *(float *)(o + 0x14));
+            d = func_001F9D48((float *)pos, (float *)(c + 0x140));
+            A[1] = -func_L00_001FF860(d, *(float *)(c + 0x148) - *(float *)(o + 0x18));
+            func_001FA218(B, A);
+            qcopy(B + 12, pos);
+            B[14] += *(float *)&D_L15_00161544_x;
+            B[15] = 1.0f;
+            for (j = 0; j < 4; j++) {
+                k = 0;
+                do {
+                    cols[k] = *(int *)(&D_L15_00161544_x + 2 + j * 2);
+                    qcopy_nc(mtx + k * 4, D_L15_001CE390_x + j * 16 + k * 4);
+                    k++;
+                } while (k < 4);
+                func_L00_001FD1D8(mtx, B, 0);
+            }
+        }
+    } while (*p++ >= 0);
+}
 typedef struct { unsigned char pad[0x454]; unsigned char killed[1]; } KillFlags_2A3DD0;
 typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice_2A3DD0;
 extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BBB40");

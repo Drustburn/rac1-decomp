@@ -360,3 +360,13 @@ what the function does and, if needed, why the C is shaped that way.
     third temporary, it did not change. A two-function test file compiled by hand
     (`wine .../ee-gcc2953.exe -O2 -G2 -S`) shows this in seconds: a first operand that stays live afterwards
     ties the result to the second, which is how the rule was found.
+
+18. **gcse hoists a plain `w = B + 12` to the top of the function** (func_L15_002A3B98, 2026-10-12). Expressions
+    that every path computes (`high(sym)`, a stack address kept in a pointer variable) are inserted at the end of
+    the first block by gcse ("PRE/HOIST" lines in `TRY_CFLAGS='-dG'`, file `src.c.gcse`), above a small loop that
+    retail runs first; reload then keeps the stack address in `$a2` across it. Retail's address is computed after
+    the loop. Two spellings stop it: write the address at its use (`qcopy(B + 12, pos)`, no pointer variable), and
+    assign a loop-invariant base (`c = D_L15_00167300;`) inside the loop, where loop.c hoists it later and its live
+    range shrinks enough to win a saved register over the table pointer (priorities 0.173 against 0.172 in
+    `tools/regalloc.py`). Also: `qcopy()` has a memory clobber that makes gcc reload a value inside an inner loop
+    that retail keeps in a register; `qcopy_nc()` does not.
