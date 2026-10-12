@@ -701,7 +701,6 @@ void func_L00_001F91B0(void) {
     }
 }
 extern int func_L00_002016D0(void);
-extern void func_001FB530(void);
 extern void func_L00_002781D8(int);
 extern void func_001FBE80(void);
 
@@ -721,7 +720,6 @@ void func_L00_001F92C0(void) { if (D_L00_0015F6BC == 0) func_L00_002781D8(0); }
 INCLUDE_ASM("asm/overlays", func_L00_001F92E8);
 extern int D_L00_0015F4F8 MACRO_ADDR;
 extern int D_0015EF84 MACRO_ADDR;
-extern int D_0013E15A[];
 extern void func_00234AC8(int);
 extern int func_00122598(int);
 extern void func_002348E8(void);
