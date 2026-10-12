@@ -1,4 +1,5 @@
 #include "common.h"
+#include "moby.h"
 #include "structs.h"
 
 /*
@@ -339,14 +340,6 @@ void func_002391A8(int arg0) {
 }
 
 typedef struct {
-    u8 pad0[0x20];
-    u8 state;
-    u8 pad21[0x32];
-    u8 anim;
-    u8 pad54[0x1C];
-    u8 flags;
-} Moby_391E8;
-typedef struct {
     u8 pad0[0x34];
     s32 timer;
     s32 base;
@@ -372,17 +365,17 @@ extern BossVars_391E8 D_001E66C0_391E8 __asm__("D_001E66C0");
 extern s32 D_001E66FC;
 extern Cam_391E8 D_001E68E0;
 extern s32 func_001F98C0(s32);
-extern void func_0020D960(Moby_391E8 *, s32, Cam_391E8 *);
-extern void func_0020D9D8(Moby_391E8 *, Cam_391E8 *);
-extern void func_00213DE0(Moby_391E8 *, s32, s32, s32);
+extern void func_0020D960(Moby *, s32, Cam_391E8 *);
+extern void func_0020D9D8(Moby *, Cam_391E8 *);
+extern void func_00213DE0(Moby *, s32, s32, s32);
 extern s32 func_002140B0(s32);
-extern s32 func_00215B18(Moby_391E8 *, f32);
+extern s32 func_00215B18(Moby *, f32);
 extern s32 func_00216960(void);
 
 /* Per-frame state machine of one boss-like moby: keeps a manipulator node attached while D_0015EEB0 is set,
    then steps the state byte at +0x20 through its animation and timer states.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/gameplay/vendor/fun_00237ed0.c, FUN_00237ed0. */
-void func_002391E8(Moby_391E8 *m) {
+void func_002391E8(Moby *m) {
     s32 r;
     s32 a;
 
@@ -404,7 +397,7 @@ void func_002391E8(Moby_391E8 *m) {
             D_001517EC = (r * 3 + 1) * 6 + D_001E66C0_391E8.base + 10000;
             D_001611B0 = 1;
             D_001611B4 = 0;
-            if (m->anim != 2) {
+            if (m->prev_seq != 2) {
                 func_00213DE0(m, 2, 0, func_001F98C0(0x12));
             }
             m->state = 12;
@@ -414,7 +407,7 @@ void func_002391E8(Moby_391E8 *m) {
         break;
     case 2:
         if (D_001E66C0_391E8.timer > func_001F98C0(600)) {
-            if (m->anim != 3) {
+            if (m->prev_seq != 3) {
                 func_00213DE0(m, 3, 0, func_001F98C0(0x12));
             }
             m->state = 3;
@@ -423,8 +416,8 @@ void func_002391E8(Moby_391E8 *m) {
         D_001E66C0_391E8.timer++;
         break;
     case 3:
-        if (m->flags & 2) {
-            if (m->anim != 0) {
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 0) {
                 func_00213DE0(m, 0, 0, func_001F98C0(0x12));
             }
             m->state = 0;
@@ -436,8 +429,8 @@ void func_002391E8(Moby_391E8 *m) {
             D_001611B4 = 0;
             func_00216960();
         }
-        if (m->flags & 2) {
-            if (m->anim != 2) {
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 2) {
                 func_00213DE0(m, 2, 0, func_001F98C0(0x12));
             }
             m->state = 2;
@@ -450,8 +443,8 @@ void func_002391E8(Moby_391E8 *m) {
             D_001611B4 = 0;
             func_00216960();
         }
-        if (m->flags & 2) {
-            if (m->anim != 2) {
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 2) {
                 func_00213DE0(m, 2, 0, func_001F98C0(0x12));
             }
             m->state = 2;
@@ -464,8 +457,8 @@ void func_002391E8(Moby_391E8 *m) {
             D_001611B4 = 0;
             func_00216960();
         }
-        if (m->flags & 2) {
-            if (m->anim != 2) {
+        if (m->unk70 & 2) {
+            if (m->prev_seq != 2) {
                 func_00213DE0(m, 2, 0, func_001F98C0(0x12));
             }
             m->state = 2;
@@ -477,9 +470,9 @@ void func_002391E8(Moby_391E8 *m) {
             D_001611B0 = 0;
             D_001611B4 = 1;
         }
-        if (m->flags & 2) {
+        if (m->unk70 & 2) {
             a = D_001E66FC * 3 + 4;
-            if (m->anim != a) {
+            if (m->prev_seq != a) {
                 func_00213DE0(m, a, 0, func_001F98C0(0xC));
             }
             m->state = 4;
@@ -490,7 +483,7 @@ void func_002391E8(Moby_391E8 *m) {
             D_001611B4 = 1;
             D_001611B0 = 0;
             a = D_001E66FC * 3 + 5;
-            if (m->anim != a) {
+            if (m->prev_seq != a) {
                 func_00213DE0(m, a, 0, func_001F98C0(0x12));
             }
             m->state = 5;
@@ -501,7 +494,7 @@ void func_002391E8(Moby_391E8 *m) {
             D_001611B4 = 1;
             D_001611B0 = 0;
             a = D_001E66FC * 3 + 6;
-            if (m->anim != a) {
+            if (m->prev_seq != a) {
                 func_00213DE0(m, a, 0, func_001F98C0(0x12));
             }
             m->state = 6;

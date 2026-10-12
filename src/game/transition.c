@@ -1,4 +1,5 @@
 #include "common.h"
+#include "moby.h"
 #include "structs.h"
 
 /*
@@ -144,13 +145,6 @@ typedef struct
   u8 pad0[0x2C];
   s32 count;
 } HelpState_EABE8;
-typedef struct 
-{
-  u8 pad0[0xD];
-  u8 xD;
-  u8 padE[0x1A];
-  void *x28;
-} MobyClass_EABE8;
 extern s32 D_0015EF74_EABE8 __asm__("D_0015EF74") MACRO_ADDR;
 extern s32 D_0015EF78_EABE8 __asm__("D_0015EF78") MACRO_ADDR;
 extern s32 D_0015EF8C_EABE8 __asm__("D_0015EF8C") MACRO_ADDR;
@@ -175,7 +169,7 @@ extern LoadState_EABE8 D_001941C0_EABE8 __asm__("D_001941C0");
 extern u8 D_00194280_EABE8[] __asm__("D_00194280");
 extern HelpState_EABE8 D_001997D0_EABE8 __asm__("D_001997D0");
 extern u64 D_0019E7C0_EABE8[] __asm__("D_0019E7C0");
-extern MobyClass_EABE8 *D_001B3580_EABE8[] __asm__("D_001B3580");
+extern MobyClass *D_001B3580_EABE8[] __asm__("D_001B3580");
 extern u8 D_001B3E40_EABE8[] __asm__("D_001B3E40");
 extern s32 D_001B5D00_EABE8[] __asm__("D_001B5D00");
 extern s32 D_001B6500_EABE8[] __asm__("D_001B6500");
@@ -400,8 +394,8 @@ void func_001EABE8(void)
   cnt = (new_var = D_001B3E40_EABE8[0x472]);
   if (cnt >= 0)
   {
-    D_001B3580_EABE8[cnt]->x28 = D_001862E0_EABE8;
-    D_001B3580_EABE8[cnt]->xD = 5;
+    D_001B3580_EABE8[cnt]->unk28 = (s32)D_001862E0_EABE8;
+    (*(u8 *)&D_001B3580_EABE8[cnt]->pad_D) = 5;
   }
 }
 
