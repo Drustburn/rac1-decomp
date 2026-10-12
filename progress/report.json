@@ -1,12 +1,12 @@
 {
  "measures": {
-  "fuzzy_match_percent": 80.71077448658805,
+  "fuzzy_match_percent": 80.76776639136739,
   "total_code": "3712808",
-  "matched_code": "2961596",
-  "matched_code_percent": 79.76701192197388,
+  "matched_code": "2963672",
+  "matched_code_percent": 79.82292647505608,
   "total_functions": 5109,
-  "matched_functions": 4263,
-  "matched_functions_percent": 83.44098649442161,
+  "matched_functions": 4264,
+  "matched_functions_percent": 83.46055979643766,
   "complete_code": "482572",
   "complete_code_percent": 12.997494079952425,
   "total_units": 141,
@@ -18282,13 +18282,13 @@
   {
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 70.60653671245382,
+    "fuzzy_match_percent": 70.77944622314322,
     "total_code": "1200628",
-    "matched_code": "826284",
-    "matched_code_percent": 68.82098368520474,
+    "matched_code": "828360",
+    "matched_code_percent": 68.99389319589415,
     "total_functions": 1980,
-    "matched_functions": 1513,
-    "matched_functions_percent": 76.41414141414141,
+    "matched_functions": 1514,
+    "matched_functions_percent": 76.46464646464646,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -30718,7 +30718,7 @@
     {
      "name": "func_L00_002C6720",
      "size": "2076",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "899480",
      "metadata": {
       "virtual_address": "2909984"
@@ -41762,7 +41762,7 @@
   {
    "name": "Level 09: Gaspar",
    "measures": {
-    "fuzzy_match_percent": 78.64740881629,
+    "fuzzy_match_percent": 78.75929066905348,
     "total_code": "35752",
     "matched_code": "27232",
     "matched_code_percent": 76.16916536137839,
@@ -41985,7 +41985,7 @@
     {
      "name": "func_L09_002F1198",
      "size": "500",
-     "fuzzy_match_percent": 81.0,
+     "fuzzy_match_percent": 89.0,
      "address": "863664",
      "metadata": {
       "virtual_address": "3084696"
@@ -49701,13 +49701,13 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 80.68977354618323,
+    "fuzzy_match_percent": 80.75493922592041,
     "total_code": "3247108",
-    "matched_code": "2585128",
-    "matched_code_percent": 79.61324353855801,
+    "matched_code": "2587204",
+    "matched_code_percent": 79.67717735289371,
     "total_functions": 3429,
-    "matched_functions": 2751,
-    "matched_functions_percent": 80.22747156605425,
+    "matched_functions": 2752,
+    "matched_functions_percent": 80.25663458734324,
     "complete_code": "281192",
     "complete_code_percent": 8.659767399174896
    }
@@ -49746,13 +49746,13 @@
    "id": "common",
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 70.60653671245382,
+    "fuzzy_match_percent": 70.77944622314322,
     "total_code": "1200628",
-    "matched_code": "826284",
-    "matched_code_percent": 68.82098368520474,
+    "matched_code": "828360",
+    "matched_code_percent": 68.99389319589415,
     "total_functions": 1980,
-    "matched_functions": 1513,
-    "matched_functions_percent": 76.41414141414141,
+    "matched_functions": 1514,
+    "matched_functions_percent": 76.46464646464646,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49761,7 +49761,7 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 86.60540256440326,
+    "fuzzy_match_percent": 86.60735714006488,
     "total_code": "2046480",
     "matched_code": "1758844",
     "matched_code_percent": 85.94484187482898,
@@ -49911,7 +49911,7 @@
    "id": "level_09",
    "name": "Level 09: Gaspar",
    "measures": {
-    "fuzzy_match_percent": 78.64740881629,
+    "fuzzy_match_percent": 78.75929066905348,
     "total_code": "35752",
     "matched_code": "27232",
     "matched_code_percent": 76.16916536137839,
