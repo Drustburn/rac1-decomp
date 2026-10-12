@@ -1102,7 +1102,6 @@ void func_L01_002E5298(Moby *moby) {
         *(int *)&D_L01_00160058_E5298[d->parent].unk94 = ((Class_E5298 *)D_L01_00160058_E5298[d->parent].pclass)->i10;
     }
 }
-extern char D_L01_00174340_c[] __asm__("D_L01_00174340");
 extern float D_0015EE70 MACRO_ADDR;
 extern void func_001F9BC0(void *);
 extern void func_L00_0026A7F8(void *, void *, int, int, int, int, int, int);
@@ -1152,7 +1151,7 @@ void func_L01_002EEDD8(char *m) {
             *(float *)(d + 8) -= D_0015EE70 * 10.8f;
         }
         if (func_L00_001EFFF0(m + 0x10, prev, 0, *(int *)(d + 0x10), 0) != 0) {
-            char *p = D_L01_00174340_c;
+            char *p = D_L01_00174340_h;
             if (*(int *)(p + 0x18) != 0) {
                 func_L00_0025A8C0(&h, m, 0x10001, 1.0f, d);
                 func_L00_001FF500(&h, &h, 1.0f);

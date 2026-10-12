@@ -1008,7 +1008,6 @@ extern unsigned char D_0013D50F_254DE8[] __asm__("D_0013D50F") NOT_SDA;
 extern unsigned char D_0013D5E7_254DE8 __asm__("D_0013D5E7") NOT_SDA;
 extern Path_254DE8 *D_L05_001B0CB0_254DE8[] __asm__("D_L05_001B0CB0");
 extern Ent_254DE8 *D_L05_00160098_254DE8 __asm__("D_L05_00160098") MACRO_ADDR;
-extern int D_0015EE84_254DE8 __asm__("D_0015EE84") MACRO_ADDR;
 extern float D_0015EE60_254DE8 __asm__("D_0015EE60") MACRO_ADDR;
 extern int D_0015EF38_254DE8 __asm__("D_0015EF38") MACRO_ADDR;
 extern int D_0015EF3C_254DE8 __asm__("D_0015EF3C") MACRO_ADDR;
@@ -1055,7 +1054,7 @@ void func_L05_00254DE8(void) {
     }
     path = D_L05_001B0CB0_254DE8[d->f20];
     ((Hero *)(D_0013E633 + 0xE1D))->unk8B4 = (void *)path;
-    if (D_0015EE84_254DE8 == 0x10) {
+    if (D_0015EE84_2523C8 == 0x10) {
         *(u128_254DE8 *)v0 = 0;
         v0[0] = 163.0f;
         v0[1] = 119.0f;
@@ -1095,7 +1094,7 @@ void func_L05_00254DE8(void) {
         }
     }
     near = 0;
-    if (D_0015EE84_254DE8 == 0x10) {
+    if (D_0015EE84_2523C8 == 0x10) {
         if (((Hero *)(D_0013E633 + 0xE1D))->motion.pos.f[2] < path->p[((Hero *)(D_0013E633 + 0xE1D))->unk898].z - 2.0f) {
             near = 1;
             if (((Hero *)(D_0013E633 + 0xE1D))->unk8AE < scale_ticks(0x46)) {
@@ -1180,12 +1179,12 @@ void func_L05_00254DE8(void) {
     if (*(D_0013D355_254DE8 + 0x13B) != 0) {
         D_L05_0015F788 = 1;
     }
-    if (D_0015EE84_254DE8 == 5) {
+    if (D_0015EE84_2523C8 == 5) {
         D_0015EF38_254DE8++;
-    } else if (D_0015EE84_254DE8 == 0x10) {
+    } else if (D_0015EE84_2523C8 == 0x10) {
         D_0015EF3C_254DE8++;
     }
-    if (D_0015EE84_254DE8 == 5) {
+    if (D_0015EE84_2523C8 == 5) {
         int t;
 
         if (D_0015EE80_254DE8 != 0) {
@@ -1226,7 +1225,7 @@ void func_L05_00254DE8(void) {
             ((Hero *)(D_0013E633 + 0xE1D))->unk880 = -1;
         }
         func_001FFFA0_254DE8();
-    } else if (D_0015EE84_254DE8 == 0x10) {
+    } else if (D_0015EE84_2523C8 == 0x10) {
         if (d->f28 == -1) {
             return;
         }

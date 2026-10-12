@@ -391,7 +391,6 @@ typedef struct { float f[4]; } __attribute__((aligned(16))) V2d8e48;
 typedef struct { float u, v; } UV2d8e48;
 typedef struct { V2d8e48 corner[4]; unsigned int color[4]; UV2d8e48 uv[4]; long unk70, tex, unk80, unk88; } Q2d8e48;
 extern short D_L15_00161D2C_2da238 __asm__("D_L15_00161D2C") ;
-extern short D_L15_00161CE0_2da238 __asm__("D_L15_00161CE0") ;
 extern short D_L15_00161D34_2da238 __asm__("D_L15_00161D34") ;
 extern short D_L15_00161D38_2da238 __asm__("D_L15_00161D38") ;
 extern V2d8e48 D_L15_00167440 __asm__("D_L15_00167440") NOT_SDA;
@@ -443,7 +442,7 @@ void func_L15_002DA238(char *mv) {
         quad.uv[i].v = D_L15_001D3A00[i].v;
     }
     draw_2d8e48(&quad, 0, 0);
-    c = *(unsigned int *)&D_L15_00161CE0_2da238;
+    c = *(unsigned int *)&D_L15_00161CE0_2d8fa0;
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;

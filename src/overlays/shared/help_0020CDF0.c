@@ -2026,7 +2026,6 @@ extern s32 D_0015EE84 MACRO_ADDR;
 typedef int Q __attribute__((mode(TI)));
 extern u8 D_L00_00173F60[];
 extern f32 D_L00_00173F68;
-extern s32 D_0015EE84_12E70b __asm__("D_0015EE84") MACRO_ADDR;
 void func_001F9BC0(void *);
 void func_L00_00212D70_12E70(void *, void *, s32, f32, f32) __asm__("func_L00_00212D70");
 s32 func_L00_001EFFF0(void *, void *, s32, s32, s32);
@@ -2153,7 +2152,7 @@ void func_L00_00212E70(void) {
             goto d1;
         }
         r = CollSoundClass();
-        if (D_0015EE84_12E70b == 1 || D_0015EE84_12E70b == 0x12) {
+        if (D_0015EE84_0D5F0b == 1 || D_0015EE84_0D5F0b == 0x12) {
             r = 3;
         }
         D_0013F450_12E70.xB12ed = r;

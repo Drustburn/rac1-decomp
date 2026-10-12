@@ -155,7 +155,6 @@ int func_L02_002D6A90(void *argp) {
     } while (*p++ >= 0);
     return result;
 }
-extern int D_L02_00160058_m __asm__("D_L02_00160058") MACRO_ADDR;
 extern float func_002140F8(float, float);
 extern float func_001F9878(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
@@ -322,7 +321,6 @@ extern float D_L02_0016199C SDATA(D_L02_0016199C);
 extern float D_L02_001619A4 SDATA(D_L02_001619A4);
 extern float D_L02_001619A8 SDATA(D_L02_001619A8);
 extern int *D_L02_001B0DB0_2D70C0[] __asm__("D_L02_001B0DB0");
-extern int D_L02_00160058_2D70C0 __asm__("D_L02_00160058") MACRO_ADDR;
 extern char D_0013E633_2D70C0[] __asm__("D_0013E633");
 extern float D_0015EE70 MACRO_ADDR;
 extern int func_001F9938(void *);
@@ -360,7 +358,7 @@ void func_L02_002D70C0(unsigned char *moby) {
     if (d->b2E == 2) {
         d->b2E = 1;
         if (d->i288 >= 0) {
-            (*(Vars_2D70C0 **)((d->i288 << 8) + D_L02_00160058_2D70C0 + 0x78))->i14C -= 1;
+            (*(Vars_2D70C0 **)((d->i288 << 8) + D_L02_00160058_m + 0x78))->i14C -= 1;
         }
         if ((d->i27C = func_L02_002D6A90(moby)) == 0) {
             DeleteMoby(moby);
@@ -406,7 +404,7 @@ void func_L02_002D70C0(unsigned char *moby) {
                 *(float *)(moby + 0x18) = g;
             }
             if (d->i288 >= 0) {
-                (*(Vars_2D70C0 **)((d->i288 << 8) + D_L02_00160058_2D70C0 + 0x78))->i14C -= 1;
+                (*(Vars_2D70C0 **)((d->i288 << 8) + D_L02_00160058_m + 0x78))->i14C -= 1;
                 d->b15D = 0;
             } else {
                 p.f[2] += 0.01f;

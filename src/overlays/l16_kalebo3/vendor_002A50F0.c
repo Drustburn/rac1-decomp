@@ -2171,7 +2171,6 @@ extern void func_L00_00217718(void*,void*,int,int);
 extern void func_L00_0025A8E8(int,float,void*,int,float,float,int,int,int);
 extern void func_0022ED80(int,int,void*);
 extern char D_0013E633[],D_0014171B[],D_0013D355[],D_L16_00167240[];
-extern char *D_L16_001601AC_m __asm__("D_L16_001601AC") MACRO_ADDR;
 typedef struct {char pad[0x72];unsigned char complete;} L16ObjectiveEntry;
 typedef struct {int trigger,helper,path,hidden,pose,camera,objective,pad1,pad2,timer;} L16SceneData;
 /* Drive a triggered scene, player pose and objective completion. */
@@ -2237,7 +2236,6 @@ notify:
     }
 }
 extern char *D_L16_001B0C30[];
-extern char *D_L16_001601AC_m __asm__("D_L16_001601AC") MACRO_ADDR;
 extern short D_L16_00161B4C;
 extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9C08(void *, void *, void *, float);
@@ -2922,7 +2920,6 @@ void func_L16_002E5848(char *moby) {
     FastVecSub(v20, moby + 0x10, v00);
     func_L00_002617B0(d + 0x20, v20, v10, moby + 0x40);
 }
-extern char *D_L16_001601AC_slots __asm__("D_L16_001601AC") MACRO_ADDR;
 extern unsigned char D_0013D5C8_b[] __asm__("D_0013D5C8");
 
 /* picks the nearest target slot and sets the moby's state */
@@ -2935,7 +2932,7 @@ void func_L16_002E5D68(void *moby_v) {
     char *g;
     *(short *)(data + 0xAC) = -1;
     for (i = 0; i < 3; i++) {
-        if (FastVecDist(moby + 0x10, D_L16_001601AC_slots + (list[i] << 7) + 0x30) < 1.0f) {
+        if (FastVecDist(moby + 0x10, D_L16_001601AC_m + (list[i] << 7) + 0x30) < 1.0f) {
             *(short *)(data + 0xAC) = i;
         }
     }
@@ -2958,7 +2955,7 @@ void func_L16_002E5D68(void *moby_v) {
         selected += *(short *)(data + 0xAC);
         idx = *selected << 7;
     }
-    g = D_L16_001601AC_slots;
+    g = D_L16_001601AC_m;
     qcopy(data + 0x60, (void *)(idx + (int)g + 0x30));
     qcopy(data + 0x70, (void *)(idx + (int)g + 0x70));
 }

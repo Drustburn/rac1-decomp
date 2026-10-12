@@ -313,7 +313,6 @@ extern char D_0013E633_2E16A0[] __asm__("D_0013E633");
 extern char D_0013A5E0_2E16A0[] __asm__("D_0013A5E0");
 extern unsigned char visited52[][16] __asm__("D_0014C150");
 extern int invert52 __asm__("D_0015EEDC") MACRO_ADDR;
-extern char *D_L08_00160058_2E16A0 __asm__("D_L08_00160058") MACRO_ADDR;
 extern int D_0015EE84_2E16A0 __asm__("D_0015EE84") MACRO_ADDR;
 extern float D_0015EE60_2E16A0 __asm__("D_0015EE60") MACRO_ADDR;
 extern float D_0015EE6C_2E16A0 __asm__("D_0015EE6C") MACRO_ADDR;
@@ -397,7 +396,7 @@ void func_L08_002E16A0(Moby *m) {
             Moby *node;
             (*(float (*)[4])&m->rot)[1] = 0.0f; m->unkBC = 2;
             func_L00_002EC0C8_2E16A0(0); m->state = 4;
-            node = (Moby *)(D_L08_00160058_2E16A0 + (d->platform_index << 8));
+            node = (Moby *)(D_L08_00160058_2E0258 + (d->platform_index << 8));
             qcopy(direction, (*(float (*)[4])&node->rot));
             direction[2] = func_001FA748_2E16A0(direction[2], 3.1415927f);
             func_L00_001FF4B0_2E16A0(work, (*(float (*)[16])&node->unkC0), 2.5f);
@@ -430,8 +429,8 @@ void func_L08_002E16A0(Moby *m) {
             int waiting = 2, activated = 3;
             indices = d->indices;
             for (count = 3; count >= 0; count--) {
-                if (((Moby *)D_L08_00160058_2E16A0)[*indices].state == waiting)
-                    ((Moby *)D_L08_00160058_2E16A0)[*indices].state = activated;
+                if (((Moby *)D_L08_00160058_2E0258)[*indices].state == waiting)
+                    ((Moby *)D_L08_00160058_2E0258)[*indices].state = activated;
                 indices++;
             }
             }
@@ -573,7 +572,7 @@ void func_L08_002E16A0(Moby *m) {
                 count = 3;
                 do {
                     Moby *node;
-                    node = (Moby *)((*walk << 8) + (unsigned int)D_L08_00160058_2E16A0);
+                    node = (Moby *)((*walk << 8) + (unsigned int)D_L08_00160058_2E0258);
                     if ((signed char)node->state <= cutoff) dead++;
                     walk++;
                 } while (--count >= 0);
@@ -587,7 +586,7 @@ void func_L08_002E16A0(Moby *m) {
                         Moby *node;
                         (*(float (*)[4])&m->rot)[1] = 0.0f; m->unkBC = 2;
                         func_L00_002EC0C8_2E16A0(0); m->state = 4;
-                        node = (Moby *)(D_L08_00160058_2E16A0 + (d->platform_index << 8));
+                        node = (Moby *)(D_L08_00160058_2E0258 + (d->platform_index << 8));
                         qcopy(muzzle, (*(float (*)[4])&node->rot)); muzzle[2] = func_001FA748_2E16A0(muzzle[2], 3.1415927f);
                         func_L00_001FF4B0_2E16A0(direction, (*(float (*)[16])&node->unkC0), 2.5f);
                         func_001F9BD8_2E16A0(direction, direction, (*(float (*)[4])&node->pos));
@@ -597,11 +596,11 @@ void func_L08_002E16A0(Moby *m) {
                     }
                     break;
                 }
-                if (func_L00_001FEF78_2E16A0(&d->target_timer) || (signed char)((Moby *)D_L08_00160058_2E16A0)[*(int *)((unsigned int)indices + (d->target_index << 2))].state < 0) {
+                if (func_L00_001FEF78_2E16A0(&d->target_timer) || (signed char)((Moby *)D_L08_00160058_2E0258)[*(int *)((unsigned int)indices + (d->target_index << 2))].state < 0) {
                     d->target_timer = 1; best_angle = 3.1415927f; best = -1;
                     for (i=0; i<4; i++) {
                         Moby *node;
-                        node = (Moby *)(D_L08_00160058_2E16A0 + (indices[i] << 8));
+                        node = (Moby *)(D_L08_00160058_2E0258 + (indices[i] << 8));
                         if (func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]) < best_angle && node->state < 0x7F) {
                             best = i;
                             best_angle = func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]);
@@ -609,7 +608,7 @@ void func_L08_002E16A0(Moby *m) {
                     }
                     d->target_index = best;
                 }
-                ((Moby *)D_L08_00160058_2E16A0)[*(int *)((unsigned int)indices + (d->target_index << 2))].unkBC = 1;
+                ((Moby *)D_L08_00160058_2E0258)[*(int *)((unsigned int)indices + (d->target_index << 2))].unkBC = 1;
             }
         }
         break;
@@ -1252,7 +1251,6 @@ typedef struct {
     unsigned char x260[1];
 } Data_2E4168;
 
-extern float D_0015EE6C_2E4168 __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_L08_00161CE0 SDATA(D_L08_00161CE0);
 extern Path_2E4168 *D_L08_001B0FB0_2E4168[] __asm__("D_L08_001B0FB0");
 
@@ -1302,9 +1300,9 @@ void func_L08_002E4168(Moby *m) {
         }
         d->f80 = 0.008f;
         d->f84 = 0.0005f;
-        d->f88 = D_0015EE6C_2E4168 * 8.0f;
+        d->f88 = D_0015EE6C_2E16A0 * 8.0f;
         d->w94 = 1;
-        d->f8C = D_0015EE6C_2E4168 * 10.0f;
+        d->f8C = D_0015EE6C_2E16A0 * 10.0f;
         d->bAD = 0;
         func_L00_0025D5B0(m, d->x70, func_L00_001FF860(m->pos.x - ((Hero *)(D_0013E633 + 0xE1D))->motion.pos.f[0], m->pos.y - ((Hero *)(D_0013E633 + 0xE1D))->motion.pos.f[1]), 4, 1, 0);
         d->b67 = 0x78;
@@ -1359,7 +1357,7 @@ void func_L08_002E4168(Moby *m) {
             }
         } else {
             FastVecSub(&vb, &va, &m->pos);
-            func_L00_001FF4B0(&vb, &vb, D_L08_00161CE0 * D_0015EE6C_2E4168);
+            func_L00_001FF4B0(&vb, &vb, D_L08_00161CE0 * D_0015EE6C_2E16A0);
             FastVecAdd(&m->pos, &m->pos, &vb);
             if (FastVecDist(&m->pos, &va) < 0.5f) {
                 c->idx = next;
@@ -1399,9 +1397,9 @@ void func_L08_002E4168(Moby *m) {
                 func_L00_00250800(m, 0, &vb);
                 n++;
                 FastVecSub(&va, &vb, &o->pos);
-                func_L00_002607A8(&va, D_0015EE6C_2E4168 * 4.0f);
+                func_L00_002607A8(&va, D_0015EE6C_2E16A0 * 4.0f);
                 FastVecAdd(&o->pos, &o->pos, &va);
-                if (FastVecLength(&va) < 2.0f * D_0015EE6C_2E4168) {
+                if (FastVecLength(&va) < 2.0f * D_0015EE6C_2E16A0) {
                     o->state = 4;
                     d->list[i] = 0;
                     d->w22C++;
@@ -1455,7 +1453,7 @@ void func_L08_002E4168(Moby *m) {
             return;
         }
         FastVecSub(&vb, &va, &m->pos);
-        func_L00_001FF4B0(&vb, &vb, D_L08_00161CE0 * D_0015EE6C_2E4168);
+        func_L00_001FF4B0(&vb, &vb, D_L08_00161CE0 * D_0015EE6C_2E16A0);
         FastVecAdd(&m->pos, &m->pos, &vb);
         if (FastVecDist(&m->pos, &va) < 0.5f) {
             c->idx = next;
@@ -1473,7 +1471,7 @@ void func_L08_002E4168(Moby *m) {
         func_L00_002592B0((char *)m, &d->f224, a, 0.01f, 0.3f, 0.1f);
         qcopy(&va, &c->path->pts[next]);
         FastVecSub(&vb, &va, &m->pos);
-        func_L00_001FF4B0(&vb, &vb, D_L08_00161CE0 * D_0015EE6C_2E4168);
+        func_L00_001FF4B0(&vb, &vb, D_L08_00161CE0 * D_0015EE6C_2E16A0);
         FastVecAdd(&m->pos, &m->pos, &vb);
         if (FastVecDist(&m->pos, &va) < 0.5f) {
             c->idx = next;
@@ -1858,11 +1856,9 @@ typedef struct {
     u8 pad0[0x60];
     struct Moby *shots[8];
 } SwarmTargetVars_EA0A8;
-extern float D_0015EE6C_EA0A8 __asm__("D_0015EE6C") MACRO_ADDR;
 extern s32 D_0015EE84_EA0A8 __asm__("D_0015EE84") MACRO_ADDR;
 extern u8 D_0014C150_EA0A8[] __asm__("D_0014C150");
 extern SwarmPath_EA0A8 * D_L08_001B0FB0_EA0A8[] __asm__("D_L08_001B0FB0");
-extern struct Moby * D_L08_00160058_EA0A8 __asm__("D_L08_00160058") MACRO_ADDR;
 extern s32 func_L00_0028EB98_EA0A8(struct Moby *, s32) __asm__("func_L00_0028EB98");
 extern s32 func_0022ED80_EA0A8(s32, s32, struct Moby *) __asm__("func_0022ED80");
 extern void func_0020D678_EA0A8(void *) __asm__("func_0020D678");
@@ -1951,7 +1947,7 @@ void func_L08_002EA0A8(struct Moby *moby) {
         break;
     case 1:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
-        target = &D_L08_00160058_EA0A8[vars->target_index];
+        target = &D_L08_00160058_E3860[vars->target_index];
         func_L00_002592B0_EA0A8(moby,
                          func_L00_001FF860_EA0A8(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
@@ -1963,8 +1959,8 @@ void func_L08_002EA0A8(struct Moby *moby) {
             vars->follow[0].point = waypoint;
         }
         func_001F9BF0_EA0A8(&step, &point, &moby->pos);
-        if (func_001F9CB8_EA0A8(&step) > (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_EA0A8) {
-            func_L00_001FF4B0_EA0A8(&step, &step, (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_EA0A8);
+        if (func_001F9CB8_EA0A8(&step) > (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_2E16A0) {
+            func_L00_001FF4B0_EA0A8(&step, &step, (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_2E16A0);
         }
         func_001F9BD8_EA0A8(&moby->pos, &moby->pos, &step);
         if (moby->unkBC == 0) {
@@ -1981,7 +1977,7 @@ void func_L08_002EA0A8(struct Moby *moby) {
         } else if (yaw <= 0.0f && yaw > -0.34f) {
             yaw = -0.34f;
         }
-        func_L00_001FF4B0_EA0A8(&velocity, &step, ((*(f32 *)&D_L08_00161DB4_EA0A8) + (*(f32 *)&D_L08_00161DB4_EA0A8)) * D_0015EE6C_EA0A8);
+        func_L00_001FF4B0_EA0A8(&velocity, &step, ((*(f32 *)&D_L08_00161DB4_EA0A8) + (*(f32 *)&D_L08_00161DB4_EA0A8)) * D_0015EE6C_2E16A0);
         shot = func_L08_002DF758_EA0A8(&muzzle, target, &velocity, pitch, yaw);
         shot->scale = shot->pclass->scale / 5.0f;
         target_vars = (SwarmTargetVars_EA0A8 *)target->pvars;
@@ -2016,8 +2012,8 @@ void func_L08_002EA0A8(struct Moby *moby) {
             follower->point = next;
         }
         func_001F9BF0_EA0A8(&step, &point, &moby->pos);
-        if (func_001F9CB8_EA0A8(&step) > (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_EA0A8) {
-            func_L00_001FF4B0_EA0A8(&step, &step, (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_EA0A8);
+        if (func_001F9CB8_EA0A8(&step) > (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_2E16A0) {
+            func_L00_001FF4B0_EA0A8(&step, &step, (*(f32 *)&D_L08_00161DB4_EA0A8) * D_0015EE6C_2E16A0);
         }
         func_001F9BD8_EA0A8(&moby->pos, &moby->pos, &step);
         func_L08_002E9F78_EA0A8((char *)moby);
@@ -2028,7 +2024,7 @@ void func_L08_002EA0A8(struct Moby *moby) {
         func_L00_00250800_EA0A8(vars->parts[3].moby, 1, &muzzle);
         pitch = func_002140F8_EA0A8(-0.5235988f, -0.2617994f);
         yaw = func_00214158_EA0A8();
-        func_L00_001FF4B0_EA0A8(&velocity, &step, ((*(f32 *)&D_L08_00161DB4_EA0A8) + (*(f32 *)&D_L08_00161DB4_EA0A8)) * D_0015EE6C_EA0A8);
+        func_L00_001FF4B0_EA0A8(&velocity, &step, ((*(f32 *)&D_L08_00161DB4_EA0A8) + (*(f32 *)&D_L08_00161DB4_EA0A8)) * D_0015EE6C_2E16A0);
         bolt = func_L08_002DF758_EA0A8(&muzzle, 0, &velocity, pitch, yaw);
         if (bolt != 0) {
             bolt->rot.z = vars->parts[3].moby->rot.z;
@@ -2053,7 +2049,7 @@ void func_L08_002EA0A8(struct Moby *moby) {
                 Vec4 *drift = (Vec4 *)part->pvars;
                 func_L00_00260108_EA0A8(moby, &part->pos, -1, 3.0f, 13.0f);
                 func_001F9BF0_EA0A8(drift, &part->pos, &moby->pos);
-                func_L00_001FF4B0_EA0A8(drift, drift, D_0015EE6C_EA0A8 * 5.0f);
+                func_L00_001FF4B0_EA0A8(drift, drift, D_0015EE6C_2E16A0 * 5.0f);
                 part->state = 1;
                 vars->parts[i].moby = 0;
             }

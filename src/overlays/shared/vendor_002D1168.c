@@ -477,7 +477,6 @@ typedef struct VoiceSlot_2D4398 {
 extern char D_0013F450_2D4398[] __asm__("D_0013F450");
 extern u8 D_0013E650_2D4398[] __asm__("D_0013E650");
 extern u8 D_0013CA40_2D4398[] __asm__("D_0013CA40");
-extern f32 D_0015EE6C_2D4398 __asm__("D_0015EE6C") MACRO_ADDR;
 extern u128_2D4398 D_L00_001E14B0_2D4398 __asm__("D_L00_001E14B0");
 extern u8 D_L00_001E14C0_2D4398[] __asm__("D_L00_001E14C0");
 extern f32 D_L00_00161A20_2D4398 SDATA(D_L00_00161A20);
@@ -651,9 +650,9 @@ void func_L00_002D4398(struct Moby *moby) {
                 if (t != 0 && t->oclass == 0x25D && t->state != 0xFE && t->state != 0xFD && ((Hero *)D_0013F450_2D4398)->unk2044 < 1.0f) {
                     tv = (TargetVars_2D4398 *)t->pvars;
                     while (tv->count > 0) {
-                        w[0] = rand_2D4398(1.0f, 10.0f) * D_0015EE6C_2D4398;
-                        w[1] = rand_2D4398(-10.0f, 10.0f) * D_0015EE6C_2D4398;
-                        w[2] = rand_2D4398(1.0f, 12.0f) * D_0015EE6C_2D4398;
+                        w[0] = rand_2D4398(1.0f, 10.0f) * D_0015EE6C_2D19E8;
+                        w[1] = rand_2D4398(-10.0f, 10.0f) * D_0015EE6C_2D19E8;
+                        w[2] = rand_2D4398(1.0f, 12.0f) * D_0015EE6C_2D19E8;
                         rotate_2D4398(w, w, (Hero *)D_0013F450_2D4398);
                         {
                             Vec4f *q = &((Hero *)D_0013F450_2D4398)->unk2040->pos;
@@ -1153,9 +1152,7 @@ int func_L00_002D6C80(char *a) {
     return r;
 }
 INCLUDE_ASM("asm/overlays", func_L00_002D6CB0);
-extern u8 *D_L00_001B0830_2D6CE0[] __asm__("D_L00_001B0830");
 extern s32 func_0022ED80_2D6CE0(s32, s32, void *) __asm__("func_0022ED80");
-extern s32 D_0015EE84_2D6CE0 __asm__("D_0015EE84") MACRO_ADDR;
 typedef struct {
     u8 pad[0x454];
     u8 killed[1]; /* per spawn id: spawn slot + 2 */
@@ -1184,7 +1181,7 @@ void func_L00_002D6CE0_r(Moby *m) {
         return;
     }
     D_L00_001BA960_2D6CE0.killed[(s16)m->save_id] = m->unkB0 + 2;
-    if (m->unkB0 == 0xFF || (D_L00_0015FD48_2D6CE0[m->unkB0] != 0xFF && D_0014C150_2D6CE0[D_0015EE84_2D6CE0][m->unkB0] == 0xFF)) {
+    if (m->unkB0 == 0xFF || (D_L00_0015FD48_2D6CE0[m->unkB0] != 0xFF && D_0014C150_2D6CE0[D_0015EE84_2D19E8][m->unkB0] == 0xFF)) {
         D_L00_001BB5C0_2D6CE0.killed[(s16)m->save_id] = m->unkB0 + 2;
     }
     m->state = 2;
@@ -1194,8 +1191,8 @@ void func_L00_002D6CE0_r(Moby *m) {
     if (v->table == -1) {
         return;
     }
-    for (i = 0; i < ((KeyRow_2D6CE0 *)D_L00_001B0830_2D6CE0[v->table])[0].count; i++) {
-        KeyRow_2D6CE0 *row = &((KeyRow_2D6CE0 *)D_L00_001B0830_2D6CE0[v->table])[i];
+    for (i = 0; i < ((KeyRow_2D6CE0 *)D_L00_001B0830_2D19E8[v->table])[0].count; i++) {
+        KeyRow_2D6CE0 *row = &((KeyRow_2D6CE0 *)D_L00_001B0830_2D19E8[v->table])[i];
         if (row[1].key == v->key) {
             row[1].key = 0;
         }
@@ -1552,7 +1549,6 @@ typedef struct {
     u8 pad31[0x47];
     Q_2D90A0 *q;
 } P_2D90A0;
-extern Vec4f D_L00_001CBAE0_2D90A0[] __asm__("D_L00_001CBAE0");
 extern s16 D_L00_001D5A40_2D90A0[] __asm__("D_L00_001D5A40");
 float func_L00_00258C80_2D90A0(float, float) __asm__("func_L00_00258C80");
 extern float D_L00_001D05E0_2D90A0[] __asm__("D_L00_001D05E0");
@@ -1574,7 +1570,7 @@ void func_L00_002D90A0_r(P_2D90A0 *m, int i) {
     Vec4f *p;
     int t;
     float f = func_L00_00258C80_2D90A0(0.0f, 1.0f);
-    p = &D_L00_001CBAE0_2D90A0[i];
+    p = &D_L00_001CBAE0_D83D8[i];
     p->x = f;
     p->y = func_L00_00258C80_2D90A0(0.0f, 1.0f);
     p->z = func_L00_00258C80_2D90A0(0.0f, 1.0f);

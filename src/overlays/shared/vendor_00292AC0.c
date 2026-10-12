@@ -687,7 +687,6 @@ extern void func_L00_002514B8_2CDDC8(void*) __asm__("func_L00_002514B8");
 
 extern void func_0020D678_2CDDC8(void *) __asm__("func_0020D678");
 extern int func_001F9850_2CDDC8(int) __asm__("func_001F9850");
-extern char *D_L03_00160058_2CDDC8 __asm__("D_L03_00160058") MACRO_ADDR;
 extern int func_001F9908_2CDDC8(void *) __asm__("func_001F9908");
 extern int func_001FA898_2CDDC8(float) __asm__("func_001FA898");
 extern float func_001F9D10_2CDDC8(void *, void *) __asm__("func_001F9D10");
@@ -728,17 +727,17 @@ void func_L03_002CDDC8(HMob49_2CDDC8 *m) {
     helicopter_target49_2CDDC8(m,&w.target,target_range);
     index=(short)m->pool_index;
     if ((D_L03_001BA8E0_2CDDC8[index>>5]>>(m->pool_index&31))&1) {
-        if (d->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_00160058_2CDDC8+(d->child_index<<8)));
+        if (d->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_00160058_p+(d->child_index<<8)));
         func_0020D678_2CDDC8(m); return;
     }
     if (d->route_a.path_id==-1 || (m->state!=0 && d->enabled!=1)) {
-        if (d->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_00160058_2CDDC8+(d->child_index<<8)));
+        if (d->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_00160058_p+(d->child_index<<8)));
         func_0020D678_2CDDC8(m); return;
     }
     if (d->request) { d->request=0; d->timer=func_001F9850_2CDDC8(240); }
     func_001F9908_2CDDC8(&d->timer);
     if (d->child_index!=-1) {
-        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_2CDDC8+(d->child_index<<8));
+        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_p+(d->child_index<<8));
         if (child->class_id==0x23E && (signed char)child->state>=0) {
             char *gun=(char*)child->data+0x150;
             func_L00_00264BB0_2CDDC8(gun,2.5f);
@@ -761,7 +760,7 @@ void func_L03_002CDDC8(HMob49_2CDDC8 *m) {
         d->gun_pitch=m->rotation[1]; d->gun_pitch_velocity=0;
         if (m->brightness<128) m->brightness=128;
         if (d->child_index!=-1) {
-            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_2CDDC8+(d->child_index<<8));
+            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_p+(d->child_index<<8));
             func_00213DE0_2CDDC8(child,8,0,0); child->alpha=0; child->animation=0; child->flags&=0xFFBE;
         }
         if ((D_0014171B_2CDDC8+0xAA35)[m->persistent+(D_0015EE84_2CDDC8<<4)]!=255 && d->activation_path!=-1 && d->activation_region!=-1) {
@@ -960,7 +959,7 @@ void func_L03_002CDDC8(HMob49_2CDDC8 *m) {
         }
         func_L00_00250800_2CDDC8(m,5,w.offset);
         if (d->child_index!=-1) {
-            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_2CDDC8+(d->child_index<<8));
+            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_p+(d->child_index<<8));
             ((unsigned char*)child->data)[0x262]=2; child->alpha=255; child->flags&=0xFFF9;
             w.hit.radius=20.0f; w.hit.flags=0x830000; w.hit.allow=1; w.hit.source=m;
             func_001F9BF0_2CDDC8(w.hit.direction,child->position,m->position); func_L00_001FF500_2CDDC8(w.hit.direction,w.hit.direction,1.0f);
@@ -986,7 +985,7 @@ void func_L03_002CDDC8(HMob49_2CDDC8 *m) {
     d->bob=func_001FA748_2CDDC8(d->bob,6.2831855f/func_001F9878_2CDDC8(D_L03_00161A14_2CDDC8*60.0f));
     m->position[2]+=D_L03_00161A18_2CDDC8*func_001F9F90_2CDDC8(d->bob);
     if (d->child_index!=-1) {
-        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_2CDDC8+(d->child_index<<8));
+        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_00160058_p+(d->child_index<<8));
         *(HQuad49_2CDDC8*)child->position=*(HQuad49_2CDDC8*)m->position; *(HQuad49_2CDDC8*)child->rotation=*(HQuad49_2CDDC8*)m->rotation;
         func_L00_002514B8_2CDDC8(child); func_L00_00251E30_2CDDC8(child); child->flags|=6;
     }
@@ -1543,7 +1542,6 @@ extern char D_0013E633[];
 extern int D_L03_0015F050 MACRO_ADDR;
 extern char D_L03_00166F40[];
 extern int func_00215570(void *arg0, int arg1);
-extern char D_0013E633_E9C38b[] __asm__("D_0013E633");
 extern int D_L03_0015F050_E9C38b __asm__("D_L03_0015F050") MACRO_ADDR;
 extern int func_00215570_E9C38b(void *arg0, int arg1) __asm__("func_00215570");
 
@@ -1555,7 +1553,7 @@ int func_L03_002E9C38(char *a0, char *a1) {
     int five;
     if (*(int *)(a0 + 0x74) != 4) return 0;
     if (a1 != 0 && *(short *)(a1 + 0x7E) == 0 && !(*(unsigned char *)(a0 + 0x7C) > *(unsigned char *)(a1 + 0x7C))) return 0;
-    if (func_00215570_E9C38b(D_0013E633_E9C38b + 0xE9D, *(int *)(sub + 0xC)) != 0) {
+    if (func_00215570_E9C38b(D_0013E633_2CDDC8 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
         if (func_00215570_E9C38b(D_L03_00166F40, *(int *)(sub + 0xC)) != 0) return 1;
         q = D_L03_00166F40 - 0x140;
         five = *(int *)(q + 0x180);

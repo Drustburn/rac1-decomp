@@ -972,7 +972,6 @@ extern float D_L00_0016189C_2BE3A8 __asm__("D_L00_0016189C") MACRO_ADDR;
 extern float D_L00_001618A0_2BE3A8 __asm__("D_L00_001618A0") MACRO_ADDR;
 extern int D_L00_001618F4_2BE3A8 __asm__("D_L00_001618F4") MACRO_ADDR;
 extern float D_0015EE60_2BE3A8 __asm__("D_0015EE60") MACRO_ADDR;
-extern float D_0015EE6C_2BE3A8 __asm__("D_0015EE6C") MACRO_ADDR;
 extern int D_L00_001618A8_2BE3A8[3] __asm__("D_L00_001618A8") MACRO_ADDR;
 extern float D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001618B8") MACRO_ADDR;
 extern float D_L00_001618C8_2BE3A8[3] __asm__("D_L00_001618C8") MACRO_ADDR;
@@ -1197,7 +1196,7 @@ void func_L00_002BE3A8(Moby *m) {
         if (D_L00_001618A8_2BE3A8[q] < D_L00_00161820_2BE3A8) {
             D_L00_001618B8_2BE3A8[q] = D_L00_001618B8_2BE3A8[q] - D_L00_00161838_2BE3A8;
         }
-        dt = D_L00_00161818_2BE3A8 * D_0015EE6C_2BE3A8;
+        dt = D_L00_00161818_2BE3A8 * D_0015EE6C_2BDAF0;
         sum = D_L00_001618C8_2BE3A8[q] + dt;
         full = D_L00_001617AC_2BE3A8;
         ratio = sum / full;
@@ -1953,7 +1952,6 @@ extern void func_L00_002C0B18_2C0CF8(void *a, void *b, int n, int c, int d, int 
 extern int func_L00_001EFFF0_2C0CF8(void *, void *, int, void *, int) __asm__("func_L00_001EFFF0");
 extern char D_L00_00173F80_2C0CF8[] __asm__("D_L00_00173F80");
 extern void *D_L00_00173F58_2C0CF8 __asm__("D_L00_00173F58");
-extern char D_0013E633_2C0CF8[] __asm__("D_0013E633");
 
 /* Tries a hop of the moby toward q: probes the ground at the landing point and the path to it, and sets the jump
  * state on success. When blocked and the hop is long enough it tries again with half the distance. */
@@ -2024,13 +2022,13 @@ int func_L00_002C0CF8(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
         }
     }
     func_L00_002BFF08_2C0CF8(p);
-    func_L00_002C0BB8_2C0CF8(m, D_0013E633_2C0CF8 + 0x2D2D, land);
+    func_L00_002C0BB8_2C0CF8(m, D_0013E633_2BE3A8 + 0x2D2D, land);
     func_L00_002BFF50_2C0CF8(p);
     func_001F9C30_2C0CF8(mid, d, 0.5f);
     func_001F9BD8_2C0CF8(mid, mid, m->pos);
     qzero(z);
     z[2] = p->f50;
-    mid[2] = func_L00_0025A4A0_2C0CF8(m->pos, z, 0, *(float *)(D_0013E633_2C0CF8 + 0x2D49));
+    mid[2] = func_L00_0025A4A0_2C0CF8(m->pos, z, 0, *(float *)(D_0013E633_2BE3A8 + 0x2D49));
     func_L00_002C0B18_2C0CF8(from, mid, 10, 0, 32, 32, 40000.0f, 60);
     func_L00_002C0B18_2C0CF8(to, mid, 10, 0, 32, 32, 40000.0f, 60);
     if (func_L00_001EFFF0_2C0CF8(from, mid, 6, m, 0) != 0 && D_L00_00173F58_2C0CF8 != p->p38) {

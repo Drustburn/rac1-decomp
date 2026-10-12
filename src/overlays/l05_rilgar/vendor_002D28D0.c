@@ -62,7 +62,6 @@ extern void func_001F9BD8(void *, void *, void *);
 extern float func_001F9878(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern char D_L05_001613A8[];
-extern float D_L05_001613A8_m __asm__("D_L05_001613A8") MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern char D_L05_0015F660[] MACRO_ADDR;
 
@@ -363,7 +362,6 @@ void func_L05_002D8AD8(char *moby, int *path) {
     *(float *)(moby + 0x40) = *(float *)(moby + 0x4C);
 }
 INCLUDE_ASM("asm/overlays", func_L05_002D8B68);
-extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0CB0");
 extern char D_0013E633[];
 extern float D_0015EE70 MACRO_ADDR;
 extern void func_L05_002DC1E8(unsigned char *m);
@@ -389,7 +387,7 @@ void func_L05_002DBF10(unsigned char *m) {
         m[0x20] = 1;
         m[0x30] = 0x40;
         if (m[0x53] != 0) func_00213DE0(m, 0, 0, 0);
-        if (*(int *)(d + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)] == 0) {
+        if (*(int *)(d + 0xB0) == -1 || *(int *)D_L05_001B0CB0_2D8388[*(int *)(d + 0xB0)] == 0) {
             DeleteMoby(m);
             return;
         }
@@ -404,7 +402,7 @@ void func_L05_002DBF10(unsigned char *m) {
         }
         break;
     case 1: {
-        char *p = D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + *(int *)(d + 0xB4) * 16;
+        char *p = D_L05_001B0CB0_2D8388[*(int *)(d + 0xB0)] + *(int *)(d + 0xB4) * 16;
         float yaw = func_L00_001FF860(*(float *)(p + 0x10) - *(float *)(m + 0x10), *(float *)(p + 0x14) - *(float *)(m + 0x14));
         func_L00_0025CE58((float *)(m + 0x48), (float *)(d + 0xBC), yaw, D_0015EE70 * 1.0471976f, D_0015EE70 * 1.0471976f,
                           D_0015EE6C * 3.1415927f);
@@ -413,9 +411,9 @@ void func_L05_002DBF10(unsigned char *m) {
         dir[2] = 0.0f;
         func_L00_00259B88(m, d + 0x60, dir, d + 0x40, 1.0f);
         if (func_001F9908_v(d + 0xB8) != 0
-            || func_001F9D48(m + 0x10, D_L05_001B0CB0_x[*(int *)(d + 0xB0)] + (*(int *)(d + 0xB4) * 16 + 0x10)) < 1.0f) {
-            int r = random_integer_below(*(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)]);
-            *(int *)(d + 0xB4) = (*(int *)(d + 0xB4) + r) % *(int *)D_L05_001B0CB0_x[*(int *)(d + 0xB0)];
+            || func_001F9D48(m + 0x10, D_L05_001B0CB0_2D8388[*(int *)(d + 0xB0)] + (*(int *)(d + 0xB4) * 16 + 0x10)) < 1.0f) {
+            int r = random_integer_below(*(int *)D_L05_001B0CB0_2D8388[*(int *)(d + 0xB0)]);
+            *(int *)(d + 0xB4) = (*(int *)(d + 0xB4) + r) % *(int *)D_L05_001B0CB0_2D8388[*(int *)(d + 0xB0)];
             *(int *)(d + 0xB8) = scale_ticks(600);
         }
         func_L05_002DC2A8(m);
@@ -646,8 +644,6 @@ extern void func_001F9BF0_3047E8(void *, void *, void *) __asm__("func_001F9BF0"
 extern float func_001FA790_3047E8(float, float) __asm__("func_001FA790");
 extern float func_001F9CE8_3047E8(void *) __asm__("func_001F9CE8");
 extern void func_L00_00263950_3047E8(void *, void *, int, float, float) __asm__("func_L00_00263950");
-extern float D_0015EE70_3047E8 __asm__("D_0015EE70") MACRO_ADDR;
-extern float D_0015EE6C_3047E8 __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_0015EE64_3047E8 __asm__("D_0015EE64") MACRO_ADDR;
 extern Path_3047E8 *D_L05_001B0CB0_3047E8[] __asm__("D_L05_001B0CB0");
 extern float D_L05_00161B58_3047E8 SDATA(D_L05_00161B58);
@@ -705,7 +701,7 @@ void func_L05_003047E8(Moby *m) {
         }
         k = func_001FA898_3047E8(D_L05_00161B58_3047E8 * 409.6f);
         d->f98 = D_L05_00161B58_3047E8 * 0.4f;
-        d->f80 = D_L05_00161B90_3047E8 * D_0015EE70_3047E8;
+        d->f80 = D_L05_00161B90_3047E8 * D_0015EE70_2D8388;
         d->f90 = k;
         d->f94 = 9;
         d->bAD = 0;
@@ -724,8 +720,8 @@ void func_L05_003047E8(Moby *m) {
         case 7:
         case 8:
             d->fC0 = 5.0f;
-            d->f88 = D_L05_00161B48_3047E8 * D_0015EE6C_3047E8;
-            d->f8C = D_L05_00161B4C_3047E8 * D_0015EE6C_3047E8;
+            d->f88 = D_L05_00161B48_3047E8 * D_0015EE6C_2D8388;
+            d->f8C = D_L05_00161B4C_3047E8 * D_0015EE6C_2D8388;
             d->fC4 = 10.0f;
             ang = func_L00_001FF860_3047E8(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
             *(u128_3047E8 *)v0 = r->dir;
@@ -737,9 +733,9 @@ void func_L05_003047E8(Moby *m) {
         case 1:
         case 2:
             m->flags &= 0xEFFF;
-            d->f80 = D_L05_00161B94_3047E8 * D_0015EE70_3047E8;
-            d->f88 = D_L05_00161B50_3047E8 * D_0015EE6C_3047E8;
-            d->f8C = D_L05_00161B54_3047E8 * D_0015EE6C_3047E8;
+            d->f80 = D_L05_00161B94_3047E8 * D_0015EE70_2D8388;
+            d->f88 = D_L05_00161B50_3047E8 * D_0015EE6C_2D8388;
+            d->f8C = D_L05_00161B54_3047E8 * D_0015EE6C_2D8388;
             d->fC0 = 5.5f;
             d->fC4 = 11.0f;
             ang2 = func_L00_001FF860_3047E8(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
@@ -786,7 +782,7 @@ void func_L05_003047E8(Moby *m) {
     if (d->target == 0) {
         d->target = *(Moby **)(D_0013E633_3047E8 + 0x2E9D);
     }
-    d->f2D8 = func_001FA748_3047E8(d->f2D8, D_0015EE6C_3047E8 * 9.424778f);
+    d->f2D8 = func_001FA748_3047E8(d->f2D8, D_0015EE6C_2D8388 * 9.424778f);
     m->unk90 = func_001FA8A8_3047E8(D_L05_00161B34_3047E8, D_L05_00161B38_3047E8, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
     k = m->state;
     if (k < 10) {

@@ -807,7 +807,6 @@ extern int func_L00_00260FB0_2E52B0(float, void *, void *, int, int, void *, int
 extern float func_001F9D48_2E52B0(void *, void *) __asm__("func_001F9D48");
 extern float func_001F9D10_2E52B0(void *, void *) __asm__("func_001F9D10");
 extern void func_00213DE0_2E52B0(void *, int, int, int) __asm__("func_00213DE0");
-extern int D_0015EE84_2E52B0 __asm__("D_0015EE84") MACRO_ADDR;
 extern float D_0015EE70_2E52B0 __asm__("D_0015EE70") MACRO_ADDR;
 extern char D_0013E633_2E52B0[] __asm__("D_0013E633");
 extern char D_0013D50F_2E52B0[] __asm__("D_0013D50F");
@@ -850,7 +849,7 @@ void func_L10_002E52B0(void *mv) {
     v21 = func_L00_0025B4D0_2E52B0(m, r, &d->f20, 0, &A, &B, 0, 4);
     func_001F9938_2E52B0(&d->h26);
     if ((unsigned int)A >= 2 && m->state != 0xB && m->state != 0xC) {
-        if (D_0015EE84_2E52B0 == 10 && r != 0 && r->f20 != 0 && r->f20->oclass == 0x31A) {
+        if (D_0015EE84_m == 10 && r != 0 && r->f20 != 0 && r->f20->oclass == 0x31A) {
             if (d->f1AC != 0 && ((Flags_2E52B0 *)(D_0013D50F_2E52B0 + 1))->b11 == 0) {
                 ((Flags_2E52B0 *)(D_0013D50F_2E52B0 + 1))->b11 = 1;
                 func_0022EE28_2E52B0(1, 0, 0);
@@ -1162,11 +1161,9 @@ extern int func_001F9850_2E9978(int) __asm__("func_001F9850");
 extern int D_L10_0015F6A8_2E9978 __asm__("D_L10_0015F6A8") MACRO_ADDR;
 extern Moby *D_L10_00160058_2E9978 __asm__("D_L10_00160058") MACRO_ADDR;
 extern Moby *D_L10_00160064_2E9978 __asm__("D_L10_00160064") MACRO_ADDR;
-extern int D_0015EE84_2E9978 __asm__("D_0015EE84") MACRO_ADDR;
 extern int D_0015EFA4_2E9978 __asm__("D_0015EFA4") MACRO_ADDR;
 extern int D_L10_00161FB8_2E9978 SDATA(D_L10_00161FB8);
 extern char D_L10_00179910_2E9978[] __asm__("D_L10_00179910");
-extern char D_0013E633_2E9978[] __asm__("D_0013E633");
 extern unsigned char D_0014171B_2E9978[] __asm__("D_0014171B");
 extern unsigned char D_0013D5CA_2E9978[] __asm__("D_0013D5CA");
 extern unsigned char D_0013D605_2E9978[] __asm__("D_0013D605");
@@ -1180,7 +1177,7 @@ void func_L10_002E9978(Moby *m)
     int flag;
     int sub;
 
-    if (func_00215570_2E9978(D_0013E633_2E9978 + 0xE9D, d->f1C)) {
+    if (func_00215570_2E9978(D_0013E633_2E52B0 + 0xE9D, d->f1C)) {
         D_L10_00161FB8_2E9978 = 1;
     } else {
         D_L10_00161FB8_2E9978 = 0;
@@ -1191,15 +1188,15 @@ void func_L10_002E9978(Moby *m)
         m->state = 1;
         break;
     case 1:
-        if (func_00215570_2E9978(D_0013E633_2E9978 + 0xE9D, d->f0) != 0
-            && (((HeroPos_2E9978 *)(D_0013E633_2E9978 + 0xE9D))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013E633_2E9978 + 0xE9D))->f200C == 9)
+        if (func_00215570_2E9978(D_0013E633_2E52B0 + 0xE9D, d->f0) != 0
+            && (((HeroPos_2E9978 *)(D_0013E633_2E52B0 + 0xE9D))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013E633_2E52B0 + 0xE9D))->f200C == 9)
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f24 == -1
             && *(unsigned short *)(D_0014171B_2E9978 + 0x4F5) == 0) {
             func_L00_00203F20_2E9978(0x2710, 0x35);
         }
-        if (func_00215570_2E9978(D_0013E633_2E9978 + 0xE9D, d->f4) != 0
-            && (((HeroPos_2E9978 *)(D_0013E633_2E9978 + 0xE9D))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013E633_2E9978 + 0xE9D))->f200C == 9)
+        if (func_00215570_2E9978(D_0013E633_2E52B0 + 0xE9D, d->f4) != 0
+            && (((HeroPos_2E9978 *)(D_0013E633_2E52B0 + 0xE9D))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013E633_2E52B0 + 0xE9D))->f200C == 9)
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f24 == -1) {
             if (((Flags_2E9978 *)(D_0013D355_2E9978 + 0x13B))->f4 == 0) {
@@ -1218,8 +1215,8 @@ void func_L10_002E9978(Moby *m)
             && *(unsigned short *)(D_0014171B_2E9978 + 0x4FD) == 0) {
             func_L00_00203F20_2E9978(0x2711, 0x36);
         }
-        if (func_00215570_2E9978(D_0013E633_2E9978 + 0xE9D, d->f8) != 0
-            && (((HeroPos_2E9978 *)(D_0013E633_2E9978 + 0xE9D))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013E633_2E9978 + 0xE9D))->f200C == 9)
+        if (func_00215570_2E9978(D_0013E633_2E52B0 + 0xE9D, d->f8) != 0
+            && (((HeroPos_2E9978 *)(D_0013E633_2E52B0 + 0xE9D))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013E633_2E52B0 + 0xE9D))->f200C == 9)
             && D_0013D5CA_2E9978[9] == 0
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f0 == 0
             && ((Msg_2E9978 *)D_L10_00179910_2E9978)->f24 == -1
@@ -1232,14 +1229,14 @@ void func_L10_002E9978(Moby *m)
         }
         if (flag == 0) break;
         if (d->f10 != -1
-            && func_001F9D48_2E9978(D_0013E633_2E9978 + 0xE9D, &D_L10_00160058_2E9978[d->f10].pos) < 15.0f
+            && func_001F9D48_2E9978(D_0013E633_2E52B0 + 0xE9D, &D_L10_00160058_2E9978[d->f10].pos) < 15.0f
             && d->f14 != -1
-            && func_001F9D48_2E9978(D_0013E633_2E9978 + 0xE9D, &D_L10_00160058_2E9978[d->f14].pos) < 15.0f
+            && func_001F9D48_2E9978(D_0013E633_2E52B0 + 0xE9D, &D_L10_00160058_2E9978[d->f14].pos) < 15.0f
             && *(unsigned short *)(D_0014171B_2E9978 + 0x69D) == 0) {
             func_L00_00203F20_2E9978(0x2717, 0x6A);
         }
         if (flag == 0) break;
-        if (func_00215570_2E9978(D_0013E633_2E9978 + 0xE9D, d->f18) == 0) break;
+        if (func_00215570_2E9978(D_0013E633_2E52B0 + 0xE9D, d->f18) == 0) break;
         if (d->f20 == -1) break;
         if (D_L10_00160058_2E9978[d->f20].oclass != 0x3F7) break;
         if (D_L10_00160058_2E9978[d->f20].state == 4) break;
@@ -1258,7 +1255,7 @@ void func_L10_002E9978(Moby *m)
         if (func_001F9850_2E9978(D_0015EFA4_2E9978) / 600 > ((Save_2E9978 *)(D_0014171B_2E9978 + 0x34D))->f35A) {
             ((Save_2E9978 *)(D_0014171B_2E9978 + 0x34D))->f35A = func_001F9850_2E9978(D_0015EFA4_2E9978) / 600;
         }
-        ((Save_2E9978 *)(D_0014171B_2E9978 + 0x34D))->f35C = ((Save_2E9978 *)(D_0014171B_2E9978 + 0x34D))->f35C | (1 << D_0015EE84_2E9978) | 0x80000000;
+        ((Save_2E9978 *)(D_0014171B_2E9978 + 0x34D))->f35C = ((Save_2E9978 *)(D_0014171B_2E9978 + 0x34D))->f35C | (1 << D_0015EE84_m) | 0x80000000;
         break;
     }
 }
@@ -1293,10 +1290,7 @@ typedef struct {
 
 typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State_2EAD50;
 
-extern unsigned char D_0013E633_2EAD50[] __asm__("D_0013E633");
-extern unsigned char D_0014171B_2EAD50[] __asm__("D_0014171B");
 extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DE4B");
-extern int D_0015EE84_2EAD50 __asm__("D_0015EE84") MACRO_ADDR;
 extern GateMoby_2EAD50 *D_L10_00160058_2EAD50 __asm__("D_L10_00160058") MACRO_ADDR;
 extern int D_L10_001BAC60_2EAD50[] __asm__("D_L10_001BAC60");
 extern L10State_2EAD50 D_L10_001BB9C0_2EAD50 __asm__("D_L10_001BB9C0");
@@ -1322,9 +1316,9 @@ void func_L10_002EAD50(GateMoby_2EAD50 *m)
     case 0:
         m->f30 = 0xFF;
         d->home = m->pos;
-        if (D_0013E633_2EAD50[0x2EC1] != 0 ||
+        if (D_0013E633_e1d[0x2EC1] != 0 ||
             D_L10_001BB9C0_2EAD50.collected[(short)m->uid] != 0 ||
-            ((*(int *)(D_0014171B_2EAD50 + 0xAB75 + ((((short)m->uid >> 5) * 4) + (D_0015EE84_2EAD50 << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
+            ((*(int *)(D_0014171B_2E9978 + 0xAB75 + ((((short)m->uid >> 5) * 4) + (D_0015EE84_m << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
             v[0] = func_001F9F90_2EAD50(func_001FA748_2EAD50(m->rotz, 3.14159265f)) * 1.5f;
             v[1] = func_001F9FA8_2EAD50(func_001FA748_2EAD50(m->rotz, 3.14159265f)) * 1.5f;
             v[2] = 0.0f;
@@ -1340,9 +1334,9 @@ void func_L10_002EAD50(GateMoby_2EAD50 *m)
         break;
     case 1: {
         unsigned char *bits;
-        if (D_0013E633_2EAD50[0x2EC1] != 0 ||
+        if (D_0013E633_e1d[0x2EC1] != 0 ||
             D_L10_001BB9C0_2EAD50.collected[(short)m->uid] != 0 ||
-            ((*(int *)((bits = D_0014171B_2EAD50 + 0xAB75) + ((((short)m->uid >> 5) * 4) + (D_0015EE84_2EAD50 << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
+            ((*(int *)((bits = D_0014171B_2E9978 + 0xAB75) + ((((short)m->uid >> 5) * 4) + (D_0015EE84_m << 8))) >> (m->uid & 0x1F)) & 1) != 0) {
             m->pos = d->home;
             m->state = 3;
             if (d->door > 0) {
@@ -1352,7 +1346,7 @@ void func_L10_002EAD50(GateMoby_2EAD50 *m)
             if (d->door > 0) {
                 D_L10_00160058_2EAD50[d->door].flags &= 0xFFFD;
             }
-            *(int *)(bits + ((((short)m->uid >> 5) * 4) + (D_0015EE84_2EAD50 << 8))) |= st << (m->uid & 0x1F);
+            *(int *)(bits + ((((short)m->uid >> 5) * 4) + (D_0015EE84_m << 8))) |= st << (m->uid & 0x1F);
             D_L10_001BAC60_2EAD50[(short)m->uid >> 5] |= st << (m->uid & 0x1F);
             if (d->sound > 0) {
                 func_L10_002F6E10_2EAD50(d->sound);
@@ -1377,9 +1371,9 @@ void func_L10_002EAD50(GateMoby_2EAD50 *m)
         }
         break;
     case 3:
-        if (D_0013E633_2EAD50[0x2EC1] == 0 &&
+        if (D_0013E633_e1d[0x2EC1] == 0 &&
             D_L10_001BB9C0_2EAD50.collected[(short)m->uid] == 0 &&
-            (((*(int *)(D_0014171B_2EAD50 + 0xAB75 + ((((short)m->uid >> 5) * 4) + (D_0015EE84_2EAD50 << 8))) >> (m->uid & 0x1F)) ^ 1) & 1)) {
+            (((*(int *)(D_0014171B_2E9978 + 0xAB75 + ((((short)m->uid >> 5) * 4) + (D_0015EE84_m << 8))) >> (m->uid & 0x1F)) ^ 1) & 1)) {
             m->pos = d->home;
             m->state = 0;
         }

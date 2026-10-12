@@ -1726,7 +1726,6 @@ typedef struct {
 extern Vec4 D_L07_00166EC0_31AAB0 __asm__("D_L07_00166EC0");
 extern struct Moby *D_L07_00173F58_31AAB0 __asm__("D_L07_00173F58");
 extern Vec4 D_L07_00173F70_31AAB0 __asm__("D_L07_00173F70");
-extern f32 D_0015EE60_31AAB0 __asm__("D_0015EE60") MACRO_ADDR;
 extern f32 D_0015EE6C_31AAB0 __asm__("D_0015EE6C") MACRO_ADDR;
 extern f32 D_0015EE70_31AAB0 __asm__("D_0015EE70") MACRO_ADDR;
 
@@ -1837,13 +1836,13 @@ void func_L07_0031AAB0(struct Moby *moby) {
             blend_31AAB0(moby, 2, 0, 10);
         }
         if (moby->unkBC == 1) {
-            moby->pos.z += D_0015EE60_31AAB0 * 0.1f;
+            moby->pos.z += D_0015EE60_315108 * 0.1f;
             if (tick_31AAB0(&vars->bob_timer)) {
                 vars->bob_timer = ticks_31AAB0(7);
                 moby->unkBC = 2;
             }
         } else if (moby->unkBC == 2) {
-            moby->pos.z -= D_0015EE60_31AAB0 * 0.1f;
+            moby->pos.z -= D_0015EE60_315108 * 0.1f;
             if (tick_31AAB0(&vars->bob_timer)) {
                 moby->unkBC = 0;
             }
@@ -2003,7 +2002,6 @@ extern void *func_L07_0030C918_31B620(void *, void *, void *, int) __asm__("func
 extern float func_001F9D48_31B620(void *, void *) __asm__("func_001F9D48");
 extern float func_001FA748_31B620(float, float) __asm__("func_001FA748");
 extern float func_001FA850_31B620(float, float) __asm__("func_001FA850");
-extern float D_0015EE6C_31B620 __asm__("D_0015EE6C") MACRO_ADDR;
 extern Moby *D_L07_00160058_31B620 __asm__("D_L07_00160058") MACRO_ADDR;
 extern char D_0013F4D0_31B620[] __asm__("D_0013F4D0");
 
@@ -2086,14 +2084,14 @@ void func_L07_0031B620(Moby *moby)
             func_00213DE0_31B620(moby, 1, 0, 1);
         }
         if (data->back != 0) {
-            float a = data->angle - data->speed * 0.017453292f * D_0015EE6C_31B620;
+            float a = data->angle - data->speed * 0.017453292f * D_0015EE6C_31B318;
             data->angle = a;
             if (a < 0.0f) {
                 data->angle = 0.0f;
                 data->back = 0;
             }
         } else {
-            float a = data->angle + data->speed * 0.017453292f * D_0015EE6C_31B620;
+            float a = data->angle + data->speed * 0.017453292f * D_0015EE6C_31B318;
             data->angle = a;
             if (data->range < a) {
                 data->angle = data->range;
@@ -2107,8 +2105,8 @@ void func_L07_0031B620(Moby *moby)
         if (moby->unkBC == 0) {
             if (data->burst == 0 || (data->shot & 1) != 0) {
                 func_L00_00250800_31B620(moby, 0, pos);
-                vel[0] = func_001F9F90_31B620(moby->rot.z) * (D_0015EE6C_31B620 * 15.0f);
-                vel[1] = func_001F9FA8_31B620(moby->rot.z) * (D_0015EE6C_31B620 * 15.0f);
+                vel[0] = func_001F9F90_31B620(moby->rot.z) * (D_0015EE6C_31B318 * 15.0f);
+                vel[1] = func_001F9FA8_31B620(moby->rot.z) * (D_0015EE6C_31B318 * 15.0f);
                 vel[2] = 0.0f;
                 func_0022ED80_31B620(0, 0, moby);
                 func_L07_0030C918_31B620(pos, vel, moby, data->kind);
@@ -2144,7 +2142,7 @@ void func_L07_0031B620(Moby *moby)
         if (moby->seq != 4 && (moby->unk70 & 2) && moby->prev_seq != 4) {
             func_00213DE0_31B620(moby, 4, 0, 1);
         }
-        moby->rot.z = func_001FA748_31B620(moby->rot.z, D_0015EE6C_31B620 * 12.566371f);
+        moby->rot.z = func_001FA748_31B620(moby->rot.z, D_0015EE6C_31B318 * 12.566371f);
         if (func_001F9938_31B620(&data->timer) == 0) {
             break;
         }
@@ -2160,14 +2158,14 @@ void func_L07_0031B620(Moby *moby)
             float low = data->height - 0.7f;
             float z = moby->pos.z;
             if (low < z) {
-                moby->pos.z = z - D_0015EE6C_31B620 * 5.0f;
+                moby->pos.z = z - D_0015EE6C_31B318 * 5.0f;
             } else {
                 moby->pos.z = low;
             }
         }
         {
             float diff = func_001FA850_31B620(moby->rot.z, func_L00_0025F368_31B620(data->start + data->angle));
-            float turn = D_0015EE6C_31B620 * 12.566371f;
+            float turn = D_0015EE6C_31B318 * 12.566371f;
             if (turn < diff) {
                 moby->rot.z = func_001FA748_31B620(moby->rot.z, turn);
             } else {
@@ -2188,7 +2186,7 @@ void func_L07_0031B620(Moby *moby)
         float top = data->height;
         float z = moby->pos.z;
         if (z < top) {
-            moby->pos.z = z + D_0015EE6C_31B620 * 5.0f;
+            moby->pos.z = z + D_0015EE6C_31B318 * 5.0f;
             break;
         }
         moby->pos.z = top;

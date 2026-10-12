@@ -412,7 +412,6 @@ st94:
     }
 }
 typedef u32 u128 __attribute__((mode(TI), aligned(16)));
-extern struct Hero D_0013F450_16648 __asm__("D_0013F450");
 typedef struct {
     u8 pad_000[0xCC8];
     f32 fCC8; /* lean angle, clamped to +-75 degrees */
@@ -432,7 +431,7 @@ extern f32 func_001F9B88(f32);
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/00214658.c, FUN_L00_00215ef8. */
 void func_L00_00216648(void)
 {
-    struct Hero *h = &D_0013F450_16648;
+    struct Hero *h = &D_0013F450_15A90;
     f32 scale;
     f32 a;
     f32 lean;
@@ -962,7 +961,6 @@ extern P_2163f0 D_0013F450_178A0 __asm__("D_0013F450");
 typedef struct { char pad[0x2218]; int a[8]; int b[8]; } G_178A0;
 typedef int q_217118 __attribute__((mode(TI)));
 extern unsigned char D_0013F530_178A0[] __asm__("D_0013F530");
-extern unsigned char D_0013F450_178A0b[] __asm__("D_0013F450");
 extern unsigned char D_0013F4D0_178A0[] __asm__("D_0013F4D0");
 extern unsigned char D_L00_00173F40[];
 float func_L00_00234250_178A0(void *) __asm__("func_L00_00234250");
@@ -1092,7 +1090,6 @@ void func_L00_00217BD8(void) {
     if (!ang) {
     }
 }
-extern struct Hero D_0013F450_17DE0 __asm__("D_0013F450");
 extern void func_001F9BF0_17DE0(void *, void *, void *) __asm__("func_001F9BF0");
 typedef struct {
     u8 pad00[0x40];
@@ -1134,10 +1131,10 @@ void func_L00_00217DE0(void) {
     s32 has_target;
     s32 state;
 
-    state = D_0013F450_17DE0.state.current;
-    aimed = (state == 1 || state == 0x1E) && scale_ticks(0x14) < D_0013F450_17DE0.state_timer;
+    state = D_0013F450_15A90.state.current;
+    aimed = (state == 1 || state == 0x1E) && scale_ticks(0x14) < D_0013F450_15A90.state_timer;
     if (aimed) {
-        target = D_0013F450_17DE0.items[0].moby;
+        target = D_0013F450_15A90.items[0].moby;
         has_target = 0;
         if (target != 0 && func_L00_00211A18(target)) {
             tpv = (ThrowPvars_217658 *)target->pvars;
@@ -1145,33 +1142,33 @@ void func_L00_00217DE0(void) {
                 has_target = 1;
                 func_L00_00233EE0(dir, 0.5f, 0.0f, 0.5f);
                 func_001F9BF0_17DE0(delta, tpv->unk50, dir);
-                D_0013F450_17DE0.aim_yaw = func_L00_001FF860(delta[0], delta[1]);
-                D_0013F450_17DE0.aim_pitch = func_L00_001FF860(func_001F9CE8(delta), delta[2]);
+                D_0013F450_15A90.aim_yaw = func_L00_001FF860(delta[0], delta[1]);
+                D_0013F450_15A90.aim_pitch = func_L00_001FF860(func_001F9CE8(delta), delta[2]);
             }
         }
         if (!has_target) {
-            D_0013F450_17DE0.aim_yaw = D_L00_00166D80[0x158 / 4];
-            D_0013F450_17DE0.aim_pitch = FastAddRots(-D_L00_00166D80[0x154 / 4], 0.12217305f);
+            D_0013F450_15A90.aim_yaw = D_L00_00166D80[0x158 / 4];
+            D_0013F450_15A90.aim_pitch = FastAddRots(-D_L00_00166D80[0x154 / 4], 0.12217305f);
         }
     }
-    item = D_0013F450_17DE0.items[0].moby;
+    item = D_0013F450_15A90.items[0].moby;
     if (!func_L00_00211A18(item)) {
         return;
     }
-    D_0013F450_17DE0.items[0].unk1A = 1;
+    D_0013F450_15A90.items[0].unk1A = 1;
     if (aimed) {
         func_L00_00217570(0x1B, 0);
     }
     item->state = 10;
     pv = (ThrowPvars_217658 *)item->pvars;
-    if (D_0013F450_17DE0.unk248 < 1.2f && 0.6632251f < D_0013F450_17DE0.unk250 && !D_0013F450_17DE0.unk254) {
+    if (D_0013F450_15A90.unk248 < 1.2f && 0.6632251f < D_0013F450_15A90.unk250 && !D_0013F450_15A90.unk254) {
         pv->unk76 = 1;
     }
     clear_u64_value(pv->unk40);
     if (!aimed) {
         func_L00_00233F88(pv->unk40, pv->unk40, 1.0f);
     } else {
-        func_00215C00(pv->unk40, 1.0f, D_0013F450_17DE0.aim_yaw, D_0013F450_17DE0.aim_pitch);
+        func_00215C00(pv->unk40, 1.0f, D_0013F450_15A90.aim_yaw, D_0013F450_15A90.aim_pitch);
     }
     clear_u64_value(dir);
     func_001FA1F8(mat, dir);
@@ -1182,7 +1179,7 @@ void func_L00_00217DE0(void) {
         func_001FA1F8(cam_mat, dir);
         func_001FA4F0(mat, cam_mat, mat);
     } else {
-        func_001FA4F0(mat, &D_0013F450_17DE0.moby->unkC0, mat);
+        func_001FA4F0(mat, &D_0013F450_15A90.moby->unkC0, mat);
     }
     func_001FA460(out_mat, mat);
     func_002153E8(out_mat, &item->rot);

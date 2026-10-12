@@ -1339,8 +1339,6 @@ extern float func_001F9878_316DD8(float) __asm__("func_001F9878");
 extern int func_001F9908_316DD8(void *) __asm__("func_001F9908");
 extern int func_L00_00260FB0_316DD8(void *, void *, float, int, int, void *, int) __asm__("func_L00_00260FB0");
 extern float func_001F9D48_316DD8(void *, void *) __asm__("func_001F9D48");
-extern float D_0015EE6C_316DD8 __asm__("D_0015EE6C") MACRO_ADDR;
-extern float D_0015EE70_316DD8 __asm__("D_0015EE70") MACRO_ADDR;
 extern Moby *D_L11_00160058_316DD8 __asm__("D_L11_00160058") MACRO_ADDR;
 extern Path_316DD8 *D_L11_001B11B0_316DD8[] __asm__("D_L11_001B11B0");
 extern float D_L11_0016235C_316DD8 SDATA(D_L11_0016235C);
@@ -1350,7 +1348,6 @@ extern float D_L11_00162368_316DD8 SDATA(D_L11_00162368);
 extern float D_L11_0016236C_316DD8 SDATA(D_L11_0016236C);
 extern float D_L11_00162370_316DD8 SDATA(D_L11_00162370);
 extern float D_L11_0016238C_316DD8 SDATA(D_L11_0016238C);
-extern char D_0013E633_316DD8[] __asm__("D_0013E633");
 
 /* Update of a path-following enemy: sinks or dies with its carrier, takes hits (knockback by hit kind),
  * then follows its path and gives up on it when too far off. */
@@ -1364,7 +1361,7 @@ void func_L11_00316DD8(Moby *m) {
 
     m->scale = ((Cls_316DD8 *)m->pclass)->scale * D_L11_0016235C_316DD8;
     d = *(void **)&m->pvars;
-    d->f1A4 = D_L11_0016238C_316DD8 * D_0015EE6C_316DD8;
+    d->f1A4 = D_L11_0016238C_316DD8 * D_0015EE6C_313D00;
     if (d->f254 != -1 && m->state != 0xB && m->state != 9 && m->state != 0x12 && m->state != 0x11 && m->state != 0
         && m->state != 0xC && m->state != 0xD) {
         if (m->pos.z < D_L11_00160058_316DD8[d->f254].pos.z + 0.5f) {
@@ -1397,7 +1394,7 @@ void func_L11_00316DD8(Moby *m) {
         d->f140 = func_001FA898_316DD8(512.0f);
         d->f148 = 0.2f;
         d->f134 = 0.0f;
-        d->f130 = D_L11_00162360_316DD8 * D_0015EE70_316DD8;
+        d->f130 = D_L11_00162360_316DD8 * D_0015EE70_313D00;
         d->f144 = 9;
         d->b15D = 0;
         switch (kind) {
@@ -1414,8 +1411,8 @@ void func_L11_00316DD8(Moby *m) {
         case 7:
         case 8: {
             float ang;
-            d->f138 = D_L11_00162368_316DD8 * D_0015EE6C_316DD8;
-            d->f13C = D_L11_00162364_316DD8 * D_0015EE6C_316DD8;
+            d->f138 = D_L11_00162368_316DD8 * D_0015EE6C_313D00;
+            d->f13C = D_L11_00162364_316DD8 * D_0015EE6C_313D00;
             d->f170 = 7.5f;
             d->f174 = 11.0f;
             ang = func_L00_001FF860_316DD8(m->pos.x - h->owner->pos.x, m->pos.y - h->owner->pos.y);
@@ -1434,9 +1431,9 @@ void func_L11_00316DD8(Moby *m) {
         case 2: {
             float ang;
             m->flags &= 0xEFFF;
-            d->f130 = D_L11_00162360_316DD8 * D_0015EE70_316DD8;
-            d->f138 = D_L11_00162370_316DD8 * D_0015EE6C_316DD8;
-            d->f13C = D_L11_0016236C_316DD8 * D_0015EE6C_316DD8;
+            d->f130 = D_L11_00162360_316DD8 * D_0015EE70_313D00;
+            d->f138 = D_L11_00162370_316DD8 * D_0015EE6C_313D00;
+            d->f13C = D_L11_0016236C_316DD8 * D_0015EE6C_313D00;
             d->f170 = 7.5f;
             d->f174 = 11.0f;
             ang = func_L00_001FF860_316DD8(m->pos.x - h->owner->pos.x, m->pos.y - h->owner->pos.y);
@@ -1488,8 +1485,8 @@ void func_L11_00316DD8(Moby *m) {
         }
     }
     if (d->f210 == 0) {
-        d->f210 = (int)((Hero *)(D_0013E633_316DD8 + 0xE1D))->moby;
-        qcopy(&d->f1D0, D_0013E633_316DD8 + 0xE9D);
+        d->f210 = (int)((Hero *)(D_0013E633_313D00 + 0xE1D))->moby;
+        qcopy(&d->f1D0, D_0013E633_313D00 + 0xE9D);
     }
 }
 extern float func_L00_0025CE58(float *p, float *v, float a, float b, float c, float d);
@@ -1498,7 +1495,6 @@ extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern int func_L00_00259B88(char *, char *, float *, char *, float);
 extern float D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C_m __asm__("D_0015EE6C") MACRO_ADDR;
 extern short D_0015EE6C_s __asm__("D_0015EE6C");
 extern short D_L11_0016238C;
 
@@ -1511,7 +1507,7 @@ void func_L11_003173C8(char *m, float *p) {
     float t = FastAddRots(ang, *(float *)(data + 0x24C));
     float dist;
     float b = D_0015EE70 * 8.726646f;
-    func_L00_0025CE58((float *)(m + 0x48), (float *)(data + 0x250), t, b, b, D_0015EE6C_m * 12.566371f);
+    func_L00_0025CE58((float *)(m + 0x48), (float *)(data + 0x250), t, b, b, D_0015EE6C_313D00 * 12.566371f);
     dist = func_0020D830(m);
     if (*(unsigned char *)(m + 0x52) == *(unsigned char *)(m + 0x53)) {
         if (8.0f < dist && dist < 22.0f) {
@@ -2256,7 +2252,6 @@ extern void func_001F9BD8(void *, void *, void *);
 extern float func_001F9F90(float);
 extern void func_00213DE0(void *, int, int, int);
 extern float D_0015EE6C MACRO_ADDR;
-extern int D_L11_00160058_m __asm__("D_L11_00160058") MACRO_ADDR;
 extern char D_0013E633[];
 
 /* finds the idle moby of type 0x527 in a list and launches it at the hero */

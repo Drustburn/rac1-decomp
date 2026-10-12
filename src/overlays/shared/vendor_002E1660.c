@@ -1578,10 +1578,8 @@ extern void func_L00_002E6BE0_2E6CE0(char *, float *) __asm__("func_L00_002E6BE0
 extern int func_L00_001EFFF0_2E6CE0(void *, void *, int, int, int) __asm__("func_L00_001EFFF0");
 extern float func_001F9CB8_2E6CE0(void *) __asm__("func_001F9CB8");
 extern void func_L00_002E9968_2E6CE0(float, float) __asm__("func_L00_002E9968");
-extern char D_0013E633_2E6CE0[] __asm__("D_0013E633");
 extern char D_L00_00166F10_2E6CE0[] __asm__("D_L00_00166F10");
 extern Cam_2E6CE0 *D_L00_00166F00_2E6CE0 __asm__("D_L00_00166F00");
-extern char D_L00_00173F60_2E6CE0[] __asm__("D_L00_00173F60");
 extern int D_L00_0015F058_2E6CE0 __asm__("D_L00_0015F058") MACRO_ADDR;
 extern int D_L00_00161DF0_2E6CE0 SDATA(D_L00_00161DF0);
 extern float D_L00_00161DA8_2E6CE0 SDATA(D_L00_00161DA8);
@@ -1627,9 +1625,9 @@ void func_L00_002E6CE0(char *m) {
         func_001F9BD8_2E6CE0(p + 0x80, f, g);
     }
     func_L00_002E6BE0_2E6CE0(m, f);
-    if (((Hero *)(D_0013E633_2E6CE0 + 0xE1D))->unk20A4 == 2) {
+    if (((Hero *)(D_0013E633_2E3700 + 0xE1D))->unk20A4 == 2) {
         func_001F9C30_2E6CE0(f, gl + 0x20, 3.0f);
-    } else if (((Hero *)(D_0013E633_2E6CE0 + 0xE1D))->unk20A4 == 1) {
+    } else if (((Hero *)(D_0013E633_2E3700 + 0xE1D))->unk20A4 == 1) {
         func_001F9C30_2E6CE0(f, gl + 0x20, 0.4f);
     } else {
         func_001F9C30_2E6CE0(f, gl + 0x20, 0.5f);
@@ -1640,15 +1638,15 @@ void func_L00_002E6CE0(char *m) {
     f20 = D_L00_00161DA8_2E6CE0 + D_L00_00166F00_2E6CE0->d->f214 * D_L00_00166F00_2E6CE0->d->f20C * (D_L00_00166F00_2E6CE0->d->f210 - 1.0f);
     func_001F9C30_2E6CE0(h, gl + 0x20, 20.0f);
     func_001F9BD8_2E6CE0(h, g, h);
-    if (func_L00_001EFFF0_2E6CE0(g, h, D_L00_0015F058_2E6CE0, (int)((Hero *)(D_0013E633_2E6CE0 + 0xE1D))->moby, 0)) {
-        qcopy(w, D_L00_00173F60_2E6CE0);
+    if (func_L00_001EFFF0_2E6CE0(g, h, D_L00_0015F058_2E6CE0, (int)((Hero *)(D_0013E633_2E3700 + 0xE1D))->moby, 0)) {
+        qcopy(w, D_L00_00173F60_a);
     } else {
         qcopy(w, h);
     }
     func_001F9C30_2E6CE0(h, gl + 0x20, 20.0f);
     func_001F9BF0_2E6CE0(h, g, h);
-    if (func_L00_001EFFF0_2E6CE0(g, h, D_L00_0015F058_2E6CE0, (int)((Hero *)(D_0013E633_2E6CE0 + 0xE1D))->moby, 0)) {
-        qcopy(h, D_L00_00173F60_2E6CE0);
+    if (func_L00_001EFFF0_2E6CE0(g, h, D_L00_0015F058_2E6CE0, (int)((Hero *)(D_0013E633_2E3700 + 0xE1D))->moby, 0)) {
+        qcopy(h, D_L00_00173F60_a);
     }
     func_001F9BF0_2E6CE0(u, h, w);
     if (func_001F9CB8_2E6CE0(u) < f20 + f20) {
@@ -1970,7 +1968,6 @@ typedef struct Ctl_2E8210 {
 } Ctl_2E8210;
 extern Hero D_0013F450_2E8210 __asm__("D_0013F450");
 extern char D_0013F4D0_2E8210[] __asm__("D_0013F4D0");
-extern char D_0013F6E0_2E8210[] __asm__("D_0013F6E0");
 extern int D_L00_00161E5C_2E8210 SDATA(D_L00_00161E5C);
 extern int D_L00_00161E60_2E8210 SDATA(D_L00_00161E60);
 extern float D_L00_00161D70_2E8210 SDATA(D_L00_00161D70);
@@ -2130,7 +2127,7 @@ void func_L00_002E8210(Moby_2E8210 *m) {
     qcopy(b->v10, b->v0);
     qcopy(c->pos, m->v30);
     qcopy(g->v20, m->v30);
-    func_001F9C30_2E8210(v0, D_0013F6E0_2E8210, func_001F9C78_2E8210(b->v0, D_0013F6E0_2E8210));
+    func_001F9C30_2E8210(v0, D_0013F6E0_E80A8, func_001F9C78_2E8210(b->v0, D_0013F6E0_E80A8));
     func_001F9BF0_2E8210(v1, b->v0, v0);
     t = b->f2C - func_001F9CB8_2E8210(v1);
     g->f30 = t;
@@ -2331,7 +2328,6 @@ extern int func_L00_001F10E0_2E8AC8(void *, int, void *, float) __asm__("func_L0
 extern void func_001F9BF0_2E8AC8(void *, void *, void *) __asm__("func_001F9BF0");
 extern void func_L00_002E89E0_2E8AC8(void *, void *, void *, void *, void *, float, float) __asm__("func_L00_002E89E0");
 extern Wrap_2E8AC8 *D_L00_00166F00_2E8AC8 __asm__("D_L00_00166F00");
-extern char D_L00_00173F60_2E8AC8[] __asm__("D_L00_00173F60");
 extern char D_L00_00173F70_2E8AC8[] __asm__("D_L00_00173F70");
 extern int D_L00_0015F05C_2E8AC8 __asm__("D_L00_0015F05C") MACRO_ADDR;
 extern float D_L00_00161DA8_2E8AC8 SDATA(D_L00_00161DA8);
@@ -2360,7 +2356,7 @@ int func_L00_002E8AC8_r(Moby_2E8AC8 *m, float *pos, int unused, float sa, float 
     f21 = D_L00_00161DA8_2E8AC8 + g->f214 * g->f20C * (g->f210 - 1.0f);
     func_001F9BC0_2E8AC8(r);
     qcopy(o, pos);
-    qcopy(a, D_L00_00173F60_2E8AC8);
+    qcopy(a, D_L00_00173F60_a);
     qcopy(b, D_L00_00173F70_2E8AC8);
     func_001F9BD8_2E8AC8(e, d->v90, c);
     dist = func_L00_0025ED30_2E8AC8(w, a, d->v90, e, 0.0f);
@@ -2372,7 +2368,7 @@ int func_L00_002E8AC8_r(Moby_2E8AC8 *m, float *pos, int unused, float sa, float 
         qcopy(pos, b);
         if (func_L00_001F10E0_2E8AC8(pos, D_L00_0015F05C_2E8AC8, (void *)((Hero *)D_0013F450_2E8AC8)->moby, sb)) {
             func_001F9BF0_2E8AC8(t, o, pos);
-            func_001F9BD8_2E8AC8(a, D_L00_00173F60_2E8AC8, t);
+            func_001F9BD8_2E8AC8(a, D_L00_00173F60_a, t);
             dist = func_L00_0025ED30_2E8AC8(w, a, d->v90, e, 0.0f);
             lim = func_001F9D10_2E8AC8(d->v90, w) / (c[11] - q[12]);
             lim = (D_L00_00161DA8_2E8AC8 + (f21 - D_L00_00161DA8_2E8AC8) * lim) * 0.75f;
@@ -2382,7 +2378,7 @@ int func_L00_002E8AC8_r(Moby_2E8AC8 *m, float *pos, int unused, float sa, float 
                 qcopy(pos, D_L00_00173F70_2E8AC8);
                 if (func_L00_001F10E0_2E8AC8(pos, D_L00_0015F05C_2E8AC8, (void *)((Hero *)D_0013F450_2E8AC8)->moby, sb)) {
                     func_001F9BF0_2E8AC8(t, o, pos);
-                    func_001F9BD8_2E8AC8(a, D_L00_00173F60_2E8AC8, t);
+                    func_001F9BD8_2E8AC8(a, D_L00_00173F60_a, t);
                     dist = func_L00_0025ED30_2E8AC8(w, a, d->v90, e, 0.0f);
                     lim = func_001F9D10_2E8AC8(d->v90, w) / (c[11] - q[12]);
                     lim = (D_L00_00161DA8_2E8AC8 + (f21 - D_L00_00161DA8_2E8AC8) * lim) * 0.75f;

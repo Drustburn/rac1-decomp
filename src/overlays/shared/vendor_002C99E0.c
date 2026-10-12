@@ -921,7 +921,6 @@ void func_L11_0031AAE0(char *moby) {
 extern char D_0013E633[];
 extern unsigned char D_0014171B[] NOT_SDA;
 extern int D_0015EFA4 MACRO_ADDR;
-extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 extern int D_0015EF00 MACRO_ADDR;
 extern unsigned char D_0013D510[] NOT_SDA;
 extern char *func_L00_0025B478(void *, int, int);
@@ -952,8 +951,8 @@ void func_L11_0031B630(char *m) {
         if (scale_ticks(D_0015EFA4) / 600 > *(unsigned short *)(st + 0x157EA)) {
             *(unsigned short *)(st + 0x157EA) = scale_ticks(D_0015EFA4) / 600;
         }
-        *(int *)(st + 0x157EC) = *(int *)(st + 0x157EC) | (1 << D_0015EE84_m) | 0x80000000;
-        if (D_0015EE84_m == 0xB && *(char **)(info + 0x20) != 0 && *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
+        *(int *)(st + 0x157EC) = *(int *)(st + 0x157EC) | (1 << D_0015EE84_3102C8) | 0x80000000;
+        if (D_0015EE84_3102C8 == 0xB && *(char **)(info + 0x20) != 0 && *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
             if (++D_0015EF00 >= 3 && gSkillPoints[0x12] == 0) {
                 gSkillPoints[0x12] = 1;
                 func_0022EE28(1, 0, 0);
@@ -1021,7 +1020,6 @@ extern float func_001F9D10_0031B8A8(void *, void *) __asm__("func_001F9D10");
 extern float func_00214D88_0031B8A8(float *, float *, float, float, float, float) __asm__("func_00214D88");
 extern void func_001F9BF0_0031B8A8(void *, void *, void *) __asm__("func_001F9BF0");
 extern float D_0015EE70_0031B8A8 __asm__("D_0015EE70") MACRO_ADDR;
-extern float D_0015EE6C_0031B8A8 __asm__("D_0015EE6C") MACRO_ADDR;
 
 /* Path follower: turns the moby to the blend of the headings of its current and next path segments, and eases its position toward the blended path point offset sideways around the path. */
 void func_L11_0031B8A8(Moby *moby) {
@@ -1062,7 +1060,7 @@ void func_L11_0031B8A8(Moby *moby) {
     func_001F9BD8_0031B8A8(E, E, G);
     vel = 0.0f;
     d = func_001F9D10_0031B8A8(&moby->pos, E);
-    func_00214D88_0031B8A8(&vel, &data->speed, d, D_0015EE70_0031B8A8 * 10.0f, D_0015EE70_0031B8A8 * 10.0f, D_0015EE6C_0031B8A8 * 20.0f);
+    func_00214D88_0031B8A8(&vel, &data->speed, d, D_0015EE70_0031B8A8 * 10.0f, D_0015EE70_0031B8A8 * 10.0f, D_0015EE6C_e * 20.0f);
     func_001F9BF0_0031B8A8(G, E, &moby->pos);
     func_L00_001FF4B0_0031B8A8(G, G, data->speed);
     func_001F9BD8_0031B8A8(&moby->pos, &moby->pos, G);

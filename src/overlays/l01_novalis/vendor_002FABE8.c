@@ -113,7 +113,6 @@ extern void func_L01_002F9908(void *, void *, u32, s32, f32, f32, f32, f32, s32)
 extern f32 func_00214158_FB158b(void) __asm__("func_00214158");
 extern void func_001F9BD8_FB158b(void *, void *, void *) __asm__("func_001F9BD8");
 void func_0020D678_FB158b(void *) __asm__("func_0020D678");
-extern s32 D_0015EE84_FB158b __asm__("D_0015EE84") MACRO_ADDR;
 extern void func_001F9BD8_FB158c(void *, void *, void *) __asm__("func_001F9BD8");
 extern f32 func_001F9F90_FB158b(f32) __asm__("func_001F9F90");
 extern f32 func_001F9FA8_FB158b(f32) __asm__("func_001F9FA8");
@@ -142,7 +141,7 @@ void func_L01_002FB158(BurstMoby *self) {
 
     t = func_L00_0025B478_FB158c(self, 0x830000, 0);
     if (D_L01_001BB9C0.collected[self->id] != 0
-        || (D_0014C290[D_0015EE84_FB158b][self->id >> 5] >> (self->id & 0x1F)) & 1) {
+        || (D_0014C290[D_0015EE84_FB158][self->id >> 5] >> (self->id & 0x1F)) & 1) {
         func_0020D678_FB158d(self);
     }
     if (t != 0 && t->moby->oclass == 0x2AE) {
@@ -162,7 +161,7 @@ void func_L01_002FB158(BurstMoby *self) {
             func_001F9BD8_FB158e(&pos, &pos, &self->pos);
             func_L01_002F9908(&pos, &dir, colors.c[random_integer_below(3)], func_L00_00258BC8_FB158b(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
-        D_0014C290[D_0015EE84_FB158b][self->id >> 5] |= 1 << (self->id & 0x1F);
+        D_0014C290[D_0015EE84_FB158][self->id >> 5] |= 1 << (self->id & 0x1F);
         D_L01_001BAC60[self->id >> 5] |= 1 << (self->id & 0x1F);
         func_0020D678_FB158d(self);
     } else {
@@ -227,7 +226,6 @@ typedef struct {
 extern BurstPalette_2FB588 D_L01_0020B7E0_2FB588 __asm__("D_L01_0020B7E0");
 extern BurstPalette_2FB588 D_L01_0020B7F8_2FB588 __asm__("D_L01_0020B7F8");
 extern char D_L01_001E3720_2FB588[] __asm__("D_L01_001E3720");
-extern f32 D_0015EE6C_2FB588 __asm__("D_0015EE6C") MACRO_ADDR;
 extern void func_001F9BC0_2FB588(void *) __asm__("func_001F9BC0");
 extern int func_L00_00258BC8_2FB588(int lo, int hi) __asm__("func_L00_00258BC8");
 extern void func_L00_0026B890_2FB588(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32) __asm__("func_L00_0026B890");
@@ -260,7 +258,7 @@ void func_L01_002FB588_r(struct Moby *moby, u128_2FB588 *where, s32 sound, f32 s
     func_001F9BC0_2FB588(&vel);
     inner_p = &inner;
     for (i = 2; i >= 0; i--) {
-        speed = func_002140F8_2FB588(8.0f, 10.0f) * D_0015EE6C_2FB588;
+        speed = func_002140F8_2FB588(8.0f, 10.0f) * D_0015EE6C_FB158b;
         size = scale * 400000.0f;
         inner = D_L01_0020B7E0_2FB588;
         outer = D_L01_0020B7F8_2FB588;
@@ -559,16 +557,12 @@ typedef struct {
 typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv_2FC140;
 extern Moby *D_L01_00160058_2FC140 __asm__("D_L01_00160058") MACRO_ADDR;
 extern Rec_2FC140 *D_L01_0016016C_2FC140 __asm__("D_L01_0016016C") MACRO_ADDR;
-extern float D_0015EE6C_2FC140 __asm__("D_0015EE6C") MACRO_ADDR;
 extern int D_L01_0015F6A8_2FC140 __asm__("D_L01_0015F6A8") MACRO_ADDR;
-extern int D_0015EE84_2FC140 __asm__("D_0015EE84") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAD60");
 extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB9C0");
 extern unsigned char D_L01_0015FD08_2FC140[] __asm__("D_L01_0015FD08") MACRO_ADDR;
 extern char D_L01_001BADB0_2FC140[] __asm__("D_L01_001BADB0");
-extern unsigned char D_0014171B_2FC140[] __asm__("D_0014171B");
 extern char D_0013E633_2FC140[] __asm__("D_0013E633");
-extern unsigned char D_0013D355_2FC140[] __asm__("D_0013D355");
 extern void func_L01_002FC058_2FC140(void) __asm__("func_L01_002FC058");
 extern int func_001F9938_2FC140(void *) __asm__("func_001F9938");
 extern int func_001F9850_2FC140(int) __asm__("func_001F9850");
@@ -617,7 +611,7 @@ void func_L01_002FC140(Moby *moby) {
         moby->pos.z = moby->pos.z + fd;
         break;
     case 1:
-        r16 = *(unsigned char *)(moby->unkB0 + (D_0015EE84_2FC140 << 4) + (D_0014171B_2FC140 + 0xAA35));
+        r16 = *(unsigned char *)(moby->unkB0 + (D_0015EE84_2FBBD8 << 4) + (D_0014171B_2FBBD8 + 0xAA35));
         if (r16 == 0xFF) {
             if (moby->prev_seq != 2) {
                 func_00213DE0_2FC140(moby, 2, 0, func_001F9850_2FC140(0x14));
@@ -628,7 +622,7 @@ void func_L01_002FC140(Moby *moby) {
             moby->unk94 = ((Class_2FC140 *)moby->pclass)->f10;
         } else {
             if (D_L01_0015F6A8_2FC140 == 0) {
-                unsigned char *pp = D_0013D355_2FC140 + 0x13B;
+                unsigned char *pp = D_0013D355_2FBBD8 + 0x13B;
                 if (pp[0xF] == 0) {
                     func_L00_00299B68_2FC140(5);
                     pp[0xF] = 1;
@@ -656,7 +650,7 @@ void func_L01_002FC140(Moby *moby) {
         }
         break;
     case 2:
-        moby->pos.z = moby->pos.z - D_0015EE6C_2FC140 * 5.0f;
+        moby->pos.z = moby->pos.z - D_0015EE6C_2FBBD8 * 5.0f;
         if (data->link != -1) {
             q = (void *)D_L01_00160058_2FC140[data->link].pvars;
             q->v.y = -func_L00_001FF860_2FC140(
@@ -753,7 +747,7 @@ void func_L01_002FC140(Moby *moby) {
             ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[(*(short *)&D_L01_00160058_2FC140[data->link].save_id)] = D_L01_00160058_2FC140[data->link].unkB0 + 2;
             if (D_L01_00160058_2FC140[data->link].unkB0 == 0xFF
                 || (D_L01_0015FD08_2FC140[D_L01_00160058_2FC140[data->link].unkB0] != 0xFF
-                    && (D_0014171B_2FC140 + 0xAA35)[D_L01_00160058_2FC140[data->link].unkB0 + (D_0015EE84_2FC140 << 4)] == 0xFF)) {
+                    && (D_0014171B_2FBBD8 + 0xAA35)[D_L01_00160058_2FC140[data->link].unkB0 + (D_0015EE84_2FBBD8 << 4)] == 0xFF)) {
                 D_L01_001BB9C0_2FC140.collected[(*(short *)&D_L01_00160058_2FC140[data->link].save_id)] = D_L01_00160058_2FC140[data->link].unkB0 + 2;
             }
         }

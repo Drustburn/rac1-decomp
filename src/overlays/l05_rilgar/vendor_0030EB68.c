@@ -222,7 +222,6 @@ void func_L05_0030F6C0(char *m) {
 extern float D_0015EE6C_30F9D0 __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_0015EE70_30F9D0 __asm__("D_0015EE70") MACRO_ADDR;
 extern int D_L05_001601AC_30F9D0 __asm__("D_L05_001601AC") MACRO_ADDR;
-extern unsigned char *D_L05_00160098_30F9D0 __asm__("D_L05_00160098") MACRO_ADDR;
 extern void scale_30F9D0(void *, void *, float) __asm__("func_L00_001FF4B0");
 extern void mul_30F9D0(void *, void *, float) __asm__("func_001F9C30");
 extern void add_30F9D0(void *, void *, void *) __asm__("func_001F9BD8");
@@ -262,7 +261,7 @@ void func_L05_0030F9D0(char *moby) {
         break;
     }
     case 1:
-        if (D_L05_00160098_30F9D0[*(int *)(data + 0x14) * 256 + 0xBC] != 0) {
+        if (D_L05_00160098_0F130[*(int *)(data + 0x14) * 256 + 0xBC] != 0) {
             voice_30F9D0(0, 0, moby);
             *(u8 *)(moby + 0x20) = 2;
             clear_30F9D0(data);
@@ -678,8 +677,6 @@ extern char D_0013E650_165B8[] __asm__("D_0013E650");
 extern char D_L05_001672C0_165B8[] __asm__("D_L05_001672C0");
 extern float func_001F9D10_165B8(void *, void *) __asm__("func_001F9D10");
 extern int func_0022ED80_165B8() __asm__("func_0022ED80");
-extern float D_0015EE6C_165B8 __asm__("D_0015EE6C") MACRO_ADDR;
-extern float D_0015EE70_165B8 __asm__("D_0015EE70") MACRO_ADDR;
 extern void func_L00_001FF4B0_165B8(void *, void *, float) __asm__("func_L00_001FF4B0");
 extern void func_001F9C30_165B8(void *, void *, float) __asm__("func_001F9C30");
 extern void func_001F9BD8_165B8(void *, void *, void *) __asm__("func_001F9BD8");
@@ -802,7 +799,7 @@ void func_L05_003165B8(struct Moby *m) {
             if (a < c) {
                 a = c;
             }
-            func_L00_001FF4B0_165B8(w, &m->unkC0, a * D_0015EE6C_165B8);
+            func_L00_001FF4B0_165B8(w, &m->unkC0, a * D_0015EE6C_30F9D0);
             if (big) {
                 scale = (*(float *)&D_L05_00161F60_165B8);
                 kind = (*(int *)&D_L05_00161F58_165B8);
@@ -812,13 +809,13 @@ void func_L05_003165B8(struct Moby *m) {
                 kind = (*(int *)&D_L05_00161F5C_165B8);
                 v[2] += (*(float *)&D_L05_00161F74_165B8) - scale + 0.4f;
             }
-            func_L05_0029CCB8_165B8(scale * func_002140F8_165B8(0.8f, 1.2f), floor, D_0015EE70_165B8 * 10.0f, v, w, kind,
+            func_L05_0029CCB8_165B8(scale * func_002140F8_165B8(0.8f, 1.2f), floor, D_0015EE70_30F9D0 * 10.0f, v, w, kind,
                              big);
             if (func_002140B0_165B8(2)) {
                 /* fall time from the emitter to the floor */
-                float t = func_001F9B50_165B8(2.0f * (m->pos.z - floor) / (D_0015EE70_165B8 * 10.0f));
+                float t = func_001F9B50_165B8(2.0f * (m->pos.z - floor) / (D_0015EE70_30F9D0 * 10.0f));
                 if (t < (float)d->age) {
-                    float s = t * (D_0015EE6C_165B8 * 4.0f);
+                    float s = t * (D_0015EE6C_30F9D0 * 4.0f);
                     float ang = func_00214158_165B8();
                     float r = func_002140F8_165B8(0.0f, 1.25f);
                     func_001F9C30_165B8(v, &m->unkC0, s);
@@ -1757,7 +1754,6 @@ void func_L05_0031A188(char *moby) {
     FastVecSub(v20, moby + 0x10, v00);
     func_L00_002617B0(d + 0x20, v20, v10, moby + 0x40);
 }
-extern char *D_L05_001601AC_slots __asm__("D_L05_001601AC") MACRO_ADDR;
 extern unsigned char D_0014C150[][16];
 
 /* picks the nearest target slot and sets the moby's state */
@@ -1769,7 +1765,7 @@ void func_L05_0031A718(char *moby) {
     char *g;
     *(short *)(data + 0xB4) = -1;
     for (i = 0; i < 5; i++) {
-        if (FastVecDist(moby + 0x10, D_L05_001601AC_slots + (list[i] << 7) + 0x30) < 1.0f) {
+        if (FastVecDist(moby + 0x10, D_L05_001601AC_c + (list[i] << 7) + 0x30) < 1.0f) {
             *(short *)(data + 0xB4) = i;
         }
     }
@@ -1806,7 +1802,7 @@ void func_L05_0031A718(char *moby) {
         selected += *(short *)(data + 0xB4);
         idx = *selected << 7;
     }
-    g = D_L05_001601AC_slots;
+    g = D_L05_001601AC_c;
     qcopy(data + 0x60, (void *)(idx + (int)g + 0x30));
     qcopy(data + 0x70, (void *)(idx + (int)g + 0x70));
 }

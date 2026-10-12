@@ -400,7 +400,6 @@ extern void func_0020D678_2B5368(void *) __asm__("func_0020D678");
 extern void func_L00_00258DB0_2B5368(float *, float, float) __asm__("func_L00_00258DB0");
 extern unsigned char D_0013E633_2B5368[] __asm__("D_0013E633");
 extern float D_0015EE6C_2B5368 __asm__("D_0015EE6C") MACRO_ADDR;
-extern float D_0015EE70_2B5368 __asm__("D_0015EE70") MACRO_ADDR;
 
 /* Update for moby class 29 (blarg_turret) on level 13: turns toward its target and fires its gun moby. */
 void func_L13_002B5368(Moby *m) {
@@ -435,7 +434,7 @@ void func_L13_002B5368(Moby *m) {
             }
             m->state = 3;
         }
-        func_L00_0025CE58_2B5368(&m->rot.z, data->f54, &data->f60, D_0015EE70_2B5368 * 12.566371f, D_0015EE70_2B5368 * 12.566371f, D_0015EE6C_2B5368 * 12.566371f);
+        func_L00_0025CE58_2B5368(&m->rot.z, data->f54, &data->f60, D_0015EE70_4B90 * 12.566371f, D_0015EE70_4B90 * 12.566371f, D_0015EE6C_2B5368 * 12.566371f);
         if (data->gun == 0 || data->gun->oclass != 0x24 || (unsigned char)data->gun->state == 0xFE
             || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
             if (m->prev_seq != 0) {
@@ -464,7 +463,7 @@ void func_L13_002B5368(Moby *m) {
                 r = -lim;
             }
             r = func_001FA748_2B5368(r, data->f54);
-            func_L00_0025CE58_2B5368(&m->rot.z, r, &data->f60, D_0015EE70_2B5368 * 12.566371f, D_0015EE70_2B5368 * 12.566371f, D_0015EE6C_2B5368 * 12.566371f);
+            func_L00_0025CE58_2B5368(&m->rot.z, r, &data->f60, D_0015EE70_4B90 * 12.566371f, D_0015EE70_4B90 * 12.566371f, D_0015EE6C_2B5368 * 12.566371f);
             func_L13_002B5950_2B5368(m);
             if (data->gun == 0 || data->gun->oclass != 0x24 || (unsigned char)data->gun->state == 0xFE
                 || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
@@ -485,7 +484,7 @@ void func_L13_002B5368(Moby *m) {
         return;
     }
     case 5:
-        func_L00_0025CE58_2B5368(&m->rot.z, data->f54, &data->f60, D_0015EE70_2B5368 * 12.566371f, D_0015EE70_2B5368 * 12.566371f, D_0015EE6C_2B5368 * 25.132742f);
+        func_L00_0025CE58_2B5368(&m->rot.z, data->f54, &data->f60, D_0015EE70_4B90 * 12.566371f, D_0015EE70_4B90 * 12.566371f, D_0015EE6C_2B5368 * 25.132742f);
         data->f64 -= 1.0f;
         if (data->f64 <= 0.0f) {
             m->state = 4;

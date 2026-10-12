@@ -922,7 +922,6 @@ void *func_L18_002D7F48(float *a, float *b, int idx) {
         if (*p++ < 0) return best;
     }
 }
-extern char *D_L18_00160058_n __asm__("D_L18_00160058") MACRO_ADDR;
 
 /* Of the mobys of class 0x247 in list idx, the one nearest to pos (within
    255 units), or 0. The second spelling of the table base keeps the
@@ -939,7 +938,7 @@ char *func_L18_002D8070(void *pos, int idx) {
             float d = FastVecDist(pos, m + 0x10);
             if (d < bestd) {
                 bestd = d;
-                best = D_L18_00160058_n + off;
+                best = D_L18_00160058_m + off;
             }
         }
         if (*p++ < 0) return best;
@@ -2018,7 +2017,6 @@ extern short D_L18_00162150[] MACRO_ADDR;
 extern short D_L18_00162158[] MACRO_ADDR;
 extern short D_L18_00162160[] MACRO_ADDR;
 extern float D_L18_00167840[];
-extern float D_L18_0015F660_a[] __asm__("D_L18_0015F660") MACRO_ADDR;
 
 /* Veldin 2 arc emitter: rebuilds the 20-point bolt and its mirror, regrows or jitters four side arcs, then spawns three particles. */
 void func_L18_002EC290(void *moby) {
@@ -2190,7 +2188,7 @@ void func_L18_002EC290(void *moby) {
     r = rand_range(1, 8);
     if (random_integer_below(2)) r = -r;
     f20 = random_float_between(0.15f, 3.0f);
-    spawn_ec290(data + 0x10, scale_ticks(12), f20 * 0.1f, f20, *(int *)&D_L18_001620E4 | 0x7F000000, 0, r, D_L18_0015F660_a, 0.0f);
+    spawn_ec290(data + 0x10, scale_ticks(12), f20 * 0.1f, f20, *(int *)&D_L18_001620E4 | 0x7F000000, 0, r, D_L18_0015F660_2D7310, 0.0f);
 }
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_2bb0b0;
 typedef struct { float u, v; } UV_2bb0b0;

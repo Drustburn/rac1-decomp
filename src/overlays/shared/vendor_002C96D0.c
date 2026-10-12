@@ -1234,7 +1234,6 @@ struct Manip;
 struct GifEntry;
 struct AnimSeq;
 struct Moby;
-extern struct Hero D_0013F450_D06C8 __asm__("D_0013F450");
 typedef struct {
     u8 pad00[0xE];
     u8 unkE;
@@ -1393,9 +1392,9 @@ void func_L00_002D06C8(struct Moby *moby) {
 
     case 1:
         if (moby->oclass == 0x1F9 &&
-            (D_0013F450_D06C8.unk240 == (s32)moby || D_0013F450_D06C8.coll_hit_moby == (u8 *)moby ||
-             (D_0013F450_D06C8.ground_moby == moby && D_0013F450_D06C8.air_frames.s == 0) ||
-             D_0013F450_D06C8.unk4F8 == (s32)moby || touched)) {
+            (D_0013F450_C9820.unk240 == (s32)moby || D_0013F450_C9820.coll_hit_moby == (u8 *)moby ||
+             (D_0013F450_C9820.ground_moby == moby && D_0013F450_C9820.air_frames.s == 0) ||
+             D_0013F450_C9820.unk4F8 == (s32)moby || touched)) {
             moby->unkBC = 0;
             moby->state = 5;
             break;

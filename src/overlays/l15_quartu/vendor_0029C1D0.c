@@ -1142,7 +1142,6 @@ typedef struct Tb_2E9358 {
 extern char D_L15_001744C0_2E9358[] __asm__("D_L15_001744C0");
 extern int D_L15_001744D8_2E9358 __asm__("D_L15_001744D8");
 extern int D_001414D0_2E9358 __asm__("D_001414D0");
-extern float D_0015EE6C_2E9358 __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_0015EE70_2E9358 __asm__("D_0015EE70") MACRO_ADDR;
 extern float D_L15_0016203C_2E9358 SDATA(D_L15_0016203C);
 extern char *D_L15_00178580_2E9358[] __asm__("D_L15_00178580");
@@ -1198,11 +1197,11 @@ void func_L15_002E9358(Moby *moby) {
                 moby->state = 1;
                 data->f8 = 0.0f;
                 (*(u128 *)&moby->pos) = ((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20;
-            } else if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015EE6C_2E9358 * -9.8f) {
+            } else if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015EE6C_2A48B0 * -9.8f) {
                 moby->unkBC = 1;
                 qcopy(&moby->pos, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20);
                 func_L00_001FF610_2E9358(&s30, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
-                func_L00_001FF4B0_2E9358(&s30, &s30, D_0015EE6C_2E9358 + D_0015EE6C_2E9358);
+                func_L00_001FF4B0_2E9358(&s30, &s30, D_0015EE6C_2A48B0 + D_0015EE6C_2A48B0);
             }
         }
         break;
@@ -1664,7 +1663,6 @@ void func_L15_002ED318(int idx, int show) {
 }
 INCLUDE_ASM("asm/overlays", func_L15_002ED3A0);
 INCLUDE_ASM("asm/overlays", func_L15_002ED3C4);
-extern int D_L15_00160058_m __asm__("D_L15_00160058") MACRO_ADDR;
 extern int D_0015EE98 MACRO_ADDR;
 extern int D_L15_00184B2C;
 extern unsigned char D_0013D355[];
@@ -1685,12 +1683,12 @@ void func_L15_002ED420(char *moby) {
 
     if (idx != -1) {
         if (mb[0x20] != 0) {
-            char *other = (char *)(D_L15_00160058_m + idx * 256);
+            char *other = (char *)(D_L15_00160058_ED318 + idx * 256);
             func_001F9BF0(vB, other + 0x10, data + 0x10);
             *(u128 *)vA = *(u128 *)vB;
             func_L00_001FF240(vB, moby + 0x10, vA);
         }
-        *(u128 *)(data + 0x10) = *(u128 *)((char *)(*(int *)(data + 0xC) * 256 + D_L15_00160058_m) + 0x10);
+        *(u128 *)(data + 0x10) = *(u128 *)((char *)(*(int *)(data + 0xC) * 256 + D_L15_00160058_ED318) + 0x10);
     }
 
     switch (mb[0x20]) {

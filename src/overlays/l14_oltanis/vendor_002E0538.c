@@ -855,7 +855,6 @@ extern void func_L00_0028EBF0_2EFD38(int) __asm__("func_L00_0028EBF0");
 extern void func_L14_002F0868_2EFD38(char *) __asm__("func_L14_002F0868");
 extern char *D_L14_001B0F30_2EFD38[] __asm__("D_L14_001B0F30");
 extern unsigned char D_L14_001BBCC0_2EFD38[] __asm__("D_L14_001BBCC0");
-extern int D_0015EE84_2EFD38 __asm__("D_0015EE84") MACRO_ADDR;
 extern unsigned char D_0014C150_2EFD38[] __asm__("D_0014C150");
 extern unsigned char D_0014C290_2EFD38[] __asm__("D_0014C290");
 extern char D_0013F450_2EFD38[] __asm__("D_0013F450");
@@ -927,8 +926,8 @@ void func_L14_002EFD38(char *moby) {
             int sh = (short)hw;
             if (((Tab_2EFD38 *)D_L14_001BBCC0_2EFD38)->b[sh]) {
                 *(short *)(data + 0x124) = 0;
-            } else if (((*(int *)(D_0014C290_2EFD38 + ((sh >> 5) * 4 + (D_0015EE84_2EFD38 << 8))) >> (hw & 0x1F)) ^ 1) & 1) {
-                if (D_0014C150_2EFD38[*(int *)(data + 0x110) + (D_0015EE84_2EFD38 << 4)] != 0xFF) {
+            } else if (((*(int *)(D_0014C290_2EFD38 + ((sh >> 5) * 4 + (D_0015EE84_m << 8))) >> (hw & 0x1F)) ^ 1) & 1) {
+                if (D_0014C150_2EFD38[*(int *)(data + 0x110) + (D_0015EE84_m << 4)] != 0xFF) {
                     *(short *)(data + 0x124) = 0;
                 } else {
                     *(short *)(data + 0x124) = 1;
@@ -1246,7 +1245,6 @@ typedef struct {
     unsigned char state;
 } Level14VendorMoby_F0A30;
 extern s32 D_0014C290_2F0A30[][64] __asm__("D_0014C290");
-extern int D_0015EE84_2F0A30 __asm__("D_0015EE84") MACRO_ADDR;
 extern int D_L14_001BAF60[];
 void func_L14_002F0A30_r(Level14VendorMoby_F0A30 *m) __asm__("func_L14_002F0A30");
 
@@ -1254,7 +1252,7 @@ void func_L14_002F0A30_r(Level14VendorMoby_F0A30 *m) __asm__("func_L14_002F0A30"
 void func_L14_002F0A30_r(Level14VendorMoby_F0A30 *m) {
     m->state = 0;
     m->data->field124 = 0;
-    D_0014C290_2F0A30[D_0015EE84_2F0A30][(short)*(unsigned short *)((char *)m + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)m + 0xB2) & 0x1F);
+    D_0014C290_2F0A30[D_0015EE84_m][(short)*(unsigned short *)((char *)m + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)m + 0xB2) & 0x1F);
     D_L14_001BAF60[(short)*(unsigned short *)((char *)m + 0xB2) >> 5] |= 1 << (*(unsigned short *)((char *)m + 0xB2) & 0x1F);
 }
 extern void func_001F9EC0(void *, void *, void *);
@@ -1632,7 +1630,6 @@ void func_L14_002F24C8(char *m) {
         qcopy(d->rot, t[k].rot);
     }
 }
-extern float D_0015EE6C_f __asm__("D_0015EE6C") MACRO_ADDR;
 
 // Picks a target by phase, then sets velocity scale from its distance.
 void func_L14_002F25C8(char *moby)
@@ -1667,7 +1664,7 @@ void func_L14_002F25C8(char *moby)
     t = *(int **)(data + 0xAC);
     d = FastVecDist((char *)t + 0x10, (char *)t + 0x20);
     d = d * (float)*(int *)*(int **)(data + 0xAC);
-    x = D_0015EE6C_f * 5.0f;
+    x = D_0015EE6C_2EC3E8 * 5.0f;
     y = D_0015EE70 * 2.5f;
     k = 1.0f / d;
     *(int *)(data + 0xC4) = 0;
@@ -1727,7 +1724,6 @@ extern void func_L00_00263950(char *, char *, int, float, float);
 typedef struct { char pad0[0x454]; unsigned char collected[1]; } CapLevelState_2FCEA8;
 extern CapLevelState_2FCEA8 D_L14_001BBCC0_2FCEA8 __asm__("D_L14_001BBCC0");
 extern char D_L14_00161FF0[];
-extern char *D_L14_001601AC_2FCEA8 __asm__("D_L14_001601AC") MACRO_ADDR;
 extern char *D_L14_00160098_2FCEA8 __asm__("D_L14_00160098") MACRO_ADDR;
 extern int D_L14_001BAF60[];
 extern unsigned char D_0015EEB0[] MACRO_ADDR;
@@ -1769,7 +1765,7 @@ void func_L14_002FCEA8(char *m) {
             if ((D_0014171B_2FCEA8 + 0xAA35)[*(unsigned char *)(m + 0xB0) + (D_0015EE84_m << 4)] != 0xFF) {
                 char *t;
                 func_L00_002512D8((unsigned char)m[0xB0]);
-                t = D_L14_001601AC_2FCEA8 + (*(int *)(d + 0x48) << 7);
+                t = D_L14_001601AC_2EC3E8 + (*(int *)(d + 0x48) << 7);
                 func_L00_00286128(t + 0x30, t + 0x70);
             }
             func_L14_002F0A00_2FCEA8(D_L14_00160098_2FCEA8 + (*(int *)(d + 0x44) << 8));
@@ -2112,10 +2108,7 @@ extern void func_L14_002FE798_2FE038(Moby *) __asm__("func_L14_002FE798");
 extern int func_L00_0028EB98_2FE038(void *, int) __asm__("func_L00_0028EB98");
 extern int func_0022ED80_2FE038(int, int, void *) __asm__("func_0022ED80");
 extern Lvl_2FE038 D_L14_001BBCC0_2FE038 __asm__("D_L14_001BBCC0");
-extern int D_0015EE84_2FE038 __asm__("D_0015EE84") MACRO_ADDR;
-extern unsigned char D_0014C150_2FE038[] __asm__("D_0014C150");
 extern char D_0014C290_2FE038[] __asm__("D_0014C290");
-extern char *D_L14_00160098_2FE038 __asm__("D_L14_00160098") MACRO_ADDR;
 extern Moby *D_L14_001B0F30_2FE038[] __asm__("D_L14_001B0F30");
 extern int D_0015EF08_2FE038 __asm__("D_0015EF08") MACRO_ADDR;
 extern int D_L14_0016205C_2FE038 SDATA(D_L14_0016205C);
@@ -2123,8 +2116,6 @@ extern char D_L14_001FD208_2FE038[] __asm__("D_L14_001FD208");
 extern char D_L14_001FD240_2FE038[] __asm__("D_L14_001FD240");
 extern char D_L14_00167480_2FE038[] __asm__("D_L14_00167480");
 extern char D_0013D510_2FE038[] __asm__("D_0013D510");
-extern char D_0013E633_2FE038[] __asm__("D_0013E633");
-extern char D_0013E650_2FE038[] __asm__("D_0013E650");
 extern int D_L14_001BAF60_2FE038[] __asm__("D_L14_001BAF60");
 
 /* Oltanis jet (pilotable gunship) moby update: removes itself once collected, reacts to a hit, then a state
@@ -2138,8 +2129,8 @@ void func_L14_002FE038(Moby *m) {
 
     if (m->state == 0
         && (D_L14_001BBCC0_2FE038.collected[(short)(id = m->save_id)] != 0
-            || (*(int *)(D_0014C290_2FE038 + (((short)id >> 5) * 4 + (D_0015EE84_2FE038 << 8))) >> (id & 0x1F)) & 1)) {
-        func_L14_002FF6C0_2FE038((Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8)));
+            || (*(int *)(D_0014C290_2FE038 + (((short)id >> 5) * 4 + (D_0015EE84_m << 8))) >> (id & 0x1F)) & 1)) {
+        func_L14_002FF6C0_2FE038((Moby *)(D_L14_00160098_2FCEA8 + (d->f8C << 8)));
         func_0020D678_2FE038(m);
         return;
     }
@@ -2147,7 +2138,7 @@ void func_L14_002FE038(Moby *m) {
         void *r = func_L00_0025B478_2FE038(m, 0x800000, 0);
         m->unkA4 = 0xFF;
         if (r != 0 && d->f8C == -1 && m->state != 3) {
-            if (D_0015EE84_2FE038 == 0xE) {
+            if (D_0015EE84_m == 0xE) {
                 D_0015EF08_2FE038 = D_0015EF08_2FE038 + 1;
                 if (D_0015EF08_2FE038 >= 3 && ((Skill_2FE038 *)D_0013D510_2FE038)->f18 == 0) {
                     ((Skill_2FE038 *)D_0013D510_2FE038)->f18 = 1;
@@ -2159,8 +2150,8 @@ void func_L14_002FE038(Moby *m) {
             func_L00_00260108_2FE038(m, (*(Vec_2FE038 *)&m->pos), -1, 5.0f, 13.0f);
             m->flags |= 0x41;
             m->unk94 = 0;
-            if (d->f6C != -1 && ((Voice_2FE038 *)(D_0013E650_2FE038 + d->f6C * 0x70))->owner == m
-                && ((Voice_2FE038 *)(D_0013E650_2FE038 + d->f6C * 0x70))->on != 0) {
+            if (d->f6C != -1 && ((Voice_2FE038 *)(D_0013E650_2EFD38 + d->f6C * 0x70))->owner == m
+                && ((Voice_2FE038 *)(D_0013E650_2EFD38 + d->f6C * 0x70))->on != 0) {
                 func_L00_0028EBF0_2FE038(d->f6C);
             }
             d->f6C = -1;
@@ -2188,7 +2179,7 @@ void func_L14_002FE038(Moby *m) {
             m->unk30 = 0xFF;
             m->flags |= 0x41;
             m->unk94 = 0;
-            ((Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8)))->flags |= 0x41;
+            ((Moby *)(D_L14_00160098_2FCEA8 + (d->f8C << 8)))->flags |= 0x41;
             d->f94 = 0;
         } else {
             m->state = 2;
@@ -2200,16 +2191,16 @@ void func_L14_002FE038(Moby *m) {
         break;
     case 1: {
         unsigned char a, b, c;
-        a = D_0014C150_2FE038[d->f98 + (D_0015EE84_2FE038 << 4)];
+        a = D_0014C150_2EFD38[d->f98 + (D_0015EE84_m << 4)];
         if (a == 0xFF) {
-            b = D_0014C150_2FE038[d->f9C + (D_0015EE84_2FE038 << 4)];
+            b = D_0014C150_2EFD38[d->f9C + (D_0015EE84_m << 4)];
             if (b == a) {
-                c = D_0014C150_2FE038[d->fA0 + (D_0015EE84_2FE038 << 4)];
-                if (c == b && ((Hero *)(D_0013E633_2FE038 + 0xE1D))->unk30C.s == 0
-                    && ((int)((Hero *)(D_0013E633_2FE038 + 0xE1D))->ground_moby) == 0
-                    && func_00215570_2FE038((*(Vec_2FE038 *)&((Hero *)(D_0013E633_2FE038 + 0xE1D))->motion.pos), d->fA4) != 0) {
-                    Moby *jet = (Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8));
-                    Moby *seat = (Moby *)(D_L14_00160098_2FE038 + (((struct Jet_2FE038 *)jet->pvars)->f4 << 8));
+                c = D_0014C150_2EFD38[d->fA0 + (D_0015EE84_m << 4)];
+                if (c == b && ((Hero *)(D_0013E633_2EC3E8 + 0xE1D))->unk30C.s == 0
+                    && ((int)((Hero *)(D_0013E633_2EC3E8 + 0xE1D))->ground_moby) == 0
+                    && func_00215570_2FE038((*(Vec_2FE038 *)&((Hero *)(D_0013E633_2EC3E8 + 0xE1D))->motion.pos), d->fA4) != 0) {
+                    Moby *jet = (Moby *)(D_L14_00160098_2FCEA8 + (d->f8C << 8));
+                    Moby *seat = (Moby *)(D_L14_00160098_2FCEA8 + (((struct Jet_2FE038 *)jet->pvars)->f4 << 8));
                     float pitch, yaw;
                     qcopy(vt, (*(Vec_2FE038 *)&seat->pos));
                     vt[2] = vt[2] + 4.0f;
@@ -2221,7 +2212,7 @@ void func_L14_002FE038(Moby *m) {
                                                                         (*(Vec_2FE038 *)&seat->pos)[1] - ((Cam_2FE038 *)D_L14_00167480_2FE038)->pos[1]));
                     if (yaw < 0.48869219f && pitch < 0.34906584f
                         && func_L00_001EFFF0_2FE038(((Cam_2FE038 *)D_L14_00167480_2FE038)->pos, vt, 0x12, seat, 0) == 0) {
-                        *(int *)(D_0014C290_2FE038 + (((short)m->save_id >> 5) * 4 + (D_0015EE84_2FE038 << 8))) |= 1 << (m->save_id & 0x1F);
+                        *(int *)(D_0014C290_2FE038 + (((short)m->save_id >> 5) * 4 + (D_0015EE84_m << 8))) |= 1 << (m->save_id & 0x1F);
                         D_L14_001BAF60_2FE038[(short)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
                         m->flags &= 0xFFBE;
                         m->unk94 = *(int *)((char *)((struct Moby *)m->pclass) + 0x10);
@@ -2249,7 +2240,7 @@ void func_L14_002FE038(Moby *m) {
             func_001F9BD8_2FE038(vb, vb, vt);
             func_001F9BD8_2FE038(vb, (*(Vec_2FE038 *)&m->pos), vb);
             {
-            Moby *jet = (Moby *)(D_L14_00160098_2FE038 + (d->f8C << 8));
+            Moby *jet = (Moby *)(D_L14_00160098_2FCEA8 + (d->f8C << 8));
             qcopy((*(Vec_2FE038 *)&jet->pos), vb);
             qcopy((*(Vec_2FE038 *)&jet->rot), (*(Vec_2FE038 *)&m->rot));
             if (d->f94 == 1) {
@@ -2418,7 +2409,6 @@ void func_L14_002FE798(struct Moby *m) {
         size -= 20000.0f;
     }
 }
-extern int *D_L14_001B0F30_fe[] __asm__("D_L14_001B0F30");
 extern char *D_L14_00167600;
 extern short D_L14_00162048;
 extern short D_L14_0016204C;
@@ -2438,7 +2428,7 @@ int func_L14_002FEDA0(char *m) {
     float yaw;
     float t;
     int r;
-    r = func_L00_0025E860_2F05D8(D_L14_001B0F30_fe[*(int *)(d + 0x68)], v, d + 0x60, d + 0x64,
+    r = func_L00_0025E860_2F05D8(D_L14_001B0F30_ee[*(int *)(d + 0x68)], v, d + 0x60, d + 0x64,
                                  (unsigned int)*(int *)(d + 0x8C) >> 31, *(float *)&D_L14_00162048 * D_0015EE6C);
     if (*(int *)(d + 0x8C) != 0 && (r != 0 || *(short *)(D_L14_00167600 + 0x86) != 0x13)) {
         func_L13_003184A0(*(int *)(d + 0x90));
@@ -2484,10 +2474,7 @@ typedef struct {
 extern s32 D_L14_00162080_2FF040 SDATA(D_L14_00162080);
 extern f32 D_L14_00162078_2FF040 SDATA(D_L14_00162078);
 extern f32 D_L14_0016207C_2FF040 SDATA(D_L14_0016207C);
-extern float D_0015EE6C_2FF040 __asm__("D_0015EE6C") MACRO_ADDR;
-extern char *D_L14_001601AC_2FF040 __asm__("D_L14_001601AC") MACRO_ADDR;
 extern unsigned char *D_L14_00160098_2FF040 __asm__("D_L14_00160098") MACRO_ADDR;
-extern char D_0013E650_2FF040[] __asm__("D_0013E650");
 extern void func_001F9C30_2FF040(void *, void *, float) __asm__("func_001F9C30");
 extern void func_L00_0025F4A8_2FF040(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("func_L00_0025F4A8");
@@ -2533,13 +2520,13 @@ void func_L14_002FF040(struct Moby *moby) {
     case 1:
         return;
     case 2:
-        func_001F9BF0_2FF040(&diff, D_L14_001601AC_2FF040 + vars->point * 0x80 + 0x30, &moby->pos);
+        func_001F9BF0_2FF040(&diff, D_L14_001601AC_2EC3E8 + vars->point * 0x80 + 0x30, &moby->pos);
         dist = func_001F9CB8_2FF040(&diff);
         func_001F9908_2FF040(&vars->timer);
-        speed = D_L14_00162078_2FF040 * D_0015EE6C_2FF040;
+        speed = D_L14_00162078_2FF040 * D_0015EE6C_2EC3E8;
         if (dist < speed || dist <= 0.0f) {
             if (vars->sound != -1) {
-                slot = D_0013E650_2FF040 + vars->sound * 0x70;
+                slot = D_0013E650_2EFD38 + vars->sound * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && ((u8 *)slot)[0x74] != 0) {
                     func_L00_0028EBF0_2FF040(vars->sound);
                 }
@@ -2549,7 +2536,7 @@ void func_L14_002FF040(struct Moby *moby) {
             if (target != 0) {
                 func_0020D678_2FF040(target);
             }
-            qcopy(&moby->pos, D_L14_001601AC_2FF040 + vars->point * 0x80 + 0x30);
+            qcopy(&moby->pos, D_L14_001601AC_2EC3E8 + vars->point * 0x80 + 0x30);
             qcopy(&step, &moby->unkC0);
             step.f[2] = 1.0f;
             func_L00_0025F4A8_2FF040(moby, &step, &moby->pos, 0.0f, 0.0f, 0x14, 0xA, 0xC, 10.0f, 6.0f,

@@ -2674,7 +2674,6 @@ extern void func_00213DE0_C7F38(void *, int, int, int) __asm__("func_00213DE0");
 extern int func_L00_0028EB98(void *, int);
 extern int func_0022ED80_C7F38(int, int, int) __asm__("func_0022ED80");
 extern struct Moby * D_L04_00160058_C7F38 __asm__("D_L04_00160058") MACRO_ADDR;
-extern struct Moby * D_L04_00160058_C7F38b __asm__("D_L04_00160058") MACRO_ADDR;
 extern u8 D_0013E650[];
 
 /* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds.
@@ -2702,7 +2701,7 @@ void func_L04_002C7F38(struct Moby *m) {
         if (v->lever == -1) {
             break;
         }
-        lever = &D_L04_00160058_C7F38b[v->lever];
+        lever = &D_L04_00160058_C7F38[v->lever];
         if (lever->oclass != 0x118) {
             break;
         }
@@ -2713,7 +2712,7 @@ void func_L04_002C7F38(struct Moby *m) {
                    (v->target != -1 && v->locked == 0 &&
                     ((u32)D_0013F450.state.control_mode < 2 || D_0013F450.state.control_mode == 9 ||
                      D_0013F450.state.control_mode == 12) &&
-                    D_0013F450.ground_moby == &D_L04_00160058_C7F38b[v->target])) {
+                    D_0013F450.ground_moby == &D_L04_00160058_C7F38[v->target])) {
             m->state = 2;
         }
         if (m->unk54 != prev) {

@@ -101,7 +101,6 @@ void func_L00_00221A98(void) {
         }
     }
 }
-extern struct Hero D_0013F450_21D50 __asm__("D_0013F450");
 struct Manip_21D50;
 struct GifEntry_21D50;
 struct AnimSeq_21D50;
@@ -109,7 +108,6 @@ typedef struct {
     s32 w0;
     u8 pad4[0x70 - 4];
 } Entry70_2215c8_21D50;
-extern struct Hero D_0013F450_21D50b __asm__("D_0013F450");
 extern struct PadState D_0013CA40_21D50 __asm__("D_0013CA40");
 extern Entry70_2215c8_21D50 D_L00_001799F0_21D50[] __asm__("D_L00_001799F0");
 extern short D_L00_0015F6A8_21D50 SDATA(D_L00_0015F6A8);
@@ -143,137 +141,137 @@ void func_L00_00221D50(void) {
     s32 n;
     s32 n8;
 
-    if (D_0013F450_21D50.unk20AD == 0) {
+    if (D_0013F450_21A98.unk20AD == 0) {
         func_L00_00216D40_21D50();
     }
-    D_0013F450_21D50.state_timer++;
-    D_0013F450_21D50.unk19C++;
-    D_0013F450_21D50.unk1A0++;
-    D_0013F450_21D50.unk1A4++;
-    func_001F9908_21D50(&D_0013F450_21D50.unk1C4);
-    func_001F9908_21D50(&D_0013F450_21D50.unk1C0);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1B2);
-    func_001F9908_21D50(&D_0013F450_21D50.unk1B8);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1D8);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1DE);
-    func_001F9908_21D50(&D_0013F450_21D50.unk1B4);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1F0);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1B0);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1C8);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1CA);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1E4);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1E6);
-    func_001F9908_21D50(&D_0013F450_21D50.unk1CC);
-    func_001F9908_21D50(&D_0013F450_21D50.unk1D0);
-    func_001F9908_21D50(&D_0013F450_21D50.unk1D4);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1E8);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1E0);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1EE);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1EA);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1F4);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1F2);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1DC);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1F6);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1DA);
-    func_001F9938_21D50(&D_0013F450_21D50.unk1F8);
+    D_0013F450_21A98.state_timer++;
+    D_0013F450_21A98.unk19C++;
+    D_0013F450_21A98.unk1A0++;
+    D_0013F450_21A98.unk1A4++;
+    func_001F9908_21D50(&D_0013F450_21A98.unk1C4);
+    func_001F9908_21D50(&D_0013F450_21A98.unk1C0);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1B2);
+    func_001F9908_21D50(&D_0013F450_21A98.unk1B8);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1D8);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1DE);
+    func_001F9908_21D50(&D_0013F450_21A98.unk1B4);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1F0);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1B0);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1C8);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1CA);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1E4);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1E6);
+    func_001F9908_21D50(&D_0013F450_21A98.unk1CC);
+    func_001F9908_21D50(&D_0013F450_21A98.unk1D0);
+    func_001F9908_21D50(&D_0013F450_21A98.unk1D4);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1E8);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1E0);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1EE);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1EA);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1F4);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1F2);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1DC);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1F6);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1DA);
+    func_001F9938_21D50(&D_0013F450_21A98.unk1F8);
     if (!(D_0013CA40_21D50.held & 5)) {
-        D_0013F450_21D50.unk1EC = 0;
+        D_0013F450_21A98.unk1EC = 0;
     }
-    if (D_0013F450_21D50.unk20A8 != 0) {
-        D_0013F450_21D50.unk1BC++;
+    if (D_0013F450_21A98.unk20A8 != 0) {
+        D_0013F450_21A98.unk1BC++;
     } else {
-        D_0013F450_21D50.unk1BC = 0;
+        D_0013F450_21A98.unk1BC = 0;
     }
     if (D_0013CA40_21D50.no_direction != 0) {
-        D_0013F450_21D50.unk1A8 = 0;
-        D_0013F450_21D50.unk1AC++;
+        D_0013F450_21A98.unk1A8 = 0;
+        D_0013F450_21A98.unk1AC++;
     } else {
-        D_0013F450_21D50.unk1AC = 0;
-        D_0013F450_21D50.unk1A8++;
+        D_0013F450_21A98.unk1AC = 0;
+        D_0013F450_21A98.unk1A8++;
     }
-    if (D_0013F450_21D50.unk22DE != 0 && func_001F9938_21D50(&D_0013F450_21D50.unk22DE) != 0 &&
-        D_0013F450_21D50.health.hp != 0 && (*(s32 *)&D_L00_0015F6A8_21D50) == 0) {
-        if (D_0013F450_21D50.unk20A4 == 3) {
+    if (D_0013F450_21A98.unk22DE != 0 && func_001F9938_21D50(&D_0013F450_21A98.unk22DE) != 0 &&
+        D_0013F450_21A98.health.hp != 0 && (*(s32 *)&D_L00_0015F6A8_21D50) == 0) {
+        if (D_0013F450_21A98.unk20A4 == 3) {
             func_L00_002111E8_21D50();
             if (func_L00_00267BA8_21D50(0x80, func_001F9850_21D50(0x12), 0)) {
-                D_0013F450_21D50.unk20A6 = 1;
+                D_0013F450_21A98.unk20A6 = 1;
             }
         } else {
             m = func_0020D348_21D50(0x27A);
-            D_0013F450_21D50.unkA8C = m;
+            D_0013F450_21A98.unkA8C = m;
             if (m != 0) {
-                qcopy(&m->pos, &D_0013F450_21D50.motion.pos);
-                qcopy(&m->rot, &D_0013F450_21D50.motion.rot);
+                qcopy(&m->pos, &D_0013F450_21A98.motion.pos);
+                qcopy(&m->rot, &D_0013F450_21A98.motion.rot);
                 m->unk32 = 0x40;
-                ((struct Moby *)D_0013F450_21D50.unkA8C)->unk31 = 1;
-                ((struct Moby *)D_0013F450_21D50.unkA8C)->unk90 = 0;
-                ((struct Moby *)D_0013F450_21D50.unkA8C)->spawn_frame = D_0013F450_21D50.moby->spawn_frame;
-                func_L00_00251E30_21D50(D_0013F450_21D50.unkA8C);
-                func_L00_002110C0_21D50(3, 0x53, D_0013F450_21D50.unkA8C);
+                ((struct Moby *)D_0013F450_21A98.unkA8C)->unk31 = 1;
+                ((struct Moby *)D_0013F450_21A98.unkA8C)->unk90 = 0;
+                ((struct Moby *)D_0013F450_21A98.unkA8C)->spawn_frame = D_0013F450_21A98.moby->spawn_frame;
+                func_L00_00251E30_21D50(D_0013F450_21A98.unkA8C);
+                func_L00_002110C0_21D50(3, 0x53, D_0013F450_21A98.unkA8C);
             }
         }
     }
-    if (D_0013F450_21D50.unk20A4 == 2) {
-        func_001F9938_21D50(&D_0013F450_21D50.unk1636);
+    if (D_0013F450_21A98.unk20A4 == 2) {
+        func_001F9938_21D50(&D_0013F450_21A98.unk1636);
     }
     for (i = 0; i < 5; i++) {
         func_001F9908_21D50(&D_L00_001799F0_21D50[i].w0);
     }
-    D_0013F450_21D50.unk22B8 = 9999.0f;
-    if (D_0013F450_21D50.air_frames.s != 0 && func_L00_002342F8_21D50(&D_0013F450_21D50.motion.velocity) < 0.0f) {
-        if (D_0013F450_21D50.unk21B4 != 0x20) goto skip;
+    D_0013F450_21A98.unk22B8 = 9999.0f;
+    if (D_0013F450_21A98.air_frames.s != 0 && func_L00_002342F8_21D50(&D_0013F450_21A98.motion.velocity) < 0.0f) {
+        if (D_0013F450_21A98.unk21B4 != 0x20) goto skip;
         func_001F9BC0_21D50(&sum);
         n8 = 8;
         for (i = 0; i < n8; i++) {
-            n = D_0013F450_21D50.unk21B0 - i;
+            n = D_0013F450_21A98.unk21B0 - i;
             {
                 s32 a = (n + 0x1F) % 32;
                 s32 b = (n + 0x1E) % 32;
-                func_001F9BF0_21D50(&d, &D_0013F450_21D50.unk1B00[a], &D_0013F450_21D50.unk1B00[b]);
+                func_001F9BF0_21D50(&d, &D_0013F450_21A98.unk1B00[a], &D_0013F450_21A98.unk1B00[b]);
             }
             func_001F9BD8_21D50(&sum, &sum, &d);
         }
         func_001F9C30_21D50(&sum, &sum, 1.0f / (f32)n8);
         if (func_001F9CB8_21D50(&sum) < D_0015EE6C_21D50) {
-            D_0013F450_21D50.unk1E2++;
+            D_0013F450_21A98.unk1E2++;
             goto skip;
         }
     }
-    D_0013F450_21D50.unk1E2 = 0;
+    D_0013F450_21A98.unk1E2 = 0;
 skip:
     func_L00_002222F0_21D50();
-    switch (D_0013F450_21D50.unk20A4) {
+    switch (D_0013F450_21A98.unk20A4) {
     case 1:
-        func_L00_00233EE0_21D50(&D_0013F450_21D50.motion.unkD0, 0.0f, 0.0f, 0.4f);
-        D_0013F450_21D50.unk2288 = 2.125f;
-        D_0013F450_21D50.unk228C = 1.25f;
+        func_L00_00233EE0_21D50(&D_0013F450_21A98.motion.unkD0, 0.0f, 0.0f, 0.4f);
+        D_0013F450_21A98.unk2288 = 2.125f;
+        D_0013F450_21A98.unk228C = 1.25f;
         break;
     case 2:
-        func_L00_00233EE0_21D50(&D_0013F450_21D50.motion.unkD0, 0.0f, 0.0f, 4.0f);
-        D_0013F450_21D50.unk2288 = 15.0f;
-        D_0013F450_21D50.unk228C = 3.0f;
+        func_L00_00233EE0_21D50(&D_0013F450_21A98.motion.unkD0, 0.0f, 0.0f, 4.0f);
+        D_0013F450_21A98.unk2288 = 15.0f;
+        D_0013F450_21A98.unk228C = 3.0f;
         break;
     default:
-        func_L00_00233EE0_21D50(&D_0013F450_21D50b.motion.unkD0, 0.0f, 0.0f, 0.7f);
+        func_L00_00233EE0_21D50(&D_0013F450_21A98.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D5EA_21D50) {
-            D_0013F450_21D50b.unk2288 = 12.0f;
-            D_0013F450_21D50b.unk228C = 4.5f;
+            D_0013F450_21A98.unk2288 = 12.0f;
+            D_0013F450_21A98.unk228C = 4.5f;
         } else {
-            D_0013F450_21D50b.unk2288 = 3.0f;
-            D_0013F450_21D50b.unk228C = 1.75f;
+            D_0013F450_21A98.unk2288 = 3.0f;
+            D_0013F450_21A98.unk228C = 1.75f;
         }
         break;
     }
     {
-        f32 z = D_0013F450_21D50.ground_z.f;
-        if (D_0013F450_21D50.motion.pos.f[2] - z < 4.0f) {
-            qcopy(&D_0013F450_21D50.motion.unkC0, &D_0013F450_21D50.motion.pos);
-            D_0013F450_21D50.motion.unkC0.f[2] = z + 0.5f;
+        f32 z = D_0013F450_21A98.ground_z.f;
+        if (D_0013F450_21A98.motion.pos.f[2] - z < 4.0f) {
+            qcopy(&D_0013F450_21A98.motion.unkC0, &D_0013F450_21A98.motion.pos);
+            D_0013F450_21A98.motion.unkC0.f[2] = z + 0.5f;
         } else {
-            qcopy(&D_0013F450_21D50.motion.unkC0, &D_0013F450_21D50.motion.unkD0);
+            qcopy(&D_0013F450_21A98.motion.unkC0, &D_0013F450_21A98.motion.unkD0);
         }
     }
-    if (D_0013F450_21D50.motion.pos.f[2] < 1.0f) {
+    if (D_0013F450_21A98.motion.pos.f[2] < 1.0f) {
         func_L00_00211908_21D50();
     }
 }

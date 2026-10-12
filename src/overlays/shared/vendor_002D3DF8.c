@@ -1181,8 +1181,6 @@ typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_3091B0;
 typedef struct { char p0[0x148]; float f148; char p14C[8]; float f154; float f158; } Cam_3091B0;
 typedef struct { char p0[0x30]; V_3091B0 v30; } Obj_3091B0;
 extern int D_0015EE84_3091B0 __asm__("D_0015EE84") MACRO_ADDR;
-extern float D_0015EE6C_3091B0 __asm__("D_0015EE6C") MACRO_ADDR;
-extern char D_L08_00167640_3091B0[] __asm__("D_L08_00167640");
 extern u128_3091B0 D_L08_001602D0_3091B0 __asm__("D_L08_001602D0") MACRO_ADDR;
 extern float D_L08_00162400_3091B0 __asm__("D_L08_00162400") MACRO_ADDR;
 extern float D_L08_001623F0_3091B0[2] __asm__("D_L08_001623F0") MACRO_ADDR;
@@ -1238,13 +1236,13 @@ void func_L08_003091B0(Moby *m) {
         fall = 0.2f;
         big = 0;
         hi = 5.0f;
-        spread = D_0015EE6C_3091B0;
+        spread = frame_3DF8;
         lo = 0.5f;
         break;
     case 0:
     default:
         {
-            float k = D_0015EE6C_3091B0;
+            float k = frame_3DF8;
             big = 1;
             spread = k + k;
         }
@@ -1267,13 +1265,13 @@ void func_L08_003091B0(Moby *m) {
         break;
     case 2:
         if (func_L08_00211A38_3091B0(&D_L08_00162400_3091B0)) func_L08_00309050_3091B0(flag);
-        func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &obj->v30);
+        func_001F9BF0_3091B0(&dv, hero_pos_3DF8, &obj->v30);
         D_L08_001602D0_3091B0 = *(u128_3091B0 *)&dv;
-        *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
+        *(u128_3091B0 *)&base = *(u128_3091B0 *)hero_pos_3DF8;
         n = D_L08_00162404_3091B0;
-        func_L00_00263D68_3091B0(&base, &base, 16.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
-            ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
-        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_001623D4_3091B0;
+        func_L00_00263D68_3091B0(&base, &base, 16.0f, ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f158,
+            ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f154);
+        base.z = ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 + D_L08_001623D4_3091B0;
         if (n > 0) {
             V_3091B0 *po = &off;
             cnt = n;
@@ -1288,13 +1286,13 @@ void func_L08_003091B0(Moby *m) {
                 w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, D_L08_001623D8_3091B0);
                 pt.y += w;
-                func_001F9BF0_3091B0(po, &pt, D_L08_00167640_3091B0);
+                func_001F9BF0_3091B0(po, &pt, hero_pos_3DF8);
                 d = func_001F9CE8_3091B0(po);
                 if (d <= 8.0f) {
                     w = -spread;
                     par.x = D_L08_001623F0_3091B0[0] + func_002140F8_3091B0(w, spread);
                     par.y = D_L08_001623F4_3091B0 + func_002140F8_3091B0(w, spread);
-                    par.z = -(hi * D_0015EE6C_3091B0);
+                    par.z = -(hi * frame_3DF8);
                     par.w = 0.0f;
                 } else {
                     float h = (d - 8.0f) * fall;
@@ -1304,12 +1302,12 @@ void func_L08_003091B0(Moby *m) {
                     w = -w;
                     par.x = D_L08_001623F0_3091B0[0] + func_002140F8_3091B0(w, spread);
                     par.y = D_L08_001623F4_3091B0 + func_002140F8_3091B0(w, spread);
-                    par.z = -(h * D_0015EE6C_3091B0);
+                    par.z = -(h * frame_3DF8);
                     par.w = 0.0f;
                 }
-                D_L08_001602E0_3091B0 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - D_L08_001623EC_3091B0;
+                D_L08_001602E0_3091B0 = ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 - D_L08_001623EC_3091B0;
                 f = func_L00_002644E0_3091B0(&pt);
-                if (f < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_001623D4_3091B0) {
+                if (f < ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 + D_L08_001623D4_3091B0) {
                     void *q;
                     if (f < D_L08_001602E0_3091B0) {
                         w = D_L08_001602E0_3091B0;
@@ -1324,8 +1322,8 @@ void func_L08_003091B0(Moby *m) {
             } while (--cnt != 0);
         }
         n = (int)((float)n * 1.4f);
-        *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_001623D4_3091B0;
+        *(u128_3091B0 *)&base = *(u128_3091B0 *)hero_pos_3DF8;
+        base.z = ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 + D_L08_001623D4_3091B0;
         if (n > 0) {
             float s = -spread;
             cnt = n;
@@ -1334,7 +1332,7 @@ void func_L08_003091B0(Moby *m) {
                 float t;
                 off.x = D_L08_001623F0_3091B0[0] + func_002140F8_3091B0(s, spread);
                 u = func_002140F8_3091B0(s, spread);
-                t = hi * D_0015EE6C_3091B0;
+                t = hi * frame_3DF8;
                 *(int *)&off.w = 0;
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                 off.y = D_L08_001623F4_3091B0 + u;
@@ -1345,9 +1343,9 @@ void func_L08_003091B0(Moby *m) {
                 w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.y += w;
-                D_L08_001602E0_3091B0 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - D_L08_001623EC_3091B0;
+                D_L08_001602E0_3091B0 = ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 - D_L08_001623EC_3091B0;
                 f = func_L00_002644E0_3091B0(&pt);
-                if (f < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_001623D4_3091B0) {
+                if (f < ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 + D_L08_001623D4_3091B0) {
                     if (f < D_L08_001602E0_3091B0) {
                         w = D_L08_001602E0_3091B0;
                     } else {
@@ -1362,11 +1360,11 @@ void func_L08_003091B0(Moby *m) {
             int sign;
             int h;
             w = 30.0f;
-            *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            func_L00_00263D68_3091B0(&base, &base, w, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
-                ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
+            *(u128_3091B0 *)&base = *(u128_3091B0 *)hero_pos_3DF8;
+            func_L00_00263D68_3091B0(&base, &base, w, ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f158,
+                ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f154);
             sign = n >> 31;
-            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_001623D4_3091B0;
+            base.z = ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 + D_L08_001623D4_3091B0;
             if (n > 0) {
                 cnt = n;
                 do {
@@ -1380,10 +1378,10 @@ void func_L08_003091B0(Moby *m) {
                     func_L00_00264570_3091B0(&pt);
                 } while (--cnt != 0);
             }
-            *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            func_L00_00263D68_3091B0(&base, &base, 4.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
-                ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
-            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + D_L08_001623D4_3091B0;
+            *(u128_3091B0 *)&base = *(u128_3091B0 *)hero_pos_3DF8;
+            func_L00_00263D68_3091B0(&base, &base, 4.0f, ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f158,
+                ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f154);
+            base.z = ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148 + D_L08_001623D4_3091B0;
             h = (n - sign) >> 1;
             if (h > 0) {
                         cnt = h;
@@ -1401,7 +1399,7 @@ void func_L08_003091B0(Moby *m) {
         }
         break;
     }
-    qcopy(&obj->v30, D_L08_00167640_3091B0);
+    qcopy(&obj->v30, hero_pos_3DF8);
 }
 typedef int u128 __attribute__((mode(TI)));
 extern char D_L08_00167640[];

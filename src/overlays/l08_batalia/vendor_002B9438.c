@@ -241,8 +241,6 @@ typedef struct {
 typedef struct { char pad0[0x20]; Moby *moby; } Hit_2D5FA8;
 typedef struct { int count; char pad4[0xC]; char list[1]; } Path_2D5FA8;
 
-extern int D_0015EE84_2D5FA8 __asm__("D_0015EE84") MACRO_ADDR;
-extern float D_0015EE70_2D5FA8 __asm__("D_0015EE70") MACRO_ADDR;
 extern float D_0015EE6C_2D5FA8 __asm__("D_0015EE6C") MACRO_ADDR;
 extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F694") MACRO_ADDR;
 extern int D_L08_0015F698_2D5FA8 __asm__("D_L08_0015F698") MACRO_ADDR;
@@ -344,7 +342,7 @@ void func_L08_002D5FA8(Moby *m) {
                 d->health = 6.0f;
                 d->flags &= 0xFFFD;
             } else {
-                if (D_0015EE84_2D5FA8 == 8) {
+                if (D_0015EE84_2B94B0 == 8) {
                     int k = d->part_id;
                     if (k != 0 && t != 0 && t->moby != 0 && t->moby->oclass == 0x661) {
                         if (k == one) D_L08_0015F694_2D5FA8 = one;
@@ -399,11 +397,11 @@ void func_L08_002D5FA8(Moby *m) {
             pitch = -0.7853982f;
         }
         yaw = angle_delta_2D5FA8(yaw, m->rot.z);
-        approach_2D5FA8(&d->yaw, yaw, &d->yaw_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
-        approach_2D5FA8(&d->pitch, pitch, &d->pitch_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
+        approach_2D5FA8(&d->yaw, yaw, &d->yaw_speed, D_0015EE70_2B94B0 * 12.566371f, D_0015EE70_2B94B0 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
+        approach_2D5FA8(&d->pitch, pitch, &d->pitch_speed, D_0015EE70_2B94B0 * 12.566371f, D_0015EE70_2B94B0 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
     } else {
-        approach_2D5FA8(&d->yaw, 0.0f, &d->yaw_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
-        approach_2D5FA8(&d->pitch, 0.0f, &d->pitch_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
+        approach_2D5FA8(&d->yaw, 0.0f, &d->yaw_speed, D_0015EE70_2B94B0 * 12.566371f, D_0015EE70_2B94B0 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
+        approach_2D5FA8(&d->pitch, 0.0f, &d->pitch_speed, D_0015EE70_2B94B0 * 12.566371f, D_0015EE70_2B94B0 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
     }
     rotation_2D5FA8(vec, 1, d->pitch);
     rotation_2D5FA8(d->f110, 2, d->yaw);
@@ -437,7 +435,6 @@ extern float func_001F9FA8_2D6C58(float) __asm__("func_001F9FA8");
 extern float func_001F9878_2D6C58(float) __asm__("func_001F9878");
 extern int func_001FA898_2D6C58(float) __asm__("func_001FA898");
 extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, int, int) __asm__("func_00219780");
-extern float D_0015EE6C_2D6C58 __asm__("D_0015EE6C") MACRO_ADDR;
 extern int D_L08_00161964_2D6C58 SDATA(D_L08_00161964);
 extern int D_L08_00161968_2D6C58 SDATA(D_L08_00161968);
 extern float D_L08_0016196C_2D6C58 SDATA(D_L08_0016196C);
@@ -476,27 +473,27 @@ void func_L08_002D6C58(char *moby, int a1, int count) {
         qcopy(t60, d + 0x40);
         qcopy(t70, d + 0x40);
         if (count / 3 < i) {
-            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(D_L08_0016196C_2D6C58, D_L08_0016196C_2D6C58 * 1.2f) * D_0015EE6C_2D6C58);
+            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(D_L08_0016196C_2D6C58, D_L08_0016196C_2D6C58 * 1.2f) * D_0015EE6C_2D5FA8);
             func_001F9BD8_2D6C58(t60, t60, t80);
             func_001F9C30_2D6C58(t70, t70, 0.5f);
             t = func_001F9F90_2D6C58(s);
-            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58) * D_0015EE6C_2D6C58);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58) * D_0015EE6C_2D5FA8);
             t70[0] = t70[0] + t;
             t = func_001F9FA8_2D6C58(s);
-            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58) * D_0015EE6C_2D6C58);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58) * D_0015EE6C_2D5FA8);
             t70[1] = t70[1] + t;
-            t70[2] = D_L08_00161970_2D6C58 * D_0015EE6C_2D6C58;
+            t70[2] = D_L08_00161970_2D6C58 * D_0015EE6C_2D5FA8;
         } else {
-            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(0.0f, D_L08_0016196C_2D6C58) * D_0015EE6C_2D6C58);
+            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(0.0f, D_L08_0016196C_2D6C58) * D_0015EE6C_2D5FA8);
             func_001F9BD8_2D6C58(t60, t60, t80);
             func_001F9C30_2D6C58(t70, t70, 0.5f);
             t = func_001F9F90_2D6C58(s);
-            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58 * 0.25f) * D_0015EE6C_2D6C58);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58 * 0.25f) * D_0015EE6C_2D5FA8);
             t70[0] = t70[0] + t;
             t = func_001F9FA8_2D6C58(s);
-            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58 * 0.25f) * D_0015EE6C_2D6C58);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_00161978_2D6C58 * 0.25f) * D_0015EE6C_2D5FA8);
             t70[1] = t70[1] + t;
-            t70[2] = D_L08_00161970_2D6C58 * D_0015EE6C_2D6C58;
+            t70[2] = D_L08_00161970_2D6C58 * D_0015EE6C_2D5FA8;
         }
         t60[3] = D_L08_00161988_2D6C58;
         t70[3] = D_L08_0016198C_2D6C58;
@@ -513,8 +510,6 @@ extern struct Hero D_0013F450_DB468 __asm__("D_0013F450");
 extern short D_L08_00161A00_DB468 SDATA(D_L08_00161A00);
 extern float D_L08_001D7320_DB468[4] __asm__("D_L08_001D7320");
 extern char D_L08_0015F660_DB468[] __asm__("D_L08_0015F660") MACRO_ADDR;
-extern int D_0015EE84_DB468 __asm__("D_0015EE84") MACRO_ADDR;
-extern float D_0015EE6C_DB468 __asm__("D_0015EE6C") MACRO_ADDR;
 extern void func_L02_002A52B0_DB468(void *, float) __asm__("func_L02_002A52B0");
 extern void func_001F49B0_DB468(void *, void *) __asm__("func_001F49B0");
 extern void func_00216270_DB468(void *) __asm__("func_00216270");
@@ -548,7 +543,7 @@ void func_L08_002DB468(struct Moby *moby) {
         func_L02_002A52B0_DB468(D_L08_001D7320_DB468, 0.6666667f);
     }
     func_001F49B0_DB468(func_00216270_DB468, moby);
-    if (D_0015EE84_DB468 != 8)
+    if (D_0015EE84_2B94B0 != 8)
         return;
     if (!(D_0013F450_DB468.motion.pos.f[2] < D_L08_001D7320_DB468[2]))
         return;
@@ -565,10 +560,10 @@ void func_L08_002DB468(struct Moby *moby) {
         r[0x23] = 0x70;
     for (i = 0; i < 16; i++) {
         float ang = func_00214158_DB468();
-        float k = func_002140F8_DB468(D_0015EE6C_DB468 * 0.0f, D_0015EE6C_DB468 * 3.0f);
+        float k = func_002140F8_DB468(D_0015EE6C_2D5FA8 * 0.0f, D_0015EE6C_2D5FA8 * 3.0f);
         v.f[0] = func_001F9F90_DB468(ang) * k;
         v.f[1] = func_001F9FA8_DB468(ang) * k;
-        v.f[2] = func_002140F8_DB468(D_0015EE6C_DB468 * 3.0f, D_0015EE6C_DB468 * 6.5f);
+        v.f[2] = func_002140F8_DB468(D_0015EE6C_2D5FA8 * 3.0f, D_0015EE6C_2D5FA8 * 6.5f);
         n = func_L00_00258BC8_DB468(0x5A, 0x78);
         func_L00_002703E8_DB468(&pos, &v, func_002140B0_DB468(2), n);
     }
@@ -712,7 +707,6 @@ extern int D_L08_0015F6A8 MACRO_ADDR;
 extern int D_L08_00179C90[];
 extern int D_L08_0015F674 MACRO_ADDR;
 extern int D_0013A5E0_d[] __asm__("D_0013A5E0") NOT_SDA;
-extern float D_0015EE6C_d __asm__("D_0015EE6C") MACRO_ADDR;
 extern void func_0020D960(void *, int, void *);
 extern float func_001FA748(float, float);
 extern void func_L00_0025AFA8(void *, void *);
@@ -748,7 +742,7 @@ void func_L08_002DD128(char *m) {
     if (((unsigned char *)d)[0xA1] == 0) {
         AttachManipulator(m, 0, d + 0xA0);
     }
-    *(float *)(d + 0x110) = FastAddRots(*(float *)(d + 0x110), D_0015EE6C_d * 1.5707964f);
+    *(float *)(d + 0x110) = FastAddRots(*(float *)(d + 0x110), D_0015EE6C_2D5FA8 * 1.5707964f);
     func_L00_0025AFA8(d + 0xB0, d + 0x110);
     switch (((unsigned char *)m)[0x20]) {
     case 0:
@@ -833,8 +827,6 @@ typedef struct {
 } Route_2dd4f8;
 extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0FB0");
 extern char D_0014171B_r[] __asm__("D_0014171B") NOT_SDA;
-extern int D_0015EE84_r __asm__("D_0015EE84") MACRO_ADDR;
-extern int D_L08_0015F6B0_r __asm__("D_L08_0015F6B0") MACRO_ADDR;
 extern float func_001F9D48(void *, void *);
 
 /* Platform route choice: picks whichever of its three routes is nearest the player (end of route a, or
@@ -873,7 +865,7 @@ void func_L08_002DD4F8(char *m) {
         qcopy(d + 0x60, (char *)((n << 4) + (int)a));
         y = func_L00_001FF860(*(float *)((char *)a + ((n - 2) << 4) + 0x10) - *(float *)(d + 0x60),
                               *(float *)((char *)a + ((n - 2) << 4) + 0x14) - *(float *)(d + 0x64));
-        fr = D_0015EE84_r << 4;
+        fr = D_0015EE84_2B94B0 << 4;
         t = (unsigned char *)(D_0014171B_r + 0xAA35);
         *(float *)(d + 0x78) = y;
         *(float *)(d + 0xE4) = 1.0f;
@@ -884,7 +876,7 @@ void func_L08_002DD4F8(char *m) {
             *(Route_2dd4f8 **)(d + 0x120) = c;
         } else if (f94) {
             *(Route_2dd4f8 **)(d + 0x120) = b;
-        } else if (32.0f < func_001F9D48(m + 0x10, pl) || D_L08_0015F6B0_r < 5) {
+        } else if (32.0f < func_001F9D48(m + 0x10, pl) || D_L08_0015F6B0_2B94B0 < 5) {
             m[0x31] = 0;
             *(unsigned short *)(m + 0x34) |= 1;
             *(int *)(d + 0x124) = 0;

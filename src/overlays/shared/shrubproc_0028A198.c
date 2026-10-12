@@ -491,7 +491,6 @@ void func_L00_0028B4E0(void) {
 }
 void func_001FA190();
 typedef int q128 __attribute__((mode(TI)));
-extern u8 D_L00_001BDB70_8B5C8[] __asm__("D_L00_001BDB70");
 extern u8 * D_L00_001605DC_8B5C8 __asm__("D_L00_001605DC") MACRO_ADDR;
 extern s32 D_L00_0015F6B0 MACRO_ADDR;
 void func_0022C9A8(s32);
@@ -501,13 +500,13 @@ void func_L00_001FFA40(void *, void *);
 void func_L00_0028B5C8(void) {
     Vec4 t;
     *(s16 *)(D_L00_001605DC_8B5C8 + 4) = 0;
-    func_001FA190(D_L00_001BDB70_8B5C8);
+    func_001FA190(D_L00_001BDB70_8AF90);
     SkyDrawShell(0);
     qzero(&t);
     t.f[2] = (f32)(D_L00_0015F6B0 % 40000) * 0.00015707963029854f - 3.1415927f;
-    func_L00_001FFA40(D_L00_001BDB70_8B5C8, &t);
+    func_L00_001FFA40(D_L00_001BDB70_8AF90, &t);
     SkyDrawShell(1);
-    func_001FA190(D_L00_001BDB70_8B5C8);
+    func_001FA190(D_L00_001BDB70_8AF90);
     SkyDrawShell(2);
 }
 extern int D_L00_0015F6B0 MACRO_ADDR;

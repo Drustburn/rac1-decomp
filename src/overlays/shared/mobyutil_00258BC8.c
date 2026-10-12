@@ -538,7 +538,6 @@ int func_L00_0025A208(char **out, int idx, int a, int b) {
 }
 extern unsigned char *D_L00_001601D4_5A2F0 __asm__("D_L00_001601D4") MACRO_ADDR;
 extern short *D_L00_001601CC_5A2F0 __asm__("D_L00_001601CC") MACRO_ADDR;
-extern short D_L00_001601D0_5A2F0[] __asm__("D_L00_001601D0") MACRO_ADDR;
 extern int D_L00_001600B4_5A2F0 __asm__("D_L00_001600B4") MACRO_ADDR;
 extern int D_L00_001ABBC0_5A2F0[] __asm__("D_L00_001ABBC0");
 extern int D_L00_00160098_5A2F0 __asm__("D_L00_00160098") MACRO_ADDR;
@@ -566,8 +565,8 @@ int func_L00_0025A2F0_r(int *out, unsigned char *m, int a2, int a3) {
             do {
                 D_L00_001601CC_5A2F0++;
                 p = D_L00_001601CC_5A2F0;
-                D_L00_001601D0_5A2F0[0] = *(unsigned short *)p & 0x7FFF;
-                D_L00_001601D4_5A2F0 = (unsigned char *)(D_L00_00160098_5A2F0 + (D_L00_001601D0_5A2F0[0] << 8));
+                D_L00_001601D0_5A208[0] = *(unsigned short *)p & 0x7FFF;
+                D_L00_001601D4_5A2F0 = (unsigned char *)(D_L00_00160098_5A2F0 + (D_L00_001601D0_5A208[0] << 8));
                 k = *p;
             } while (k >= 0 && m != D_L00_001601D4_5A2F0);
             if (k < 0) {
@@ -586,8 +585,8 @@ int func_L00_0025A2F0_r(int *out, unsigned char *m, int a2, int a3) {
         short n;
 
         D_L00_001601CC_5A2F0 = p + 1;
-        D_L00_001601D0_5A2F0[0] = *(unsigned short *)D_L00_001601CC_5A2F0 & 0x7FFF;
-        D_L00_001601D4_5A2F0 = (unsigned char *)(D_L00_00160098_5A2F0 + (D_L00_001601D0_5A2F0[0] << 8));
+        D_L00_001601D0_5A208[0] = *(unsigned short *)D_L00_001601CC_5A2F0 & 0x7FFF;
+        D_L00_001601D4_5A2F0 = (unsigned char *)(D_L00_00160098_5A2F0 + (D_L00_001601D0_5A208[0] << 8));
         *out = (int)D_L00_001601D4_5A2F0;
         neg = (signed char)D_L00_001601D4_5A2F0[0x20] < 0;
         if ((a2 == 0 && a3 == 0 && !neg) || (a2 != 0 && (a3 == 0 || neg))) {
@@ -2246,7 +2245,6 @@ int func_L00_00260B68(float *p, int idx) {
 }
 extern char D_0013F450[];
 extern short D_L00_001B0BB0[];
-extern char * D_L00_00160098_60D30 __asm__("D_L00_00160098") MACRO_ADDR;
 extern char * D_L00_001DD450[];
 extern float func_001F9D48_60D30(void *, void *) __asm__("func_001F9D48");
 
@@ -2267,7 +2265,7 @@ int func_L00_00260D30(char *a, char *o, float best) {
         res = 2;
     }
     for (i = 1; i <= D_L00_001B0BB0[0]; i++) {
-        p = D_L00_00160098_60D30 + (D_L00_001B0BB0[i] << 8);
+        p = D_L00_00160098_5A208 + (D_L00_001B0BB0[i] << 8);
         if (p == 0) continue;
         if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C) continue;
         if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
@@ -2353,7 +2351,7 @@ int func_L00_00260FB0(char *a, char *o, float best, int *list, int n, float *v, 
         }
     }
     for (i = 1; i <= D_L00_001B0BB0[0]; i++) {
-        p = D_L00_00160098_60D30 + (D_L00_001B0BB0[i] << 8);
+        p = D_L00_00160098_5A208 + (D_L00_001B0BB0[i] << 8);
         if (p == 0) continue;
         if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C) continue;
         if (*(unsigned char *)(p + 0x20) == 0xFE) continue;

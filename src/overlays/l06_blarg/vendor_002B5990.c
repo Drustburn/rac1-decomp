@@ -918,9 +918,7 @@ extern int func_001FA8A8_2FA618(int, int, float) __asm__("func_001FA8A8");
 extern int func_L00_00260FB0_2FA618(float, void *, void *, int, int, void *, int) __asm__("func_L00_00260FB0");
 extern float func_001F9D48_2FA618(void *, void *) __asm__("func_001F9D48");
 extern float func_001F9B88_2FA618(float) __asm__("func_001F9B88");
-extern float D_0015EE6C_2FA618 __asm__("D_0015EE6C") MACRO_ADDR;
 extern int *D_L06_001B0FB0_2FA618[] __asm__("D_L06_001B0FB0");
-extern unsigned char D_0013E633_2FA618[] __asm__("D_0013E633");
 extern int D_L06_0015F6B0_2FA618 SDATA(D_L06_0015F6B0);
 extern float D_L06_00161F74_2FA618 SDATA(D_L06_00161F74);
 extern int D_L06_00161F78_2FA618 SDATA(D_L06_00161F78);
@@ -973,8 +971,8 @@ void func_L06_002FA618(Moby *moby)
         case 9:
         case 10:
             moby->state = 14;
-            data->f88 = D_0015EE6C_2FA618 + D_0015EE6C_2FA618;
-            data->f8C = D_0015EE6C_2FA618;
+            data->f88 = D_0015EE6C_2F69D0 + D_0015EE6C_2F69D0;
+            data->f8C = D_0015EE6C_2F69D0;
             data->fC0 = 5.0f;
             data->fC4 = 8.5f;
             func_L00_0025D5B0_2FA618(moby, data->f70, 9, 1, 0, func_L00_001FF860_2FA618(target->x, target->y));
@@ -984,8 +982,8 @@ void func_L06_002FA618(Moby *moby)
         case 2:
             moby->state = 0x11;
             moby->flags &= 0xEFFF;
-            data->f88 = D_0015EE6C_2FA618 * 8.0f;
-            data->f8C = D_0015EE6C_2FA618 * 5.0f;
+            data->f88 = D_0015EE6C_2F69D0 * 8.0f;
+            data->f8C = D_0015EE6C_2F69D0 * 5.0f;
             data->fC0 = 7.5f;
             data->fC4 = 14.5f;
             func_L00_0025D5B0_2FA618(moby, data->f70, 10, 1, 0, func_L00_001FF860_2FA618(target->x, target->y));
@@ -1010,15 +1008,15 @@ void func_L06_002FA618(Moby *moby)
         }
         break;
     }
-    data->f1C8 = func_001FA748_2FA618(data->f1C8, D_L06_00161F74_2FA618 * 0.017453292f * D_0015EE6C_2FA618);
+    data->f1C8 = func_001FA748_2FA618(data->f1C8, D_L06_00161F74_2FA618 * 0.017453292f * D_0015EE6C_2F69D0);
     moby->unk90 = func_001FA8A8_2FA618(D_L06_00161F78_2FA618, D_L06_00161F7C_2FA618,
                                      (func_001F9FA8_2FA618(data->f1C8) + 1.0f) * 0.5f);
 
     if (data->f1AC != 0) {
         data->f1A0 = D_L06_00161F60_2FA618 + 6.0f;
     } else if (moby->state == 1) {
-        if (moby == ((Moby *)((Hero *)(D_0013E633_2FA618 + 0xE1D))->unk240) ||
-            moby == ((Moby *)((Hero *)(D_0013E633_2FA618 + 0xE1D))->coll_hit_moby)) {
+        if (moby == ((Moby *)((Hero *)(D_0013E633_2F69D0 + 0xE1D))->unk240) ||
+            moby == ((Moby *)((Hero *)(D_0013E633_2F69D0 + 0xE1D))->coll_hit_moby)) {
             data->f1A0 = 6.0f;
         } else {
             data->f1A0 = 0.0f;
@@ -1035,7 +1033,7 @@ void func_L06_002FA618(Moby *moby)
         }
     }
     if (data->f160 == 0) {
-        data->f160 = *(int *)(D_0013E633_2FA618 + 0x2E9D);
+        data->f160 = *(int *)(D_0013E633_2F69D0 + 0x2E9D);
     }
 }
 void func_L06_002FAAC8(char *arg)
@@ -1394,7 +1392,6 @@ extern void func_L01_00231960(int, int, int);
 extern float func_001F9B88(float);
 extern int func_001FA8A8(int, int, float);
 extern void func_L00_002617B0(char *, void *, void *, void *);
-extern unsigned char D_0013D5DD_2FDA70[] __asm__("D_0013D5DD");
 extern unsigned char D_0013D4AF_2FDA70[] __asm__("D_0013D4AF");
 extern unsigned char D_0013D5CA_2FDA70[] __asm__("D_0013D5CA");
 extern unsigned char D_0013D355_2FDA70[] __asm__("D_0013D355");
@@ -1419,7 +1416,7 @@ void func_L06_002FDA70(Moby *moby) {
     switch (moby->state) {
     case 0:
         if (D_L06_00162008 == -1) {
-            if (D_0013D5DD_2FDA70[1] != 0) {
+            if (D_0013D5DD_2F69D0[1] != 0) {
                 D_L06_00162008 = 1;
             } else {
                 D_L06_00162008 = 0;
@@ -1491,7 +1488,7 @@ void func_L06_002FDA70(Moby *moby) {
                     func_L00_002664B0(0, 10);
                     ((Moby *)D_L06_00160058)[d->f6C].flags |= 1;
                     ((Moby *)D_L06_00160058)[d->f6C].flags |= 2;
-                    if (D_0013D5DD_2FDA70[1] != 0 && D_L06_00162008 == 0) {
+                    if (D_0013D5DD_2F69D0[1] != 0 && D_L06_00162008 == 0) {
                         D_L06_00162008 = 1;
                         func_L00_00299B68(3);
                         moby->state = 2;

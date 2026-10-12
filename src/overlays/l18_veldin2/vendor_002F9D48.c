@@ -616,7 +616,6 @@ void func_L18_002FDD20_r(struct Moby *m) {
     func_L00_001FD1D8_2FDD20(&pk, mat, 0);
 }
 extern unsigned short *D_L18_001AC540[];
-extern unsigned char *D_L18_00160058_m __asm__("D_L18_00160058") MACRO_ADDR;
 extern short D_L18_001626E4;
 
 /* For each listed moby of matching type, spawns effects at five points. */

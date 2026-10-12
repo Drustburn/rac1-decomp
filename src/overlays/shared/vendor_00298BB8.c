@@ -853,7 +853,6 @@ int func_L15_0029AE80(void *mm) {
     return 1;
 }
 extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
-extern int D_L15_00160058_m __asm__("D_L15_00160058") MACRO_ADDR;
 
 // Finds the nearest visible target moby from the moby's candidate list, returning its address.
 int func_L15_0029AFB8(char *m) {
@@ -1496,7 +1495,6 @@ tailA:
     *(int *)(moby + 0x94) = 0;
 }
 extern char D_0013E633[];
-extern int D_L15_00160058_m __asm__("D_L15_00160058") MACRO_ADDR;
 extern float func_002140F8(float, float);
 
 // wakes the first idle moby in a list and initialises it at a position
@@ -1763,7 +1761,6 @@ void func_L15_002A8850(char *moby) {
 }
 INCLUDE_ASM("asm/overlays", func_L15_002BEFF8);
 INCLUDE_ASM("asm/overlays", func_L15_002CC858);
-extern int D_L15_00160058_m __asm__("D_L15_00160058") MACRO_ADDR;
 extern short D_L15_00161B44;
 
 // Sets the two fields of the moby's data (and of matching mobys in the level list) from a flag.

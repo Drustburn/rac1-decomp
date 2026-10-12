@@ -2132,8 +2132,6 @@ extern char *D_L00_001601AC_2E0E50 __asm__("D_L00_001601AC") MACRO_ADDR;
 extern float D_L00_0015F4FC_2E0E50 __asm__("D_L00_0015F4FC") MACRO_ADDR;
 extern float D_L00_00161C84_2E0E50 __asm__("D_L00_00161C84") MACRO_ADDR;
 extern float D_0015EE6C_2E0E50 __asm__("D_0015EE6C") MACRO_ADDR;
-extern float D_0015EE64_2E0E50 __asm__("D_0015EE64") MACRO_ADDR;
-extern float D_0015EE70_2E0E50 __asm__("D_0015EE70") MACRO_ADDR;
 extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166EC0");
 extern void func_L00_002E1660_2E0E50(Moby *) __asm__("func_L00_002E1660");
 extern int func_0022ED80_2E0E50(int, int, Moby *) __asm__("func_0022ED80");
@@ -2173,8 +2171,8 @@ void func_L00_002E0E50(Moby *m) {
             func_L00_002E1660_2E0E50(m);
         }
         if (((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk20B0 != 0) {
-            float a = D_0015EE64_2E0E50 * 0.02f;
-            float b = D_0015EE64_2E0E50 * 0.3f;
+            float a = D_0015EE64_2DDEA0 * 0.02f;
+            float b = D_0015EE64_2DDEA0 * 0.3f;
 
             ((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk18F0[0].unkA0 = 1;
             ((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk18F0[0].scale = 2.3f;
@@ -2308,7 +2306,7 @@ void func_L00_002E0E50(Moby *m) {
                 return;
             }
             if (d->f10 < 1.0f) {
-                func_00214D88_2E0E50(&d->f10, &d->f14, 1.0f, D_0015EE70_2E0E50 * 0.666f, D_0015EE70_2E0E50 * 0.666f, D_0015EE6C_2E0E50 * 0.5f);
+                func_00214D88_2E0E50(&d->f10, &d->f14, 1.0f, D_0015EE70_2DDEA0 * 0.666f, D_0015EE70_2DDEA0 * 0.666f, D_0015EE6C_2E0E50 * 0.5f);
                 func_001F9C08_2E0E50(&v0, D_L00_001601AC_2E0E50 + (d->i8 << 7) + 0x30, D_L00_001601AC_2E0E50 + (d->iC << 7) + 0x30, d->f10);
                 func_001F9BC0_2E0E50(&v10);
                 v10.y = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->iC].v70.y, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[d->i8].v70.y) * d->f10;

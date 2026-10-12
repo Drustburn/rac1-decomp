@@ -1038,9 +1038,7 @@ extern int D_L14_0016234C_308368 SDATA(D_L14_0016234C);
 extern float D_L14_00162360_308368 SDATA(D_L14_00162360);
 extern float D_L14_00162364_308368 SDATA(D_L14_00162364);
 extern float D_L14_00162368_308368 SDATA(D_L14_00162368);
-extern char *D_L14_00160098_308368 __asm__("D_L14_00160098") MACRO_ADDR;
 extern float D_0015EE6C_308368 __asm__("D_0015EE6C") MACRO_ADDR;
-extern char D_0013E633_308368[] __asm__("D_0013E633");
 
 /* Blarg heavy interceptor update (class 1417): hit reaction, then a state machine (0 set up on its path,
  * 1 wait for the trigger volume, 2 chase with its thruster part, 3 respawn), then its engine sound. */
@@ -1057,12 +1055,12 @@ void func_L14_00308368(Moby *m) {
         m->flags |= 0x41;
         m->unk94 = 0;
         if (d->part >= 0) {
-            Moby *o = (Moby *)(D_L14_00160098_308368 + (d->part << 8));
+            Moby *o = (Moby *)(D_L14_00160098_3071B0 + (d->part << 8));
             o->pos.x = o->pos.y = o->pos.z = 5.0f;
             o->flags |= 0x41;
         }
         if (d->sound != -1) {
-            Snd_308368 *e = (Snd_308368 *)(D_0013E633_308368 + 0x1D + d->sound * 0x70);
+            Snd_308368 *e = (Snd_308368 *)(D_0013E633_3071B0 + 0x1D + d->sound * 0x70);
             if (e->f88 == m && e->b74 != 0) {
                 func_L00_0028EBF0_308368(d->sound);
             }
@@ -1093,7 +1091,7 @@ void func_L14_00308368(Moby *m) {
         d->fC0 = 0;
         d->fCC = 0;
         if (d->part >= 0) {
-            Moby *o = (Moby *)(D_L14_00160098_308368 + (d->part << 8));
+            Moby *o = (Moby *)(D_L14_00160098_3071B0 + (d->part << 8));
             o->unk32 = (*(unsigned short *)&m->unk32);
             o->unk30 = m->unk30;
         }
@@ -1104,18 +1102,18 @@ void func_L14_00308368(Moby *m) {
             m->flags |= 0x41;
             m->unk94 = 0;
             if (d->part >= 0) {
-                Moby *o = (Moby *)(D_L14_00160098_308368 + (d->part << 8));
+                Moby *o = (Moby *)(D_L14_00160098_3071B0 + (d->part << 8));
                 o->flags |= 0x41;
             }
             m->state = 1;
         }
         break;
     case 1:
-        if (func_00215570_308368(D_0013E633_308368 + 0xE9D, d->trigger)) {
+        if (func_00215570_308368(D_0013E633_3071B0 + 0xE9D, d->trigger)) {
             m->flags &= 0xFFBE;
             m->unk94 = ((Model_308368 *)m->pclass)->bounds;
             if (d->part >= 0) {
-                Moby *o = (Moby *)(D_L14_00160098_308368 + (d->part << 8));
+                Moby *o = (Moby *)(D_L14_00160098_3071B0 + (d->part << 8));
                 o->flags &= 0xFFBE;
             }
             m->state = 2;
@@ -1127,15 +1125,15 @@ void func_L14_00308368(Moby *m) {
         func_L00_00263BF8_308368(m, &d->fBC, &d->fC0, D_L14_00162360_308368, D_L14_00162364_308368, D_L14_00162368_308368);
         if (func_L14_00308AA8_308368(m)) {
             if (d->part >= 0) {
-                Moby *o = (Moby *)(D_L14_00160098_308368 + (d->part << 8));
+                Moby *o = (Moby *)(D_L14_00160098_3071B0 + (d->part << 8));
                 func_001F9C30_308368(&vec, &m->unkC0, d->fA4);
                 func_001F9BD8_308368(&o->pos, &m->pos, &vec);
                 func_001F9C30_308368(&vec, &m->unkD0, d->fA8);
                 func_001F9BD8_308368(&o->pos, &o->pos, &vec);
                 func_001F9C30_308368(&vec, &m->unkE0, d->fAC);
                 func_001F9BD8_308368(&o->pos, &o->pos, &vec);
-                if ((((Hero *)(D_0013E633_308368 + 0xE1D))->state.control_mode == 13 && ((Hero *)(D_0013E633_308368 + 0xE1D))->unk964 == o)
-                    || (((Hero *)(D_0013E633_308368 + 0xE1D))->state.control_mode == 14 && ((Hero *)(D_0013E633_308368 + 0xE1D))->unk994 == o)) {
+                if ((((Hero *)(D_0013E633_3071B0 + 0xE1D))->state.control_mode == 13 && ((Hero *)(D_0013E633_3071B0 + 0xE1D))->unk964 == o)
+                    || (((Hero *)(D_0013E633_3071B0 + 0xE1D))->state.control_mode == 14 && ((Hero *)(D_0013E633_3071B0 + 0xE1D))->unk994 == o)) {
                     func_L14_00314A40_308368(m);
                     d->fCC = func_001F9850_308368(0x1E);
                 } else {
@@ -1171,7 +1169,7 @@ void func_L14_00308368(Moby *m) {
             d->f80 = d->f84 = d->f88 = 0.0f;
             d->f90 = d->f94 = d->f98 = 0.0f;
             if (d->part >= 0) {
-                Moby *o = (Moby *)(D_L14_00160098_308368 + (d->part << 8));
+                Moby *o = (Moby *)(D_L14_00160098_3071B0 + (d->part << 8));
                 o->flags &= 0xFFBE;
                 func_001F9C30_308368(&vec, &m->unkC0, d->fA4);
                 func_001F9BD8_308368(&o->pos, &m->pos, &vec);

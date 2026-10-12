@@ -975,19 +975,10 @@ typedef union Work_2B5C98 {
     struct { V_2B5C98 v; V_2B5C98 rnd; } spray;
 } Work_2B5C98;
 
-extern Hero hero_2B5C98 __asm__("D_0013F450");
 extern char D_0013CA40_2B5C98[] __asm__("D_0013CA40");
 extern Order_2B5C98 order_2B5C98 __asm__("D_0013E620");
-extern unsigned char D_0014171B_2B5C98[] __asm__("D_0014171B");
-extern char D_L00_00166D80_2B5C98[] __asm__("D_L00_00166D80");
-extern char D_L00_00166EC0_2B5C98[] __asm__("D_L00_00166EC0");
 extern Moby *D_L00_00173F58_2B5C98 __asm__("D_L00_00173F58");
-extern float D_L00_0017ADF4_2B5C98 __asm__("D_L00_0017ADF4");
 extern Light_2B5C98 D_L00_001803C0_2B5C98[] __asm__("D_L00_001803C0");
-extern int D_L00_0015F6A8_2B5C98 __asm__("D_L00_0015F6A8") MACRO_ADDR;
-extern float D_0015EE6C_2B5C98 __asm__("D_0015EE6C") MACRO_ADDR;
-extern int D_0015EFA4_2B5C98 __asm__("D_0015EFA4") MACRO_ADDR;
-extern int D_0015EE84_2B5C98 __asm__("D_0015EE84") MACRO_ADDR;
 
 extern int func_001F9938_2B5C98(short *) __asm__("func_001F9938");
 extern int func_001F9908_2B5C98(int *) __asm__("func_001F9908");
@@ -1063,43 +1054,43 @@ void func_L00_002B5C98_r(Moby *m) {
     }
     func_001F9938_2B5C98(&data->lock);
     func_001F9908_2B5C98(&data->cooldown);
-    if (hero_2B5C98.state.current == 1) func_L00_00222B80_2B5C98(30, 1);
+    if (hero_2B33E8.state.current == 1) func_L00_00222B80_2B5C98(30, 1);
     if (m->prev_seq == 0 && m->prev_frame < 3) data->cooldown = func_001F9850_2B5C98(7);
-    if (hero_2B5C98.state.current == 30 && (hero_2B5C98.moby->flags & 1)) {
-        func_001FA480_2B5C98(&w.rotation, D_L00_00166D80_2B5C98);
+    if (hero_2B33E8.state.current == 30 && (hero_2B33E8.moby->flags & 1)) {
+        func_001FA480_2B5C98(&w.rotation, D_L00_00166D80_2B33E8);
         func_001FA4A0_2B5C98(&inverse, &w.rotation);
-        velocity.f.z = D_0015EE6C_2B5C98 * 40.0f;
+        velocity.f.z = D_0015EE6C_2B33E8 * 40.0f;
         func_001F9EE8_2B5C98(&velocity, &velocity, &inverse);
         func_001F9BC0_2B5C98(&launch);
         launch.f.x += 0.15f;
         launch.f.z += 0.75f;
         launch.f.y += 0.15f;
         func_001F9EE8_2B5C98(&launch, &launch, &inverse);
-        func_001F9BD8_2B5C98(&launch, &launch, D_L00_00166D80_2B5C98 + 0x140);
-        if (hero_2B5C98.state.current == 30 && (hero_2B5C98.moby->flags & 1) && !hero_2B5C98.unk20AC) {
+        func_001F9BD8_2B5C98(&launch, &launch, D_L00_00166D80_2B33E8 + 0x140);
+        if (hero_2B33E8.state.current == 30 && (hero_2B33E8.moby->flags & 1) && !hero_2B33E8.unk20AC) {
             func_L00_001EE2E0_2B5C98((int)m, 0xFF0F0FFF, 1.0f, 0, 0.0f, 0x26, -1, 90.0f, 4);
             func_L00_001FF4B0_2B5C98(&reach, &velocity, 20.0f);
             func_001F9BD8_2B5C98(&end, &reach, &launch);
             reach = end;
-            if (func_L00_001EFFF0_2B5C98(D_L00_00166D80_2B5C98 + 0x140, &reach, 0, (int)m, 0)) {
+            if (func_L00_001EFFF0_2B5C98(D_L00_00166D80_2B33E8 + 0x140, &reach, 0, (int)m, 0)) {
                 if (D_L00_00173F58_2B5C98 && (D_L00_00173F58_2B5C98->flags & 0x1000)) target = D_L00_00173F58_2B5C98;
             }
         }
     } else {
-        velocity.f.x = D_0015EE6C_2B5C98 * 40.0f;
-        func_001F9EC0_2B5C98(&velocity, &velocity, &hero_2B5C98.unk640);
+        velocity.f.x = D_0015EE6C_2B33E8 * 40.0f;
+        func_001F9EC0_2B5C98(&velocity, &velocity, &hero_2B33E8.unk640);
         func_L00_00250800_2B5C98(m, 0, &launch);
     }
-    if (hero_2B5C98.items[6].unk40) yaw = hero_2B5C98.items[6].unk4C;
+    if (hero_2B33E8.items[6].unk40) yaw = hero_2B33E8.items[6].unk4C;
     else yaw = func_L00_001FF860_2B5C98(velocity.f.x, velocity.f.y);
     pitch = -func_L00_001FF860_2B5C98(func_001F9CE8_2B5C98(&velocity), velocity.f.z);
     yaw0 = yaw;
     pitch0 = pitch;
-    if (hero_2B5C98.state.current != 30) {
-        if (hero_2B5C98.unk22C8 == 1) {
+    if (hero_2B33E8.state.current != 30) {
+        if (hero_2B33E8.unk22C8 == 1) {
             yaw = m->rot.z;
             yaw0 = yaw;
-            pitch = D_L00_0017ADF4_2B5C98;
+            pitch = D_L00_0017ADF4_2B33E8;
             pitch0 = pitch;
         }
         target = func_L00_002B5998_2B5C98(m, &launch, &yaw, &pitch);
@@ -1107,7 +1098,7 @@ void func_L00_002B5C98_r(Moby *m) {
     if (target && data->lock == 0) {
         if (func_L00_00234718_2B5C98(-1)) {
             Aim_2B5C98 *r = func_L00_0025D390_2B5C98(target);
-            float d = func_001F9D10_2B5C98(D_L00_00166EC0_2B5C98, &target->pos) / 50.0f;
+            float d = func_001F9D10_2B5C98(D_L00_00166EC0_2B33E8, &target->pos) / 50.0f;
             float h;
             qcopy(&w.point, &target->pos);
             h = 0.5f;
@@ -1116,19 +1107,19 @@ void func_L00_002B5C98_r(Moby *m) {
             func_L00_001EE2E0_2B5C98((int)m, 0xFF0FFF0F, func_001F9B88_2B5C98(0.9f - d * 0.65f), &w.point, 0.0f, 0x26, -1, 90.0f, 4);
         }
     }
-    if (hero_2B5C98.unk20A8 && hero_2B5C98.state.current != 0x72 && D_L00_0015F6A8_2B5C98 != 2) {
-        if (func_001F9850_2B5C98(5 - order_2B5C98.level) < hero_2B5C98.unk1BC && data->cooldown == 0) {
-            if (func_L00_00234638_2B5C98(-1, 1) && !hero_2B5C98.unk20AC) {
+    if (hero_2B33E8.unk20A8 && hero_2B33E8.state.current != 0x72 && D_L00_0015F6A8_2B33E8 != 2) {
+        if (func_001F9850_2B5C98(5 - order_2B5C98.level) < hero_2B33E8.unk1BC && data->cooldown == 0) {
+            if (func_L00_00234638_2B5C98(-1, 1) && !hero_2B33E8.unk20AC) {
                 data->cooldown = func_001F9850_2B5C98(6);
                 if (target) {
-                    float speed = D_0015EE6C_2B5C98 * 40.0f;
+                    float speed = D_0015EE6C_2B33E8 * 40.0f;
                     Aim_2B5C98 *r;
                     qcopy(&tpoint, &target->pos);
                     r = func_L00_0025D390_2B5C98(target);
                     if (r) tpoint.f.z += r->height;
                     else tpoint.f.z += 0.5f;
                     pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&launch, &tpoint), tpoint.f.z - launch.f.z);
-                    pitch0 -= hero_2B5C98.unk2E4.f * 0.5f;
+                    pitch0 -= hero_2B33E8.unk2E4.f * 0.5f;
                     if (func_001FA850_2B5C98(pitch0, pitch) < 0.17453292f) {
                         pitch0 = pitch;
                     } else if (func_001FA748_2B5C98(pitch0, 0.17453292f) < pitch) {
@@ -1140,24 +1131,24 @@ void func_L00_002B5C98_r(Moby *m) {
                     func_001F9BD8_2B5C98(&w.point, &w.point, &launch);
                     yaw = func_L00_001FF860_2B5C98(tpoint.f.x - w.point.f.x, tpoint.f.y - w.point.f.y);
                     pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&w.point, &tpoint), tpoint.f.z - w.point.f.z);
-                } else if (hero_2B5C98.state.current != 30) {
-                    pitch -= hero_2B5C98.unk2E4.f * 0.5f;
-                    pitch0 -= hero_2B5C98.unk2E4.f * 0.5f;
+                } else if (hero_2B33E8.state.current != 30) {
+                    pitch -= hero_2B33E8.unk2E4.f * 0.5f;
+                    pitch0 -= hero_2B33E8.unk2E4.f * 0.5f;
                 }
                 w.spawn.flags = 0x10000;
                 w.spawn.owner = m;
                 w.spawn.f1C = 0.25f;
                 w.spawn.i20 = 1;
-                w.spawn.pos.f.x = func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B5C98.unk670, hero_2B5C98.unk674));
-                w.spawn.pos.f.y = func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B5C98.unk670, hero_2B5C98.unk674));
+                w.spawn.pos.f.x = func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674));
+                w.spawn.pos.f.y = func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674));
                 w.spawn.pos.f.z = 1.0f;
                 w.spawn.pos.f.w = 5627.9248f;
                 w.spawn.b18 = 1;
                 w.spawn.b19 = 1;
                 w.spawn.cls = (*(unsigned short *)&m->oclass);
                 func_L00_00233EE0_2B5C98(&inverse, 0.7f, -0.15f, 0.5f);
-                func_L00_001F2BE8_2B5C98(&inverse, 0.42f, 5, hero_2B5C98.moby, &w.spawn);
-                func_L00_002CC3C0_2B5C98(hero_2B5C98.moby, yaw, pitch, yaw0, pitch0, &launch, target);
+                func_L00_001F2BE8_2B5C98(&inverse, 0.42f, 5, hero_2B33E8.moby, &w.spawn);
+                func_L00_002CC3C0_2B5C98(hero_2B33E8.moby, yaw, pitch, yaw0, pitch0, &launch, target);
                 data->glow = func_001F9850_2B5C98(15);
                 for (i = 0; i < 5; i++) {
                     w.spray.rnd.q = 0;
@@ -1167,28 +1158,28 @@ void func_L00_002B5C98_r(Moby *m) {
                     w.spray.v = w.spray.rnd;
                     func_L00_001FF4B0_2B5C98(&w.spray.v, &w.spray.v, func_001F9CB8_2B5C98(&velocity) * 0.65f);
                     func_001F9BD8_2B5C98(&w.spray.v, &velocity, &w.spray.v);
-                    func_L00_001FF4B0_2B5C98(&w.spray.v, &w.spray.v, func_002140F8_2B5C98(D_0015EE6C_2B5C98 * 3.0f, D_0015EE6C_2B5C98 * 6.0f));
+                    func_L00_001FF4B0_2B5C98(&w.spray.v, &w.spray.v, func_002140F8_2B5C98(D_0015EE6C_2B33E8 * 3.0f, D_0015EE6C_2B33E8 * 6.0f));
                     func_L00_0026EBC0_2B5C98(&launch, &w.spray.v, 0x5F2F4F6F,
                         func_L00_00258BC8_2B5C98(func_001F9850_2B5C98(5), func_001F9850_2B5C98(10)), 10000.0f);
                 }
-                func_L00_001FF4B0_2B5C98(&velocity, &velocity, D_0015EE6C_2B5C98 * 0.5f);
+                func_L00_001FF4B0_2B5C98(&velocity, &velocity, D_0015EE6C_2B33E8 * 0.5f);
                 func_L00_0026EBC0_2B5C98(&launch, &velocity, 0x2F4F7F7F,
                     func_L00_00258BC8_2B5C98(func_001F9850_2B5C98(4), func_001F9850_2B5C98(7)), 200000.0f);
             }
             if (m->prev_seq != 4) func_00213DE0_2B5C98(m, 4, 0, func_001F9850_2B5C98(7));
-            stats = (Stats_2B5C98 *)(D_0014171B_2B5C98 + 0x65);
+            stats = (Stats_2B5C98 *)(D_0014171B_2B33E8 + 0x65);
             if (stats->uses < 65535) stats->uses++;
-            if (func_001F9850_2B5C98(D_0015EFA4_2B5C98) / 600 > stats->longest)
-                stats->longest = func_001F9850_2B5C98(D_0015EFA4_2B5C98) / 600;
-            stats->levels = (stats->levels | (1 << D_0015EE84_2B5C98)) | 0x80000000;
+            if (func_001F9850_2B5C98(D_0015EFA4_2B33E8) / 600 > stats->longest)
+                stats->longest = func_001F9850_2B5C98(D_0015EFA4_2B33E8) / 600;
+            stats->levels = (stats->levels | (1 << D_0015EE84_2B33E8)) | 0x80000000;
         }
     }
-    if (!(((((Input_2B5C98 *)D_0013CA40_2B5C98)->held & hero_2B5C98.items[0].button_mask) && func_L00_00234718_2B5C98(-1)) ||
-          (!(func_001F9850_2B5C98(9) < hero_2B5C98.unk1BC) && hero_2B5C98.unk20A8)) ||
-        hero_2B5C98.state.current == 0x72 || D_L00_0015F6A8_2B5C98 == 2) {
-        if ((m->prev_seq != 0 || (m->unk70 & 2)) && hero_2B5C98.state.current != 0x72 && D_L00_0015F6A8_2B5C98 != 2) {
+    if (!(((((Input_2B5C98 *)D_0013CA40_2B5C98)->held & hero_2B33E8.items[0].button_mask) && func_L00_00234718_2B5C98(-1)) ||
+          (!(func_001F9850_2B5C98(9) < hero_2B33E8.unk1BC) && hero_2B33E8.unk20A8)) ||
+        hero_2B33E8.state.current == 0x72 || D_L00_0015F6A8_2B33E8 == 2) {
+        if ((m->prev_seq != 0 || (m->unk70 & 2)) && hero_2B33E8.state.current != 0x72 && D_L00_0015F6A8_2B33E8 != 2) {
             if (m->prev_seq != 1) func_00213DE0_2B5C98(m, 1, 0, func_001F9850_2B5C98(7));
-        } else if (hero_2B5C98.state.current == 0x72 || D_L00_0015F6A8_2B5C98 == 2) {
+        } else if (hero_2B33E8.state.current == 0x72 || D_L00_0015F6A8_2B33E8 == 2) {
             func_00213D28_2B5C98(m, 1, 0);
             func_L00_002514B8_2B5C98(m);
         }
@@ -1199,9 +1190,9 @@ void func_L00_002B5C98_r(Moby *m) {
         a = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
         b = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
         c = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
-        w.point.f.x = hero_2B5C98.motion.pos.f[0] + func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B5C98.unk670, hero_2B5C98.unk674)) * 2.0f;
-        w.point.f.y = hero_2B5C98.motion.pos.f[1] + func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B5C98.unk670, hero_2B5C98.unk674)) * 2.0f;
-        w.point.f.z = hero_2B5C98.motion.pos.f[2] + 1.0f;
+        w.point.f.x = hero_2B33E8.motion.pos.f[0] + func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674)) * 2.0f;
+        w.point.f.y = hero_2B33E8.motion.pos.f[1] + func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674)) * 2.0f;
+        w.point.f.z = hero_2B33E8.motion.pos.f[2] + 1.0f;
         if (data->light == -1) {
             data->light = func_L00_0023F0D0_2B5C98(&w.point, 6.0f, 0.0f, a, b, c);
         } else {
@@ -1550,12 +1541,9 @@ typedef struct Hit_2B7430 {
 typedef struct Hit2_2B7430 { char p0[0x24]; Tgt_2B7430 *f24; } Hit2_2B7430;
 typedef struct Row_2B7430 { char p0[0x74]; unsigned char f74; char p1[0x13]; Moby *f88; } Row_2B7430;
 extern char D_0013F450_2B7430[] __asm__("D_0013F450");
-extern char D_0013CA40_2B7430[] __asm__("D_0013CA40");
 extern char D_0013E650_2B7430[] __asm__("D_0013E650");
-extern char D_L00_00173F40_2B7430[] __asm__("D_L00_00173F40");
 extern Hit2_2B7430 *D_L00_00173F58_2B7430 __asm__("D_L00_00173F58");
 extern char D_L00_00178000_2B7430[] __asm__("D_L00_00178000");
-extern float D_0015EE6C_2B7430 __asm__("D_0015EE6C") MACRO_ADDR;
 extern float D_0015EE60_2B7430 __asm__("D_0015EE60") MACRO_ADDR;
 extern int D_L00_0015F6E8_2B7430 __asm__("D_L00_0015F6E8") MACRO_ADDR;
 extern int D_L00_0015F558_2B7430 SDATA(D_L00_0015F558);
@@ -1608,7 +1596,7 @@ void func_L00_002B7430(Moby *m) {
     int direct = 0;
 
     *(u128_2B7430 *)&k40 = 0;
-    k40.z = D_0015EE6C_2B7430 * 8.0f;
+    k40.z = D_0015EE6C_2B33E8 * 8.0f;
     *(u128_2B7430 *)&k30 = *(u128_2B7430 *)&k40;
     *(u128_2B7430 *)&k40 = 0;
     k40.z = 1.0f;
@@ -1645,14 +1633,14 @@ void func_L00_002B7430(Moby *m) {
         return;
     }
     {
-        float t = D_L00_0016156C_2B7430 * D_0015EE6C_2B7430;
-        if (((PadState *)D_0013CA40_2B7430)->held & 0x40) t = D_L00_00161570_2B7430 * D_0015EE6C_2B7430;
+        float t = D_L00_0016156C_2B7430 * D_0015EE6C_2B33E8;
+        if (((PadState *)D_0013CA40_2B5C98)->held & 0x40) t = D_L00_00161570_2B7430 * D_0015EE6C_2B33E8;
         d->f48 += (t - d->f48) * D_L00_00161574_2B7430;
         d->f4 += (d->f48 - d->f4) * D_L00_00161578_2B7430;
-        if (D_L00_00161570_2B7430 * D_0015EE6C_2B7430 < d->f4) d->f4 = D_L00_00161570_2B7430 * D_0015EE6C_2B7430;
+        if (D_L00_00161570_2B7430 * D_0015EE6C_2B33E8 < d->f4) d->f4 = D_L00_00161570_2B7430 * D_0015EE6C_2B33E8;
     }
-    func_L00_0028F210_2B7430(d->f2C, func_001FA898_2B7430((d->f48 - D_L00_0016156C_2B7430 * D_0015EE6C_2B7430
-        / (D_L00_00161570_2B7430 * D_0015EE6C_2B7430 - D_L00_0016156C_2B7430 * D_0015EE6C_2B7430)) * D_L00_00161568_2B7430));
+    func_L00_0028F210_2B7430(d->f2C, func_001FA898_2B7430((d->f48 - D_L00_0016156C_2B7430 * D_0015EE6C_2B33E8
+        / (D_L00_00161570_2B7430 * D_0015EE6C_2B33E8 - D_L00_0016156C_2B7430 * D_0015EE6C_2B33E8)) * D_L00_00161568_2B7430));
     if (d->f10 > 0) {
         if (d->f10 < func_001F9850_2B7430(0xBB8) - func_001F9850_2B7430(5)) {
             float ang;
@@ -1682,8 +1670,8 @@ void func_L00_002B7430(Moby *m) {
         float t = func_00214358_2B7430(&m->pos, 0, 0.5f) + d->f44;
         if (m->pos.z < t) {
             if (D_L00_00173F58_2B7430 == 0 || (D_L00_00173F58_2B7430->f24 != 0 && D_L00_00173F58_2B7430->f24->h46 == 5)) {
-                float s = func_L00_001FF860_2B7430(d->f4, func_00214D28_2B7430(&m->pos.z, t, D_0015EE6C_2B7430 * 6.0f));
-                if (D_0015EE6C_2B7430 * 1.57079637f < s) s = D_0015EE6C_2B7430 * 1.57079637f;
+                float s = func_L00_001FF860_2B7430(d->f4, func_00214D28_2B7430(&m->pos.z, t, D_0015EE6C_2B33E8 * 6.0f));
+                if (D_0015EE6C_2B33E8 * 1.57079637f < s) s = D_0015EE6C_2B33E8 * 1.57079637f;
                 m->rot.y -= s;
             }
         }
@@ -1713,16 +1701,16 @@ void func_L00_002B7430(Moby *m) {
         ev.h1A = (*(unsigned short *)&m->oclass);
         if (func_001F9850_2B7430(0xBB8) - 40 < d->f10) skip = ((Hero *)D_0013F450_2B7430)->moby;
         if (func_L00_001EFFF0_2B7430(&v20, &m->pos, 0, skip, &ev)) {
-            if (((Hit_2B7430 *)D_L00_00173F40_2B7430)->f18 != 0) {
+            if (((Hit_2B7430 *)D_L00_00173F40_2B33E8)->f18 != 0) {
                 direct = 0;
-                if (((Hit_2B7430 *)D_L00_00173F40_2B7430)->f18 == ((Hero *)D_0013F450_2B7430)->moby) direct = 1;
+                if (((Hit_2B7430 *)D_L00_00173F40_2B33E8)->f18 == ((Hero *)D_0013F450_2B7430)->moby) direct = 1;
                 m->unkBC = 2;
-                qcopy(&m->pos, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v20);
-                func_001F9BF0_2B7430(&v60, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v50, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v60);
+                qcopy(&m->pos, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v20);
+                func_001F9BF0_2B7430(&v60, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v50, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v60);
                 func_L00_001FF4B0_2B7430(&v60, &v60, 1.0f);
-                func_L00_001FF610_2B7430(&k30, &v50, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v40);
-                func_L00_001FF4B0_2B7430(&k30, &k30, D_0015EE6C_2B7430 + D_0015EE6C_2B7430);
-                func_L00_001FF4B0_2B7430(&k40, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v40, 1.0f);
+                func_L00_001FF610_2B7430(&k30, &v50, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v40);
+                func_L00_001FF4B0_2B7430(&k30, &k30, D_0015EE6C_2B33E8 + D_0015EE6C_2B33E8);
+                func_L00_001FF4B0_2B7430(&k40, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v40, 1.0f);
                 if (d->f2C != -1) {
                     Row_2B7430 *e = (Row_2B7430 *)(D_0013E650_2B7430 + d->f2C * 0x70);
                     if (e->f88 == m) {
@@ -1730,14 +1718,14 @@ void func_L00_002B7430(Moby *m) {
                     }
                 }
                 d->f2C = -1;
-            } else if (((Hit_2B7430 *)D_L00_00173F40_2B7430)->f1C > 0) {
+            } else if (((Hit_2B7430 *)D_L00_00173F40_2B33E8)->f1C > 0) {
                 m->unkBC = 1;
-                qcopy(&m->pos, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v20);
-                func_001F9BF0_2B7430(&v60, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v50, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v60);
+                qcopy(&m->pos, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v20);
+                func_001F9BF0_2B7430(&v60, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v50, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v60);
                 func_L00_001FF4B0_2B7430(&v60, &v60, 1.0f);
-                func_L00_001FF610_2B7430(&k30, &v50, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v40);
-                func_L00_001FF4B0_2B7430(&k30, &k30, D_0015EE6C_2B7430 + D_0015EE6C_2B7430);
-                func_L00_001FF4B0_2B7430(&k40, &((Hit_2B7430 *)D_L00_00173F40_2B7430)->v40, 1.0f);
+                func_L00_001FF610_2B7430(&k30, &v50, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v40);
+                func_L00_001FF4B0_2B7430(&k30, &k30, D_0015EE6C_2B33E8 + D_0015EE6C_2B33E8);
+                func_L00_001FF4B0_2B7430(&k40, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v40, 1.0f);
                 if (d->f2C != -1) {
                     Row_2B7430 *e = (Row_2B7430 *)(D_0013E650_2B7430 + d->f2C * 0x70);
                     if (e->f88 == m) {
@@ -1752,7 +1740,7 @@ void func_L00_002B7430(Moby *m) {
         }
     }
     if (d->f10 < func_001F9850_2B7430(0xBB8) - func_001F9850_2B7430(0x3C)) {
-        if (((PadState *)D_0013CA40_2B7430)->pressed & 0x20) {
+        if (((PadState *)D_0013CA40_2B5C98)->pressed & 0x20) {
             m->unkBC = 1;
             if (d->f2C != -1) {
                 Row_2B7430 *e = (Row_2B7430 *)(D_0013E650_2B7430 + d->f2C * 0x70);
@@ -2225,20 +2213,14 @@ typedef struct Voice_2B9AD8 { char pad0[4]; unsigned char active; char pad5[0x13
 typedef struct Aim_2B9AD8 { char pad0[4]; short kind; } Aim_2B9AD8;
 typedef struct Light_2B9AD8 { float x, y, z, b; V_2B9AD8 pos; } Light_2B9AD8;
 
-extern char D_0013F450_2B9AD8[] __asm__("D_0013F450");
-extern char D_0013CA40_2B9AD8[] __asm__("D_0013CA40");
 extern Voice_2B9AD8 D_0013E650_2B9AD8[] __asm__("D_0013E650");
 extern unsigned char D_0013E633_2B9AD8[] __asm__("D_0013E633");
-extern unsigned char D_0014171B_2B9AD8[] __asm__("D_0014171B");
 extern unsigned short D_00141E70_2B9AD8[] __asm__("D_00141E70");
 extern unsigned short D_00141A18_2B9AD8[] __asm__("D_00141A18");
 extern float D_L00_0017AFBC_2B9AD8 __asm__("D_L00_0017AFBC");
 extern int D_L00_00161660_2B9AD8 SDATA(D_L00_00161660);
 extern char D_L00_001670D0_2B9AD8[] __asm__("D_L00_001670D0");
 extern Light_2B9AD8 D_L00_001803C0_2B9AD8[] __asm__("D_L00_001803C0");
-extern float D_0015EE60_2B9AD8 __asm__("D_0015EE60") MACRO_ADDR;
-extern int D_0015EFA4_2B9AD8 __asm__("D_0015EFA4") MACRO_ADDR;
-extern int D_0015EE84_2B9AD8 __asm__("D_0015EE84") MACRO_ADDR;
 
 extern int func_L00_00234718_2B9AD8(int) __asm__("func_L00_00234718");
 extern void func_L00_00203F20_2B9AD8(int, int) __asm__("func_L00_00203F20");
@@ -2274,24 +2256,24 @@ void func_L00_002B9AD8_r(Moby *m) {
     V_2B9AD8 t;
     Data_2B9AD8 *s = (Data_2B9AD8 *)m->pvars;
     int active;
-    int done = ((Hero *)D_0013F450_2B9AD8)->items[0].state == 3;
+    int done = ((Hero *)D_0013F450_2B7430)->items[0].state == 3;
     int ready;
     Hero *h;
 
-    if ((((PadState *)D_0013CA40_2B9AD8)->pressed & ((Hero *)D_0013F450_2B9AD8)->items[0].button_mask) &&
-        !((Hero *)D_0013F450_2B9AD8)->unk20AC) {
+    if ((((PadState *)D_0013CA40_2B5C98)->pressed & ((Hero *)D_0013F450_2B7430)->items[0].button_mask) &&
+        !((Hero *)D_0013F450_2B7430)->unk20AC) {
         s->reach = 0.8f;
     }
     D_L00_0017AFBC_2B9AD8 = 0.9f;
     active = 0;
     ready = func_L00_00234718_2B9AD8(-1);
     if (D_00141E70_2B9AD8[0] == 0 && D_00141A18_2B9AD8[0] == 0 &&
-        ((Hero *)D_0013F450_2B9AD8)->unk20B5 >= 3) {
-        if ((unsigned int)((Hero *)D_0013F450_2B9AD8)->state.control_mode < 2 || ((Hero *)D_0013F450_2B9AD8)->state.control_mode == 9)
+        ((Hero *)D_0013F450_2B7430)->unk20B5 >= 3) {
+        if ((unsigned int)((Hero *)D_0013F450_2B7430)->state.control_mode < 2 || ((Hero *)D_0013F450_2B7430)->state.control_mode == 9)
             func_L00_00203F20_2B9AD8(0x4E30, 0x81);
     }
-    if ((((PadState *)D_0013CA40_2B9AD8)->held & ((Hero *)D_0013F450_2B9AD8)->items[0].button_mask) && m->state != 4 &&
-        m->state != 0 && !((Hero *)D_0013F450_2B9AD8)->unk20AC && ((Hero *)D_0013F450_2B9AD8)->state.current != 0x72) {
+    if ((((PadState *)D_0013CA40_2B5C98)->held & ((Hero *)D_0013F450_2B7430)->items[0].button_mask) && m->state != 4 &&
+        m->state != 0 && !((Hero *)D_0013F450_2B7430)->unk20AC && ((Hero *)D_0013F450_2B7430)->state.current != 0x72) {
         if (s->timer == 0) {
             if (ready > 0) {
                 if (func_001F9938_2B9AD8(&s->tick)) {
@@ -2307,21 +2289,21 @@ void func_L00_002B9AD8_r(Moby *m) {
                 }
                 active = 1;
                 if (s->target) {
-                    if (2.0943f < func_001FA850_2B9AD8(((Hero *)D_0013F450_2B9AD8)->motion.rot.f[2],
-                            func_L00_001FF860_2B9AD8(s->target->pos.x - ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[0],
-                                                     s->target->pos.y - ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[1])) ||
+                    if (2.0943f < func_001FA850_2B9AD8(((Hero *)D_0013F450_2B7430)->motion.rot.f[2],
+                            func_L00_001FF860_2B9AD8(s->target->pos.x - ((Hero *)D_0013F450_2B7430)->motion.pos.f[0],
+                                                     s->target->pos.y - ((Hero *)D_0013F450_2B7430)->motion.pos.f[1])) ||
                         !s->target->unk31 ||
-                        20.0f < func_001F9D10_2B9AD8(&s->target->pos, &((Hero *)D_0013F450_2B9AD8)->motion.pos)) {
+                        20.0f < func_001F9D10_2B9AD8(&s->target->pos, &((Hero *)D_0013F450_2B7430)->motion.pos)) {
                         s->target = 0;
                         s->lock = 0;
                     }
                 }
                 if (s->target2) {
-                    if (2.0943f < func_001FA850_2B9AD8(((Hero *)D_0013F450_2B9AD8)->motion.rot.f[2],
-                            func_L00_001FF860_2B9AD8(s->target2->pos.x - ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[0],
-                                                     s->target2->pos.y - ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[1])) ||
+                    if (2.0943f < func_001FA850_2B9AD8(((Hero *)D_0013F450_2B7430)->motion.rot.f[2],
+                            func_L00_001FF860_2B9AD8(s->target2->pos.x - ((Hero *)D_0013F450_2B7430)->motion.pos.f[0],
+                                                     s->target2->pos.y - ((Hero *)D_0013F450_2B7430)->motion.pos.f[1])) ||
                         !s->target2->unk31 ||
-                        20.0f < func_001F9D10_2B9AD8(&s->target2->pos, &((Hero *)D_0013F450_2B9AD8)->motion.pos)) {
+                        20.0f < func_001F9D10_2B9AD8(&s->target2->pos, &((Hero *)D_0013F450_2B7430)->motion.pos)) {
                         s->target2 = 0;
                         s->lock2 = 0;
                     }
@@ -2359,21 +2341,21 @@ void func_L00_002B9AD8_r(Moby *m) {
                 } else {
                     s->hold2 = 0;
                 }
-                s->reach += (func_001FA888_2B9AD8(D_0013E633_2B9AD8[0]) * 6.0f + 12.0f - s->reach) * (D_0015EE60_2B9AD8 * 0.07f);
-                if (((Hero *)D_0013F450_2B9AD8)->state.current == 1) {
+                s->reach += (func_001FA888_2B9AD8(D_0013E633_2B9AD8[0]) * 6.0f + 12.0f - s->reach) * (D_0015EE60_2B7430 * 0.07f);
+                if (((Hero *)D_0013F450_2B7430)->state.current == 1) {
                     t.f.x = 1.2f;
                     t.f.y = 0.0f;
                     t.f.z = 0.0f;
                     func_001F9EC0_2B9AD8(&t, &t, D_L00_001670D0_2B9AD8);
                     s->pos.f.z = t.f.z + m->pos.z;
-                    s->pos.f.x = t.f.x + ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[0];
-                    s->pos.f.y = t.f.y + ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[1];
+                    s->pos.f.x = t.f.x + ((Hero *)D_0013F450_2B7430)->motion.pos.f[0];
+                    s->pos.f.y = t.f.y + ((Hero *)D_0013F450_2B7430)->motion.pos.f[1];
                     t.f.x = s->reach;
                     t.f.y = 0.0f;
                     t.f.z = 0.0f;
                     func_001F9EC0_2B9AD8(&t, &t, D_L00_001670D0_2B9AD8);
                     func_001F9BD8_2B9AD8(&s->tip, &s->pos, &t);
-                } else if (((Hero *)D_0013F450_2B9AD8)->unk22C8 == 1) {
+                } else if (((Hero *)D_0013F450_2B7430)->unk22C8 == 1) {
                     func_L00_00250800_2B9AD8(m, 0, &s->pos);
                     t.f.x = 0.0f;
                     t.f.y = -s->reach;
@@ -2382,7 +2364,7 @@ void func_L00_002B9AD8_r(Moby *m) {
                     func_001F9BD8_2B9AD8(&s->tip, &s->pos, &t);
                 } else {
                     func_L00_00250800_2B9AD8(m, 0, &s->pos);
-                    func_L00_001FF4B0_2B9AD8(&s->tip, D_0013F450_2B9AD8 + 0x640, s->reach);
+                    func_L00_001FF4B0_2B9AD8(&s->tip, D_0013F450_2B7430 + 0x640, s->reach);
                     func_001F9BD8_2B9AD8(&s->tip, &s->pos, &s->tip);
                 }
                 func_L00_002BA608_2B9AD8(m);
@@ -2437,13 +2419,13 @@ void func_L00_002B9AD8_r(Moby *m) {
             func_L00_0020EB60_2B9AD8();
             m->state = 3;
         }
-        if ((((PadState *)D_0013CA40_2B9AD8)->pressed & (h = (Hero *)D_0013F450_2B9AD8)->items[0].button_mask) && !h->unk20AC) {
+        if ((((PadState *)D_0013CA40_2B5C98)->pressed & (h = (Hero *)D_0013F450_2B7430)->items[0].button_mask) && !h->unk20AC) {
             if (active) {
-                Stats_2B9AD8 *st = (Stats_2B9AD8 *)(D_0014171B_2B9AD8 + 0x65);
+                Stats_2B9AD8 *st = (Stats_2B9AD8 *)(D_0014171B_2B33E8 + 0x65);
                 if (st->uses < 65535) st->uses++;
-                if (func_001F9850_2B9AD8(D_0015EFA4_2B9AD8) / 600 > st->longest)
-                    st->longest = func_001F9850_2B9AD8(D_0015EFA4_2B9AD8) / 600;
-                st->levels = (st->levels | (1 << D_0015EE84_2B9AD8)) | 0x80000000;
+                if (func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600 > st->longest)
+                    st->longest = func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600;
+                st->levels = (st->levels | (1 << D_0015EE84_2B33E8)) | 0x80000000;
                 func_L00_0020EB60_2B9AD8();
                 m->state = 3;
             } else {
@@ -2460,19 +2442,19 @@ void func_L00_002B9AD8_r(Moby *m) {
     case 2:
         break;
     case 3:
-        if ((((PadState *)D_0013CA40_2B9AD8)->released & ((Hero *)D_0013F450_2B9AD8)->items[0].button_mask) || !active ||
-            ((Hero *)D_0013F450_2B9AD8)->unk20AC) {
-            h = (Hero *)D_0013F450_2B9AD8;
+        if ((((PadState *)D_0013CA40_2B5C98)->released & ((Hero *)D_0013F450_2B7430)->items[0].button_mask) || !active ||
+            ((Hero *)D_0013F450_2B7430)->unk20AC) {
+            h = (Hero *)D_0013F450_2B7430;
             if (func_001F9850_2B9AD8(70) < h->unk1BC) {
-                if (((Stats2_2B9AD8 *)(D_0014171B_2B9AD8 + 0x22D))->uses < 65535) ((Stats2_2B9AD8 *)(D_0014171B_2B9AD8 + 0x22D))->uses++;
+                if (((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->uses < 65535) ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->uses++;
             }
-            if (func_001F9850_2B9AD8(D_0015EFA4_2B9AD8) / 600 > ((Stats2_2B9AD8 *)(D_0014171B_2B9AD8 + 0x22D))->longest)
-                ((Stats2_2B9AD8 *)(D_0014171B_2B9AD8 + 0x22D))->longest = func_001F9850_2B9AD8(D_0015EFA4_2B9AD8) / 600;
-            ((Stats2_2B9AD8 *)(D_0014171B_2B9AD8 + 0x22D))->levels = (((Stats2_2B9AD8 *)(D_0014171B_2B9AD8 + 0x22D))->levels | (1 << D_0015EE84_2B9AD8)) | 0x80000000;
-            if (((Hero *)D_0013F450_2B9AD8)->unk1BC < func_001F9850_2B9AD8(30))
-                ((Hero *)D_0013F450_2B9AD8)->unk20B5++;
+            if (func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600 > ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->longest)
+                ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->longest = func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600;
+            ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->levels = (((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->levels | (1 << D_0015EE84_2B33E8)) | 0x80000000;
+            if (((Hero *)D_0013F450_2B7430)->unk1BC < func_001F9850_2B9AD8(30))
+                ((Hero *)D_0013F450_2B7430)->unk20B5++;
             else
-                ((Hero *)D_0013F450_2B9AD8)->unk20B5 = 0;
+                ((Hero *)D_0013F450_2B7430)->unk20B5 = 0;
             s->target = 0;
             s->target2 = 0;
             s->lock = 0;
@@ -2492,10 +2474,10 @@ void func_L00_002B9AD8_r(Moby *m) {
         qzero(&t);
         t.f.x = 2.0f;
         t.f.z = 2.0f;
-        func_001F9EC0_2B9AD8(&t, &t, D_0013F450_2B9AD8 + 0x640);
-        D_L00_001803C0_2B9AD8[s->light].pos.f.x = ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[0] + t.f.x;
-        D_L00_001803C0_2B9AD8[s->light].pos.f.y = ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[1] + t.f.y;
-        D_L00_001803C0_2B9AD8[s->light].pos.f.z = ((Hero *)D_0013F450_2B9AD8)->motion.pos.f[2] + t.f.z;
+        func_001F9EC0_2B9AD8(&t, &t, D_0013F450_2B7430 + 0x640);
+        D_L00_001803C0_2B9AD8[s->light].pos.f.x = ((Hero *)D_0013F450_2B7430)->motion.pos.f[0] + t.f.x;
+        D_L00_001803C0_2B9AD8[s->light].pos.f.y = ((Hero *)D_0013F450_2B7430)->motion.pos.f[1] + t.f.y;
+        D_L00_001803C0_2B9AD8[s->light].pos.f.z = ((Hero *)D_0013F450_2B7430)->motion.pos.f[2] + t.f.z;
         D_L00_001803C0_2B9AD8[s->light].pos.f.w = 7.5f;
         k = func_001FA888_2B9AD8(s->glow) / (float)func_001F9850_2B9AD8(10);
         D_L00_001803C0_2B9AD8[s->light].z = k;

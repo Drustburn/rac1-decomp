@@ -236,7 +236,6 @@ typedef u32 u128 __attribute__((mode(TI), aligned(16)));
 struct Manip;
 struct GifEntry;
 struct AnimSeq;
-extern struct Moby * D_L08_00160058_EB980 __asm__("D_L08_00160058") MACRO_ADDR;
 extern s32 func_L00_0028EB98(struct Moby *, s32);
 extern s32 func_0022ED80_EB980(s32, s32, struct Moby *) __asm__("func_0022ED80");
 extern f32 func_001FA748(f32, f32);
@@ -268,7 +267,7 @@ extern int func_001F9850(int);
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l08/gameplay/entities/002e9b70.c, FUN_L08_002ea4c0. */
 void func_L08_002EB980(struct Moby *moby) {
     SwingGateVars *vars = (SwingGateVars *)moby->pvars;
-    f32 progress = *(f32 *)D_L08_00160058_EB980[vars->driver].pvars;
+    f32 progress = *(f32 *)D_L08_00160058_2EAF48[vars->driver].pvars;
     Vec4 mat[4];
     Vec4 off;
     f32 yaw;

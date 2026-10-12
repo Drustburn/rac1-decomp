@@ -707,7 +707,6 @@ void func_L03_002D44C8(void *arg, int mode);
 extern float D_0015EE6C MACRO_ADDR;
 void func_L03_002D5008_D4560(struct Moby *m) __asm__("func_L03_002D5008");
 struct Moby;
-extern struct Hero D_0013F450_D4560 __asm__("D_0013F450");
 struct RailPath_D4560 {
     s32 count;
     u8 pad4[0xC];
@@ -811,7 +810,7 @@ void func_L03_002D4560(struct Moby *m) {
         }
         for (r = 0; r < 5; r++) {
             if ((v->volume[r] != -1 || v->route == r) &&
-                (is_point_inside_clip_volume(&D_0013F450_D4560.motion.pos, v->volume[r]) || v->route == r)) {
+                (is_point_inside_clip_volume(&D_0013F450_CBBD0.motion.pos, v->volume[r]) || v->route == r)) {
                 m->unk94 = m->pclass->unk10;
                 if (v->out[r] != -1) {
                     p = D_L03_001B08B0_D4560[v->out[r]];
@@ -843,7 +842,7 @@ void func_L03_002D4560(struct Moby *m) {
                             D_L03_00161B90_D4560 * 0.017453292f * D_0015EE70, D_0015EE6C * 12.566371f);
         func_L00_0025CE58(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B98_D4560 * 0.017453292f * D_0015EE70,
                             D_L03_00161B98_D4560 * 0.017453292f * D_0015EE70, D_0015EE6C * 12.566371f);
-        if (D_0013F450_D4560.ground_moby == m && D_0013F450_D4560.air_frames.s == 0) {
+        if (D_0013F450_CBBD0.ground_moby == m && D_0013F450_CBBD0.air_frames.s == 0) {
             func_L03_002D44C8(m, v->help[m->unkBC]);
             if ((D_0013CBE4 & 0x10) && D_L03_0015F674_D4560 == 8) {
                 func_L00_00234768(&m->pos, m->rot.z, 0);
@@ -859,8 +858,8 @@ void func_L03_002D4560(struct Moby *m) {
         break;
     case 5:
         if (func_L01_00278FA8(m)) {
-            D_0013F450_D4560.unk1F2 = 4;
-            D_0013F450_D4560.unk1F4 = 4;
+            D_0013F450_CBBD0.unk1F2 = 4;
+            D_0013F450_CBBD0.unk1F4 = 4;
         }
         if (func_L03_002D4CE0_D4560(m, v->back[m->unkBC], &v->snd)) {
             m->state = 6;
@@ -871,10 +870,10 @@ void func_L03_002D4560(struct Moby *m) {
                             D_L03_00161B90_D4560 * 0.017453292f * D_0015EE70, D_0015EE6C * 12.566371f);
         func_L00_0025CE58(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B98_D4560 * 0.017453292f * D_0015EE70,
                             D_L03_00161B98_D4560 * 0.017453292f * D_0015EE70, D_0015EE6C * 12.566371f);
-        if (v->onward[m->unkBC] != -1 && FastVecDist(&m->pos, &D_0013F450_D4560.motion.pos) > 15.0f) {
+        if (v->onward[m->unkBC] != -1 && FastVecDist(&m->pos, &D_0013F450_CBBD0.motion.pos) > 15.0f) {
             m->state = 7;
             v->idx = 1;
-        } else if (v->onward[m->unkBC] == -1 && func_001F9D48(&m->pos, &D_0013F450_D4560.motion.pos) > 5.0f) {
+        } else if (v->onward[m->unkBC] == -1 && func_001F9D48(&m->pos, &D_0013F450_CBBD0.motion.pos) > 5.0f) {
             m->state = 1;
         }
         break;
@@ -1055,7 +1054,6 @@ char *func_L03_002D5650(char *a, char *pos, char *parent, int n, float f0, float
 struct Manip_D5790;
 struct GifEntry_D5790;
 struct AnimSeq_D5790;
-extern float D_0015EE6C_D5790 __asm__("D_0015EE6C") MACRO_ADDR;
 struct Moby;
 typedef struct {
     Vec4 aim; /* 0x00: point to aim at (the trooper turns toward it) */
@@ -1136,7 +1134,7 @@ void func_L03_002D5790(struct Moby *m) {
         cam.f[2] *= (*(float *)&D_L03_00161BA8_D5790);
         func_L00_001FF240_D5790(&trail, pos, &cam);
         m->rot.z = v->heading;
-        m->rot.x = func_001FA748_D5790(m->rot.x, D_0015EE6C_D5790 * 6.2831855f);
+        m->rot.x = func_001FA748_D5790(m->rot.x, D_0015EE6C_D5220 * 6.2831855f);
         side.f[0] = func_001F9F90_D5790(v->heading) * v->speed * -0.5f;
         side.f[1] = func_001F9FA8_D5790(v->heading) * v->speed * -0.5f;
         side.f[2] = 0.0f;
@@ -1153,7 +1151,7 @@ void func_L03_002D5790(struct Moby *m) {
         if (target.found != 0) {
             pitch = -func_L00_001FF860_D5790(func_001F9D48_D5790(pos, &target.pos), target.pos.f[2] - m->pos.z);
             m->rot.y = func_L00_00259148_D5790(&v->turn_vel, m->rot.y, pitch, D_0015EE70_D5790 * 0.7853982f,
-                                        D_0015EE70_D5790 * 3.1415927f, D_0015EE6C_D5790 * 0.5235988f);
+                                        D_0015EE70_D5790 * 3.1415927f, D_0015EE6C_D5220 * 0.5235988f);
             m->pos.z += func_001F9FA8_D5790(-m->rot.y) * v->speed;
         }
         if (func_L00_001EFFF0_D5790(pos, &old, 0, v->ignore, 0) != 0 ||
@@ -1432,7 +1430,6 @@ struct Manip_DE088;
 struct GifEntry_DE088;
 struct AnimSeq_DE088;
 struct Moby;
-extern struct Hero D_0013F450_DE088 __asm__("D_0013F450");
 struct RailPath_DE088 {
     s32 count;
     u8 pad4[0xC];
@@ -1497,12 +1494,12 @@ void func_L03_002DE088(struct Moby *m) {
         m->unk32 = 0xFF;
         break;
     case 1:
-        hero_end = func_001F9D10_DE088(&D_0013F450_DE088.motion.pos, &D_L03_001B08B0_DE088[d->path[0]]->pts[0]) <
-                   func_001F9D10_DE088(&D_0013F450_DE088.motion.pos, &D_L03_001B08B0_DE088[d->path[1]]->pts[0]);
+        hero_end = func_001F9D10_DE088(&D_0013F450_CBBD0.motion.pos, &D_L03_001B08B0_DE088[d->path[0]]->pts[0]) <
+                   func_001F9D10_DE088(&D_0013F450_CBBD0.motion.pos, &D_L03_001B08B0_DE088[d->path[1]]->pts[0]);
         lift_end = func_001F9D10_DE088(&m->pos, &D_L03_001B08B0_DE088[d->path[0]]->pts[0]) <
                    func_001F9D10_DE088(&m->pos, &D_L03_001B08B0_DE088[d->path[1]]->pts[0]);
         if (!d->started) {
-            if (d->autostart || func_00215570_DE088(&D_0013F450_DE088.motion.pos, d->volume)) {
+            if (d->autostart || func_00215570_DE088(&D_0013F450_CBBD0.motion.pos, d->volume)) {
                 m->unk94 = m->pclass->unk10;
                 m->unkBC = hero_end;
                 m->flags &= 0xFFBE;
@@ -1539,8 +1536,8 @@ void func_L03_002DE088(struct Moby *m) {
         break;
     case 3:
         if (func_L01_00278FA8_DE088(m)) {
-            D_0013F450_DE088.unk1F2 = 4;
-            D_0013F450_DE088.unk1F4 = 4;
+            D_0013F450_CBBD0.unk1F2 = 4;
+            D_0013F450_CBBD0.unk1F4 = 4;
         }
         if (func_L03_002D4CE0_DE088(m, d->path[m->unkBC], &d->snd)) {
             m->state = 1;
@@ -1551,7 +1548,7 @@ void func_L03_002DE088(struct Moby *m) {
     func_L03_002DE4B8_DE088(m);
     func_001F9BF0_DE088(&move, &m->pos, &oldPos);
     func_L00_002617B0_DE088(d->coll, &move, &oldRot, &m->rot);
-    if (!func_L01_00278FA8_DE088(m) && func_001F9D48_DE088(&m->pos, &D_0013F450_DE088.motion.pos) > 2.0f && d->timer == 0)
+    if (!func_L01_00278FA8_DE088(m) && func_001F9D48_DE088(&m->pos, &D_0013F450_CBBD0.motion.pos) > 2.0f && d->timer == 0)
         d->ready = 1;
 }
 extern short D_L03_00161C58;
