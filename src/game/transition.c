@@ -1,4 +1,5 @@
 #include "common.h"
+#include "callees.h"
 #include "moby.h"
 #include "structs.h"
 
@@ -424,10 +425,6 @@ extern char D_0018CC20[];
 extern float D_0018CEB0;
 extern char D_00187180[];
 extern void func_001F3140(void);
-extern void func_00125358(float *);
-extern void func_001254A0(float *, float *, float);
-extern void func_00125548(float *, float *, float);
-extern void func_001253F8(float *, float *, float);
 
 /* Transition_UpdateMovieCamera: the current keyframe (0x20 bytes: position,
    a flag byte at +0xC, then X/Y/Z angles) sets the camera position and

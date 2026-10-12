@@ -1,4 +1,5 @@
 #include "common.h"
+#include "callees.h"
 #include "records.h"
 #include "structs.h"
 
@@ -93,7 +94,6 @@ INCLUDE_ASM("asm/nonmatchings/text", func_001F1088);
 LINKER_REMNANT("asm/remnants/text", func_001F2410);
 
 extern void func_001FA190(void *);
-extern void func_001FA540(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9EE8(void *, void *, void *);
 extern float D_0018D010;
@@ -194,10 +194,6 @@ void func_001F2568(void) {
 /* Retail carries 4 bytes of inter-function padding after this endlabel. */
 __asm__(".section .text\n\tnop\n");
 
-extern void func_00125358(float *);
-extern void func_001254A0(float *, float *, float);
-extern void func_00125548(float *, float *, float);
-extern void func_001253F8(float *, float *, float);
 extern void func_001F9C48(void *, void *, float);
 extern int D_0018C42C;
 extern char D_00187390[];
@@ -391,7 +387,6 @@ int func_001F2B10(int a0, int a1, int a2, int a3, int a4, int a5, float t) {
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern float func_001FA888(int);
 extern int func_001F2B10(int, int, int, int, int, int, float);
-extern void func_001F99D8(void *, int);
 extern void func_001F9AC0(void *, void *, void *, int);
 extern void func_001F99B0();
 extern char D_001940C0[];
@@ -2203,7 +2198,6 @@ int func_001F6FD8(int a, int b, int c, int d, int e) {
 INCLUDE_ASM("asm/nonmatchings/text", func_001F7070); /* FontPrintWindow */
 
 extern int func_001F4868(int);
-extern void func_001F7070(void *, void *, void *, void *, int, unsigned char *);
 
 /* func_001F7560 and func_001F75D0 are the same call with a different
    mode (1 vs 2) and a different table. Six arguments: EABI passes the

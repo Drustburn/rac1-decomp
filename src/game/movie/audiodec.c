@@ -1,7 +1,7 @@
 #include "common.h"
+#include "callees.h"
 #include "structs.h"
 
-extern void func_001F99D8(void *, int);
 extern int func_0012F1A8(int, int, int, int, int, int);
 extern char *D_001613B8 MACRO_ADDR;
 /* Clears the header, sets buffer parameters, and acquires the sound transport handle. */

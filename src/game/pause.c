@@ -1,4 +1,5 @@
 #include "common.h"
+#include "callees.h"
 #include "records.h"
 #include "pad.h"
 #include "moby.h"
@@ -41,7 +42,6 @@ extern void func_001F6668(void *, void *, void *, void *, void *, int,
 extern int func_001F6600(unsigned char *, int);
 extern int func_001F6620(unsigned char *, int);
 extern int func_001F4868(int);
-extern void func_001F7070(void *, void *, void *, void *, int, unsigned char *);
 extern void func_001FB498(void);
 extern void func_001F3008(void);
 extern void func_001F3140(void);
@@ -144,18 +144,12 @@ extern int D_001B2F40[];
 extern void func_001FA460_2(void *, void *) __asm__("func_001FA460");
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern void func_002116A0(void *, int, int *, void *);
-extern void func_001FA540(void *, void *, void *);
-extern void func_00211548(void *, int, void *, void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern int D_001414D0 NOT_SDA;
 extern float D_001CAE00[] NOT_SDA;
-extern void func_0020E360(void *, void *);
-extern float func_001FA058(float, float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_00118D80(int);
-extern void func_00212578(int, int);
 extern char D_00165600[];
 extern int D_0015F718;
 extern short D_0015F71C;
@@ -180,7 +174,6 @@ extern void func_0012EDE0(void *);
 extern void func_0012EFE8(void);
 extern char D_001E8980[];
 extern int func_0012EE98(int, int, int, void *);
-extern void func_001F9978(void);
 extern int func_00217628_v(void) __asm__("func_00217628");
 extern void func_00122598(int);
 extern void func_00217130(void);
@@ -2333,7 +2326,6 @@ int func_0021DAC8(void) {
     return 0;
 }
 
-extern void func_00226D50(int);
 
 int func_0021DAE0(void) {
     func_00226D50(1);
@@ -5891,7 +5883,6 @@ int func_00222950(void) {
     return 0;
 }
 
-extern void func_001FDF78(int, int, int, int);
 
 int func_00222978(void *arg0) {
     int *p = (int *)arg0;
@@ -7588,7 +7579,6 @@ void func_00225DF8(void) {
 
 extern char D_001864D0_a[] __asm__("D_001864D0");
 extern int func_0020E3D0(void *);
-extern void func_0020ED48(void *);
 extern void func_0020DAF8(int, int, void *);
 extern void func_00214F78(void *);
 extern void func_0020EEE8(void *);
@@ -7865,8 +7855,6 @@ extern f32 D_001D6238[];
 extern void func_001F9BC0(void *);
 extern f32 func_001F9F90(f32);
 extern f32 func_001F9FA8(f32);
-extern void func_001FA1F8(void *, void *);
-extern void func_001FA4F0(void *, void *, void *);
 extern f32 func_001FA748(f32, f32);
 extern f32 func_001FA7D8_26410(f32) __asm__("func_001FA7D8");
 extern f32 func_001FA888(s32);

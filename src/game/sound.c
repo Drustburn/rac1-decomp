@@ -1,4 +1,5 @@
 #include "common.h"
+#include "callees.h"
 #include "records.h"
 #include "hero.h"
 #include "structs.h"
@@ -40,7 +41,6 @@ extern void func_001F6668(void *, void *, void *, void *, void *, int,
 extern int func_001F6600(unsigned char *, int);
 extern int func_001F6620(unsigned char *, int);
 extern int func_001F4868(int);
-extern void func_001F7070(void *, void *, void *, void *, int, unsigned char *);
 extern void func_001FB498(void);
 extern void func_001F3008(void);
 extern void func_001F3140(void);
@@ -142,18 +142,12 @@ extern int D_001B2F40[];
 extern void func_001FA460_2(void *, void *) __asm__("func_001FA460");
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern void func_002116A0(void *, int, int *, void *);
-extern void func_001FA540(void *, void *, void *);
-extern void func_00211548(void *, int, void *, void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern int D_001414D0 NOT_SDA;
 extern float D_001CAE00[] NOT_SDA;
-extern void func_0020E360(void *, void *);
-extern float func_001FA058(float, float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_00118D80(int);
-extern void func_00212578(int, int);
 extern char D_00165600[];
 extern int D_0015F718;
 extern short D_0015F71C;
@@ -178,7 +172,6 @@ extern void func_0012EDE0(void *);
 extern void func_0012EFE8(void);
 extern char D_001E8980[];
 extern int func_0012EE98(int, int, int, void *);
-extern void func_001F9978(void);
 extern int func_00217628_v(void) __asm__("func_00217628");
 extern void func_00122598(int);
 extern void func_00217130(void);
@@ -209,7 +202,6 @@ extern int D_00141FA0[];
 extern char D_001D0A50[];
 extern char D_001D0A88[];
 extern int D_001A0418 NOT_SDA;
-extern void func_00226D50(int);
 extern float func_001FA748(float, float);
 extern char *D_001D5F74 NOT_SDA;
 extern void func_0020E180(int, int);
@@ -237,10 +229,8 @@ extern int func_00226F68(int);
 extern int D_0013CC04 NOT_SDA;
 extern char D_001D2678[];
 extern char *D_001D5F78 NOT_SDA;
-extern void func_001FDF78(int, int, int, int);
 extern unsigned char D_001B3E40[] NOT_SDA;
 extern void *func_0020D348(void);
-extern void func_0020ED48(void *);
 extern void func_0020E340(void *, int, int, int, int);
 typedef struct {
     int key;
@@ -279,7 +269,6 @@ void func_0022D8C0(void *arg0) {
 
 extern char D_00187180[];
 extern void func_001F9BF0(void *, void *, void *);
-extern void func_001F9E58(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001EFE10(void *, void *, int, int, int);
 
@@ -334,7 +323,6 @@ void func_0022DB00(void *arg0, int arg1) {
 
 extern void func_001F9EE8(void *, void *, void *);
 extern float func_001F9CE8(void *);
-extern float func_001F9BB0(float, float, float);
 extern float func_001FA058_a(float, float) __asm__("func_001FA058");
 extern void func_001FA898(float);
 
@@ -650,7 +638,6 @@ return_result:
     return result;
 }
 
-extern int func_0022EB08(void *, int, int, int, int);
 
 /* Starts entry idx of the sound bank arg2 points at; the same shape as
    its siblings func_0022EE28 and func_0022EEB8. */

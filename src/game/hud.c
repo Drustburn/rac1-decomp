@@ -1,4 +1,5 @@
 #include "common.h"
+#include "callees.h"
 #include "records.h"
 #include "structs.h"
 
@@ -39,7 +40,6 @@ extern void func_001F6668(void *, void *, void *, void *, void *, int,
 extern int func_001F6600(unsigned char *, int);
 extern int func_001F6620(unsigned char *, int);
 extern int func_001F4868(int);
-extern void func_001F7070(void *, void *, void *, void *, int, unsigned char *);
 extern void func_001FB498(void);
 extern void func_001F3008(void);
 extern void func_001F3140(void);
@@ -71,7 +71,6 @@ int func_001FF668(int arg0) {
 extern int D_0019A4E8 NOT_SDA;
 extern int func_001FFB38(int, int, int, int, int, int, int);
 extern char *func_001FFAB8_d(int, int, char *, int) __asm__("func_001FFAB8");
-extern void func_001F99D8(void *, int);
 extern char D_0015F7B8[];
 extern unsigned char *D_0015FAB8 MACRO_ADDR;
 extern unsigned char *D_0015FABC MACRO_ADDR;

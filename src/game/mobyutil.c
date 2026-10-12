@@ -1,4 +1,5 @@
 #include "common.h"
+#include "callees.h"
 #include "records.h"
 #include "structs.h"
 
@@ -39,7 +40,6 @@ extern void func_001F6668(void *, void *, void *, void *, void *, int,
 extern int func_001F6600(unsigned char *, int);
 extern int func_001F6620(unsigned char *, int);
 extern int func_001F4868(int);
-extern void func_001F7070(void *, void *, void *, void *, int, unsigned char *);
 extern void func_001FB498(void);
 extern void func_001F3008(void);
 extern void func_001F3140(void);
@@ -141,18 +141,12 @@ extern int D_001B2F40[];
 extern void func_001FA460_2(void *, void *) __asm__("func_001FA460");
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern void func_002116A0(void *, int, int *, void *);
-extern void func_001FA540(void *, void *, void *);
-extern void func_00211548(void *, int, void *, void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern int D_001414D0 NOT_SDA;
 extern float D_001CAE00[] NOT_SDA;
-extern void func_0020E360(void *, void *);
-extern float func_001FA058(float, float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_00118D80(int);
-extern void func_00212578(int, int);
 extern char D_00165600[];
 extern int D_0015F718;
 extern short D_0015F71C;
@@ -519,7 +513,6 @@ float func_00214D28(float *p, float target, float maxstep) {
 
 LINKER_REMNANT("asm/remnants/text", func_00214D80);
 
-extern float func_001F9B50(float);
 
 /* Moves *p1 toward `a` with velocity *p2: when *p2 heads away from the
    target (or it is reached), the velocity eases to 0 by c
@@ -824,7 +817,6 @@ int func_00215570(void *arg0, int arg1) {
 
 LINKER_REMNANT("asm/remnants/text", func_00215648);
 
-extern void func_001FA588(void *, void *, void *);
 
 /* Conjugate-style sandwich: arg0 = arg2 * (arg1 with w = 0) * a, where
    a is arg2 negated with its w kept (func_001FA588 is the quaternion
