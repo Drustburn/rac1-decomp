@@ -1638,7 +1638,6 @@ void func_L06_003065B0(char *m) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L06_003097F0);
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_30A0A8;
 typedef struct Data_30A0A8 { int f0; int f4; char pad8[0x18]; int f20; int f24; int f28; } Data_30A0A8;
 
 extern int func_L00_00200290_30A0A8(void *, float) __asm__("func_L00_00200290");
@@ -1695,19 +1694,19 @@ extern int D_L06_0016240C_30A0A8 SDATA(D_L06_0016240C);
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
 void func_L06_0030A0A8(Moby *m) {
     Data_30A0A8 *d = *(void **)&m->pvars;
-    V4_30A0A8 v1;
-    V4_30A0A8 v2;
-    V4_30A0A8 v3;
-    V4_30A0A8 v4;
+    Vec4A v1;
+    Vec4A v2;
+    Vec4A v3;
+    Vec4A v4;
 
-    qcopy(&v1, &*(V4_30A0A8 *)&m->pos);
+    qcopy(&v1, &*(Vec4A *)&m->pos);
     v1.w = 3.0f;
     if (func_L00_00200290_30A0A8(&v1, 64.0f) == -1) {
         return;
     }
     switch (m->state) {
     case 0:
-        func_001FA1F8_30A0A8(&*(V4_30A0A8 *)&m->unkC0, &*(V4_30A0A8 *)&m->rot);
+        func_001FA1F8_30A0A8(&*(Vec4A *)&m->unkC0, &*(Vec4A *)&m->rot);
         if (d->f4 != 0) {
             m->state = 1;
         } else if (d->f0 != 0) {
@@ -1718,7 +1717,7 @@ void func_L06_0030A0A8(Moby *m) {
         break;
     case 2:
         if (func_001F9908_30A0A8(&d->f28)) {
-            func_L00_00260108_30A0A8(m, &*(V4_30A0A8 *)&m->pos, -1, 0.333f, 13.0f);
+            func_L00_00260108_30A0A8(m, &*(Vec4A *)&m->pos, -1, 0.333f, 13.0f);
             if (d->f0 != 0) {
                 m->state = 4;
             } else {
@@ -1739,11 +1738,11 @@ void func_L06_0030A0A8(Moby *m) {
         for (k = 0; k < n; k++) {
                 int c19, c18, c17, c16, c2;
                 float z;
-                func_L00_001FF4B0_30A0A8(&v2, &*(V4_30A0A8 *)&m->unkC0, D_L06_00162380_30A0A8 * (func_002140F8_30A0A8(-D_L06_0016238C_30A0A8, D_L06_0016238C_30A0A8) + 1.0f) * D_0015EE6C_302FE8);
+                func_L00_001FF4B0_30A0A8(&v2, &*(Vec4A *)&m->unkC0, D_L06_00162380_30A0A8 * (func_002140F8_30A0A8(-D_L06_0016238C_30A0A8, D_L06_0016238C_30A0A8) + 1.0f) * D_0015EE6C_302FE8);
                 z = D_L06_00162384_30A0A8 * (func_002140F8_30A0A8(-D_L06_0016238C_30A0A8, D_L06_0016238C_30A0A8) + 1.0f) * D_0015EE6C_302FE8;
                 func_001F9BC0_30A0A8(&v3);
                 v3.z = z;
-                func_L00_001FF4B0_30A0A8(&v4, &*(V4_30A0A8 *)&m->unkD0, func_002140F8_30A0A8(-D_L06_00162388_30A0A8, D_L06_00162388_30A0A8) * D_0015EE6C_302FE8);
+                func_L00_001FF4B0_30A0A8(&v4, &*(Vec4A *)&m->unkD0, func_002140F8_30A0A8(-D_L06_00162388_30A0A8, D_L06_00162388_30A0A8) * D_0015EE6C_302FE8);
                 func_001F9BD8_30A0A8(&v3, &v3, &v4);
                 v2.w = func_002140F8_30A0A8(D_L06_001623A0_30A0A8, D_L06_001623A4_30A0A8);
                 v3.w = func_002140F8_30A0A8(D_L06_001623A8_30A0A8, D_L06_001623AC_30A0A8);
@@ -1752,7 +1751,7 @@ void func_L06_0030A0A8(Moby *m) {
                 c17 = func_001FA898_30A0A8(func_001F9878_30A0A8((float)D_L06_00162390_30A0A8 * func_002140F8_30A0A8(0.0f, 1.0f) + 1.0f));
                 c16 = func_001FA898_30A0A8(func_001F9878_30A0A8((float)D_L06_00162394_30A0A8 * (func_002140F8_30A0A8(-D_L06_0016239C_30A0A8, D_L06_0016239C_30A0A8) + 1.0f)));
                 c2 = func_001FA898_30A0A8(func_001F9878_30A0A8((float)D_L06_00162398_30A0A8 * (func_002140F8_30A0A8(-D_L06_0016239C_30A0A8, D_L06_0016239C_30A0A8) + 1.0f)));
-                func_00219780_30A0A8(&*(V4_30A0A8 *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, -1);
+                func_00219780_30A0A8(&*(Vec4A *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, -1);
         }
         break;
     }
@@ -1765,7 +1764,7 @@ void func_L06_0030A0A8(Moby *m) {
             for (k = 0; k < cnt; k++) {
                     int c19, c18, c17, c16, c2;
                     func_L00_00258DB0_30A0A8(&v4, 0.0f, D_L06_001623D0_30A0A8 * D_0015EE6C_302FE8);
-                    func_L00_001FF4B0_30A0A8(&v2, &*(V4_30A0A8 *)&m->unkC0, D_L06_001623C0_30A0A8 * (func_002140F8_30A0A8(-D_L06_001623CC_30A0A8, D_L06_001623CC_30A0A8) + 1.0f) * D_0015EE6C_302FE8);
+                    func_L00_001FF4B0_30A0A8(&v2, &*(Vec4A *)&m->unkC0, D_L06_001623C0_30A0A8 * (func_002140F8_30A0A8(-D_L06_001623CC_30A0A8, D_L06_001623CC_30A0A8) + 1.0f) * D_0015EE6C_302FE8);
                     func_001F9BD8_30A0A8(&v2, &v2, &v4);
                     func_L00_001FF4B0_30A0A8(&v3, &v2, D_L06_001623C4_30A0A8 * (func_002140F8_30A0A8(-D_L06_001623CC_30A0A8, D_L06_001623CC_30A0A8) + 1.0f) * D_0015EE6C_302FE8);
                     v3.z = v3.z - D_L06_001623C8_30A0A8 * D_0015EE6C_302FE8;
@@ -1776,7 +1775,7 @@ void func_L06_0030A0A8(Moby *m) {
                     c17 = func_001FA898_30A0A8(func_001F9878_30A0A8((float)D_L06_001623D4_30A0A8 * func_002140F8_30A0A8(0.0f, 1.0f) + 1.0f));
                     c16 = func_001FA898_30A0A8(func_001F9878_30A0A8((float)D_L06_001623D8_30A0A8 * (func_002140F8_30A0A8(-D_L06_001623E0_30A0A8, D_L06_001623E0_30A0A8) + 1.0f)));
                     c2 = func_001FA898_30A0A8(func_001F9878_30A0A8((float)D_L06_001623DC_30A0A8 * (func_002140F8_30A0A8(-D_L06_001623E0_30A0A8, D_L06_001623E0_30A0A8) + 1.0f)));
-                    func_00219780_30A0A8(&*(V4_30A0A8 *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, D_L06_0016240C_30A0A8);
+                    func_00219780_30A0A8(&*(Vec4A *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, D_L06_0016240C_30A0A8);
             }
         }
         break;

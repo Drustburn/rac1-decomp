@@ -363,7 +363,6 @@ void func_L13_002B5210(unsigned char *moby, float *v, float *w)
     *(int *)(w + 1) = 0;
 }
 typedef int Q_2B5368 __attribute__((mode(TI)));
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2B5368;
 typedef struct Cls_2B5368 { char pad0[0x24]; float scale; } Cls_2B5368;
 typedef struct Data_2B5368 {
     char pad0[0x40];
@@ -476,7 +475,7 @@ void func_L13_002B5368(Moby *m) {
         }
         break;
     case 4: {
-        V4_2B5368 v;
+        Vec4A v;
         func_L00_00258DB0_2B5368(&v.x, 0.5f, 1.0f);
         func_L00_002584A8_2B5368(m, 0, -1);
         func_L00_0025F4A8_2B5368(m, &v, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
@@ -494,9 +493,9 @@ void func_L13_002B5368(Moby *m) {
     gun = data->gun;
     if (gun != 0 && gun->oclass == 0x24 && (unsigned char)gun->state != 0xFE && (unsigned char)gun->state != 0xFD) {
         qcopy(&gun->rot, &m->rot);
-        (*(V4_2B5368 *)&gun->unkC0) = (*(V4_2B5368 *)&m->unkC0);
-        (*(V4_2B5368 *)&gun->unkD0) = (*(V4_2B5368 *)&m->unkD0);
-        (*(V4_2B5368 *)&gun->unkE0) = (*(V4_2B5368 *)&m->unkE0);
+        (*(Vec4A *)&gun->unkC0) = (*(Vec4A *)&m->unkC0);
+        (*(Vec4A *)&gun->unkD0) = (*(Vec4A *)&m->unkD0);
+        (*(Vec4A *)&gun->unkE0) = (*(Vec4A *)&m->unkE0);
     } else {
         data->gun = 0;
     }

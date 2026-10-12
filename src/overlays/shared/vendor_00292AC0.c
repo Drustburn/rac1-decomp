@@ -175,7 +175,6 @@ char *func_L03_002C0028(char *m, float *at, int cls) {
     }
     return found;
 }
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2C0330;
 typedef struct Data_2C0330 {
     char pad0[0x20];
     float hp;
@@ -253,11 +252,11 @@ extern float D_0015EE70 MACRO_ADDR;
 /* Update of moby class 455 (spawner): counts its living children, takes hits, runs its state machine and spawns class 0x221 children at a point picked by its mode. */
 void func_L03_002C0330(Moby *moby) {
     int used[4];
-    Vec_2C0330 v30;
-    Vec_2C0330 v40;
-    Vec_2C0330 v50;
-    Vec_2C0330 v60;
-    Vec_2C0330 v70;
+    Vec4A v30;
+    Vec4A v40;
+    Vec4A v50;
+    Vec4A v60;
+    Vec4A v70;
     int st;
     Data_2C0330 *d;
     Hit_2C0330 *r;
@@ -408,11 +407,11 @@ void func_L03_002C0330(Moby *moby) {
     case 8: {
         float z;
         float *p;
-        Vec_2C0330 *vel;
+        Vec4A *vel;
         z = 0.0f;
         p = D_L03_0015F660;
         func_L00_0025F4A8(moby, d->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x14, 8.0f, 4.0f, 18.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
-        vel = (Vec_2C0330 *)&moby->rot;
+        vel = (Vec4A *)&moby->rot;
         func_L00_00265050(moby, 0x6C5, &moby->pos, vel, 0, 0, z, p, p, p);
         func_L00_00265050(moby, 0x6C6, &moby->pos, vel, 0, 0, z, p, p, p);
         func_L00_00265050(moby, 0x6C7, &moby->pos, vel, 0, 0, z, p, p, p);
@@ -1074,15 +1073,14 @@ void func_L03_002D50A0(unsigned char *m) {
     }
 }
 typedef int u128_2D5B88 __attribute__((mode(TI)));
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2D5B88;
 typedef struct {
-    Vec_2D5B88 vel;
+    Vec4A vel;
     Moby *target;
     int timer;
     int flip;
 } Data_2D5B88;
 typedef struct {
-    Vec_2D5B88 dir;
+    Vec4A dir;
     void *owner;
     int flags;
     unsigned char b18;
@@ -1092,10 +1090,10 @@ typedef struct {
     int i20;
 } Hit_2D5B88;
 typedef struct {
-    Vec_2D5B88 pos;
-    Vec_2D5B88 v10;
-    Vec_2D5B88 v20;
-    Vec_2D5B88 v30;
+    Vec4A pos;
+    Vec4A v10;
+    Vec4A v20;
+    Vec4A v30;
     void *moby;
 } Tgt_2D5B88;
 extern void func_L00_00260D30(void *, void *, float);
@@ -1129,18 +1127,18 @@ extern float D_L03_00161BB0 SDATA(D_L03_00161BB0);
 /* Update of moby class 848: a spark that homes on its target moby, sheds particles and an arc when close, and dies on a hit. */
 void func_L03_002D5B88(Moby *moby) {
     Tgt_2D5B88 tgt;
-    Vec_2D5B88 v50;
+    Vec4A v50;
     Hit_2D5B88 hit;
-    Vec_2D5B88 v90;
-    Vec_2D5B88 vA0;
-    Vec_2D5B88 vB0;
-    Vec_2D5B88 vC0;
-    Vec_2D5B88 vD0;
-    Vec_2D5B88 vE0;
-    Vec_2D5B88 vF0;
-    Vec_2D5B88 v100;
-    Vec_2D5B88 v110;
-    Vec_2D5B88 v120;
+    Vec4A v90;
+    Vec4A vA0;
+    Vec4A vB0;
+    Vec4A vC0;
+    Vec4A vD0;
+    Vec4A vE0;
+    Vec4A vF0;
+    Vec4A v100;
+    Vec4A v110;
+    Vec4A v120;
     float ang;
     int *snd = 0;
     Data_2D5B88 *d = (Data_2D5B88 *)((char *)moby->pvars);

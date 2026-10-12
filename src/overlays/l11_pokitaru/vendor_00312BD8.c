@@ -1277,10 +1277,9 @@ void func_L11_003153D0(char *moby, float *a, float *b) {
 }
 INCLUDE_ASM("asm/overlays", func_L11_00315788);
 typedef int Q_316DD8 __attribute__((mode(TI)));
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_316DD8;
 typedef struct Cls_316DD8 { char pad0[0x10]; int bounds; char pad14[0x10]; float scale; } Cls_316DD8;
-typedef struct Hit_316DD8 { char pad0[0x10]; V4_316DD8 pos; Moby *owner; } Hit_316DD8;
-typedef struct Path_316DD8 { int n; char pad4[0xC]; V4_316DD8 a; V4_316DD8 b; } Path_316DD8;
+typedef struct Hit_316DD8 { char pad0[0x10]; Vec4A pos; Moby *owner; } Hit_316DD8;
+typedef struct Path_316DD8 { int n; char pad4[0xC]; Vec4A a; Vec4A b; } Path_316DD8;
 typedef struct Data_316DD8 {
     char pad0[0x20];
     float hp;
@@ -1304,7 +1303,7 @@ typedef struct Data_316DD8 {
     char pad178[0x2C];
     float f1A4;
     char pad1A8[0x28];
-    V4_316DD8 f1D0;
+    Vec4A f1D0;
     char pad1E0[0x30];
     int f210;
     int f214;
@@ -1352,7 +1351,7 @@ extern float D_L11_0016238C_316DD8 SDATA(D_L11_0016238C);
 /* Update of a path-following enemy: sinks or dies with its carrier, takes hits (knockback by hit kind),
  * then follows its path and gives up on it when too far off. */
 void func_L11_00316DD8(Moby *m) {
-    V4_316DD8 v;
+    Vec4A v;
     int hit;
     float dmg;
     Data_316DD8 *d;
@@ -1365,7 +1364,7 @@ void func_L11_00316DD8(Moby *m) {
     if (d->f254 != -1 && m->state != 0xB && m->state != 9 && m->state != 0x12 && m->state != 0x11 && m->state != 0
         && m->state != 0xC && m->state != 0xD) {
         if (m->pos.z < D_L11_00160058_316DD8[d->f254].pos.z + 0.5f) {
-            func_L00_00260460_316DD8(m, &*(V4_316DD8 *)&m->pos, -1, 0.5f, 10.0f);
+            func_L00_00260460_316DD8(m, &*(Vec4A *)&m->pos, -1, 0.5f, 10.0f);
             func_0020D678_316DD8(m);
         }
     }
@@ -1478,7 +1477,7 @@ void func_L11_00316DD8(Moby *m) {
         if (m->state == 1) {
             qcopy(&v, &D_L11_001B11B0_316DD8[d->f234]->b);
         } else {
-            qcopy(&v, &*(V4_316DD8 *)&m->pos);
+            qcopy(&v, &*(Vec4A *)&m->pos);
         }
         if (d->f248 < func_001F9D48_316DD8(&v, &d->f1D0) || 3.0f < v.z - d->f1D0.z) {
             d->f214 = 2;

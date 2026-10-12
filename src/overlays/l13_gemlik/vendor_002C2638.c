@@ -47,11 +47,10 @@ unsigned char *func_L13_002C2638(char *src, char *pos, char *target, char *vec, 
     return moby;
 }
 typedef int Q_2C27B0 __attribute__((mode(TI)));
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2C27B0;
 typedef struct Cls_2C27B0 { char pad0[0x24]; float scale; } Cls_2C27B0;
 typedef struct Rocket_2C27B0 {
-    V4_2C27B0 vel;
-    V4_2C27B0 tpos;
+    Vec4A vel;
+    Vec4A tpos;
     Moby *owner;
     Moby *target;
     int timer;
@@ -97,11 +96,11 @@ extern Tex_2C27B0 D_L13_001B2680;
 /* Update for the homing rocket (class 82): smoke trail, steering toward its target, collision and expiry. */
 void func_L13_002C27B0(Moby *m) {
     Rocket_2C27B0 *d = (void *)m->pvars;
-    V4_2C27B0 old;
-    V4_2C27B0 hitpos;
-    V4_2C27B0 tmp;
-    V4_2C27B0 vel;
-    V4_2C27B0 dir;
+    Vec4A old;
+    Vec4A hitpos;
+    Vec4A tmp;
+    Vec4A vel;
+    Vec4A dir;
     Hit_2C27B0 *hit;
     float t;
     float yaw;
@@ -681,19 +680,18 @@ void func_L13_002C5190(char *out, float scale) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L13_002C5248);
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2C56B0;
 typedef float Vec_2C56B0[4] __attribute__((aligned(16)));
 typedef struct Cls_2C56B0 { char pad0[0x10]; int f10; } Cls_2C56B0;
-typedef struct Veh_2C56B0 { char pad0[0x10]; V4_2C56B0 vel; char pad20[0x44]; float f64; } Veh_2C56B0;
+typedef struct Veh_2C56B0 { char pad0[0x10]; Vec4A vel; char pad20[0x44]; float f64; } Veh_2C56B0;
 typedef struct Boss_2C56B0 { char pad0[0x10E]; unsigned char b10E; unsigned char b10F; } Boss_2C56B0;
 typedef struct Data_2C56B0 {
     char pad0[0x20];
     float f20;
     short h24;
     char pad26[0x4A];
-    V4_2C56B0 vel;
+    Vec4A vel;
     char pad80[0x10];
-    V4_2C56B0 v90;
+    Vec4A v90;
     int fA0;
     int fA4;
     int fA8;

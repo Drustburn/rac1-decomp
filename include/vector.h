@@ -26,6 +26,14 @@ typedef struct {
    and a second typedef of one name is an error. */
 typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
+/* Four floats aligned to 16 bytes, the layout moved by one lq/sq. */
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} __attribute__((aligned(16))) Vec4A;
+
 typedef union {
     VecQuad q;
     f32 f[4];

@@ -496,7 +496,6 @@ int func_L00_002228E0(void) {
 typedef struct { int a; int b; int c; char pad[0x20]; } T2C_222B80;
 typedef struct { char pad[0x194]; float f194; } H194_222B80;
 typedef struct { char pad[0x694]; float f694; } H694_222B80;
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_222B80;
 extern void func_L00_002638B8(char *o);
 extern void func_L00_0020BFA8(void);
 extern void func_L00_0020E9F8(int a, int b);
@@ -568,8 +567,8 @@ int func_L00_00222B80(int a, int b) {
     int old2088;
     char *moby;
     int old20A7;
-    V4_222B80 d;
-    V4_222B80 out;
+    Vec4A d;
+    Vec4A out;
     {
         char *p = (char *)D_0013E633 + 0xE1D;
         if (*(int *)(p + 0x208C) == 0x14 && (a != 0x64 || b != 2)) return 0;
@@ -1657,7 +1656,7 @@ int func_L00_00222B80(int a, int b) {
                     *(float *)(u + 0x488) += h;
                     *(float *)(u + 0x48C) += h;
                     *(float *)(u + 0x4A0) = D_0015EE70 * 14.0f;
-                    d = (V4_222B80){ 331.0f, 104.0f, 145.0f };
+                    d = (Vec4A){ 331.0f, 104.0f, 145.0f };
                     if (FastVecDist(u + 0x80, &d) < 10.0f) {
                         h = 0.7f;
                         *(float *)(u + 0x430) += h;

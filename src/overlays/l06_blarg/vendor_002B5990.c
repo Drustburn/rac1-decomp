@@ -1346,7 +1346,6 @@ INCLUDE_ASM("asm/overlays", func_L06_002FD3E0);
 void func_L06_002FDA60(unsigned char *moby) {
     moby[0x20] = 3;
 }
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2FDA70;
 typedef struct {
     char pad0[0x10];
     int f10;
@@ -1375,8 +1374,8 @@ typedef struct {
 } Data_2FDA70;
 typedef struct {
     char pad0[0x20];
-    Vec_2FDA70 v20;
-    Vec_2FDA70 v30;
+    Vec4A v20;
+    Vec4A v30;
     char pad40[0x40];
 } Node_2FDA70;
 typedef struct {
@@ -1406,8 +1405,8 @@ extern int D_L06_00162008 SDATA(D_L06_00162008);
 
 /* Update of moby class 1061: a lift that the hero calls with buttons; it moves between two heights and switches its helper mobys. */
 void func_L06_002FDA70(Moby *moby) {
-    Vec_2FDA70 v0;
-    Vec_2FDA70 v10;
+    Vec4A v0;
+    Vec4A v10;
     Data_2FDA70 *d = (Data_2FDA70 *)moby->pvars;
 
     FastVecScale(&v0, &moby->pos, -1.0f);

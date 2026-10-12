@@ -1261,10 +1261,9 @@ void func_L10_002E9978(Moby *m)
 }
 INCLUDE_ASM("asm/overlays", func_L10_002E9E70);
 INCLUDE_ASM("asm/overlays", func_L10_002EAA08);
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2EAD50;
 
 typedef struct {
-    Vec_2EAD50 home;        /* 0x00 */
+    Vec4A home;        /* 0x00 */
     int sound;              /* 0x10 */
     int timer;              /* 0x14 */
     char pad18[0x4];
@@ -1273,7 +1272,7 @@ typedef struct {
 
 typedef struct {
     char pad00[0x10];
-    Vec_2EAD50 pos;         /* 0x10 */
+    Vec4A pos;         /* 0x10 */
     unsigned char state;    /* 0x20 */
     char pad21[0xF];
     unsigned char f30;      /* 0x30 */
@@ -1309,7 +1308,7 @@ void func_L10_002EAD50(GateMoby_2EAD50 *m)
 {
     GateVars_2EAD50 *d = m->vars;
     float v[3];
-    Vec_2EAD50 out;
+    Vec4A out;
     unsigned char st = m->state;
 
     switch (st) {

@@ -479,7 +479,6 @@ void func_L00_002B4748(char *m) {
     }
 }
 typedef int Q_2B4918 __attribute__((mode(TI)));
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2B4918;
 typedef struct { float pos[4][4]; unsigned int col[4]; float uv[4][2]; unsigned long tag[4]; } Quad_2B4918;
 typedef struct { int a, b; } Ids_2B4918;
 typedef struct { float x, y, z; } P3_2B4918;
@@ -517,17 +516,17 @@ extern void func_L00_001FDE48_2B4918(int, void *, void *, void *, int) __asm__("
 /* Draws the moby's beam: orients the moby along its child's two joints, draws three quads and a ribbon of 196 points. */
 void func_L00_002B4918(Moby *m) {
     Quad_2B4918 pk;
-    V4_2B4918 mtx[4];
-    V4_2B4918 out[2];
+    Vec4A mtx[4];
+    Vec4A out[2];
     Ids_2B4918 ids;
-    V4_2B4918 up;
-    V4_2B4918 res[4];
-    V4_2B4918 idm[4];
-    V4_2B4918 a;
-    V4_2B4918 b;
-    V4_2B4918 c;
-    V4_2B4918 d;
-    V4_2B4918 e;
+    Vec4A up;
+    Vec4A res[4];
+    Vec4A idm[4];
+    Vec4A a;
+    Vec4A b;
+    Vec4A c;
+    Vec4A d;
+    Vec4A e;
     Data_2B4918 *data = (Data_2B4918 *)m->pvars;
     Child_2B4918 *child = data->child;
     int i;

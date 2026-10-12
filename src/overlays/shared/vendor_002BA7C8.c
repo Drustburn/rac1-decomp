@@ -933,9 +933,8 @@ void func_L00_002BDAF0(Moby *m) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_002BE2A0);
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2BE3A8;
 typedef struct {
-    Vec_2BE3A8 pos;
+    Vec4A pos;
     Moby *target;
     char pad14[0x34];
     float f48;
@@ -977,14 +976,14 @@ extern float D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001618B8") MACRO_ADDR;
 extern float D_L00_001618C8_2BE3A8[3] __asm__("D_L00_001618C8") MACRO_ADDR;
 extern float D_L00_001618D8_2BE3A8[3] __asm__("D_L00_001618D8") MACRO_ADDR;
 extern int D_L00_001618E8_2BE3A8[3] __asm__("D_L00_001618E8") MACRO_ADDR;
-extern Vec_2BE3A8 D_L00_001DC250_2BE3A8[12] __asm__("D_L00_001DC250");
-extern Vec_2BE3A8 D_L00_001DC260_2BE3A8[12] __asm__("D_L00_001DC260");
-extern Vec_2BE3A8 D_L00_001DC320_2BE3A8[12] __asm__("D_L00_001DC320");
-extern Vec_2BE3A8 D_L00_001DC3E0_2BE3A8[12] __asm__("D_L00_001DC3E0");
-extern Vec_2BE3A8 D_L00_001DC4A0_2BE3A8[12][20] __asm__("D_L00_001DC4A0");
-extern Vec_2BE3A8 D_L00_001DD3A0_2BE3A8[3] __asm__("D_L00_001DD3A0");
-extern Vec_2BE3A8 D_L00_001DD3D0_2BE3A8[3] __asm__("D_L00_001DD3D0");
-extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173F60");
+extern Vec4A D_L00_001DC250_2BE3A8[12] __asm__("D_L00_001DC250");
+extern Vec4A D_L00_001DC260_2BE3A8[12] __asm__("D_L00_001DC260");
+extern Vec4A D_L00_001DC320_2BE3A8[12] __asm__("D_L00_001DC320");
+extern Vec4A D_L00_001DC3E0_2BE3A8[12] __asm__("D_L00_001DC3E0");
+extern Vec4A D_L00_001DC4A0_2BE3A8[12][20] __asm__("D_L00_001DC4A0");
+extern Vec4A D_L00_001DD3A0_2BE3A8[3] __asm__("D_L00_001DD3A0");
+extern Vec4A D_L00_001DD3D0_2BE3A8[3] __asm__("D_L00_001DD3D0");
+extern Vec4A D_L00_00173F60_2BE3A8 __asm__("D_L00_00173F60");
 extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F660") MACRO_ADDR;
 extern Tab_2BE3A8 D_L00_001E9E30_2BE3A8 __asm__("D_L00_001E9E30");
 extern char D_0013E633_2BE3A8[] __asm__("D_0013E633");
@@ -1021,13 +1020,13 @@ extern int func_001F9908_2BE3A8(int *) __asm__("func_001F9908");
  * twenty points around each node, queues the draw callback, sparks at the tip, and runs the three travelling
  * pulses along the beam. */
 void func_L00_002BE3A8(Moby *m) {
-    Vec_2BE3A8 aim;
-    Vec_2BE3A8 seg;
-    Vec_2BE3A8 off;
-    Vec_2BE3A8 end;
-    Vec_2BE3A8 tmp;
-    Vec_2BE3A8 dir;
-    Vec_2BE3A8 side;
+    Vec4A aim;
+    Vec4A seg;
+    Vec4A off;
+    Vec4A end;
+    Vec4A tmp;
+    Vec4A dir;
+    Vec4A side;
     Vars_2BE3A8 *p;
     Info_2BE3A8 *info;
     int j;
@@ -1093,11 +1092,11 @@ void func_L00_002BE3A8(Moby *m) {
             func_001F9CA0_2BE3A8(&side, &dir, D_0013E633_2BE3A8 + 0x10AD);
             func_L00_001FF4B0_2BE3A8(&side, &side, D_L00_001617D8_2BE3A8 + (D_L00_001617DC_2BE3A8 - D_L00_001617D8_2BE3A8) * t);
             {
-                Vec_2BE3A8 ring;
-                Vec_2BE3A8 fwd;
-                Vec_2BE3A8 out;
-                Vec_2BE3A8 up;
-                Vec_2BE3A8 node;
+                Vec4A ring;
+                Vec4A fwd;
+                Vec4A out;
+                Vec4A up;
+                Vec4A node;
 
                 for (j = 0; j < 20; j++) {
                     func_002156E0_2BE3A8(&ring, &side, &dir, (float)j * D_L00_001617D4_2BE3A8);
@@ -1144,8 +1143,8 @@ void func_L00_002BE3A8(Moby *m) {
         func_001F9BD8_2BE3A8(&tmp, &D_L00_001DC260_2BE3A8[0], &side);
         {
             Tab_2BE3A8 cols;
-            Vec_2BE3A8 out;
-            Vec_2BE3A8 up;
+            Vec4A out;
+            Vec4A up;
 
             cols = D_L00_001E9E30_2BE3A8;
             col = cols.c[func_002140B0_2BE3A8(5)];
@@ -1178,7 +1177,7 @@ void func_L00_002BE3A8(Moby *m) {
         }
     }
     for (q = 0; q < 3; q++) {
-        Vec_2BE3A8 step;
+        Vec4A step;
         float dt;
         float sum;
         float full;

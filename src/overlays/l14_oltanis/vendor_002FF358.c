@@ -972,7 +972,6 @@ void func_L14_00307680(int unused, char *moby) {
 }
 INCLUDE_ASM("asm/overlays", func_L14_003076A4);
 INCLUDE_ASM("asm/overlays", func_L14_00308000);
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_308368;
 typedef struct Model_308368 { char pad0[0x10]; int bounds; } Model_308368;
 typedef struct Part_308368 { char pad0[0x20]; float f20; float f24; float f28; float f2C; } Part_308368;
 typedef struct Fx_308368 { char pad0[2]; unsigned char b2; char pad3[0x1D]; float f20; float f24; float f28; char pad2C[0x14]; } Fx_308368;
@@ -1007,7 +1006,7 @@ typedef struct Data_308368 {
     Fx_308368 fx;
 } Data_308368;
 typedef struct Snd_308368 { char pad0[0x74]; unsigned char b74; char pad75[0x13]; Moby *f88; } Snd_308368;
-typedef struct Path_308368 { char pad0[0x10]; V4_308368 a; V4_308368 b; } Path_308368;
+typedef struct Path_308368 { char pad0[0x10]; Vec4A a; Vec4A b; } Path_308368;
 
 extern char *func_L00_0025B478_308368(void *, int, int) __asm__("func_L00_0025B478");
 extern void func_L00_00260108_308368(void *, void *, float, float, int) __asm__("func_L00_00260108");
@@ -1044,7 +1043,7 @@ extern float D_0015EE6C_308368 __asm__("D_0015EE6C") MACRO_ADDR;
  * 1 wait for the trigger volume, 2 chase with its thruster part, 3 respawn), then its engine sound. */
 void func_L14_00308368(Moby *m) {
     Data_308368 *d = (void *)m->pvars;
-    V4_308368 vec;
+    Vec4A vec;
     char *hit;
 
     hit = func_L00_0025B478_308368(m, 0x800000, 0);

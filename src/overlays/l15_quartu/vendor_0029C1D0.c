@@ -5,10 +5,9 @@
 #include "moby.h"
 
 INCLUDE_ASM("asm/overlays", func_L15_0029C1D0);
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2A48B0;
 
 typedef struct {
-    Vec_2A48B0 home;   /* 0x00: x y z w at open */
+    Vec4A home;   /* 0x00: x y z w at open */
     int vol_near;       /* 0x10 */
     int vol_trigger;    /* 0x14 */
     float travel;       /* 0x18 */
@@ -20,7 +19,7 @@ typedef struct {
 
 typedef struct {
     char pad00[0x10];
-    Vec_2A48B0 pos;    /* 0x10 */
+    Vec4A pos;    /* 0x10 */
     unsigned char state; /* 0x20 */
     char pad21[0xF];
     unsigned char f30;  /* 0x30 */

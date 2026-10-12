@@ -1492,16 +1492,15 @@ void func_L00_002DDDE8(char *p, char *q, int flag) {
     fn = *(void (**)(char *))(*(char **)(*(char **)(p + 0x24) + 0x2C) + 0x14);
     if (fn) fn(p); else DeleteMoby(p);
 }
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2DDEA0;
 typedef struct { char pad0[0xC]; void (*fC)(void *); } Cb_2DDEA0;
 typedef struct { char pad0[0x10]; int i10; char pad14[0x10]; float f24; char pad28[4]; Cb_2DDEA0 *f2C; char pad30[0x16]; short h46; } Cls_2DDEA0;
 typedef struct {
     float x, y, f8, timer;
-    Vec_2DDEA0 vel;
-    Vec_2DDEA0 q20;
-    Vec_2DDEA0 v30;
-    Vec_2DDEA0 v40;
-    Vec_2DDEA0 v50;
+    Vec4A vel;
+    Vec4A q20;
+    Vec4A v30;
+    Vec4A v40;
+    Vec4A v50;
     Moby *owner;
     float f64;
     short state;
@@ -1516,12 +1515,12 @@ typedef struct {
     float f98;
     short h9C, h9E;
 } R_2DDEA0;
-typedef struct { char pad0[0x18]; Moby *hit; char pad1C[4]; Vec_2DDEA0 v20; Vec_2DDEA0 v30; Vec_2DDEA0 v40; } Coll_2DDEA0;
-typedef struct { Vec_2DDEA0 v; char pad10[8]; unsigned char b18; unsigned char b19; short h1A; int pad1C; } Hit_2DDEA0;
+typedef struct { char pad0[0x18]; Moby *hit; char pad1C[4]; Vec4A v20; Vec4A v30; Vec4A v40; } Coll_2DDEA0;
+typedef struct { Vec4A v; char pad10[8]; unsigned char b18; unsigned char b19; short h1A; int pad1C; } Hit_2DDEA0;
 typedef union {
-    Vec_2DDEA0 v[15];
+    Vec4A v[15];
     long long q;
-    struct { Vec_2DDEA0 pad; Hit_2DDEA0 hit; } h;
+    struct { Vec4A pad; Hit_2DDEA0 hit; } h;
 } Frame_2DDEA0;
 
 extern float D_0015EE60_2DDEA0 __asm__("D_0015EE60") MACRO_ADDR;
@@ -1598,7 +1597,7 @@ int func_L00_002DDEA0(Moby *self, char *q) {
     if (self == 0 || self->state == 0xFE || self->state == 0xFD) return 0;
     m = func_L00_002DCD40_2DDEA0(self);
     if (m != 0) {
-        m->v30 = (*(Vec_2DDEA0 *)&self->pos);
+        m->v30 = (*(Vec4A *)&self->pos);
         switch ((short)(m->state - 1)) {
         case 0: {
             float f20, f21;

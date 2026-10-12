@@ -20,20 +20,19 @@ int func_L04_001F2F68(char *a, char *b, int n) {
     }
     return best;
 }
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_1F3010;
-typedef union { Vec_1F3010 v; int n; } PathEl_1F3010;
+typedef union { Vec4A v; int n; } PathEl_1F3010;
 typedef struct {
-    Vec_1F3010 vel;
-    Vec_1F3010 pos;
-    Vec_1F3010 dir;
-    Vec_1F3010 drift;
+    Vec4A vel;
+    Vec4A pos;
+    Vec4A dir;
+    Vec4A drift;
     float range;
     short timer;
     short pad46;
     float f48;
     float near;
     Moby *target;
-    Vec_1F3010 *point;
+    Vec4A *point;
     int pad58;
     short path;
     short count;
@@ -47,7 +46,7 @@ typedef struct {
     char pad20[8];
     float z;
     char pad2C[0x14];
-    Vec_1F3010 normal;
+    Vec4A normal;
 } Coll_1F3010;
 
 extern PathEl_1F3010 *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0930");
@@ -75,12 +74,12 @@ extern int func_L04_0024D790_1F3010(void *, void *, void *, int) __asm__("func_L
 /* Steering for a moby: pulls it along its path (c->path) and toward its target, pushes it away from the
  * listed mobys (and the hero's), and keeps it off the ground; f holds the gains. */
 void func_L04_001F3010(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
-    Vec_1F3010 o;
-    Vec_1F3010 w;
-    Vec_1F3010 t;
-    Vec_1F3010 a;
-    Vec_1F3010 e;
-    Vec_1F3010 x;
+    Vec4A o;
+    Vec4A w;
+    Vec4A t;
+    Vec4A a;
+    Vec4A e;
+    Vec4A x;
     PathEl_1F3010 *path;
     Moby *obj;
     int flag;

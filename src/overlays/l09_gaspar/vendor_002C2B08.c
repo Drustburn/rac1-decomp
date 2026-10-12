@@ -1280,13 +1280,12 @@ void func_L09_002F1390(char *moby)
         DeleteMoby(moby);
     }
 }
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2F9A50;
 
 typedef struct {
     char pad00[0x20];
     char f20[0x40];         /* 0x20: passed to func_L00_002617B0 */
-    Vec_2F9A50 ang;         /* 0x60: tilt x, y */
-    Vec_2F9A50 angvel;      /* 0x70 */
+    Vec4A ang;         /* 0x60: tilt x, y */
+    Vec4A angvel;      /* 0x70 */
     int init;               /* 0x80 */
     float baseZ;            /* 0x84 */
     int timer;              /* 0x88 */
@@ -1328,26 +1327,26 @@ extern float D_L09_00161A98_2F9A50 SDATA(D_L09_00161A98);
 void func_L09_002F9A50(Moby *moby)
 {
     PlatVars_2F9A50 *data = (*(PlatVars_2F9A50 **)&moby->pvars);
-    Vec_2F9A50 m0;
-    Vec_2F9A50 rot;
-    Vec_2F9A50 rel;
-    Vec_2F9A50 ang;
-    Vec_2F9A50 pos;
-    Vec_2F9A50 out;
+    Vec4A m0;
+    Vec4A rot;
+    Vec4A rel;
+    Vec4A ang;
+    Vec4A pos;
+    Vec4A out;
     float low;
     float z0;
     float k;
 
-    func_001F9C30_2F9A50(&m0, &(*(Vec_2F9A50 *)&moby->pos), -1.0f);
-    qcopy(&rot, &(*(Vec_2F9A50 *)&moby->rot));
+    func_001F9C30_2F9A50(&m0, &(*(Vec4A *)&moby->pos), -1.0f);
+    qcopy(&rot, &(*(Vec4A *)&moby->rot));
     low = data->baseZ - 0.25f;
-    z0 = (*(Vec_2F9A50 *)&moby->pos).z;
+    z0 = (*(Vec4A *)&moby->pos).z;
     if (data->init == 0) {
-        qcopy(&data->ang, &(*(Vec_2F9A50 *)&moby->rot));
+        qcopy(&data->ang, &(*(Vec4A *)&moby->rot));
         qzero(&data->angvel);
-        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - 0.3f;
+        (*(Vec4A *)&moby->pos).z = (*(Vec4A *)&moby->pos).z - 0.3f;
         data->init = 1;
-        data->baseZ = (*(Vec_2F9A50 *)&moby->pos).z;
+        data->baseZ = (*(Vec4A *)&moby->pos).z;
     }
     if (((Hero *)(D_0013E633_2F9A50 + 0xE1D))->air_frames.s == 0 &&
         ((int)((Hero *)(D_0013E633_2F9A50 + 0xE1D))->ground_moby) == (int)moby) {
@@ -1362,14 +1361,14 @@ void func_L09_002F9A50(Moby *moby)
         float a, b, y;
         float deg;
         func_001F9908_2F9A50(&data->timer);
-        func_001F9BF0_2F9A50(&rel, D_0013E633_2F9A50 + 0xE9D, &(*(Vec_2F9A50 *)&moby->pos));
+        func_001F9BF0_2F9A50(&rel, D_0013E633_2F9A50 + 0xE9D, &(*(Vec4A *)&moby->pos));
         deg = 0.01745329238474369f;
-        a = func_001F9C78_2F9A50(&rel, &(*(Vec_2F9A50 *)&moby->unkC0));
-        b = func_001F9C78_2F9A50(&rel, &(*(Vec_2F9A50 *)&moby->unkD0));
+        a = func_001F9C78_2F9A50(&rel, &(*(Vec4A *)&moby->unkC0));
+        b = func_001F9C78_2F9A50(&rel, &(*(Vec4A *)&moby->unkD0));
         k = D_L09_00161A74_2F9A50;
         y = k * a;
         ang = data->ang;
-        pos = (*(Vec_2F9A50 *)&moby->pos);
+        pos = (*(Vec4A *)&moby->pos);
         func_L00_0025CCF0_2F9A50(&data->ang.x, -k * b, &data->angvel.x, 0,
             D_L09_00161A84_2F9A50 * deg * D_0015EE70_F0780,
             D_L09_00161A88_2F9A50 * D_0015EE64_2F9A50,
@@ -1378,14 +1377,14 @@ void func_L09_002F9A50(Moby *moby)
             D_L09_00161A84_2F9A50 * deg * D_0015EE70_F0780,
             D_L09_00161A88_2F9A50 * D_0015EE64_2F9A50,
             D_L09_00161A8C_2F9A50 * deg * D_0015EE6C_F0780);
-        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z - D_L09_00161A78_2F9A50 * D_0015EE6C_F0780;
-        if (low < z0 && (*(Vec_2F9A50 *)&moby->pos).z <= low) {
+        (*(Vec4A *)&moby->pos).z = (*(Vec4A *)&moby->pos).z - D_L09_00161A78_2F9A50 * D_0015EE6C_F0780;
+        if (low < z0 && (*(Vec4A *)&moby->pos).z <= low) {
             func_0022ED80_2F9A50(1, 0, moby);
         }
-        func_L07_00289960_2F9A50(D_0013E633_2F9A50 + 0xE9D, &out, &(*(Vec_2F9A50 *)&moby->pos), &ang, &data->ang);
+        func_L07_00289960_2F9A50(D_0013E633_2F9A50 + 0xE9D, &out, &(*(Vec4A *)&moby->pos), &ang, &data->ang);
         func_001F9BF0_2F9A50(D_0013E633_2F9A50 + 0xE9D + 0x70, &out, D_0013E633_2F9A50 + 0xE9D);
         ((Hero *)(D_0013E633_2F9A50 + 0xE1D))->motion.unkF0.f[2] =
-            ((Hero *)(D_0013E633_2F9A50 + 0xE1D))->motion.unkF0.f[2] + ((*(Vec_2F9A50 *)&moby->pos).z - pos.z);
+            ((Hero *)(D_0013E633_2F9A50 + 0xE1D))->motion.unkF0.f[2] + ((*(Vec4A *)&moby->pos).z - pos.z);
     } else {
         float deg = 0.01745329238474369f;
         func_L00_0025CCF0_2F9A50(&data->ang.x, 0.0f, &data->angvel.x, 0,
@@ -1396,21 +1395,21 @@ void func_L09_002F9A50(Moby *moby)
             D_L09_00161A90_2F9A50 * deg * D_0015EE70_F0780,
             D_L09_00161A94_2F9A50 * D_0015EE64_2F9A50,
             D_L09_00161A98_2F9A50 * deg * D_0015EE6C_F0780);
-        (*(Vec_2F9A50 *)&moby->pos).z = (*(Vec_2F9A50 *)&moby->pos).z + D_L09_00161A7C_2F9A50 * D_0015EE6C_F0780 * (data->baseZ - (*(Vec_2F9A50 *)&moby->pos).z);
-        if (data->baseZ < (*(Vec_2F9A50 *)&moby->pos).z) {
-            (*(Vec_2F9A50 *)&moby->pos).z = data->baseZ;
+        (*(Vec4A *)&moby->pos).z = (*(Vec4A *)&moby->pos).z + D_L09_00161A7C_2F9A50 * D_0015EE6C_F0780 * (data->baseZ - (*(Vec4A *)&moby->pos).z);
+        if (data->baseZ < (*(Vec4A *)&moby->pos).z) {
+            (*(Vec4A *)&moby->pos).z = data->baseZ;
         }
-        if (z0 < low && low <= (*(Vec_2F9A50 *)&moby->pos).z) {
+        if (z0 < low && low <= (*(Vec4A *)&moby->pos).z) {
             func_0022ED80_2F9A50(2, 0, moby);
         }
     }
     func_L00_00263B78_2F9A50(0.14f, D_0015EE6C_F0780 * 0.5235987901687622f, moby, &data->f98, &data->f9C);
     func_L00_00263BF8_2F9A50(moby, &data->f90, &data->f94, 0.0872664600610733f,
         D_0015EE6C_F0780 * 0.3141592741012573f, D_0015EE6C_F0780 * 0.48869219422340393f);
-    (*(Vec_2F9A50 *)&moby->rot).x = func_001FA748_2F9A50(data->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
-    (*(Vec_2F9A50 *)&moby->rot).y = func_001FA748_2F9A50(data->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
-    func_001F9BD8_2F9A50(&m0, &m0, &(*(Vec_2F9A50 *)&moby->pos));
-    func_L00_002617B0_2F9A50(data->f20, &m0, &rot, &(*(Vec_2F9A50 *)&moby->rot));
+    (*(Vec4A *)&moby->rot).x = func_001FA748_2F9A50(data->ang.x, (*(Vec4A *)&moby->rot).x);
+    (*(Vec4A *)&moby->rot).y = func_001FA748_2F9A50(data->ang.y, (*(Vec4A *)&moby->rot).y);
+    func_001F9BD8_2F9A50(&m0, &m0, &(*(Vec4A *)&moby->pos));
+    func_L00_002617B0_2F9A50(data->f20, &m0, &rot, &(*(Vec4A *)&moby->rot));
 }
 extern int func_0022EE28(int, int, int);
 extern void func_L00_00264DB8(int arg0, int arg1);
