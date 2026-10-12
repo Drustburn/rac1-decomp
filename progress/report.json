@@ -1,12 +1,12 @@
 {
  "measures": {
-  "fuzzy_match_percent": 80.62213552653411,
+  "fuzzy_match_percent": 80.66178206898931,
   "total_code": "3712808",
-  "matched_code": "2953384",
-  "matched_code_percent": 79.54583161854855,
+  "matched_code": "2954856",
+  "matched_code_percent": 79.58547816100375,
   "total_functions": 5109,
-  "matched_functions": 4252,
-  "matched_functions_percent": 83.22568017224506,
+  "matched_functions": 4257,
+  "matched_functions_percent": 83.32354668232531,
   "complete_code": "618092",
   "complete_code_percent": 16.647561629903837,
   "total_units": 280,
@@ -16006,13 +16006,13 @@
   {
    "name": "game/sound",
    "measures": {
-    "fuzzy_match_percent": 41.11543450064851,
+    "fuzzy_match_percent": 47.27626459143969,
     "total_code": "6168",
-    "matched_code": "2536",
-    "matched_code_percent": 41.11543450064851,
+    "matched_code": "2916",
+    "matched_code_percent": 47.27626459143969,
     "total_functions": 20,
-    "matched_functions": 18,
-    "matched_functions_percent": 90.0,
+    "matched_functions": 19,
+    "matched_functions_percent": 95.0,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -16067,7 +16067,7 @@
     {
      "name": "func_0022DBE8",
      "size": "380",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "808",
      "metadata": {
       "virtual_address": "2284520"
@@ -44584,13 +44584,13 @@
   {
    "name": "Level 08: Batalia",
    "measures": {
-    "fuzzy_match_percent": 81.88991297225351,
+    "fuzzy_match_percent": 82.09724378007577,
     "total_code": "156272",
-    "matched_code": "127736",
-    "matched_code_percent": 81.73953107402478,
+    "matched_code": "128060",
+    "matched_code_percent": 81.94686188184704,
     "total_functions": 85,
-    "matched_functions": 68,
-    "matched_functions_percent": 80.0,
+    "matched_functions": 69,
+    "matched_functions_percent": 81.17647058823529,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -44906,7 +44906,7 @@
     {
      "name": "func_L08_002DF758",
      "size": "324",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "792480",
      "metadata": {
       "virtual_address": "3012440"
@@ -46348,13 +46348,13 @@
   {
    "name": "Level 11: Pokitaru",
    "measures": {
-    "fuzzy_match_percent": 87.18652471294605,
+    "fuzzy_match_percent": 87.43721333292068,
     "total_code": "129244",
-    "matched_code": "112660",
-    "matched_code_percent": 87.16845656278048,
+    "matched_code": "112984",
+    "matched_code_percent": 87.4191451827551,
     "total_functions": 100,
-    "matched_functions": 87,
-    "matched_functions_percent": 87.0,
+    "matched_functions": 88,
+    "matched_functions_percent": 88.0,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -47030,7 +47030,7 @@
     {
      "name": "func_L11_00319510",
      "size": "324",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "903032",
      "metadata": {
       "virtual_address": "3249424"
@@ -48967,13 +48967,13 @@
   {
    "name": "Level 14: Oltanis",
    "measures": {
-    "fuzzy_match_percent": 87.8161935603748,
+    "fuzzy_match_percent": 88.11083428450084,
     "total_code": "150692",
-    "matched_code": "130892",
-    "matched_code_percent": 86.86061635654183,
+    "matched_code": "131336",
+    "matched_code_percent": 87.15525708066785,
     "total_functions": 135,
-    "matched_functions": 114,
-    "matched_functions_percent": 84.44444444444444,
+    "matched_functions": 116,
+    "matched_functions_percent": 85.92592592592592,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -49496,7 +49496,7 @@
     {
      "name": "func_L14_002DF5F8",
      "size": "192",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "791120",
      "metadata": {
       "virtual_address": "3012088"
@@ -49757,7 +49757,7 @@
     {
      "name": "func_L14_002F24C8",
      "size": "252",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "868640",
      "metadata": {
       "virtual_address": "3089608"
@@ -53300,13 +53300,13 @@
    "id": "executable",
    "name": "Executable",
    "measures": {
-    "fuzzy_match_percent": 80.64934507193472,
+    "fuzzy_match_percent": 80.73094266695297,
     "total_code": "465700",
-    "matched_code": "375500",
-    "matched_code_percent": 80.63130770882542,
+    "matched_code": "375880",
+    "matched_code_percent": 80.71290530384367,
     "total_functions": 1680,
-    "matched_functions": 1510,
-    "matched_functions_percent": 89.88095238095238,
+    "matched_functions": 1511,
+    "matched_functions_percent": 89.94047619047619,
     "complete_code": "199804",
     "complete_code_percent": 42.90401546059695
    }
@@ -53315,13 +53315,13 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 80.61823313545467,
+    "fuzzy_match_percent": 80.6518630609145,
     "total_code": "3247108",
-    "matched_code": "2577884",
-    "matched_code_percent": 79.39015271435382,
+    "matched_code": "2578976",
+    "matched_code_percent": 79.42378263981364,
     "total_functions": 3429,
-    "matched_functions": 2742,
-    "matched_functions_percent": 79.96500437445319,
+    "matched_functions": 2746,
+    "matched_functions_percent": 80.08165645960922,
     "complete_code": "418288",
     "complete_code_percent": 12.881862876134702
    }
@@ -53330,13 +53330,13 @@
    "id": "game",
    "name": "Executable game code",
    "measures": {
-    "fuzzy_match_percent": 80.21029145658017,
+    "fuzzy_match_percent": 80.2937404472866,
     "total_code": "455368",
-    "matched_code": "365168",
-    "matched_code_percent": 80.19184483758191,
+    "matched_code": "365548",
+    "matched_code_percent": 80.27529382828833,
     "total_functions": 1646,
-    "matched_functions": 1476,
-    "matched_functions_percent": 89.6719319562576,
+    "matched_functions": 1477,
+    "matched_functions_percent": 89.73268529769138,
     "complete_code": "189472",
     "complete_code_percent": 41.608545176648335
    }
@@ -53375,13 +53375,13 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 86.53225257026699,
+    "fuzzy_match_percent": 86.58561248582932,
     "total_code": "2046480",
-    "matched_code": "1757752",
-    "matched_code_percent": 85.89148195926664,
+    "matched_code": "1758844",
+    "matched_code_percent": 85.94484187482898,
     "total_functions": 1449,
-    "matched_functions": 1234,
-    "matched_functions_percent": 85.16218081435473,
+    "matched_functions": 1238,
+    "matched_functions_percent": 85.43823326432022,
     "complete_code": "281192",
     "complete_code_percent": 13.740275986083422
    }
@@ -53510,13 +53510,13 @@
    "id": "level_08",
    "name": "Level 08: Batalia",
    "measures": {
-    "fuzzy_match_percent": 81.88991297225351,
+    "fuzzy_match_percent": 82.09724378007577,
     "total_code": "156272",
-    "matched_code": "127736",
-    "matched_code_percent": 81.73953107402478,
+    "matched_code": "128060",
+    "matched_code_percent": 81.94686188184704,
     "total_functions": 85,
-    "matched_functions": 68,
-    "matched_functions_percent": 80.0,
+    "matched_functions": 69,
+    "matched_functions_percent": 81.17647058823529,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -53555,13 +53555,13 @@
    "id": "level_11",
    "name": "Level 11: Pokitaru",
    "measures": {
-    "fuzzy_match_percent": 87.18652471294605,
+    "fuzzy_match_percent": 87.43721333292068,
     "total_code": "129244",
-    "matched_code": "112660",
-    "matched_code_percent": 87.16845656278048,
+    "matched_code": "112984",
+    "matched_code_percent": 87.4191451827551,
     "total_functions": 100,
-    "matched_functions": 87,
-    "matched_functions_percent": 87.0,
+    "matched_functions": 88,
+    "matched_functions_percent": 88.0,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -53600,13 +53600,13 @@
    "id": "level_14",
    "name": "Level 14: Oltanis",
    "measures": {
-    "fuzzy_match_percent": 87.8161935603748,
+    "fuzzy_match_percent": 88.11083428450084,
     "total_code": "150692",
-    "matched_code": "130892",
-    "matched_code_percent": 86.86061635654183,
+    "matched_code": "131336",
+    "matched_code_percent": 87.15525708066785,
     "total_functions": 135,
-    "matched_functions": 114,
-    "matched_functions_percent": 84.44444444444444,
+    "matched_functions": 116,
+    "matched_functions_percent": 85.92592592592592,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
