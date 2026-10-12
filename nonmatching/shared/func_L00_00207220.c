@@ -1,40 +1,44 @@
 /* NON_MATCHING func_L00_00207220 -- src/overlays/shared/help_00203E98.c
- * Best so far: SIZE ours 244 / retail 240, checked 2026-10-09.
+ * Best so far: SIZE ours 244 / retail 240, checked 2026-10-12.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   func_L00_00207220: loops over 8 slots (ints at D_0013F450+0x2218, owners at +0x2238); if the owner (or the wor
- *   Logic and two separate lui bases match (use D_0013F450 for g so it is not merged with D_0013E633+0x1D); differ
- *   Would unblock: the source form that leaves owner[i] unreduced while the slot walks as a pointer (best was p7.c
+ *   func_L00_00207220: sound-slot pruner (8 slots at hero+0x2218, mobys at +0x2238, rows of 0x70 at D_0013E650). B
  */
-#include "common.h"
-extern unsigned char D_0013E633[] NOT_SDA;
-extern unsigned char D_0013F450[] NOT_SDA;
-extern void func_L00_0028EBF0(void);
+typedef struct { char p0[0x74]; unsigned char f74; char p1[0x13]; Moby *f88; } Row13E650_207220;
+extern Hero D_0013F450_207220 __asm__("D_0013F450");
+extern char D_0013E650_207220[] __asm__("D_0013E650");
+extern void func_L00_0028EBF0_a(void) __asm__("func_L00_0028EBF0");
 
-/* for each of 8 slots, calls the handler when its owner still matches, then frees it */
 void func_L00_00207220(void) {
-    char *g = (char *)D_0013F450;
-    char *h = (char *)D_0013E633 + 0x1D;
-    int *slot = (int *)(g + 0x2218);
-    int *owner = (int *)(g + 0x2238);
     int i;
-    for (i = 0; i < 8; i++) {
-        int s = slot[i];
-        int v = owner[i];
-        if (v != 0) {
-            if (s != -1) {
-                if (*(int *)(h + s * 0x70 + 0x88) == v && *(unsigned char *)(h + s * 0x70 + 0x74) != 0) {
-                    func_L00_0028EBF0();
+    int none;
+    int *p;
+    Moby *m;
+    int k;
+    Row13E650_207220 *row;
+
+    none = -1;
+    p = &D_0013F450_207220.unk2218;
+    for (i = 0; i < 8; i++, p++) {
+        k = *p;
+        m = D_0013F450_207220.unk2238[i];
+        if (m != 0) {
+            if (k != none) {
+                row = (Row13E650_207220 *)(D_0013E650_207220 + k * 0x70);
+                if (row->f88 == m && row->f74 != 0) {
+                    func_L00_0028EBF0_a();
                 }
             }
         } else {
-            if (s != -1) {
-                if (*(int *)(h + s * 0x70 + 0x88) == *(int *)(g + 0x2080) && *(unsigned char *)(h + s * 0x70 + 0x74) != 0) {
-                    func_L00_0028EBF0();
+            if (k != none) {
+                m = *(Moby **)((char *)&D_0013F450_207220 + 0x2080);
+                row = (Row13E650_207220 *)(D_0013E650_207220 + k * 0x70);
+                if (row->f88 == m && row->f74 != 0) {
+                    func_L00_0028EBF0_a();
                 }
             }
         }
-        slot[i] = -1;
+        *p = none;
     }
 }
