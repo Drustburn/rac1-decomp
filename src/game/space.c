@@ -1572,7 +1572,171 @@ void func_00232A00(int x, int y, int w, int h, unsigned long rgba,
     D_00161000 = (int *)((char *)D_00161000 + 0x60);
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_00232B90);
+extern s32 D_0015EF74 MACRO_ADDR;
+extern s32 D_0015EF78 MACRO_ADDR;
+typedef struct {
+    u64 q[12];
+} sceGsLoadImage __attribute__((aligned(16)));
+struct DiscFile {
+    s32 sector;
+    s32 size;
+};
+struct DiscTable {
+    u8 pad_0[0x8];
+    struct DiscFile debug_font; /* 0x8 */
+    struct DiscFile memcard_data; /* 0x10, read by memcard_update_state and memcard_restore_game */
+    struct DiscFile animation_streams[49]; /* 0x18, streamed animations by archive index */
+    struct DiscFile music_10000[37]; /* 0x1A0, music tracks 10000.. */
+    struct DiscFile unk2C8[6]; /* 0x2C8, one per language */
+    struct DiscFile unk2F8[6]; /* 0x2F8, one per language */
+    u8 pad_328[0x1D0];
+    struct DiscFile level_chunk; /* 0x4F8, read by load_level_chunk_from_disc */
+    u8 pad_500[0x3B8];
+    /* 0x8B8: render archive sector/length records; extent reaches the next
+       known field, not a proven count of valid archives. */
+    struct DiscFile render_archives[201];
+    s32 music_50000[40][6]; /* 0xF00, tracks 50000.., one location per language */
+    struct DiscFile unk12C0; /* 0x12C0 */
+    struct DiscFile level_archives[24]; /* 0x12C8, by level index */
+    struct DiscFile loading_slides[6]; /* 0x1388, one per language */
+    struct DiscFile unk13B8; /* 0x13B8 */
+    struct DiscFile music_40000[36]; /* 0x13C0, music tracks 40000.. */
+    s32 sound_bank; /* 0x14E0, passed to load_audio_bank_by_location */
+    s32 pad_14E4;
+    struct DiscFile unk14E8; /* 0x14E8 */
+    u8 pad_14F0[0x8];
+    struct DiscFile wad_chunks[6]; /* 0x14F8, level wad chunks */
+    struct DiscFile help_text; /* 0x1528, per-language archive read by update_menu_help_text_load */
+    struct DiscFile unk1530[14]; /* 0x1530, overlays: x of an x/y pair picked by D_0015ED80 */
+    struct DiscFile unk15A0[14]; /* 0x15A0, the y half of the 0x1530 pair */
+    struct DiscFile animation_table; /* 0x1610, read with animation_asset_read_active set */
+    struct DiscFile music_60000[62]; /* 0x1618, music tracks 60000.. */
+    struct DiscFile unk1808[19]; /* 0x1808, overlays: x of an x/y pair picked by D_0015ED80 */
+    struct DiscFile unk18A0[19]; /* 0x18A0, the y half of the 0x1808 pair */
+    struct DiscFile movies[12]; /* 0x1938, level transition movies */
+    struct DiscFile movies_alt[12]; /* 0x1998, picked by the video mode flag */
+    struct DiscFile unk19F8[3]; /* 0x19F8, overlays: x/y pair picked by D_0015ED80 */
+    struct DiscFile unk1A10[3]; /* 0x1A10, the y half of the 0x19F8 pair */
+    struct DiscFile unk1A28[5]; /* 0x1A28, overlays: x/y pair picked by D_0015ED80 */
+    struct DiscFile unk1A50[5]; /* 0x1A50, the y half of the 0x1A28 pair */
+    struct DiscFile start_movies[4]; /* 0x1A78, played by start_level */
+    struct DiscFile start_movies_alt[4]; /* 0x1A98, while D_0015ED80 is set */
+    u8 pad_1AB8[0xEB0];
+    struct DiscFile shared_archive; /* 0x2968 */
+    struct DiscFile sound_archive; /* 0x2970 */
+    struct DiscFile sound_archive_alt; /* 0x2978, while D_0015ED80 is set */
+    u8 pad_2980[0x8];
+    struct DiscFile music_20000[36]; /* 0x2988, music tracks 20000.. */
+    s32 music_tracks[1]; /* 0x2AA8, by track number */
+};
+extern struct DiscTable D_00137C80;
+struct CommonArchiveMemory {
+    u8 pad_0[0x14];
+    s32 archive_base;
+};
+extern s32 D_0015EF8C MACRO_ADDR;
+extern struct CommonArchiveMemory D_001941C0;
+extern void func_00118D80(s32 a0);
+extern s32 func_00120F30_32B90(s32 a0) __asm__("func_00120F30");
+extern s32 func_00122958(sceGsLoadImage *load_image, s32 image_address);
+extern s32 func_00122630(sceGsLoadImage *load_image, s32 block_offset, s32 buffer_width, s32 pixel_storage_format, s32 x, s32 y, s32 width, s32 height);
+extern s32 func_00120858_32B90(s32 a0, s32 a1) __asm__("func_00120858");
+extern s32 func_0020C468(s32 source_address, s32 destination_address);
+extern s32 func_002175C8(void *a0, u32 a1, u32 a2);
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/fun_00231878.c, prepare_loading_slide_textures. */
+void func_00232B90(s32 language_index, s32 first_slide, s32 second_slide,
+                                    u64 *shared_texture, u64 *first_texture, u64 *second_texture) {
+    s32 texture_bases[6];
+    sceGsLoadImage load_image;
+    u64 *first_output;
+    u64 *second_output;
+    s32 upload_index;
+    s32 *texture_base_output;
+    s32 upload_bytes;
+    s32 image_address;
+    s32 archive_base;
+    struct CommonArchiveMemory *archive_memory;
+
+    first_output = first_texture;
+    second_output = second_texture;
+    archive_memory = &D_001941C0;
+    upload_index = 0;
+    func_002175C8((void *)(archive_memory->archive_base + 0x100000),
+                           D_00137C80.loading_slides[language_index].sector,
+                           D_00137C80.loading_slides[language_index].size);
+    func_00120F30_32B90(0);
+    func_00118D80(0);
+    func_0020C468(archive_memory->archive_base + 0x100000, archive_memory->archive_base);
+    func_00118D80(0);
+    archive_base = archive_memory->archive_base;
+    D_0015EF74 = D_0015EF8C;
+    D_0015EF78 = D_0015EF8C;
+    texture_base_output = texture_bases;
+    for (upload_index = 0; upload_index < 6; upload_index++) {
+        if (upload_index == 0) {
+            func_00122630(&load_image, (D_0015EF74 << 8) >> 16, 1, 0, 0, 0,
+                                 0x10, 0x10);
+            upload_bytes = 0x400;
+            image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + 4)) + 0x20;
+        } else if (upload_index == 1) {
+            func_00122630(&load_image, (D_0015EF74 << 8) >> 16, 1, 0x13, 0,
+                                 0, 0x40, 0x40);
+            upload_bytes = 0x1000;
+            image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + 4)) + 0x420;
+        } else if (upload_index == 2) {
+            func_00122630(&load_image, (D_0015EF74 << 8) >> 16, 1, 0, 0, 0,
+                                 0x10, 0x10);
+            upload_bytes = 0x400;
+            image_address =
+                (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + first_slide * 4 + 8)) +
+                0x20;
+        } else if (upload_index == 3) {
+            func_00122630(&load_image, (D_0015EF74 << 8) >> 16, 8, 0x13, 0,
+                                 0, 0x200, 0x40);
+            upload_bytes = 0x8000;
+            image_address =
+                (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + first_slide * 4 + 8)) +
+                0x420;
+        } else if (upload_index == 4) {
+            func_00122630(&load_image, (D_0015EF74 << 8) >> 16, 1, 0, 0, 0,
+                                 0x10, 0x10);
+            upload_bytes = 0x400;
+            image_address =
+                (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + second_slide * 4 + 8)) +
+                0x20;
+        } else {
+            func_00122630(&load_image, (D_0015EF74 << 8) >> 16, 8, 0x13, 0,
+                                 0, 0x200, 0x40);
+            upload_bytes = 0x8000;
+            image_address =
+                (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + second_slide * 4 + 8)) +
+                0x420;
+        }
+        func_00118D80(0);
+        func_00122958(&load_image, image_address);
+        func_00120858_32B90(0, 0);
+        *texture_base_output = D_0015EF74 >> 8;
+        D_0015EF74 = D_0015EF74 + upload_bytes;
+        texture_base_output++;
+    }
+    /* Each TEX0 combines an image base with its paired palette base. */
+    {
+        u64 texture_bits = ((u64)texture_bases[0] << 37) | (0xB000ULL << 19);
+        u64 image_bits = (u64)(texture_bases[1] | 0x19304000);
+        *shared_texture = (image_bits | texture_bits) | (1ULL << 63);
+    }
+    {
+        u64 image_bits = (u64)(texture_bases[3] | 0x25320000);
+        u64 texture_bits = ((u64)texture_bases[2] << 37) | (0xB000ULL << 19);
+        *first_output = (image_bits | texture_bits) | (1ULL << 63);
+    }
+    {
+        u64 image_bits = (u64)(texture_bases[5] | 0x25320000);
+        u64 texture_bits = ((u64)texture_bases[4] << 37) | (0xB000ULL << 19);
+        *second_output = (image_bits | texture_bits) | (1ULL << 63);
+    }
+}
 
 typedef struct {
     u8 pad_0[0xC];

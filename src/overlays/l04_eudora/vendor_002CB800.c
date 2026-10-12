@@ -76,7 +76,65 @@ void func_L04_002CF440(void *m) {
     char pad[0x50];
     DeleteMoby(m);
 }
-INCLUDE_ASM("asm/overlays", func_L04_002D27F8);
+extern f32 D_0015EE6C MACRO_ADDR;
+extern f32 D_0015EE70 MACRO_ADDR;
+extern void func_L04_00293530(void *, char *);
+extern void func_L04_00293578(void *, char *);
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l04/gameplay/entities/002ca420.c, FUN_L04_002d1418. */
+void func_L04_002D27F8(void *m) {
+    char *d = *(char **)(m + 0x78);
+    char *p = d + 0x160;
+    float speed;
+    float angleHalf;
+    float angleFull;
+    float angleOther;
+    float amount;
+    float frameScale;
+    float otherScale;
+    *(int *)(d + 0x1d0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1d4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1d8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1dc) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1e0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1e4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1e8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1ec) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x54) + 0x14);
+    *(int *)(d + 0x1f0) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1f4) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1f8) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x1fc) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    *(int *)(d + 0x200) = *(int *)(*(char **)(*(char **)(m + 0x24) + 0x70) + 0x14);
+    func_L04_00293530(m, p);
+    frameScale = D_0015EE70;
+    otherScale = D_0015EE6C;
+    angleFull = frameScale * 6.2831855f;
+    angleOther = otherScale * 6.2831855f;
+    speed = frameScale * 9.8f;
+    angleHalf = frameScale * 3.1415927f;
+    amount = frameScale * 10.0f;
+    *(unsigned char *)(d + 0x214) = 7;
+    *(unsigned char *)(d + 0x210) = 0;
+    *(unsigned char *)(d + 0x211) = 0;
+    *(float *)(d + 0x23c) = speed;
+    *(float *)(d + 0x22c) = angleHalf;
+    *(float *)(d + 0x230) = angleFull;
+    *(float *)(d + 0x234) = angleOther;
+    *(float *)(d + 0x224) = amount;
+    *(unsigned char *)(d + 0x212) = 0xff;
+    *(unsigned char *)(d + 0x213) = 0x10;
+    *(unsigned char *)(d + 0x215) = 7;
+    *(unsigned char *)(d + 0x250) = 10;
+    *(unsigned char *)(d + 0x251) = 8;
+    *(unsigned char *)(d + 0x253) = 12;
+    *(unsigned char *)(d + 0x252) = 14;
+    *(unsigned char *)(d + 0x300) = 11;
+    *(unsigned char *)(d + 0x301) = 9;
+    *(unsigned char *)(d + 0x303) = 13;
+    *(unsigned char *)(d + 0x302) = 15;
+    *(float *)(d + 0x240) = 0.5f;
+    func_L04_00293578(m, p);
+}
 extern void func_001F9BC0(void *);
 extern void func_L00_00250800(void *, int, void *);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int,

@@ -76,7 +76,40 @@ void func_L00_00235CA0(int n) {
     }
     D_L00_0017E5D8_235ca0.t->c[n] = 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00235FF8);
+extern volatile s32 D_L00_0016009C MACRO_ADDR;
+extern volatile int D_L00_0015FB28 MACRO_ADDR;
+extern volatile int D_L00_0015FB2C MACRO_ADDR;
+extern volatile int D_L00_0015FB30 MACRO_ADDR;
+extern volatile int D_L00_0015FB34 MACRO_ADDR;
+extern int D_L00_00160098 MACRO_ADDR;
+extern volatile int D_L00_001600A0 MACRO_ADDR;
+extern volatile int D_L00_001600A8 MACRO_ADDR;
+extern short D_L00_0015F808;
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/hud/00234fd0.c, FUN_L00_00235668. */
+void func_L00_00235FF8(int state) {
+    int oldState = (*(volatile int *)&D_L00_0015F808);
+    if (state != oldState) {
+        int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
+        oldDC = D_L00_00160098;
+        old70 = D_L00_0015FB28;
+        D_L00_0015FB28 = oldDC;
+        oldDC = D_L00_0016009C;
+        old74 = D_L00_0015FB2C;
+        D_L00_0015FB2C = oldDC;
+        oldDC = D_L00_001600A0;
+        old78 = D_L00_0015FB30;
+        oldE8 = D_L00_001600A8;
+        old7C = D_L00_0015FB34;
+        (*(volatile int *)&D_L00_0015F808) = oldState ^ 1;
+        *(volatile int *)&D_L00_00160098 = old70;
+        D_L00_0016009C = old74;
+        D_L00_001600A0 = old78;
+        D_L00_0015FB30 = oldDC;
+        D_L00_001600A8 = old7C;
+        D_L00_0015FB34 = oldE8;
+    }
+}
 typedef struct {
     int unk00, unk04;
     char pad08[0x18];
