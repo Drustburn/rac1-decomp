@@ -2699,19 +2699,9 @@ void func_L01_00316730(Cam_316730 *cam) {
     FastVecCross(cam->f20, cam->f10, cam->f0);
 }
 typedef u32 u128_171B8 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_171B8 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_171B8;
 typedef int OvlQuad_171B8 __attribute__((mode(TI)));
-typedef union {
-    OvlQuad_171B8 q;
-    f32 f[4];
-    s32 i[4];
-} OvlVec4;
 typedef struct {
-    Vec4_171B8 pos; /* 0x00 */
+    Vec4 pos; /* 0x00 */
     u8 pad10[0x30];
     s32 state; /* 0x40 */
     u8 pad44[4];
@@ -2720,7 +2710,7 @@ typedef struct {
     u8 pad50[0x10];
 } CameraFocus_171B8;
 typedef struct {
-    Vec4_171B8 vel; /* 0x00 */
+    Vec4 vel; /* 0x00 */
     u8 pad10[0x10];
     f32 unk20; /* 0x20 */
     f32 unk24; /* 0x24 */
@@ -2736,9 +2726,9 @@ typedef struct {
     u8 pad14[0xC];
 } CameraSpring_171B8;
 typedef struct {
-    Vec4_171B8 vel; /* 0x00 */
+    Vec4 vel; /* 0x00 */
     u8 pad10[0x10];
-    Vec4_171B8 accel; /* 0x20 */
+    Vec4 accel; /* 0x20 */
     f32 unk30; /* 0x30 */
     f32 unk34; /* 0x34 */
     f32 unk38; /* 0x38 */
@@ -2754,7 +2744,7 @@ typedef struct {
     s32 unk10;
 } CameraBlend_171B8;
 typedef struct {
-    Vec4_171B8 axis; /* 0x00 */
+    Vec4 axis; /* 0x00 */
     f32 unk10; /* 0x10 */
     f32 unk14; /* 0x14 */
     s32 unk18; /* 0x18 */
@@ -2783,7 +2773,7 @@ typedef struct {
 typedef struct {
     s32 count;
     u8 pad4[0xC];
-    Vec4_171B8 pts[1]; /* 0x10 */
+    Vec4 pts[1]; /* 0x10 */
 } CameraPath_171B8;
 typedef struct {
     u8 pad0[0x20];
@@ -2802,7 +2792,7 @@ extern CameraPresetRow_171B8 * D_L01_0015F050_171B8 __asm__("D_L01_0015F050") MA
 extern CameraPath_171B8 * D_L01_001B0C30_171B8[] __asm__("D_L01_001B0C30");
 void func_L01_00316270_171B8(Camera_171B8 *cam) __asm__("func_L01_00316270");
 extern Camera_171B8 * D_L01_00167304;
-extern OvlVec4 D_0013F4D0_171B8 __asm__("D_0013F4D0");
+extern Vec4 D_0013F4D0_171B8 __asm__("D_0013F4D0");
 extern f32 func_001F9D10(void *, void *);
 extern f32 func_001F9C78(void *, void *);
 
@@ -2811,7 +2801,7 @@ void func_L01_003171B8(Camera_171B8 *cam) {
     CameraPresetRow_171B8 *rows = D_L01_0015F050_171B8;
     Camera_171B8 *src = D_L01_00167304;
     CameraPreset_171B8 *s = rows[cam->preset].preset;
-    OvlVec4 at, delta, to_camera;
+    Vec4 at, delta, to_camera;
     s32 seg;
     f32 t;
 

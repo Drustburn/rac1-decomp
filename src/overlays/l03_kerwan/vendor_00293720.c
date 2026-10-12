@@ -1362,103 +1362,18 @@ int func_L03_002C6F40(unsigned char *moby) {
     }
     return 0;
 }
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4f_C6F80;
-struct Moby_C6F80;
 extern f32 D_0015EE6C MACRO_ADDR;
 extern f32 D_0015EE70 MACRO_ADDR;
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
 } AnimSeq_C6F80;
-struct Manip;
-struct GifEntry;
 struct AnimSeq_C6F80;
-struct MobyClass_C6F80 {
-    u8 pad_0[0xC];
-    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
-    u8 pad_D[3];
-    u32 unk10; /* copied into Moby.unk94 when a moby is (re)classed */
-    u8 pad_14[0x8];
-    void *unk1C; /* word table, indexed id * 4 + 4 (0024eec0) */
-    struct GifEntry *gifs; /* patched by patch_moby_gifs */
-    f32 scale; /* default draw scale: copied into Moby.scale, divides it */
-    s32 unk28;
-    void **callbacks; /* function-pointer table, called with the moby */
-    u8 pad_30[0x14];
-    u16 flags; /* initial Moby.flags */
-    s16 unk46; /* class category; 5 is tested by targeting code */
-    struct AnimSeq_C6F80 *seqs[1]; /* animation sequences, indexed by Moby.seq */
-};
-struct Moby_C6F80 {
-    Vec4f_C6F80 bsphere;
-    Vec4f_C6F80 pos;
-    u8 state; /* >= 0xFE: dead, waiting to respawn */
-    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
-    u8 unk22; /* class slot: pclass = D_L00_00197300[unk22] (crate_update) */
-    u8 unk23; /* 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
-    struct MobyClass_C6F80 *pclass;
-    struct Moby_C6F80 *next;
-    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
-    u8 unk30; /* set to 0xFF (0x7F for beams) by spawners */
-    u8 unk31; /* set to 1 by spawners */
-    s16 unk32; /* set to 0xFF (0x7F for beams) by spawners */
-    u16 flags;
-    u16 unk36; /* set to 0x7F80 by spawners */
-    u64 spawn_frame; /* frame count at which it may respawn */
-    Vec4f_C6F80 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
-    u8 frame; /* animation frame */
-    u8 prev_frame; /* frame index in prev_seq */
-    u8 seq; /* animation sequence id */
-    u8 prev_seq;
-    f32 unk54;
-    f32 unk58;
-    u8 pad5C[8];
-    struct Manip *manips;
-    void *cur_frame_data;
-    void *prev_frame_data;
-    u8 unk70;
-    u8 unk71; /* set to 0xFF when a moby changes class */
-    u8 unk72;
-    u8 unk73;
-    void (*update)(struct Moby_C6F80 *moby);
-    u8 *pvars;
-    u8 unk7C;
-    u8 sound_slot; /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
-    u8 unk7E;
-    u8 unk7F; /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
-    u8 pad80[0x10];
-    s32 unk90;
-    u32 unk94; /* set from the class header's word 0x10 */
-    s32 unk98; /* set to 1 while a carrier holds the moby (FUN_L00_002c7a58) */
-    u8 pad9C[8];
-    u8 unkA4;
-    u8 padA5;
-    s16 oclass;
-    u8 padA8[8];
-    u8 unkB0; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
-    u8 padB1;
-    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
-    s16 unkB4;
-    u8 padB6[2];
-    void *unkB8; /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
-    u8 unkBC;
-    u8 padBD[3];
-    Vec4f_C6F80 unkC0; /* 0xC0: first row of a matrix built from rot (FUN_001fa030) */
-    Vec4f_C6F80 unkD0;
-    Vec4f_C6F80 unkE0;
-    u8 padF0[0x10];
-};
-int func_L03_002C8068_C6F80(struct Moby_C6F80 *moby) __asm__("func_L03_002C8068");
+int func_L03_002C8068_C6F80(struct Moby *moby) __asm__("func_L03_002C8068");
 typedef int OvlQuad_C6F80 __attribute__((mode(TI)));
 extern int func_001F9908_C6F80(void *) __asm__("func_001F9908");
 extern int func_L00_0025EFC0_C6F80(void *, void *, void *, int *, float *, int, float, float, float) __asm__("func_L00_0025EFC0");
 extern int func_00215570(void *, int);
-struct Moby_C6F80;
 typedef struct {
     float pos[4];
     float v10[4];
@@ -1545,7 +1460,7 @@ extern void func_L00_00260108(void *, void *, int, float, float);
 extern void func_L00_00264B40(void *, int, void *, float);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
 extern void func_L01_0026E8E0_C6F80(char *p, void *) __asm__("func_L01_0026E8E0");
-extern void func_L03_002C7DE8_C6F80(struct Moby_C6F80 *moby) __asm__("func_L03_002C7DE8");
+extern void func_L03_002C7DE8_C6F80(struct Moby *moby) __asm__("func_L03_002C7DE8");
 extern void func_00213DE0(void *, int, int, int);
 extern void func_L00_00265050_C6F80(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("func_L00_00265050");
 
@@ -1569,7 +1484,7 @@ void func_L03_002C6F80(char *moby) {
     data = *(Data2c5bb8 **)(moby + 0x78);
     func_L00_00260D30_C6F80(moby, (char *)&tgt, data->f230);
     func_L00_00264B40(moby, 0, data->m280, 2.1f);
-    func_L03_002C7DE8_C6F80((struct Moby_C6F80 *)moby);
+    func_L03_002C7DE8_C6F80((struct Moby *)moby);
     func_001F9908_C6F80(&data->i244);
     switch (((unsigned char *)moby)[0x20]) {
     case 0:
@@ -1639,7 +1554,7 @@ void func_L03_002C6F80(char *moby) {
         if (func_002140B0(14) == 0) {
             idx = data->i248;
             if (idx == -1 || (m = (*(char * *)&D_L03_00160058_C6F80) + (idx << 8)) == 0 || ((unsigned char *)m)[0x20] == 0xFE ||
-                ((unsigned char *)m)[0x20] == 0xFD || func_L03_002C8068_C6F80((struct Moby_C6F80 *)m)) {
+                ((unsigned char *)m)[0x20] == 0xFD || func_L03_002C8068_C6F80((struct Moby *)m)) {
                 data->i23C = func_001F9850((int)func_002140F8(30.0f, 90.0f));
                 moby[0x20] = 4;
                 if (((unsigned char *)moby)[0x53] != 3) {
@@ -1707,7 +1622,7 @@ void func_L03_002C6F80(char *moby) {
         if (func_002140B0(14) == 0) {
             idx = data->i248;
             if (idx == -1 || (m = (*(char * *)&D_L03_00160058_C6F80) + (idx << 8)) == 0 || ((unsigned char *)m)[0x20] == 0xFE ||
-                ((unsigned char *)m)[0x20] == 0xFD || func_L03_002C8068_C6F80((struct Moby_C6F80 *)m)) {
+                ((unsigned char *)m)[0x20] == 0xFD || func_L03_002C8068_C6F80((struct Moby *)m)) {
                 data->i270 = -1;
                 data->i23C = func_001F9850((int)func_002140F8(30.0f, 90.0f));
                 moby[0x20] = 4;
