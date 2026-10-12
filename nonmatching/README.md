@@ -58,6 +58,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_00205778`](shared/func_L00_00205778.c) | shared | 8 | BYTES 1/8 | 87.5% |
 | [`func_L00_0029AB38`](shared/func_L00_0029AB38.c) | shared | 480 | BYTES 88/480 | 81.7% |
 | [`func_L18_002EB5E8`](l18_veldin2/func_L18_002EB5E8.c) | l18_veldin2 | 924 | BYTES 172/924 | 81.4% |
+| [`func_L09_002F1198`](l09_gaspar/func_L09_002F1198.c) | l09_gaspar | 500 | BYTES 95/500 | 81.0% |
 | [`func_L18_002EAB58`](l18_veldin2/func_L18_002EAB58.c) | l18_veldin2 | 1764 | BYTES 339/1764 | 80.8% |
 | [`func_L18_002D9C90`](l18_veldin2/func_L18_002D9C90.c) | l18_veldin2 | 24 | BYTES 7/24 | 70.8% |
 | [`func_L06_0030D3E8`](shared/func_L06_0030D3E8.c) | shared | 472 | BYTES 171/472 | 63.8% |
@@ -412,7 +413,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L08_00303998`](shared/func_L08_00303998.c) | shared | 1440 | SIZE ours 1456 / retail 1440 | - |
 | [`func_L08_00308A00`](l08_batalia/func_L08_00308A00.c) | l08_batalia | 1612 | SIZE ours 1632 / retail 1612 | - |
 | [`func_L08_00318468`](shared/func_L08_00318468.c) | shared | 648 | SIZE ours 644 / retail 648 | - |
-| [`func_L09_002F1198`](l09_gaspar/func_L09_002F1198.c) | l09_gaspar | 500 | SIZE ours 496 / retail 500 | - |
 | [`func_L09_0030AFB8`](l09_gaspar/func_L09_0030AFB8.c) | l09_gaspar | 1580 | SIZE ours 1556 / retail 1580 | - |
 | [`func_L09_0030BB28`](shared/func_L09_0030BB28.c) | shared | 620 | SIZE ours 616 / retail 620 | - |
 | [`func_L10_00299D18`](l10_orxon/func_L10_00299D18.c) | l10_orxon | 1232 | SIZE ours 1220 / retail 1232 | - |
