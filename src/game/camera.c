@@ -1,4 +1,5 @@
 #include "common.h"
+#include "records.h"
 #include "structs.h"
 
 /*
@@ -108,12 +109,6 @@ void func_001EC210(void *arg0) {
    base) and no amount of reordering the C addition changes it, because
    GCC canonicalises the PLUS before operand order is chosen. Indexing
    a typed array puts the base first. See func_001EC270/func_001EC780. */
-typedef struct {
-    char unk_00[8];
-    void (*fn_08)(void *);
-    char unk_0C[4];
-    void (*fn_10)(void *);
-} DispatchRec;
 extern DispatchRec D_001E8F80[];
 
 /*
