@@ -984,10 +984,8 @@ typedef struct {
     short oclass;
 } HoverMoby;
 extern char D_0013E633[];
-extern char D_L01_001672C0[];
 extern float func_001F9D48(void *, void *);
 extern float func_001F9B88(float);
-extern float func_001F9878(float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 
@@ -1098,7 +1096,6 @@ void func_L01_00300C38(char *m) {
         DeleteMoby(m);
     }
 }
-extern char *func_0020D348(int);
 extern void func_L00_00251E30(void *, int);
 
 char *func_L01_00300E68(char *owner) {
@@ -1118,7 +1115,6 @@ char *func_L01_00300E68(char *owner) {
     }
     return moby;
 }
-extern int func_L00_0028EB98(void *, int);
 extern int func_0022ED80(int, int, int);
 extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
@@ -1186,7 +1182,6 @@ char *func_L01_003010A8(void *position,float scale) {
 extern int D_L01_00161350_s __asm__("D_L01_00161350") MACRO_ADDR;
 extern int D_L01_00161358_s __asm__("D_L01_00161358") MACRO_ADDR;
 extern float D_L01_00174368_s __asm__("D_L01_00174368") NOT_SDA;
-extern float D_0015EE70_s __asm__("D_0015EE70") MACRO_ADDR;
 extern int func_L00_001F3958(void);
 extern void func_L00_002A5158(int, int, int, float, float, float, float);
 extern char *func_L00_002D9340(void *, float);
@@ -1441,7 +1436,6 @@ extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_001F9C78(void *, void *);
 extern void func_001F9C30(void *, void *, float);
 extern float func_001F9CB8(void *);
-extern char D_L01_001672C0[];
 extern float D_L01_001621A0 MACRO_ADDR;
 extern float D_L01_001621A4 MACRO_ADDR;
 

@@ -594,7 +594,6 @@ extern Rec D_L00_00179BC0[] NOT_SDA;
 extern Rec2 D_L00_001C43B0[];
 extern char *func_0020D348(int);
 extern void func_L00_00251E30(void *);
-extern void func_L00_0025E210(void *);
 
 /* spawns a moby of a class and initialises its data block. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002bffa8.c, FUN_L00_002c52a8. */
 char *func_L00_002C6608(void *pos, int idx, int a2, int a3) {

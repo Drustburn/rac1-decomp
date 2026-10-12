@@ -85,7 +85,6 @@ void func_L06_002B5990(char *m) {
     }
 }
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern float func_00214D88(float *, float *, float, float, float, float);
 extern void func_001F9C08(void *, void *, void *, float);
 extern float D_0015EE6C MACRO_ADDR;
@@ -180,8 +179,6 @@ int func_L06_002EB140(void *m_, void *pos) {
     return 0;
 }
 LINKER_REMNANT("asm/overlays", func_L06_002EB258);
-extern short *D_L06_001AC340[];
-extern char *D_L06_00160058 MACRO_ADDR;
 
 /* Switches every moby listed in a table into state 15 until a negative entry. */
 void func_L06_002EB260(int index) {
@@ -364,14 +361,11 @@ void func_L06_002F51A0(char *moby)
 }
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern float func_001FA790(float, float);
-extern void func_001F9BC0(void *);
 extern float func_001F9FA8(float);
 extern float func_001F9F90(float);
 extern float func_001FA748(float, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
 extern float D_0015EE6C MACRO_ADDR;
-extern short D_L06_00161D7C;
 extern short D_L06_00161D80;
 extern char D_0013E633[];
 typedef struct {
@@ -435,14 +429,9 @@ void func_L06_002F5560(char *m) {
 }
 extern char D_0013E633[];
 extern float D_0015EE6C MACRO_ADDR;
-extern void func_001F9BC0(void *);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
-extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
-extern short D_L06_00161D7C;
-extern short D_L06_00161D80;
 
 // Sweeps two probe segments around a moby (sin/cos offsets scaled by its speed) via a collision query.
 void func_L06_002F57C0(char *m)
@@ -1066,7 +1055,6 @@ extern float func_L00_001FF860(float, float);
 extern float func_001F9D10(void *, void *);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
-extern void func_001F9BD8(void *, void *, void *);
 extern float func_001FA790(float, float);
 extern float func_001FA850(float, float);
 extern float func_001FA748(float, float);
@@ -1166,7 +1154,6 @@ void func_L06_002FC4C0(char *moby) {
 }
 extern void func_L00_00217718(void *, void *, int, int);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BC0(void *);
 extern float func_001F9D48(void *, void *);
 extern void func_L00_002EBF50(void *, void *, int, int, int);
 extern void func_L00_002EBE88(void *);
@@ -1193,10 +1180,8 @@ void func_L06_002FC578(char *moby) {
     func_L00_002EBEE0(m);
     *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
 }
-extern void func_001F9BC0(void *);
 extern float func_00214D88(float *, float *, float, float, float, float);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9C08(void *, void *, void *, float);
 extern float func_L00_001FF860(float, float);
 extern float func_001F9D48(void *, void *);
@@ -1638,7 +1623,6 @@ void func_L06_002FDA70(Moby *moby) {
     func_L00_002617B0(d->f20, &v0, &v10, &moby->rot);
 }
 extern void func_001F49B0(void *, void *);
-extern int func_00215570(void *, int);
 extern void func_L06_002FE5D0(void);
 extern void func_L06_002FE890(void);
 extern void func_L06_002FEB78(void);

@@ -28,7 +28,6 @@ int func_L00_00203F20(int a, int b) {
 }
 extern char D_L00_00179510[] NOT_SDA;
 extern char *D_L00_0015F740 MACRO_ADDR;
-extern unsigned char D_0014171B[] NOT_SDA;
 void func_L00_00203FB8(void) {
     if (*(int *)(D_L00_00179510) != 0) {
         int v = *(int *)((char *)(*(int *)(D_L00_00179510 + 0x20) << 4) + (int)D_L00_0015F740 + 8);
@@ -158,7 +157,6 @@ void func_L00_00205278(void) {
     (*(f32 *)&D_0013F450_05278.pad_D18[8]) = 0.97f;
 }
 extern unsigned char D_0013F450[] NOT_SDA;
-extern unsigned char D_0014171B[] NOT_SDA;
 extern void func_L00_00232EA8(void);
 extern void func_L00_00222B80(int, int);
 void func_L00_00205598(void) {
@@ -551,7 +549,6 @@ extern void func_L00_00205CC0(void);
 extern void func_L00_00205FF0(void);
 extern void func_L00_00215738(void);
 extern void func_L00_00205B00(void);
-extern void func_L00_00208E98(void);
 extern void func_L00_002098B8(int);
 extern void func_L00_00210FE0(void);
 extern void func_001F7B40(void);
@@ -1182,8 +1179,6 @@ void func_L00_00208E98(void) {
 }
 extern void func_L00_00233A90(void);
 extern void func_L00_00233AC8(void);
-extern void func_L00_00233868(void);
-extern void func_L00_001FF040(int, void *, unsigned short);
 extern void func_L00_00233F68(float *, float *, float);
 extern void func_L00_0024FF10(void *, int, void *, float, float);
 

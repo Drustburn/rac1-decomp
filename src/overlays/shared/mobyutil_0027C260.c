@@ -32,12 +32,8 @@ void func_L12_0027C260(char *moby, char *arr, int n) {
     }
 }
 extern void func_001FA218(float *, float *);
-extern void func_001FA540(void *, void *, void *);
-extern void func_002153E8(void *, void *);
-extern void func_001F9EE8(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_00251E30(void *);
-extern char *D_L12_00160058 MACRO_ADDR;
 
 // updates attached objects' transforms relative to a parent
 void func_L12_0027C368(char *parent, char *list, int n) {

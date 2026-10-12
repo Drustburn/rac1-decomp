@@ -396,13 +396,9 @@ extern float func_001F9878(float);
 extern int func_L00_00260FB0(float, char *, void *, int, int, void *, int);
 extern int func_L00_00260D30(float, char *, void *);
 extern float func_001F9D48(void *, void *);
-extern float D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
-extern int D_0015EE84 MACRO_ADDR;
 extern short D_0015EF10;
 extern char D_0013E633[];
 extern char D_0013D50F[];
-extern char *D_L16_001B0C30[];
 
 typedef struct {
     char pad00[0x20];
@@ -595,9 +591,6 @@ void func_L16_002D5188(char *moby, void *owner, void *position, char *vector) {
     qcopy(data + 0x2C0, position);
     *(float *)(data + 0x2CC) = *(float *)(vector + 8);
 }
-extern int func_001F9850(int);
-extern void func_00213DE0(void *, int, int, int);
-extern float D_0015EE6C MACRO_ADDR;
 
 // Starts the moby's state-10 setup: sets its animation, flags, and copies position and timing into its data block.
 void func_L16_002D51A8(char *moby, int arg) {
@@ -622,8 +615,6 @@ extern float func_00214D88(float *, float *, float, float, float, float);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern float D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
 
 /* steers the moby's vector toward the target and returns the distance */
 float func_L16_002D5280(char *moby, float *target) {
@@ -667,11 +658,8 @@ next:
         if (*p++ >= 0) goto next;
     }
 }
-extern char *D_L16_001B0C30[];
 extern float func_L00_001FF860(float, float);
 extern float func_001FA790(float, float);
-extern int func_001F9850(int);
-extern void func_00213DE0(void *, int, int, int);
 void func_L16_002D5438(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *target = D_L16_001B0C30[*(int *)(data + 0x120)] + (*(short *)(data + 0x300) << 4);
@@ -695,11 +683,9 @@ void func_L16_002D5438(char *moby) {
 }
 extern void func_L00_00250800(void *,int,void *);
 extern void func_001F9BC0(void *);
-extern int func_002140B0(int);
 extern int func_L00_00258BC8(int,int);
 extern void func_L00_0026B890(void *,void *,int,int,int,int,int,int,float,float);
 extern void func_L00_002ADBB0(void *,void *,void *,float,int,int,int,int,int);
-extern char D_L16_00167240[];
 extern short D_L16_0015F6B4;
 typedef struct {int values[6];} L16ParticleChoices;
 extern L16ParticleChoices D_L16_001E8600,D_L16_001E8618;
@@ -1046,7 +1032,6 @@ extern void func_L00_0025E4B0(void*,void*);
 extern void func_L00_0025E590(void*,void*);
 extern int func_L00_00260FB0(float,char*,void*,int,int,void*,int);
 extern short D_L16_00161E38;
-extern char *D_L16_00160098 MACRO_ADDR;
 typedef struct {char pad[0x74];unsigned char active;char pad75[0x13];char *owner;} L16InteractionSlot;
 typedef struct {char pad[0x80];float position[4];char pad90[0x1FF0];int owner;} L16PursuitPlayer;
 typedef struct {int status;float amount;} L16HitResult;
@@ -1161,7 +1146,6 @@ void func_L16_002E4408(void *arg) {
         b->pts[0].heading = a->pts[0].heading;
     }
 }
-extern float D_0015EE64 MACRO_ADDR;
 extern void func_L00_00263950(char *, char *, int, float, float);
 
 void func_L16_002E44B8(char *moby)
@@ -1327,8 +1311,6 @@ int func_L16_002E7138(int idx) {
 }
 INCLUDE_ASM("asm/overlays", func_L16_002E7160);
 extern char D_0013E633[];
-extern short *D_L16_001ABFC0[];
-extern char *D_L16_00160098 MACRO_ADDR;
 extern float func_001F9D10_2E7198(void *, void *) __asm__("func_001F9D10");
 extern void func_0022ED80(int, int, int);
 
@@ -1353,7 +1335,6 @@ void func_L16_002E7198(int idx) {
         }
     }
 }
-extern void func_001F49B0(void (*)(void), void *);
 extern void func_L16_002EB158(void);
 void func_L16_002EB268(unsigned char *moby) {
     switch (moby[0x20]) {

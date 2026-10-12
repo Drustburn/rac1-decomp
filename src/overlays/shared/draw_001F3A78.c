@@ -406,8 +406,6 @@ void func_L00_001F9248(void) {
         func_001FBE80();
     }
 }
-extern int D_L00_0015F6BC MACRO_ADDR;
-extern void func_L00_002781D8(int);
 void func_L00_001F92C0(void) { if (D_L00_0015F6BC == 0) func_L00_002781D8(0); }
 INCLUDE_ASM("asm/overlays", func_L00_001F92E8);
 extern int D_L00_0015F4F8 MACRO_ADDR;

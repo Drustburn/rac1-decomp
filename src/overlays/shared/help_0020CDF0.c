@@ -1120,7 +1120,6 @@ void func_L00_00210558(int i) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_00210E00);
-extern int func_L00_0020DC00();
 extern void func_L00_0020F118();
 extern void func_L00_0020FC18();
 extern void func_L00_00235088();
@@ -1524,7 +1523,6 @@ void func_L00_00211908(void) {
 INCLUDE_ASM("asm/overlays", func_L00_00211A18);
 extern float D_0015EE64 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
-extern float func_001F9D48(void *, void *);
 extern float func_L00_0025C918(float *p, float *v, float t, float u1, float u2, float eps);
 
 /* Updates the hero camera's follow-speed targets by mode, then eases them. Adapted from Lombyte (MIT) for PAL: overlays/shared/ui_help_0020c758.c, FUN_L00_00211380. */
@@ -1781,7 +1779,6 @@ void func_L00_00212430(int m, float x, float y, float z) {
 }
 extern char D_0013F450[] NOT_SDA;
 extern void func_L00_00212430(int, float, float, float);
-extern float func_L00_0025CCF0(char *, char *, int, float, float, float, float);
 void func_L00_002124E8(int a, float x, float y, float z) {
     char *g = D_0013F450;
     if (*(unsigned char *)(g + 0x20B3) != 0) {
@@ -1790,7 +1787,6 @@ void func_L00_002124E8(int a, float x, float y, float z) {
         *(float *)(g + 0x188) = func_L00_0025CCF0(g + 0x98, g + 0x184, a, *(float *)(g + 0x180), x, y, z);
     }
 }
-extern float D_0015EE64 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern void func_L00_002124E8(int, float, float, float);
 void func_L00_00212550(void) {
@@ -1829,7 +1825,6 @@ void func_L00_002125F0(void) {
     }
     func_L00_002124E8(0, a, b, c);
 }
-extern float func_00214D28(float *, float, float);
 
 /* Steps the value at D_0013F450 + 0x194 towards the target at +0x190
    (func_00214D28), by at most UP when it is below the target and DOWN
@@ -1846,8 +1841,6 @@ void func_L00_00212740(float up, float down) {
 }
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
-extern void func_001FA218(void *, void *);
-extern void func_001F9EE8(void *, void *, void *);
 extern void func_00215C00(void *, float, float, float);
 
 /* D_0013E633 + 0xE1D lands on D_0013F450 (see src/game/camera.c). */
@@ -1920,7 +1913,6 @@ extern int D_L00_00173F5C;
 extern int D_L00_00173F40[];
 extern float func_L00_00234250(float *v);
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
-extern int func_L00_001F3958(void);
 
 /* Hero ground probe: measures the support under the feet, and slides the velocity off a steep floor Adapted from Lombyte (MIT) for PAL: overlays/shared/ui_help_0020c758.c, FUN_L00_00212318. */
 void func_L00_002129D0(int arg) {
@@ -2353,10 +2345,7 @@ void func_L00_002136A8(void) {
     }
 }
 extern char D_0013E633[];
-extern void func_001F9C30(void *, void *, float);
-extern float func_001F9CB8(void *);
 extern void func_001F9BC0(void *);
-extern void func_L00_001FF4B0(void *, void *, float);
 void func_L00_00213970(float a, float b) {
     char *p = D_0013E633 + 0x173D;
     char *q = p - 0x920;
@@ -2370,7 +2359,6 @@ void func_L00_00213970(float a, float b) {
         func_L00_001FF4B0(p, p, v - b);
     }
 }
-extern float func_001F9C78(void *, void *);
 
 typedef struct {
     float v[4];

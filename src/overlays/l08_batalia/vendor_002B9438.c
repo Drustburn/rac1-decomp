@@ -984,7 +984,6 @@ extern char *func_0020D348(int);
 extern int func_001F9850(int);
 extern float func_002140F8(float, float);
 extern float func_L00_001FF860(float, float);
-extern void func_L00_00251E30(void *);
 /* Spawns a moby of class 0x1A9 at a position, with a random spin and a heading from a vector. */
 char *func_L08_002DDC18(char *src, char *pos, char *vec) {
     char *moby = CreateMoby(0x1A9);

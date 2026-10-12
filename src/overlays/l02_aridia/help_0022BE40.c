@@ -3269,8 +3269,6 @@ f32 func_L02_002368E8(f32 a, f32 b, f32 c) {
     }
     return a;
 }
-extern float D_0015EE6C MACRO_ADDR;
-extern char D_0013E633[];
 
 void func_L02_00237C98(void)
 {

@@ -672,7 +672,6 @@ void func_L10_002D9988(char *m) {
         func_0020D678_2D9988(m);
     }
 }
-extern int func_L00_00258BC8(int, int);
 extern int func_001F9908(int *arg0);
 extern float func_001FA748(float, float);
 extern void func_00215C00(void *, float, float, float);
@@ -896,7 +895,6 @@ extern float func_00214358(void *, int, float);
 extern float func_001F9B88(float);
 extern char *D_L10_00160058_2DA678 __asm__("D_L10_00160058") MACRO_ADDR;
 extern char D_L10_00178400[];
-extern char D_L10_00174340[];
 extern int D_0015EE84_2DA678 __asm__("D_0015EE84") MACRO_ADDR;
 extern unsigned char D_0014C150[];
 
@@ -977,7 +975,6 @@ extern char *func_L00_0025B478(void *, int, int);
 extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
 extern int func_L00_0028EF68_v(int, int, void *, int) __asm__("func_L00_0028EF68");
 extern void func_001F9EC0(void *, void *, void *);
-extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_L00_001FF240(void *, void *, void *);
 extern void func_L01_002F9908(void *, void *, unsigned int, float, int, float, float, float, int);
 
@@ -1119,9 +1116,7 @@ void func_L10_002DE798(char *m) {
  }
 }
 extern void func_001F9BF0(void *dst, void *a, void *b);
-extern unsigned char D_0014171B[] NOT_SDA;
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
-extern int D_L10_001BAC60[];
 extern char D_L10_00178600[];
 
 /* Collectible trigger: deletes itself once taken, else watches for its toucher. */
@@ -1161,7 +1156,6 @@ void func_L10_002DEA10(char *m) {
     }
 }
 extern char *func_0020D348(int);
-extern void func_L00_00251E30(void *);
 
 char *func_L10_002DEC08(char *owner) {
     char *moby = CreateMoby(0x462);

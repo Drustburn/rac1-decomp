@@ -251,8 +251,6 @@ void func_L18_002F3108(int a, int b) {
         }
     } while (++i < ((Blk *)D_L18_001C6480[D_L18_001C6780[a]])->n);
 }
-extern char D_0013E633[];
-extern unsigned char *D_L18_00160058 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern void func_L18_002F33D8(void);
 extern void func_001F49B0(void (*)(void), void *);
@@ -298,7 +296,6 @@ void func_L18_002F3268(unsigned char *m)
     }
 }
 INCLUDE_ASM("asm/overlays", func_L18_002F33D8);
-extern float D_0015EE70 MACRO_ADDR;
 extern short D_L18_00162388;
 extern short D_L18_0016238C;
 extern short D_L18_00162398;
@@ -399,7 +396,6 @@ void func_L18_002F3710(unsigned char *m)
         break;
     }
 }
-extern short *D_L18_001AC540[];
 typedef struct { int pad[7]; int idx; } Lx;
 typedef struct { char pad[0x18]; float f; char pad1[0x78 - 0x1C]; Lx *l; char pad2[0xA6 - 0x7C]; short kind; char pad3[0x100 - 0xA8]; } Mx;
 typedef struct { int pad[2]; float f; char pad2[0x1190 - 12]; } E;
@@ -430,7 +426,6 @@ extern short D_L18_001623AC;
 extern short D_L18_001623B0;
 extern short D_L18_001623B4;
 extern short D_L18_001623B8;
-extern short D_L18_00162398;
 extern float D_L18_001DAA60[][2];
 extern FRow D_L18_001DA680[];
 extern short D_L18_001DA8D0[][4][2];
@@ -1819,7 +1814,6 @@ void func_L18_002F4050(Moby *moby) {
         AddDrawCallback((void (*)(void))func_L18_002F8CE0, moby);
     }
 }
-extern char D_0013E633[];
 extern short D_L18_00162438;
 
 /* Latches the target from the global block once, and counts a class 0x24B hit. */
@@ -2111,12 +2105,8 @@ void func_L18_002F72E0(char *moby) {
         }
     }
 }
-extern void func_001F9BF0(void *, void *, void *);
-extern float func_001F9CB8(void *);
 extern float func_00214D88(float, float, float, float, float *, float *);
-extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern float D_0015EE70 MACRO_ADDR;
 
 /* steps a moby's offset vector toward a target, returns whether both settled */
 int func_L18_002F7CD8(char *moby, float arg, void *x) {
@@ -2148,7 +2138,6 @@ extern float func_001F9D48(void *, void *);
 extern char *D_L18_0016016C MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L18_0016240C;
-extern short D_L18_00162408;
 extern short D_L18_001623DC;
 
 /* Moves a moby's follow distance toward a target, clamped to a range, then applies it. */
@@ -2283,9 +2272,7 @@ void func_L18_002F7F00_r(Moby *moby) {
 }
 extern int func_L18_002D9C48(void *obj);
 extern void func_L18_002D9C78(void *, int, int);
-extern int func_001F9850(int);
 extern float func_001F9C78(void *, void *);
-extern short *D_L18_001AC540[];
 extern short D_L18_001623C8;
 extern short D_L18_001623CC;
 
@@ -2336,8 +2323,6 @@ start:
     }
     return best;
 }
-extern short *D_L18_001AC540[];
-extern unsigned char *D_L18_00160058 MACRO_ADDR;
 
 void func_L18_002F8408(int unused, int idx)
 {
@@ -2370,7 +2355,6 @@ void func_L18_002F8488(int a0, int idx) {
         } while (*p++ >= 0);
     }
 }
-extern int func_002140B0(int);
 extern short D_L18_001DFE00[];
 
 /* Picks a new state for the moby at random among the allowed transitions, retrying up to 100 times until one is accepted. */
@@ -2554,11 +2538,7 @@ x = *(float *)&D_L18_00162460;
 }
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVec;
 extern int func_L00_001FEF78(void *);
-extern float func_002140F8(float, float);
-extern float func_L00_00258C80(float lo, float hi);
-extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern int func_L00_00258BC8(int, int);
-extern int func_001F9850(int);
 unsigned char *func_L00_00272158(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
 extern char *func_L00_0026DA50(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern short D_L18_0016247C;
@@ -2612,11 +2592,7 @@ void func_L18_002F8B00(char *moby, void *p) {
     }
     }
 }
-extern int func_001F9850(int);
-extern float func_001FA888(int);
 extern float func_001F9FA8(float);
-extern int func_001FA8A8(int, int, float);
-extern void func_L00_00250800(void *, int, void *);
 extern void func_L00_00264690(void *, int, float, float);
 extern int D_L18_0015F6B0 MACRO_ADDR;
 extern short D_L18_001624F0;

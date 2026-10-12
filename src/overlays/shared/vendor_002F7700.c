@@ -1318,7 +1318,6 @@ extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_001F9908(void *);
-extern float func_001FA888(int);
 extern float func_001F9B88(float);
 extern int func_001FA8A8(int, int, float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
@@ -1486,7 +1485,6 @@ extern char D_0013E633[];
 extern char D_0013A5E0[];
 extern float D_0015EE70 MACRO_ADDR;
 extern int D_0015EF20 MACRO_ADDR;
-extern char *D_L01_00160058 MACRO_ADDR;
 extern unsigned char D_001414F5[] NOT_SDA;
 extern short D_L01_00162018;
 extern short D_L01_0016201C;
@@ -1505,7 +1503,6 @@ extern void func_L00_00234768(float *pos, int arg, float t);
 extern void func_L00_0025A8E8(int, float, void *, int, float, float, int, int, int);
 extern int func_L00_002347B8(void);
 extern float func_00214D88(float *, float *, float, float, float, float);
-extern void func_001F49B0(void (*)(char *), char *);
 extern float func_00214D28(float *p, float target, float maxstep);
 extern void func_L00_00217718(void *, void *, int, int);
 extern void func_L00_002664B0(int, int);
@@ -1974,7 +1971,6 @@ void *func_L01_0030E6E0(void *moby, void *from, void *ang, float yawMax, float p
 extern int func_001F9938(void *);
 extern void func_001F9BF0(void *, void *, void *);
 extern float func_L00_001FF860(float, float);
-extern float func_001FA850(float, float);
 extern float func_001F9D48(void *, void *);
 extern void *func_L00_0025D390(void *);
 extern void func_0022ED80_0E9C8(int, int, char *) __asm__("func_0022ED80");
@@ -2196,7 +2192,6 @@ void func_L01_0030F240(char *moby) {
     }
 }
 extern void func_L00_00250800(void *, int, void *);
-extern void func_001F49B0(void (*)(char *), char *);
 
 /* Attach two effect entries and register their update callback. */
 void func_L01_0030F2A8(char *moby) {

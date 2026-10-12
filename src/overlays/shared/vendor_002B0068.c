@@ -199,7 +199,6 @@ void func_L04_002B0290(struct Moby *m)
     DeleteMoby(m);
 }
 extern void func_001F9EC0(void *, void *, void *);
-extern void func_001F9BD8(void *, void *, void *);
 extern void func_L04_002C5560(void *, void *, void *, int, float, float);
 extern char D_L04_001D2F60[];
 extern short D_L04_00161940;

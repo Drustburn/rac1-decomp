@@ -184,7 +184,6 @@ int func_L00_00232850(int id, int *key, int *arg) {
     return 0;
 }
 extern char D_0013F450[];
-extern int func_L00_00232850(int, int *, int *);
 
 /* Unless the flag at D_0013F450 + 0x20A4 is set, and only while state
    +0x11A4 is 2: asks func_L00_00232850 for a pair of values for the
@@ -235,7 +234,6 @@ INCLUDE_ASM("asm/overlays", func_L00_00232A30);
 INCLUDE_ASM("asm/overlays", func_L00_00232A3C);
 extern char D_0013F450[];
 extern int func_L00_00232A18(int, int *);
-extern void func_00213DE0(void *, int, int, int);
 extern int func_001F9850(int);
 
 /* When the animation at D_0013F450 + 0x2278 is set and enabled (+0x227C),
@@ -392,7 +390,6 @@ void func_L00_00232C10(int a0, int a1, float t) {
         func_L00_00232A78(a0, a1, t);
     }
 }
-extern void func_0020D6D0(void *);
 
 /* Starts sequence SEQ of bank BANK on the animation at D_0013F450 +
    0x2080: SEQ in slot 0, the next one (clamped to the bank's last) in
@@ -796,7 +793,6 @@ void func_L00_00233D50(float *dst, float *src, float h) {
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BD8(void *, void *, void *);
-extern void func_001F9EE8(void *, void *, void *);
 
 /* The polar form of func_L00_00233EE0: sets OUT to (R cos ANGLE,
    R sin ANGLE, Z) via func_001F9F90 / func_001F9FA8, then transforms it
@@ -813,7 +809,6 @@ void func_L00_00233E48(float *out, float r, float angle, float z) {
 }
 extern void func_001F9BC0(void *);
 extern void func_001F9BD8(void *, void *, void *);
-extern void func_001F9EE8(void *, void *, void *);
 
 /* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
    then transforms it by the matrix at D_0013F450 and adds the vector at
@@ -835,7 +830,6 @@ void func_L00_00233D50(float *dst, float *src, float h);
 void func_L00_00233F68(float *dst, float *src, float h) {
     func_L00_00233D50(dst, src, -h);
 }
-extern void func_001FA218(void *, void *);
 
 /* Moves SRC by R into DST along the current animation's heading (+0x48
    of the object at D_0013F450 + 0x2080): in view mode 0 (+0x20B3) as
@@ -866,7 +860,6 @@ void func_L00_00233F88(float *dst, float *src, float r) {
         break;
     }
 }
-extern void func_001FA218(void *, void *);
 
 /* Moves SRC by DZ along the view's z into DST: in view mode 0
    (D_0013F450 + 0x20B3) a copy with z + DZ; in modes 1 and 2 SRC plus
@@ -923,7 +916,6 @@ void func_L00_00234150(float *dst, float *src) {
     }
 }
 extern float func_001F9CE8(void *);
-extern void func_001FA218(void *, void *);
 extern void func_001FA4A0(void *, void *);
 
 /* The xy length (func_001F9CE8) of V. In view modes 1 and 2
@@ -949,7 +941,6 @@ float func_L00_00234250(float *v) {
     }
     return 0.0f;
 }
-extern float func_001F9C78(void *, void *);
 
 /* V's z in view mode 0 (D_0013F450 + 0x20B3); in modes 1 and 2 the dot
    product of V with (0, 0, 1) taken through the rotation func_001FA218
@@ -973,7 +964,6 @@ float func_L00_002342F8(float *v) {
     }
     return 0.0f;
 }
-extern void func_001F9EE8(void *, void *, void *);
 
 /* Places a point by the view mode at D_0013F450 + 0x20B3: in mode 0 it
    copies SRC to DST as is; in modes 1 and 2 it transforms it by the
@@ -1018,7 +1008,6 @@ void func_L00_00234420(float *dst, float *src, float z) {
         break;
     }
 }
-extern int func_001FA898(float);
 extern float func_001FA888(int);
 
 /* The height at the top of a jump from POS with velocity VEL losing STEP

@@ -874,9 +874,7 @@ void func_L00_002AB910(M910 *m) {
 }
 typedef int q_2adbb0 __attribute__((mode(TI)));
 extern char *func_0020D348(int);
-extern float func_002140F8(float, float);
 extern void func_L00_00251328(void *, int, int, int);
-extern int func_001F9850(int);
 extern float func_001FA888(int);
 extern void func_L00_00251E30(void *);
 
@@ -916,10 +914,6 @@ char *func_L00_002ADBB0(void *owner, void *pos, void *vel, float scale, int life
     return m;
 }
 extern float func_001FA888(int);
-extern float func_001FA748(float, float);
-extern int func_001F9938(void *);
-extern void func_0020D678(void *);
-extern float D_0015EE6C MACRO_ADDR;
 
 typedef struct V_d {
     char pad0[0x14];
@@ -968,16 +962,9 @@ typedef struct {
 } QuadPkt;
 
 extern int D_L00_0015F6A8 MACRO_ADDR;
-extern int D_L00_0015F6B0 MACRO_ADDR;
-extern float func_001F9B50(float);
 extern float func_L00_001FF860(float, float);
-extern float func_001FA748(float, float);
-extern int func_001F9850(int);
 extern float func_001FA888(int);
-extern float func_001F9878(float);
 extern float func_001FA7D8(float x);
-extern void func_001FA218(void *, void *);
-extern void func_001FA540(void *, void *, void *);
 extern int func_001F4868(int);
 extern void func_L00_001FD1D8(void *, void *, int);
 
@@ -1040,9 +1027,6 @@ void func_L00_002ADE90(char *moby) {
 }
 extern char D_0013E633[];
 extern char *spawn_79(int) __asm__("func_0020D348");
-extern float func_002140F8(float, float);
-extern void func_001F9BC0(float *);
-extern void func_L00_00251E30(void *);
 
 typedef int u128 __attribute__((mode(TI)));
 typedef union {
@@ -1592,10 +1576,6 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
 }
 struct Dd { char pad[0x10]; float x; float y; short s0; short s1; float z; };
 extern struct Moby *func_0020D348_m(int) __asm__("func_0020D348");
-extern void func_L00_00251328(void *, int, int, int);
-extern float func_002140F8(float, float);
-extern void func_L00_00251E30(void *);
-extern float D_0015EE6C MACRO_ADDR;
 
 /* spawns a type-0x7A moby with randomised velocity */
 char *func_L00_002B0738(char *pos, char *vel, int a, int b, int c) {
@@ -1628,12 +1608,7 @@ typedef int Q_2af5b8 __attribute__((mode(TI)));
 typedef struct { int c[4]; } C_2af5b8;
 typedef struct { float x0, x4, x8, xc; float x10, x14; short x18, x1a; float x1c; } W_2af5b8;
 extern C_2af5b8 D_L00_00161508;
-extern float D_0015EE70 MACRO_ADDR;
-extern void func_L00_001FF4B0(void *, void *, float);
-extern int func_002140B0(int);
-extern unsigned func_L00_0025D140(unsigned c, int mask);
 extern void func_L00_0026A7F8(void *, void *, int, int, int, int, int, int);
-extern void func_001F9BD8(void *, void *, void *);
 
 // Per-frame update of a falling spark moby: emits a burst particle, moves, fades and dies when out of bounds. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002aa670.c, FUN_L00_002af5b8.
 void func_L00_002B08A0(unsigned char *m) {
@@ -1793,7 +1768,6 @@ void func_L00_002B0D30(char *moby) {
     }
 }
 extern unsigned char *func_L00_0025D390(unsigned char *);
-extern float func_001F9CB8(void *);
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern void func_L00_002607F8(int, short *, short);
 extern unsigned char D_0013E633_u[] __asm__("D_0013E633") NOT_SDA;
@@ -1874,7 +1848,6 @@ unsigned char *func_L00_002B0F58(unsigned char *a, Vec4 *pos, unsigned char *tgt
     }
     return m;
 }
-extern float D_0015EE6C MACRO_ADDR;
 extern float D_0015EE64 MACRO_ADDR;
 
 // Runs n steps of a critically-damped chase toward a target and sums the positions.
@@ -1913,19 +1886,13 @@ typedef struct {
     char *cam;
 } P;
 typedef struct { char p0[0xB]; u8 bB; } E;
-extern char * D_L00_001ABD80[];
 extern P D_0013F450;
 extern E D_0013E620;
-extern s32 D_L00_00166EC0[];
 extern s32 D_L00_00173F40[0x1C];
-extern f32 func_001F9D10(void *, void *);
-extern f32 func_001F9D48(void *, void *);
 extern f32 func_L00_001FF860(f32, f32);
 extern f32 func_001FA850(f32, f32);
-extern f32 func_001F9B88(f32);
 extern f32 func_001F9FC0(f32);
 extern f32 func_001FA888(s32);
-extern void func_00215C00(void *, f32, f32, f32);
 extern s32 func_L00_001EFFF0_B1290(void *, void *, s32, char *, void *) __asm__("func_L00_001EFFF0");
 extern s32 func_L00_0025D390_B1290(char *) __asm__("func_L00_0025D390");
 extern s32 func_L00_002608F0(char *);

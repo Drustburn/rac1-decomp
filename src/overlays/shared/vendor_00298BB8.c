@@ -789,8 +789,6 @@ int func_L15_0029AA60(unsigned char *moby, char *d, int a, int b, float angle) {
     }
     return ret;
 }
-extern float func_L00_001FF860(float, float);
-extern int func_L15_0029AA60(unsigned char *, char *, int, int, float);
 
 void func_L15_0029AC48(char *moby, void *a, float *point, void *b, void *c)
 {
@@ -799,12 +797,9 @@ void func_L15_0029AC48(char *moby, void *a, float *point, void *b, void *c)
     func_L15_0029AA60(moby, a, b, c, angle);
 }
 extern float D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
 extern float func_L00_0025CE58(float *p, float *v, float a, float b, float c, float d);
-extern float func_001FA850(float, float);
 extern void func_00214D28(void *, float, float);
 extern float func_001F9F90(float x);
-extern float func_001F9FA8(float);
 extern void func_L00_00259868(int, int, float, float, float, int);
 extern float func_001F9D48(float *, float *);
 
@@ -858,8 +853,6 @@ int func_L15_0029AE80(void *mm) {
     return 1;
 }
 extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
-extern float func_001F9D10(void *, void *);
-extern int D_L15_001AC140[];
 extern int D_L15_00160058_m __asm__("D_L15_00160058") MACRO_ADDR;
 
 // Finds the nearest visible target moby from the moby's candidate list, returning its address.
@@ -1078,14 +1071,12 @@ void func_L15_0029BE10(unsigned char *m) {
     qcopy(m + 0x10, next);
     func_L15_0029BFF8((char *)m);
 }
-extern void func_001F9C30(void *, void *, float);
 extern void func_L00_00258DB0(float *, float, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern float func_002140F8(float, float);
 extern float func_001F9878(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
-extern float D_0015EE6C MACRO_ADDR;
 extern short D_L15_001614A0, D_L15_001614A4, D_L15_001614A8, D_L15_001614AC;
 extern short D_L15_001614B0, D_L15_001614B4, D_L15_001614B8, D_L15_001614BC;
 extern short D_L15_001614C0, D_L15_001614C4, D_L15_001614C8, D_L15_001614CC;
@@ -1505,9 +1496,7 @@ tailA:
     *(int *)(moby + 0x94) = 0;
 }
 extern char D_0013E633[];
-extern int D_L15_001AC140[];
 extern int D_L15_00160058_m __asm__("D_L15_00160058") MACRO_ADDR;
-extern void func_00213DE0(void *, int, int, int);
 extern float func_002140F8(float, float);
 
 // wakes the first idle moby in a list and initialises it at a position
@@ -1715,7 +1704,6 @@ INCLUDE_ASM("asm/overlays", func_L15_002A8090);
 typedef int u128_2A8850 __attribute__((mode(TI)));
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
-extern void func_L00_001FF240(void *, void *, void *);
 extern int func_001F4868(int);
 extern void func_L00_001FD1D8(void *, void *, int);
 extern float D_L15_00167440[];
@@ -1775,7 +1763,6 @@ void func_L15_002A8850(char *moby) {
 }
 INCLUDE_ASM("asm/overlays", func_L15_002BEFF8);
 INCLUDE_ASM("asm/overlays", func_L15_002CC858);
-extern int D_L15_001AC140[];
 extern int D_L15_00160058_m __asm__("D_L15_00160058") MACRO_ADDR;
 extern short D_L15_00161B44;
 
@@ -1806,7 +1793,6 @@ void func_L15_002CCE50(char *m, int a) {
         } while (*p++ >= 0);
     }
 }
-extern void func_00213DE0(void *, int, int, int);
 
 // Moby update: state 1 starts an animation, state 3 allocates a value once.
 void func_L15_002CCF30(unsigned char *moby) {
@@ -1823,7 +1809,6 @@ void func_L15_002CCF30(unsigned char *moby) {
         }
     }
 }
-extern void func_00214D28(void *, float, float);
 extern int func_L00_0028EB98(void *, int);
 extern int func_0022ED80(int, int, int);
 extern void func_001F49B0(void (*)(void), void *);
@@ -1863,15 +1848,11 @@ void func_L15_002CCFC0(void *arg) {
         *(int *)&D_L15_00161B48 = 0;
     }
 }
-extern float func_001FA888(int);
-extern float func_001F9FA8(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern void func_001F55C0(int, int, int, int);
-extern int D_L15_0015F6B0 MACRO_ADDR;
 extern signed char D_L15_00161B57[] MACRO_ADDR;
 extern short D_L15_00161B5C;
 extern short D_L15_00161B58;
-extern short D_L15_00161B44;
 extern short D_L15_00161B54;
 
 // Draws an oscillating-intensity effect: a sine of the global timer scaled by a level value.
@@ -1889,8 +1870,6 @@ void func_L15_002CD118(void) {
 }
 typedef int u128 __attribute__((mode(TI)));
 extern int func_L00_0020DC00(void);
-extern float func_00214358(void *, int, float);
-extern int func_L00_001F3958(void);
 
 // Checks whether the pad-state object is in state 0x18/0x19 and a probed height is above a threshold.
 int func_L15_002D7B60(void) {

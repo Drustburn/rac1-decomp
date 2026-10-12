@@ -1618,8 +1618,6 @@ void func_L07_00319080(char *moby, void *anchor) {
 INCLUDE_ASM("asm/overlays", func_L07_00319230);
 extern int func_0022ED80(int, int, int);
 extern void func_001F9BF0(void *, void *, void *);
-extern float func_001F9CB8(void *);
-extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_L00_002E0490(int arg0);

@@ -683,8 +683,6 @@ INCLUDE_ASM("asm/overlays", func_L00_00238C30);
 extern int D_L00_0015FB48 MACRO_ADDR;
 extern void *D_L00_0015FB78 MACRO_ADDR;
 extern short D_L00_0015F820;
-extern short D_L00_0015F7F8;
-extern short D_L00_0015F7FC;
 extern short D_L00_0015F80C;
 void func_L00_002394A8(char *a) {
     int x = *(int *)&D_L00_0015F7F8;
@@ -708,7 +706,6 @@ typedef struct { u8 p0[0x148]; float f148; float f14C; u8 p150[0x70]; int w1C0; 
 extern G_t D_0013CA40;
 extern int D_L00_0017E604;
 extern short D_L00_0015FB48_39510 __asm__("D_L00_0015FB48");
-extern short D_L00_0015F860;
 extern int D_L00_0015FB54_export __asm__("D_L00_0015FB54") MACRO_ADDR;
 extern Ent ** D_L00_0015FB78_39510 __asm__("D_L00_0015FB78") MACRO_ADDR;
 extern int D_L00_0017DD38;
@@ -716,11 +713,6 @@ extern int D_L00_0017DD3C;
 extern int D_L00_0017DD40;
 extern int D_L00_0017DD44;
 extern int D_00141710[];
-extern int D_L00_0015FB50 MACRO_ADDR;
-extern int D_L00_0015FB4C MACRO_ADDR;
-extern int D_L00_0015F4F8 MACRO_ADDR;
-extern float func_L00_001FF860(float, float);
-extern int func_001FFCB0(int);
 
 /* Updates radial HUD selection and fades, closing it when the display fade reaches zero. Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_text_002377b8.c, FUN_L00_00238b80. */
 void func_L00_00239510(Obj *o) {
@@ -1310,7 +1302,6 @@ int func_L00_0023A788(HudElem_3A788 *m)
 LINKER_REMNANT("asm/overlays", func_L00_0023AB88);
 /* A word reached through $gp: under -G2 that takes a declaration of at
    most two bytes. */
-extern short D_L00_0015F8D0;
 
 /* Steps a two-digit HUD counter (+0x70, +0x71): while the flag at
    D_0013F450 + 0x2048 is set, restarts the timer at func_001F9850(10)
@@ -1401,7 +1392,6 @@ extern void func_00200650(int, int, int, int, int, int);
 extern void func_L00_0023BAB8(char *, int, int, int, int, int);
 extern int func_00116248(char *, const char *, ...);
 extern int func_001FA8A8(int, int, float);
-extern void func_001F6CF8(int, int, int, char *, int);
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
 int func_L00_0023B140(char *m) {
@@ -1546,7 +1536,6 @@ typedef struct {
 } WeaponRec;
 
 extern WeaponRec D_L00_001C43B0[];
-extern char D_0013E633[];
 extern char D_0013D50F[];
 extern short D_L00_0015FA40;
 extern int D_hud_pair[2] __asm__("D_L00_0015FA44") MACRO_ADDR;
@@ -1592,7 +1581,6 @@ void func_L00_0023B750(void) {
 }
 /* Reached through $gp: under -G2 that takes a declaration of at most two
    bytes, though the variable is a word. */
-extern short D_L00_0015FA40;
 extern int D_L00_0015FA44 MACRO_ADDR;
 extern int D_L00_0015FA48 MACRO_ADDR;
 extern void func_L00_00236208(void);
@@ -1740,7 +1728,6 @@ typedef struct O23D750 {
 } O23D750;
 extern s32 D_L00_0015F9F4_23D750 SDATA(D_L00_0015F9F4);
 extern s32 D_L00_0015F9F8_23D750 SDATA(D_L00_0015F9F8);
-extern int func_001F9850(int);
 void func_L00_0023D750_r(O23D750 *p) __asm__("func_L00_0023D750");
 
 /* Steps a HUD element: clamps the shown value to 0..max, then on a random timer ramps its two-stage counter up to the limits or back down. Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/hud/0023b120.c, FUN_L00_0023cdb8. */
@@ -1772,7 +1759,6 @@ LINKER_REMNANT("asm/overlays", func_L00_0023D838);
 extern int D_0015EF8C MACRO_ADDR;
 extern int D_0015EF78 MACRO_ADDR;
 extern int D_0015EF74 MACRO_ADDR;
-extern int D_0015EE84 MACRO_ADDR;
 extern int D_0015EF24 MACRO_ADDR;
 extern char D_L00_00173FC0[];
 extern char D_L00_00197F40[];

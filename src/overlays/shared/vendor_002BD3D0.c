@@ -174,12 +174,10 @@ void func_L12_00309AE8(void *unused, struct Moby *m) {
 }
 typedef struct { char pad[0x40]; float vx, vy; } MO;
 extern int func_L00_0025D6F0(void *, void *);
-extern float func_001FA748(float, float);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int,
                                   float, float, float, float, int, float, int, int, int, int)
     __asm__("func_L00_0025F4A8");
 extern void func_0020D678(void *);
-extern float D_0015EE6C MACRO_ADDR;
 
 // updates a moby's velocity and either spawns an effect and deletes itself or expires by height
 void func_L12_00309CF8(char *m) {

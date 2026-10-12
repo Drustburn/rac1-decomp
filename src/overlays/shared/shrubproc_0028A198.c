@@ -594,11 +594,9 @@ void func_L00_0028B8F8(void) {
 }
 extern char D_L00_001BDB70[] NOT_SDA;
 extern char *D_L00_001605DC MACRO_ADDR;
-extern void func_001FA190(void *);
 extern void func_0022C9A8(int);
 extern void func_L00_0028A198(int, int);
 extern void func_L00_0028A3E0(void);
-extern void func_0022CEB8(void);
 extern void func_00234C98(int, long);
 void func_L00_0028BBF8(void) {
     func_001FA190(D_L00_001BDB70);
@@ -637,7 +635,6 @@ void func_L00_0028BD70(void) {
     VU1_addGSregister(0x42, 0x8000000044L);
     SkyDrawShell(1);
 }
-extern short D_L00_001605C0;
 
 /* Initialises and animates a second star field of the sky (variant of func_L00_0028A878). */
 void func_L00_0028BF60(void) {

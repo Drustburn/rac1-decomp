@@ -161,7 +161,6 @@ void func_L06_002FEE60(char *m) {
         break;
     }
 }
-extern short *D_L06_001AC340[];
 extern char *D_L06_00160058 MACRO_ADDR;
 void func_L06_00301068(int idx)
 {
@@ -259,9 +258,6 @@ extern V3003f0 D_L06_001F3200[];
 extern I3003f0 D_L06_001F3800[];
 extern UV3003f0 D_L06_001F3C00[];
 extern long func_001F4868_01848(int) __asm__("func_001F4868");
-extern void func_001FA190(void *);
-extern void func_001F9C30(void *, void *, float);
-extern void func_L00_001FD1D8(void *, void *, int);
 
 /* Draws the 64 quads of the backdrop mesh, each corner scaled from the shared vertex table.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l06/gameplay/entities/002fd1a0.c, FUN_L06_003003f0. */
@@ -296,18 +292,7 @@ void func_L06_00301848(void) {
         func_L00_001FD1D8(&quad, &buf, 0);
     }
 }
-extern short D_L06_001620E4;
-extern short D_L06_001620E8;
-extern short D_L06_001620EC;
-extern short D_L06_001620F0;
-extern short D_L06_001620F4;
-extern short D_L06_001620F8;
-extern short D_L06_001620FC;
-extern short D_L06_00162104;
 extern long func_001F4868_01B78(int) __asm__("func_001F4868");
-extern void func_001FA190(void *);
-extern void func_001F9C30(void *, void *, float);
-extern void func_L00_001FD1D8(void *, void *, int);
 typedef float FVec4_l06[4] __attribute__((aligned(16)));
 typedef struct {
     FVec4_l06 v;
@@ -318,10 +303,6 @@ extern FRow_l06 D_L06_001F7B00[];
 extern float D_L06_001F8800[][2];
 extern short D_L06_001F8200[][4][2];
 extern float D_L06_00167640_01B78[] __asm__("D_L06_00167640");
-extern void func_001F9EE8(void *, void *, void *);
-extern void func_001F9BF0(void *, void *, void *);
-extern void func_001F9EC0(void *, void *, void *);
-extern float func_001F9C78(void *, void *);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l06/gameplay/entities/002fd1a0.c, FUN_L06_00300720. */
 void func_L06_00301B78(void) {
@@ -370,8 +351,6 @@ void func_L06_00301B78(void) {
 }
 extern void func_0020D678(void *);
 extern float func_001FA888(int);
-extern float func_001F9FA8(float);
-extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern int D_L06_0015F6B0 MACRO_ADDR;
 extern char D_0013E633[] NOT_SDA;
@@ -488,7 +467,6 @@ extern float func_001F9CB8(void *);
 extern float func_001F9878(float);
 extern int func_001FA898_3024C8(float) __asm__("func_001FA898");
 extern void func_00215C00(void *, float, float, float);
-extern void func_001F9BF0(void *, void *, void *);
 extern float func_001F9CE8(void *);
 extern void func_L00_00263950_3024C8(float, float, void *, void *, int) __asm__("func_L00_00263950");
 
@@ -984,20 +962,16 @@ extern void func_L06_002E7578(char *);
 extern void func_L00_002EC0C8(int);
 extern void func_L00_00299B68(int);
 extern void func_L00_00261848(int);
-extern void func_L00_002512D8(int);
 extern void func_L00_00286128(void *, void *);
 extern void func_L00_00263DB0(int);
 extern void func_L06_00239CD0(void);
-extern int func_0020BFC8(int, int);
 extern void func_L00_0029A7D0(int);
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_002617B0(char *, void *, void *, void *);
 extern unsigned char D_0013D4AF_3039B8[] __asm__("D_0013D4AF");
 extern unsigned char D_0013D5DD_3039B8[] __asm__("D_0013D5DD");
 extern unsigned char D_0013D355_3039B8[] __asm__("D_0013D355");
 extern char D_0013A5E0_3039B8[] __asm__("D_0013A5E0");
 extern char D_L06_001B0FB0_3039B8[] __asm__("D_L06_001B0FB0");
-extern char D_L06_00179C90[];
 extern char *D_L06_0016016C MACRO_ADDR;
 extern int D_L06_0015F674 MACRO_ADDR;
 extern int D_L06_0015FE78 MACRO_ADDR;
@@ -1256,9 +1230,6 @@ void func_L06_003039B8(Moby *moby) {
 extern unsigned short D_00141D00 NOT_SDA;
 extern unsigned char D_0014C150[];
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
-extern int D_0015EF1D_i __asm__("D_0015EF1D") MACRO_ADDR;
-extern int D_0015EF1C_i __asm__("D_0015EF1C") MACRO_ADDR;
-extern int func_L00_00203F20(int a, int b);
 extern void func_00215F80(int, int);
 
 /* Picks the next selection state from the menu mode, then queues the matching sound. */
@@ -1311,7 +1282,6 @@ void func_L06_00304418(char *m) {
 INCLUDE_ASM("asm/overlays", func_L06_003045A0);
 INCLUDE_ASM("asm/overlays", func_L06_00304B88);
 INCLUDE_ASM("asm/overlays", func_L06_00304FA8);
-extern short *D_L06_001AC340[];
 extern char *D_L06_00160058 MACRO_ADDR;
 extern void func_0020D678(void *);
 
@@ -1570,7 +1540,6 @@ void func_L06_00305C58(int unused, void *obj) {
 }
 INCLUDE_ASM("asm/overlays", func_L06_00305E38);
 extern void func_L00_0025A890(char *a, int b, int c, float d);
-extern void func_001F9EC0(void *, void *, void *);
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern short D_L06_00162278;
 extern short D_L06_0016227C;
@@ -1828,7 +1797,6 @@ extern int func_L00_00200290(char *, float);
 extern float func_002140F8(float, float);
 extern float func_001F9878(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern short *D_L06_001AC340[];
 extern char *D_L06_00160058 MACRO_ADDR;
 /* finds the mobys of type 0x5E8 in state 1 in a level list and starts those within range */
 void func_L06_0030A680(int idx) {
@@ -1909,7 +1877,6 @@ extern int func_0022ED80_0B248(int, int, int) __asm__("func_0022ED80");
 extern void func_L00_00265050(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void func_L01_00279790(void *);
 void func_0020D678_0B248(struct Obj *obj) __asm__("func_0020D678");
-extern char *func_0020D348(int);
 extern void func_L00_00251E30(void *);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l06/gameplay_vendor_003083b0.c, FUN_L06_00309e08. */

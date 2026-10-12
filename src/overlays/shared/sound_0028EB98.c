@@ -55,7 +55,6 @@ int func_L00_0028EF68(int i, int a1, int v, int k) {
 }
 extern int D_L00_0015F6D0 MACRO_ADDR;
 extern char *D_L00_0015F6D4 MACRO_ADDR;
-extern int func_0022EB08(void *, int, int, int, int);
 int func_L00_0028F0B0(int a, int b, int c, int d) {
     int r;
     if (a >= D_L00_0015F6D0) return -1;
@@ -67,14 +66,11 @@ int func_L00_0028F0B0(int a, int b, int c, int d) {
     }
     return r;
 }
-extern int func_0022EB08(void *, int, int, int, int);
 extern char D_0013E650[];
 
 extern unsigned char D_L00_001BDBB0[];
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 extern int D_L00_0015F654 MACRO_ADDR;
-extern int D_L00_0015F6D0 MACRO_ADDR;
-extern char *D_L00_0015F6D4 MACRO_ADDR;
 
 /* Starts a sound bank entry chosen by (a0, a1, a2) offset from a
    level-specific table row, the same shape as func_0022EE28. */

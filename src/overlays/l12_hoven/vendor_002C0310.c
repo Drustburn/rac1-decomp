@@ -688,7 +688,6 @@ void func_L12_002E4838(struct Moby *moby) {
     func_L00_0025E590_E4838(moby, vars->anim);
 }
 extern short D_L12_001619A0;
-extern void func_001F9BD8(void *, void *, void *);
 extern char *func_L00_0026DA50(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("func_L00_0026DEA0");
 
@@ -763,7 +762,6 @@ void func_L12_002E4F18(char *m, float *ang, void *target, int unused, int brake)
 extern char D_0013E633[];
 extern short D_L12_00161994;
 extern void func_001F9BF0(void *, void *, void *);
-extern void func_001F9BC0(void *);
 extern void func_001FA218(void *, void *);
 extern void func_001F9EE8(void *, void *, void *);
 
@@ -1419,7 +1417,6 @@ void func_L12_002E9A50(Level12VendorMoby *moby) {
     }
     DeleteMoby(moby);
 }
-extern void func_L12_0027C9B8(void *, void *, int);
 extern void func_L00_00250800(void *, int, void *);
 extern void *func_L04_002CF460(void *, void *);
 
@@ -1831,9 +1828,7 @@ void func_L12_002EC8F0(char *m) {
 }
 extern char *func_L00_0025B478(void *, int, int);
 extern int func_0022EE28(int, int, int);
-extern void func_L00_00264DB8(int, int);
 extern void func_L00_00261B00(void *, int, int, int, int);
-extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
 extern int func_001F9908(int *arg0);
 extern char D_0013D50F[];
 extern short D_0015EF04;

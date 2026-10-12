@@ -115,7 +115,6 @@ int func_L00_0023F0D0(u128_pt *v, float a, float b_0023e738, float c, float d, f
     return i;
 }
 extern void func_002027C0(int);
-extern void func_001F99D8(void *, int);
 extern unsigned char D_L00_001803C0[];
 extern unsigned char D_L00_001805C0[];
 

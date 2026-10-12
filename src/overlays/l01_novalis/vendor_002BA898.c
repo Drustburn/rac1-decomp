@@ -624,7 +624,6 @@ extern void func_L00_002592B0(char *moby, float *vel, float target, float k, flo
 extern int func_001F9908(void *);
 extern float func_001F9D48(void *, void *);
 extern float func_001F9B88(float);
-extern float func_001FA850(float, float);
 extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
 extern float func_001F9D10(void *, void *);
 extern void func_L00_002EC0C8(int);
@@ -2641,13 +2640,10 @@ typedef struct {
 } BeamVars;
 
 extern BeamMoby *func_0020D348_b(int) __asm__("func_0020D348");
-extern float func_001F9CE8(void *);
 extern float func_L00_001FF860(float, float);
 extern float func_001F9CB8(void *);
-extern int func_001F9850(int);
 extern char *func_L00_0026E940(char *, int, int, int, float);
 extern void func_0022ED80(int, int, int);
-extern void func_L00_00251E30(void *);
 
 /* Spawns a beam moby from an owner, position, direction and colour vectors. Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002b96e0.c, FUN_L01_002f68a0. */
 BeamMoby *func_L01_002F7C78(void *owner, u128_t *pos, u128_t *dir, u128_t *color, int kind) {
@@ -3099,9 +3095,6 @@ typedef struct {
 } SteamParticle;
 extern SteamColors D_L01_00161C98;
 extern SteamColors D_L01_00161CA8;
-extern int func_001F9938(void *);
-extern int func_001F9908(void *);
-extern float func_00214158(void);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_L01_002F9908(void *, void *, unsigned int, int, float, float, float, float, int);
@@ -3229,23 +3222,17 @@ typedef struct {
 typedef struct { unsigned int c[3]; } CapColors;
 typedef struct { float x, y, z; } CapVec3;
 
-extern char D_0013E633[];
 extern unsigned char D_0014171B[] NOT_SDA;
 extern CapColors D_L01_00161CD0;
 typedef struct { char pad0[0x454]; unsigned char collected[1]; } CapLevelState;
 extern CapLevelState D_L01_001BB9C0;
-extern int D_L01_001BAC60[];
-extern int D_L01_0015F504 MACRO_ADDR;
 typedef struct { char pad0[0x160]; float shake; char pad164[4]; int shake_time; } CapCamera;
 extern CapCamera D_L01_00167180;
 extern float D_0015EE70 MACRO_ADDR;
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 
-extern void func_001F9BC0(void *);
 extern float func_001F9D48(void *, void *);
 extern int func_0022ED80_2FA458(int, int, void *) __asm__("func_0022ED80");
-extern void func_L00_002EC0C8(int);
-extern int func_L01_0023D688(int, int);
 
 /* Collapsing platform: sparkles while idle, then drops when the player stands near, and records it as collected.
    Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002b96e0.c, FUN_L01_002f9080. */
@@ -3378,7 +3365,6 @@ typedef struct {
     u8 pad7c[0x40];
     u8 mode;
 } LiftMoby;
-extern int func_001F9938(void *);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern float func_001FA888(int);
 extern void func_001F9BF0(void *, void *, void *);

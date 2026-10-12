@@ -7,7 +7,6 @@ extern int func_001160D8(void);
 int func_L00_00258BC8(int lo, int hi) {
     return ((func_001160D8() >> 16) & 0x7FFF) % (hi - lo + 1) + lo;
 }
-extern int func_001160D8(void);
 
 /* Random float in [lo, hi], randomly negated: uses a 12-bit fraction
    (bits 16-27 of the RNG word) for the magnitude and bit 16 for the
@@ -684,7 +683,6 @@ int func_L00_0025A868(char *a) {
     if (p && *(int *)(p + 8)) return 1;
     return 0;
 }
-extern void func_001F9BC0(void *);
 void func_L00_0025A890(char *a, int b, int c, float d) {
     *(int *)(a + 0x10) = b;
     *(int *)(a + 0x14) = c;
@@ -1204,8 +1202,6 @@ float func_L00_0025C700(float a, float b, float t) {
     return a + (b - a) * t;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0025C710);
-extern float func_001FA790(float, float);
-extern float func_001FA748(float, float);
 float func_L00_0025C7A8(float a, float b, float c) {
     float r = FastSubRots(b, a);
     return FastAddRots(a, r * c);
@@ -1425,7 +1421,6 @@ void func_L00_0025D3F0(void *a0, void *a1, void *a2) {
 extern int func_001F9850(int);
 extern int func_L00_0025D390(char *);
 extern void func_00213F28(void *, int, int, int, int);
-extern void func_00213DE0(void *, int, int, int);
 
 /* Initialises an effect record S for moby O from angle ANG. */
 void func_L00_0025D5B0(float ang, char *o, float *s, int a, int b, int c) {
@@ -1511,7 +1506,6 @@ void func_L00_0025E4B0(void *m, short *p) {
         *((unsigned char *)p + 6) = (unsigned char)c2;
     }
 }
-extern int func_001F9938(void *);
 extern void func_L00_00251328(void *, int, int, int);
 
 /* Steps a two-phase colour fade record and hands the current colour to the caller's setter. */
@@ -1662,7 +1656,6 @@ void func_L00_0025EAC8(V *a, V *b, float r) {
         FastVecDist(p, q);
     }
 }
-extern void func_L00_001FF500(float *, float *, float);
 
 /* Projects point v onto the line through a and b, clamps it to the segment, and writes the result back to v. */
 void func_L00_0025EB58(float *out, float *v, float *a, float *b) {
@@ -2105,7 +2098,6 @@ typedef struct { float x, y, z, w; } Vy10 __attribute__((aligned(16)));
 typedef struct { int v[6]; } S6y10;
 extern S6y10 D_L00_001E93B0;
 extern S6y10 D_L00_001E93C8;
-extern float D_L00_001B0670[] NOT_SDA;
 extern int func_002140B0(int);
 extern unsigned func_L00_0025D140(unsigned, int);
 extern void func_L00_0026B890(void *, void *, int, int, float, int, int, int, int, float);
@@ -2239,7 +2231,6 @@ int func_L00_00260AB0(void *p, int i) {
     return 0;
 }
 extern int D_L00_001601B4 MACRO_ADDR;
-extern void func_001F9EC0(void *, void *, void *);
 int func_L00_00260B68(float *p, int idx) {
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
@@ -2496,9 +2487,6 @@ int func_L00_00261568(int x, char *o, float *p, float *q, float *r, float *s) {
     return 1;
 }
 extern int func_L00_0025D390(char *);
-extern void func_001FA218(void *, void *);
-extern void func_001FA540(void *, void *, void *);
-extern void func_002153E8(void *, void *);
 
 int func_L00_002616E0(int x, char *o, float *a, float *c, float *b, float *d) {
     float m[16];
@@ -2516,9 +2504,6 @@ int func_L00_002616E0(int x, char *o, float *a, float *c, float *b, float *d) {
 }
 typedef struct { int a[16]; } Mx __attribute__((aligned(16)));
 typedef struct { int a[4]; } Vx __attribute__((aligned(16)));
-extern void func_001FA218(void *, void *);
-extern void func_001FA540(void *, void *, void *);
-extern void func_002153E8(void *, void *);
 void func_L00_002617B0(char *a, Vx *b, void *c, void *d) {
     Mx t0, t1, t2;
     func_001FA218(&t0, c);

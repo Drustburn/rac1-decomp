@@ -90,7 +90,6 @@ void func_L02_002D4E50(void *moby, void *va_, void *vb_, int d, float fa, float 
         }
     }
 }
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L02_002D4E50(void *, void *, void *, int, float, float);
@@ -156,7 +155,6 @@ int func_L02_002D6A90(void *argp) {
     } while (*p++ >= 0);
     return result;
 }
-extern int D_L02_001AC140[];
 extern int D_L02_00160058_m __asm__("D_L02_00160058") MACRO_ADDR;
 extern float func_002140F8(float, float);
 extern float func_001F9878(float);
@@ -516,17 +514,13 @@ extern void func_L00_0025B178(void *);
 extern void func_L02_002D99F0(void *);
 extern int func_001160D8(void);
 extern void func_L01_0026E8E0(char *p);
-extern void func_001F9BC0(void *);
 extern void func_L02_00265E58(char *moby);
 /* The angle before the pointer: argument moves follow the parameter order, and retail loads $f12 before $a1 in state 11. */
 extern void func_L00_002592B0(char *moby, float target, float *vel, float k, float d, float max);
 extern void func_L00_002607A8(void *a, float x);
-extern float func_00214358(void *, int, float);
 extern float func_00214D28(float *p, float target, float maxstep);
 extern int func_L00_0025A060(char *m, char *p, float *pos, char *v);
-extern float func_001F9B88(float);
 extern float func_001FA850(float, float);
-extern float func_00214158(void);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_L00_00250800(void *, int, void *);
@@ -536,7 +530,6 @@ extern int func_00215570(void *arg0, int arg1);
 extern void func_L02_00265E88(void *, void *, void *, float);
 extern void func_L00_0025A8C0(char *arg, int a, int b, void *src, float scale);
 extern void func_L02_002661E8(char **slots, int a, int b);
-extern float func_001F9D48(void *, void *);
 extern int func_L00_0025D6F0(void *, void *);
 extern void func_L00_002584A8(void *, int, int);
 extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
@@ -545,7 +538,6 @@ extern void *func_L00_00265050(char *src, int cls, float *pos, void *mat, int a8
 extern char D_L02_00167440[];
 extern char D_0013E633[];
 extern float D_0015EE6C MACRO_ADDR;
-extern float D_0015EE70 MACRO_ADDR;
 extern char *D_L02_0016016C MACRO_ADDR;
 extern int D_L02_0015F6B0 MACRO_ADDR;
 extern float D_L02_0015F660[] MACRO_ADDR;
@@ -893,11 +885,7 @@ typedef struct {
 struct AnimSeq_D99F0;
 extern int func_001FA898(float);
 extern struct Hero D_0013F450_D99F0 __asm__("D_0013F450");
-extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
 extern char *func_L00_0025B478(void *, int, int);
-extern void func_L00_0025D5B0(float, void *, void *, int, int, int);
-extern void func_L00_0025E4B0(void *m, short *p);
-extern void func_L00_0025E590(void *, void *);
 extern f32 D_L02_00161B14_D99F0 SDATA(D_L02_00161B14);
 extern char D_001414D0[];
 extern f32 D_L02_00161AF4_D99F0 SDATA(D_L02_00161AF4);
@@ -1160,7 +1148,6 @@ void func_L02_002DD170(Moby *m) {
     }
 }
 extern int D_L02_0016017C MACRO_ADDR;
-extern short D_L02_00161C6C;
 extern short D_L02_00161C78;
 extern short D_L02_00161C7C;
 extern short D_L02_00161C80;
@@ -1441,12 +1428,6 @@ void func_L02_002DDF70(char *m)
 typedef int Q_2de418 __attribute__((mode(TI)));
 extern float D_0015EE6C MACRO_ADDR;
 extern char *func_L00_0025B478(void *, int, int);
-extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
-extern void func_L00_0025BBA0(void *, float *, void *, void *);
-extern void func_L00_0025D5B0(float, void *, void *, int, int, int);
-extern void func_L00_002584A8(void *, int, int);
-extern void func_L00_0025E4B0(void *m, short *p);
-extern void func_L00_0025E590(void *, void *);
 
 /* Enemy hit reaction: on a hit takes damage and is knocked back; when its health runs out it is flung and dies. */
 void func_L02_002DE418(char *m) {
@@ -1549,7 +1530,6 @@ void func_L02_002DE7A8(char *moby) {
 }
 extern float D_0015EE6C MACRO_ADDR;
 extern float func_001FA748(float, float);
-extern void func_L00_002617B0(char *, void *, void *, void *);
 
 /* Rotates a platform and updates its transform. */
 void func_L02_002DF038(char *moby)
@@ -1563,9 +1543,6 @@ void func_L02_002DF038(char *moby)
     func_L00_002617B0(data + 0x20, zero, pos, moby + 0x40);
 }
 INCLUDE_ASM("asm/overlays", func_L02_002DF0C0);
-extern float func_00214D88(float *, float *, float, float, float, float);
-extern float func_001FA748(float, float);
-extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L02_00161CC0;
 extern short D_L02_00161CC4;
@@ -1597,8 +1574,6 @@ void func_L02_002E03B8(char *moby) {
     func_L00_00251E30(*(void **)(d + 0x84));
     func_L00_00251E30(*(void **)(d + 0x88));
 }
-extern float func_001FA748(float, float);
-extern short D_L02_00161CCC;
 
 // Copies the moby position into two linked objects and eases their heights toward it.
 void func_L02_002E04E8(char *moby)
@@ -1623,7 +1598,6 @@ void func_L02_002E04E8(char *moby)
 }
 extern char D_0013E633[];
 extern short D_L02_00161CF8;
-extern void func_L00_0028EBF0(int);
 extern int func_0022ED80(int, int, int);
 extern int func_002140B0(int);
 
@@ -1697,12 +1671,9 @@ extern short D_L02_00161CFC;
 extern short D_L02_00161D08;
 extern short D_L02_00161D0C;
 extern void func_L02_002E0B68(char *moby);
-extern int func_001F9938(void *);
 extern float func_L00_0025CE58(float *, float *, float, float, float, float);
-extern int func_L00_0028EB98(void *, int);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern char *func_L02_002ED660(char *src, void *pos, float *dir);
-extern float func_0020D830(void *);
 
 /* Rocket launcher update: on its state byte it aims at the target, fires, and clears its lock. */
 void func_L02_002E0810(unsigned char *m) {
@@ -1777,9 +1748,7 @@ void func_L02_002E0810(unsigned char *m) {
         break;
     }
 }
-extern float func_001F9D10(void *, void *);
 extern int func_L00_0028F210(int, int);
-extern char D_L02_00167440[];
 extern short D_L02_00161D10;
 extern short D_L02_00161D18;
 extern short D_L02_00161D1C;
@@ -1883,7 +1852,6 @@ void func_L02_002E0D80(struct Moby *m) {
     }
 }
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_L00_002607A8(void *a, float x);
 extern float func_001F9CB8(void *);
 extern float D_0015EE6C MACRO_ADDR;
 
@@ -1955,8 +1923,6 @@ void func_L02_002E1570(char *moby) {
     }
     }
 }
-extern void func_001F9BC0(void *);
-extern int func_L00_0025D6F0(void *, void *);
 extern int func_L00_00258BC8(int, int);
 extern void func_L00_0026A7F8(void *, void *, int, int, int, int, int, int);
 extern short D_L02_00161D2C;

@@ -333,8 +333,6 @@ void func_L13_002B4B90(unsigned char *moby) {
 extern float func_001FA790(float, float);
 extern float func_001FA748(float, float);
 extern float func_001F9F90(float);
-extern float func_001F9FA8(float);
-extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9BC0(void *);
 extern float func_L00_001FF860(float, float);
 extern unsigned char D_0013E633[];
@@ -508,9 +506,6 @@ extern void func_L00_00250800(void *, int, void *);
 extern float func_001F9D48(void *, void *);
 extern float func_002140F8(float, float);
 extern float func_001FA748(float, float);
-extern float func_001F9F90(float);
-extern float func_001F9FA8(float);
-extern void func_001F9BD8(void *, void *, void *);
 extern char *func_L13_00307660(float, float *, float *, void *);
 extern int D_L13_0015F6B0 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
@@ -657,10 +652,8 @@ void func_L13_002B5C08(char *m, char *p) {
 }
 extern int func_L00_00258BC8(int, int);
 extern int func_002140B0(int);
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
 extern void func_0020D678(void *);
-extern float D_L13_00167140[];
 
 /* Updates the gem-lock turret: idle animations, then a burst of particles when destroyed. */
 void func_L13_002B5E30(unsigned char *moby) {
@@ -727,7 +720,6 @@ typedef struct {
     void *value;
 } Level13VendorMoby;
 
-extern void func_L00_002688A8(void *);
 
 /* Release the vendor moby's attached object and clear its reference. */
 void func_L13_002B6168(Level13VendorMoby *moby) {
@@ -762,11 +754,9 @@ extern void func_L01_0026F040(int, int);
 extern void func_L00_0025BBA0(void *, float *, void *, void *);
 extern int func_001160D8(void);
 extern void func_L00_0025D5B0(float, void *, void *, int, int, int);
-extern float func_001F9B88(float);
 extern void func_L01_0026E8E0(char *p);
 extern int func_L01_0028C2D8(void *, void *, float);
 extern float func_001F9CE8(void *);
-extern float func_00214158(void);
 extern int func_001F9908_i(void *) __asm__("func_001F9908");
 extern void func_L00_002592B0(char *moby, float *vel, float target, float k, float d, float max);
 extern float func_001F9CB8(void *);
@@ -1826,10 +1816,6 @@ void func_L13_002B9800(void *moby, char *obj)
 }
 extern void func_001FA218(float *, float *);
 extern void func_001F9EE8(void *, void *, void *);
-extern void func_001F9C30(void *, void *, float);
-extern float func_001F9CB8(void *);
-extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern float func_001FA888(int);
 extern void func_001F5800(int, int, int, int, int, int, int, int, long, long);
 extern int D_0013E604;
 typedef struct {
@@ -2069,10 +2055,8 @@ int func_L13_002B9E50(int a, char *p, char *a2, void *a3, float f0, float f1, fl
 }
 extern unsigned char D_0013A5E0[];
 extern unsigned char D_0013E633[];
-extern int D_L13_0015F6A8 MACRO_ADDR;
 extern char D_L13_00167150[];
 extern void func_001F9908(int *arg0);
-extern int func_001F9850(int);
 extern int func_L13_002B9E50(int, char *, char *, void *, float, float, float, char *, char *);
 
 #define W(p, o) (*(int *)((char *)(p) + (o)))
@@ -2145,12 +2129,9 @@ skip:
 extern long func_001F4868_l(int) __asm__("func_001F4868");
 extern void func_L13_002B9590_f(float, float, float, float, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("func_L13_002B9590");
 extern void func_L11_00311F98(float, float, float, void *, int, int, long);
-extern void func_L11_003126D8(void *, void *, void *, int);
 extern void func_001F5E60(float, float, float, float, float, int, int, int, int, int, int, int, float, float);
 extern void *func_001FE540_id(int) __asm__("func_001FE540");
 extern int func_001F6F40_c(int, int, long, void *, int) __asm__("func_001F6F40");
-extern float func_L00_0025F368(float);
-extern unsigned char D_0013E15A[];
 extern char D_L13_001CBEE0[];
 extern int D_L13_001CC0F0[];
 extern short D_L13_00161450;
@@ -2258,11 +2239,7 @@ void func_L13_002BAA68(char *moby) {
 }
 extern float D_0015EE6C MACRO_ADDR;
 extern void func_00215C00(void *, float, float, float);
-extern int func_0022ED80(int, int, int);
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_L00_00250800(void *, int, void *);
 extern int func_L11_00309C18(void *, void *, void *, float, float);
-extern void func_L11_003126D8(void *, void *, void *, int);
 extern int func_001F9908_i(void *) __asm__("func_001F9908");
 
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
@@ -2286,7 +2263,6 @@ void func_L13_002BB068(char *moby, char *obj, float p2, float p3) {
     FastVecAdd(d, a, moby + 0x10);
     func_L11_003126D8(d, obj + 0xE0, obj + 0xE4, 0);
 }
-extern void func_001F9BD8(void *, void *, void *);
 extern int func_L13_002E7E90(void *, void *, float, int, void *, int);
 
 /* Fires a timed burst from a moby while a pad button is held and ammo remains. */

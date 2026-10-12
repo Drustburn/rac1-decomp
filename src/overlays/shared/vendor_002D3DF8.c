@@ -558,7 +558,6 @@ void func_L08_002F2618(float *out, float *ph, float a, float b, float scale) {
     out[0] = FastSin(ph[0] * 3.1415927f) * scale;
     out[1] = FastSin(ph[1] * 3.1415927f) * scale;
 }
-extern float D_0015EE7C MACRO_ADDR;
 typedef struct { float x, y; } V2;
 extern V2 D_L08_001DB7C0[];
 
@@ -1090,8 +1089,6 @@ char *func_L08_00308650(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     }
     return m;
 }
-extern float D_L08_0015F6B8 MACRO_ADDR;
-extern float D_L08_0015F6B4 MACRO_ADDR;
 extern char D_L08_001746C0[];
 extern void func_001F9C30(void *, void *, float);
 extern void func_L00_001FF240(void *, void *, void *);
@@ -1151,7 +1148,6 @@ void func_L08_00308758(char *m) {
 }
 extern float func_002140F8(float, float);
 extern float func_001F9878(float);
-extern float func_001F9CB8(void *);
 extern float D_0015EE6C MACRO_ADDR;
 extern float D_L08_001623F0[2] MACRO_ADDR;
 extern float D_L08_00162400 MACRO_ADDR;

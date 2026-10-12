@@ -1269,22 +1269,8 @@ void func_L00_002B69C0(void *m_) {
     *(int *)&D_L00_0015F554_m = 0;
     SetBackgroundColor(0x40, 0x60, 0x40);
 }
-extern void func_001FB448(int, int, int);
-extern int D_L00_0015F40C_m __asm__("D_L00_0015F40C") MACRO_ADDR;
-extern float D_L00_0015F548_m __asm__("D_L00_0015F548") MACRO_ADDR;
-extern float D_L00_0015F54C_m __asm__("D_L00_0015F54C") MACRO_ADDR;
-extern float D_L00_0015F550_m __asm__("D_L00_0015F550") MACRO_ADDR;
-extern float D_L00_0015F554_m __asm__("D_L00_0015F554") MACRO_ADDR;
-extern int D_L00_0015F544_m __asm__("D_L00_0015F544") MACRO_ADDR;
-extern int D_L00_0015F545_m __asm__("D_L00_0015F545") MACRO_ADDR;
 extern unsigned char D_L00_0015F546;
-extern float D_L00_00161040_m __asm__("D_L00_00161040") MACRO_ADDR;
-extern float D_L00_001610A0_m __asm__("D_L00_001610A0") MACRO_ADDR;
-extern float D_L00_00160564_m __asm__("D_L00_00160564") MACRO_ADDR;
-extern int D_L00_001600B0_m __asm__("D_L00_001600B0") MACRO_ADDR;
-extern int D_L00_0016023C_m __asm__("D_L00_0016023C") MACRO_ADDR;
 extern char D_L00_0016CB40[];
-extern int D_L00_0016A0F8;
 
 // Loads the stored camera parameters of a moby into the globals and applies the screen setup.
 void func_L00_002B6AE0(int m_, int flag) {
@@ -1992,7 +1978,6 @@ extern char D_0013E633[];
 struct E { float f; short s4; short x; short s8; short y; };
 extern struct E D_L00_001DB740[];
 extern float D_L00_001615B0[] MACRO_ADDR;
-extern float D_L00_001615AC MACRO_ADDR;
 extern float D_L00_001DB700[];
 extern short D_L00_00161598;
 extern short D_L00_00161594;

@@ -390,7 +390,6 @@ void func_L05_0023E348(int i) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L05_0024C558);
-extern unsigned char D_0013E633[] NOT_SDA;
 extern short D_L05_0015F6B0;
 extern float D_L05_00174368;
 extern float func_001F9B88(float);
@@ -398,7 +397,6 @@ extern void func_L00_00212D70(void *, void *, int, float, float);
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern int func_L00_001F3958(void);
 extern void func_L05_0024D680(int, int);
-extern int func_L00_00217570(int, int);
 
 /* Decides whether the hero's current motion warrants the swing effect, running a probe when the conditions line up. */
 int func_L05_00251DB0(void) {
@@ -916,7 +914,6 @@ typedef struct { int bank; int seq; } SndPair_254030;
 typedef struct { char pad[0x6E0]; int flags[6]; } Hero6E0_254030;
 extern SndPair_254030 D_L05_00179CC0[];
 extern float func_L00_00233410(float a, float b, float c);
-extern int func_001FA898(float);
 extern void func_L00_00232C10(int, int, float);
 extern void func_L00_00232E60(int bank, int seq);
 extern int func_L05_002559A0(void);
@@ -1276,7 +1273,6 @@ int func_L05_002559DC(int arg) {
     return r;
 }
 INCLUDE_ASM("asm/overlays", func_L05_002559F0);
-extern unsigned char D_0013E633[] NOT_SDA;
 extern char D_L05_0017C168[];
 
 // Clears two slots in the game state block and refills them when the flag is set and the mode is 0x15 or 0x16.

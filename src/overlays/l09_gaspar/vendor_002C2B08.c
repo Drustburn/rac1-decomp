@@ -526,7 +526,6 @@ extern void func_001F9BF0(void *, void *, void *);
 extern float func_001F9CB8(void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_001FA748(float, float);
-extern float D_0015EE60 MACRO_ADDR;
 extern float D_0015EE70 MACRO_ADDR;
 extern float D_L09_00166FC0[];
 
@@ -576,7 +575,6 @@ extern float D_L09_00174068;
 extern V6_2EC188 D_L09_00208DF0;
 extern V6_2EC188 D_L09_00208E08;
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
-extern void func_L00_0026B890(void *, void *, int, int, int, int, int, int, float, float);
 extern int func_L00_0028EF68(int, int, int, int);
 extern int func_L00_0028F210(int, int);
 extern char *func_L09_002F1198(void *, void *, void *, float, float);
@@ -1129,7 +1127,6 @@ void func_L09_002F0AA0(void) {
     func_L03_00292AC0(D_L09_001FCA00);
     func_L09_002C2B08(D_L09_001FCA00, D_L09_001F6680, 10);
 }
-extern float func_00214158(void);
 typedef int u128_2F0BB8 __attribute__((mode(TI)));
 
 typedef struct { char pad[0x24]; float scale; } SpawnClass_2F0BB8;
@@ -1272,7 +1269,6 @@ char *func_L09_002F10F8(char *owner, void *position, float angle) {
     return moby;
 }
 INCLUDE_ASM("asm/overlays", func_L09_002F1198);
-extern float D_0015EE60 MACRO_ADDR;
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_0020D678(void *);
@@ -1476,12 +1472,8 @@ extern L09LevelState D_L09_001BB6C0;
 extern int D_L09_001BA960[];
 extern int D_0015EE84 MACRO_ADDR;
 extern int func_00215570(void *, int);
-extern int func_001F9938(void *);
-extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern int func_L01_00278FA8(void *);
-extern float func_001F9D10(void *, void *);
 extern void func_L00_00222B80(int, int);
-extern float func_001F9878(float);
 extern int func_0022ED80(int, int, int);
 extern float func_001F9D48(void *, void *);
 extern float func_001F9B88(float);
@@ -1880,8 +1872,6 @@ void func_L09_00305378(Moby *moby, VendorVars2_05378 *vars, f32 *health) {
     }
 }
 typedef int u128 __attribute__((mode(TI)));
-extern char *D_L09_00160064 MACRO_ADDR;
-extern float func_001F9D10(void *, void *);
 // Finds the nearest eligible moby to a position, returning it only when close enough.
 char *func_L09_00305580(char *self, char *pos, int bone) {
     char *best = 0;
@@ -2084,7 +2074,6 @@ void func_L09_00305710(Moby *m) {
 }
 INCLUDE_ASM("asm/overlays", func_L09_00306030);
 INCLUDE_ASM("asm/overlays", func_L09_00306DD8);
-extern void func_L00_0025E210(void *);
 extern int func_001F9850(int);
 
 /* spawn a moby copying position, rotation and data word from owner */

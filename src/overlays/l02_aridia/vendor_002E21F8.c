@@ -450,18 +450,15 @@ void func_L02_002E2D88(char *m)
     func_L00_00263950_2E2D88(m, d + 0xC0, 1, rate * D_0015EE64, head_rate * D_0015EE64);
 }
 extern char D_0013F4D0[];
-extern char * D_L02_0016016C MACRO_ADDR;
 extern char * D_L02_00160058 MACRO_ADDR;
 extern int func_00215570(void *, int);
 extern void func_001FFDA0(int, int);
-extern int func_001F9938(int *);
 extern int func_001F9850(int);
 extern void func_001F4E08(int);
 extern float func_L00_001FF860(float, float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BC0(void *);
-extern float func_001FA748(float, float);
 extern void func_L00_00217718(void *, void *, int, int);
 extern int func_001FFB38(int, int, void *, void *, void *, void *, int);
 extern void func_L00_0023B0F8(void);
@@ -780,7 +777,6 @@ void func_L02_002ED358(struct Moby *m) {
     if (v->timer == 0)
         func_0020D678_ED358(m);
 }
-extern char *func_0020D348(int);
 extern void func_L00_00251328(char *, int, int, int);
 extern float func_001F9CE8(void *);
 extern short D_L02_00161FDC;
@@ -820,7 +816,6 @@ typedef struct {
 } Flags_0013D5C8;
 
 extern int func_00215570(void *arg0, int arg1);
-extern int func_L00_00203F20(int a, int b);
 extern int func_0022EE28(int, int, int);
 extern void func_L00_00264DB8(int arg0, int arg1);
 extern int func_001F9850(int);
@@ -828,13 +823,10 @@ extern Entry_L02_0017A140 D_L02_0017A140[];
 extern unsigned char D_0013D355[];
 extern unsigned char D_0013D50F[];
 extern unsigned char D_0013E633[];
-extern unsigned char D_0014171B[];
-extern unsigned char D_0014C150[][16];
 extern unsigned short D_001419E8 NOT_SDA;
 extern unsigned short D_001418A2 NOT_SDA;
 extern unsigned short D_00141988 NOT_SDA;
 extern int D_0015EE84 MACRO_ADDR;
-extern int D_0015EFA4 MACRO_ADDR;
 extern unsigned char D_0015EEDC[4] MACRO_ADDR;
 extern unsigned char D_0015EEE0[4] MACRO_ADDR;
 

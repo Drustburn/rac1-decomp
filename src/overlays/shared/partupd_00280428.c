@@ -100,7 +100,6 @@ char *func_L01_00286530(float scale, void *pos, int a, int idx, int b, unsigned 
     return r;
 }
 extern int func_001FA898(float);
-extern int func_002140B0(int);
 extern float func_001FA888(int);
 extern unsigned char *D_L01_001B28D0;
 
@@ -184,7 +183,6 @@ typedef struct {
     float e[1][4];
 } List;
 
-extern float func_001F9D10(void *, void *);
 extern float func_001F9B88(float);
 
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */
@@ -332,8 +330,6 @@ void func_L01_0028C690(void *out, int *l, int idx, float a, float b) {
         *(u128 *)out = *(u128 *)v3;
     }
 }
-extern void func_001F9C30(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 
 // Cubic Hermite blend of four vectors at parameter t, written to out.
 void func_L01_0028C848(float t, void *out, void *p1, void *p2, void *p3, void *p4) {

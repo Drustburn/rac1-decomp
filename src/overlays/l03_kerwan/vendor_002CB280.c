@@ -450,7 +450,6 @@ void func_L03_002CDBF0(unsigned char *arg);
 extern float D_0015EE6C MACRO_ADDR;
 struct Moby;
 extern struct Hero D_0013F450;
-extern char D_L03_00166F40[];
 typedef int OvlQuad __attribute__((mode(TI)));
 typedef float MineVec[4] __attribute__((aligned(16)));
 typedef struct {
@@ -484,7 +483,6 @@ extern void func_001F9BD8(void *, void *, void *);
 extern f32 func_001F9CB8(void *);
 extern void func_L00_001FF4B0(void *, void *, f32);
 extern f32 func_001F9D48(void *, void *);
-extern f32 func_001F9B88(f32);
 extern void func_0022ED80_CD270(int, int, struct Moby *) __asm__("func_0022ED80");
 extern int func_L00_001F2BE8(void *, int, struct Moby *, void *, f32);
 extern void func_L00_0025BA50(struct Moby *, void *, void *, int, int, int, int, int, f32, f32, f32);
@@ -909,7 +907,6 @@ extern float D_L03_00161B9C SDATA(D_L03_00161B9C);
 extern float func_001F9CB8(void *);
 extern float func_001F9D10(void *, void *);
 extern float func_00214D88(float *, float *, float, float, float, float);
-extern float func_001F9CE8(void *);
 extern float func_L00_0025CE58(float *, float, float *, float, float, float);
 extern int func_L00_0028EB98(void *, int);
 extern int func_L00_0028EF68(int, int, int, int);
@@ -2033,7 +2030,6 @@ void func_L03_002ECBA8_r(char *m) {
     func_L00_001FF4B0_2ECBA8(m + 0x10, m + 0x10, -1.0f);
     func_001F9CA0_2ECBA8(m + 0x20, m + 0x10, m);
 }
-extern char D_0013E633[];
 typedef struct CameraSmoothECD40 {
     float position[4]; int sourceFlag; float duration;
 } CameraSmoothECD40;
@@ -2129,7 +2125,6 @@ void func_L03_002ECD40(char *m) {
 extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_001EC120(void *, float, float, float, float, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern char D_0013E633[];
 
 // Smooths a camera-like moby's position toward the player's and sets its orientation vector.
 void func_L03_002ECEC8(void *arg) {
@@ -2157,8 +2152,6 @@ void func_L03_002ECEC8(void *arg) {
     *(float *)(m + 0x34) = v2[1];
     *(float *)(m + 0x38) = v2[2];
 }
-extern char D_0013E633[];
-extern float func_001EC120(void *, float, float, float, float, float);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9BF0(void *, void *, void *);
@@ -2197,7 +2190,6 @@ void func_L03_002ED178(void *arg) {
     func_L03_002ED020(arg);
 }
 extern int D_L03_0015F050 MACRO_ADDR;
-extern char D_0013E633[];
 extern int func_00215570(void *, int);
 
 void func_L03_002ED1B0(char *moby)

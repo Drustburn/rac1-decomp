@@ -145,14 +145,11 @@ extern char D_0013F6E0_2d8fa0[] __asm__("D_0013F6E0");
 extern short D_L15_00161C88;
 extern short D_L15_00161C8C;
 extern short D_L15_00161C90;
-extern short D_L15_00161C94;
 extern short D_L15_00161C98;
-extern short D_L15_00161C9C;
 extern short D_L15_00161CA0;
 extern short D_L15_00161CA4;
 extern short D_L15_00161CA8;
 extern short D_L15_00161CAC;
-extern short D_L15_00161CB0;
 extern short D_L15_00161CB4;
 extern short D_L15_00161CB8;
 extern short D_L15_00161CCC;
@@ -168,7 +165,6 @@ extern float D_L15_001D3CA0[];
 extern float D_L15_001D3E30[];
 extern H_2d8fa0 D_L15_001D3E70[];
 extern P_2d8fa0 D_L15_001D3E80_2d8fa0[] __asm__("D_L15_001D3E80");
-extern short D_L15_00161D40[] MACRO_ADDR;
 extern short D_L15_00161D48_2d8fa0[] __asm__("D_L15_00161D48") MACRO_ADDR;
 extern short D_L15_00161D50[] MACRO_ADDR;
 extern short D_L15_00161D58[] MACRO_ADDR;
@@ -347,7 +343,6 @@ void func_L15_002D8FA0(Moby *moby) {
     f20 = random_float_between(0.15f, 3.0f);
     spawn_2d8fa0(&data->c, scale_ticks(12), f20 * 0.1f, f20, *(int *)&D_L15_00161CE0_2d8fa0 | 0x7F000000, 0, r, D_L15_0015F660_2d8fa0, 0.0f);
 }
-extern float D_0015EE60 MACRO_ADDR;
 extern char D_L15_001D3A20[];
 extern char D_L15_001D3E80[];
 extern int D_L15_00161D48 MACRO_ADDR;
@@ -516,7 +511,6 @@ void func_L15_002E5770(unsigned char *m) {
 }
 extern char *func_0020D348(int);
 extern void func_001F9C30(void *, void *, float);
-extern float func_L00_001FF860(float, float);
 extern float func_001F9CE8(void *);
 extern void func_L00_00251E30(void *);
 extern char *func_L00_0026E940(char *src, int col, int w, int v, float x);
@@ -563,21 +557,16 @@ void func_L15_002EC490(char *moby)
         *(unsigned short *)(moby + 0x34) |= 1;
     }
 }
-extern float func_001FA748(float, float);
 extern void func_L02_002EBC08(char *);
-extern void func_0020D678(void *);
 extern void func_L02_002EBCE8(char *);
-extern float func_001F9D10(void *, void *);
 extern void func_L00_00299B68(int);
 extern void func_L00_00264DB8(int arg0, int arg1);
 extern int func_0020BFC8(int, int);
 extern int D_0015EE84 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
 extern int D_L15_0015F6A8 MACRO_ADDR;
 extern int D_L15_0015F720 MACRO_ADDR;
 extern short D_L15_00162220;
 extern unsigned char D_0013D355[];
-extern char D_0013E633[];
 
 /* Update for moby class 1428: a four-state trigger that spins and then deletes itself. */
 void func_L15_002ED168(unsigned char *moby) {

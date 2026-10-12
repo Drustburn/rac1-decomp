@@ -96,8 +96,6 @@ void func_L00_002722F0(unsigned char *p) {
     }
 }
 extern unsigned char *D_L00_001B24B4;
-extern unsigned char *func_00218928(int);
-extern int func_002140B0(int);
 extern int func_001FA898(float);
 extern int func_001160D8(void);
 extern float func_00214158(void);
@@ -195,7 +193,6 @@ unsigned char *func_L00_00272770(void *a, void *b, int c, float f, float g) {
 }
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_001FA898(float);
-extern float func_001F9B88(float);
 extern void func_L00_002688A8(void *);
 
 /* Particle update: move, spin, ease toward a target value, fade, die. */
@@ -219,8 +216,6 @@ void func_L00_00272890(char *m) {
     if ((*(unsigned *)(m + 4) & 0xFF000000) == 0) KillPart(m);
 }
 extern char *D_L00_001B24BC;
-extern unsigned char *func_00218928(int);
-extern int func_002140B0(int);
 extern int func_001FA898(float);
 
 unsigned char *func_L00_002729B8(void *a, void *b, float f) {
@@ -238,7 +233,6 @@ unsigned char *func_L00_002729B8(void *a, void *b, float f) {
     }
     return r;
 }
-extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_002688A8(void *);
 void func_L00_00272A88(char *m) {
@@ -255,8 +249,6 @@ void func_L00_00272A88(char *m) {
     }
 }
 extern void func_001F9BD8(void *, void *, void *);
-extern float func_001FA888(int);
-extern float func_001F9B88(float);
 extern int func_001FA8A8(int, int, float);
 extern int func_001F9938(void *);
 extern void func_L00_002688A8(void *);
@@ -341,8 +333,6 @@ void func_L00_00272C98(unsigned char *m) {
         KillPart(m);
     }
 }
-extern void func_L00_001FF2C8(void *, void *, float);
-extern void func_L00_001FF240(void *, void *, void *);
 extern float D_0015EE70 MACRO_ADDR;
 
 // Updates a particle: drifts it with gravity, fades it, kills it when faded or timed out.
@@ -727,7 +717,6 @@ unsigned char *func_L00_00273E08(float f, void *pos, int a1, unsigned char a2, i
     }
     return r;
 }
-extern unsigned char D_0013E633[] NOT_SDA;
 
 // Particle update: registers the velocity vector once, then kills the particle when its timer expires.
 void func_L00_00273F28(char *m) {
@@ -1564,9 +1553,7 @@ void func_L00_002761C0(O_275320 *o) {
     FastVecAdd(vel, &tmp, vel);
     vel->f[3] = h + D_L00_00160318;
 }
-extern void func_001F9EC0(void *, void *, void *);
 extern int func_L00_00237B70(float, int, int);
-extern float D_0015EE60 MACRO_ADDR;
 
 /* Update a particle following a parent moby with a scaled offset. */
 void func_L00_002763B0(char *m) {
@@ -1615,8 +1602,6 @@ void func_L00_002763B0(char *m) {
 }
 extern float func_001F9CE8(void *);
 extern int func_L00_0025A468_r(void *, void *) __asm__("func_L00_0025A468");
-extern float D_0015EE64 MACRO_ADDR;
-extern float D_0015EE60 MACRO_ADDR;
 
 /* particle type 75 update: move, damp, then fade or die */
 void func_L00_00276590(char *m) {

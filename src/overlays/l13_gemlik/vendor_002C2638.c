@@ -216,10 +216,8 @@ void func_L13_002C27B0(Moby *m) {
         DeleteMoby(m);
     }
 }
-extern char *func_0020D348(int);
 extern int func_001F9850(int);
 extern void func_00213DE0(void *, int, int, int);
-extern void func_L00_00251E30(void *);
 extern void func_L00_0025E210(void *);
 
 /* Spawns a moby of class 0x53 at a position, with its data block filled in. */
@@ -578,7 +576,6 @@ extern void func_L00_002592B0(char *moby, float *vel, float target, float k, flo
 extern float func_L00_00259148(float *vel, float cur, float target, float k, float d, float max);
 extern float func_001F9B88(float);
 extern float func_L00_0025F368(float);
-extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 
 /* steers a moby's pitch toward a target with a spring, then damps and clamps it */
@@ -626,7 +623,6 @@ extern char *D_L13_001B0AB0[];
 extern char D_0013E633[];
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BF0(void *, void *, void *);
-extern float func_L00_001FF860(float, float);
 extern float func_001F9D48(void *, void *);
 
 /* Steers moby m along its path toward the next point (advancing when reached); aims it at the hero when aim. Returns 1 on a wrap. */
@@ -671,7 +667,6 @@ int func_L13_002C4F10(char *m, char *d, int aim) {
 }
 extern char D_0013E633[];
 extern float func_001FA748(float, float);
-extern void func_00215C00(void *, float, float, float);
 extern void func_001F9BD8(void *, void *, void *);
 
 // Computes an offset vector from the player's angle data, or copies the default vector when there is no player.
@@ -1144,8 +1139,6 @@ extern int func_L00_00258BC8(int, int);
 extern void func_L00_0026B890(void *, void *, int, int, int, int, int, float, int, float);
 extern int func_L00_002ADBB0(void *, void *, void *, float, int, int, int, int, int);
 extern float D_L13_0015F660[] MACRO_ADDR;
-extern float D_L13_00167140[];
-extern float D_L13_0015F6B4 MACRO_ADDR;
 extern Blk24 D_L13_001F4C40;
 extern Blk24 D_L13_001F4C58;
 
@@ -1260,7 +1253,6 @@ typedef int Q_2cff90 __attribute__((mode(TI)));
 extern char D_L13_001F4C70[];
 extern char D_L13_001F4C98[];
 extern int func_00120778(float);
-extern int func_001E9730_d(void *, ...) __asm__("func_001E9730");
 extern void func_L00_002584A8(void *, int, int);
 extern void func_L00_00250800(void *, int, void *);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("func_L00_0025F4A8");
@@ -1359,7 +1351,6 @@ end:
 INCLUDE_ASM("asm/overlays", func_L13_002D0298);
 extern float func_002140F8(float, float);
 extern int func_001160D8(void);
-extern float func_00214158(void);
 
 // spawns a spinning moby of class 0x584 with randomized angular rates
 char *func_L13_002E2488(char *owner, char *pos, char *vec, int a3, float f) {
@@ -1503,9 +1494,6 @@ int func_L13_002E56C8(char *m, char *arg, float *t) {
     return result;
 }
 INCLUDE_ASM("asm/overlays", func_L13_002E5810);
-extern char *func_0020D348(int);
-extern void func_L00_00251E30(void *);
-extern void func_L00_0025E210(void *);
 
 char *func_L13_002E9870(char *owner) {
     char *moby = CreateMoby(0x160);
@@ -1736,7 +1724,6 @@ void func_L13_002E9D58(struct Moby *m, char *d) {
 extern int D_L13_001D3808[];
 extern int D_L13_0015F6B0 MACRO_ADDR;
 extern void func_L00_00250800(void *, int, void *);
-extern void func_L00_00260958(float *v, float s);
 extern int func_L00_00258BC8(int, int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern void func_L00_0026A7F8(void *, void *, int, int, int, int, int, int);
@@ -1963,7 +1950,6 @@ int func_L13_002EA840(struct Moby *m, char *d, int idx, int aim) {
 }
 extern void func_L00_00260108(void *, void *, int, float, float);
 extern void func_001F9C30(void *, void *, float);
-extern void func_L00_00260958(float *v, float s);
 extern float func_002140F8(float, float);
 
 /* Launches the child moby held in slot idx of p: spins it off with random-ish velocities and clears the slot. */
@@ -2305,7 +2291,6 @@ void func_L13_002EB768(char *a, char *b, float f) {
     func_00215C00(a, dist / (k + f) * k, y, -x);
     FastVecAdd(a, a, *(char **)(base + 0x15F0) + 0x10);
 }
-extern float func_L00_001FF860(float, float);
 extern float func_001F9D48(void *, void *);
 extern void func_L13_002EB768(char *a, char *b, float f);
 
@@ -2382,7 +2367,6 @@ unsigned char *func_L13_002EB978(struct Moby *m, unsigned char *d) {
     return r;
 }
 extern void func_L00_00250800(void *, int, void *);
-extern void func_L13_002EB768(char *a, char *b, float f);
 extern void func_001F9BF0(void *dst, void *a, void *b);
 extern unsigned char *func_L13_002C31B0(char *owner, char *pos, char *vec);
 extern void func_0022ED80(int, int, int);

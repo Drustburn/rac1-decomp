@@ -517,11 +517,9 @@ int func_L00_001ED5B0(int key) {
     return i;
 }
 extern char *func_L00_001EB578(int);
-extern void func_001ED818(void);
 extern void func_001EC270(void *);
 extern void func_001EC038(void);
 extern char D_L00_00169210[];
-extern char D_0013E633[];
 
 /* resets the camera behind the hero */
 void func_L00_001ED600(void) {
@@ -565,13 +563,10 @@ typedef struct {
     char pad3[0x10];
 } Elem;
 extern Elem D_L00_00167250[];
-extern int D_L00_00169990[];
 extern char D_L00_00166FF0[];
-extern int D_L00_0015F04C MACRO_ADDR;
 extern int D_L00_0015F054 MACRO_ADDR;
 extern short D_L00_0015F040;
 extern char *D_L00_0015F050 MACRO_ADDR;
-extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BC0(void *);
 
 extern float func_001F9F90(float);
@@ -606,7 +601,6 @@ typedef struct { char pad[0x140]; W q; char pad2[0x30]; char *o; } CamC;
 extern CamC D_cam_c __asm__("D_L00_00166D80");
 extern void func_001F9BF0_3(float *, float *, float *) __asm__("func_001F9BF0");
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern float func_001FA888(int);
 extern void func_L00_001FF328(float *, float *, float);
 extern int func_L00_001F10E0_f(void *, int, void *, float) __asm__("func_L00_001F10E0");
 extern int D_L00_0016C16C;

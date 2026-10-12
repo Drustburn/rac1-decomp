@@ -711,7 +711,6 @@ skip:
         func_L00_00211908();
     }
 }
-extern void func_L15_00217348(int, int);
 
 /* Select the message associated with the current help mode. */
 void func_L15_0021B2C8(void) {

@@ -402,23 +402,17 @@ extern void func_L00_001FF4B0_2D2670(void *, void *, float) __asm__("func_L00_00
 extern void func_001F9BD8_2D2670(void *, void *, void *) __asm__("func_001F9BD8");
 extern int func_L11_002D37A8_2D2670(void *, void *) __asm__("func_L11_002D37A8");
 extern float func_L00_0025A748_2D2670(void *) __asm__("func_L00_0025A748");
-extern int func_L00_002676E8(void *, void *);
 extern void func_L05_0028CEE8(int *, int, int);
-extern void func_001F9BC0(void *);
 extern void func_L11_0030BC10_2D2670(void *) __asm__("func_L11_0030BC10");
 extern void func_L11_002CCB50_2D2670(void *) __asm__("func_L11_002CCB50");
-extern int func_L00_00267290(void *, void *);
-extern void func_L01_00279398(float, void *);
 extern int func_L11_002D3500_2D2670(void *, void *) __asm__("func_L11_002D3500");
 extern void func_L00_002512D8(int);
 extern void func_L00_002676A0(void *, int);
 extern void func_001FA1F8(void *, void *);
 extern int func_L11_0030BC00_2D2670(void *) __asm__("func_L11_0030BC00");
-extern void func_L00_002618D8(int, int);
 
 extern int D_L11_00160058_2D2670 __asm__("D_L11_00160058") MACRO_ADDR;
 extern Cuboid_2D2670 *D_L11_0016016C_2D2670 __asm__("D_L11_0016016C") MACRO_ADDR;
-extern int D_L11_0015F6A8 MACRO_ADDR;
 extern int D_0015EE84 MACRO_ADDR;
 extern unsigned char D_0014C150[];
 extern unsigned char D_0013D4E1[];
@@ -826,7 +820,6 @@ int func_L11_002D3620(char *moby) {
     }
     return found;
 }
-extern int func_00215570(void *arg0, int arg1);
 extern float func_001F9CB8(void *a);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
@@ -1312,7 +1305,6 @@ extern float D_L11_001D3800[];
 extern unsigned char D_001414F5_r __asm__("D_001414F5") NOT_SDA;
 extern void func_001FA460(void *, void *);
 extern long func_001F4868(int);
-extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_L00_001FD1D8(void *, void *, int);
 
@@ -1798,10 +1790,8 @@ int func_L11_0030BC00(unsigned char *arg) {
 void func_L11_0030BC10(unsigned char *arg) {
     *(int *)(*(int *)(arg + 0x78) + 0xB8) = 1;
 }
-extern short *D_L11_001AC540[];
 extern int D_L11_00160058_m __asm__("D_L11_00160058") MACRO_ADDR;
 extern short D_L11_00160074;
-extern int func_L11_00317598(char *);
 
 // Returns 1 unless a listed moby in the group with state >= 0 and id 0x4DE fails the check.
 int func_L11_0030BC20(char *m) {
@@ -1827,9 +1817,7 @@ extern void func_L11_0030E620(void *);
 extern int func_L11_00310738(char *moby);
 extern float func_00214D28(float *, float, float);
 extern float func_00214358(void *, int, float);
-extern void func_001F9BC0(void *);
 extern float func_L00_001FF860(float, float);
-extern void func_L00_00217718(void *, void *, int, int);
 extern void func_L00_002EBF50(void *, void *, int, int, int);
 extern void func_0022ED80_u(int, int, void *) __asm__("func_0022ED80");
 extern float func_00214D88_f(float *, float *, float, float, float, float) __asm__("func_00214D88");
@@ -2249,7 +2237,6 @@ void func_L11_0030FE40(unsigned char *m) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L11_00310058);
-extern int func_L11_00310738(char *moby);
 extern void func_0022ED80(int, int, int);
 extern unsigned char D_0013D4EB NOT_SDA;
 extern short D_L11_0015F6B0;

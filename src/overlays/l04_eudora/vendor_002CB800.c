@@ -194,7 +194,6 @@ extern void func_L00_0025B178(void *);
 extern float func_L00_001FF860(float, float);
 extern float func_001FA850(float, float);
 extern float func_001F9D48(void *, void *);
-extern float func_0020D830(void *);
 extern void func_001F9938(void *);
 extern char *func_L00_0025B478(void *, int, int);
 extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
@@ -207,7 +206,6 @@ extern int func_001F9850(int);
 extern void func_00213DE0(void *, int, int, int);
 extern void func_L00_002A27C8(void *);
 extern float func_001FA748(float, float);
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_0020DB98(void *, int, void *, void *);
 extern void func_L00_001EFFF0(void *, void *, int, void *, void *);
@@ -219,12 +217,9 @@ extern void func_L04_002D27F8(void *);
 extern void *func_001153FC(void *, int, int);
 extern int func_002140B0(int);
 extern int func_L00_0025A778(void *, void *, int);
-extern float func_002140F8(float, float);
 extern int func_00215B18(void *, float);
-extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_L00_001FF240(void *, void *, void *);
-extern float func_00214158(void);
 extern void func_L00_002B0B98(void *, void *, void *, void *, int, int, float, float);
 extern void func_L04_00296FA8(void *, void *);
 extern int func_L04_00296938(void *, void *, float, float, float);
@@ -832,8 +827,6 @@ void *func_L04_002D48B8(char *src, char *pos) {
     }
     return m;
 }
-extern void func_001F9BF0(void *, void *, void *);
-extern void func_L00_002617B0(char *, void *, void *, void *);
 extern void func_L00_0025E210(void *);
 
 /* UpdateMoby_584 */
@@ -852,13 +845,10 @@ void func_L04_002D4960(char *m) {
         m[0x20] = 1;
     }
 }
-extern int *D_L04_001B0930[];
 extern char *D_L04_00160058 MACRO_ADDR;
 extern float func_001FA888(int);
 extern float func_L00_00200210(float, float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern void func_001F9C30(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 
 /* update: blend two keyframes of a path and write the result to a position */
 void func_L04_002D8348(char *moby) {
@@ -1040,16 +1030,11 @@ typedef struct {
     int c[4];
     float d[4];
 } L10SpriteData_298940;
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern int func_001F9908(int *);
-extern int func_001F9850(int);
-extern float func_001FA888(int);
 extern int func_001FA8A8(int, int, float);
 extern float func_001F9B88(float);
 extern unsigned char *func_L00_00273E08(void *, int, unsigned char, int, int, int, int, float);
 extern int func_001FA898(float);
-extern char D_L04_00166FC0[];
 extern int D_L04_0015F6A8 MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l04/unclassified_002ca420.c, FUN_L04_002e1d00. */
@@ -1086,21 +1071,15 @@ void func_L04_002E30E0(char *m) {
     }
 }
 
-extern float func_001F9D10(void *, void *);
-extern void func_L00_0025B178(void *);
 extern void func_L02_002E2110(void *);
 extern int func_L00_002676E8(void *, void *);
 extern int func_00215570(void *, int);
 extern int func_L00_00267290(void *, void *);
 extern void func_L00_00261848(int);
 extern void func_L00_002512D8(int);
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern float func_001FA748(float, float);
 extern int func_0020BFC8(int, int);
-extern char D_L04_00166FC0[];
 extern char D_L04_0016CA70[];
-extern int D_0015EE84 MACRO_ADDR;
 extern unsigned char D_0014C150[];
 
 // UpdateMoby_1190: Updates the gate moby: checks the player's distance, then steps its four states.
@@ -1542,8 +1521,6 @@ void func_L04_002E6780(struct Moby *m) {
         break;
     }
 }
-extern char *func_L00_0025B478(void *, int, int);
-extern void func_0022ED80(int, int, int);
 extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
 extern void func_L01_00279E10(void *, int);

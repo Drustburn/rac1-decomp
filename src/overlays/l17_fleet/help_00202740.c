@@ -230,7 +230,6 @@ s32 func_L17_0020E320(s32 arg) {
     FastVecAdd(D_0013F530 + 0x20, D_0013F530 + 0x20, &v);
     return 1;
 }
-extern char D_0013E633[];
 extern float func_001F9D48(void *, void *);
 extern float func_00214D28(float *p, float target, float maxstep);
 extern float func_L00_0025C918(float *p, float *v, float t, float u1, float u2, float eps);

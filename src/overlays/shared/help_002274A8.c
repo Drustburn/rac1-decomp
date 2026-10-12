@@ -439,10 +439,7 @@ void func_L01_00231960(int a, int b, int c) {
     }
     func_L01_0023D688(b, 1);
 }
-extern void func_L00_00205B50(void);
 extern void func_0020D678(void *);
-extern void func_L00_00207220(void);
-extern void func_L00_00232EA8(void);
 extern void func_L01_0023D688(int, int);
 extern int D_L01_0015F6A8 MACRO_ADDR;
 
@@ -1108,7 +1105,6 @@ extern void func_001F9BC0(float *);
 extern void func_L00_00235040(void);
 extern void func_L00_00234090(float *dst, float *src, float dz);
 extern void func_L00_00233D50(float *dst, float *src, float h);
-extern int func_L00_001F10E0(float, void *, int, void *);
 extern int func_L00_001F1D20(float, float, void *, int, void *);
 extern int func_L00_001F34F0(float, void *);
 extern void func_001F9BF0(void *, void *, void *);
@@ -1351,7 +1347,6 @@ void func_L01_00240CE8(void)
         break;
     }
 }
-extern void func_L00_00211F80(int, float);
 extern int hl_next(int, int) __asm__("func_L01_0023D688");
 extern void func_L00_00232C10(int, int, float);
 extern void func_L00_00232E60(int bank, int seq);

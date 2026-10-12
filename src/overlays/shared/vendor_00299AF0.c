@@ -54,7 +54,6 @@ void func_L10_00299AF0(char *m) {
     }
 }
 extern struct Moby *func_0020D348_m(int) __asm__("func_0020D348");
-extern int func_001F9850(int);
 extern float func_001F9D10(void *, void *);
 extern float func_L00_001FF860(float, float);
 extern float func_001F9CE8(void *);
@@ -241,7 +240,6 @@ void func_L10_002CD6A8(char *m) {
 }
 extern float func_00214158(void);
 extern float func_002140F8(float, float);
-extern int func_L00_00258BC8(int, int);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BD8(float *, float *, float *);
@@ -324,7 +322,6 @@ void func_L10_002F6E10(int i) {
     q[0x38] = 1;
     q[0x39] = 0;
 }
-extern char D_0013F4D0[];
 extern char * D_L10_001B0C30[];
 extern int func_00215570(void *, int);
 extern int func_L00_00260AB0(void *, int);
@@ -355,7 +352,6 @@ int func_L10_002F6E38(char *moby, char *unused)
 INCLUDE_ASM("asm/overlays", func_L10_002F6F18);
 INCLUDE_ASM("asm/overlays", func_L10_002F72D8);
 extern char *D_L10_0015F050 MACRO_ADDR;
-extern char D_0013E633[];
 
 // Decides whether a moby's camera target passes the checks; -1 disabled, 0 no, 1 yes.
 int func_L10_002F79B8(char *a, char *b) {

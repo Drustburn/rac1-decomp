@@ -108,9 +108,7 @@ void *func_L11_00312E10(void *a0, char *a1, int a2, int a3, void *a4) {
     return best;
 }
 extern void func_L11_003126D8(void *, void *, void *, int);
-extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern float func_001FA888(int);
 extern float func_001F9B50(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern char D_L11_00167A60[];
@@ -806,7 +804,6 @@ extern float D_L11_0016D570_a[] __asm__("D_L11_0016D570");
 extern char *D_L11_0015F520 MACRO_ADDR;
 extern float D_L11_0015F4FC MACRO_ADDR;
 extern int D_L11_0015F6E8 MACRO_ADDR;
-extern int D_L11_001F1348[];
 extern char D_L11_0021B900[];
 extern char D_L11_0021B938[];
 extern float D_L11_00162108 SDATA(D_L11_00162108);
@@ -814,7 +811,6 @@ extern short D_L11_00162098_s __asm__("D_L11_00162098");
 extern short D_L11_0016209C_s __asm__("D_L11_0016209C");
 extern float D_L11_00162104 SDATA(D_L11_00162104);
 extern short D_L11_00162200;
-extern short D_L11_001621FC;
 extern short D_L11_00162060;
 extern float D_L11_0016211C SDATA(D_L11_0016211C);
 extern unsigned char D_L11_001620E8;
@@ -1221,7 +1217,6 @@ extern float func_001F9CE8(void *);
 extern float func_L00_001FF860(float, float);
 extern float func_001FA748(float, float);
 extern float func_001FA790(float, float);
-extern char *D_L11_0016016C MACRO_ADDR;
 extern unsigned char D_0013F450[];
 
 // Clamps and blends camera inputs near the edges of the movement bounds. Adapted from Lombyte (MIT) for PAL: src/overlays/l11/gameplay_vendor_0030c788.c, FUN_L11_00313f60.
@@ -1581,9 +1576,7 @@ extern void func_L11_00319108(void *);
 extern void func_L11_00318AE8(char *moby);
 extern void func_0020D678(void *);
 extern char *func_0020D348(int);
-extern float func_00214D28(float *p, float target, float maxstep);
 extern void func_0022ED80(int, int, int);
-extern int func_L00_0028EB98(void *, int);
 extern s32 map_data_0015EE84 __asm__("D_0015EE84") MACRO_ADDR;
 extern char D_L11_001B11B0[];
 extern float D_0015EE6C MACRO_ADDR;
@@ -1851,7 +1844,6 @@ void func_L11_003198F8(char *m) {
     *(float *)(d + 0x24) = random_float_between(20.0f, 60.0f) * 0.017453292f * D_0015EE6C;
 }
 extern void func_L11_0031A498(char *moby);
-extern float func_00214D28(float *p, float target, float maxstep);
 extern void func_0020D678(void *);
 extern void func_L11_0031A630(char *moby);
 extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
@@ -1896,10 +1888,7 @@ void func_L11_00319FA0(unsigned char *moby) {
     }
     }
 }
-extern char *func_0020D348(int);
-extern void func_001F9BC0(void *);
 extern void func_001FA1F8(void *, void *);
-extern int func_002140B0(int);
 
 /* Spawns a spark effect moby from a source moby, initialises its particle bytes and warms it up. */
 char *func_L11_0031A180(char *src, void *pos, int ticks) {
@@ -1950,7 +1939,6 @@ void func_L11_0031A308(char *arg, void *src) {
 extern float func_00214158(void);
 extern float func_001F9FA8(float);
 extern float func_001F9F90(float);
-extern void func_001F9C30(void *, void *, float);
 extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
 extern short D_L11_0016241C;
 extern short D_L11_00162420;
@@ -1982,9 +1970,7 @@ void func_L11_0031A348(char *m) {
 }
 extern int func_001FA8A8(int, int, float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern float func_001FA888(int);
 extern unsigned char *func_L00_00273E08(float f, void *pos, int a1, unsigned char a2, int idx, int flag, int s, int mode);
-extern float D_L11_00167840[];
 extern short D_L11_00162414, D_L11_00162410;
 
 // Spawns four particles around the moby, each rotated a step further around the offset vector.
@@ -2010,10 +1996,6 @@ void func_L11_0031A498(char *moby) {
         FastVecAdd(v0, v0, v1);
     }
 }
-extern void func_L00_00258DB0(float *, float, float);
-extern int func_001FA8A8(int, int, float);
-extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
-extern short D_L11_00162438;
 extern short D_L11_0016243C;
 extern short D_L11_00162440;
 extern short D_L11_00162444;
@@ -2042,26 +2024,20 @@ extern void func_L11_0031B630(void *);
 extern float func_L00_00258C80(float lo, float hi);
 extern void func_L11_0031AAE0(void *);
 extern void func_L11_0031B8A8(void *);
-extern void func_L00_00260108(void *, void *, int, float, float);
 extern char *func_L11_00310A70(void *position, void *vector, int id);
 extern void func_0022ED80(int, int, int);
 extern float func_001F9D10(void *, void *);
 extern int func_L00_00200290(char *, float);
 extern void func_00213DE0(void *, int, int, int);
-extern float func_001F9CB8(void *);
 extern float func_00214D88(float *, float *, float, float, float, float);
 extern void func_L00_002607A8(void *a, float x);
-extern float func_L00_0025CE58(float *p, float *v, float a, float b, float c, float d);
 extern float func_001F9CE8(void *);
-extern float func_00214D28(float *p, float target, float maxstep);
 extern void func_001F9EC0(void *, void *, void *);
 extern char *func_L11_0030A318(int owner, float *dir, float *pos, float size, float len, float z);
 extern float D_0015EE70 MACRO_ADDR;
 extern char D_0014171B[];
 extern char D_L11_001B11B0[];
 extern float D_L11_0015F660[] MACRO_ADDR;
-extern float D_L11_00167850[];
-extern int D_L11_0015F6B0 MACRO_ADDR;
 extern char D_L11_001F1770[];
 extern char D_L11_001F1780[];
 extern short D_L11_00162460;
@@ -2255,7 +2231,6 @@ void func_L11_0031ACA8(unsigned char *moby) {
         break;
     }
 }
-extern short *D_L11_001AC540[];
 extern char *D_L11_00160058_31BBC8 __asm__("D_L11_00160058") MACRO_ADDR;
 short func_L11_0031BBC8_r(int idx) __asm__("func_L11_0031BBC8");
 
@@ -2273,7 +2248,6 @@ short func_L11_0031BBC8_r(int idx) {
     } while (*p++ >= 0);
     return found;
 }
-extern int func_002140B0(int);
 extern void func_001FA1F8(void *, void *);
 extern float func_001FA748(float, float);
 extern float func_001F9FA8(float);
@@ -2282,9 +2256,6 @@ extern void func_001F9BD8(void *, void *, void *);
 extern float func_001F9F90(float);
 extern void func_00213DE0(void *, int, int, int);
 extern float D_0015EE6C MACRO_ADDR;
-extern short *D_L11_001AC540[];
-extern float D_L11_00167840[];
-extern float D_L11_00167850[];
 extern int D_L11_00160058_m __asm__("D_L11_00160058") MACRO_ADDR;
 extern char D_0013E633[];
 
@@ -2355,7 +2326,6 @@ extern short D_L11_001624A8;
 extern short D_L11_001624AC;
 extern void func_L11_0031C508(char *);
 extern void func_L11_0031C2D8(char *, float *, int, int);
-extern float func_001F9B88(float);
 extern char *func_L00_0026FF20_p(void *, float *, float, float) __asm__("func_L00_0026FF20");
 extern void func_0020D678(void *);
 extern void func_L00_001FF500(void *, void *, float);
@@ -2413,8 +2383,6 @@ void func_L11_0031BF78(char *m) {
     func_00214D28(&len, 0.0f, *(float *)&D_L11_00162498 * D_0015EE70);
     func_L00_001FF500(d, d, len);
 }
-extern char *func_0020D348(int);
-extern float func_00214158(void);
 
 char *func_L11_0031C210(void *position, void *vector, void *owner, float scale) {
     char *moby = CreateMoby(0x5F4);

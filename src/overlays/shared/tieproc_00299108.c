@@ -340,7 +340,6 @@ void func_L00_00299E70(void) {
     }
     func_L00_002666C8(scale_ticks(30));
 }
-extern void func_001F3140(void);
 extern void func_00125358(float *);
 extern void func_001254A0(float *, float *, float);
 extern void func_00125548(float *, float *, float);
@@ -675,7 +674,6 @@ void func_L00_0029A300(void) {
 }
 extern int D_0015EE80 MACRO_ADDR;
 extern int D_0015EE88 MACRO_ADDR;
-extern char D_0013E633[];
 typedef struct {
     int b;
     int a;
@@ -784,11 +782,7 @@ void func_L00_0029AD18(void) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0029ADD8);
 extern void func_00234AC8(int);
-extern void func_001F4E08(int);
 extern void func_00217588(void);
-extern void func_002348B8(void);
-extern int D_L00_0015F6A8 MACRO_ADDR;
-extern int D_L00_0015F6BC MACRO_ADDR;
 extern int D_L00_0015F4FC MACRO_ADDR;
 void func_L00_0029AF70(void) {
     VU1_syncChain(1);

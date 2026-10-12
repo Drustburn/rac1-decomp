@@ -1878,7 +1878,6 @@ void func_L00_002DF150(void) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_002DF168);
 INCLUDE_ASM("asm/overlays", func_L00_002DF410);
-extern short D_L00_001E6358[];
 extern void func_L00_002DED98(void);
 extern void func_001F49B0(void (*)(void), int);
 
@@ -1898,7 +1897,6 @@ extern char D_L00_001E6290[];
 extern char D_L00_001E6280[];
 extern short D_L00_00161C20;
 extern float func_001F9CB8(void *);
-extern void func_L00_002E0490(int);
 typedef float VQ[4] __attribute__((aligned(16)));
 
 /* pull each active entry's marker toward its target, then update the rest */
@@ -2049,7 +2047,6 @@ void func_L00_002E0AE8(char *a) {
     }
     func_0023B5D0(a);
 }
-extern float func_00214158(void);
 extern void func_0020D960(char *, int, void *);
 extern float func_001FA748(float, float);
 extern void func_L00_001FFED8(void *, int, float);

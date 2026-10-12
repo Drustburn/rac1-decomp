@@ -1009,7 +1009,6 @@ extern s32 func_0022ED80(s32, s32, struct Moby *);
 extern void func_0020D678(void *);
 extern f32 func_002140F8(f32, f32);
 extern f32 func_00214158(void);
-extern int func_002140B0(int);
 extern f32 func_001F9878(f32);
 extern s32 func_001FA898(f32);
 extern f32 func_001FA790(f32, f32);
@@ -1734,7 +1733,6 @@ void func_L08_002E9B60(char *moby) {
         e += 0x10;
     } while (i < 8);
 }
-extern void *func_L00_0025B478(void *, int, int);
 extern void func_L00_00260108(void *, void *, int, float, float);
 extern float func_002140F8(float, float);
 extern void func_0022ED80_2E9CB0(int, int, int) __asm__("func_0022ED80");
@@ -2129,7 +2127,6 @@ void func_L08_002EA930(char *moby) {
 }
 INCLUDE_ASM("asm/overlays", func_L08_002EAB30);
 extern void func_L00_00251E30();
-extern void func_001F9C30(void *, void *, float);
 extern short D_L08_00161DC8;
 
 // Updates the moby's attached parts: pose each one, scale one value, then run the flagged ones.

@@ -187,7 +187,6 @@ typedef struct {
     UV_2bb0b0 uv[4];
     long unk70, tex, unk80, unk88;
 } Q_2bb0b0;
-extern int func_001F4868(int);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
@@ -195,13 +194,11 @@ extern void func_001F9CA0(void *, void *, void *);
 extern float func_L00_00258C80(float lo, float hi);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9EE8(void *, void *, void *);
-extern void func_L00_001FD1D8(void *, void *, int);
 extern float D_L00_00166EC0[];
 extern V_2bb0b0 D_L00_001DB860[];
 extern UV_2bb0b0 D_L00_001DB8A0[];
 extern short D_L00_00161710;
 extern short D_L00_00161718;
-extern short D_L00_001616C8;
 extern short D_L00_0016171C;
 extern char D_0013E633[];
 
@@ -457,9 +454,6 @@ void func_L00_002BC860(char *m) {
 }
 extern float func_001FA888(int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern short D_L00_001DC1C0[];
-extern short D_L00_001DC1D8[];
-extern char D_L00_001DBEA0[];
 extern float D_L00_001617A4_m __asm__("D_L00_001617A4") MACRO_ADDR;
 extern short D_L00_00161760;
 extern short D_L00_00161764;
@@ -477,14 +471,11 @@ void func_L00_002BCE08(int arg) {
     }
     func_L00_002BD4A8(arg);
 }
-extern int func_001F4868(int);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
 extern float func_001F9CB8(void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern void func_L00_001FD1D8(void *, void *, int);
-extern void func_00234C98(int, long);
 extern float D_L00_00166EC0[];
 extern short D_L00_00161780;
 extern short D_L00_00161750;
@@ -601,12 +592,10 @@ void func_L00_002BCED0(char *m, int a, int b, int n, float sx, float sy, float s
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9BF0(void *, void *, void *);
-extern int func_001F4868(int);
 extern int func_002140B0(int);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9CA0(void *, void *, void *);
 extern void func_001F9EE8(void *, void *, void *);
-extern void func_L00_001FD1D8(void *, void *, int);
 extern short D_L00_00161788;
 extern short D_L00_0016178C;
 extern short D_L00_00161790;
@@ -1363,8 +1352,6 @@ void func_L00_002BEF58(void *o) {
 extern short D_L00_00161874;
 extern short D_L00_00161850;
 extern short D_L00_00161878;
-extern short D_L00_0016185C;
-extern short D_L00_00161844;
 typedef float RW_2BF380[4] __attribute__((aligned(16)));
 typedef struct { float v[4]; } P_2BF380;
 typedef struct {

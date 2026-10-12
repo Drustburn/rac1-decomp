@@ -386,15 +386,11 @@ void func_L14_002FF728(L14Moby *m) {
 extern float D_0015EE6C MACRO_ADDR;
 extern int D_0015EE84 MACRO_ADDR;
 extern short D_L14_00162088;
-extern short D_L14_0016208C;
-extern short D_L14_00162090;
 extern char *D_L14_001B0F30[];
 extern int func_L00_0025E860(void *, void *, int *, float *, float, int);
-extern float func_L00_0025C918(float *, float *, float, float, float, float);
 extern void func_001F9BF0(void *dst, void *a, void *b);
 extern float func_001F9B88(float);
 extern float func_L00_001FF860(float, float);
-extern void func_L00_002592B0(char *moby, float target, float *vel, float k, float d, float max);
 
 /* Samples a path table with func_L00_0025E860 and eases the moby's x, y and z toward the result;
  * returns that call's result. */
@@ -767,9 +763,7 @@ extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_001F9908_r(int *arg0) __asm__("func_001F9908");
 extern float func_001FA888(int);
-extern float func_001F9B88(float);
 extern int func_001FA8A8(int, int, float);
-extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern unsigned char *func_L00_00273E08(float f, void *pos, int a1, unsigned char a2, int idx, int flag, int s, int mode);
 extern char D_L14_001675C0[];
 
@@ -951,8 +945,6 @@ void func_L14_003071B0(Moby *moby) {
     }
     }
 }
-extern char *func_0020D348(int);
-extern void func_L00_00251E30(void *);
 
 char *func_L14_003075E0(char *owner)
 {
@@ -1230,7 +1222,6 @@ extern int func_001F4868(int);
 void func_L14_00308EB0(void) {
     func_L12_002BD3D0(D_L14_001F62C0, 0x13, GetEffectTex(0x2E), GetEffectTex(0x2F));
 }
-extern void func_001F49B0(void (*)(void), void *);
 extern void func_L14_00308EB0(void);
 
 void func_L14_00308F08(unsigned char *moby)
@@ -1255,7 +1246,6 @@ extern int func_L01_0026EFB8(int, int);
 extern int func_0022EE28(int, int, int);
 extern void func_L00_00264DB8(int arg0, int arg1);
 extern void func_L00_00264870(int);
-extern int D_L14_0015F6A8 MACRO_ADDR;
 extern Level14State D_L14_0016D060;
 extern unsigned char D_0013D510[];
 
@@ -1634,10 +1624,8 @@ extern char D_L14_0017AE80[];
 extern float func_L00_0025C7A8(float, float, float);
 extern float func_L00_001EB6A8(void *, float, float, float, float, float);
 extern float func_001EC120(void *, float, float, float, float, float);
-extern float func_001FA748(float, float);
 extern void func_L00_001ED900(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
-extern void func_001F9CA0(void *, void *, void *);
 extern void func_002156E0(void *dst, void *vec, void *axis, float angle);
 
 /* Camera 21 update (level 14): follows keyed angles along the hero's path progress, triggers three mobys, builds the camera matrix. */

@@ -124,15 +124,12 @@ void func_L17_002F1558(Moby *moby, int arg) {
         }
     }
 }
-extern float func_L00_001FF860(float, float);
 extern float func_L00_0025CE58(float *p, float *v, float a, float b, float c, float d);
 extern float func_00214D28(float *p, float target, float maxstep);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_L00_00259868(int, int, float, float, float, int);
 extern float func_001F9D48(void *, void *);
-extern float D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
 
 /* Steers the moby toward a target point; returns nonzero when it is within 0.2 of it. */
 int func_L17_002F1858(char *moby, float *target, float speed) {
@@ -318,10 +315,8 @@ void func_L17_002F1F58(char *m) {
         p += 0x10;
     }
 }
-extern float func_001FA888(int);
 extern int func_001F4868(int);
 extern void func_00234C98(int, long);
-extern float func_001F9878(float);
 extern float func_001FA748(float, float);
 extern void func_L00_00251358(void *, void *, void *, void *);
 extern float func_001F9B50(float);
@@ -329,7 +324,6 @@ extern float func_L00_00200210(float, float);
 extern float func_001FA7D8(float x);
 extern void func_001F7868(void);
 extern void func_L00_001FDE48(int, int, int, void *, int);
-extern int D_L17_0015F6B0 MACRO_ADDR;
 extern short D_L17_00162290;
 extern short D_L17_00162298;
 extern short D_L17_001622A0;
@@ -549,12 +543,9 @@ extern void func_L00_00217718(void *, void *, int, int);
 extern void func_001FA1F8(void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern float func_001FA748(float, float);
 extern void func_L00_002EC0C8(int);
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_002617B0(char *, void *, void *, void *);
 
-extern char D_0013E633[];
 extern char D_0013A5E0[];
 extern unsigned char D_0014171B[] NOT_SDA;
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
@@ -775,16 +766,7 @@ void func_L17_002F3C18(char *moby) {
         break;
     }
 }
-extern char D_L17_001B10B0[];
-extern float func_001FA748(float, float);
-extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern void func_001F9C08(void *, void *, void *, float);
-extern void func_L00_002EBE88(void *);
-extern void func_L00_00217718(void *, void *, int, int);
-extern float func_001FA790(float, float);
-extern void func_001F9BC0(void *);
-extern void func_L00_002EBEE0(void *);
-extern char *D_L17_0016016C MACRO_ADDR;
 
 typedef struct {
     float x, y, z, w;
@@ -879,7 +861,6 @@ extern void func_L00_00203FB8(void);
 extern void func_L17_0021ED38(int, int);
 extern void func_L00_002E9B30(void);
 extern void func_L00_002E9E20(int a, float x, float y);
-extern float func_001FA850(float, float);
 extern int func_001F9908_i(int *) __asm__("func_001F9908");
 extern void func_L06_00239CD0(void);
 extern char *D_L17_00160058 MACRO_ADDR;
@@ -889,10 +870,8 @@ extern int D_L17_00179D90[];
 extern unsigned char D_0013D5E7 NOT_SDA;
 extern int D_0015EE84 MACRO_ADDR;
 extern char D_L17_00167600[];
-extern char D_0013E633[];
 extern unsigned char D_0013D510[];
 extern unsigned char D_0013D5CA[] NOT_SDA;
-extern unsigned char D_0014171B[] NOT_SDA;
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 void func_L17_002F4210(char *moby) {
@@ -1122,15 +1101,8 @@ void func_L17_002F49B8(unsigned char *m) {
     }
 }
 typedef int u128_2F4E30 __attribute__((mode(TI)));
-extern void func_00234C98(int, long);
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
-extern int func_001F4868(int);
 extern void func_L00_001FD1D8(void *, void *, int);
-extern float func_001FA748(float, float);
-extern int func_001FA8A8(int, int, float);
 extern char D_L17_00167740[];
 extern float D_L17_0016D464;
 extern float D_L17_001DE388[];
@@ -1253,27 +1225,18 @@ void func_L17_002F4E30(char *moby) {
     }
     VU1_addGSregister(0x47, 0x5360B);
 }
-extern char D_0013E633[];
 extern int func_00215570(void *, int);
 extern void func_00215C00(void *, float, float, float);
-extern void func_001F9BD8(void *, void *, void *);
-extern float func_001FA748(float, float);
-extern void func_001F49B0(void (*)(void), void *);
 extern void func_L17_002F4E30(char *);
-extern float D_0015EE7C MACRO_ADDR;
 extern short D_L17_0015F718;
 extern float D_L17_0015F718_m __asm__("D_L17_0015F718") MACRO_ADDR;
 typedef int u128 __attribute__((mode(TI)));
-extern short D_L17_00162440;
 extern short D_L17_00162450;
 extern short D_L17_00162454;
 extern short D_L17_00162458;
 extern float D_L17_001DE2B0[];
-extern float D_L17_001DE310[];
 extern float D_L17_001DE328[];
 extern float D_L17_001DE340[];
-extern float D_L17_001DE370[];
-extern float D_L17_001DE3A0[];
 
 // Fleet moby update: sets up a path on first tick, then animates its scrolling and bounce values.
 void func_L17_002F5388(unsigned char *moby) {
@@ -1337,31 +1300,18 @@ done:
 extern void func_L11_0031B630(void *);
 extern float func_L00_00258C80(float lo, float hi);
 extern float func_00214158(void);
-extern float func_002140F8(float, float);
 extern void func_L11_0031AAE0(void *);
-extern float func_001FA748(float, float);
 extern void func_L11_0031B8A8(void *);
 extern void func_L00_00260108(void *, void *, int, float, float);
 extern int func_002140B0(int);
 extern unsigned char *func_L13_002E2F98(char *position, int moby_class);
-extern int func_0022ED80(int, int, int);
-extern float func_001F9D10(void *, void *);
 extern int func_L00_00200290(char *, float);
-extern void func_001FA1F8(void *, void *);
-extern void func_001F9BF0(void *, void *, void *);
-extern void func_001F9BD8(void *, void *, void *);
-extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_001F9CB8(void *);
 extern float func_00214D88(float *, float *, float, float, float, float);
 extern void func_L00_002607A8(void *a, float x);
-extern float func_001F9CE8(void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern char *func_L11_0030A318(int owner, float *dir, float *pos, float size, float len, float z);
-extern char D_0013E633[];
-extern char D_L17_001B10B0[];
 extern char D_L17_00167750[];
-extern char D_L17_00167740[];
-extern int D_L17_0015F6B0 MACRO_ADDR;
 extern char D_L17_001DE3E0[];
 extern char D_L17_001DE3F0[];
 extern short D_L17_00162468;
@@ -1555,18 +1505,6 @@ void func_L17_002F5C18(unsigned char *moby) {
 }
 LINKER_REMNANT("asm/overlays", func_L17_002F6AF0);
 extern short *D_L17_001AC440[];
-extern char D_L17_00167750[];
-extern char D_L17_00167740[];
-extern char *D_L17_00160058 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
-extern char D_0013E633[];
-extern int func_002140B0(int);
-extern void func_001FA1F8(void *, void *);
-extern float func_001FA748(float, float);
-extern float func_001F9FA8(float);
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
-extern float func_001F9F90(float);
 
 /* Finds the listed moby of type 0x733 in state 4 and launches it along a rotated vector. */
 char *func_L17_002F6AF8(int list) {
@@ -1609,8 +1547,6 @@ char *func_L17_002F6AF8(int list) {
     } while (*s++ >= 0);
     return 0;
 }
-extern char *func_L00_0025B478(void *, int, int);
-extern int func_0022ED80(int, int, int);
 extern void func_L00_002584A8(void *, int, int);
 extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
@@ -1668,12 +1604,8 @@ void func_L17_002F6ED0(unsigned char *m) {
         break;
     }
 }
-extern char D_L17_00167740[];
-extern void func_001F9BF0(void *, void *, void *);
-extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_001F9C78(void *, void *);
 extern void func_001F9C30(void *, void *, float);
-extern float func_001F9CB8(void *);
 
 typedef struct { float x, y, z; } V3;
 typedef struct { V3 v; float w; } V4;
@@ -1710,10 +1642,6 @@ void func_L17_002F7018(int n, V3 *b, V3 *a, int unused, float *out) {
         out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
     }
 }
-extern int func_001F4868(int);
-extern void func_00234C98(int, long);
-extern void func_001F7868(void);
-extern void func_L00_001FDE48(int, int, int, void *, int);
 extern char D_L17_001DEB70[];
 extern short D_L17_00162470;
 extern short D_L17_00162478;

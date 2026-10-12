@@ -254,10 +254,8 @@ void func_L00_00269DB0(char *pos, int a1) {
         *(int *)(p + 0x20) = a1;
     }
 }
-extern int func_001F9850(int);
 extern int func_001F9938(void *);
 extern void func_L00_002688A8(void *);
-extern unsigned char *D_L00_001B2404;
 
 void func_L00_00269E88(char *m) {
     int t = *(short *)(m + 0xA) * *(int *)(m + 0x20) / scale_ticks(0x1B);

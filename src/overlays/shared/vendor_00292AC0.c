@@ -991,16 +991,12 @@ void func_L03_002CDDC8(HMob49_2CDDC8 *m) {
         func_L00_002514B8_2CDDC8(child); func_L00_00251E30_2CDDC8(child); child->flags|=6;
     }
 }
-extern char *func_L00_0025B478(void *, int, int);
-extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
-extern void func_L00_0025E4B0(void *m, short *p);
 extern float func_L00_001FF860(float, float);
 extern float func_001FA790(float, float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern float func_001F9B88(float);
 extern int func_0022ED80(int, int, int);
-extern void func_L00_0025E590(void *, void *);
 
 /* Moby update: advance a timer from a collision query, switch state, aim head angles. */
 void func_L03_002CF600(char *m) {

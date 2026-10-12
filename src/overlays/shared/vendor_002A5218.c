@@ -690,7 +690,6 @@ extern void func_001F9BC0(void *);
 extern void func_001FA218(void *, void *);
 extern void func_001FA540(void *, void *, void *);
 extern int func_001F4868(int);
-extern void func_L02_0020BF88(void *, void *, void *, s32, s32);
 
 /* Draws the rotating radar arrow sprite (style sel) at angle a and scale s, twice. */
 void func_L02_002DBAF8(int p0, int p1, int sel, float a, float s) {
@@ -767,7 +766,6 @@ extern f32 func_001F9FA8(f32);
 extern f32 func_001F9F90(f32);
 extern s32 func_001FA898(f32);
 extern s32 func_001F4868(s32);
-extern void func_L02_0020BF88(void *, void *, void *, s32, s32);
 typedef unsigned long u64_t;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_002a4038.c, FUN_L02_002da938. */
@@ -912,11 +910,9 @@ extern short D_L02_00161D4C;
 extern void func_L00_00251328(void *, int, int, int);
 extern void func_L02_002FBB10_c(char *) __asm__("func_L02_002FBB10");
 extern void func_L02_002FBC00_c(char *) __asm__("func_L02_002FBC00");
-extern float func_L00_001FF860(float, float);
 extern float func_L00_0025CE58_f(float *, float, float *, float, float, float) __asm__("func_L00_0025CE58");
 extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_001F9878(float);
-extern void func_001F9BD8(void *, void *, void *);
 extern int func_001FA898(float);
 extern int func_002140B0(int);
 extern void func_L00_00273F80(void *, void *, int, int, int, int, float);
@@ -1009,7 +1005,6 @@ void func_L02_002E2110(char *moby) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L02_002EB648);
-extern int func_002140B0(int);
 extern int func_001F9850(int);
 
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
@@ -1042,8 +1037,6 @@ typedef struct {
 } L02SpriteData;
 extern char D_L02_00167440[];
 extern void func_001F9BF0(void *, void *, void *);
-extern void func_001F9BD8(void *, void *, void *);
-extern void func_L00_001FF4B0(void *, void *, float);
 extern int func_001F9908(int *);
 extern float func_001FA888(int);
 extern int func_001FA8A8_2ebce8(int, int, float) __asm__("func_001FA8A8");
@@ -1308,14 +1301,10 @@ void func_L02_002ED8F0(char *moby) {
         func_L02_002ED828(moby);
     }
 }
-extern void func_001F9BF0(void *, void *, void *);
-extern void func_L00_00250800(void *, int, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_L00_00258DB0(float *, float, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern float func_002140F8(float, float);
 extern int func_001FA8A8(int, int, float);
-extern float func_001F9878(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
 extern float D_0015EE6C MACRO_ADDR;
@@ -1411,24 +1400,10 @@ void func_L02_002EE188(char *m) {
         }
     }
 }
-extern char *D_L02_001B0DB0[];
-extern char *func_L00_0025B478(void *, int, int);
-extern int func_001E9730();
-extern float func_001F9D10(void *, void *);
-extern float func_00214158(void);
-extern int func_L00_0028EB98(void *, int);
 extern int func_0022ED80_r(int, int, int) __asm__("func_0022ED80");
-extern void func_00215CA8(int *, int, void *, float *, int, float);
 extern void func_L02_002EE858(char *m, void *arg1);
 extern void func_L02_002EEA90(char *moby, void *arg);
-extern int func_0022EE28(int, int, int);
-extern void func_L00_00264DB8(int, int);
-extern void *func_L00_00265050(char *, int, float *, void *, int, int, float, float *, float *, float *);
-extern void func_0020D678(void *);
 extern void func_L02_002EE188(char *m);
-extern unsigned char D_0013D50F[];
-extern float D_0015EE60 MACRO_ADDR;
-extern float D_L02_0015F660[] MACRO_ADDR;
 extern char D_L02_001FB0A0[];
 extern char D_L02_001FB0C0[];
 extern short D_L02_00162050;
@@ -1437,8 +1412,6 @@ extern short D_L02_00162058;
 extern short D_L02_0016205C;
 extern short D_L02_00162060;
 extern short D_L02_00162064;
-extern int D_0015EEF4 MACRO_ADDR;
-extern int D_0015EEFC MACRO_ADDR;
 
 /* Update for a ship moby: eases its attach point along a path, spawns effects and drives its state machine. */
 void func_L02_002EE250(char *moby) {
@@ -1664,12 +1637,10 @@ void func_L02_002EEA90(char *moby, void *arg) {
         }
     }
 }
-extern char *func_L00_0025B478(void *, int, int);
 extern void func_0022ED80(int, int, int);
 extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
 extern void func_L01_00279E10(void *, int);
-extern void func_0020D678(void *);
 
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 void func_L02_002F3398(char *m) {
@@ -1785,7 +1756,6 @@ void func_L02_002FBBA8(void) {
     }
     s->a = 0;
 }
-extern float func_001F9B88(float);
 extern float func_001F9CB8(void *);
 extern float func_001F9C78(void *, void *);
 extern float func_001F9FC0(float);
@@ -1840,12 +1810,7 @@ INCLUDE_ASM("asm/overlays", func_L02_002FCA80);
 extern char *D_L02_0015F050 MACRO_ADDR;
 extern char D_L02_00167490[];
 extern char D_L02_00167300[];
-extern float func_001F9C78(void *, void *);
-extern float func_001F9CB8(void *);
-extern float func_L00_001FF860(float, float);
 extern float func_001FA850(float, float);
-extern float func_001F9FC0(float);
-extern float func_001F9B88(float);
 
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
 int func_L02_002FCBC0(char *moby, float a, float b) {

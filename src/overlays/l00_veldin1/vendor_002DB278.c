@@ -634,8 +634,6 @@ extern void func_L00_00250800(void *, int, void *);
 extern void func_002141A8(void *, float, float);
 extern char *func_L00_002757E8(void *, void *, int, void *);
 extern float func_002140F8(float, float);
-extern int func_002140B0(int);
-extern int func_001F9850(int);
 extern float func_001FA888(int);
 extern void func_001F49B0(void (*)(void), void *);
 extern void func_L00_002E3128_2E2F58(void) __asm__("func_L00_002E3128");
@@ -679,11 +677,7 @@ void func_L00_002E2F58(char *m) {
     }
     AddDrawCallback(func_L00_002E3128_2E2F58, m);
 }
-extern char D_0013E633[];
-extern float D_L00_00166EC0[];
 extern float D_L00_001E6FF0[][4];
-extern void func_001F9BF0(void *, void *, void *);
-extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9CA0(void *, void *, void *);
 extern int func_001F4868(int);
 extern void func_001F9C30(void *, void *, float);
@@ -781,7 +775,6 @@ void func_L00_002E32A0(unsigned char *m) {
 }
 extern void func_L00_00264870(int);
 extern void func_L00_00264BE8(void *, void *, void *, float, float);
-extern int func_L00_00258BC8(int, int);
 extern char *func_L00_0026DEA0(void *, int, void *, int, float, float, float, float);
 extern float D_L00_0015F660_b[] __asm__("D_L00_0015F660") MACRO_ADDR;
 typedef struct {

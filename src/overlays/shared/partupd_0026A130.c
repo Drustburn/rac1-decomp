@@ -272,7 +272,6 @@ void func_L00_0026B368(void *pos, void *vel, int color, int tag, int life, float
         }
     }
 }
-extern int func_001FA8A8(int, int, float);
 
 /* Moves a particle, expires it, then fades its alpha and picks a color index. */
 void func_L00_0026B458(char *m) {
@@ -290,7 +289,6 @@ void func_L00_0026B458(char *m) {
     }
     m[2] = D_L00_001B2420[(*(int *)(p + 0x18) - *(short *)(m + 0xA)) * 10 / *(int *)(p + 0x18)];
 }
-extern float func_001FA748(float, float);
 extern short D_L00_00160264;
 
 /* updates a particle: kills it when expired, else spins and fades by lifetime */
@@ -583,7 +581,6 @@ void func_L00_0026C908(char *m) {
         *(int *)(m + 4) = (x << 24) | 0xFFFFFF;
     }
 }
-extern int func_001160D8(void);
 extern unsigned char *D_L00_001B243C;
 
 /* spawns a type-15 particle with given position, velocity and color */
@@ -951,7 +948,6 @@ void func_L00_0026D700(M_26c860 *m) {
     if (1.0f < r->f8) r->f8 -= 1.0f;
     m->b8 = r->f8 * 255.0f;
 }
-extern int func_001160D8(void);
 extern unsigned char *D_L00_001B2454;
 
 // Spawn a particle of type 0x15 with position, color, and lifetime data.
@@ -1328,7 +1324,6 @@ void func_L00_0026EA80(char *m) {
     FastVecAdd(m + 0x10, a, b);
 }
 extern void *func_00218928(int);
-extern int func_001160D8(void);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern unsigned char *D_L00_001B246C;
 
@@ -1352,7 +1347,6 @@ char *func_L00_0026EBC0(char *pos, char *vel, int c, int d, float f) {
     }
     return p;
 }
-extern int func_001F9908(void *);
 void func_L00_0026ECA0(char *a) {
     char *b = a + 0x20;
     FastVecAdd(a + 0x10, a + 0x10, b);
@@ -1692,10 +1686,8 @@ void func_L00_0026FA28(unsigned char *p) {
 }
 extern void *func_00218928(int);
 extern float func_002140F8(float, float);
-extern int func_L00_0025D038(float, float, float, float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern float D_0015EE60 MACRO_ADDR;
-extern unsigned char *D_L00_001B2420;
 
 void *func_L00_0026FBC8(void *arg0) {
     char *p = func_00218928(0x20);
@@ -1834,8 +1826,6 @@ char *func_L00_0026FF20(char *vec, float *pos, float sc, float vy) {
 extern float func_001F9CE8(void *);
 extern void func_L00_001FF500(void *, void *, float);
 extern void func_00214D28(void *, float, float);
-extern float func_001F9FA8(float);
-extern float func_001F9F90(float);
 extern float D_L00_00166ED8;
 
 /* Updates a particle that swirls on a circle: fades with age, spins, and moves along its orbit. */
@@ -1976,9 +1966,6 @@ void func_L00_00270500(char *m) {
         }
     }
 }
-extern float func_001F9CB8(void *);
-extern float func_001FA748(float, float);
-extern float func_001F9FA8(float);
 
 /* particle type 36 update */
 void func_L00_00270738(char *m) {
@@ -2080,8 +2067,6 @@ void func_L00_00270AD8(char *m) {
     if (*(int *)(q + 8) >= 0x1F) *(int *)(q + 8) = 0;
     if (*(short *)(m + 0xA) == 0) KillPart(m);
 }
-extern float func_00214158(void);
-extern int func_001160D8(void);
 extern unsigned char *D_L00_001B2430;
 
 /* Spawns a particle at a with velocity b, colour class c and tag d. */

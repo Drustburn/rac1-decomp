@@ -531,7 +531,6 @@ void func_L06_00300AB0(char *moby) {
     } while (i < 15);
     VU1_addGSregister(0x47, 0x5360B);
 }
-extern float func_002140F8(float, float);
 extern float func_00214158(void);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
@@ -580,8 +579,6 @@ void func_L06_00300DA8(char *moby) {
         func_00219780(s10, v, w, *(int *)&D_L06_00162094, *(int *)&D_L06_00162098, s18, s19, s17, *(int *)&D_L06_001620D0);
     }
 }
-extern void func_001F9BD8(float *, float *, float *);
-extern float func_001FA748(float, float);
 extern void func_0020D678(void *);
 extern float D_0015EE70 MACRO_ADDR;
 extern short D_L06_00162110;
@@ -646,7 +643,6 @@ extern short D_L06_00162170;
 extern short D_L06_00162174;
 extern short D_L06_00162178;
 extern void func_001F62C8(int, int, int, int, int);
-extern float func_001FA888(int);
 extern float func_001F9FA8(float);
 extern int func_001FA8A8(int, int, float);
 extern int func_001F9850(int);

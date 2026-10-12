@@ -195,7 +195,6 @@ void func_L05_002F95B0(void *mv) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L05_002F9BA0);
-extern int func_001F9850(int);
 extern int func_001F9908(int *);
 extern int func_L00_0025A208(int *, int, int, int);
 extern int func_L00_0025A2F0(int *, int, int, int);
@@ -269,8 +268,6 @@ extern float func_L00_00258C80(float lo, float hi);
 extern void func_L00_00251328(void *, int, int, int);
 extern void func_0020D960(char *, int, void *);
 extern void func_001F49B0(void *, void *);
-extern float func_001FA748(float, float);
-extern float func_001F9FA8(float);
 extern void func_L00_001FFED8(void *, int, float);
 extern void func_L05_0030D678(void);
 
@@ -494,8 +491,6 @@ void func_L05_0031ABA0(char *moby) {
     default: try_set_help_message(8, 0x139B); break;
     }
 }
-extern float func_001FA748(float, float);
-extern float func_001F9FA8(float);
 extern float D_0015EE6C MACRO_ADDR;
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 void func_L05_0031AC50(char *moby) {
@@ -521,7 +516,6 @@ void func_L05_0031AC50(char *moby) {
     if (*(float *)(moby + 0x44) > 0.17453292f) *(float *)(moby + 0x44) = 0.17453292f;
     else if (*(float *)(moby + 0x44) < -0.17453292f) *(float *)(moby + 0x44) = -0.17453292f;
 }
-extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern char *D_L05_001B0CB0[];
 extern char D_L05_00215F40[];
@@ -546,7 +540,6 @@ void func_L05_0031ADF8(char *a) {
     }
 }
 extern int func_L00_00200290(char *, float);
-extern float func_00214158(void);
 extern unsigned char *func_L00_00275248(float f0, float f1, int a0, void *pos, int timer, int flag, int col, float *vel);
 extern char D_L05_0015F660[] MACRO_ADDR;
 

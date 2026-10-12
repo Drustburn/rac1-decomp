@@ -1110,7 +1110,6 @@ void func_L07_0030E128(int arg) {
 }
 INCLUDE_ASM("asm/overlays", func_L07_0030E370);
 extern char D_L07_00208820[];
-extern char D_L07_00166EC0[];
 extern void func_L02_002A52B0(void *, float);
 extern int func_00215570(void *, int);
 extern void func_00216270(void);
@@ -1161,8 +1160,6 @@ unsigned char *func_L07_0030EF90(int a, void *pos, int b, float f0, float f1, fl
     return moby;
 }
 INCLUDE_ASM("asm/overlays", func_L07_0030F0D0);
-extern float func_001F9D48(void *, void *);
-extern float func_001F9B88(float);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_L00_0025AC00(char *m, float t, int a, int b, void *pos, void *vel);
@@ -1477,7 +1474,6 @@ int func_L07_0030FFA8(char *moby, char *data) {
     if (delta > 0.68f) return 0;
     return 1;
 }
-extern void func_00213DE0(void *, int, int, int);
 
 // Steps a moby's state by its mode byte, switching its animation if not already set.
 void func_L07_00310038(char *arg) {
@@ -1650,7 +1646,6 @@ void func_L07_003104D8(char *a, char *b, float f12, float f13, float f14) {
         FastVecScale(q, q, 0.5f);
     }
 }
-extern float func_001F9CE8(void *);
 extern float func_001FA850(float, float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
@@ -1993,7 +1988,6 @@ void func_L07_003126A8(Moby *m) {
     func_001F9BD8_3126A8(&v1, &v1, &m->pos);
     func_L00_002617B0_3126A8(d->a60, &v1, &v2, &m->rot);
 }
-extern float D_0015EE60 MACRO_ADDR;
 extern void func_L00_00251328(void *, int, int, int);
 extern float func_002140F8(float, float);
 extern float func_L00_0025F368(float);
@@ -2063,7 +2057,6 @@ void func_L07_00312FA8(char *m) {
     func_L00_002617B0(d + 0x60, v, m + 0x40, m + 0x40);
 }
 INCLUDE_ASM("asm/overlays", func_L07_00313298);
-extern float func_001F9D10(void *, void *);
 
 void func_L07_003134B8(char *moby) {
     float distance = FastVecDist(moby + 0x10, D_L07_00166EC0);

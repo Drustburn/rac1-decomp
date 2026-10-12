@@ -405,7 +405,6 @@ extern float D_0015EE6C MACRO_ADDR;
 extern char *func_L00_0025B478(void *, int, int);
 extern int func_L00_0025B4D0(void *, void *, void *, int, void *, void *, int, int);
 extern void func_L00_0025E4B0(void *m, short *p);
-extern float func_L00_001FF860(float, float);
 extern float func_001FA790(float, float);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
@@ -458,11 +457,8 @@ void func_L15_002C7C20(char *m) {
 }
 extern char *D_L15_00160064 MACRO_ADDR;
 extern void func_L00_00260D30_t(void *, float *, float) __asm__("func_L00_00260D30");
-extern float func_001F9D48(void *, void *);
 extern void func_001F9BC0_t(void *) __asm__("func_001F9BC0");
 extern void func_001F9BF0(void *, void *, void *);
-extern void func_001F9C30(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 
 /* Flocking step toward the moby's path target: separates from same-type mobys, keeps ~10 units off the
@@ -609,14 +605,11 @@ extern float func_001FA888(int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern float func_00214358(void *, int, float);
 extern float func_001F9878(float);
-extern void func_001F9C30(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern float func_L00_00259148(float *vel, float cur, float target, float k, float d, float max);
 extern float func_001F9CB8(void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_L00_0025CE58(void *, float, void *, float, float, float);
 extern int func_001F9908(int *);
-extern float func_001F9D48(void *, void *);
 extern int func_00215B18(char *, float);
 extern void func_L00_00250800(void *, int, void *);
 extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b, int c) __asm__("func_L10_002CD578");
@@ -1054,7 +1047,6 @@ spawn:
     }
 }
 INCLUDE_ASM("asm/overlays", func_L15_002D2398);
-extern float func_001FA748(float, float);
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L15_00160058_g SDATA(D_L15_00160058);
 extern short D_L15_00161F40;
@@ -1080,8 +1072,6 @@ void func_L15_002E5AA0(char *moby) {
     }
 }
 extern void func_001F9BC0(void *);
-extern float func_001F9F90(float);
-extern float func_001F9FA8(float);
 extern void func_L00_002617B0(char *a, void *b, void *c, void *d);
 
 /* Updates a moby: initialises its vector, then applies an angle-based offset. */
@@ -1253,7 +1243,6 @@ void func_L15_002E9358(Moby *moby) {
 extern void func_L00_002D80A0(char *);
 extern void func_0020D678(void *);
 extern void func_L10_00299AF0(char *);
-extern float func_001F9D48(void *, void *);
 extern void func_L00_00299B68(int);
 extern void func_L00_00264DB8(int, int);
 extern void func_L00_002618D8(int, int);
@@ -1305,9 +1294,6 @@ void func_L15_002EBB38(unsigned char *m) {
     }
 }
 extern short D_L15_001620FC;
-extern float func_001F9878(float);
-extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern int func_001F9908(int *);
 extern char *func_L15_002E92C8(void *, void *);
 
 /* Per-frame update: picks a random value on spawn, then re-rolls and spawns a child when triggered. */
@@ -1404,15 +1390,6 @@ void func_L15_002EC080(char *moby) {
         }
     }
 }
-extern int func_001F4868(int);
-extern void func_00234C98(int, long);
-extern void func_L00_00251358(void *, void *, void *, void *);
-extern float func_001F9B50(float);
-extern float func_L00_00200210(float, float);
-extern float func_001FA7D8(float x);
-extern void func_001F7868(void);
-extern void func_L00_001FDE48(int, int, int, void *, int);
-extern int D_L15_0015F6B0 MACRO_ADDR;
 extern float D_L15_001DE4D0[];
 extern float D_L15_001DDE70[];
 extern int D_L15_001DEA20[];
@@ -1492,13 +1469,9 @@ void func_L15_002EC4F8(char *moby) {
     }
 }
 extern unsigned char D_0014C150[];
-extern int D_0015EE84 MACRO_ADDR;
-extern int D_L15_0015F6A8 MACRO_ADDR;
 extern short D_L15_00161B48;
-extern short D_L15_00160058_g SDATA(D_L15_00160058);
 extern char *D_L15_0016016C MACRO_ADDR;
 extern int func_00215570(void *arg0, int arg1);
-extern void func_L00_00299B68(int);
 extern void func_L00_002512D8(int idx);
 extern void func_L00_00233868(void);
 extern void func_L00_0029A7D0(int);
@@ -1625,8 +1598,6 @@ void func_L15_002ECAA8(void) {
     func_L00_001FB7F8((void *)(*(int *)&D_L15_00162200 + 1), (void *)(*(int *)&D_L15_00162204 + 1), (void *)*(int *)&D_L15_0016220C, buf, (void *)n);
     func_L00_001FB7F8((void *)*(int *)&D_L15_00162200, (void *)*(int *)&D_L15_00162204, (void *)*(int *)&D_L15_00162208, buf, (void *)n);
 }
-extern int func_002140B0(int);
-extern float func_002140F8(float, float);
 extern void func_L00_0026FF20(float, float, char *, float *);
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L15_0016221C;

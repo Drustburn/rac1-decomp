@@ -93,8 +93,6 @@ void func_L18_002A8400(char *moby) {
     }
 }
 extern int func_001F9850(int);
-extern float func_L00_001FF860(float, float);
-extern float func_001F9CE8(void *);
 
 char *func_L18_002A87D0(char *owner, float *pos, float *vec, int arg3) {
     char *moby = CreateMoby(0x29);
@@ -119,22 +117,16 @@ char *func_L18_002A87D0(char *owner, float *pos, float *vec, int arg3) {
 }
 extern float func_001FA888(int);
 extern void func_001F9BF0(void *, void *, void *);
-extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BC0(void *);
 extern void func_001FA1F8(void *, void *);
 extern void func_001FA4A0(void *, void *);
-extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9C08(void *, void *, void *, float);
 extern void func_L18_002D6878(void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
-extern float func_001FA748(float, float);
-extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
 extern void func_L18_002D6A00(void *, void *);
-extern void func_0020D678(void *);
 extern float func_001F9878(float);
 extern void func_001F49B0(void (*)(void), void *);
 extern void func_L18_002D6B58(void);
-extern char D_0013E633[];
 extern int D_L18_0015F6A8 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L18_001619F4;
@@ -248,10 +240,6 @@ char *func_L18_002D6738(float *pos, float *dir, float *target, float a, float b,
     return moby;
 }
 extern unsigned char *D_L18_001B2DDC;
-extern void func_L00_00258DB0(float *, float, float);
-extern float func_002140F8(float, float);
-extern unsigned char *func_L00_00272158(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
-extern char *func_L00_0026DA50(void *pos, void *dir, int c, int d, int n, int k, float f);
 
 void func_L18_002D6878(void *mobyp, void *vec) {
     char *moby = mobyp;
@@ -471,27 +459,17 @@ extern int *D_L18_001AC540[];
    symbol out of the small-data window: the size the assembler goes by is the
    one declared at the first use in this file. */
 extern char *D_L18_00160058_m __asm__("D_L18_00160058") MACRO_ADDR;
-extern short D_L18_00161A24;
 extern float D_0015EE70 MACRO_ADDR;
-extern void func_00213DE0(void *, int, int, int);
 extern void func_001F9BF0(void *, void *, void *);
-extern void func_L00_001FF500(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_L00_0025BC48(float *a, float *b, float *out, float speed, float g);
 extern void func_0022ED80(int, int, int);
 
-extern int *D_L18_001AC540[];
-extern short D_L18_00161A24;
 extern float D_0015EE70 MACRO_ADDR;
-extern void func_00213DE0(void *, int, int, int);
 extern void func_001F9BF0(void *, void *, void *);
-extern float func_001F9CE8(void *);
-extern void func_L00_001FF500(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern float func_L00_0025BC48(float *a, float *b, float *out, float speed, float g);
-extern float func_L00_001FF860(float, float);
 extern void func_0022ED80(int, int, int);
 char *func_L18_002D70E8(float f, int a0, int idx, float *p6, float *p7, int a8) {
     float v[4];
@@ -656,7 +634,6 @@ int func_L18_002D7580(Level18VendorMoby *moby, void *arg) {
     return active;
 }
 extern int func_001F9850(int);
-extern void func_00213DE0(void *, int, int, int);
 
 void func_L18_002D7670(unsigned char *arg) {
     unsigned short flags;
@@ -945,8 +922,6 @@ void *func_L18_002D7F48(float *a, float *b, int idx) {
         if (*p++ < 0) return best;
     }
 }
-extern float func_001F9D10(void *, void *);
-extern int *D_L18_001AC540[];
 extern char *D_L18_00160058_n __asm__("D_L18_00160058") MACRO_ADDR;
 
 /* Of the mobys of class 0x247 in list idx, the one nearest to pos (within
@@ -970,7 +945,6 @@ char *func_L18_002D8070(void *pos, int idx) {
         if (*p++ < 0) return best;
     }
 }
-extern int *D_L18_001AC540[];
 
 // Sets the data fields 0x30 and 0x24 of each listed moby whose class is 0x247.
 void func_L18_002D8140(int idx) {
@@ -1129,7 +1103,6 @@ void func_L18_002D9358(unsigned char *arg, int value) {
         *(int *)(data + 0x70) = func_0022EEB8(0x12, 0, arg);
     }
 }
-extern char D_0013E650[];
 extern void func_L00_0028EBF0(int);
 
 void func_L18_002D93C0(unsigned char *arg) {
@@ -1160,9 +1133,6 @@ extern short D_L18_00161AC4;
 extern short D_L18_00161AC8;
 extern short D_L18_00161ACC;
 extern void func_001F62C8(int, int, int, int, int);
-extern float func_001FA888(int);
-extern float func_001F9FA8(float);
-extern int func_001FA8A8(int, int, float);
 extern int func_002140B0(int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern int func_001F6FD8(int a, int b, int c, int d, int e);
@@ -1195,7 +1165,6 @@ void func_L18_002D9488(char *moby) {
     FontPrintCenterLarge(W(D_L18_00161AAC), W(D_L18_00161AB0), col, (int)buf, 8);
 }
 INCLUDE_ASM("asm/overlays", func_L18_002D96B0);
-extern float func_001FA748(float, float);
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L18_00161ADC;
 extern short D_L18_00161AD8;
@@ -1244,11 +1213,8 @@ int func_L18_002D9C48(Level18State *obj) {
 }
 INCLUDE_ASM("asm/overlays", func_L18_002D9C78);
 INCLUDE_ASM("asm/overlays", func_L18_002D9C90);
-extern float func_002140F8(float, float);
 extern float func_00214158(void);
-extern float func_001F9F90(float);
 extern void func_001F9BC8(void *);
-extern void func_L00_00258DB0(float *, float, float);
 extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
 extern short D_L18_00161AF8;
 extern short D_L18_00161AFC;
@@ -1416,9 +1382,7 @@ void func_L18_002DC850(char *moby) {
         break;
     }
 }
-extern float func_L00_001FF860(float, float);
 extern short D_L18_00161C88;
-extern short D_L18_00161C8C;
 
 typedef struct {
     char v[16]; char padv[16];
@@ -1475,12 +1439,8 @@ void func_L18_002DCD28(char *pos, float *vec, int arg, float fa, float fb) {
 INCLUDE_ASM("asm/overlays", func_L18_002DCE10);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_L00_0025A8C0(char *arg, int a, int b, void *src, float scale);
-extern float func_001F9F90(float);
 extern void func_001F9BD8(void *, void *, void *);
-extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
 extern void func_L18_002DD4B8(char *moby, void *a1, void *a2);
-extern char D_0013E633[];
 
 void func_L18_002DD270(char *moby) {
     char hit[0x30];
@@ -1518,10 +1478,7 @@ void func_L18_002DD270(char *moby) {
         q = FastAddRots(q, step);
     }
 }
-extern void func_001F9C08(void *, void *, void *, float);
-extern float func_001F9D10(void *, void *);
 extern int func_L00_00200290(char *, float);
-extern float func_002140F8(float, float);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_L00_00273F80(void *, void *, int, int, int, int, float);
@@ -1558,16 +1515,12 @@ void func_L18_002DD4B8(char *moby, void *a1, void *a2) {
     }
 }
 extern int func_001F9908(int *);
-extern void func_0020D678(void *);
 extern float func_001F9D48(void *, void *);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_L00_0025A8C0(char *arg, int a, int b, void *src, float scale);
 extern void func_L00_0025AAC0(int, void *);
 extern void func_L00_0025A8E8(int, float, void *, int, float, float, int, int, int);
-extern void func_001F49B0(void (*)(void), void *);
 extern void func_L18_002DD8A8(void);
-extern char D_0013E633[];
 extern short D_L18_00161D30;
 
 /* UpdateMoby_628 */
@@ -1641,7 +1594,6 @@ extern int func_L00_00203F20(int a, int b);
 extern void func_L00_002EBE88(void *);
 extern void func_L00_002EBEE0(void *);
 extern void func_L00_002EC0C8(int);
-extern float func_00214D88(float *, float *, float, float, float, float);
 extern float func_001FA790(float, float);
 extern int D_L18_0017EF88;
 extern float D_L18_0015F4FC MACRO_ADDR;
@@ -1760,7 +1712,6 @@ void func_L18_002E09F8(char *moby) {
     }
 }
 extern float D_0015EE70 MACRO_ADDR;
-extern char D_0013E633[];
 
 // Initialise a moby's data block from five vectors and a few parameters.
 void func_L18_002E0E90(char *moby, void *v0, void *v1, void *v2, void *v3, void *v4, int a6, int a7, int a8) {
@@ -1795,7 +1746,6 @@ float func_L18_002E0F80(Level18VendorFloatMoby *moby) {
 }
 INCLUDE_ASM("asm/overlays", func_L18_002E0F90);
 extern void func_001F9BC0(void *);
-extern void func_001FA1F8(void *, void *);
 
 char *func_L18_002E36B0(void *vector) {
     char *moby = CreateMoby(0x326);
@@ -1906,8 +1856,6 @@ void func_L18_002EB558(unsigned char *arg, void *src, void *position, int active
     }
 }
 INCLUDE_ASM("asm/overlays", func_L18_002EB5E8);
-extern void func_L00_00258DB0(float *, float, float);
-extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
 extern short D_L18_00161FAC;
 extern short D_L18_00161FB0;
 extern short D_L18_00161FB4;
@@ -2252,13 +2200,7 @@ typedef struct {
     UV_2bb0b0 uv[4];
     long unk70, tex, unk80, unk88;
 } Q_2bb0b0;
-extern int func_001F4868(int);
-extern void func_001F9CA0(void *, void *, void *);
-extern float func_L00_00258C80(float lo, float hi);
-extern void func_001F9C30(void *, void *, float);
 extern void func_001F9EE8(void *, void *, void *);
-extern void func_L00_001FD1D8(void *, void *, int);
-extern float D_L18_00167840[];
 extern V_2bb0b0 D_L18_001D9F70[];
 extern UV_2bb0b0 D_L18_001D9FB0[];
 extern short D_L18_00162130;
@@ -2425,10 +2367,6 @@ void func_L18_002F0F78(char *moby) {
 INCLUDE_ASM("asm/overlays", func_L18_002F1420);
 INCLUDE_ASM("asm/overlays", func_L18_002F1444);
 extern float func_L00_0025CE58(float *, float *, float, float, float, float);
-extern float func_00214D88(float *, float *, float, float, float, float);
-extern float func_001F9CB8(void *);
-extern void func_L00_001FF500(void *, void *, float);
-extern short D_L18_001622A4;
 extern short D_L18_001622BC;
 
 int func_L18_002F1510(char *moby, float *vec) {
@@ -2466,9 +2404,6 @@ int func_L18_002F1510(char *moby, float *vec) {
     }
     return 0;
 }
-extern float func_002140F8(float, float);
-extern float func_00214158(void);
-extern float func_001F9F90(float);
 extern void func_001F9BD8(void *, void *, void *);
 extern short D_L18_001622B8;
 extern short D_L18_001622B4;
@@ -2489,13 +2424,9 @@ void func_L18_002F16D8(char *moby, void *out) {
     *(int *)(data + 0x160) = scale_ticks(180);
 }
 INCLUDE_ASM("asm/overlays", func_L18_002F1780);
-extern int *D_L18_001AC540[];
-extern float func_001F9FA8(float);
-extern int func_001FA8A8(int, int, float);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_00264690(void *, int, float, float);
-extern float func_001FA748(float, float);
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L18_001622C8;
 extern short D_L18_001622E8;
@@ -2541,7 +2472,6 @@ void impl_2F1AB0(char *moby) {
     } while (*(p++) >= 0);
 }
 extern short D_L18_001622C0;
-extern void func_001F49B0(void (*)(void), void *);
 extern void func_L18_002F1780(void);
 extern void func_L18_002F1AB0(void);
 

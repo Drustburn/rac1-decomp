@@ -376,11 +376,8 @@ float func_L14_002B4828(char *moby, int flag, float x) {
     }
     return FastDiffRots(s, *(float *)(d + 0x268));
 }
-extern float func_001FA790(float, float);
 extern float func_001FA748(float, float);
 extern float func_L00_0025CE58(float *, float *, float, float, float, float);
-extern void func_L00_001FFED8(void *, int, float);
-extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 
 /* steers the pitch angle of a moby toward a target and updates the joint */
@@ -754,7 +751,6 @@ void func_L14_002E17B8(Moby *m) {
         ef->bB = e->frames;
     }
 }
-extern float func_L00_001FF860(float, float);
 
 /* Recomputes a path's segment lengths, aims the moby along its first segment, and recomputes a second path. */
 void func_L14_002FFD88(char *moby) {
@@ -870,9 +866,7 @@ void func_L14_00300130(unsigned char *m) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L14_00300AC8);
-extern unsigned char *func_0020D348(int);
 extern float func_002140F8(float, float);
-extern void func_L00_00251E30(void *);
 
 /* Spawns moby class 0x3A5 at the given position, owned by owner, with three randomised angle values. */
 unsigned char *func_L14_00300F80(unsigned char *owner, char *pos) {

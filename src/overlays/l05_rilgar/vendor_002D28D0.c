@@ -59,7 +59,6 @@ extern int func_002140B0(int);
 extern void func_L00_002703E8(void *, void *, int, int);
 extern void func_L00_00258DB0(float *, float, float);
 extern void func_001F9BD8(void *, void *, void *);
-extern unsigned char *func_L00_00272770(void *, void *, void *, float, float);
 extern float func_001F9878(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern char D_L05_001613A8[];
@@ -459,11 +458,9 @@ void func_L05_002DC1E8(unsigned char *m) {
         m[0xA4] = 0xFF;
     }
 }
-extern int func_002140B0(int);
 extern float func_00214158(void);
 extern float func_002140F8(float, float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L01_00287F20(float *, float, float, int, int, int);
@@ -1003,7 +1000,6 @@ void func_L05_00306CF0(char *m) {
 }
 extern float func_L00_001FF860(float, float);
 extern float func_001FA748(float, float);
-extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 
 /* Moves a point along a looped path of 16-byte nodes stored in the moby's data. */
@@ -1069,7 +1065,6 @@ void func_L05_00308268(char *moby) {
         heading = func_L00_001FF860(target[0] - *(float *)(moby + 0x10), target[1] - *(float *)(moby + 0x14));
     }
 }
-extern int func_L00_0025E7F8(char *, int, int, int);
 extern char *D_L05_001B0CB0[];
 
 /* advances a moby's path waypoint until it reaches one flagged 2.0 */
@@ -1098,7 +1093,6 @@ void func_L05_003087B0(char *moby) {
 int func_L05_003088C8(int arg) {
     return arg == 5 ? 6 : arg;
 }
-extern void func_00213DE0(void *, int, int, int);
 extern int func_L05_003088C8(int);
 
 // Sets an animation on the moby's child, blending by frame fraction clamped to the frame count.

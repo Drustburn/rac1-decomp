@@ -253,7 +253,6 @@ extern void func_L00_0028EBF0(int);
 extern int func_L00_0028EB98(void *, int);
 extern int func_0022ED80_r(int, int, char *) __asm__("func_0022ED80");
 extern float func_001FA888(int);
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_002617B0(char *, void *, void *, void *);
@@ -431,21 +430,16 @@ void func_L01_002BB068(unsigned char *moby) {
     }
 }
 LINKER_REMNANT("asm/overlays", func_L01_002C05B8);
-extern void func_001F9BF0(void *, void *, void *);
 extern float func_001F9CE8(void *);
 extern float func_L00_001FF860(float, float);
 extern float func_L00_00258C80(float, float);
-extern float func_001FA748(float, float);
 extern void func_00215C00(void *, float, float, float);
 extern float func_002140F8(float, float);
 extern void func_001F9C30(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_0026D588(char *, char *);
-extern int func_001F9850(int);
 extern int func_L00_00258BC8(int, int);
 extern char *func_L00_0026DA50(void *, void *, int, int, int, int, float);
 extern char D_L01_00174360[];
-extern char D_L01_001672C0[];
 extern float D_L01_00174340[];
 
 /* spawns two bursts of particles around a point */
@@ -576,9 +570,7 @@ void func_L01_002E2E38(struct Moby *m) {
         break;
     }
 }
-extern char D_0013E633[];
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
 
 void func_L01_002E4430(int unused, void *out)
 {
@@ -587,7 +579,6 @@ void func_L01_002E4430(int unused, void *out)
     func_L00_001FF4B0(scratch, *(char **)(base + 0x2080) + 0xD0, 1.0f);
     FastVecAdd(out, scratch, base + 0x80);
 }
-extern void func_L00_001FF4B0(void *, void *, float);
 typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
 extern int func_L00_00259428(Vs *p, int x, int y, float f, float g);
 extern float D_L01_00174368;
@@ -692,7 +683,6 @@ void *func_L01_002E4620(void *moby, void *from, void *ang, float yawMax, float p
     }
     return best;
 }
-extern float func_001FA850(float, float);
 extern void *func_L00_0025D390(void *);
 extern void *func_L01_002E4620(void *, void *, void *, float, float, float, float, float, float);
 extern void func_L01_0030DC70(void *, void *, float, float, float, float);
@@ -1121,7 +1111,6 @@ extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern void func_L00_0025A8C0(void *, void *, int, float, void *);
 extern void func_L00_001FF500(void *, void *, float);
 extern void func_L00_0025AAC0(void *, void *);
-extern int func_001F9908(void *);
 extern void func_L00_00260108(void *, void *, int, float, float);
 extern void func_0020D678(void *);
 
@@ -1347,7 +1336,6 @@ int func_L01_002F31A0(char *a) {
 }
 INCLUDE_ASM("asm/overlays", func_L01_002F31D0);
 extern float func_L00_00259148(float *vel, float cur, float target, float k, float d, float max);
-extern void func_00213DE0(void *m, int a, int b, int c);
 extern float D_0015EE70 MACRO_ADDR;
 extern char D_001405A8[];
 extern unsigned char D_0013D5CD NOT_SDA;
@@ -1538,7 +1526,6 @@ in_range:
 }
 typedef int u128 __attribute__((mode(TI)));
 extern void func_001FA218(float *, float *);
-extern void func_001F9EE8(void *, void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
 
 /* Build a rotation from two angle fields in the moby data and apply both to a vector. */

@@ -711,7 +711,6 @@ extern B_00284e50 D_L00_001BB610;
 extern int D_L00_001BA860[];
 extern char D_0013F450[];
 extern char D_0013E650[];
-extern char D_001517D0[];
 extern unsigned char D_0014C150[][16] NOT_SDA;
 extern int D_0014C290[][64] NOT_SDA;
 extern unsigned char D_L00_001BB5C0[0xC58];
@@ -772,7 +771,6 @@ INCLUDE_ASM("asm/overlays", func_L00_00286498);
 INCLUDE_ASM("asm/overlays", func_L00_002864CC);
 typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
 extern int func_L00_00286498(int, int);
-extern void func_L00_001FF040(int, void *, unsigned short);
 
 void func_L00_002864E0(int *h) {
     int i;

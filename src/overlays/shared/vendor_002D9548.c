@@ -201,7 +201,6 @@ INCLUDE_ASM("asm/overlays", func_L06_002E9AA8);
 INCLUDE_ASM("asm/overlays", func_L06_002EA920);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_001F9C78(void *, void *);
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
 extern void func_00215328(void *, void *);
 extern void func_001FA5C8(void *, void *, void *, float);
@@ -226,7 +225,6 @@ void func_L06_002EADC8(char *m, float *a1, float *a2) {
     func_001FA5C8(A, A, B, *(float *)&D_L06_00161C90);
     func_001FA648(A, m);
 }
-extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
 
@@ -664,7 +662,6 @@ extern int func_L00_0025D6F0(void *, void *);
 extern void func_L00_00260108(void *, void *, int, float, float);
 extern float func_002140F8(float, float);
 extern void func_L00_001FF240(void *, void *, void *);
-extern int func_002140B0(int);
 extern void func_L00_00272F00(void *, int, float, float, int, int, int, float, void *);
 extern int func_L06_002F4720(void *, int);
 extern float func_001F9D10(void *, void *);
@@ -1358,7 +1355,6 @@ void func_L06_002F1470(Moby *moby) {
     d->f2F0.q = d->f2E0.q;
     d->f2E0.q = *(u128 *)(*(float (*)[4])&moby->pos);
 }
-extern float func_001F9D48(void *, void *);
 extern float func_L00_001FF860(float, float);
 extern float func_001FA850(float, float);
 extern char D_L06_00167500[];
@@ -1427,9 +1423,7 @@ int func_L06_002F4720_r(char *moby, int flag)
     }
     return iter.out;
 }
-extern float func_001F9D48(void *, void *);
 extern float func_L00_001FF860(float, float);
-extern float func_001FA850(float, float);
 
 /* Scores a candidate target and keeps it if it beats the best so far. */
 void func_L06_002F4818(char *a, char *b, char *c, int *out, float *best, float thresh) {
@@ -1536,9 +1530,6 @@ void func_L06_002F4A70_r(unsigned char *moby) {
     }
     moby[0xA4] = 0xFF;
 }
-extern unsigned char D_0015EEB0[] MACRO_ADDR;
-extern int func_L00_0025A208(int *, int, int, int);
-extern int func_L00_0025A2F0(int *, int, int, int);
 extern void func_L00_00264690(void *, int, float, float);
 
 /* for each moby in a search list with the owner's id, start three effects on its data */
@@ -1821,7 +1812,6 @@ void func_L06_002F86B8(char *m) {
     }
     }
 }
-extern int func_002140B0(int);
 extern int func_001F9850(int);
 
 /* fills random floats and sound handles in the moby's data block */
@@ -1907,7 +1897,6 @@ void func_L06_002F8A58(char *m) {
                           (unsigned char)random_integer_below(0xFF), 0, *(float *)&D_L06_00161EFC);
     }
 }
-extern char D_0013E633[];
 extern int func_00215570(void *, int);
 extern void func_001F4E08(int);
 extern void func_L00_00211908(void);
@@ -1964,11 +1953,9 @@ extern char *func_L00_0025B478(void *, int, int);
 extern void func_L06_002F9098(char *m);
 extern int func_0022ED80(int, int, int);
 extern void func_L00_0028EBF0(int);
-extern void func_0020D678(void *);
 extern void func_L00_00251328(void *, int, int, int);
 extern float func_001FA748(float, float);
 extern int func_L00_0028EB98(void *, int);
-extern char D_0013E633[];
 extern short D_L06_00161F04, D_L06_00161F08, D_L06_00161F0C, D_L06_00161F10;
 
 // UpdateMoby_1040: spins up, rotates and tracks a slot, deleting itself when its target is gone.
@@ -2013,7 +2000,6 @@ void func_L06_002F8EE8(char *m) {
         *(int *)(d + 0x60) = func_0022ED80(0, 4, (int)m);
     }
 }
-extern void func_L00_00258DB0(float *, float, float);
 extern float func_002140F8(float, float);
 extern void func_L00_00273F80(void *, float, void *, int, int, int, int);
 extern float D_0015EE6C MACRO_ADDR;

@@ -820,8 +820,6 @@ void func_L00_002A7E10(struct Moby *bolt)
     func_L00_00272F00_A7E10(&pos, scale_ticks(0x19), size * 0.14f, size * k, 0x7F7F7F7F, 1, spin, &vel, 0.0f);
 }
 extern int func_L00_00261568(int x, char *o, float *p, float *q, float *r, float *s);
-extern float func_001FA748(float, float);
-extern float func_001FA790(float, float);
 extern void func_001FA1F8(void *, void *);
 extern void func_001FA4F0(void *, void *, void *);
 extern int func_L00_001F10E0(float, void *, int, void *);
@@ -910,7 +908,6 @@ void func_L00_002A8088(char *moby, void *out1, void *out2) {
         }
     }
 }
-extern int D_L00_0015F6B0 MACRO_ADDR;
 extern short D_L00_00161474;
 extern short D_L00_00161470;
 extern int func_0022ED80(int, int, int);
@@ -959,7 +956,6 @@ struct AnimSeq;
 int func_001F9850(int);
 unsigned char *func_0020D348_A86D8(int) __asm__("func_0020D348");
 void func_L00_00251E30_A86D8(unsigned char *) __asm__("func_L00_00251E30");
-extern s32 D_0015EE98 MACRO_ADDR;
 extern s32 func_002140B0(s32);
 extern f32 func_002140F8(f32, f32);
 extern f32 D_L00_00161470_A86D8 SDATA(D_L00_00161470);
@@ -1072,7 +1068,6 @@ INCLUDE_ASM("asm/overlays", func_L00_002A8A20);
 extern char D_0013E633[];
 extern int func_001F9850(int);
 extern void func_0020D6D0_p(void *) __asm__("func_0020D6D0");
-extern void func_00213DE0(void *, int, int, int);
 
 /* copies a moby's animation selection from the player moby, or starts an animation */
 void func_L00_002A8F10(char *m) {
@@ -1111,7 +1106,6 @@ int func_L00_002A9030(void) {
     if (x != 0) r = *(unsigned char *)(x + 9) == 1;
     return r;
 }
-extern void *D_L00_00173F58;
 extern char *func_L00_0025D390(void *);
 int func_L00_002A9080(void) {
     char *x = func_L00_0025D390(D_L00_00173F58);
@@ -1160,7 +1154,6 @@ extern V D_L00_00166EC0;
 extern int D_L00_00173F40[];
 extern float func_001F9CE8(void *);
 extern float func_L00_001FF860(float, float);
-extern float func_001FA748(float, float);
 extern int func_L00_00258BC8(int, int);
 extern void func_L00_0026D588(void *, void *);
 extern void func_L00_0026DA50(void *, void *, int, int, int, int, float);
@@ -1232,7 +1225,6 @@ void func_L00_002A9560(char *a) {
 }
 extern char D_0013E633[] NOT_SDA;
 extern float func_L00_001FF860(float, float);
-extern float func_001FA850(float, float);
 extern float func_001F9CB8(float *);
 extern void func_L00_001FF4B0(float *, float *, float);
 
@@ -1565,7 +1557,6 @@ void func_L00_002A9768(Wrench48 *m) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_002AA998);
 LINKER_REMNANT("asm/overlays", func_L00_002AAC48);
-extern void func_L00_00251328(void *, int, int, int);
 
 /* Creates a moby at a position with a scale, colour and a few data fields. */
 void *func_L00_002AAC50(int unused, void *pos, int c, float scale, float a, float b) {
@@ -1645,9 +1636,6 @@ void func_L00_002AAE20(int a, char *pos) {
 }
 extern void func_L00_0023F1D0(int);
 extern void func_0020D678(void *);
-extern int D_L00_0015F420 MACRO_ADDR;
-extern int D_L00_0015F430 MACRO_ADDR;
-extern short D_L00_00161490;
 
 // Tears down the tracked moby if it is class 0x5F3 and dead, freeing its slot and clearing the pointer.
 void func_L00_002AAE80(void) {
@@ -1675,12 +1663,10 @@ typedef struct {
 } QuadPkt_2AAEF0;
 
 extern int D_L00_0015F6A8 MACRO_ADDR;
-extern int D_L00_0015F6B0 MACRO_ADDR;
 extern float D_L00_001614B0 SDATA(D_L00_001614B0);
 extern float D_L00_001614B0_v[] __asm__("D_L00_001614B0") MACRO_ADDR;
 extern float func_001F9B50(float);
 extern float func_L00_001FF860(float, float);
-extern float func_001FA748(float, float);
 extern int func_001F9850(int);
 extern float func_001FA888(int);
 extern float func_001F9878(float);
@@ -1872,8 +1858,6 @@ void func_L00_002AB2A8(Vec4 *pos, N2 *self, void *arg) {
         FastVecScale(m, m, 0.6f);
     }
 }
-extern float func_001F9F90(float);
-extern int func_L00_001F3958(void);
 extern int func_001F9908(int *arg0);
 extern void func_L00_002AAEF0(void);
 extern int D_L00_0015F6A8 MACRO_ADDR;

@@ -2741,7 +2741,6 @@ void func_L17_002260F0(void) {
     }
 }
 extern void func_0022C7E0(void);
-extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 extern void func_L00_0028BF60(void);
 extern void func_L00_0028A5A8(void);
 extern void func_0022C870(void);

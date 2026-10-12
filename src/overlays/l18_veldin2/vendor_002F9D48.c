@@ -314,7 +314,6 @@ void func_L18_002FC188(M2 *m) {
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVd058;
 
 extern float func_00214158(void);
-extern void func_001F9BD8(void *, void *, void *);
 extern float func_00214358(void *, int, float);
 extern int func_L00_002DDEA0(void *, void *);
 extern void func_L18_002FD5C0(void *);
@@ -466,15 +465,11 @@ void func_L18_002FD058(unsigned char *m) {
 }
 INCLUDE_ASM("asm/overlays", func_L18_002FD5C0);
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVec;
-extern float func_L00_001FF860(float, float);
-extern float func_L00_0025CE58(float *, float *, float, float, float, float);
 extern float func_001F9D48(float *, float *);
 extern float func_00214D88(float *, float *, float, float, float, float);
 extern float func_001F9F90(float);
 extern void func_L00_00259868(int, int, float, float, float, int);
 extern void func_L00_00262DF0(float, void *, void *, void *);
-extern float D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
 
 float func_L18_002FD9A0(char *self, float *src) {
     QVec a;
@@ -623,8 +618,6 @@ void func_L18_002FDD20_r(struct Moby *m) {
 extern unsigned short *D_L18_001AC540[];
 extern unsigned char *D_L18_00160058_m __asm__("D_L18_00160058") MACRO_ADDR;
 extern short D_L18_001626E4;
-extern void func_L00_00250800(void *, int, void *);
-extern void func_L00_00264690(void *, int, float, float);
 
 /* For each listed moby of matching type, spawns effects at five points. */
 void func_L18_002FDF58(unsigned char *moby) {

@@ -615,7 +615,6 @@ void func_L08_002F8560(struct Moby *m) {
 extern void func_L02_002E2110(void *);
 extern float func_001F9D10(void *, void *);
 extern void func_L00_0025B178(void *);
-extern int func_001F9850(int);
 extern void func_00213DE0(void *, int, int, int);
 extern int func_L00_002676E8(void *, void *);
 extern int func_L00_00267290(void *, void *);
@@ -642,7 +641,6 @@ extern void func_L00_00263950(char *, char *, int, float, float);
 extern char D_L08_00162270[];
 extern short D_L08_00162268;
 extern char *D_L08_0016016C MACRO_ADDR;
-extern int D_L08_0015F6A8 MACRO_ADDR;
 extern unsigned char D_0015EEB0[] MACRO_ADDR;
 extern float D_0015EE64 MACRO_ADDR;
 extern s32 D_0015EE84 MACRO_ADDR;
@@ -785,8 +783,6 @@ void func_L08_003041A8(char *m) {
         func_L00_00263950(m, d + 0xE0, 1, sx * D_0015EE64, sy * D_0015EE64);
     }
 }
-extern int D_L08_0015F6A8 MACRO_ADDR;
-extern unsigned char D_0015EEB0[] MACRO_ADDR;
 struct G {
     char pad0[0x30];
     int a;
@@ -974,37 +970,22 @@ void func_L08_003078B0(char *moby) {
     }
 }
 extern void func_L08_003078B0(char *moby);
-extern int func_L00_002676E8(void *, void *);
-extern int func_L00_00267290(void *, void *);
-extern void func_L01_00279398(float, void *);
-extern void func_L00_00286128(void *, void *);
 extern void func_L08_002E2A10(char *arg);
 extern void func_L00_0029A7D0(int);
 extern void func_L00_00211908(void);
-extern void func_L00_002512D8(int);
 extern void func_L00_002618D8(int, int);
-extern int func_0020BFC8(int, int);
 extern void func_0020D678(void *);
-extern float func_001F9D48(void *, void *);
 extern float func_L00_001FF860(float, float);
 extern float func_001FA850(float, float);
-extern int func_001F9850(int);
 extern int func_001F9908(int *arg0);
 extern float func_002140F8(float, float);
 extern float func_001F9878(float);
 extern float func_001FA748(float, float);
-extern void func_00215C00(void *, float, float, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern float func_001FA790(float, float);
-extern float func_001F9CE8(void *);
-extern void func_L00_00263950(char *, char *, int, float, float);
 extern s32 D_0015EE84 MACRO_ADDR;
 extern char D_L08_00162398[];
-extern char *D_L08_0016016C MACRO_ADDR;
 extern char *D_L08_00160058 MACRO_ADDR;
-extern float D_0015EE64 MACRO_ADDR;
-extern unsigned char D_0014171B_q[] __asm__("D_0014171B") NOT_SDA;
-extern char D_0013E633[] NOT_SDA;
 
 /* Update function: calls func_L08_003078B0, then a switch on the state byte at +0x20 (states 0, 1, 2 and 5;
  * state 5 and one state-0 case delete the moby). Then, when the byte at +0x53 is zero, updates the countdowns at
@@ -1114,7 +1095,6 @@ void func_L08_00307A98(char *m) {
         func_L00_00263950(m, d + 0xE0, 1, sx * D_0015EE64, sy * D_0015EE64);
     }
 }
-extern void func_L00_00211908(void);
 
 // Sets the vendor state or closes the active interaction.
 void func_L08_00307FF0(char *moby, int mode) {
@@ -1139,7 +1119,6 @@ close:
     func_L00_00211908();
 }
 INCLUDE_ASM("asm/overlays", func_L08_00308A00);
-extern int func_001F9850(int);
 extern void func_L00_00264870(int);
 /* per-frame update of a moby that fires a sound event when the game state allows */
 void func_L08_00309998(char *moby) {
@@ -1233,8 +1212,6 @@ extern short D_L08_00162458;
 extern short D_L08_00162460;
 extern short D_L08_00162468;
 extern short D_L08_00162478;
-extern void func_L08_00259040(void *, int, int, void *);
-extern void func_L00_001FDE48(int, int, int, void *, int);
 
 /* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
 void func_L08_0030A428(int x) {
@@ -1284,14 +1261,10 @@ void func_L08_0030A4F0(void) {
     VU1_addGSregister(0x42, (long)*(int *)&D_L08_00162450 << 32 | 0x48);
     func_L08_0030A428(0);
 }
-extern void func_L08_002F2428(void *, int, void *, float, float, float, float, int);
 extern int func_L00_00200290(char *, float);
 extern void func_001F9BF0(void *, void *, void *);
 extern float func_001F9CB8(void *);
-extern void func_L08_002F2760(int);
-extern void func_L08_002F2618(void *, float, float, float, void *);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern void func_L08_002F2838(int);
 extern void func_001F49B0(void (*)(void), void *);
 extern void func_L08_0030A4F0(void);
 extern char D_L08_001F87E8[];

@@ -478,8 +478,6 @@ skip:
         func_L00_00211908();
     }
 }
-extern unsigned char D_0013E633[];
-extern void func_L06_00235E08(int, int);
 
 // Dispatches on a mode byte and calls func_L06_00235E08 with a matching id.
 void func_L06_00239CD0(void) {
@@ -507,7 +505,6 @@ extern void func_001F9C30(void *, void *, f32);
 extern void func_L00_0025E290(Vec4 *, void *);
 extern s32 func_L00_001EFFF0(void *, void *, s32, s32, s32);
 extern f32 func_L00_002345B0(void *);
-extern f32 func_L00_002342F8(void *);
 extern s32 func_L00_0025A5D8(f32 *, f32 *, f32, f32, f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_00242950.c, FUN_L06_00242950. */

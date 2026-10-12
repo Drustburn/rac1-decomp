@@ -551,7 +551,6 @@ extern void func_L00_00233D50(float *dst, float *src, float h);
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_L00_001F1D20(float, float, void *, int, int);
 extern int func_L00_001F34F0(float, void *);
-extern int func_L00_001F10E0(float, void *, int, void *);
 extern void func_001F9BF0(void *, void *, void *);
 extern float func_001F9CB8(void *);
 extern void func_L00_001FF4B0(void *, void *, float);

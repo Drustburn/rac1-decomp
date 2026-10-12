@@ -295,7 +295,6 @@ void func_L00_00263950(int m, unsigned char *p, int c, float fa, float fb) {
     *(float *)(p + 0x70) = 1.0f;
 }
 extern float func_001FA748(float, float);
-extern float func_001F9FA8(float);
 void func_L00_00263B78(float x, float y, char *a, float *p, float *q) {
     float t;
     *p = FastAddRots(*p, y);
@@ -304,7 +303,6 @@ void func_L00_00263B78(float x, float y, char *a, float *p, float *q) {
     *q = t;
     *(float *)(a + 0x18) += t;
 }
-extern float func_001F9F90(float);
 
 void func_L00_00263BF8(float *o, float *a, float *b, float r, float l1, float l2) {
     o[0x10] = r * FastSin(*a) * FastSin(*b);
@@ -313,14 +311,12 @@ void func_L00_00263BF8(float *o, float *a, float *b, float r, float l1, float l2
     *b = FastAddRots(*b, l2);
 }
 extern void func_00215C00(void *);
-extern void func_001F9BD8(void *, void *, void *);
 void func_L00_00263D68(void *a, void *b) {
     typedef float W[4] __attribute__((aligned(16)));
     W v;
     func_00215C00(v);
     FastVecAdd(a, v, b);
 }
-extern int func_001F9850(int);
 extern void func_L00_00264DB8(int arg0, int arg1);
 extern char D_L00_001E93E0[];
 typedef struct { int v[19]; } Tbl;
@@ -442,7 +438,6 @@ typedef struct { char pad[0x140]; V pos; } S166D;
 extern S166D D_L00_00166D80;
 extern V D_L00_00173F60;
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
-extern void func_001F9BF0(void *, void *, void *);
 extern float func_001F9CE8(void *);
 extern void func_L00_00269DB0(char *, int);
 
@@ -516,8 +511,6 @@ void func_L00_00264690(float *p, int b, float s, float t) {
 LINKER_REMNANT("asm/overlays", func_L00_00264860);
 INCLUDE_ASM("asm/overlays", func_L00_00264870);
 extern unsigned char D_0015EEB4_m[4] __asm__("D_0015EEB4") MACRO_ADDR;
-extern void func_0020D960(int, int, void *);
-extern void func_0020D9D8(int, void *);
 
 /* Sets a moby's three float fields to x, running its setup call first when it has a flag byte; without the global flag only runs func_0020D9D8 on a flagged moby. */
 void func_L00_00264B40(float x, int a, int b, unsigned char *m) {
@@ -592,7 +585,6 @@ void func_L00_00264BE8(void *p0, void *p1, void *vel, float a, float b) {
 }
 extern int D_L00_0015F720 MACRO_ADDR;
 extern char D_L00_00179218[];
-extern int func_001F9850(int);
 extern int func_001FE540(int);
 extern void func_001166FC(void *, int);
 
@@ -647,12 +639,7 @@ extern float func_002140F8(float, float);
 extern float func_001F9878(float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern float func_001F9CB8(void *a);
-extern float func_00214158(void);
 extern void func_L00_00258DB0(float *, float, float);
-extern void func_001F9C30(void *, void *, float);
-extern void func_L00_00251E30(void *);
-extern float D_0015EE70 MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
 
 /* Spawns a break-effect fragment moby of class cls from src, and initialises its motion data. */
 void *func_L00_00265050(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12) {

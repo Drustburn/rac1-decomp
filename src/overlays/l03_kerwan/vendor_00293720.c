@@ -703,7 +703,6 @@ void func_L03_00295DB0(char *moby) {
     func_001F9BD8_295DB0(v0, v0, moby + 0x10);
     func_L00_002617B0_295DB0(d->f60, v0, v1, moby + 0x40);
 }
-extern void func_L00_00250800(void *, int, void *);
 extern float func_001F9D10(void *, void *);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_002617B0(char *, void *, void *, void *);
@@ -807,7 +806,6 @@ extern float func_00214158(void);
 extern int func_001F9850(int);
 extern void func_L00_0026DD70(void *, void *, int, int, float, int);
 extern int func_L00_001FEF78(void *);
-extern int func_L00_00258BC8(int, int);
 extern void func_L03_002BC038(void *, void *, int, int, float, float, int);
 extern char D_L03_00166F40[];
 
@@ -914,7 +912,6 @@ extern float func_L00_001FF860(float, float);
 extern float func_001FA748(float, float);
 extern void func_001F9BF0(void *, void *, void *);
 extern float func_001F9CE8(void *);
-extern float func_L00_00259148(float *vel, float cur, float target, float k, float d, float max);
 extern float func_L00_0025F368(float);
 extern float D_0015EE60 MACRO_ADDR;
 extern float D_0015EE70 MACRO_ADDR;
@@ -948,8 +945,6 @@ void func_L03_0029E1A8(char *m) {
 extern int func_001F9938(void *);
 extern float func_001F9D10(void *, void *);
 extern int func_001F9850(int);
-extern int func_L00_00258BC8(int, int);
-extern char D_L03_00166F40[];
 
 // Picks the next animation frame value for a moby in one of several states, storing it at data+0x148.
 void func_L03_0029E370(char *moby) {
@@ -1777,7 +1772,6 @@ void func_L03_002C7DE8(unsigned char *moby) {
  moby[0xA4]=255;
 }
 LINKER_REMNANT("asm/overlays", func_L03_002C8000);
-extern float func_0020D830(void *);
 
 int func_L03_002C8068(unsigned char *moby) {
     unsigned char state;
@@ -1798,10 +1792,8 @@ int func_L03_002C8120(unsigned char *moby) {
     }
     return 0;
 }
-extern int func_L00_0025A208(int *, int, int, int);
 extern int func_L03_002C6F40(unsigned char *);
 extern int func_L03_002C8120(unsigned char *);
-extern int func_L00_0025A2F0(int *, int, int, int);
 
 /* scans class instances for either predicate */
 int func_L03_002C8160(int id) {
@@ -1817,8 +1809,6 @@ absent:
     return 0;
 }
 extern char *D_L03_00160058 MACRO_ADDR;
-extern float func_001F9B88(float);
-extern float func_001F9D48(void *, void *);
 extern void func_00213DE0(void *, int, int, int);
 
 // Checks whether a moby can start an attack on a target and switches its state.
@@ -1914,40 +1904,26 @@ typedef struct Data2C8398 {
 extern void func_L00_00260D30(void *, void *, float);
 extern void func_L00_00264BB0(void *, float);
 extern void func_L03_002CA970(void *);
-extern int func_L00_001FEF78(void *);
 extern void func_L00_00263950(char *, char *, int, float, float);
 extern void func_L01_0026E8E0(char *p);
-extern float func_001F9878(float);
-extern int func_001FA898(float);
-extern void func_001F9BC0(void *);
 extern int func_L03_002C8160(int);
 extern int func_00215570(void *arg0, int arg1);
 extern float func_001FA850(float, float);
 extern void func_L03_002CB068(void *);
 extern int func_00215B18(char *, float);
-extern void func_L00_00250800(void *, int, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern float func_001F9F90(float);
-extern float func_001F9FA8(float);
 extern void func_L00_001FF240(void *, void *, void *);
 extern void func_L03_00251AC8(void *, void *, int);
 extern void func_L03_002D5650(void *, void *, void *, int, float, float, float);
-extern void func_L00_002592B0(char *moby, float *vel, float target, float k, float d, float max);
-extern void func_L00_001FF500(void *, void *, float);
 extern void func_L00_0025AAC0(void *, void *);
 extern int func_L00_0025A060(char *m, char *p, float *pos, char *v);
 extern void func_L00_0025EFC0(void *, void *, void *, int *, float *, int, float, float, float);
-extern int func_L00_0025D6F0(void *, void *);
-extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
 extern void *func_L00_00265050(char *, int, float *, void *, int, int, float, float *, float *, float *);
-extern void func_L00_002584A8(void *, int, int);
 extern float func_L00_0025A748(void *);
 extern float func_00214D28(float *p, float target, float maxstep);
-extern float func_001F9CB8(void *);
 extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
 extern float func_001FA888(int);
 extern int func_L00_001F10E0(float, void *, int, void *);
-extern void func_L00_0025B178(void *);
 extern int func_L00_00261478(int unused, char *m, char *a, void *b, char *c, void *d);
 extern float func_00214358(void *, int, float);
 extern unsigned char *func_L00_0025D390(int);
@@ -1955,11 +1931,9 @@ extern void func_L03_00250B88(void *, void *, float);
 extern void func_0020D678(void *);
 extern int D_0015EE84 MACRO_ADDR;
 extern float D_0015EE64 MACRO_ADDR;
-extern unsigned char D_0013E633[];
 extern unsigned char D_0014171B[];
 extern char *D_L03_001B08B0[];
 extern Moby *D_L03_00160058_m __asm__("D_L03_00160058") MACRO_ADDR;
-extern float D_L03_0015F660[] MACRO_ADDR;
 extern char D_L03_00173FC0[];
 extern char D_L03_00173FE0[];
 extern char D_L03_00173FF0[];

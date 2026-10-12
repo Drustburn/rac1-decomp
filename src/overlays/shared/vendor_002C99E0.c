@@ -114,11 +114,8 @@ unsigned char *func_L11_00309C18(char *owner, float *dir, float *pos, float a, f
 INCLUDE_ASM("asm/overlays", func_L11_00309DA0);
 extern char *func_0020D348(int);
 extern int func_001FA898(float);
-extern float func_001F9CE8(void *);
 extern float func_L00_001FF860(float, float);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern float func_001F9CB8(void *);
-extern void func_L00_00251E30(void *);
 
 /* spawns a streak moby aimed along a direction with the given size and colour */
 char *func_L11_0030A318(int owner, float *dir, float *pos, float size, float len, float z) {
@@ -783,7 +780,6 @@ void func_L11_00311F98(short *pts, int n, float x0, float y0, unsigned int col, 
     D_L11_00161240 += ((n + 1) / 2) * 16;
 }
 INCLUDE_ASM("asm/overlays", func_L11_003121C0);
-extern int func_001F4868(int);
 extern void func_L11_003121C0(float, float, float, float, float, int, int, int, int, int, int, int, int);
 extern float func_001FA748(float, float);
 
@@ -818,7 +814,6 @@ typedef int u128_312780 __attribute__((mode(TI)));
 
 extern void func_L00_00250800(void *, int, void *);
 extern void func_L00_00260958(float *v, float s);
-extern float func_002140F8(float, float);
 extern void func_L01_0028B570(void *, float *, float *, void *, int);
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L11_00162084;
@@ -879,7 +874,6 @@ void func_L11_00312780(void *m, char *t) {
 }
 INCLUDE_ASM("asm/overlays", func_L11_0031A738);
 typedef int u128_31AAE0 __attribute__((mode(TI)));
-extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern void f49(void *, void *) __asm__("func_001F49B0");
 extern void cb(void) __asm__("func_L11_0031A738");

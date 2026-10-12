@@ -219,7 +219,6 @@ INCLUDE_ASM("asm/overlays", func_L00_00250700);
    0x3A800000 is exactly 2^-10. */
 
 extern void func_002116A0(void *, int, int *, void *);
-extern void func_001F9C30(void *, void *, float);
 extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 

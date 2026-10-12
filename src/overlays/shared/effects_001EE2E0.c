@@ -90,7 +90,6 @@ extern unsigned char * D_L00_001601AC MACRO_ADDR;
 extern unsigned char * D_L00_001601BC MACRO_ADDR;
 extern unsigned char * D_L00_001601B4 MACRO_ADDR;
 extern unsigned char * D_L00_001601A4 MACRO_ADDR;
-extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern float func_001F9CE8(void *);

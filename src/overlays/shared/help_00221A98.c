@@ -342,7 +342,6 @@ int func_L00_00222520(void) {
     }
     return r;
 }
-extern unsigned char D_0013E633[] NOT_SDA;
 extern void func_L00_00211F80(int, float);
 extern float func_001FA790(float, float);
 extern float func_001FA850(float, float);
@@ -2740,7 +2739,6 @@ int func_L00_00222B80(int a, int b) {
     }
     return 1;
 }
-extern unsigned char D_0013E633[] NOT_SDA;
 void func_L00_00227E08(void) {
     switch (D_0013E633[0x2EC1]) {
     case 0: func_L00_00222B80(0, 1); break;
@@ -2749,7 +2747,6 @@ void func_L00_00227E08(void) {
     case 3: func_L00_00222B80(0x53, 1); break;
     }
 }
-extern void func_L00_0020ED30(void);
 
 int func_L00_00227E90(void) {
     char *p = (char *)D_0013E633 + 0xE1D;
@@ -2771,7 +2768,6 @@ int func_L00_00227E90(void) {
     return 0;
 }
 INCLUDE_ASM("asm/overlays", func_L00_00227F48);
-extern float func_001F9B88(float);
 extern void func_L00_00212D70(void *, void *, int, float, float);
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern int func_L00_001F3958(void);
@@ -2863,9 +2859,7 @@ int func_L00_00228180(void) {
     }
     return r;
 }
-extern float func_001F9B88(float);
 extern float func_00214D28(float *p, float target, float maxstep);
-extern float D_0015EE60 MACRO_ADDR;
 
 // Integrates and damps the player's camera-offset spring values and stores the resulting height.
 void func_L00_00228510(void) {

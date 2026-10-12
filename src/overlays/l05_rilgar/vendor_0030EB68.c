@@ -530,12 +530,10 @@ extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_001F9850(int);
-extern float func_L00_00258C80(float lo, float hi);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern void func_L05_0029CA28(float, void *, void *, int, int, int);
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L05_00161E74;
-extern short D_L05_00161E78;
 extern short D_L05_00161E7C;
 extern short D_L05_00161E80;
 extern short D_L05_00161E84;
@@ -1119,7 +1117,6 @@ void func_L05_00317538(char *moby) {
     if (none) func_L03_00292AC0(D_L05_00211E60);
 }
 extern void func_L02_002A52B0(void *, float);
-extern void func_001F49B0(void *, void *);
 extern void func_L05_00317538_3175D8(void) __asm__("func_L05_00317538");
 extern char D_0013E633[];
 extern float D_L05_00211E60_3175D8[] __asm__("D_L05_00211E60");
@@ -1423,22 +1420,11 @@ void func_L05_00318980(char *m)
 extern void func_L02_002E2110(void *);
 extern void func_L00_0025B178(void *);
 extern float func_00214358(void *, int, float);
-extern int func_L00_002676E8(void *, void *);
-extern int func_L00_00267290(void *, void *);
-extern void func_L01_00279398(float, void *);
 extern void func_L00_002618D8(int, int);
 extern void func_L00_00264DB8(int, int);
-extern int func_0020BFC8(int, int);
-extern void func_0020D678(void *);
-extern void func_00213DE0(void *, int, int, int);
-extern float func_001FA850(float, float);
 extern float func_001F9CB8(void *);
-extern void func_00215C00(void *, float, float, float);
 extern float func_001FA790(float, float);
-extern float func_001F9CE8(void *);
-extern void func_L00_00263950(char *, char *, int, float, float);
 extern char D_L05_00161FB8[];
-extern float D_0015EE64 MACRO_ADDR;
 extern unsigned char D_0013D605[];
 
 /* Shady salesman update: spawn and approach states, aims at the player and sets the body and head poses. */
@@ -1628,10 +1614,8 @@ extern int func_L05_0031AB08(char *);
 extern void func_L05_0031AA20(char *);
 extern void func_L05_0031AC50(char *);
 extern void func_L05_0031ADF8(char *);
-extern int func_L00_0028EB98(void *, int);
 extern int func_0022ED80_i(int, int, void *) __asm__("func_0022ED80");
 extern void func_L00_0028EBF0(int);
-extern void func_L00_002617B0(char *a, void *b, void *c, void *d);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_001FA4A0(void *, void *);
 extern void func_001F9EE8(void *, void *, void *);

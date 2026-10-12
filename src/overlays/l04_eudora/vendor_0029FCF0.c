@@ -960,12 +960,10 @@ void func_L04_002C2F00_r(struct Moby *m) {
     func_L00_0028F210_C2F00b(v->voice, func_001FA898_2C2F00(v->pitch));
 }
 extern void func_L00_0028EBF0(int);
-extern void func_L00_002584A8(void *, int, int);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int,
                                   float, float, float, float, int, float, int, int, int, int)
     __asm__("func_L00_0025F4A8");
 extern int func_0022ED80(int, int, char *);
-extern unsigned char D_0013E633[];
 
 // release the moby's claimed slot, then spawn an effect at it
 void func_L04_002C30F0(char *moby)
@@ -994,7 +992,6 @@ void func_L04_002C30F0(char *moby)
     func_0022ED80(1, 0, moby);
 }
 extern void func_L00_00260D30(char *, float *, float);
-extern float func_001F9D48(float *, float *);
 extern char *D_L04_00160064 MACRO_ADDR;
 
 /* Check that a moby's spot is clear of the other mobys of class 0x154. */
@@ -1252,50 +1249,30 @@ typedef struct {
     int f18;
 } G_35F0;
 
-extern void func_L00_00264B40(float, int, int, unsigned char *);
-extern float func_001F9D10(void *, void *);
-extern void func_L00_0025B178(void *);
-extern float func_0020D830(void *);
 extern void func_L04_002C2F00(void *);
-extern int func_L00_001FEF78(void *);
 extern void *func_L00_0025B478_2C35F0(void *, int, int) __asm__("func_L00_0025B478");
-extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
-extern float func_L00_001FF860(float, float);
-extern float func_001F9878(float);
-extern float func_001FA748(float, float);
-extern void func_L00_0025E4B0(void *m, short *p);
-extern int func_001F9938(void *);
 extern void func_001F9BF0(void *dst, void *a, void *b);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern int func_L00_001F2BE8(void *, int, void *, void *, float);
 extern void func_0020D678(void *);
 extern void func_L01_0026E8E0(char *p);
 extern void func_L00_002626A8(char *moby, char *d, float a, float b);
-extern int func_L00_0025A778(void *, void *, int);
 extern float func_L04_002C3338(void *, void *, float);
 extern float func_001FA850(float, float);
-extern int func_00215570(void *arg0, int arg1);
 extern void func_L00_002592B0_b(char *moby, float target, float *vel, float k, float d, float max) __asm__("func_L00_002592B0");
 extern int func_L00_002DDEA0(void *, void *);
-extern float func_001F9F90(float);
-extern float func_001F9FA8(float);
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_L00_002594C8(void *, void *, void *, int, float, float, float, float);
-extern float func_001FA790(float, float);
 extern float func_001FA888(int);
 extern float func_001FA7D8(float);
 extern int func_001FA898(float);
-extern float func_00214358(void *, int, float);
 extern float func_002140F8(float, float);
-extern int func_002140B0(int);
 extern void func_001F9EC0(void *, void *, void *);
 extern int func_L00_00258BC8(int, int);
 extern void func_L00_0026DD70(void *, void *, int, int, float, int);
-extern void func_L00_0025E590(void *, void *);
 
 extern float D_L04_00166FC0[4];
 extern float D_0015EE6C MACRO_ADDR;
-extern float D_0015EE70 MACRO_ADDR;
 extern I4_35F0 D_L04_00161920;
 extern I4_35F0 D_L04_00161930;
 extern G_35F0 D_L04_00174040;
@@ -1967,53 +1944,24 @@ struct Shot5BD0 {
     int pad[4];
 };
 extern void func_L00_00264BB0(void *, float);
-extern float func_001F9D10(void *, void *);
-extern void func_L00_0025B178(void *);
-extern float func_0020D830(void *);
 extern int func_001FA898(float);
 extern int func_001E9730();
 extern char *func_L00_0025B478(void *, int, int);
-extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
-extern int func_001F9938(void *);
-extern float func_L00_001FF860(float, float);
-extern void func_L00_0025BBA0(void *, float *, void *, void *);
-extern void func_L00_0025D5B0(float, void *, void *, int, int, int);
-extern float func_001F9878(float);
-extern float func_001FA748(float, float);
-extern void func_L00_0025E4B0(void *m, short *p);
-extern int func_L00_001FEF78(void *);
-extern void func_001F9908(int *arg0);
 extern void func_L00_002592B0(char *moby, float *vel, float target, float k, float d, float max);
-extern float func_001F9B88(float);
 extern void func_001F9BD8(void *, void *, void *);
 extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
-extern float func_001F9F90(float);
-extern float func_001F9FA8(float);
 extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, float, int) __asm__("func_L00_002594C8");
-extern int func_L00_0025A778(void *, void *, int);
-extern float func_001FA850(float, float);
 extern void func_001F9BF0(void *dst, void *a, void *b);
 extern float func_001F9CE8(void *);
-extern void func_00215C00(void *, float, float, float);
 extern void func_L04_002B0068(void *, void *, void *, int);
 extern void func_L00_001FF500(void *, void *, float);
 extern void func_L00_0025AAC0(void *, void *);
-extern int func_L00_0025D6F0(void *, void *);
-extern void func_L00_0025E590(void *, void *);
-extern float func_001FA790(float, float);
 extern void func_L00_00263950(char *, char *, int, float, float);
-extern void func_0020DAF8(char *, int, char *);
-extern void func_L00_002514B8(void *);
-extern void func_L00_00251E30(void *);
-extern void func_001FA480(void *, void *);
-extern void func_00214F78(void *);
 extern void *func_L04_002CF460(void *, void *);
-extern float func_00214358(void *, int, float);
 extern float D_L04_00166FC0[];
 extern char *D_L04_00160058 MACRO_ADDR;
 extern char D_L04_001DBF80[];
 extern struct Path5BD0 *D_L04_001B0930[];
-extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern float D_0015EE64 MACRO_ADDR;
 extern char *D_L04_00174058;

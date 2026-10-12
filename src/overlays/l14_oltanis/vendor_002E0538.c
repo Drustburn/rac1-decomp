@@ -283,7 +283,6 @@ extern unsigned long func_001F4868_ECC70(s32) __asm__("func_001F4868");
 extern void func_00234C98(s32, s64);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9CA0(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9EE8(void *, void *, void *);
 extern void func_L00_001FD1D8_ECC70(void *, int, int) __asm__("func_L00_001FD1D8");
@@ -507,7 +506,6 @@ extern void func_L00_0028FC68(void);
 extern void func_L01_002A3680(void);
 extern int func_001F9908(void *);
 extern int func_L00_00200290(void *, float);
-extern int func_002140B0(int);
 extern float func_L00_00258C80(float, float);
 extern void func_L14_002EE990(char *);
 
@@ -590,16 +588,12 @@ extern float func_001FA888(int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern void func_001F9A98(void *, void *, int);
 extern void func_001F9BF0(void *, void *, void *);
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9CA0(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
-extern void func_001F9EE8(void *, void *, void *);
 extern void func_L00_001FD1D8(void *, void *, int);
 extern float func_L00_00258E58(float, float, float, float, float);
 extern short D_L14_001E0350[];
 extern unsigned char D_L14_00161DB0[] MACRO_ADDR;
 extern V_2EF078 D_L14_001E00D0[];
-extern char D_L14_001675C0[];
 extern short D_L14_001E06A0[];
 extern int D_L14_00161DC8[] MACRO_ADDR;
 extern V_2EF078 D_L14_001E03A0[];
@@ -796,7 +790,6 @@ void func_L14_002EF078(void) {
         }
     }
 }
-extern float func_002140F8(float, float);
 extern float func_00214158(void);
 extern void func_00215C00(void *, float, float, float);
 extern float func_L00_00258C80(float lo, float hi);
@@ -1603,7 +1596,6 @@ void func_L14_002F19C0(Moby *moby) {
     FastVecSub(v20, (*(float (*)[4])&moby->pos), v00);
     func_L00_002617B0(d->f20, v20, v10, (*(float (*)[4])&moby->rot));
 }
-extern float func_001F9D10(void *, void *);
 struct L14PathPoint_2F24C8 {
     char pad0[0x30];
     float pos[4];
@@ -1640,9 +1632,7 @@ void func_L14_002F24C8(char *m) {
         qcopy(d->rot, t[k].rot);
     }
 }
-extern float func_001F9D10(void *, void *);
 extern float D_0015EE6C_f __asm__("D_0015EE6C") MACRO_ADDR;
-extern float D_0015EE70 MACRO_ADDR;
 
 // Picks a target by phase, then sets velocity scale from its distance.
 void func_L14_002F25C8(char *moby)
@@ -2000,7 +1990,6 @@ void func_L14_002FD870(struct Moby *m) {
     }
 }
 extern float func_L00_001FF860(float, float);
-extern float func_001F9D10(void *, void *);
 
 // Resets a path-following moby to the start of its path and computes each segment's length and its initial heading.
 void func_L14_002FDD18(char *moby) {
@@ -2019,7 +2008,6 @@ void func_L14_002FDD18(char *moby) {
 extern void func_L00_0025E860(int a, char *pos, char *b, char *c, int d, float f);
 extern float func_L00_0025C918(float *p, float *v, float t, float u1, float u2, float eps);
 extern void func_001F9BF0(void *dst, void *a, void *b);
-extern float func_001FA790(float, float);
 extern void func_L00_002592B0(char *moby, float *vel, float target, float k, float d, float max);
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_L14_00162018;
@@ -2315,7 +2303,6 @@ typedef struct {
     u8 padC[0x14];
     L14PuffTail tail; /* 0x20 */
 } L14Puff;
-extern char D_L14_0015F660[] MACRO_ADDR;
 extern void func_001F9C30(void *, void *, f32);
 extern s32 func_001F9850(s32);
 extern L14Puff *func_L00_0026DEA0(void *, f32, f32, f32, int, void *, f32, int);
@@ -2442,8 +2429,6 @@ extern void func_L13_003184A0(int);
 extern void func_L00_0028EBF0(int);
 extern void func_0020D678(void *);
 extern void func_001F9BF0(void *, void *, void *);
-extern float func_001FA790(float, float);
-extern void func_L00_002592B0(char *moby, float *vel, float target, float k, float d, float max);
 
 /* Flies the moby along its path, banking and pitching toward the next point; returns 1 once it is removed at the end. */
 int func_L14_002FEDA0(char *m) {

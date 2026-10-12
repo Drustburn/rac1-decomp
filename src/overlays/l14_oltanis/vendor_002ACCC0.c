@@ -900,7 +900,6 @@ extern void func_00234C98(s32, s64);
 extern float func_L00_001FF860(float, float);
 extern float func_001F9CE8(void *);
 extern void func_001FA1F8(void *, void *);
-extern void func_001F9EE8(void *, void *, void *);
 extern void func_L00_001FD1D8_AEF88(void *, int, int) __asm__("func_L00_001FD1D8");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l14/gameplay/entities/002460f8.c, FUN_L14_002add48. */
@@ -1000,11 +999,7 @@ u64 func_001F4868(s32);
 extern void func_00234C98(int, long);
 extern void func_001F9BF0(void *dst, void *a, void *b);
 extern float func_L00_001FF860(float, float);
-extern float func_001F9CE8(void *);
-extern void func_001FA1F8(void *, void *);
-extern void func_001F9EE8(void *, void *, void *);
 extern void func_L00_001FD1D8(void *, void *, int);
-extern char D_L14_001675C0[];
 extern char D_L14_001D8900[];
 extern short D_L14_00161540;
 extern short D_L14_0016153C;
@@ -1072,7 +1067,6 @@ typedef struct {
     float uv[8];
     u64 a, b, c, d;
 } Pk_2af4a0;
-extern char D_L14_001675C0[];
 extern float D_L14_001D8940[4][4];
 extern short D_L14_00161544;
 extern short D_L14_00161548;
@@ -1144,7 +1138,6 @@ void func_L14_002AF4A0(char *m) {
     func_L00_001FD1D8(&pk, 0, 0);
 }
 extern int *D_L14_001B0F30[];
-extern float func_001F9D10(void *, void *);
 extern int func_L00_0025E860_2AF688(void *, void *, void *, void *, int, float) __asm__("func_L00_0025E860");
 
 /* Measures the segments of the moby's three paths, sums two of them and places it on the first two. */
@@ -1193,8 +1186,6 @@ void func_L14_002AF688(char *m) {
 extern float func_L00_0025C918(float *p, float *v, float t, float u1, float u2, float eps);
 extern int func_L00_0025E860_2AF918(int *tab, float *out, int *a, float *b, int c, float d) __asm__("func_L00_0025E860");
 extern int *D_L14_001B0F30[];
-extern short D_L14_00161468;
-extern short D_L14_0016146C;
 
 // Run the lookup for the moby's track, ease three axes, and on a wrap-around reset and flip the direction.
 void func_L14_002AF918(char *moby) {
@@ -1309,7 +1300,6 @@ void func_L14_002AFC48(char *moby) {
                           *(float *)&D_L14_0016148C, *(float *)&D_L14_00161490, *(float *)&D_L14_00161494);
     }
 }
-extern short D_L14_00161464;
 extern int func_002140B0(int);
 extern float func_001FA888(int);
 extern int func_L00_00200290(char *, float);
@@ -1340,9 +1330,6 @@ extern void func_001F9BD8(void *, void *, void *);
 extern float func_001F9CB8(void *a);
 extern float func_L00_001FF860(float, float);
 extern float func_001FA790(float, float);
-extern void func_L00_001FFED8(void *, int, float);
-extern float func_001F9CE8(void *);
-extern void func_001F49B0(void *, void *);
 extern void func_L14_002AF4A0(char *);
 
 // Sets up the moby's motion data from its vectors; returns whether it succeeded.
@@ -1379,7 +1366,6 @@ int func_L14_002AFDE0(char *moby, int flag) {
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern int D_L14_001D8510[];
 extern int D_L14_001D83C8[];
-extern short D_L14_001614E0;
 
 /* Advance the blink phase and fade each light entry's alpha up and down. */
 void func_L14_002AFF90(char *moby) {
@@ -1438,10 +1424,8 @@ void func_L14_002B0068(struct Moby *moby) {
         } while (i < *(short *)(d + 0x20A));
     }
 }
-extern float func_001F9D48(void *, void *);
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001AC2C0");
 extern int D_L14_001D8980[];
-extern char D_L14_001675C0[];
 extern char *D_L14_00160098_2B0168 __asm__("D_L14_00160098") MACRO_ADDR;
 
 /* Returns the farthest moby in a list that is not in the excluded-id table, by distance from a point. */
@@ -1959,12 +1943,10 @@ extern void func_L14_002B6780(char *moby);
 extern void func_L14_002B6AA0(char *moby, float *target, float a, float b, float c, float d, float e, float f, float g);
 extern void func_L14_002B6678(char *moby);
 extern void func_L14_002B7028(char *m);
-extern void func_L00_0025B178(void *);
 extern int func_001E9730();
 extern void func_0020D678(void *);
 extern void func_L14_002B6800(char *moby);
 extern void func_L14_002B6EE8(char *moby);
-extern void func_001F99B0(void *, int, int);
 extern void func_0020D960(void *, int, void *);
 extern void func_L14_002B6F68(char *moby);
 extern int func_L14_002B6980(char *moby, char *a1, int a2, int a3, float *v, float *vel,
@@ -1973,7 +1955,6 @@ extern float func_00214220(float, float, float);
 extern void func_001F9BC0(void *);
 extern void func_L14_002B6E80(char *moby);
 extern int func_00215B18(void *, float);
-extern void func_L00_00250800(void *, int, void *);
 extern char *func_L14_00302968_2B5938(int a0, float *a1, float *a2, float f, int a3) __asm__("func_L14_00302968");
 extern void func_L14_002B6BB8(char *m, float *input, float angle);
 extern unsigned char *func_L14_002BC560(char *owner, float angle, char *posp);
@@ -2322,7 +2303,6 @@ void func_L14_002B64E0(unsigned char *m) {
 }
 extern short D_L14_00161600;
 extern short D_L14_00161604;
-extern short D_L14_00161608;
 extern short D_L14_0016160C;
 extern short D_L14_00161610;
 
@@ -2344,7 +2324,6 @@ void func_L14_002B6678(char *moby) {
     func_L00_00263BF8(moby, data + 0xC8, data + 0xCC, *(float *)(data + 0x160), *(float *)&D_L14_0016160C, *(float *)&D_L14_00161610);
 }
 extern int *D_L14_001B0F30[];
-extern char D_0013E633[];
 extern int func_L00_00260FB0(float a, char *m, char *b, int c, int d, int *e, int f);
 
 // Updates a moby's effect from its table entry and latches a default word.
@@ -2358,7 +2337,6 @@ void func_L14_002B6780(char *moby) {
         }
     }
 }
-extern float func_001F9D10(void *, void *);
 
 /* Recomputes the per-segment lengths of three paths held by the moby, then clears a counter. */
 void func_L14_002B6800(char *moby) {
@@ -2407,10 +2385,8 @@ void func_L14_002B6AA0(char *moby, float *target, float a, float b, float c, flo
         func_L00_002592B0_2B6AA0(moby, a, (float *)(data + 0xE4), e, f, g);
     }
 }
-extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern float func_002140F8(float, float);
-extern int func_L00_00258BC8(int, int);
 extern char *func_L00_0026DEA0(void *, int, void *, int, float, float, float, float);
 extern float func_L00_00258C80(float, float);
 extern void func_002156E0(void *, void *, void *, float);
@@ -2481,7 +2457,6 @@ typedef struct {
     char pad110[0x150 - 0x110];
     int pathB;
 } Mover_2B6E80;
-extern void func_001F9BC0(void *);
 void func_L14_002B6E80_r(Moby *moby) __asm__("func_L14_002B6E80");
 
 /* Picks the mover's active path, puts it on the path's last segment (node, weight, t = 0) and clears its offset vector. Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l14/gameplay/entities/002460f8.c, FUN_L14_002b5c30. */
@@ -2499,7 +2474,6 @@ void func_L14_002B6E80_r(Moby *moby) {
     d->t = 0;
     clear_u64_value(d->off);
 }
-extern char D_0013E633[];
 extern void func_L00_0028EBF0(int);
 
 // Clears a moby's link to its slot entry, releasing the slot if it still points back here.
@@ -2520,8 +2494,6 @@ void func_L14_002B6EE8(char *moby)
 }
 extern int *D_L14_001B0F30[];
 extern float func_L00_001FF860(float, float);
-extern void func_001F9BC0(void *);
-extern short D_L14_00161608;
 extern void func_001F9BF0(void *, void *, void *);
 void func_L14_002B6F68_r(Moby *moby) __asm__("func_L14_002B6F68");
 
@@ -2626,7 +2598,6 @@ typedef int u128_2BC560 __attribute__((mode(TI)));
 extern float D_0015EE60 MACRO_ADDR;
 extern struct Moby *func_0020D348_m(int) __asm__("func_0020D348");
 extern float func_002140F8(float, float);
-extern void func_001F9CA0(void *, void *, void *);
 extern float func_L00_00258C80(float lo, float hi);
 extern void func_002156E0(void *dst, void *vec, void *axis, float angle);
 extern void func_L00_00251E30(void *);
@@ -2881,7 +2852,6 @@ void func_L14_002D7668(char *m) {
 extern char *D_L14_0015F7EC_p __asm__("D_L14_0015F7EC") MACRO_ADDR;
 extern char *D_L14_001B0F30_a[] __asm__("D_L14_001B0F30");
 extern int func_001F9908(void *);
-extern void func_001F9C08(void *, void *, void *, float);
 
 int func_L14_002D77E0(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -2984,7 +2954,6 @@ INCLUDE_ASM("asm/overlays", func_L14_002D8500);
 extern char D_L14_00180AC0[];
 extern short D_L14_00161B30;
 extern float D_L14_0015F660[] MACRO_ADDR;
-extern void func_L00_00250800(void *, int, void *);
 extern int func_L00_0023F0D0(float *, float, float, float, float, float);
 extern void func_002141A8(void *, float, float);
 extern char *func_L00_002757E8(void *, void *, int, void *);
@@ -3068,7 +3037,6 @@ void func_L14_002DF5F8(Moby *moby) {
 typedef int u128_s07 __attribute__((mode(TI)));
 extern short D_L14_00161BD4;
 extern short D_L14_00161BD0;
-extern float func_001F9B88(float);
 extern float func_001F9C78(void *a, void *b);
 extern float func_001F9FC0(float x);
 extern int func_0022EB08(void *, int, int, int, int);
@@ -3148,11 +3116,8 @@ void func_L14_002DF6B8(char *moby) {
 }
 typedef int u128 __attribute__((mode(TI)));
 extern void func_L14_002E0480(char *);
-extern float func_001F9B88(float);
-extern int func_L00_0028EB98(void *, int);
 extern int func_L00_0028EF68(int i, int a1, int v, int k);
 extern void func_L14_002E1058(char *);
-extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_L14_002E0538(char *);
 

@@ -123,7 +123,6 @@ void func_L16_00209D98(void) {
         }
     }
 }
-extern char D_0013E633[];
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_002607A8(void *a, float x);
@@ -400,7 +399,6 @@ extern void func_L00_00233EE0(float *, float, float, float);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_00234090(float *, float *, float);
 extern void func_L00_00233D50(float *, float *, float);
-extern int func_L00_001F10E0(float, void *, int, void *);
 extern int func_L00_001F1D20(float, float, void *, int, void *);
 extern int func_L00_001F34F0(float, void *);
 extern float func_001F9CB8(void *);

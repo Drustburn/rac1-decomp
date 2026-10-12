@@ -1097,14 +1097,12 @@ void func_L00_002D5AC0(Moby *moby) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_002D6610);
 extern float func_L00_001FF860(float, float);
-extern float func_001F9D10(void *, void *);
 extern float func_001FA748(float, float);
 extern float func_L00_0025CE58(float *p, float *v, float a, float b, float c, float d);
 extern float func_00214D88(float *, float, float, float, float, float *);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_L00_00259868(int, int, float, float, float, int);
-extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 
 /* Walks a moby toward a target point: turn to face it, ease its speed, step it along its heading; returns the distance (or 37.0 when a flag is set). Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002cfcb8.c, FUN_L00_002d54c8. */
@@ -1315,7 +1313,6 @@ void func_L00_002D6E38(Obj_6e38 *o, Path_6e38 *path, s32 p) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_002D7298);
-extern int func_002140B0(int);
 
 /* Fills the random float, constant and random int slots of a moby's data block. */
 void func_L00_002D80A0(char *a) {
@@ -1357,7 +1354,6 @@ extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern int func_001F9908(int *);
-extern float func_001FA888(int);
 extern float func_001F9B88(float);
 extern int func_001FA8A8(int, int, float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
@@ -1620,11 +1616,8 @@ void func_L00_002D9208(char *m, int idx) {
     D_L00_001D3010[idx] = 1;
 }
 typedef struct { int a[4]; } Vy __attribute__((aligned(16)));
-extern char *func_0020D348(int);
-extern void func_L00_0025E210(void *);
 extern void func_L00_00251328(void *, int, int, int);
 extern float func_00214158(void);
-extern void func_L00_00251E30(void *);
 char *func_L00_002D9340(Vy *src, float f) {
     char *m = CreateMoby(0x307);
     if (m != 0) {

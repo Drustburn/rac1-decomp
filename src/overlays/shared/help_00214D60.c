@@ -636,7 +636,6 @@ void func_L00_00216D40(void) {
 extern float func_L00_00234250(float *v);
 extern void func_L00_002343A0(float *dst, float *src, float z);
 extern void func_L00_00234420(float *dst, float *src, float z);
-extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9BC0(void *);
 // Bleeds off the hero's momentum vector by amount a, clearing it when it is tiny.
 void func_L00_00216E98(float a) {
@@ -849,7 +848,6 @@ int func_L00_00217570(int a, int b) {
 }
 typedef struct { char pad[0x2218]; int a[8]; int b[8]; } G;
 extern G D_0013F450 NOT_SDA;
-extern int func_0022ED80(int, int, int);
 
 void func_L00_002175D0(int idx, int a, int b) {
     G *g = &D_0013F450;
@@ -1050,7 +1048,6 @@ void func_L00_00217AF0(int a, int n) {
     }
 }
 extern char D_0013F4D0[];
-extern int D_0015EE84 MACRO_ADDR;
 extern int func_001F9850(int);
 extern float func_002140F8(float, float);
 extern int func_001FA898(float);

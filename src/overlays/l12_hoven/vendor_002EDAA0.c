@@ -1214,8 +1214,6 @@ extern int D_L12_00160058_m __asm__("D_L12_00160058") MACRO_ADDR;
 extern void func_L12_00308E98(char *m);
 extern void func_0020D678(void *);
 extern float func_001F9D48(void *, void *);
-extern void func_00213DE0(void *, int, int, int);
-extern int func_001F9938(void *);
 extern void func_L12_00308AC0(char *);
 
 /* Door/switch moby: clears its linked mobys, waits for the hero, opens, fires its list one by one, closes. */
@@ -1285,7 +1283,6 @@ void func_L12_00308C20(char *m) {
     }
 }
 extern char D_0013E633[] NOT_SDA;
-extern int func_001F9938(void *);
 extern float func_001F9B88(float);
 extern int func_L00_00260D30(char *, char *, float);
 
@@ -1378,11 +1375,8 @@ INCLUDE_ASM("asm/overlays", func_L12_00309730);
 extern char D_0013D355[];
 extern char D_0013E633[];
 extern int D_L12_0015F6B0 MACRO_ADDR;
-extern int D_L12_0015F6A8 MACRO_ADDR;
 extern char D_L12_0016CD70[];
-extern void func_0020D678(void *);
 extern int func_00215570(void *arg0, int arg1);
-extern void func_L00_00299B68(int);
 
 /* Vendor-counter moby update: once the shared block is ready, latch its data and copy two vectors. */
 void func_L12_0030A7A8(char *moby) {
@@ -1409,12 +1403,10 @@ void func_L12_0030A7A8(char *moby) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L12_0030A880);
-extern char *func_L00_0025B478(void *, int, int);
 extern void func_0022ED80(int, int, int);
 extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
 extern void func_L01_00279E10(void *, int);
-extern void func_0020D678(void *);
 void func_L12_0030CAA8(char *m) {
     int hit = 0;
     char *r = func_L00_0025B478(m, 0x10000, 0);
@@ -1436,7 +1428,6 @@ void func_L12_0030CAA8(char *m) {
     }
 }
 extern void func_001F7868(void);
-extern void func_00234C98(int, long);
 extern int func_001F4868(int);
 extern int func_00215570(void *, int);
 extern void func_L08_00259040(void *, int, int, void *);

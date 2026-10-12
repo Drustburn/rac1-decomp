@@ -1013,7 +1013,6 @@ extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BD8(void *, void *, void *);
 extern float func_001FA790(float, float);
-extern float func_001FA850(float, float);
 extern float func_001FA748(float, float);
 
 /* Computes the aim angle of a moby relative to its owner, narrowed by nearby table entries. */
@@ -1487,21 +1486,13 @@ void func_L10_002EB8A8(void *pos, short *timer, short *burst) {
     func_00219780(pos, vel, acc, c1, FastTweenColor(*(int *)&D_L10_0016201C, *(int *)&D_L10_00162020, random_float_between(0.0f, 1.0f)), a, b, c, -1);
     *timer = func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162024, (float)*(int *)&D_L10_00162028));
 }
-extern char D_L10_001672C0[];
-extern float D_0015EE6C MACRO_ADDR;
 extern short D_L10_0016203C, D_L10_00162040, D_L10_00162044, D_L10_00162048, D_L10_0016204C;
 extern short D_L10_00162050, D_L10_00162054, D_L10_00162058, D_L10_0016205C, D_L10_00162060;
 extern short D_L10_00162064, D_L10_00162068, D_L10_0016206C, D_L10_00162070, D_L10_00162074;
 extern short D_L10_00162078, D_L10_0016207C;
-extern int func_L00_00200290(char *, float);
-extern int func_002140B0(int);
 extern int func_001F9938(void *);
-extern void func_001F9BC0(void *);
-extern void func_L00_00258DB0(float *, float, float);
 extern float func_002140F8(float, float);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
-extern int func_001FA8A8(int, int, float);
-extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
 
 /* Emits a smoke particle from pos on its timer, when the camera is near and the spot is visible. */
 void func_L10_002EBB70(void *pos, short *timer) {
@@ -1608,7 +1599,6 @@ extern char *func_L00_0025B478(void *, int, int);
 extern int func_0022ED80(int, int, int);
 extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
-extern void func_0020D678(void *);
 
 /* Update for moby class 1855: waits, arms, then fires an effect and deletes itself. */
 void func_L10_002ECAB0(char *m) {

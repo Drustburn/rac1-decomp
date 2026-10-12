@@ -287,7 +287,6 @@ extern int D_L00_00161CC8[] MACRO_ADDR;
 extern int D_L00_00161D08[] MACRO_ADDR;
 extern int D_L00_00161D18[] MACRO_ADDR;
 extern int D_L00_00161D58[] MACRO_ADDR;
-extern void func_L00_0023F1D0(int);
 /* Frees one slot: clears its two state words and releases its two handles. MACRO_ADDR arrays, as the NTSC decomp declares them. */
 void func_L00_002E35A8(int i) {
     int v;
@@ -689,7 +688,6 @@ typedef struct { char pad0[0x60]; int path; float f64; float f68; float f6C; int
 extern int *D_L00_001B0830[];
 extern short D_L00_00161D68;
 extern short D_L00_00161D6C;
-extern void func_0020D678(void *);
 extern float func_001F9D10(void *, void *);
 extern void func_00215CA8(int *, float, int, void *, float *, int);
 extern int func_002140B0(int);
@@ -735,7 +733,6 @@ void func_L00_002E4F38(unsigned char *m) {
 }
 extern float func_001F9D10(void *, void *);
 extern float func_001F9CB8(void *);
-extern void func_00213DE0(void *, int, int, int);
 
 // Grass moby update: plays an animation when the player is near and leaves.
 void func_L00_002E5158(char *m) {
@@ -1324,13 +1321,8 @@ void func_L00_002E5DE0(char *m) {
         e->invTimer = 1.0f / func_001FA888(e->timer);
     }
 }
-extern short D_L00_00161DF4;
 extern short D_L00_00161DE0;
 extern short D_L00_00161DDC;
-extern short D_L00_00161E0C;
-extern short D_L00_00161E3C;
-extern short D_L00_00161E10;
-extern short D_L00_00161E24;
 extern short D_L00_00161E50;
 extern void func_001F9C08(float, void *, void *, void *);
 extern float func_001F9B88(float);
@@ -2152,9 +2144,7 @@ void func_L00_002E8210(Moby_2E8210 *m) {
 typedef struct { unsigned char p0[0x208C]; int w208C; unsigned char p1[0x20A4 - 0x2090]; unsigned char b20A4; } G_2e7138;
 extern G_2e7138 D_0013F450_E85E8 __asm__("D_0013F450");
 extern float D_0013CB40;
-extern float D_0015EE60 MACRO_ADDR;
 extern short D_L00_00161D88;
-extern short D_L00_00161D98;
 float func_001F9CB8(void *);
 void func_001F9BF0_E85E8(void *, void *, void *) __asm__("func_001F9BF0");
 void func_L00_001FF4B0(void *, void *, float);
@@ -2433,14 +2423,9 @@ extern int func_L00_001F10E0_b(void *, int, void *, float) __asm__("func_L00_001
 extern int func_L00_002E8E78_f(void *, int, float *, float) __asm__("func_L00_002E8E78");
 extern int func_L00_002E8AC8(void *, void *, int, float, float);
 extern float func_001F9B88(float);
-extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern int D_L00_0015F05C MACRO_ADDR;
 extern V4 D_L00_00173F60;
-extern float D_L00_00166F40[];
-extern float D_0015EE60 MACRO_ADDR;
 extern short D_L00_00161DA8;
-extern short D_L00_00161D88;
-extern short D_L00_00161D98;
 extern unsigned char D_0013A5E0[];
 
 // Camera sweep: steps a vector along the path, testing each step against the edge and the wall.
@@ -2969,7 +2954,6 @@ void func_L00_002EABD0(int arg) {
 }
 extern void func_001E9768(void *, float);
 extern char *D_L00_0015F080 MACRO_ADDR;
-extern int D_L00_001601B4 MACRO_ADDR;
 
 // Walk the 64x64 grid of entries and call the update for each type-5 element.
 void func_L00_002EAF50(int a) {
