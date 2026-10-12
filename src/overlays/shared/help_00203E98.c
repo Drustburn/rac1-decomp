@@ -507,7 +507,58 @@ void func_L00_00206808(void) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_002068C8);
-INCLUDE_ASM("asm/overlays", func_L00_00207220);
+typedef struct { char p0[0x74]; unsigned char f74; char p1[0x13]; Moby *f88; } Row_207220;
+typedef struct { char pad0[0x2080]; Moby *moby; char pad1[0x2218 - 0x2084]; int idx[8]; Moby *mob[8]; } HS_207220;
+extern HS_207220 D_0013F450_207220 __asm__("D_0013F450");
+extern char D_0013F450_g_207220[] __asm__("D_0013F450");
+extern char D_0013E650_207220[] __asm__("D_0013E650");
+extern void func_L00_0028EBF0_a(int) __asm__("func_L00_0028EBF0");
+/* Clears the hero's eight sound-slot indexes (hero + 0x2218), first calling func_L00_0028EBF0(row) for
+   a slot whose voice row (D_0013E650, stride 0x70) still belongs to the moby the sound plays on (hero.moby
+   when the slot has none) and is flagged. Needs -fno-sched-interblock (config/file_cflags.txt). */
+void func_L00_00207220(void) {
+    int i;
+    int *p;
+    HS_207220 *hp;
+    int k;
+    int none;
+    int off;
+    Moby **mb;
+    Moby *m;
+    unsigned char c;
+    hp = &D_0013F450_207220;
+    p = hp->idx;
+    off = 0;
+    none = -1;
+    mb = hp->mob;
+    for (i = 7; i >= 0; p++, i--, off += 4) {
+        k = *p;
+        m = *(Moby **)(off + (int)mb);
+        if (m != 0) {
+            if (k != none) {
+                if (((Row_207220 *)(D_0013E650_207220 + k * 0x70))->f88 != m) {
+                    *p = none;
+                    continue;
+                }
+                c = ((Row_207220 *)(D_0013E650_207220 + k * 0x70))->f74;
+                goto test;
+            }
+        } else {
+            if (k != none) {
+                if (((Row_207220 *)(D_0013E650_207220 + k * 0x70))->f88 != hp->moby) {
+                    *p = none;
+                    continue;
+                }
+                c = ((Row_207220 *)(D_0013E650_207220 + k * 0x70))->f74;
+            test:
+                if (c != 0) {
+                    func_L00_0028EBF0_a(k);
+                }
+            }
+        }
+        *p = none;
+    }
+}
 typedef struct { unsigned char p[8]; int x8; unsigned char pc[0x40]; } E00207310;
 typedef struct { unsigned char p[0x280]; unsigned short x280; unsigned char p282[0x13E]; unsigned short x3c0; } G00207310;
 extern G00207310 D_00141A68;

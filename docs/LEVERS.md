@@ -337,3 +337,18 @@ As [WORKER.md](WORKER.md) says: `RESULT.md` holds exactly two lines, the
 verdict and the candidate file; what you tried and what mattered goes in
 `NOTES.md`. Put a short comment above the definition in the candidate:
 what the function does and, if needed, why the C is shaped that way.
+
+16. **Loop updates at the top, a `nop` where retail has work, a missing saved register** (func_L00_00207220,
+    2026-10-12). Three things found with `TRY_CFLAGS='-dL'` (`src.c.loop`: each giv's benefit and why it was or
+    was not reduced), `-dS`/`-dR` (`src.c.sched`, `src.c.sched2`: the per-block schedule) and
+    `tools/regalloc.py`:
+    - Retail kept `unk2238[i]` as base register + running offset (`addu $2,$s3,$s7`) instead of one pointer.
+      The address giv is reduced when `benefit * lifetime * threshold >= loop insn count`; an explicit
+      `off += 4` induction variable (not `i << 2`) drops its benefit to 0, so it stays unreduced.
+    - Retail's biv updates sit at the loop bottom; ours were moved to the top by inter-block scheduling. A
+      file whose retail object was built with `-fno-sched-interblock` needs that flag (config/file_cflags.txt):
+      the function went from 88 bytes off to 6 off. Test a flag by appending a line there and running
+      `try_func.py`; undo it if nothing improves.
+    - The last two bytes were the bottom block's order: write `for (i = 7; i >= 0; p++, i--, off += 4)` with
+      the stores in the arms and `continue`, and the order of the three updates decides which one reorg puts
+      in the delay slot (the scheduler orders ties by insn number).
