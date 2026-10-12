@@ -472,7 +472,81 @@ void func_L01_002C84D8(void) {
         func_L00_0026DA50(p, v, 0x4F007FFF, 0x1FFFFFFF, rand_range(scale_ticks(10), scale_ticks(20)), 1, 20000.0f);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L01_002C8740);
+typedef int OvlQuad __attribute__((mode(TI)));
+typedef struct {
+    u8 pad0[0x18];
+    s32 moby; /* 0x18: passed to FUN_002141f8 (reads moby+0x34, moby+0x78); 0 when no moby was hit */
+    s32 unk1C; /* 0x1C: > 0 gates copying point and the normal into the hero (shared/ui/help/00226f10.c) */
+    union {
+        OvlQuad q;
+        f32 f[4];
+    } point; /* 0x20: f[2] is read as the ground height */
+    u8 pad30[0x10]; /* 0x30: position after push-out (copied into hero.motion.pos) */
+    f32 normal_x; /* 0x40: start of the surface normal; its angle is tested against 50 degrees (0.87266463) */
+    f32 normal_y; /* 0x44: FUN_001f9e90 (atan2) of normal_x, normal_y is stored in the hero */
+    f32 normal_z; /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
+} CollisionHit;
+extern s32 func_001FA898(f32);
+void func_L01_002C84D8(void);
+extern int func_001F9908(void *);
+extern int func_001E97C8(void *);
+extern int func_L00_001F2BE8(float, void *, int, int, void *);
+extern void func_L00_0025AC00(float, void *, void *, int, void *, void *);
+extern void func_L00_0025A8C0(void *, void *, int, float, void *);
+extern void func_L00_001FF4B0(void *, void *, float);
+extern void func_L01_00281738(int, void *);
+extern void func_0020D678(void *);
+extern short D_L01_00161524;
+extern short D_L01_0016152C;
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b8c08.c, FUN_L01_002c7530. */
+void func_L01_002C8740(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    char *camera = D_L01_001672C0;
+    char hit[0x30];
+    float normal[4];
+    float distance;
+
+    distance = func_001F9D48(camera, moby + 0x10);
+    camera -= 0x140;
+    *(float *)(moby + 0x44) = -func_L00_001FF860(distance, *(float *)(camera + 0x148) - *(float *)(moby + 0x18));
+    *(float *)(moby + 0x48) = func_L00_001FF860(*(float *)(camera + 0x140) - *(float *)(moby + 0x10),
+                                             *(float *)(camera + 0x144) - *(float *)(moby + 0x14));
+    *(float *)(moby + 0x40) = func_001FA748(*(float *)(moby + 0x40), *(float *)(data + 3));
+    func_001F9BD8(moby + 0x10, moby + 0x10, data + 8);
+    switch ((u8)moby[0x20]) {
+    case 1:
+        func_L01_00281738((*(s32 *)&D_L01_00161524), moby);
+        func_L00_001FF4B0(normal, data + 8, 1.0f);
+        func_L00_0025A8C0(hit, moby, 0, 0.0f, normal);
+        if (func_L00_001F2BE8((*(f32 *)&D_L01_0016152C), moby + 0x10, 0x10, data[6], hit) &&
+            !func_001E97C8(moby)) {
+            CollisionHit *contact = (CollisionHit *)D_L01_00174340;
+            if (contact->moby != 0)
+                func_L00_0025AC00(1.0f, contact->moby, moby, 0x10001, &contact->point, normal);
+            ((void (*)(void *))func_L01_002C84D8)(moby);
+            goto remove;
+        }
+        if (func_001F9908(data)) {
+            data[0] = func_001F9850(0x1e);
+            moby[0x20] = 2;
+            if (data[4] != 0)
+                data[4] = 0;
+        }
+        break;
+    case 0:
+        break;
+    case 2:
+        if (func_001F9908(data)) {
+        remove:
+            func_0020D678(moby);
+        } else {
+            int duration = func_001F9850(0x1e);
+            moby[0x23] = func_001FA898((float)data[0] * (127.0f / (float)duration));
+        }
+        break;
+    }
+}
 extern unsigned char D_0013D49C NOT_SDA;
 extern unsigned char D_0013D49D NOT_SDA;
 
