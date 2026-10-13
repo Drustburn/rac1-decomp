@@ -1,4 +1,4 @@
-/* functional: high. Written from the retail instructions (924 bytes); not a match. The callees' float arguments are passed as retail leaves them in f12. */
+/* functional: medium. Written from the retail instructions (924 bytes); not a match. The callees' float arguments are passed as retail leaves them in f12. */
 /* Finds the point of a closed or open polyline path (shared level code) nearest to a point.
  *
  * path (a0): +0x00 number of points n, +0x10 .. n quadwords (x, y, z, and the length of the segment in w).
