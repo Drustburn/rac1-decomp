@@ -1,4 +1,4 @@
-/* functional: level 12 moby update (class 19): state 0 claims a slot in the 0x1190-byte table and builds it,
+/* functional: medium. level 12 moby update (class 19): state 0 claims a slot in the 0x1190-byte table and builds it,
  * state 2 steers, then the per-frame tail. Not a match (1380 bytes against 1420). Starts from the near miss in
  * nonmatching/l12_hoven/, with two differences found by tools/equiv.py: the second near-hero test stores the
  * moby's z (+0x18) like the first, not its distance; the 1/sqrt(3) constant is 0x3F13CD36 (0.57735f). */

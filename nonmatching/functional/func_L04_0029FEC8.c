@@ -1,4 +1,4 @@
-/* functional: level 4 (Eudora) update of the moby that keeps a swarm of class 0x55 mobys around it
+/* functional: medium. level 4 (Eudora) update of the moby that keeps a swarm of class 0x55 mobys around it
  * (written from the retail instructions of PAL's func_L04_0029FEC8, 1476 bytes; not a match).
  *
  * data (the moby's variables, moby + 0x78):

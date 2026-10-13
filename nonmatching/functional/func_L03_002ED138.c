@@ -1,4 +1,4 @@
-/* functional: level 3. -1 while the hero is in state 6 (the one of his state ids the level waits
+/* functional: high. level 3. -1 while the hero is in state 6 (the one of his state ids the level waits
  * out), or in a state other than 0x11 while the object id at +0x2284 of the hero block is 0x50;
  * 0 otherwise. Written from the retail instructions (56 bytes); not a match. */
 int func_L03_002ED138(void) {
