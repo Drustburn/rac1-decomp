@@ -493,7 +493,95 @@ void func_L00_0026BB18(char *m) {
         if (FastDecTimer(m + 0xA)) KillPart(m);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_0026C0D0);
+extern unsigned char *func_L00_00268760(int, int);
+extern float func_L00_00258C80(float, float);
+extern float func_001F9878(float);
+extern int func_001FA898(float);
+extern unsigned func_L00_0025D140(unsigned, int);
+extern short D_L00_00160268;
+extern short D_L00_0016026C;
+extern short D_L00_00160270;
+extern short D_L00_00160274;
+extern short D_L00_00160278;
+extern short D_L00_00160280;
+extern short D_L00_00160284;
+extern short D_L00_00160288;
+extern short D_L00_0016028C;
+extern short D_L00_00160290;
+extern short D_L00_00160294;
+extern short D_L00_00160298;
+extern short D_L00_001602A0;
+extern short D_L00_001602A4;
+extern unsigned char * D_L00_001B2430;
+extern unsigned char * D_L00_001B2460;
+extern unsigned char D_0013E620[];
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/rendering/00269290.c, FUN_L00_0026b230. */
+unsigned char *func_L00_0026C0D0(void *pos, void *vel, unsigned char flags, float size) {
+    void *source = pos;
+    unsigned char *particle = func_L00_00268760(0xC, 0);
+    if (particle) {
+        unsigned char *motion = particle + 0x20;
+        qcopy(particle + 0x10, source);
+        qcopy(motion, vel);
+        if (flags & 1) {
+            float one = 1.0f;
+            float zero = 0.0f;
+            float scale = (*(float *)&D_L00_00160298);
+            float hi = (float)(*(int *)&D_L00_001602A4);
+            float lo = (float)(*(int *)&D_L00_001602A0);
+            *(int *)(particle + 4) = (*(int *)&D_L00_00160288);
+            *(float *)(particle + 0xC) = scale * 210000.0f;
+            *(short *)(particle + 0xA) = func_001FA898(func_001F9878(
+                func_002140F8(lo, hi)));
+            *(int *)(motion + 0x14) = func_001FA8A8((*(int *)&D_L00_00160288), (*(int *)&D_L00_0016028C),
+                                                          func_002140F8(zero, one));
+            *(int *)(motion + 0x18) = func_001FA8A8((*(int *)&D_L00_00160290),
+                                                          (*(int *)&D_L00_00160294),
+                                                          func_002140F8(zero, one));
+            { unsigned char texture = *D_L00_001B2460;
+              particle[3] = 0x48;
+              particle[2] = texture; }
+        } else {
+            int offset = 0;
+            float one = 1.0f;
+            float zero = 0.0f;
+            float scale = (*(float *)&D_L00_00160278);
+            float hi = (float)(*(int *)&D_L00_00160284);
+            float lo = (float)(*(int *)&D_L00_00160280);
+            *(int *)(particle + 4) = (*(int *)&D_L00_00160268);
+            *(float *)(particle + 0xC) = scale * 210000.0f;
+            *(short *)(particle + 0xA) = func_001FA898(func_001F9878(
+                func_002140F8(lo, hi)));
+            *(int *)(motion + 0x14) = func_001FA8A8((*(int *)&D_L00_00160268), (*(int *)&D_L00_0016026C),
+                                                          func_002140F8(zero, one));
+            *(int *)(motion + 0x18) = func_001FA8A8((*(int *)&D_L00_00160270),
+                                                          (*(int *)&D_L00_00160274),
+                                                          func_002140F8(zero, one));
+            if (flags & 4) {
+                offset = 8;
+                if (!D_0013E620[0x10])
+                    offset = 0;
+            }
+            particle[2] = D_L00_001B2430[func_002140B0(8) + offset];
+            particle[3] = 0x44;
+        }
+        particle[9] = func_001FA898(4.0f) + 0x40;
+        particle[1] = 0;
+        particle[8] = func_002140B0(0xFF);
+        motion[0x1E] = func_001FA898(func_L00_00258C80(1.0f, 4.0f));
+        *(float *)(motion + 0x10) = size;
+        motion[0x1F] = flags;
+        if (flags & 4) {
+            *(short *)(particle + 0xA) = *(short *)(particle + 0xA) * (D_0013E620[0x10] + 2) / 2;
+            func_L00_0025D140(*(int *)(particle + 4), D_0013E620[0x10]);
+            func_L00_0025D140(*(unsigned *)(motion + 0x14), D_0013E620[0x10]);
+            func_L00_0025D140(*(unsigned *)(motion + 0x18), D_0013E620[0x10]);
+        }
+        motion[0x1D] = particle[0xA];
+    }
+    return particle;
+}
 INCLUDE_ASM("asm/overlays", func_L00_0026C3A0);
 extern float func_L00_00258C80(float lo, float hi);
 extern int func_002140B0(int);

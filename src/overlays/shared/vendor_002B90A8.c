@@ -472,77 +472,79 @@ void func_L01_002C84D8(void) {
         func_L00_0026DA50(p, v, 0x4F007FFF, 0x1FFFFFFF, rand_range(scale_ticks(10), scale_ticks(20)), 1, 20000.0f);
     }
 }
-/* NON_MATCHING func_L01_002C8740 -- src/overlays/shared/vendor_002B90A8.c
- * Best so far: BYTES 4/552 (99.3% of the bytes match), checked 2026-10-09.
- * Not built into anything: the retail assembly stays in the source file
- * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
- * What the last attempts found:
- *   UpdateMoby_156: aims a moby at the player (func_001F9D48 / func_L00_001FF860), then state 1 spawns effects/del
- *   Best p5.c (BYTES 365/552, all in the shifted tail): frame is 0xA0 vs retail 0xB0 (retail has an extra 0x10 of 
- *   q28 t02: p10.c is 556 vs 552, near. Found: state dispatch is a switch(int st) with case 1, case 0 (empty), cas
- *   hq13 s04: p11-p12 fix the prototypes (func_001F9908 takes void *, the file's own; func_L00_001F2BE8 declared f
- */
-extern char *func_L01_00281738(int a, char *b);
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_L00_0025A8C0_x(void *, void *, int, void *, float) __asm__("func_L00_0025A8C0");
-extern int func_L00_001F2BE8_x(float, void *, int, int, void *) __asm__("func_L00_001F2BE8");
-extern int func_001E97C8(void *arg0);
-extern void func_L00_0025AC00_x(int, float, void *, int, void *, void *) __asm__("func_L00_0025AC00");
-extern void func_L01_002C84D8_a(void *) __asm__("func_L01_002C84D8");
+typedef int OvlQuad __attribute__((mode(TI)));
+typedef struct {
+    u8 pad0[0x18];
+    s32 moby; /* 0x18: passed to FUN_002141f8 (reads moby+0x34, moby+0x78); 0 when no moby was hit */
+    s32 unk1C; /* 0x1C: > 0 gates copying point and the normal into the hero (shared/ui/help/00226f10.c) */
+    union {
+        OvlQuad q;
+        f32 f[4];
+    } point; /* 0x20: f[2] is read as the ground height */
+    u8 pad30[0x10]; /* 0x30: position after push-out (copied into hero.motion.pos) */
+    f32 normal_x; /* 0x40: start of the surface normal; its angle is tested against 50 degrees (0.87266463) */
+    f32 normal_y; /* 0x44: FUN_001f9e90 (atan2) of normal_x, normal_y is stored in the hero */
+    f32 normal_z; /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
+} CollisionHit;
+extern s32 func_001FA898(f32);
+void func_L01_002C84D8(void);
 extern int func_001F9908(void *);
+extern int func_001E97C8(void *);
+extern int func_L00_001F2BE8(float, void *, int, int, void *);
+extern void func_L00_0025AC00(float, void *, void *, int, void *, void *);
+extern void func_L00_0025A8C0(void *, void *, int, float, void *);
+extern void func_L00_001FF4B0(void *, void *, float);
+extern void func_L01_00281738(int, void *);
 extern void func_0020D678(void *);
 extern short D_L01_00161524;
 extern short D_L01_0016152C;
 
-/* updates a moby that flies toward the player and bursts */
-void func_L01_002C8740(char *m) {
-    float a[12];
-    float b[4];
-    char *d = *(char **)(m + 0x78);
-    char *g;
-    float *e;
-    int st;
-    float dist;
-    float r;
-    dist = func_001F9D48(D_L01_001672C0, m + 0x10);
-    g = D_L01_001672C0 - 0x140;
-    r = func_L00_001FF860(dist, *(float *)(g + 0x148) - *(float *)(m + 0x18));
-    *(float *)(m + 0x44) = -r;
-    *(float *)(m + 0x48) = func_L00_001FF860(*(float *)(g + 0x140) - *(float *)(m + 0x10), *(float *)(g + 0x144) - *(float *)(m + 0x14));
-    *(float *)(m + 0x40) = func_001FA748(*(float *)(m + 0x40), *(float *)(d + 0xC));
-    func_001F9BD8(m + 0x10, m + 0x10, d + 0x20);
-    st = (unsigned char)m[0x20];
-    switch (st) {
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b8c08.c, FUN_L01_002c7530. */
+void func_L01_002C8740(char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    char *camera = D_L01_001672C0;
+    char hit[0x30];
+    float normal[4];
+    float distance;
+
+    distance = func_001F9D48(camera, moby + 0x10);
+    camera -= 0x140;
+    *(float *)(moby + 0x44) = -func_L00_001FF860(distance, *(float *)(camera + 0x148) - *(float *)(moby + 0x18));
+    *(float *)(moby + 0x48) = func_L00_001FF860(*(float *)(camera + 0x140) - *(float *)(moby + 0x10),
+                                             *(float *)(camera + 0x144) - *(float *)(moby + 0x14));
+    *(float *)(moby + 0x40) = func_001FA748(*(float *)(moby + 0x40), *(float *)(data + 3));
+    func_001F9BD8(moby + 0x10, moby + 0x10, data + 8);
+    switch ((u8)moby[0x20]) {
     case 1:
-    {
-        func_L01_00281738(*(int *)&D_L01_00161524, m);
-        func_L00_001FF4B0(b, d + 0x20, 1.0f);
-        func_L00_0025A8C0_x(a, m, 0, b, 0.0f);
-        if (func_L00_001F2BE8_x(*(float *)&D_L01_0016152C, m + 0x10, 0x10, *(int *)(d + 0x18), a) != 0 && !func_001E97C8(m)) {
-            e = D_L01_00174340;
-            if (((int *)e)[6] != 0)
-                func_L00_0025AC00_x(((int *)e)[6], 1.0f, m, 0x10001, e + 8, b);
-            func_L01_002C84D8_a(m);
-            func_0020D678(m);
-        } else if (func_001F9908(d) != 0) {
-            *(int *)d = func_001F9850(0x1E);
-            m[0x20] = 2;
-            if (*(int *)(d + 0x10) != 0) *(int *)(d + 0x10) = 0;
+        func_L01_00281738((*(s32 *)&D_L01_00161524), moby);
+        func_L00_001FF4B0(normal, data + 8, 1.0f);
+        func_L00_0025A8C0(hit, moby, 0, 0.0f, normal);
+        if (func_L00_001F2BE8((*(f32 *)&D_L01_0016152C), moby + 0x10, 0x10, data[6], hit) &&
+            !func_001E97C8(moby)) {
+            CollisionHit *contact = (CollisionHit *)D_L01_00174340;
+            if (contact->moby != 0)
+                func_L00_0025AC00(1.0f, contact->moby, moby, 0x10001, &contact->point, normal);
+            ((void (*)(void *))func_L01_002C84D8)(moby);
+            goto remove;
         }
-    }
-    break;
+        if (func_001F9908(data)) {
+            data[0] = func_001F9850(0x1e);
+            moby[0x20] = 2;
+            if (data[4] != 0)
+                data[4] = 0;
+        }
+        break;
     case 0:
-    break;
+        break;
     case 2:
-      {
-        if (func_001F9908(d) != 0) {
-            func_0020D678(m);
+        if (func_001F9908(data)) {
+        remove:
+            func_0020D678(moby);
         } else {
-            float t = (float)func_001F9850(0x1E);
-            m[0x23] = func_001FA898_r((float)*(int *)d * (127.0f / t));
+            int duration = func_001F9850(0x1e);
+            moby[0x23] = func_001FA898((float)data[0] * (127.0f / (float)duration));
         }
-      }
-    break;
+        break;
     }
 }
 extern unsigned char D_0013D49C NOT_SDA;

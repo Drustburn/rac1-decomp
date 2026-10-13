@@ -1856,7 +1856,94 @@ void func_L01_0030AC10(char *a) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L01_0030C9F0);
-INCLUDE_ASM("asm/overlays", func_L01_0030D380);
+typedef int OvlQuad_0D380 __attribute__((mode(TI)));
+typedef union {
+    OvlQuad_0D380 q;
+    f32 f[4];
+} GlowVec_bfa8;
+typedef struct {
+    GlowVec_bfa8 corner[4];
+    u32 color[4];
+    s32 unk50, unk54, unk58;
+    f32 unk5C, unk60;
+    s32 unk64;
+    f32 unk68, unk6C;
+    s64 unk70, tex, unk80, unk88;
+} GlowQuad_bfa8;
+extern GlowVec_bfa8 D_L01_0020BCC0[4];
+extern GlowVec_bfa8 D_0013F6E0[];
+extern short D_L01_001620F4;
+extern short D_L01_001620FC;
+extern s64 func_001F4868(s32);
+extern void func_001F9CA0(void *, void *, void *);
+extern void func_001F9EE8(void *, void *, void *);
+extern void func_L00_001FD1D8(void *, void *, s32);
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/0030b618.c, FUN_L01_0030bfa8. */
+void func_L01_0030D380(char *m) {
+    struct {
+        GlowQuad_bfa8 quad;
+        GlowVec_bfa8 src_corner[4];
+        struct { GlowVec_bfa8 mat0, mat1, mat2, point, partial, offset; } basis;
+    } local;
+    GlowVec_bfa8 *dst;
+    GlowVec_bfa8 *src;
+    GlowVec_bfa8 *basis;
+    s32 i;
+    f32 one;
+    OvlQuad_0D380 q0, q1, q2, q3;
+
+    i = 3;
+    one = 1.0f;
+    q0 = D_L01_0020BCC0[0].q;
+    q1 = D_L01_0020BCC0[1].q;
+    q2 = D_L01_0020BCC0[2].q;
+    q3 = D_L01_0020BCC0[3].q;
+    local.src_corner[0].q = q0;
+    local.src_corner[1].q = q1;
+    local.src_corner[2].q = q2;
+    local.src_corner[3].q = q3;
+    local.quad.tex = func_001F4868(0xB);
+    local.quad.unk88 = 0x8000000048L;
+    local.quad.unk80 = 0xFF9000000260L;
+    local.quad.unk70 = 5;
+    local.quad.unk50 = 0;
+    local.quad.unk54 = 0;
+    local.quad.unk58 = 0;
+    local.quad.unk5C = one;
+    local.quad.unk60 = one;
+    local.quad.unk64 = 0;
+    local.quad.unk68 = one;
+    local.quad.unk6C = one;
+
+    func_001F9C30(&local.basis.offset, m + 0xc0, (*(f32 *)&D_L01_001620F4));
+    func_001F9C30(&local.basis.partial, m + 0xe0, (*(f32 *)&D_L01_001620FC));
+    func_001F9BD8(&local.basis.offset, &local.basis.offset, &local.basis.partial);
+    src = &local.basis.mat0;
+    func_001F9BD8(&local.basis.point, &local.basis.offset, m + 0x10);
+    func_001F9BF0(src, D_L01_001672C0, &local.basis.point);
+    func_L00_001FF4B0(src, src, one);
+    dst = &local.basis.mat1;
+    func_001F9CA0(dst, src, D_0013F6E0);
+    func_L00_001FF4B0(dst, dst, -1.0f);
+    func_001F9CA0(&local.basis.mat2, dst, src);
+    basis = src;
+
+    local.quad.color[3] = 0x202020FF;
+    local.quad.color[2] = 0x202020FF;
+    local.quad.color[1] = 0x202020FF;
+    local.quad.color[0] = 0x202020FF;
+    src = local.src_corner;
+    dst = local.quad.corner;
+    do {
+        func_001F9C30(dst, src, 0.4f);
+        src++;
+        func_001F9EE8(dst, dst, basis);
+        dst++;
+        i--;
+    } while (i >= 0);
+    func_L00_001FD1D8(&local.quad, 0, 0);
+}
 typedef int uq __attribute__((mode(TI)));
 
 // Spawns moby 0x661 at pos with owner data and a random timer.
@@ -1891,7 +1978,110 @@ char *func_L01_0030DC70(char *owner, char *pos, float a, float b, float c, float
     }
     return m;
 }
-INCLUDE_ASM("asm/overlays", func_L01_0030DD80);
+extern f32 D_0015EE60 MACRO_ADDR;
+extern f32 D_0015EE70 MACRO_ADDR;
+typedef int OvlQuad_0DD80 __attribute__((mode(TI)));
+typedef union {
+    OvlQuad_0DD80 q;
+    f32 f[4];
+    s32 i[4];
+} OvlVec4;
+typedef struct {
+    OvlQuad_0DD80 dir;
+    void *owner;
+    s32 flags;
+    u8 b28;
+    u8 b29;
+    u16 id;
+    f32 scale;
+    s32 count;
+} DropProbe_30c9a8;
+extern f32 func_L00_00259148(f32 *, f32, f32, f32, f32, f32);
+extern void func_00215C00_0DD80(f32 *, f32, f32, f32) __asm__("func_00215C00");
+extern f32 func_001F9D48(void *, void *);
+extern void func_L00_001FF500(void *, void *, f32);
+extern s32 func_001F9938(void *);
+extern s32 func_L00_001EFFF0_0DD80(void *, void *, s32, void *, void *) __asm__("func_L00_001EFFF0");
+extern s32 func_L00_001F3958(void);
+extern f32 D_L01_001672C0_0DD80[] __asm__("D_L01_001672C0");
+extern OvlQuad_0DD80 D_L01_00174360;
+extern OvlQuad_0DD80 D_0013F4D0_0DD80 __asm__("D_0013F4D0");
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/0030b618.c, FUN_L01_0030c9a8. */
+void func_L01_0030DD80(char *m) {
+    char *e = *(char **)(m + 0x78);
+    f32 *pos;
+    OvlVec4 old_pos;
+    OvlVec4 offset;
+    DropProbe_30c9a8 probe;
+    f32 desired_yaw, desired_pitch;
+    f32 pitch_k, pitch_d, pitch_max;
+    f32 height = *(f32 *)(*(char **)(m + 0x24) + 0x24);
+
+    if (*(f32 *)(m + 0x2c) < height)
+        *(f32 *)(m + 0x2c) += D_0015EE60 * 0.21f * height;
+
+    if (*(s16 *)(e + 0x14) < func_001F9850(0x23) - func_001F9850(1)) {
+        desired_yaw = *(f32 *)(e + 8);
+        desired_pitch = *(f32 *)(e + 0xc);
+    } else {
+        desired_yaw = *(f32 *)(m + 0x48);
+        desired_pitch = *(f32 *)(m + 0x44);
+    }
+    pos = (f32 *)(m + 0x10);
+    desired_yaw = func_L00_00259148((f32 *)e, *(f32 *)(m + 0x48), desired_yaw,
+                                            D_0015EE70 * 4.712389f,
+                                            D_0015EE70 * 3.1415927f,
+                                            D_0015EE6C * 3.1415927f);
+    pitch_d = D_0015EE70 * 3.1415927f;
+    pitch_k = D_0015EE70 * 4.712389f;
+    pitch_max = D_0015EE6C * 3.1415927f;
+    *(f32 *)(m + 0x48) = desired_yaw;
+    {
+        f32 pitch_result = func_L00_00259148((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
+                                                pitch_k, pitch_d, pitch_max);
+        pitch_max = D_0015EE6C * 40.0f;
+        *(f32 *)(m + 0x44) = pitch_result;
+        func_00215C00_0DD80(offset.f, pitch_max,
+                                       *(f32 *)(m + 0x48), -pitch_result);
+    }
+    qcopy(&old_pos, pos);
+    func_001F9BD8(pos, pos, &offset);
+    if (*(f32 *)(m + 0x10) < 2.0f || *(f32 *)(m + 0x10) > 1021.0f ||
+        *(f32 *)(m + 0x14) < 2.0f || *(f32 *)(m + 0x14) > 1021.0f ||
+        *(f32 *)(m + 0x18) < 2.0f || *(f32 *)(m + 0x18) > 1021.0f ||
+        *(f32 *)(m + 0x10) < 0.0f || *(f32 *)(m + 0x14) < 0.0f || *(f32 *)(m + 0x18) < 0.0f ||
+        func_001F9D48(pos, D_L01_001672C0_0DD80) > 64.0f) {
+        func_0020D678(m);
+        return;
+    }
+    probe.owner = m;
+    probe.flags = 0x10001;
+    probe.scale = 0.5f;
+    probe.count = 1;
+    func_001F9BF0(&probe.dir, pos, &D_0013F4D0_0DD80);
+    func_L00_001FF500(&probe.dir, &probe.dir, 1.0f);
+    ((f32 *)&probe.dir)[2] = 1.0f;
+    ((f32 *)&probe.dir)[3] = 5627.9248f;
+    probe.b28 = 1;
+    probe.b29 = 1;
+    probe.id = *(u16 *)(m + 0xa6);
+    if (func_001F9938(e + 0x14)) {
+        func_0020D678(m);
+        return;
+    }
+    {
+        if (!func_L00_001EFFF0_0DD80(&old_pos, pos, 0, *(void **)(e + 0x10), &probe))
+            return;
+        if (!func_L00_001F3958()) {
+            if (*(s16 *)(e + 0x14) > func_001F9850(3))
+                *(s16 *)(e + 0x14) = func_001F9850(3);
+            return;
+        }
+        qcopy(pos, &D_L01_00174360);
+    }
+    func_0020D678(m);
+}
 extern char D_0013E633[];
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
