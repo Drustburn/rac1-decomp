@@ -1,4 +1,4 @@
-/* functional: high. Same reads, writes, calls and arguments in the same order as retail, read side by side with the compiled output; differs only in compiler choices (registers, branch threading, the two flag bytes at 0x13DE48 read once instead of re-read, the seen-bit test as a shift right instead of a mask), and the globals are named by their addresses (_gp = 0x166D00). */
+/* functional: medium. Same reads, writes, calls and arguments in the same order as retail, read side by side with the compiled output; differs only in compiler choices (registers, branch threading, the two flag bytes at 0x13DE48 read once instead of re-read, the seen-bit test as a shift right instead of a mask), and the globals are named by their addresses (_gp = 0x166D00). */
 /* func_L01_0030C090 -- src/overlays/l01_novalis/vendor_002FABE8.c (functional C for the port, not a match)
  * Novalis tutorial-hint moby. m = the moby, d = m[0x78] its data (+0x18 a countdown, +0x20..+0x3C trigger ids,
  * +0x28 a done flag, +0x2C a frame counter, +0x34 a hit count).
