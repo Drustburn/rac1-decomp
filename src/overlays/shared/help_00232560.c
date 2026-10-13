@@ -1111,7 +1111,18 @@ void func_L00_00234768(float *pos, int arg, float t) {
         func_L00_00222B80(0x65, 1);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_002347B8);
+extern int D_001414D4;
+/* 1 when the word at 0x1414D4 is 101 or 102, 2 when it is 103, else 0 */
+int func_L00_002347B8(void) {
+    switch (D_001414D4) {
+    case 101:
+    case 102:
+        return 1;
+    case 103:
+        return 2;
+    }
+    return 0;
+}
 // Returns the constant 2.
 int func_L00_002347F0(void) {
     return 2;
