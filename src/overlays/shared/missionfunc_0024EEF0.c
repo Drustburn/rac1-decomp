@@ -61,7 +61,13 @@ INCLUDE_ASM("asm/overlays", func_L00_0024F048);
 INCLUDE_ASM("asm/overlays", func_L00_0024F170);
 INCLUDE_ASM("asm/overlays", func_L00_0024F198);
 INCLUDE_ASM("asm/overlays", func_L00_0024F1C8);
-INCLUDE_ASM("asm/overlays", func_L00_0024F220);
+extern u8 D_0013D5DD NOT_SDA;
+extern int D_0013DC34 NOT_SDA;
+/* 2 when the byte at 0x13D5DD is set, else whether the word at 0x13DC34 is */
+int func_L00_0024F220(void) {
+    if (D_0013D5DD) return 2;
+    return D_0013DC34 != 0;
+}
 INCLUDE_ASM("asm/overlays", func_L00_0024F258);
 extern u8 * D_L00_0016009C MACRO_ADDR;
 extern u8 * D_L00_001600A0 MACRO_ADDR;
