@@ -1,4 +1,4 @@
-/* functional: high. Same reads, writes, calls and arguments as retail; the jump table is a switch, shared exits are gotos, quad copies use qcopy, repeated global and data loads are shared, and the integer remainder by the path point count is guarded against zero (retail traps with break 7). */
+/* functional: medium. Same reads, writes, calls and arguments as retail; the jump table is a switch, shared exits are gotos, quad copies use qcopy, repeated global and data loads are shared, and the integer remainder by the path point count is guarded against zero (retail traps with break 7). */
 /* Level 12 (Hoven) moby update for a scripted camera/cutscene-style moby driven by a path (data = moby+0x78 is its
  * state block, 17 child slots of 0x30 bytes at data+0x20, each a moby index or -1). Before the state machine, a
  * nonzero state with D_L12_001FB98C set restores the saved position (moby+0x10) and rotation (moby+0x40) quads.
