@@ -1065,7 +1065,22 @@ float func_L00_002345B0(float *v) {
     }
     return 0.0f;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00234638);
+typedef struct { u8 pad[0xE]; u16 max; u8 pad2[8]; } AmmoInfo;
+extern AmmoInfo D_L00_001C43B0[];
+extern int D_00140508;
+extern int D_0013D530[];
+extern int D_0013DFA8[];
+/* takes amount from the weapon's ammo (the current weapon for -1): 1 when taken or the weapon has no ammo limit, 0 when there is too little */
+int func_L00_00234638(int id, int amount) {
+    AmmoInfo *e;
+    if (id == -1) id = D_00140508;
+    e = &D_L00_001C43B0[id];
+    if (e->max == 0) return 1;
+    if (D_0013D530[id] < amount) return 0;
+    D_0013D530[id] -= amount;
+    D_0013DFA8[id] += amount;
+    return 1;
+}
 INCLUDE_ASM("asm/overlays", func_L00_00234674);
 INCLUDE_ASM("asm/overlays", func_L00_002346C0);
 INCLUDE_ASM("asm/overlays", func_L00_00234718);
