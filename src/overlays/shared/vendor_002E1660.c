@@ -2483,7 +2483,21 @@ int func_L00_002E8EE0(char *m) {
 INCLUDE_ASM("asm/overlays", func_L00_002E91D0);
 /* Empty function that only reserves 0x50 bytes of stack. Adapted from Lombyte (MIT), FUN_L00_002e8378; the volatile buffer is what keeps the frame. */
 void func_L00_002E9828(int a) { volatile char buf[0x50]; }
-INCLUDE_ASM("asm/overlays", func_L00_002E9838);
+typedef struct { u8 pad[0x220]; s32 cur; } Owner_2E9838;
+typedef struct { u8 pad[0x70]; Owner_2E9838 *p; u8 pad2[0x86 - 0x74]; s16 f86; } Vendor_2E9838;
+extern Vendor_2E9838 *D_L00_00166F00_2E9838 __asm__("D_L00_00166F00");
+/* -1 when the vendor's +0x86 is set, else 1 after clearing its owner's +0x220 when that equals id, else 0. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/vendor/002df730.c, FUN_L00_002e8388. */
+s32 func_L00_002E9838(s32 id) {
+    Vendor_2E9838 *t = D_L00_00166F00_2E9838;
+    if (t->f86 != 0) {
+        return -1;
+    }
+    if (t->p->cur == id) {
+        t->p->cur = 0;
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("asm/overlays", func_L00_002E9854);
 INCLUDE_ASM("asm/overlays", func_L00_002E9870);
 INCLUDE_ASM("asm/overlays", func_L00_002E988C);
