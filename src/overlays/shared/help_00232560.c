@@ -1083,7 +1083,14 @@ int func_L00_00234638(int id, int amount) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_00234674);
 INCLUDE_ASM("asm/overlays", func_L00_002346C0);
-INCLUDE_ASM("asm/overlays", func_L00_00234718);
+/* the weapon's ammo (the current weapon for -1), or 1 when it has no ammo limit */
+int func_L00_00234718(int id) {
+    AmmoInfo *e;
+    if (id == -1) id = D_00140508;
+    e = &D_L00_001C43B0[id];
+    if (e->max == 0) return 1;
+    return D_0013D530[id];
+}
 extern void func_L00_00222B80(int, int);
 
 /* Records a target: POS at D_0013F450 + 0x1640, ARG at +0x1650 and T at
