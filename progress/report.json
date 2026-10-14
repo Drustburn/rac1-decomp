@@ -1,12 +1,12 @@
 {
  "measures": {
-  "fuzzy_match_percent": 82.88118918080332,
+  "fuzzy_match_percent": 83.38264735477838,
   "total_code": "3712808",
-  "matched_code": "3026264",
-  "matched_code_percent": 81.50876641075973,
+  "matched_code": "3041136",
+  "matched_code_percent": 81.90932577176089,
   "total_functions": 5109,
-  "matched_functions": 4363,
-  "matched_functions_percent": 85.39831669602663,
+  "matched_functions": 4366,
+  "matched_functions_percent": 85.45703660207477,
   "complete_code": "482572",
   "complete_code_percent": 12.997494079952425,
   "total_units": 141,
@@ -39404,13 +39404,13 @@
   {
    "name": "Level 06: Blarg Station (Nebula G34)",
    "measures": {
-    "fuzzy_match_percent": 82.35085122131754,
+    "fuzzy_match_percent": 89.17542561065878,
     "total_code": "135100",
-    "matched_code": "111256",
-    "matched_code_percent": 82.35085122131754,
+    "matched_code": "120476",
+    "matched_code_percent": 89.17542561065878,
     "total_functions": 88,
-    "matched_functions": 72,
-    "matched_functions_percent": 81.81818181818181,
+    "matched_functions": 74,
+    "matched_functions_percent": 84.0909090909091,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -39744,7 +39744,7 @@
     {
      "name": "func_L06_002F91A8",
      "size": "5228",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "927344",
      "metadata": {
       "virtual_address": "3117480"
@@ -39798,7 +39798,7 @@
     {
      "name": "func_L06_002FAE58",
      "size": "3992",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "934688",
      "metadata": {
       "virtual_address": "3124824"
@@ -42167,13 +42167,13 @@
   {
    "name": "Level 10: Orxon",
    "measures": {
-    "fuzzy_match_percent": 62.49556391511108,
+    "fuzzy_match_percent": 79.17201220810561,
     "total_code": "56356",
-    "matched_code": "35220",
-    "matched_code_percent": 62.49556391511108,
+    "matched_code": "40872",
+    "matched_code_percent": 72.5246646319824,
     "total_functions": 60,
-    "matched_functions": 44,
-    "matched_functions_percent": 73.33333333333333,
+    "matched_functions": 45,
+    "matched_functions_percent": 75.0,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -42516,7 +42516,7 @@
     {
      "name": "func_L10_002E1568",
      "size": "5652",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "720000",
      "metadata": {
       "virtual_address": "3020136"
@@ -42579,7 +42579,7 @@
     {
      "name": "func_L10_002E5E48",
      "size": "3804",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 98.48,
      "address": "738656",
      "metadata": {
       "virtual_address": "3038792"
@@ -49701,13 +49701,13 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 83.0896730998784,
+    "fuzzy_match_percent": 83.6630503697444,
     "total_code": "3247108",
-    "matched_code": "2647140",
-    "matched_code_percent": 81.52300447043955,
+    "matched_code": "2662012",
+    "matched_code_percent": 81.98101202670192,
     "total_functions": 3429,
-    "matched_functions": 2849,
-    "matched_functions_percent": 83.08544765237679,
+    "matched_functions": 2852,
+    "matched_functions_percent": 83.1729367162438,
     "complete_code": "281192",
     "complete_code_percent": 8.659767399174896
    }
@@ -49761,13 +49761,13 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 88.49066684257848,
+    "fuzzy_match_percent": 89.40043284078027,
     "total_code": "2046480",
-    "matched_code": "1783744",
-    "matched_code_percent": 87.16156522418983,
+    "matched_code": "1798616",
+    "matched_code_percent": 87.88827645518158,
     "total_functions": 1449,
-    "matched_functions": 1275,
-    "matched_functions_percent": 87.99171842650104,
+    "matched_functions": 1278,
+    "matched_functions_percent": 88.19875776397515,
     "complete_code": "281192",
     "complete_code_percent": 13.740275986083422
    }
@@ -49866,13 +49866,13 @@
    "id": "level_06",
    "name": "Level 06: Blarg Station (Nebula G34)",
    "measures": {
-    "fuzzy_match_percent": 82.35085122131754,
+    "fuzzy_match_percent": 89.17542561065878,
     "total_code": "135100",
-    "matched_code": "111256",
-    "matched_code_percent": 82.35085122131754,
+    "matched_code": "120476",
+    "matched_code_percent": 89.17542561065878,
     "total_functions": 88,
-    "matched_functions": 72,
-    "matched_functions_percent": 81.81818181818181,
+    "matched_functions": 74,
+    "matched_functions_percent": 84.0909090909091,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49926,13 +49926,13 @@
    "id": "level_10",
    "name": "Level 10: Orxon",
    "measures": {
-    "fuzzy_match_percent": 62.49556391511108,
+    "fuzzy_match_percent": 79.17201220810561,
     "total_code": "56356",
-    "matched_code": "35220",
-    "matched_code_percent": 62.49556391511108,
+    "matched_code": "40872",
+    "matched_code_percent": 72.5246646319824,
     "total_functions": 60,
-    "matched_functions": 44,
-    "matched_functions_percent": 73.33333333333333,
+    "matched_functions": 45,
+    "matched_functions_percent": 75.0,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
