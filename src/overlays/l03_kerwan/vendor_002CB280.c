@@ -1390,7 +1390,17 @@ INCLUDE_ASM("asm/overlays", func_L03_002DC920);
 INCLUDE_ASM("asm/overlays", func_L03_002DD158);
 INCLUDE_ASM("asm/overlays", func_L03_002DDE38);
 INCLUDE_ASM("asm/overlays", func_L03_002DDE9C);
-INCLUDE_ASM("asm/overlays", func_L03_002DDEF8);
+/* whether the moby is a taxi (class 0x3F4), active, with its pvars word at +0x7C equal to 1. Adapted from Lombyte (MIT) for PAL: src/overlays/l03/gameplay/entities/002c9eb8.c, FUN_L03_002dcb30. */
+int func_L03_002DDEF8(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    if (moby->oclass != 0x3F4) {
+        return 0;
+    }
+    if (moby->state && *(int *)(data + 0x7C) == 1) {
+        return 1;
+    }
+    return 0;
+}
 int func_L03_002DDF10(unsigned char *moby, char *data) {
     if (moby[0x20] && *(int *)(data + 0x7C) == 1) {
         return 1;
