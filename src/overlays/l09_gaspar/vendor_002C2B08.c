@@ -1632,7 +1632,49 @@ char *func_L09_002F10F8(char *owner, void *position, float angle) {
     }
     return moby;
 }
-INCLUDE_ASM("asm/overlays", func_L09_002F1198);
+extern float func_L00_001FF860(float, float);
+extern float func_001FA850(float, float);
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l09/gameplay/entities/0021e538.c, FUN_L09_002efe48. */
+char *func_L09_002F1198(void *unused, void *origin, void *direction_v, float lower_radius, float upper_radius) {
+    float *direction = direction_v;
+    float offset[4];
+    char *moby = (char *)func_0020D348(0x1A1);
+    if (moby != 0) {
+        float pi = 3.1415927f;
+        char *data = (char *)((struct Moby *)moby)->pvars;
+        float angle = func_002140F8(-3.1415927f, 3.1415927f);
+        float radius = func_002140F8(lower_radius, upper_radius);
+        float heading = func_L00_001FF860(direction[0], direction[1]);
+        float difference = func_001FA850(heading, angle);
+        float gap;
+
+        ((struct Moby *)moby)->pos.x = func_001F9F90(angle) * radius;
+        {
+            float sine = func_001F9FA8(angle);
+            float speed = D_0015EE6C;
+            ((struct Moby *)moby)->pos.y = sine * radius;
+            ((struct Moby *)moby)->pos.z = 0.0f;
+            func_L00_001FF4B0(data, &((struct Moby *)moby)->pos, difference * speed);
+        }
+        gap = pi - difference;
+        func_L00_001FF4B0(offset, direction, gap * gap * 0.25f * D_0015EE6C);
+        func_001F9BD8(data, data, offset);
+        *(int *)(data + 8) = 0;
+        func_001F9BD8(&((struct Moby *)moby)->pos, &((struct Moby *)moby)->pos, origin);
+        func_001F9BD8(&((struct Moby *)moby)->pos, &((struct Moby *)moby)->pos, direction);
+        func_001F9C30(data, data, 0.35f);
+        ((struct Moby *)moby)->unk58 *= 0.5f;
+        ((struct Moby *)moby)->rot.z = func_L00_001FF860(*(float *)data, *(float *)(data + 4));
+        ((struct Moby *)moby)->unk30 = 0xFF;
+        ((struct Moby *)moby)->unk32 = 0xFF;
+        ((struct Moby *)moby)->unk31 = 1;
+        pi -= difference;
+        ((struct Moby *)moby)->scale *= (3.1415927f - difference) + (3.1415927f - difference) + 1.0f;
+        func_L00_00251E30(moby);
+    }
+    return moby;
+}
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_0020D678(void *);
