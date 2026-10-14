@@ -897,7 +897,95 @@ void func_L02_002DC2C0(void) {
         func_L02_0020BF88_DC2C0(&q, b, c, GetEffectTex((*(int *)&D_L02_00161BAC) + 0x28), 1);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L02_002DDAE8);
+extern int D_L02_00161CA8_DDAE8 SDATA(D_L02_00161CA8);
+extern float D_L02_00161CA4_DDAE8 SDATA(D_L02_00161CA4);
+extern float D_L02_00161CAC_DDAE8 SDATA(D_L02_00161CAC);
+extern float D_0015EE70_DDAE8 __asm__("D_0015EE70") MACRO_ADDR;
+extern float D_0015EE6C_DDAE8 __asm__("D_0015EE6C") MACRO_ADDR;
+extern void func_001F9BC0_DDAE8(void *) __asm__("func_001F9BC0");
+extern int func_001F9850_DDAE8(int) __asm__("func_001F9850");
+extern int func_001F9908_DDAE8(int *) __asm__("func_001F9908");
+extern float func_001F9CB8_DDAE8(void *) __asm__("func_001F9CB8");
+extern float func_001F9B88_DDAE8(float) __asm__("func_001F9B88");
+extern float func_001F9F90_DDAE8(float) __asm__("func_001F9F90");
+extern float func_001F9FA8_DDAE8(float) __asm__("func_001F9FA8");
+extern void func_L00_002617B0_DDAE8(void *, void *, void *, void *) __asm__("func_L00_002617B0");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/entities/002a4038.c, FUN_L02_002dc6b0. */
+void func_L02_002DDAE8(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    float limit;
+    float y;
+
+    if (data == 0) return;
+    switch (*(u8 *)(moby + 0x20)) {
+    case 0:
+        func_001F9BC0_DDAE8(data + 0x40);
+        *(int *)(data + 0xa0) = func_001F9850_DDAE8(D_L02_00161CA8_DDAE8);
+        *(u32 *)(data + 0x9c) |= 4;
+        if (*(int *)(data + 0xa4) != 0) *(u8 *)(moby + 0x20) = 3;
+        else *(u8 *)(moby + 0x20) = 1;
+        break;
+    case 1: {
+        float speed;
+
+        *(float *)(moby + 0x58) = 1.0f;
+        if (func_001F9908_DDAE8((int *)(data + 0xa0))) {
+            speed = func_001F9CB8_DDAE8(data + 0x40) - D_L02_00161CAC_DDAE8 * D_0015EE70_DDAE8;
+            if (speed <= 0.0f) {
+                *(int *)(data + 0xa0) = func_001F9850_DDAE8(D_L02_00161CA8_DDAE8);
+                *(u8 *)(moby + 0x20) = 2;
+            } else {
+                *(float *)(data + 0x40) = func_001F9F90_DDAE8(*(float *)(moby + 0x48)) * -speed;
+                y = func_001F9FA8_DDAE8(*(float *)(moby + 0x48)) * -speed;
+                *(float *)(data + 0x48) = 0.0f;
+                *(float *)(data + 0x44) = y;
+            }
+        } else {
+            speed = func_001F9CB8_DDAE8(data + 0x40);
+            limit = func_001F9B88_DDAE8(D_L02_00161CA4_DDAE8 * D_0015EE6C_DDAE8);
+            /* Retail loads D_0015EE6C_DDAE8_sq through its absolute EE address here. */
+            if (speed < limit) speed += D_L02_00161CAC_DDAE8 * D_0015EE70_DDAE8;
+            *(float *)(data + 0x40) = func_001F9F90_DDAE8(*(float *)(moby + 0x48)) * -speed;
+            *(float *)(data + 0x44) = func_001F9FA8_DDAE8(*(float *)(moby + 0x48)) * -speed;
+            *(int *)(data + 0x48) = 0;
+        }
+        *(float *)(moby + 0x58) = speed / (D_L02_00161CA4_DDAE8 * D_0015EE6C_DDAE8);
+        break;
+    }
+    case 2: {
+        float speed;
+
+        *(float *)(moby + 0x58) = -1.0f;
+        if (func_001F9908_DDAE8((int *)(data + 0xa0))) {
+            speed = func_001F9CB8_DDAE8(data + 0x40) - D_L02_00161CAC_DDAE8 * D_0015EE70_DDAE8;
+            if (speed <= 0.0f) {
+                *(int *)(data + 0xa0) = func_001F9850_DDAE8(D_L02_00161CA8_DDAE8);
+                *(u8 *)(moby + 0x20) = 1;
+            } else {
+                *(float *)(data + 0x40) = func_001F9F90_DDAE8(*(float *)(moby + 0x48)) * speed;
+                *(float *)(data + 0x44) = func_001F9FA8_DDAE8(*(float *)(moby + 0x48)) * speed;
+                *(float *)(data + 0x48) = 0.0f;
+            }
+        } else {
+            speed = func_001F9CB8_DDAE8(data + 0x40);
+            limit = func_001F9B88_DDAE8(D_L02_00161CA4_DDAE8 * D_0015EE6C_DDAE8);
+            if (speed < limit) speed += D_L02_00161CAC_DDAE8 * D_0015EE70_DDAE8;
+            *(float *)(data + 0x40) = func_001F9F90_DDAE8(*(float *)(moby + 0x48)) * speed;
+            *(float *)(data + 0x44) = func_001F9FA8_DDAE8(*(float *)(moby + 0x48)) * speed;
+            *(int *)(data + 0x48) = 0;
+        }
+        *(float *)(moby + 0x58) = speed / -(D_L02_00161CA4_DDAE8 * D_0015EE6C_DDAE8);
+        break;
+    }
+    case 3:
+        *(float *)(data + 0x40) = func_001F9F90_DDAE8(*(float *)(moby + 0x48)) * -(D_L02_00161CA4_DDAE8 * D_0015EE6C_DDAE8);
+        *(float *)(data + 0x44) = func_001F9FA8_DDAE8(*(float *)(moby + 0x48)) * -(D_L02_00161CA4_DDAE8 * D_0015EE6C_DDAE8);
+        *(int *)(data + 0x48) = 0;
+        break;
+    }
+    func_L00_002617B0_DDAE8(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
+}
 extern int D_L02_00160058_x __asm__("D_L02_00160058") MACRO_ADDR;
 extern unsigned char D_0014171B_x[] __asm__("D_0014171B");
 extern float D_0015EE70 MACRO_ADDR;
