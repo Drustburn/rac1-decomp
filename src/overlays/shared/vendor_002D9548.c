@@ -110,7 +110,7 @@ extern char *func_L00_0025B478(void *, int, int);
 extern int func_L00_001FEF78(void *);
 extern void func_0020D678(void *);
 extern void func_L06_002D9548(void *, void *);
-extern void func_L06_002D9B08(void);
+extern void func_L06_002D9B08(char *);
 extern void func_001F49B0(int, int);
 extern float func_001F9FA8_D9970b(float) __asm__("func_001F9FA8");
 extern int func_001FA8A8_D9970b(int, int, float) __asm__("func_001FA8A8");

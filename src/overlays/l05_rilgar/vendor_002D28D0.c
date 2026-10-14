@@ -362,7 +362,109 @@ void func_L05_002D8AD8(char *moby, int *path) {
     func_00215CA8(path, 1, moby + 0x10, (float *)(moby + 0x40), 0, d[2]);
     *(float *)(moby + 0x40) = *(float *)(moby + 0x4C);
 }
-INCLUDE_ASM("asm/overlays", func_L05_002D8B68);
+typedef struct {
+    char vertices[0x40];
+    int color[4];
+    float uv[4][2];
+    u64 zero;
+    u64 effect_texture;
+    u64 texture;
+    u64 flags;
+} L05GlowPacket;
+
+extern u64 func_001F4868(int);
+extern float func_001FA888(int);
+extern void func_001153FC(void *, int, int);
+extern int func_L00_00200290(void *, float);
+extern void func_L00_001FD1D8(void *, int, int);
+extern unsigned char D_0015EEB0[] MACRO_ADDR;
+extern short D_L05_001614A0;
+extern short D_L05_001614B0;
+extern short D_L05_001614B4;
+extern short D_L05_001614B8;
+extern short D_L05_001614BC;
+extern short D_L05_001614C0;
+extern short D_L05_001614C4;
+extern short D_L05_001614C8;
+extern short D_L05_001614CC;
+extern short *D_L05_001AC040[];
+extern int D_L05_00160098 MACRO_ADDR;
+extern float D_L05_001CE070[][2];
+
+void func_L05_002D8B68(char *moby) {
+    L05GlowPacket packet[16];
+    float matrix[8];
+    float center[4];
+    int i;
+    int j;
+    short *list;
+    char *member;
+    char *data;
+    float phase;
+    float ratio;
+    u64 texture;
+    L05GlowPacket *p;
+
+    if (*(int *)&D_L05_001614B0 != 0)
+        return;
+    if (D_0015EEB0[2] != 0)
+        *(float *)&D_L05_001614A0 = 16.0f;
+    else
+        *(float *)&D_L05_001614A0 = 5.0f;
+    for (i = 0; i < 16; i++) {
+        texture = func_001F4868(0x13);
+        p = &packet[i];
+        p->effect_texture = texture;
+        p->texture = 0xff9000000260ULL;
+        p->zero = 0;
+        p->flags = (u64)*(int *)&D_L05_001614B8 | ((u64)*(int *)&D_L05_001614BC << 2) |
+                   ((u64)*(int *)&D_L05_001614C0 << 4) | ((u64)*(int *)&D_L05_001614C4 << 6) |
+                   0x8000000000ULL;
+        phase = func_001FA888((D_L05_0015F6B0 + 3) & 3) / (*(float *)&D_L05_001614A0 * 4.0f);
+        for (j = 0; j < 4; j++) {
+            packet[i].uv[j][0] = D_L05_001CE070[j][0];
+            packet[i].uv[j][1] = D_L05_001CE070[j][1];
+            ratio = func_001FA888(i + 1 - (j >> 1)) / (*(float *)&D_L05_001614A0 + phase);
+            if (ratio > 1.0f)
+                ratio = 1.0f;
+            else if (ratio < 0.0f)
+                ratio = 0.0f;
+            packet[i].color[j] = func_001FA8A8(*(int *)&D_L05_001614C8, *(int *)&D_L05_001614CC, ratio);
+        }
+    }
+    func_001153FC(matrix, 0, 0x20);
+    matrix[2] = 0.15f;
+    matrix[6] = -0.15f;
+    list = D_L05_001AC040[(unsigned char)moby[0x21]];
+    do {
+        member = (char *)(((*list & 0x7fff) << 8) + *(int *)&D_L05_00160098);
+        if (*(short *)(member + 0xA6) == 0x4f && (unsigned char)member[0x20] == 1) {
+            int frame;
+            data = *(char **)(member + 0x78);
+            qcopy_nc(center, member + 0x10);
+            center[3] = 20.0f;
+            if (func_L00_00200290(center, 512.0f) != -1) {
+                for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
+                    int first = (*(short *)(data + 0x322) - frame + 15) & 15;
+                    int ribbon;
+                    for (ribbon = 0; ribbon < 3; ribbon++) {
+                        if (*(int *)&D_L05_001614B4 == 0) {
+                            char *points = data + (ribbon * 0x100 + 0x20);
+                            int k;
+                            for (k = 0; k < 4; k++) {
+                                int index = (first + (k >> 1)) & 15;
+                                func_001F9BD8(packet[frame].vertices + k * 0x10,
+                                              points + (index << 4),
+                                              (char *)matrix + (k & 1) * 0x10);
+                            }
+                            func_L00_001FD1D8(&packet[frame], 0, 0);
+                        }
+                    }
+                }
+            }
+        }
+    } while (*list++ >= 0);
+}
 extern char D_0013E633[];
 extern float D_0015EE70 MACRO_ADDR;
 extern void func_L05_002DC1E8(unsigned char *m);

@@ -968,7 +968,146 @@ void func_L01_002E4920(char *moby, char *state) {
         *(int *)(state + 0x68) = 0;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L01_002E4BA8);
+typedef struct {
+    char pad0[0x10];
+    float pos[4];
+    unsigned char state;
+    char pad21[0x10];
+    unsigned char visible;
+    char pad32[0x21];
+    unsigned char prev_seq;
+    char pad54[4];
+    float anim_speed;
+    char pad5C[0x14];
+    unsigned char anim_flags;
+    char pad71[0x4B];
+    unsigned char command;
+} M_4BA8;
+typedef struct { int count; char pad4[0x2C]; float spread; } Emit_4BA8;
+
+extern char D_L01_001DEE1C[];
+extern float D_0015EE60 MACRO_ADDR;
+extern float D_0015EE64 MACRO_ADDR;
+extern float D_0015EE70 MACRO_ADDR;
+extern short D_L01_001619D4;
+extern short D_L01_001619D8;
+extern short D_L01_001619DC;
+extern short D_L01_001619B0;
+extern int func_001160D8(void);
+extern void func_00213DE0(void *, int, int, int);
+extern void func_L00_002592B0(void *, float, void *, float, float, float);
+extern void func_L00_001FF548(void *, void *, float);
+extern int func_L00_00259B08(void *, void *, int, int, float, float);
+extern float func_001F9CB8(void *);
+extern float func_00214358(void *, int, float);
+void func_L01_002E4BA8(M_4BA8 *m, char *p) {
+    float v[4];
+    float d, ang, len, ground, near;
+    int hit;
+    short n;
+    M_4BA8 *target;
+
+    func_001F9BF0(v, p, m->pos);
+    if (m->state == 6)
+        d = func_001F9D48(m->pos, p + 0x30);
+    else
+        d = func_001F9D48(m->pos, &((Hero *)D_0013F450)->motion.pos);
+    func_001F9D48(m->pos, p);
+
+    switch (m->command) {
+    case 0:
+        ang = func_L00_001FF860(*(float *)(p + 0) - m->pos[0], *(float *)(p + 4) - m->pos[1]);
+        func_L00_002592B0(m, ang, D_L01_001DEE1C, D_0015EE70 * 11.519173f,
+                  D_0015EE70 * 3.1415927f, D_0015EE6C * 11.519173f);
+        if (m->anim_flags & 2) {
+            m->anim_speed = 1.0f;
+            if (m->prev_seq != func_001160D8() % 3) {
+                int seq = func_001160D8() % 3;
+                func_00213DE0(m, seq, 0, func_001F9850(20));
+            }
+        }
+        if (1.3f < d) {
+            if (m->prev_seq != 5)
+                func_00213DE0(m, 5, 0, func_001F9850(10));
+            m->command = 2;
+        }
+        return;
+    case 2:
+    case 3:
+        break;
+    default:
+        goto inactive;
+    }
+
+    target = *(M_4BA8 **)(p + 0x68);
+    if (target == 0) {
+        ang = func_L00_001FF860(*(float *)(p + 0) - m->pos[0], *(float *)(p + 4) - m->pos[1]);
+        func_L00_002592B0(m, ang, D_L01_001DEE1C, D_0015EE70 * 11.519173f,
+                  D_0015EE70 * 3.1415927f, D_0015EE6C * 11.519173f);
+    } else {
+        ang = func_L00_001FF860(target->pos[0] - m->pos[0], target->pos[1] - m->pos[1]);
+        func_L00_002592B0(m, ang, D_L01_001DEE1C,
+                  *(float *)&D_L01_001619D4 * 0.017453292f * D_0015EE70,
+                  *(float *)&D_L01_001619D8 * 0.017453292f * D_0015EE70,
+                  *(float *)&D_L01_001619DC * 0.017453292f * D_0015EE6C);
+    }
+    func_001F9C30(v, v, D_0015EE60 * 0.04f);
+    func_001F9BF0(v, v, p + 0x10);
+    if (1.3f < d) {
+        func_001F9C30(v, v, D_0015EE64 * 0.13f);
+    } else {
+        func_001F9C30(v, v, D_0015EE64 * 0.25f);
+    }
+    v[2] *= D_0015EE60 * -0.100000024f + 1.0f;
+    func_001F9BD8(p + 0x10, p + 0x10, v);
+    if (m->state == 6)
+        func_L00_001FF548(p + 0x10, p + 0x10, D_0015EE6C * 2.7f);
+    hit = func_L00_00259B08(m, p + 0x10, D_L01_001DEE08_E4580.count, 0, 1.0f, D_L01_001DEE08_E4580.spread);
+    len = func_001F9CB8(p + 0x10);
+    if (hit != 0) {
+        if (len < 0.005f) {
+            n = ++*(short *)(p + 0x4a);
+            if (func_001F9850(20) < n && m->visible == 0) {
+                qcopy(m->pos, p);
+                *(short *)(p + 0x4a) = 0;
+            }
+        }
+        ground = func_00214358(m->pos, 0, 0.5f);
+        if ((hit & 2) || m->pos[2] - ground < *(float *)&D_L01_001619B0) {
+            if (len < 0.005f) {
+                if (m->prev_seq >= 3 && m->prev_seq != func_001160D8() % 3) {
+                    int seq = func_001160D8() % 3;
+                    func_00213DE0(m, seq, 0, func_001F9850(10));
+                }
+            } else {
+                goto animation3;
+            }
+        } else {
+            if (m->prev_seq != 5)
+                func_00213DE0(m, 5, 0, func_001F9850(7));
+        }
+    } else {
+        ground = func_00214358(m->pos, 0, 0.5f);
+        if (m->pos[2] - ground < *(float *)&D_L01_001619B0) {
+ animation3:
+            if (m->prev_seq != 3)
+                func_00213DE0(m, 3, 0, func_001F9850(11));
+        } else {
+            if (m->prev_seq != 5)
+                func_00213DE0(m, 5, 0, func_001F9850(7));
+            *(short *)(p + 0x4a) = 0;
+        }
+    }
+    if (m->state == 6 || !(d < 1.1f)) return;
+    near = 1.1f - d;
+    ang = func_L00_001FF860(((Hero *)D_0013F450)->motion.pos.f[0] - m->pos[0], ((Hero *)D_0013F450)->motion.pos.f[1] - m->pos[1]);
+    ((float *)(p + 0x10))[0] -= near * func_001F9F90(ang) * (D_0015EE64 * 0.1f);
+    ((float *)(p + 0x10))[1] -= near * func_001F9FA8(ang) * (D_0015EE64 * 0.1f);
+    return;
+inactive:
+    m->command = 0;
+    if (1.3f < d) m->command = 2;
+}
 typedef int u128_E5298 __attribute__((mode(TI)));
 typedef float Vec_E5298[4] __attribute__((aligned(16)));
 typedef struct {

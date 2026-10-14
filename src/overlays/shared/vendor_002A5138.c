@@ -1063,7 +1063,138 @@ struct Moby *func_L00_002A86D8(struct Moby *src, void *pos, void *vel, int flags
     }
     return m;
 }
-INCLUDE_ASM("asm/overlays", func_L00_002A8A20);
+typedef int q_2a7780 __attribute__((mode(TI)));
+typedef struct {
+    short sel[4];
+    unsigned int col[4][4];
+    float f48;
+    q_2a7780 *verts;
+    short (*idx)[4][2];
+    float *uv;
+    short n;
+    float f5C;
+} E_2a7780;
+typedef struct {
+    q_2a7780 m[3];
+    q_2a7780 m30;
+    unsigned char pad[0x30];
+    float f70;
+    unsigned char pad2[4];
+    short h78;
+} R_2a7780;
+typedef struct { unsigned char pad[0x78]; R_2a7780 *r; } O_2a7780;
+typedef struct {
+    unsigned char pad[0x2080];
+    unsigned char *p2080;
+} P_2a7780;
+typedef struct {
+    q_2a7780 pos[4];
+    unsigned int col[4];
+    float uv[4][2];
+    unsigned long tag[4];
+} V_2a7780;
+extern int func_001F4868(int);
+extern int func_001FA898(float);
+extern void func_L00_001FD1D8(void *, void *, int);
+#define P_2a7780_G (*(P_2a7780 *)D_0013F450)
+extern char D_L00_001D95E8[];
+#define effects ((E_2a7780 *)D_L00_001D95E8)
+extern int D_L00_00161488 MACRO_ADDR;
+extern short D_L00_00161484;
+#define last_frame D_L00_00161488
+#define frame_2a7780 D_L00_0015F6B0
+#define uv_scale (*(float *)&D_L00_00161484)
+#define FUN_001f44b8_2a7780 func_001F4868
+#define FUN_001fa6d0_2a7780 func_001FA898
+#define FUN_001f9a68_2a7780 func_001F9C30
+#define FUN_001f7d30_2a7780 func_L00_001FD1D8
+
+void func_L00_002A8A20(void *op) {
+    O_2a7780 *o = (O_2a7780 *)op;
+    R_2a7780 *r;
+    E_2a7780 *e;
+    V_2a7780 v;
+    int sel0, sel1, sel2, sel3;
+    unsigned int color;
+    float scale, alpha;
+    int tex, idx, nv; int k;
+    int i, j, d, cur;
+    float t, w;
+
+    r = o->r;
+    if (r == 0) return;
+    if (r->f70 == 0.0f) return;
+    if (r->f70 == 1.0f) {
+        if (P_2a7780_G.p2080[0x52] != P_2a7780_G.p2080[0x53]) { r->f70 = 0.0f; return; }
+        if (P_2a7780_G.p2080[0x52] == 0xFF) { r->f70 = 0.0f; return; }
+    }
+    scale = 1.0f;
+    tex = 0x14;
+    nv = 1;
+    color = 0x808080;
+    alpha = scale;
+    if (!((unsigned)(P_2a7780_G.p2080[0x52] - 0x17) < 3 || P_2a7780_G.p2080[0x52] == 0x2B)) k = r->h78;
+    else k = P_2a7780_G.p2080[0x52];
+    if (k == 0x17) { r->h78 = k; idx = 0; }
+    else if (k == 0x18) { r->h78 = k; idx = 1; }
+    else if (k == 0x19) { r->h78 = k; idx = 2; }
+    else {
+        r->h78 = 0x2B;
+        alpha = 0.7f;
+        idx = 3;
+        scale = 1.25f;
+        tex = 0xC;
+        nv = 2;
+        color = 0x408080;
+    }
+    t = r->f70;
+    e = &effects[idx];
+    sel0 = e->sel[0];
+    sel1 = e->sel[1];
+    sel2 = e->sel[2];
+    sel3 = e->sel[3];
+    if (t == 1.0f) {
+        unsigned char *g = P_2a7780_G.p2080;
+        qcopy(&r->m[0], g + 0xC0);
+        qcopy(&r->m[1], g + 0xD0);
+        qcopy(&r->m[2], g + 0xE0);
+        last_frame = frame_2a7780;
+    }
+    cur = frame_2a7780;
+    d = cur - last_frame;
+    if (d <= 0) d = 1;
+    r->f70 = t + (float)d * e->f48;
+    last_frame = cur;
+    if ((float)(e->n * 2) <= r->f70) {
+        int k2 = P_2a7780_G.p2080[0x52];
+        if ((unsigned)(k2 - 0x17) < 3) return;
+        if (k2 != 0x2B) r->f70 = 0.0f;
+        return;
+    }
+    v.tag[1] = FUN_001f44b8_2a7780(tex);
+    v.tag[2] = 0xFF9000000260LL;
+    v.tag[0] = 5;
+    v.tag[3] = (nv << 2) | 0x8000000040LL;
+    qcopy(&r->m30, P_2a7780_G.p2080 + 0x10);
+    for (i = 0; i < e->n; i++) {
+        for (j = 0; j < 4; j++) {
+            int vi = e->idx[i][j][0];
+            float *uv;
+            if (i == sel0) v.col[j] = e->col[0][j];
+            else if (i == sel1) v.col[j] = e->col[1][j];
+            else if (i == sel2) v.col[j] = e->col[2][j];
+            else if (i == sel3) v.col[j] = e->col[3][j];
+            else v.col[j] = 0x50808080;
+            v.col[j] = (FUN_001fa6d0_2a7780(((int)v.col[j] >> 24) * alpha) << 24) | color;
+            FUN_001f9a68_2a7780(&v.pos[j], &e->verts[vi], scale);
+            uv = (float *)(e->idx[i][j][1] * 8 + (int)e->uv);
+            w = 1.0f - r->f70 * e->f5C;
+            v.uv[j][0] = (uv[0] - 0.5f) * uv_scale + 0.5f;
+            v.uv[j][1] = (uv[1] - 0.5f) * uv_scale + 0.5f + w;
+        }
+        FUN_001f7d30_2a7780(&v, r, 0);
+    }
+}
 extern char D_0013E633[];
 extern int func_001F9850(int);
 extern void func_0020D6D0_p(void *) __asm__("func_0020D6D0");
@@ -1280,7 +1411,7 @@ extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE74 MACRO_ADDR;
 extern unsigned char D_0013E650[];
 extern void reticle48(int,int,float,float,int,int,int,float,int) __asm__("func_L00_001EE2E0");
-extern void func_L00_002A8A20(void);
+extern void func_L00_002A8A20(void *);
 extern int func_L00_001EFFF0(void*,void*,int,int,int);
 extern void func_L00_00250800(void*,int,void*);
 extern float func_001F9F90(float);

@@ -1190,7 +1190,70 @@ void func_L13_002EE238(char *m) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L13_002EE590);
+void func_L13_002EE590(void *moby, void *data) {
+    extern void func_001FA1F8(void *, void *);
+    extern void func_001F9EC0(void *, void *, void *);
+    extern void func_001F9BD8(void *, void *, void *);
+    extern void func_001F9BF0(void *, void *, void *);
+    extern void func_001FA4A0(void *, void *);
+    extern void func_001F9EE8(void *, void *, void *);
+    extern int func_L00_001F2BE8(void *, float, int, void *, void *);
+    extern void func_L00_0025AD38(float, void *, void *, int, void *);
+    extern void *func_00115248(void *, const void *, unsigned int);
+    extern char D_L13_00178280[];
+    float matrix[12];
+    float query[4];
+    float candidate_pos[4];
+    float local_pos[4];
+    float rotation_matrix[16];
+    float probe[4];
+    void **candidates;
+    int count, hit_count, i, j;
+    char *candidate;
+    short half_width, half_height, max_size;
+    float radius;
+    float limit, tolerance, height_limit, height_tolerance;
+
+    func_001FA1F8(matrix, moby + 0x40);
+    max_size = *(short *)(data + 10) < *(short *)(data + 8) ?
+        *(short *)(data + 8) : *(short *)(data + 10);
+    radius = (float)max_size * 0.5f;
+    qzero(query);
+    query[2] = radius;
+    func_001F9EC0(query, query, matrix);
+    func_001F9BD8(query, query, moby + 0x10);
+    count = func_L00_001F2BE8(query, radius, 0x10, moby, 0);
+    if (count == 0) return;
+    candidates = __builtin_alloca(((unsigned)count << 5) >> 3);
+    func_00115248(candidates, ((void **)D_L13_00178280), count * 4);
+    for (i = 0; i < count; i++) {
+        candidate = *(void **)((u32)candidates + (i << 2));
+        if (candidate == 0 || (unsigned char)candidate[0x20] == 0xfe ||
+            (unsigned char)candidate[0x20] == 0xfd) continue;
+        func_001F9BF0(candidate_pos, candidate + 0x10, moby + 0x10);
+        func_001FA4A0(rotation_matrix, matrix);
+        func_001F9EE8(local_pos, candidate_pos, rotation_matrix);
+        qcopy(probe, local_pos);
+        half_width = *(short *)(data + 8);
+        limit = (float)half_width * 0.5f;
+        tolerance = limit + 0.7f;
+        if (probe[0] < -tolerance) probe[0] = (float)-half_width * 0.5f;
+        else if (tolerance < probe[0]) probe[0] = limit;
+        half_height = *(short *)(data + 10);
+        height_limit = (float)half_height * 0.5f;
+        height_tolerance = height_limit + 1.5f;
+        if (probe[2] < -height_tolerance) probe[2] = (float)-half_height * 0.5f;
+        else if (height_tolerance < probe[2]) probe[2] = height_limit;
+        probe[1] = 0.0f;
+        func_001F9EC0(probe, probe, matrix);
+        func_001F9BD8(probe, probe, moby + 0x10);
+        hit_count = func_L00_001F2BE8(probe, 0.7f, 0x10, moby, 0);
+        for (j = 0; j < hit_count; j++) {
+            if (((void **)D_L13_00178280)[j] == candidate)
+                func_L00_0025AD38(1.0f, candidate, moby, 0x10001, probe);
+        }
+    }
+}
 extern void func_L00_00251328(void *, int, int, int);
 extern void func_L13_002EE590(void *, void *);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
@@ -1553,7 +1616,204 @@ void func_L13_00306E20(char *moby, char *pos, int arg2, float arg3) {
     *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
     func_L00_00251E30(moby);
 }
-INCLUDE_ASM("asm/overlays", func_L13_00306EF0);
+typedef int OvlQuad_p __attribute__((mode(TI)));
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) L13Vec_p;
+extern char *func_L00_0025B478(void *, int, int);
+#define hit_lookup_p func_L00_0025B478
+#define moby_pos_p func_L00_00250800
+#define add_p func_001F9BD8
+#define scale_p func_001F9C30
+#define norm_p func_L00_001FF4B0
+extern void func_L00_001FF500(void *, void *, float);
+#define norm1_p func_L00_001FF500
+extern float func_001F9CB8(void *);
+#define len_p func_001F9CB8
+#define dist_p func_001F9D48
+extern float func_001FA888(int);
+#define i2f_p func_001FA888
+#define ticks_p func_001F9850
+extern int func_001FA898(float);
+#define f2i_p func_001FA898
+#define sweep_p func_L00_001EFFF0
+#define rndint_p func_L00_00258BC8
+#define rndf_p func_002140F8
+extern int func_L00_00272158(void *, void *, int, int, int, int, float, float, float, float, float);
+#define trail_p func_L00_00272158
+extern void func_L00_0025A8C0(void *, struct Moby *, int, float, void *);
+#define desc_p func_L00_0025A8C0
+#define mat_p func_L00_001FF610
+extern void func_L00_0026EBC0(void *, void *, int, int, float);
+#define spark_p func_L00_0026EBC0
+extern void func_L07_0029B070(void *, void *);
+#define puff_p func_L07_0029B070
+#define remove_p func_0020D678
+#define D_0015EE6C_p D_0015EE6C
+extern void func_L13_00307550(char *);
+#define boom_p func_L13_00307550
+extern void func_L13_003075E0(char *);
+#define boom2_p func_L13_003075E0
+
+extern int D_L13_0015F660 MACRO_ADDR;
+#define D_L13_0015F580_p D_L13_0015F660
+typedef struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vec_p pos; L13Vec_p pad2; L13Vec_p matrix; } L13Hit_p;
+#define D_L13_00174140_p (*(L13Hit_p *)D_L13_001741C0)
+void func_L13_00306EF0(struct Moby *moby);
+#define func_L13_00306EF0_r func_L13_00306EF0
+void func_L13_00306EF0_r(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    struct Moby *source;
+    struct Moby *target;
+    struct {
+        L13Vec_p old_pos;
+        L13Vec_p velocity;
+        L13Vec_p direction;
+        char hit[48];
+        L13Vec_p random_direction;
+    } work;
+    int i;
+    int stationary;
+    float length;
+    float distance;
+    float other_distance;
+
+    qcopy(&work.old_pos, &moby->pos);
+    if (moby->state == 1) {
+        source = *(struct Moby **)(data + 0x20);
+        if (source == 0 || source->oclass != 0x65 || source->state == 0xfe || source->state == 0xfd)
+            goto remove;
+        qcopy(&moby->rot, &source->rot);
+        *(OvlQuad_p *)&moby->unkC0 = *(OvlQuad_p *)&source->unkC0;
+        *(OvlQuad_p *)&moby->unkD0 = *(OvlQuad_p *)&source->unkD0;
+        *(OvlQuad_p *)&moby->unkE0 = *(OvlQuad_p *)&source->unkE0;
+        moby_pos_p(*(struct Moby **)(data + 0x20), *(short *)(data + 0x26), &moby->pos);
+        qcopy(data + 0x10, &moby->pos);
+        {
+        struct Moby *source = *(struct Moby **)(data + 0x20);
+        if (source != 0 && source->state != 0xfe && source->state != 0xfd && (source->flags & 1))
+            moby->flags |= 1;
+        else
+            moby->flags &= 0xfffe;
+        }
+        goto bounds;
+    }
+
+    {
+        char *target = hit_lookup_p(moby, 0x230000, 0);
+        if (target != 0 && *(struct Moby **)(target + 0x20) != 0 &&
+            (*(struct Moby **)(target + 0x20))->oclass == 0x1df)
+            goto special;
+    }
+    add_p(&moby->pos, &moby->pos, data);
+    for (i = 0; i < 4; i++) {
+        scale_p(&work.direction, data, -i2f_p(i) * 0.25f);
+        add_p(&work.velocity, &moby->pos, &work.direction);
+        length = rndf_p(25000.0f, 35000.0f);
+        target = (struct Moby *)trail_p(
+            &work.velocity, &D_L13_0015F580_p, ticks_p(15), 0x60, 0x4040ff, 3,
+            length, 500.0f, 1.0f, -0.0004f, 0.0f);
+        if (target != 0)
+            *((char *)target + 9) = f2i_p(4.0f) - 0x80;
+    }
+    qcopy(&work.velocity, data);
+    work.velocity.z = 0.0f;
+    norm1_p(&work.velocity, &work.velocity, 1.0f);
+    work.velocity.z = 1.0f;
+    desc_p(work.hit, moby, 0x10001, 1.0f, &work.velocity);
+    stationary = *(short *)(data + 0x24) == 0;
+    distance = dist_p(&moby->pos, data + 0x10);
+    other_distance = dist_p(*(char **)(data + 0x2c) + 0x10, data + 0x10);
+    if (*(float *)(data + 0x28) < distance || other_distance < distance) {
+        if (moby->unk31 != 0) {
+            int i;
+            for (i = 0; i < 3; i++) {
+                *(OvlQuad_p *)&work.random_direction = 0;
+                work.random_direction.x = rndf_p(-1.0f, 1.0f);
+                work.random_direction.y = rndf_p(-1.0f, 1.0f);
+                work.random_direction.z = rndf_p(-1.0f, 1.0f);
+                *(OvlQuad_p *)&work.direction = *(OvlQuad_p *)&work.random_direction;
+                length = len_p(&work.random_direction);
+                norm_p(&work.direction, &work.direction, length * 0.1f);
+                add_p(&work.direction, &work.random_direction, &work.direction);
+                norm_p(&work.direction, &work.direction,
+                    rndf_p(D_0015EE6C_p + D_0015EE6C_p, D_0015EE6C_p * 4.0f));
+                puff_p(&moby->pos, &work.direction);
+            }
+        }
+        boom_p(moby);
+        goto remove;
+    }
+    if (sweep_p(&work.old_pos, &moby->pos, stationary,
+                moby, work.hit) == 0)
+        goto bounds;
+    {
+    struct Moby *target = D_L13_00174140_p.moby;
+    if (target != 0 && target == *(struct Moby **)(data + 0x20))
+        goto bounds;
+    }
+    qcopy(&moby->pos, &D_L13_00174140_p.pos);
+    if (moby->unk31 != 0) {
+        int i;
+        for (i = 0; i < 5; i++) {
+            *(OvlQuad_p *)&work.direction = 0;
+            work.direction.x = rndf_p(-1.0f, 1.0f);
+            work.direction.y = rndf_p(-1.0f, 1.0f);
+            work.direction.z = rndf_p(-1.0f, 1.0f);
+            *(OvlQuad_p *)&work.random_direction = *(OvlQuad_p *)&work.direction;
+            mat_p(&work.direction, data, &D_L13_00174140_p.matrix);
+            length = len_p(&work.direction);
+            norm_p(&work.random_direction, &work.random_direction, length * 0.5f);
+            add_p(&work.random_direction, &work.direction, &work.random_direction);
+            norm_p(&work.random_direction, &work.random_direction,
+                rndf_p(D_0015EE6C_p * 3.0f, D_0015EE6C_p * 6.0f));
+            spark_p(&moby->pos, &work.random_direction, 0x7f2f4f6f,
+                rndint_p(ticks_p(10), ticks_p(15)), 30000.0f);
+        }
+    }
+    {
+    struct Moby *target = D_L13_00174140_p.moby;
+    if (target != 0 && target->oclass == 0x1df) {
+special:
+        boom2_p(moby);
+    } else {
+        boom_p(moby);
+    }
+    }
+remove:
+    remove_p(moby);
+    return;
+bounds:
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f ||
+        moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
+        moby->pos.z < 2.0f || moby->pos.z > 1021.0f)
+        remove_p(moby);
+}
+
+#undef hit_lookup_p
+#undef moby_pos_p
+#undef add_p
+#undef scale_p
+#undef norm_p
+#undef norm1_p
+#undef len_p
+#undef dist_p
+#undef i2f_p
+#undef ticks_p
+#undef f2i_p
+#undef sweep_p
+#undef rndint_p
+#undef rndf_p
+#undef trail_p
+#undef desc_p
+#undef mat_p
+#undef spark_p
+#undef puff_p
+#undef remove_p
+#undef D_0015EE6C_p
+#undef boom_p
+#undef boom2_p
+#undef D_L13_0015F580_p
+#undef D_L13_00174140_p
+#undef func_L13_00306EF0_r
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int,
                                   float, float, float, float, int, float, int, int, int, int)
     __asm__("func_L00_0025F4A8");
