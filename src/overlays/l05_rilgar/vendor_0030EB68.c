@@ -1440,7 +1440,43 @@ void func_L05_00317720(char *moby) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L05_00317B68);
-INCLUDE_ASM("asm/overlays", func_L05_00317CD8);
+extern float D_0015EE64 MACRO_ADDR;
+extern short D_L05_00161F90;
+extern void func_L00_00263950(char *, char *, int, float, float);
+
+typedef struct TrailEffect_317CD8 {
+    char pad0[0x64];
+    float pulse;
+    char pad68[8];
+    float width;
+    char pad74[0xC];
+} TrailEffect_317CD8;
+
+typedef struct TrailFields_317CD8 {
+    char pad0[0x140];
+    TrailEffect_317CD8 trail;
+} TrailFields_317CD8;
+
+/* Updates the two trails of the moby; with the cheat counter on, they get wider and pulse. */
+void func_L05_00317CD8(char *moby, int data_addr) {
+    char *t = (char *)data_addr;
+    int i;
+    for (i = 0; i < 2; i++) {
+        TrailFields_317CD8 *e = (TrailFields_317CD8 *)(t + i * 0x80);
+        if (*(int *)&D_L05_00161F90 != 0) {
+            float value = *(int *)&D_L05_00161F90 * 0.15f + 1.0f;
+            int frame;
+            if (3.7f < value) value = 3.7f;
+            frame = D_L05_0015F6B0;
+            e->trail.width = value;
+            value = (float)(frame & 0x7F);
+            value *= 0.0078125f;
+            value = FastSin(value * 3.1415927f);
+            e->trail.pulse = value * 0.61086524f;
+        }
+        func_L00_00263950(moby, (char *)&e->trail, i + 2, D_0015EE64 * 0.05f, D_0015EE64 * 0.3f);
+    }
+}
 typedef struct {
     char pad0[0x44];
     short n;
