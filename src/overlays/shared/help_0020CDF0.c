@@ -149,7 +149,76 @@ int func_L00_0020CDF0(Vec4 *pos, f32 *dir)
     }
     return 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_0020D3A0);
+typedef int u128_D3A0 __attribute__((mode(TI)));
+
+struct LedgeSpot_20D3A0 {
+    Vec4 sphere;
+    s32 *owner;
+    s32 kind;
+    u8 pad18[8];
+};
+
+extern struct LedgeSpot_20D3A0 *D_L00_0015F7EC_D3A0 __asm__("D_L00_0015F7EC") MACRO_ADDR;
+extern s32 D_L00_0015F7F0_D3A0 __asm__("D_L00_0015F7F0") MACRO_ADDR;
+extern f32 func_001F9D10_D3A0(void *, void *) __asm__("func_001F9D10");
+extern f32 func_001F9D48_D3A0(void *, void *) __asm__("func_001F9D48");
+extern f32 func_001F9B88_D3A0(f32) __asm__("func_001F9B88");
+extern s32 func_L00_0025EFC0_D3A0(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32) __asm__("func_L00_0025EFC0");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/ui/help/0020c758.c, FUN_L00_0020cd08. */
+int func_L00_0020D3A0(void *from_v, void *outOwner_v, void *to_v, void *outI_v, void *outF_v, void *outKind_v,
+                      int skip_v, int only_v)
+{
+    Vec4 *from = from_v;
+    s32 **outOwner = outOwner_v;
+    Vec4 *to = to_v;
+    s32 *outI = outI_v;
+    f32 *outF = outF_v;
+    s32 *outKind = outKind_v;
+    s32 *skip = (s32 *)skip_v;
+    s32 *only = (s32 *)only_v;
+    Vec4 pos;
+    s32 gotI;
+    f32 gotF;
+    s32 i;
+    Vec4 *p = &pos;
+    f32 distance_limit, height_limit, distance, height;
+    struct Hero *hero_state;
+
+    *(u128_D3A0 *)p = *(u128_D3A0 *)from;
+    for (i = 0; i < D_L00_0015F7F0_D3A0; i++) {
+        if (skip != 0 && D_L00_0015F7EC_D3A0[i].owner == skip)
+            continue;
+        if (only != 0 && D_L00_0015F7EC_D3A0[i].owner != only)
+            continue;
+        if (*D_L00_0015F7EC_D3A0[i].owner == 0)
+            continue;
+        if (func_001F9D10_D3A0(&D_L00_0015F7EC_D3A0[i], p) > D_L00_0015F7EC_D3A0[i].sphere.f[3])
+            continue;
+        if (!func_L00_0025EFC0_D3A0(D_L00_0015F7EC_D3A0[i].owner, p, to, &gotI, &gotF, D_L00_0015F7EC_D3A0[i].kind,
+                                    12.0f, 10.0f, 0.0f))
+            continue;
+        hero_state = &D_0013F450_0CDF0;
+        distance_limit = 0.9f;
+        height_limit = 1.5f;
+        if ((u32)hero_state->state.control_mode < 2)
+            distance_limit = 0.3f;
+        if (hero_state->unk1CA != 0) {
+            height_limit = 10.0f;
+            distance_limit += 0.5f;
+        }
+        distance = func_001F9D48_D3A0(p, to);
+        height = func_001F9B88_D3A0(p->f[2] - to->f[2]);
+        if (!(distance < distance_limit && height < height_limit))
+            continue;
+        *outOwner = D_L00_0015F7EC_D3A0[i].owner;
+        *outI = gotI;
+        *outF = gotF;
+        *outKind = D_L00_0015F7EC_D3A0[i].kind;
+        return 1;
+    }
+    return 0;
+}
 typedef int Q_cf58 __attribute__((mode(TI)));
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) V_cf58;
 extern u8 D_0013D5E5 NOT_SDA;
