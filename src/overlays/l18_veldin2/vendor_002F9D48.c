@@ -19,10 +19,7 @@ extern int D_L18_00162528_FABE0 SDATA(D_L18_00162528);
 extern int D_L18_00162588_FABE0 SDATA(D_L18_00162588);
 extern int D_L18_0016258C_FABE0 SDATA(D_L18_0016258C);
 extern float D_L18_001625B0_FABE0 __asm__("D_L18_001625B0") MACRO_ADDR;
-extern float D_L18_001625E0_FABE0 __asm__("D_L18_001625E0") MACRO_ADDR;
-extern volatile float D_L18_001625E4_FABE0 __asm__("D_L18_001625E4") MACRO_ADDR;
-extern volatile float D_L18_001625E8_FABE0 __asm__("D_L18_001625E8") MACRO_ADDR;
-extern float D_L18_001625EC_FABE0 __asm__("D_L18_001625EC") MACRO_ADDR;
+extern float D_L18_001625E0_FABE0[4] __asm__("D_L18_001625E0") MACRO_ADDR;
 extern char D_L18_00167A50_FABE0[] __asm__("D_L18_00167A50");
 extern float D_L18_001DFE50_FABE0[4][4] __asm__("D_L18_001DFE50");
 extern int func_001F9850_FABE0(int) __asm__("func_001F9850");
@@ -48,15 +45,15 @@ void func_L18_002FABE0(void) {
     char *target;
 
     if (D_L18_0016D2E0_FABE0.n == func_001F9850_FABE0(D_L18_00162528_FABE0 + 1)) {
-        D_L18_001625E0_FABE0 = 1.0f;
-        D_L18_001625E4_FABE0 = 0.0f;
+        D_L18_001625E0_FABE0[0] = 1.0f;
+        D_L18_001625E0_FABE0[1] = 0.0f;
         if (D_L18_0016D2E0_FABE0.state == 7) {
             tilt = -0.15f;
         } else {
             tilt = 0.15f;
         }
-        D_L18_001625E8_FABE0 = tilt;
-        D_L18_001625EC_FABE0 = 1.0f;
+        D_L18_001625E0_FABE0[2] = tilt;
+        D_L18_001625E0_FABE0[3] = 1.0f;
     }
     pk.b = func_001F4868_FABE0(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -64,7 +61,7 @@ void func_L18_002FABE0(void) {
     pk.a = 0;
     func_00234C98_FABE0(0x4A, 0);
     func_00234C98_FABE0(0x47, 0x51001);
-    func_001F9EC0_FABE0(mat[3], &D_L18_001625E0_FABE0, D_L18_00167A50_FABE0);
+    func_001F9EC0_FABE0(mat[3], D_L18_001625E0_FABE0, D_L18_00167A50_FABE0);
     target = D_L18_00167A50_FABE0;
     target -= 0x210;
     func_001F9BD8_FABE0(mat[3], mat[3], target);

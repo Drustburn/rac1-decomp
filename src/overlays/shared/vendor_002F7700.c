@@ -999,7 +999,7 @@ void func_L01_00303810(char *moby) {
     s32 row;
     s32 column;
     f32 screen_center[2];
-    volatile f32 coordinate[2];
+    f32 coordinate[2];
     f32 opacity;
     s32 color;
     s32 texture_x;

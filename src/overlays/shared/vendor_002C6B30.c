@@ -1191,9 +1191,9 @@ struct Moby *func_L09_0030BB28(struct Moby *owner, Vec4 *pos)
         func_00213D28_BB28(m, 0, 0);
         other = func_L00_002DCD40_BB28(m);
         if (other != 0) {
-            *(volatile s32 *)((u8 *)other + 0x6c) = 0;
-            *(volatile s32 *)((u8 *)other + 0x94) = 0;
-            *(volatile s16 *)((u8 *)other + 0x68) = 0;
+            *(s32 *)((u8 *)other + 0x94) = 0;
+            *(s16 *)((u8 *)other + 0x68) = 0;
+            *(s32 *)((u8 *)other + 0x6c) = 0;
         }
         if (owner->unkB4 < m->unkB4)
             m->unkB4 = owner->unkB4;
@@ -1203,10 +1203,7 @@ struct Moby *func_L09_0030BB28(struct Moby *owner, Vec4 *pos)
         owner->unkB4 = left;
         if ((s16)left < 0)
             owner->unkB4 = 1;
-        {
-            struct Moby *target = ((struct Moby *volatile *)&m)[0];
-            target->unk94 = target->pclass->unk10;
-        }
+        m->unk94 = m->pclass->unk10;
         func_L00_0025E210_BB28(m);
         func_L00_00251E30_BB28(m);
         result = m;
