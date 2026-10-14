@@ -838,7 +838,44 @@ void func_L06_002EAED8(char *moby) {
     FastVecAdd(a, a, c);
     func_L00_001EFFF0(b, a, 2, 0, 0);
 }
-INCLUDE_ASM("asm/overlays", func_L06_002EAF90);
+extern float func_001F9CB8(void *);
+extern int coll_sphere_L06(void *, float, int, void *) __asm__("func_L00_001F10E0");
+extern void func_L00_00262DF0(float, int, void *, void *);
+extern char D_L06_001746E0[];
+extern char D_L06_001746F0[];
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/entities/00297d10.c, FUN_L06_002e9b60. */
+void func_L06_002EAF90(void *moby, void *out, int follow_path, float scale, float threshold) {
+    float start[4];
+    float end[4];
+    float forward[4];
+    float backward[4];
+    int i;
+
+    func_L00_001FF4B0(forward, (char *)moby + 0xE0, scale);
+    func_L00_001FF4B0(backward, forward, -D_0015EE6C);
+    func_001F9BD8(out, out, backward);
+    qcopy(start, (char *)moby + 0x10);
+    func_001F9BD8(start, start, forward);
+    func_001F9BD8((char *)moby + 0x10, (char *)moby + 0x10, out);
+    func_001F9BD8(end, (char *)moby + 0x10, forward);
+
+    if (threshold < func_001F9CB8(out) && func_L00_001EFFF0(start, end, 0, (int)moby, 0) != 0) {
+        qcopy(end, D_L06_001746E0);
+        func_001F9BF0((char *)moby + 0x10, end, forward);
+    }
+    for (i = 0; i < 6; i++) {
+        if (coll_sphere_L06(end, threshold, 4, moby) != 0) {
+            qcopy(end, D_L06_001746F0);
+            func_001F9BF0((char *)moby + 0x10, end, forward);
+        } else {
+            break;
+        }
+    }
+    if (follow_path != 0) {
+        func_L00_00262DF0(0.5f, *(int *)(*(char **)((char *)moby + 0x78) + 0x1EC), (char *)moby + 0x10, (char *)moby + 0x10);
+    }
+}
 typedef u32 u128_EB360 __attribute__((mode(TI), aligned(16)));
 extern int func_0022ED80(int, int, int);
 extern float D_0015EE6C MACRO_ADDR;
