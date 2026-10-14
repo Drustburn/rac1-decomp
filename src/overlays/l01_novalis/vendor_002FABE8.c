@@ -5,7 +5,103 @@
 #include "moby.h"
 #include "vector.h"
 
-INCLUDE_ASM("asm/overlays", func_L01_002FABE8);
+typedef int u128_ABE8 __attribute__((mode(TI)));
+typedef union {
+    u128_ABE8 q;
+    f32 f[4];
+} DebrisVec_ABE8;
+typedef struct {
+    u32 c[3];
+} DebrisColors_ABE8;
+typedef struct {
+    u8 pad0[0x2C];
+    f32 force;
+} DebrisHit_ABE8;
+
+extern DebrisColors_ABE8 D_L01_00161CE0_ABE8 __asm__("D_L01_00161CE0");
+extern f32 D_0015EE6C_ABE8 __asm__("D_0015EE6C") MACRO_ADDR;
+extern void *func_L00_0025B478_ABE8(void *, s32, s32) __asm__("func_L00_0025B478");
+extern s32 func_0022ED80_ABE8(s32, s32, void *) __asm__("func_0022ED80");
+extern f32 func_002140F8_ABE8(f32, f32) __asm__("func_002140F8");
+extern s32 func_002140B0_ABE8(s32) __asm__("func_002140B0");
+extern float func_001F9F90_ABE8(float) __asm__("func_001F9F90");
+extern float func_001F9FA8_ABE8(float) __asm__("func_001F9FA8");
+extern void func_L00_001FF4B0_ABE8(void *, void *, f32) __asm__("func_L00_001FF4B0");
+extern void func_001F9BD8_ABE8(void *, void *, void *) __asm__("func_001F9BD8");
+extern int func_L00_00258BC8_ABE8(int, int) __asm__("func_L00_00258BC8");
+extern s32 func_001F9850_ABE8(s32) __asm__("func_001F9850");
+extern void func_L00_0026DD70_ABE8(void *, void *, int, int, float, int) __asm__("func_L00_0026DD70");
+extern struct Moby *func_L01_002F9908_ABE8(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("func_L01_002F9908");
+extern void func_L00_002584A8_ABE8(void *, s32, s32) __asm__("func_L00_002584A8");
+extern void func_0020D678_ABE8(void *) __asm__("func_0020D678");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l01/gameplay/entities/002f9810.c, FUN_L01_002f9810. */
+void func_L01_002FABE8(struct Moby *m) {
+    DebrisHit_ABE8 *hit;
+    s32 i;
+    s32 j;
+    f32 s;
+
+    hit = func_L00_0025B478_ABE8(m, 0x10000, 0);
+    m->unkA4 = 0xFF;
+    if (hit != 0 && hit->force > 0.0f) {
+        func_0022ED80_ABE8(0, 0x10, m);
+        for (i = 0; i < 200; i++) {
+            {
+                DebrisVec_ABE8 vel;
+                DebrisVec_ABE8 pos;
+                DebrisVec_ABE8 off;
+
+                pos.q = 0;
+                pos.f[0] = func_002140F8_ABE8(-1.0f, 1.0f);
+                pos.f[1] = func_002140F8_ABE8(-1.0f, 1.0f);
+                pos.f[2] = func_002140F8_ABE8(-1.0f, 1.0f);
+                off.q = 0;
+                vel.q = pos.q;
+                s = func_002140F8_ABE8(-1.0f, 1.0f);
+                s *= func_001F9F90_ABE8(m->rot.z);
+                off.f[0] = s;
+                s = func_002140F8_ABE8(-0.3f, 0.3f);
+                s *= func_001F9FA8_ABE8(m->rot.z);
+                off.f[1] = s;
+                off.f[2] = func_002140F8_ABE8(0.0f, 2.0f);
+                pos.q = off.q;
+                func_001F9BD8_ABE8(&pos, &pos, &m->pos);
+                func_L00_001FF4B0_ABE8(&vel, &vel, func_002140F8_ABE8(0.5f, 1.5f) * D_0015EE6C_ABE8);
+                s = func_002140F8_ABE8(0.5f, 1.0f) * 210000.0f;
+                func_L00_0026DD70_ABE8(&pos, &vel, 0x5F787878, 0x181818, s, func_001F9850_ABE8(func_L00_00258BC8_ABE8(30, 90)));
+            }
+        }
+        for (j = 0; j < 40; j++) {
+            DebrisColors_ABE8 colors;
+            DebrisVec_ABE8 vel;
+            DebrisVec_ABE8 pos;
+            DebrisVec_ABE8 off;
+
+            colors = D_L01_00161CE0_ABE8;
+            pos.q = 0;
+            pos.f[0] = func_002140F8_ABE8(-1.0f, 1.0f);
+            pos.f[1] = func_002140F8_ABE8(-1.0f, 1.0f);
+            pos.f[2] = func_002140F8_ABE8(-1.0f, 1.0f);
+            off.q = 0;
+            vel.q = pos.q;
+            s = func_002140F8_ABE8(-1.2f, 1.2f);
+            s *= func_001F9F90_ABE8(m->rot.z);
+            off.f[0] = s;
+            s = func_002140F8_ABE8(-0.4f, 0.4f);
+            s *= func_001F9FA8_ABE8(m->rot.z);
+            off.f[1] = s;
+            off.f[2] = func_002140F8_ABE8(0.5f, 2.0f);
+            pos.q = off.q;
+            func_001F9BD8_ABE8(&pos, &pos, &m->pos);
+            func_L00_001FF4B0_ABE8(&vel, &vel, func_002140F8_ABE8(1.0f, 5.0f) * D_0015EE6C_ABE8);
+            func_L01_002F9908_ABE8(&pos, &vel, colors.c[func_002140B0_ABE8(3)], func_002140F8_ABE8(0.04f, 0.09f),
+                               func_L00_00258BC8_ABE8(60, 180), 1.0f, 1.0f, 0.75f, 0);
+        }
+        func_L00_002584A8_ABE8(m, 0, -1);
+        func_0020D678_ABE8(m);
+    }
+}
 typedef struct {
     int pad0[4];
     void *moby;
