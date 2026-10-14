@@ -522,7 +522,7 @@ void func_L10_002CB030(struct Moby_CB030 *moby) {
             }
         } else {
             /* Retail logs only a missing target; neither rotation flag is silent. */
-            func_001E9730(D_L10_001DD0A0);
+            STUB_printf(D_L10_001DD0A0);
         }
         {
             int *entry = slot;
@@ -533,10 +533,10 @@ void func_L10_002CB030(struct Moby_CB030 *moby) {
                     char *base = D_L10_00160058_CB030;
                     unsigned short oclass = *(unsigned short *)((index << 8) + (int)base + 0xa6);
                     *(short *)(entry + 1) = oclass;
-                    func_001E9730(D_L10_001DD0D0, ((char *)moby - base) >> 8,
+                    STUB_printf(D_L10_001DD0D0, ((char *)moby - base) >> 8,
                                 i, index, (short)oclass);
                 } else {
-                    func_001E9730(D_L10_001DD100, ((char *)moby - D_L10_00160058_CB030) >> 8, i);
+                    STUB_printf(D_L10_001DD100, ((char *)moby - D_L10_00160058_CB030) >> 8, i);
                 }
             }
         }
@@ -563,7 +563,7 @@ void func_L10_002CB030(struct Moby_CB030 *moby) {
             if ((*(int *)(d + 8) & 2) == 0) {
                 float now = func_001FA888(*(int *)(d + 0x40));
                 float initial = func_001FA888(*(int *)(d + 0xc));
-                target->alpha = func_001FA898(*(float *)(d + 0x44) * now / initial);
+                target->alpha = truncate_float_to_s32(*(float *)(d + 0x44) * now / initial);
             }
         }
         if ((*(int *)(d + 8) & 4) == 0 && target != 0 &&
@@ -574,8 +574,8 @@ void func_L10_002CB030(struct Moby_CB030 *moby) {
         func_L10_002CAD18_CB030(moby, (HitBox *)d);
         return;
     case 3:
-        if (target != 0 && (*(int *)(d + 8) & 1) == 0) func_0020D678(target);
-        func_0020D678(moby);
+        if (target != 0 && (*(int *)(d + 8) & 1) == 0) DeleteMoby(target);
+        DeleteMoby(moby);
         break;
     case 4:
         break;
@@ -719,7 +719,7 @@ void func_L10_002D8F40(struct Moby_D8F40 *moby) {
     int i;
 
     qcopy(old, &moby->pos);
-    func_001F9BD8(&moby->pos, &moby->pos, data);
+    FastVecAdd(&moby->pos, &moby->pos, data);
     func_L00_00260D30(20.0f, moby, found);
     switch (*(short *)(data + 0x12)) {
     case 0:
@@ -749,8 +749,8 @@ void func_L10_002D8F40(struct Moby_D8F40 *moby) {
     func_L00_001FF500(check, check, 1.0f);
     check[2] = 1.0f;
     func_L00_0025A8C0(hit, moby, 0x10001, *(float *)(data + 0x18), check);
-    if (func_001F9938(data + 0x10)) {
-        func_0020D678(moby);
+    if (FastDecTimer(data + 0x10)) {
+        DeleteMoby(moby);
         return;
     }
     if (func_L00_001EFFF0(old, &moby->pos, 0, *(int *)(data + 0x20), (int)hit)) {
@@ -769,26 +769,26 @@ void func_L10_002D8F40(struct Moby_D8F40 *moby) {
             }
             for (i = 0; i < 5; i++) {
                 *(OvlQuad *)rand_dir = 0;
-                rand_dir[0] = func_002140F8(-1.0f, 1.0f);
-                rand_dir[1] = func_002140F8(-1.0f, 1.0f);
-                rand_dir[2] = func_002140F8(-1.0f, 1.0f);
+                rand_dir[0] = random_float_between(-1.0f, 1.0f);
+                rand_dir[1] = random_float_between(-1.0f, 1.0f);
+                rand_dir[2] = random_float_between(-1.0f, 1.0f);
                 *(OvlQuad *)raised = *(OvlQuad *)rand_dir;
                 func_L00_001FF610(rand_dir, data, D_L10_00174380);
-                func_L00_001FF4B0(raised, raised, func_001F9CB8(rand_dir) * 0.5f);
-                func_001F9BD8(raised, rand_dir, raised);
+                func_L00_001FF4B0(raised, raised, FastVecLength(rand_dir) * 0.5f);
+                FastVecAdd(raised, rand_dir, raised);
                 func_L00_001FF4B0(raised, raised,
-                    func_002140F8(D_0015EE6C * 3.0f, D_0015EE6C * 6.0f));
+                    random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.0f));
                 func_L00_0026EBC0(&moby->pos, raised, 0x7f2f4f6f,
-                    func_L00_00258BC8(func_001F9850(10), func_001F9850(15)), 30000.0f);
+                    rand_range(scale_ticks(10), scale_ticks(15)), 30000.0f);
             }
-            func_0020D678(moby);
+            DeleteMoby(moby);
             return;
         }
     }
     if (moby->pos.x < 2.0f || moby->pos.y < 2.0f || moby->pos.z < 2.0f ||
         moby->pos.x > 510.0f || moby->pos.y > 510.0f || moby->pos.z > 510.0f ||
         func_001F9D48(&moby->pos, &D_L10_001672C0) > 80.0f)
-        func_0020D678(moby);
+        DeleteMoby(moby);
 }
 extern char *func_0020D348(int);
 extern float func_002140F8(float, float);

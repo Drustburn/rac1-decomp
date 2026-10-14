@@ -850,11 +850,11 @@ void func_L06_002F8200(char *moby) {
 
     func_001FA218(base_matrix, moby + 0x40);
     func_001FA1C0(yaw_matrix, (*(float *)&D_L06_00161E9C));
-    func_001FA540(base_matrix, base_matrix, yaw_matrix);
-    func_00234C98(6, func_001F4868(14));
-    func_00234C98(0x14, 0xFF9000000260L);
-    func_00234C98(8, 0);
-    func_00234C98(0x42, (long)(*(int *)&D_L06_00161E60) | ((long)(*(int *)&D_L06_00161E64) << 2) |
+    sce_vu0_mul_matrix(base_matrix, base_matrix, yaw_matrix);
+    VU1_addGSregister(6, GetEffectTex(14));
+    VU1_addGSregister(0x14, 0xFF9000000260L);
+    VU1_addGSregister(8, 0);
+    VU1_addGSregister(0x42, (long)(*(int *)&D_L06_00161E60) | ((long)(*(int *)&D_L06_00161E64) << 2) |
                                   ((long)(*(int *)&D_L06_00161E68) << 4) | ((long)(*(int *)&D_L06_00161E6C) << 6) |
                                   0x8000000000L);
     func_001F7868();
@@ -867,10 +867,10 @@ void func_L06_002F8200(char *moby) {
     for (i = 8; i >= 0; i--) {
         func_001FA218(matrix, rotation);
         rotation += 4;
-        func_001FA540(matrix, base_matrix, matrix);
+        sce_vu0_mul_matrix(matrix, base_matrix, matrix);
         func_001F9EE8(offset, offset_src, base_matrix);
         offset_src += 4;
-        func_001F9BD8(translation, offset, moby + 0x10);
+        FastVecAdd(translation, offset, moby + 0x10);
         matrix[15] = 1.0f;
         matrix += 16;
         translation += 16;

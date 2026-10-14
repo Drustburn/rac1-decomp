@@ -1773,13 +1773,13 @@ void func_L08_002E9CB0(char *m) {
             char *d2;
             d2 = *(char **)(t + 0x78);
             func_L00_00260108(m, t + 0x10, -1, 2.0f, 13.0f);
-            func_001F9BF0(d2, *q + 0x10, *(char **)(o1 + data + 0x64) + 0x10);
+            FastVecSub(d2, *q + 0x10, *(char **)(o1 + data + 0x64) + 0x10);
             func_L00_001FF4B0(d2, d2, D_0015EE6C * 10.0f);
             (*q)[0x20] = 1;
             *q = 0;
             return;
         } else {
-            int s = func_001FA898(func_002140F8(0.0f, 23.0f));
+            int s = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
                         char *b2 = base;
             for (i = 0; i < 8; i++) {
                 int k = (i + s) % 8 + 5;
@@ -1788,7 +1788,7 @@ void func_L08_002E9CB0(char *m) {
                 if (*sq != 0) {
                     char *d2 = *(char **)(*sq + 0x78);
                     func_L00_00260108(m, *sq + 0x10, -1, 2.0f, 13.0f);
-                    func_001F9BF0(d2, *sq + 0x10, *(char **)(data + off + 0x64) + 0x10);
+                    FastVecSub(d2, *sq + 0x10, *(char **)(data + off + 0x64) + 0x10);
                     func_L00_001FF4B0(d2, d2, D_0015EE6C * 10.0f);
                     (*sq)[0x20] = 1;
                     *sq = 0;
@@ -2269,7 +2269,7 @@ mark_hit:
             vector = chosen->moby->pvars;
             func_L00_00260108(moby, &chosen->moby->pos, -1, 2.0f, 13.0f);
             position += selected * 16;
-            func_001F9BF0(vector, &chosen->moby->pos,
+            FastVecSub(vector, &chosen->moby->pos,
                          &(*(struct Moby_EAB30 **)(position + 0x64))->pos);
             func_L00_001FF4B0(vector, vector, D_0015EE6C * 10.0f);
             chosen->moby->state = 1;
@@ -2277,7 +2277,7 @@ mark_hit:
             return;
         }
         {
-            int start = func_001FA898(func_002140F8(0.0f, 23.0f));
+            int start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
             SwarmPart *base = slots;
             i = 0;
             do {
@@ -2290,7 +2290,7 @@ mark_hit:
                     char *position = data;
                     func_L00_00260108(moby, &candidate->moby->pos, -1, 2.0f, 13.0f);
                     position += index * 16;
-                    func_001F9BF0(vector, &candidate->moby->pos,
+                    FastVecSub(vector, &candidate->moby->pos,
                                  &(*(struct Moby_EAB30 **)(position + 0x64))->pos);
                     func_L00_001FF4B0(vector, vector, D_0015EE6C * 10.0f);
                     candidate->moby->state = 1;
