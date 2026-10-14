@@ -691,7 +691,12 @@ char *func_L03_002CDC50(char *p, void *pos, float *dir) {
     m[0x20] = 1;
     return m;
 }
-INCLUDE_ASM("asm/overlays", func_L03_002D44A0);
+/* whether the moby is a taxi (class 0x330) in states 2 to 6 */
+s32 func_L03_002D44A0(u8 *object) {
+    struct Moby *m = (struct Moby *)object;
+    if (m->oclass != 0x330) return 0;
+    return m->state >= 2 && m->state < 7;
+}
 extern void func_00215F80(int, int);
 
 void func_L03_002D44C8(void *arg, int mode) {
