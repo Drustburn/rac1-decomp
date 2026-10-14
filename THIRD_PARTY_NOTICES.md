@@ -771,6 +771,17 @@ project's own check. In parentheses, Lombyte's name.
 - `src/overlays/l06_blarg/vendor_002FE5D0.c`: `func_L06_00305C38` (`FUN_L06_003047f8`)
 - `src/overlays/l14_oltanis/vendor_002FF358.c`: `func_L14_00307660` (`FUN_L14_003061d8`)
 
+Six more were adapted by hand on 2026-10-14 from Lombyte's matched C. The C is Lombyte's with every symbol
+renamed to its PAL address and the level data at its PAL place, rewritten where Lombyte's form only steered the
+compiler, and each passed this project's own check. In parentheses, Lombyte's name.
+
+- `src/overlays/shared/vendor_002A5218.c`: `func_L02_002DDAE8` (`FUN_L02_002dc6b0`)
+- `src/overlays/shared/hud_00235960.c`: `func_L00_0023AC68` (`FUN_L00_0023a2d0`)
+- `src/overlays/shared/help_00237B00.c`: `func_L05_0024C558` (`FUN_L05_0024bdc0`)
+- `src/overlays/l11_pokitaru/vendor_00312BD8.c`: `func_L11_00319108` (`FUN_L11_00317c98`)
+- `src/overlays/l10_orxon/vendor_00296BD8.c`: `func_L10_002DB688` (`FUN_L10_002da2c8`)
+- `src/overlays/l01_novalis/vendor_002FABE8.c`: `func_L01_002FABE8` (`FUN_L01_002f9810`)
+
 `include/hero.h` (the hero and the records inside it) and `include/vector.h` (the 16-byte vector) are
 adapted from Lombyte's `include/rnc/gameplay/hero.h` and `include/rnc/math/vector.h` at 42adb529, while
 Lombyte was MIT licensed. `include/pad.h` (the controller state) is adapted from its
