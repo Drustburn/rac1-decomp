@@ -12,6 +12,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L01_002F0B48`](shared/func_L01_002F0B48.c) | shared | 788 | BYTES 5/788 | 99.4% |
 | [`func_L07_0031E6B0`](l07_umbris/func_L07_0031E6B0.c) | l07_umbris | 1196 | BYTES 8/1196 | 99.3% |
 | [`func_L00_002630A8`](shared/func_L00_002630A8.c) | shared | 816 | BYTES 6/816 | 99.3% |
+| [`func_L05_003033A0`](l05_rilgar/func_L05_003033A0.c) | l05_rilgar | 5188 | BYTES 49/5188 | 99.1% |
 | [`func_L05_00317CD8`](l05_rilgar/func_L05_00317CD8.c) | l05_rilgar | 384 | BYTES 4/384 | 99.0% |
 | [`func_L14_00306BE0`](l14_oltanis/func_L14_00306BE0.c) | l14_oltanis | 736 | BYTES 8/736 | 98.9% |
 | [`func_L14_002B2A28`](shared/func_L14_002B2A28.c) | shared | 3620 | BYTES 50/3620 | 98.6% |
@@ -456,6 +457,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L05_002D8B68`](l05_rilgar/func_L05_002D8B68.c) | l05_rilgar | 960 | SIZE ours 940 / retail 960 | - |
 | [`func_L05_002F62E8`](shared/func_L05_002F62E8.c) | shared | 244 | SIZE ours 564 / retail 560 | - |
 | [`func_L05_002F9BA0`](shared/func_L05_002F9BA0.c) | shared | 920 | SIZE ours 932 / retail 920 | - |
+| [`func_L05_00305778`](l05_rilgar/func_L05_00305778.c) | l05_rilgar | 3672 | SIZE ours 3668 / retail 3672 | - |
 | [`func_L05_0030D678`](functional/func_L05_0030D678.c) | functional | 908 | ? | - |
 | [`func_L05_0030DA08`](shared/func_L05_0030DA08.c) | shared | 888 | SIZE ours 876 / retail 888 | - |
 | [`func_L05_0030F358`](l05_rilgar/func_L05_0030F358.c) | l05_rilgar | 868 | SIZE ours 860 / retail 868 | - |
