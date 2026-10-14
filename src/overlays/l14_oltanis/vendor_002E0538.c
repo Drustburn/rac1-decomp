@@ -2957,7 +2957,120 @@ void func_L14_002FCEA8(char *m) {
         func_L00_00263950(m, d + 0x100, 1, sx * D_0015EE64, sy * D_0015EE64);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L14_002FD578);
+typedef struct {
+    u8 pad0[0x60];
+    s32 segment;
+    s32 along;
+    s32 path;
+    s32 sound;
+    f32 f70;
+    f32 f74;
+    f32 f78;
+    s32 timer;
+    f32 f80;
+    f32 f84;
+    f32 f88;
+} L14CartVars_FD578;
+
+extern int func_L00_0025B478_FD578(struct Moby *, int, int) __asm__("func_L00_0025B478");
+extern void func_L00_00260108_FD578(float, float, struct Moby *, void *, int) __asm__("func_L00_00260108");
+extern void func_0022EE28_FD578(int, int, int) __asm__("func_0022EE28");
+extern void func_L00_00264DB8_FD578(int, int) __asm__("func_L00_00264DB8");
+extern void func_L00_0028EBF0_FD578(int) __asm__("func_L00_0028EBF0");
+extern void func_001E9730_FD578(const char *, short) __asm__("func_001E9730");
+extern void func_0020D678_FD578(struct Moby *) __asm__("func_0020D678");
+extern int func_001F9850_FD578(int) __asm__("func_001F9850");
+extern int func_001F9908_FD578(void *) __asm__("func_001F9908");
+extern float func_L00_001FF860_FD578(float, float) __asm__("func_L00_001FF860");
+extern int func_L00_0028EB98_FD578(struct Moby *, int) __asm__("func_L00_0028EB98");
+extern int func_0022ED80_FD578(int, int, struct Moby *) __asm__("func_0022ED80");
+extern void func_L14_002FDD18_FD578(struct Moby *) __asm__("func_L14_002FDD18");
+extern void func_L14_002FDE28_FD578(struct Moby *) __asm__("func_L14_002FDE28");
+extern void func_L14_002FD870_FD578(struct Moby *) __asm__("func_L14_002FD870");
+extern s32 D_0015EE84_FD578 __asm__("D_0015EE84") MACRO_ADDR;
+extern int D_0015EF08_FD578 __asm__("D_0015EF08") MACRO_ADDR;
+extern struct { char pad[0x18]; unsigned char flag; } D_0013D510_FD578 __asm__("D_0013D510");
+extern char D_0013E650_FD578[] __asm__("D_0013E650");
+extern s32 D_L14_0016202C_FD578 SDATA(D_L14_0016202C);
+extern char D_L14_001FD180_FD578[] __asm__("D_L14_001FD180");
+extern char D_L14_001FD1B8_FD578[] __asm__("D_L14_001FD1B8");
+extern char *D_L14_001B0F30_FD578[] __asm__("D_L14_001B0F30");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l14/gameplay/entities/002df080.c, FUN_L14_002fc0f0. */
+void func_L14_002FD578(struct Moby *moby) {
+    L14CartVars_FD578 *data = (L14CartVars_FD578 *)moby->pvars;
+    int hit = func_L00_0025B478_FD578(moby, 0x800000, 0);
+    int index;
+    int path_index;
+    char *path;
+    moby->unkA4 = 0xff;
+    if (hit && moby->state != 2) {
+        if (D_0015EE84_FD578 == 14) {
+            D_0015EF08_FD578 = D_0015EF08_FD578 + 1;
+            if (D_0015EF08_FD578 > 2 && D_0013D510_FD578.flag == 0) {
+                D_0013D510_FD578.flag = 1;
+                func_0022EE28_FD578(1, 0, 0);
+                func_L00_00264DB8_FD578(0x53db, -1);
+            }
+        }
+        moby->state = 2;
+        func_L00_00260108_FD578(5.0f, 13.0f, moby, &moby->pos, -1);
+        moby->unk94 = 0;
+        moby->flags |= 0x41;
+        index = data->sound;
+        if (index != -1) {
+            char *entry = D_0013E650_FD578 + index * 0x70;
+            if (*(struct Moby **)(entry + 0x88) == moby && *(unsigned char *)(entry + 0x74) != 0)
+                func_L00_0028EBF0_FD578(index);
+        }
+        data->sound = -1;
+    }
+    switch (moby->state) {
+    case 0:
+        path_index = data->path;
+        if (path_index == -1) {
+            func_001E9730_FD578(D_L14_001FD180_FD578, moby->save_id);
+            func_0020D678_FD578(moby);
+            return;
+        }
+        if (*(int *)D_L14_001B0F30_FD578[path_index] == 0) {
+            func_001E9730_FD578(D_L14_001FD1B8_FD578, moby->save_id);
+            func_0020D678_FD578(moby);
+            return;
+        }
+        func_L14_002FDD18_FD578(moby);
+        moby->state = 1;
+        moby->unk30 = 0xff;
+        moby->unk32 = 0xff;
+        data->sound = -1;
+        data->timer = func_001F9850_FD578(D_L14_0016202C_FD578);
+        break;
+    case 1:
+        func_L14_002FDE28_FD578(moby);
+        break;
+    case 2:
+      if (func_001F9908_FD578(&data->timer)) {
+        path = D_L14_001B0F30_FD578[data->path];
+        moby->flags &= 0xffbe;
+        moby->unk94 = moby->pclass->unk10;
+        data->timer = func_001F9850_FD578(D_L14_0016202C_FD578);
+        moby->state = 1;
+        data->segment = 0;
+        data->along = 0;
+        qcopy(&moby->pos, path + 0x10);
+        moby->rot.z = func_L00_001FF860_FD578(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+                                              *(float *)(path + 0x24) - *(float *)(path + 0x14));
+        data->f80 = data->f84 =
+            data->f88 = data->f70 =
+            data->f74 = data->f78 = 0.0f;
+      }
+      break;
+    }
+    func_L14_002FD870_FD578(moby);
+    if (moby->state != 0 && moby->state != 2 &&
+        func_L00_0028EB98_FD578(moby, data->sound) == 0)
+        data->sound = func_0022ED80_FD578(0, 4, moby);
+}
 typedef u32 u128_2FD870 __attribute__((mode(TI), aligned(16)));
 struct AnimSeq;
 typedef struct {

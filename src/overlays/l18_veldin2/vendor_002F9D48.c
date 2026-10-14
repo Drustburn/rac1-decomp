@@ -5,7 +5,108 @@
 #include "moby.h"
 
 INCLUDE_ASM("asm/overlays", func_L18_002F9D48);
-INCLUDE_ASM("asm/overlays", func_L18_002FABE0);
+typedef unsigned int u128_FABE0 __attribute__((mode(TI)));
+typedef struct {
+    float m[4][4];
+    int col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_FABE0;
+typedef struct { char pad[0x30]; int state; int n; } ML_FABE0;
+
+extern ML_FABE0 D_L18_0016D2E0_FABE0 __asm__("D_L18_0016D2E0");
+extern int D_L18_00162528_FABE0 SDATA(D_L18_00162528);
+extern int D_L18_00162588_FABE0 SDATA(D_L18_00162588);
+extern int D_L18_0016258C_FABE0 SDATA(D_L18_0016258C);
+extern float D_L18_001625B0_FABE0 __asm__("D_L18_001625B0") MACRO_ADDR;
+extern float D_L18_001625E0_FABE0[4] __asm__("D_L18_001625E0") MACRO_ADDR;
+extern char D_L18_00167A50_FABE0[] __asm__("D_L18_00167A50");
+extern float D_L18_001DFE50_FABE0[4][4] __asm__("D_L18_001DFE50");
+extern int func_001F9850_FABE0(int) __asm__("func_001F9850");
+extern unsigned long func_001F4868_FABE0(int) __asm__("func_001F4868");
+extern void func_00234C98_FABE0(int, long) __asm__("func_00234C98");
+extern void func_001F9EC0_FABE0(void *, void *, void *) __asm__("func_001F9EC0");
+extern void func_001F9BD8_FABE0(void *, void *, void *) __asm__("func_001F9BD8");
+extern void func_001F9BF0_FABE0(void *, void *, void *) __asm__("func_001F9BF0");
+extern void func_L00_001FF4B0_FABE0(void *, void *, float) __asm__("func_L00_001FF4B0");
+extern void func_001F9CA0_FABE0(void *, void *, void *) __asm__("func_001F9CA0");
+extern void func_001F9C30_FABE0(void *, void *, float) __asm__("func_001F9C30");
+extern void func_001F9EE8_FABE0(void *, void *, void *) __asm__("func_001F9EE8");
+extern void func_L00_001FD1D8_FABE0(void *, int, int) __asm__("func_L00_001FD1D8");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l18/gameplay/vendor/002f88e8.c, FUN_L18_002f9780. */
+void func_L18_002FABE0(void) {
+    Pk_FABE0 pk;
+    float mat[4][4];
+    float up[4];
+    int i;
+    int color;
+    float tilt;
+    char *target;
+
+    if (D_L18_0016D2E0_FABE0.n == func_001F9850_FABE0(D_L18_00162528_FABE0 + 1)) {
+        D_L18_001625E0_FABE0[0] = 1.0f;
+        D_L18_001625E0_FABE0[1] = 0.0f;
+        if (D_L18_0016D2E0_FABE0.state == 7) {
+            tilt = -0.15f;
+        } else {
+            tilt = 0.15f;
+        }
+        D_L18_001625E0_FABE0[2] = tilt;
+        D_L18_001625E0_FABE0[3] = 1.0f;
+    }
+    pk.b = func_001F4868_FABE0(0xB);
+    pk.c = 0x0000FF9000000260ULL;
+    pk.d = 0x8000000048ULL;
+    pk.a = 0;
+    func_00234C98_FABE0(0x4A, 0);
+    func_00234C98_FABE0(0x47, 0x51001);
+    func_001F9EC0_FABE0(mat[3], D_L18_001625E0_FABE0, D_L18_00167A50_FABE0);
+    target = D_L18_00167A50_FABE0;
+    target -= 0x210;
+    func_001F9BD8_FABE0(mat[3], mat[3], target);
+    func_001F9BF0_FABE0(mat[0], mat[3], target);
+    func_L00_001FF4B0_FABE0(mat[0], mat[0], 1.0f);
+    *(u128_FABE0 *)up = 0;
+    up[2] = 1.0f;
+    up[3] = 1.0f;
+    func_001F9CA0_FABE0(mat[1], mat[0], up);
+    func_L00_001FF4B0_FABE0(mat[1], mat[1], 1.0f);
+    func_001F9CA0_FABE0(mat[2], mat[1], mat[0]);
+    pk.uv[0] = 1.0f;
+    pk.uv[1] = 1.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 0.0f;
+    pk.uv[7] = 0.0f;
+    color = D_L18_00162588_FABE0;
+    pk.col[3] = color;
+    pk.col[2] = color;
+    pk.col[1] = color;
+    pk.col[0] = color;
+    for (i = 0; i < 4; i++) {
+        func_001F9C30_FABE0(pk.m[i], D_L18_001DFE50_FABE0[i], D_L18_001625B0_FABE0);
+        func_001F9EE8_FABE0(pk.m[i], pk.m[i], mat);
+    }
+    func_L00_001FD1D8_FABE0(&pk, 0, 0);
+    color = D_L18_0016258C_FABE0;
+    pk.col[3] = color;
+    pk.col[2] = color;
+    pk.col[1] = color;
+    pk.col[0] = color;
+    for (i = 0; i < 4; i++) {
+        func_001F9C30_FABE0(pk.m[i], D_L18_001DFE50_FABE0[i], D_L18_001625B0_FABE0 * 0.75f);
+        func_001F9EE8_FABE0(pk.m[i], pk.m[i], mat);
+    }
+    func_L00_001FD1D8_FABE0(&pk, 0, 0);
+    for (i = 0; i < 4; i++) {
+        func_001F9C30_FABE0(pk.m[i], D_L18_001DFE50_FABE0[i], D_L18_001625B0_FABE0 * 0.5f);
+        func_001F9EE8_FABE0(pk.m[i], pk.m[i], mat);
+    }
+    func_L00_001FD1D8_FABE0(&pk, 0, 0);
+}
 extern int func_001F9850(int);
 extern float func_001FA888(int);
 extern float func_001F9FA8(float);

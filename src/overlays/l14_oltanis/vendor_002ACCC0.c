@@ -2935,14 +2935,82 @@ void func_L14_002D84A8(char *moby)
     int idx = *(int *)(data + 0x60);
     func_L00_0025E860(*(int *)((idx << 5) + D_L14_0015F7EC + 0x10), moby + 0x10, data + 0x64, data + 0x68, 0, *(float *)&D_L14_00161B00 * D_0015EE6C);
 }
-INCLUDE_ASM("asm/overlays", func_L14_002D8500);
+typedef struct {
+    float m[4][4];
+    u32 col[4];
+    float uv[8];
+    unsigned long a, b, c, d;
+} Pk_2D8500;
+
+extern struct Hero D_0013F450_D8500 __asm__("D_0013F450");
+extern char D_L14_001675C0_D8500[] __asm__("D_L14_001675C0");
+extern float D_L14_001DE840_D8500[4][4] __asm__("D_L14_001DE840");
+extern void func_001F9C30_D8500(void *, void *, float) __asm__("func_001F9C30");
+extern void func_001F9BF0_D8500(void *, void *, void *) __asm__("func_001F9BF0");
+extern void func_L00_001FF4B0_D8500(void *, void *, float) __asm__("func_L00_001FF4B0");
+extern void func_001F9CA0_D8500(void *, void *, void *) __asm__("func_001F9CA0");
+extern unsigned long func_001F4868_D8500(s32) __asm__("func_001F4868");
+extern void func_001F9EE8_D8500(void *, void *, void *) __asm__("func_001F9EE8");
+extern void func_L00_001FD1D8_D8500(void *, int, int) __asm__("func_L00_001FD1D8");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l14/gameplay/entities/002d6358.c, FUN_L14_002d71f0. */
+void func_L14_002D8500(struct Moby *m) {
+    char *d = (char *)m->pvars;
+    Pk_2D8500 pk;
+    float mat[4][4];
+    int i;
+    int j;
+    qcopy(mat[3], d + 0xE0);
+    mat[3][3] = 1.0f;
+    func_001F9BF0_D8500(mat[0], D_L14_001675C0_D8500, mat[3]);
+    func_L00_001FF4B0_D8500(mat[0], mat[0], 1.0f);
+    func_001F9CA0_D8500(mat[1], mat[0], &D_0013F450_D8500.unk290);
+    func_L00_001FF4B0_D8500(mat[1], mat[1], -1.0f);
+    func_001F9CA0_D8500(mat[2], mat[1], mat[0]);
+    pk.b = func_001F4868_D8500(0xB);
+    pk.d = 0x8000000048ULL;
+    pk.c = 0x0000FF9000000260ULL;
+    pk.a = 5;
+    pk.col[3] = 0x80FFFFFF;
+    pk.col[2] = 0x80FFFFFF;
+    pk.col[1] = 0x80FFFFFF;
+    pk.col[0] = 0x80FFFFFF;
+    pk.uv[0] = 0.0f;
+    pk.uv[1] = 0.0f;
+    pk.uv[2] = 0.0f;
+    pk.uv[3] = 1.0f;
+    pk.uv[4] = 1.0f;
+    pk.uv[5] = 0.0f;
+    pk.uv[6] = 1.0f;
+    pk.uv[7] = 1.0f;
+    for (i = 0; i < 4; i++) {
+        func_001F9C30_D8500(pk.m[i], D_L14_001DE840_D8500[i], 0.4f);
+        func_001F9EE8_D8500(pk.m[i], pk.m[i], mat);
+    }
+    func_L00_001FD1D8_D8500(&pk, 0, 0);
+    qcopy(mat[3], d + 0x200);
+    func_001F9BF0_D8500(mat[0], D_L14_001675C0_D8500, mat[3]);
+    func_L00_001FF4B0_D8500(mat[0], mat[0], 1.0f);
+    func_001F9CA0_D8500(mat[1], mat[0], &D_0013F450_D8500.unk290);
+    func_L00_001FF4B0_D8500(mat[1], mat[1], -1.0f);
+    func_001F9CA0_D8500(mat[2], mat[1], mat[0]);
+    pk.col[3] = 0x202020FF;
+    pk.col[2] = 0x202020FF;
+    pk.col[1] = 0x202020FF;
+    pk.col[0] = 0x202020FF;
+    for (j = 0; j < 4; j++) {
+        func_001F9C30_D8500(pk.m[j], D_L14_001DE840_D8500[j], 0.2f);
+        func_001F9EE8_D8500(pk.m[j], pk.m[j], mat);
+    }
+    func_L00_001FD1D8_D8500(&pk, 0, 0);
+}
 extern char D_L14_00180AC0[];
 extern short D_L14_00161B30;
 extern float D_L14_0015F660[] MACRO_ADDR;
 extern int func_L00_0023F0D0(float *, float, float, float, float, float);
 extern void func_002141A8(void *, float, float);
 extern char *func_L00_002757E8(void *, void *, int, void *);
-extern void func_L14_002D8500(void);
+extern void func_L14_002D8500(struct Moby *);
 
 /* Puffs smoke from the moby's exhaust joint: keeps its light in place while active, then spawns four puffs. */
 void func_L14_002D87A0(char *m) {

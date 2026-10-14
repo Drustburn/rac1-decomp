@@ -771,6 +771,26 @@ project's own check. In parentheses, Lombyte's name.
 - `src/overlays/l06_blarg/vendor_002FE5D0.c`: `func_L06_00305C38` (`FUN_L06_003047f8`)
 - `src/overlays/l14_oltanis/vendor_002FF358.c`: `func_L14_00307660` (`FUN_L14_003061d8`)
 
+Fifteen more were adapted by hand on 2026-10-14 from Lombyte's matched C. The C is Lombyte's with every
+symbol renamed to its PAL address, the level data at its PAL place and two dialogue ids at their PAL
+values, and each passed this project's own check. In parentheses, Lombyte's name.
+
+- `src/overlays/shared/vendor_002D9548.c`: `func_L06_002EAF90` (`FUN_L06_002e9b60`)
+- `src/overlays/shared/vendor_002FF000.c`: `func_L06_0030D3E8` (`FUN_L06_0030bfa8`)
+- `src/overlays/shared/mobyutil_00261B00.c`: `func_L00_002629E0` (`FUN_L00_00261968`)
+- `src/overlays/l09_gaspar/vendor_002C2B08.c`: `func_L09_002F1198` (`FUN_L09_002efe48`)
+- `src/overlays/shared/vendor_002F7700.c`: `func_L01_00303810` (`FUN_L01_00302438`)
+- `src/overlays/shared/help_0020CDF0.c`: `func_L00_0020D3A0` (`FUN_L00_0020cd08`)
+- `src/overlays/shared/vendor_002C6B30.c`: `func_L09_0030BB28` (`FUN_L09_0030a778`)
+- `src/overlays/l11_pokitaru/vendor_002CC828.c`: `func_L11_00310058` (`FUN_L11_0030eb90`)
+- `src/overlays/l14_oltanis/vendor_002ACCC0.c`: `func_L14_002D8500` (`FUN_L14_002d71f0`)
+- `src/overlays/l14_oltanis/vendor_002FF358.c`: `func_L14_00306BE0` (`FUN_L14_00305758`)
+- `src/overlays/l14_oltanis/vendor_002E0538.c`: `func_L14_002FD578` (`FUN_L14_002fc0f0`)
+- `src/overlays/shared/vendor_002B90A8.c`: `func_L01_002F0B48` (`FUN_L01_002ef770`)
+- `src/overlays/shared/vendor_002D9548.c`: `func_L06_002F3D40` (`FUN_L06_002f2910`)
+- `src/overlays/l18_veldin2/vendor_002F9D48.c`: `func_L18_002FABE0` (`FUN_L18_002f9780`)
+- `src/overlays/l13_gemlik/vendor_002EBD00.c`: `func_L13_002EBD00` (`FUN_L13_002ea8c8`)
+
 `include/hero.h` (the hero and the records inside it) and `include/vector.h` (the 16-byte vector) are
 adapted from Lombyte's `include/rnc/gameplay/hero.h` and `include/rnc/math/vector.h` at 42adb529, while
 Lombyte was MIT licensed. `include/pad.h` (the controller state) is adapted from its

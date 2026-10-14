@@ -2210,7 +2210,75 @@ void func_L11_0030FE40(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L11_00310058);
+struct L11TiltVars_10058 {
+    u8 pad0[0x20];
+    u8 unk20[0x3C];
+    s32 unk5C;
+    f32 spin;
+};
+
+extern struct Hero D_0013F450_10058 __asm__("D_0013F450");
+extern float D_0015EE70_10058 __asm__("D_0015EE70") MACRO_ADDR;
+extern float D_L11_00161FF8_10058 SDATA(D_L11_00161FF8);
+extern float D_L11_00161FFC_10058 SDATA(D_L11_00161FFC);
+extern float D_L11_00162000_10058 SDATA(D_L11_00162000);
+extern float D_L11_00162004_10058 SDATA(D_L11_00162004);
+extern float D_L11_00162008_10058 SDATA(D_L11_00162008);
+extern float D_L11_0016200C_10058 SDATA(D_L11_0016200C);
+extern float D_L11_00162010_10058 SDATA(D_L11_00162010);
+extern float D_L11_00162014_10058 SDATA(D_L11_00162014);
+extern void func_001F9C30_10058(void *, void *, float) __asm__("func_001F9C30");
+extern void func_001F9BF0_10058(void *, void *, void *) __asm__("func_001F9BF0");
+extern void func_001F9BD8_10058(void *, void *, void *) __asm__("func_001F9BD8");
+extern void func_001FA4A0_10058(void *, void *) __asm__("func_001FA4A0");
+extern void func_001F9EE8_10058(void *, void *, void *) __asm__("func_001F9EE8");
+extern float func_001F9B88_10058(float) __asm__("func_001F9B88");
+extern void func_L11_0024E240_10058(int, int) __asm__("func_L11_0024E240");
+extern float func_001FA748_10058(float, float) __asm__("func_001FA748");
+extern void func_L00_002617B0_10058(void *, void *, void *, void *) __asm__("func_L00_002617B0");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l11/gameplay/vendor/0030c788.c, FUN_L11_0030eb90. */
+void func_L11_00310058(struct Moby *m) {
+    Vec4f v;
+    Vec4f rot;
+    float matrix[16] __attribute__((aligned(16)));
+    Vec4f diff;
+    struct L11TiltVars_10058 *d = (struct L11TiltVars_10058 *)m->pvars;
+    float spin;
+    float change;
+    float scaled;
+
+    func_001F9C30_10058(&v, &m->pos, -1.0f);
+    qcopy(&rot, &m->rot);
+    d->unk5C = 1;
+    spin = d->spin;
+    /* two separate updates (not one sum): gives retail's FP register allocation */
+    d->spin = spin + D_L11_0016200C_10058 * 0.017453292f * D_0015EE70_10058 * (D_L11_00161FFC_10058 * m->rot.y);
+    d->spin = d->spin + D_L11_00162010_10058 * 0.017453292f * D_0015EE70_10058 * (D_L11_00162000_10058 * spin);
+    if (D_0013F450_10058.ground_moby == m && D_0013F450_10058.air_frames.s == 0) {
+        func_001F9BF0_10058(&diff, &D_0013F450_10058.motion.pos, &m->pos);
+        func_001FA4A0_10058(matrix, &m->unkC0);
+        func_001F9EE8_10058(&diff, &diff, matrix);
+        scaled = D_L11_00161FF8_10058 * diff.x;
+        change = D_L11_00162008_10058 * 0.017453292f * D_0015EE70_10058 * scaled;
+        if (d->spin * change < 0.0f && m->rot.y * change < 0.0f) {
+            change += change;
+        }
+        if (change < 0.0f) {
+            change -= D_L11_00162004_10058 * 0.017453292f * D_0015EE70_10058;
+        } else {
+            change += D_L11_00162004_10058 * 0.017453292f * D_0015EE70_10058;
+        }
+        d->spin = d->spin + change;
+        if (func_001F9B88_10058(m->rot.y) > D_L11_00162014_10058 * 0.017453292f &&
+            (u32)D_0013F450_10058.state.control_mode < 2) {
+            func_L11_0024E240_10058(6, 1);
+        }
+    }
+    m->rot.y = func_001FA748_10058(m->rot.y, d->spin);
+    func_001F9BD8_10058(&v, &v, &m->pos);
+    func_L00_002617B0_10058(d->unk20, &v, &rot, &m->rot);
+}
 extern void func_0022ED80(int, int, int);
 extern unsigned char D_0013D4EB NOT_SDA;
 extern short D_L11_0015F6B0;

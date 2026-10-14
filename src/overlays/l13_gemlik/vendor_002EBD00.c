@@ -5,7 +5,105 @@
 #include "include_asm.h"
 #include "moby.h"
 
-INCLUDE_ASM("asm/overlays", func_L13_002EBD00);
+struct GeometryQuad_EBD00 {
+    Vec4 positions[4];
+    u32 colors[4];
+    f32 texture_coordinates[4][2];
+    u64 reserved;
+    u64 texture;
+    u64 texture_state;
+    u64 primitive;
+};
+
+extern int D_L13_0015F6B0_EBD00 __asm__("D_L13_0015F6B0") MACRO_ADDR;
+extern char D_L13_00160700_EBD00[] __asm__("D_L13_00160700") MACRO_ADDR;
+extern u64 func_001F4868_EBD00(int) __asm__("func_001F4868");
+extern void func_L00_00250800_EBD00(struct Moby *, int, void *) __asm__("func_L00_00250800");
+extern void func_001F9BF0_EBD00(void *, void *, void *) __asm__("func_001F9BF0");
+extern void func_L00_001FF548_EBD00(void *, void *, float) __asm__("func_L00_001FF548");
+extern float func_001F9CB8_EBD00(void *) __asm__("func_001F9CB8");
+extern void func_L00_001FF4B0_EBD00(void *, void *, float) __asm__("func_L00_001FF4B0");
+extern float func_001FA888_EBD00(int) __asm__("func_001FA888");
+extern void func_001F9CA0_EBD00(void *, void *, void *) __asm__("func_001F9CA0");
+extern void func_001F9BD8_EBD00(void *, void *, void *) __asm__("func_001F9BD8");
+extern int func_001FA898_EBD00(float) __asm__("func_001FA898");
+extern void func_L00_001FD1D8_EBD00(void *, int, int) __asm__("func_L00_001FD1D8");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l13/gameplay/entities/002ea8c8.c, FUN_L13_002ea8c8. */
+void func_L13_002EBD00(struct Moby *moby) {
+    char *vars = (char *)moby->pvars;
+    struct GeometryQuad_EBD00 quad;
+    float start[4];
+    float direction[4];
+    float position[4];
+    float offset[4];
+    float side[4];
+    float up[4];
+    float edge[4];
+    float length;
+    float step;
+    float distance;
+    float width;
+    float scale;
+    float zero = 0.0f;
+    float one = 1.0f;
+    u64 texture;
+
+    texture = func_001F4868_EBD00(0x34);
+    quad.colors[3] = 0x40808080;
+    quad.colors[2] = 0x40808080;
+    quad.colors[1] = 0x40808080;
+    quad.colors[0] = 0x40808080;
+    quad.texture = texture;
+    quad.texture_state = 0xFF9000000260LL;
+    quad.reserved = 4;
+    quad.primitive = 0x8000000048LL;
+    quad.texture_coordinates[0][0] = zero;
+    quad.texture_coordinates[2][0] = zero;
+    quad.texture_coordinates[1][0] = one;
+    quad.texture_coordinates[3][0] = one;
+    quad.texture_coordinates[0][1] = zero;
+    quad.texture_coordinates[1][1] = zero;
+    quad.texture_coordinates[2][1] = one;
+    quad.texture_coordinates[3][1] = one;
+    func_L00_00250800_EBD00(moby, 0x13, start);
+    func_001F9BF0_EBD00(direction, vars + 0x80, start);
+    func_L00_001FF548_EBD00(direction, direction, 100.0f);
+    length = func_001F9CB8_EBD00(direction);
+    scale = length / 100.0f;
+    if (scale < 1.0f)
+        step = 1.0f;
+    else
+        step = scale;
+    func_L00_001FF4B0_EBD00(direction, direction, step);
+    qcopy(position, start);
+    distance = zero;
+    func_L00_001FF4B0_EBD00(offset, direction, func_001FA888_EBD00(D_L13_0015F6B0_EBD00 % 20) / 20.0f);
+    func_001F9BF0_EBD00(position, position, offset);
+    while (distance < length) {
+        width = (distance * 0.0f) / (length + length) + 0.5f;
+        func_001F9CA0_EBD00(side, direction, D_L13_00160700_EBD00);
+        func_L00_001FF4B0_EBD00(side, side, width);
+        func_001F9CA0_EBD00(up, direction, side);
+        func_L00_001FF4B0_EBD00(up, up, width);
+        func_001F9BF0_EBD00(edge, position, up);
+        func_001F9BF0_EBD00(&quad.positions[0], edge, side);
+        func_001F9BD8_EBD00(&quad.positions[1], edge, side);
+        func_001F9BD8_EBD00(edge, position, up);
+        func_001F9BF0_EBD00(&quad.positions[2], edge, side);
+        func_001F9BD8_EBD00(&quad.positions[3], edge, side);
+        if (10.0f < length && length - 10.0f < distance) {
+            int color = func_001FA898_EBD00((length - distance) * 6.4f) << 24 | 0x808080;
+            quad.colors[3] = color;
+            quad.colors[2] = color;
+            quad.colors[1] = color;
+            quad.colors[0] = color;
+        }
+        func_L00_001FD1D8_EBD00(&quad, 0, 1);
+        distance += step;
+        func_001F9BD8_EBD00(position, position, direction);
+    }
+}
 extern int func_001F9908(void *);
 extern void func_L13_002EB978(void *, void *);
 extern int func_001F9850(int);
