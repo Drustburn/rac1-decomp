@@ -77,7 +77,68 @@ void func_L00_002626A8(char *moby, char *d, float a, float b) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_002629E0);
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    Vec4 points[1];
+} SegmentPath_2629E0;
+
+extern SegmentPath_2629E0 *D_L00_001B0830_2629E0[] __asm__("D_L00_001B0830");
+extern void func_001F9BF0_2629E0(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9BF0");
+extern f32 func_001F9CB8_2629E0(Vec4 *) __asm__("func_001F9CB8");
+extern void func_L00_001FF4B0_2629E0(Vec4 *, Vec4 *, f32) __asm__("func_L00_001FF4B0");
+extern void func_001F9BC0_2629E0(Vec4 *) __asm__("func_001F9BC0");
+extern void func_001F9EC0_2629E0(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9EC0");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/state/00261968.c, FUN_L00_00261968. */
+s32 func_L00_002629E0(s32 path_index, Vec4 *start, Vec4 *end) {
+    Vec4 direction;
+    Vec4 axis;
+    Vec4 origin;
+    Vec4 first;
+    Vec4 next;
+    Vec4 *previous;
+    Vec4 *current;
+    SegmentPath_2629E0 **entry;
+    s32 i;
+    s32 offset;
+    f32 crossing;
+    f32 zero;
+
+    i = 1;
+    func_001F9BF0_2629E0(&direction, end, start);
+    direction.i[2] = 0;
+    func_L00_001FF4B0_2629E0(&direction, &direction, 1.0f / func_001F9CB8_2629E0(&direction));
+    func_001F9BC0_2629E0(&axis);
+    axis.f[0] = direction.f[1];
+    axis.f[1] = -direction.f[0];
+    func_001F9BC0_2629E0(&origin);
+    entry = &D_L00_001B0830_2629E0[path_index];
+    origin.f[2] = 1.0f;
+    func_001F9BF0_2629E0(&first, &(*entry)->points[0], start);
+    func_001F9EC0_2629E0(&first, &first, &direction);
+    previous = &first;
+    current = &next;
+    if (i < (*entry)->count) {
+        offset = 0x20;
+        zero = 0.0f;
+        do {
+            func_001F9BF0_2629E0(current, (Vec4 *)((u8 *)*entry + offset), start);
+            func_001F9EC0_2629E0(current, current, &direction);
+            if (first.f[3] != zero || next.f[3] != zero) {
+                if (next.f[1] * first.f[1] < 0.0f) {
+                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + next.f[0];
+                    if (crossing > 0.0f && crossing < 1.0f)
+                        return 1;
+                }
+            }
+            qcopy(previous, current);
+            i++;
+            offset += 0x10;
+        } while (i < (*entry)->count);
+    }
+    return 0;
+}
 INCLUDE_ASM("asm/overlays", func_L00_00262BC0);
 LINKER_REMNANT("asm/overlays", func_L00_00262DE8);
 typedef int OvlQuad __attribute__((mode(TI)));
