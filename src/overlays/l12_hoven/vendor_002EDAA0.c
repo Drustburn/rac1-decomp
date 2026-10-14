@@ -210,7 +210,128 @@ char *func_L12_002EE068(char *src, char *pos, int owner, int seed, float f0, flo
     }
     return moby;
 }
-INCLUDE_ASM("asm/overlays", func_L12_002EE180);
+typedef struct {
+    float vel[4];
+    struct Moby *owner;
+    int timer;
+    float unk18;
+    float yaw;
+} ShotVars_E180;
+typedef struct {
+    float dir[4];
+    float unk10[2];
+    char unk18;
+    char unk19;
+    short oclass;
+    int pad1C;
+    int pad20[4];
+} ShotHit_E180;
+typedef struct { char pad0[0x18]; int moby; } ShotColl_E180;
+
+extern ShotColl_E180 D_L12_00174340_E180 __asm__("D_L12_00174340") NOT_SDA;
+extern int D_001414D4_E180 __asm__("D_001414D4") NOT_SDA;
+extern s32 D_0015EE84_E180 __asm__("D_0015EE84") MACRO_ADDR;
+extern float D_0015EE6C_E180 __asm__("D_0015EE6C") MACRO_ADDR;
+extern int D_L12_00161FA0_E180 SDATA(D_L12_00161FA0);
+extern char D_L12_001672C0_E180[] __asm__("D_L12_001672C0");
+extern int D_L12_0015F660_E180 __asm__("D_L12_0015F660") MACRO_ADDR;
+extern char *func_L00_0025B478_E180(struct Moby *, int, int) __asm__("func_L00_0025B478");
+extern void func_0020D678_E180(struct Moby *) __asm__("func_0020D678");
+extern void func_001F9BD8_E180(void *, void *, void *) __asm__("func_001F9BD8");
+extern void func_001F9BF0_E180(void *, void *, void *) __asm__("func_001F9BF0");
+extern void func_L00_001FF4B0_E180(void *, void *, float) __asm__("func_L00_001FF4B0");
+extern float func_001FA748_E180(float, float) __asm__("func_001FA748");
+extern void func_L00_001FF240_E180(void *, void *, void *) __asm__("func_L00_001FF240");
+extern int func_L00_00258BC8_E180(int, int) __asm__("func_L00_00258BC8");
+extern int func_001F9850_E180(int) __asm__("func_001F9850");
+extern void func_L00_0026A7F8_E180(void *, void *, int, int, int, int, int, int) __asm__("func_L00_0026A7F8");
+extern int func_L00_001EFFF0_E180(void *, void *, int, struct Moby *, int) __asm__("func_L00_001EFFF0");
+extern int func_L00_001F10E0_E180(void *, float, int, struct Moby *) __asm__("func_L00_001F10E0");
+extern void func_L00_0025A8C0_E180(void *, struct Moby *, int, float, void *) __asm__("func_L00_0025A8C0");
+extern float func_001F9F90_E180(float) __asm__("func_001F9F90");
+extern float func_001F9FA8_E180(float) __asm__("func_001F9FA8");
+extern void func_L00_0025AAC0_E180(int, void *) __asm__("func_L00_0025AAC0");
+extern int func_001F9908_E180(int *) __asm__("func_001F9908");
+extern void func_L00_0025F4A8_E180(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("func_L00_0025F4A8");
+extern void func_L00_00260108_E180(void *, void *, int, float, float) __asm__("func_L00_00260108");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l12/gameplay/entities/002ec720.c, FUN_L12_002ece00. */
+void func_L12_002EE180(struct Moby *moby) {
+    ShotVars_E180 *vars = (ShotVars_E180 *)moby->pvars;
+    float old_pos[4];
+    float side[4];
+    float back[4];
+    float trail[4];
+    ShotHit_E180 hit;
+    switch (moby->state) {
+    case 1: {
+        char *touch = func_L00_0025B478_E180(moby, 0x230000, 0);
+        int damage;
+        if (touch != 0 && *(struct Moby **)(touch + 0x20) != vars->owner) {
+            moby->state = 2;
+            break;
+        }
+        if (D_0015EE84_E180 == 12 && D_001414D4_E180 == 50 && vars->owner != 0) {
+            if ((signed char)vars->owner->state < 0) {
+                func_0020D678_E180(moby);
+                return;
+            }
+            if (vars->owner->state < 2) {
+                moby->state = 2;
+                break;
+            }
+        }
+        qcopy(old_pos, &moby->pos);
+        func_001F9BD8_E180(&moby->pos, &moby->pos, vars);
+        moby->rot.z = vars->yaw;
+        moby->rot.x = func_001FA748_E180(moby->rot.x, D_0015EE6C_E180 * 6.2831855f);
+        func_L00_001FF4B0_E180(side, vars, 0.2f);
+        func_L00_001FF4B0_E180(back, vars, -0.2f);
+        func_L00_001FF240_E180(trail, back, &moby->pos);
+        func_L00_0026A7F8_E180(back, side, 0x6F00AFFF, 0xFF, func_001F9850_E180(func_L00_00258BC8_E180(15, 22)), 40,
+                         func_L00_00258BC8_E180(20, 35), 1);
+        func_L00_0026A7F8_E180(back, side, 0x1FFFFFFF, 0x4F4F4F, func_001F9850_E180(func_L00_00258BC8_E180(30, 60)), 40,
+                         func_L00_00258BC8_E180(50, 75), 0);
+        if (func_L00_001EFFF0_E180(&moby->pos, old_pos, 0, moby, 0) || func_L00_001F10E0_E180(&moby->pos, 0.2f, 0, moby)) {
+            if (D_L12_00174340_E180.moby != 0 && D_L12_00174340_E180.moby != (int)vars->owner) {
+                damage = 1;
+                if (D_0015EE84_E180 == 12 && D_001414D4_E180 == 50) {
+                    damage = D_L12_00161FA0_E180 >= 16 ? 2 : 3;
+                }
+                func_L00_0025A8C0_E180(&hit, moby, 0x10003, damage, vars);
+                hit.dir[0] = func_001F9F90_E180(vars->yaw);
+                hit.dir[1] = func_001F9FA8_E180(vars->yaw);
+                hit.dir[2] = 1.0f;
+                hit.dir[3] = 5627.9248f;
+                hit.unk18 = 1;
+                hit.unk19 = 1;
+                hit.oclass = moby->oclass;
+                func_L00_0025AAC0_E180(D_L12_00174340_E180.moby, &hit);
+            }
+            moby->state = 2;
+        }
+        if (func_001F9908_E180(&vars->timer)) {
+            moby->state = 2;
+        }
+        break;
+    }
+    case 2:
+        func_001F9BF0_E180(old_pos, &moby->pos, D_L12_001672C0_E180);
+        func_L00_001FF4B0_E180(old_pos, old_pos, 0.4f);
+        func_001F9BD8_E180(&moby->pos, &moby->pos, old_pos);
+        if (D_0015EE84_E180 == 12 && D_001414D4_E180 == 50) {
+            char *camera = D_L12_001672C0_E180 - 0x140;
+            func_L00_0025F4A8_E180(moby, &D_L12_0015F660_E180, 0, 0.0f, 0.0f, 3, 3, 5, 0.3f, 0.2f, 0.0f, 0.15f, -1, 0.0f, 0, 0,
+                             -1, 0);
+            *(float *)(camera + 0x160) = 0.025f;
+            *(int *)(camera + 0x168) = func_001F9850_E180(20);
+        } else {
+            func_L00_00260108_E180(moby, &moby->pos, 0, 0.25f, 13.0f);
+        }
+        func_0020D678_E180(moby);
+        break;
+    }
+}
 extern unsigned char D_0013D50F_e[] __asm__("D_0013D50F");
 extern unsigned char D_0013D5CA_e[] __asm__("D_0013D5CA") NOT_SDA;
 extern int D_0013A5E0_e[] __asm__("D_0013A5E0") NOT_SDA;
