@@ -57,12 +57,12 @@ void func_L09_002C2B08(void *data_ptr, void *list_ptr, int count) {
         current[0x228 / 4] = *(float *)(data + 0x28);
         current[0x22c / 4] = *(float *)(data + 0x2c);
     }
-    func_001F3140();
+    UpdateViewContext();
     func_001F2608();
     func_001FA1C0(1024.0f, matrix);
     func_001F9C30_C2B08(-1024.0f, offset, D_L09_00166FC0);
     offset[3] = 1.0f;
-    func_00234B48(D_0010E810, D_0010E800[0]);
+    VU1_addDataRef(D_0010E810, D_0010E800[0]);
     {
         int *packet;
         int *packet_end;
@@ -75,8 +75,8 @@ void func_L09_002C2B08(void *data_ptr, void *list_ptr, int count) {
         packet[5] = 0;
         packet[6] = 0;
         packet[7] = 0x6c0c43a4;
-        func_001FA540(packet + 8, D_L09_00166FC0 - 64, matrix);
-        func_001FA540(packet + 24, D_L09_00166FC0 - 32, matrix);
+        sce_vu0_mul_matrix(packet + 8, D_L09_00166FC0 - 64, matrix);
+        sce_vu0_mul_matrix(packet + 24, D_L09_00166FC0 - 32, matrix);
         packet[40] = 0x8000;
         packet[41] = 0x303ec000;
         packet[42] = 0x412;
@@ -158,7 +158,7 @@ void func_L09_002C2B08(void *data_ptr, void *list_ptr, int count) {
         int visible;
         entry_offset = i * 32;
         entry = (char *)((int)list + entry_offset);
-        visible = func_L00_00200290(entry, 256.0f);
+        visible = FastBSphereCheck(entry, 256.0f);
         if (visible != -1) {
             int n = *(int *)(entry + 0x1c);
             float *source = *(float **)(entry + 0x14);
@@ -1287,7 +1287,7 @@ void func_L09_002EEF80(struct Moby_EEF80 *moby) {
         }
         replaced = func_L09_002EEEB0((char *)moby, next) != 0;
     }
-    moby->command = func_001F9850(10);
+    moby->command = scale_ticks(10);
     qcopy(top, &moby->pos);
     top[2] += 1.25f;
     qcopy(center, top);
@@ -1298,7 +1298,7 @@ void func_L09_002EEF80(struct Moby_EEF80 *moby) {
         func_0022ED80_EEF80(0, 0, moby);
     }
     moby->hit_slot = 0xFF;
-    func_001F9BF0(push, D_L09_00166FC0, center);
+    FastVecSub(push, D_L09_00166FC0, center);
     func_L00_001FF4B0(push, push, 2.0f);
     spread = 4.0f;
     if (moby->oclass != 0x114) {
@@ -1306,27 +1306,27 @@ void func_L09_002EEF80(struct Moby_EEF80 *moby) {
     }
     for (i = 0; i < 20; i++) {
         *(u128_EEF80 *)vel = 0;
-        vel[0] = func_002140F8(-0.5f, 0.5f);
-        vel[1] = func_002140F8(-2.0f, 2.0f);
-        vel[2] = func_002140F8(-spread, spread);
+        vel[0] = random_float_between(-0.5f, 0.5f);
+        vel[1] = random_float_between(-2.0f, 2.0f);
+        vel[2] = random_float_between(-spread, spread);
         *(u128_EEF80 *)pos = *(u128_EEF80 *)vel;
         func_001F9EC0(pos, pos, &moby->rot_row0);
-        func_001F9BD8(pos, pos, top);
-        func_001F9BF0(vel, pos, center);
-        falloff = func_001F9B88(3.0f - func_001F9CB8(vel)) / 3.0f;
+        FastVecAdd(pos, pos, top);
+        FastVecSub(vel, pos, center);
+        falloff = FastAbsF(3.0f - FastVecLength(vel)) / 3.0f;
         func_L00_001FF4B0(pull, hit + 0x10, falloff * falloff * 8.0f);
-        func_001F9BD8(vel, vel, pull);
-        func_L00_001FF4B0(vel, vel, falloff * (func_002140F8(6.0f, 10.0f) * D_0015EE6C));
-        func_001F9BD8(pos, pos, push);
-        if (moby->oclass == 0x514 || func_002140B0(4) == 0) {
-            func_L09_002F0BB8_EEF80(moby, (Vec4_EEF80 *)pos, (Vec4_EEF80 *)vel, i & 1, func_002140F8(1.0f, 2.0f));
+        FastVecAdd(vel, vel, pull);
+        func_L00_001FF4B0(vel, vel, falloff * (random_float_between(6.0f, 10.0f) * D_0015EE6C));
+        FastVecAdd(pos, pos, push);
+        if (moby->oclass == 0x514 || random_integer_below(4) == 0) {
+            func_L09_002F0BB8_EEF80(moby, (Vec4_EEF80 *)pos, (Vec4_EEF80 *)vel, i & 1, random_float_between(1.0f, 2.0f));
         }
         if (i % 3 == 0) {
-            func_L00_00260108_EEF80(moby, pos, -1, func_002140F8(1.0f, 1.6f), 0.0f);
+            func_L00_00260108_EEF80(moby, pos, -1, random_float_between(1.0f, 1.6f), 0.0f);
         }
     }
-    func_001F9C30(pos, hit + 0x10, 0.5f);
-    func_001F9BD8(center, center, push);
+    FastVecScale(pos, hit + 0x10, 0.5f);
+    FastVecAdd(center, center, push);
     func_L00_0025F4A8(moby, hit + 0x10, center, 0.0f, 0.0f, 10, 3, 16, 3.0f, 2.0f, 1.0f, 1.0f, -1, 15.0f, 1, 1,
                            -1, 0);
     if (moby->oclass == 0x514 || replaced) {

@@ -1921,20 +1921,20 @@ void func_L05_003065D0(char *moby) {
             func_L00_0025F4A8(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
                                   4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             qcopy(position, moby + 0x10);
-            position[0] += 2.0f * func_001F9F90(*(float *)(moby + 0x48));
-            position[1] += 2.0f * func_001F9FA8(*(float *)(moby + 0x48));
+            position[0] += 2.0f * FastCos(*(float *)(moby + 0x48));
+            position[1] += 2.0f * FastSin(*(float *)(moby + 0x48));
             func_L00_0025F4A8(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
                                   4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             qcopy(position, moby + 0x10);
-            angle = func_001FA748(*(float *)(moby + 0x48), 3.14159274f);
-            position[0] += 2.0f * func_001F9F90(angle);
-            angle = func_001FA748(*(float *)(moby + 0x48), 3.14159274f);
-            position[1] += 2.0f * func_001F9FA8(angle);
+            angle = FastAddRots(*(float *)(moby + 0x48), 3.14159274f);
+            position[0] += 2.0f * FastCos(angle);
+            angle = FastAddRots(*(float *)(moby + 0x48), 3.14159274f);
+            position[1] += 2.0f * FastSin(angle);
             func_L00_0025F4A8(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
                                   4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            *(short *)(data + 0x19e) = func_001F9850((*(int *)&D_L05_00161C34));
+            *(short *)(data + 0x19e) = scale_ticks((*(int *)&D_L05_00161C34));
             moby[0x20] = 3;
-            func_001F9BC0(effect_data);
+            clear_u64_value(effect_data);
             *(float *)(effect_data + 8) = *(float *)(data + 0x194);
             func_L00_00265050(moby, 0x6dd, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
                               D_L05_0015F660, D_L05_0015F660, D_L05_0015F660);
@@ -1964,12 +1964,12 @@ mark_children:
     if (*(char **)(data + 0x188) != 0)
         ((unsigned char *)*(char **)(data + 0x188))[0xa4] = 0xff;
     if (*(int *)(data + 0x38) != 0 && *(int *)(data + 0x178) == 0) {
-        *(int *)(data + 0x178) = func_001F9850(0xf0);
+        *(int *)(data + 0x178) = scale_ticks(0xf0);
         *(int *)(data + 0x38) = 0;
         base = &D_0013F450;
         angle = func_L00_001FF860(base->motion.pos.f[0] - *(float *)(moby + 0x10),
                               base->motion.pos.f[1] - *(float *)(moby + 0x14));
-        if (func_001FA850(*(float *)(moby + 0x48), angle) > 1.5707964f)
+        if (FastDiffRots(*(float *)(moby + 0x48), angle) > 1.5707964f)
             ((signed char *)data)[0xc4] *= -1;
     }
     if (func_001F9908_065D0(data + 0x178) != 0)
@@ -1979,7 +1979,7 @@ mark_children:
     if (*(char **)(data + 0x184) != 0) {
         char *first;
         float offset_scale;
-        speed = func_001F9CB8(data + 0x40);
+        speed = FastVecLength(data + 0x40);
         speed /= (*(float *)&D_L05_00161BB0) * D_0015EE6C;
         offset_scale = (*(float *)&D_L05_00161BB4);
         *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
@@ -1992,7 +1992,7 @@ mark_children:
     if (*(char **)(data + 0x188) != 0) {
         char *second;
         float offset_scale;
-        speed = func_001F9CB8(data + 0x40);
+        speed = FastVecLength(data + 0x40);
         speed /= (*(float *)&D_L05_00161BB0) * D_0015EE6C;
         offset_scale = (*(float *)&D_L05_00161BB4);
         *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
