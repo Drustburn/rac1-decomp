@@ -1467,7 +1467,204 @@ void func_L06_00304418(char *m) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L06_003045A0);
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} Vec4f_045A0;
+struct Moby_045A0;
+extern f32 D_0015EE6C MACRO_ADDR;
+extern short D_0015EE70_045A0 __asm__("D_0015EE70");
+struct Manip;
+struct GifEntry;
+struct AnimSeq;
+struct MobyClass_045A0 {
+    u8 pad_0[0xC];
+    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
+    u8 pad_D[3];
+    u32 collision; /* collision data; copied into Moby.collision when a moby is (re)classed */
+    u8 pad_14[0x8];
+    void *retarget_table; /* retarget table: word table, indexed id * 4 + 4 (0024eec0) */
+    struct GifEntry *gifs; /* patched by patch_moby_gifs */
+    f32 scale; /* default draw scale: copied into Moby.scale, divides it */
+    s32 sound_defs; /* sound definitions, 0x20 bytes each */
+    void **callbacks; /* function-pointer table, called with the moby */
+    u8 pad_30[0x14];
+    u16 flags; /* initial Moby.flags */
+    s16 type; /* class type; 5 (a creature) is tested by targeting code */
+    struct AnimSeq *seqs[1]; /* animation sequences, indexed by Moby.seq */
+};
+struct Moby_045A0 {
+    Vec4f_045A0 bsphere;
+    Vec4f_045A0 pos;
+    u8 state; /* >= 0xFE: dead, waiting to respawn */
+    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
+    u8 class_slot; /* class slot: pclass = D_L00_00197300[class_slot] (crate_update) */
+    u8 alpha; /* 0x80 by default; 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
+    struct MobyClass_045A0 *pclass;
+    struct Moby_045A0 *next;
+    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
+    u8 update_dist; /* update distance; 0xFF (always) or 0x7F for beams, set by spawners */
+    u8 visible; /* drawn last frame; set to 1 by spawners */
+    s16 draw_dist; /* draw distance; 0xFF (0x7F for beams), set by spawners */
+    u16 flags;
+    u16 occlusion; /* occlusion bits; 0x7F80 set by spawners */
+    u64 spawn_frame; /* frame count at which it may respawn */
+    Vec4f_045A0 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
+    u8 frame; /* animation frame */
+    u8 prev_frame; /* frame index in prev_seq */
+    u8 seq; /* animation sequence id */
+    u8 prev_seq;
+    f32 anim_time;
+    f32 anim_speed;
+    u8 pad5C[8];
+    struct Manip *manips;
+    void *cur_frame_data;
+    void *prev_frame_data;
+    u8 anim_flags;
+    u8 unk71; /* set to 0xFF when a moby changes class */
+    u8 unk72;
+    u8 unk73;
+    void (*update)(struct Moby_045A0 *moby);
+    u8 *pvars;
+    u8 unk7C;
+    u8 sound_slot; /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
+    u8 anim_trigger_count;
+    u8 shadow_range; /* shadow range in units of 1024; 0x17 from FUN_L09_002c5990 near D_L09_00166F40 */
+    u8 pad80[6];
+    s16 unk86;
+    u8 pad88[8];
+    s32 glow_color; /* glow colour (class header + 0x40) */
+    u32 collision; /* collision data, from the class header (MobyClass.collision) */
+    s32 collision_disable; /* per-primitive collision disable bits; 1 while a carrier holds the moby (FUN_L00_002c7a58) */
+    u8 pad9C[8];
+    u8 hit_slot; /* hit-message slot (0xFF: none) */
+    u8 padA5;
+    s16 oclass;
+    u8 padA8[8];
+    u8 mission; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
+    u8 padB1;
+    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
+    s16 unkB4;
+    u8 padB6[2];
+    void *parent; /* 0xB8: spawner (bolt source record); its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
+    u8 command; /* external command byte */
+    u8 padBD[3];
+    Vec4f_045A0 rot_row0; /* 0xC0: rows of the matrix built from rot (FUN_001fa030) */
+    Vec4f_045A0 rot_row1;
+    Vec4f_045A0 rot_row2;
+    u8 padF0[0x10];
+};
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) PathPoint_303160;
+typedef struct {
+    int n;
+    int pad[3];
+    PathPoint_303160 p[1];
+} Path_303160;
+struct PathRide_303160 {
+    char pad0[0x60];
+    int path_a[5];
+    int path_b[5];
+    int path_c[5];
+    char pad1[0x14];
+    float sway;
+    float sway_speed;
+    char pad2[0x0C];
+    float scale_start;
+    float scale_end;
+    char pad3[4];
+    int sound_slot[9];
+    float progress;
+};
+extern float func_00214D28(float *p, float target, float maxstep);
+extern int func_001FA898(float);
+extern float func_L00_0025CE58(float *p, float *v, float a, float b, float c, float d);
+extern int func_0022EEB8(int, int, void *);
+extern void func_L06_00304B88_045A0(float, struct Moby_045A0 *, void *, void *, int) __asm__("func_L06_00304B88");
+extern void func_L06_00304FA8_045A0(struct Moby_045A0 *) __asm__("func_L06_00304FA8");
+extern char D_L06_001B0FB0[];
+extern char * D_L06_0016016C MACRO_ADDR;
+
+/* Moves the moby along three paths and plays the sound marked on the path points.
+   Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l06/gameplay/entities/002fd1a0.c, FUN_L06_00303160. */
+int func_L06_003045A0(char *moby, int path) {
+    float rotation[4], position[4];
+    struct PathRide_303160 *ride = *(struct PathRide_303160 **)(moby + 0x78);
+    Path_303160 *first_path = ((Path_303160 **)D_L06_001B0FB0)[ride->path_a[path]];
+    Path_303160 *middle_path = ((Path_303160 **)D_L06_001B0FB0)[ride->path_b[path]];
+    Path_303160 *third_path = ((Path_303160 **)D_L06_001B0FB0)[ride->path_c[path]];
+    float time, first_index_f, first_fraction, third_fraction, angle, rate;
+    int first_index, middle_index, third_index, marker, prev_marker;
+    char *sound;
+
+    func_00214D28(&ride->progress, 1.0f, 1.0f / (float)func_001F9850(0x4B0));
+    time = ride->progress * (float)(first_path->n - 1);
+    first_index = func_001FA898(time);
+    first_index_f = (float)first_index;
+    first_fraction = time - first_index_f;
+    middle_index = func_001FA898(ride->progress * (float)(middle_path->n - 1));
+    time = ride->progress * (float)(third_path->n - 1);
+    third_fraction = time - first_index_f;
+    third_index = func_001FA898(time);
+    func_001F9C08(position, &first_path->p[first_index], &first_path->p[first_index + 1], first_fraction);
+    func_001F9C08(moby + 0x10, &third_path->p[third_index], &third_path->p[third_index + 1], third_fraction);
+    func_L00_002EBE88(position);
+    if (third_index > 0) {
+        angle = func_L00_001FF860(third_path->p[third_index].x - third_path->p[third_index - 1].x, third_path->p[third_index].y - third_path->p[third_index - 1].y);
+        *(float *)(moby + 0x48) = func_001FA748(
+            func_001FA790(func_L00_001FF860(third_path->p[third_index + 1].x - third_path->p[third_index].x, third_path->p[third_index + 1].y - third_path->p[third_index].y), angle) * third_fraction,
+            angle);
+        angle = -func_L00_001FF860(func_001F9D48(&third_path->p[third_index - 1], &third_path->p[third_index]), third_path->p[third_index].z - third_path->p[third_index - 1].z);
+        *(float *)(moby + 0x44) = func_001FA748(
+            func_001FA790(-func_L00_001FF860(func_001F9D48(&third_path->p[third_index], &third_path->p[third_index + 1]), third_path->p[third_index + 1].z - third_path->p[third_index].z),
+                           angle) * third_fraction,
+            angle);
+        *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * func_001F9F90(ride->sway);
+        *(float *)(moby + 0x48) = func_001FA748(*(float *)(moby + 0x48), ride->sway);
+    } else {
+        *(float *)(moby + 0x44) =
+            -func_L00_001FF860(func_001F9D48(&third_path->p[0], &third_path->p[1]), third_path->p[1].z - third_path->p[0].z);
+        *(float *)(moby + 0x48) = func_L00_001FF860(third_path->p[1].x - third_path->p[0].x, third_path->p[1].y - third_path->p[0].y);
+    }
+    if (first_index > 0 && middle_index > 0) {
+        func_001F9BC0(rotation);
+        angle = func_L00_001FF860(middle_path->p[middle_index].x - position[0], middle_path->p[middle_index].y - position[1]);
+        rotation[2] = func_001FA748(
+            func_001FA790(func_L00_001FF860(middle_path->p[middle_index + 1].x - position[0], middle_path->p[middle_index + 1].y - position[1]), angle) * third_fraction, angle);
+        angle = -func_L00_001FF860(func_001F9D48(position, &middle_path->p[middle_index]), middle_path->p[middle_index].z - position[2]);
+        rotation[1] = func_001FA748(
+            func_001FA790(-func_L00_001FF860(func_001F9D48(position, &middle_path->p[middle_index + 1]), middle_path->p[middle_index + 1].z - position[2]), angle) * third_fraction,
+            angle);
+        func_L00_002EBEE0(rotation);
+    }
+    *(float *)(moby + 0x2C) =
+        *(float *)(*(char **)(moby + 0x24) + 0x24) * (ride->scale_start - (ride->scale_start - ride->scale_end) * ride->progress);
+    if (ride->progress > 0.8f) {
+        rate = (*(f32 *)&D_0015EE70_045A0) * 12.566371f;
+        func_L00_0025CE58(&ride->sway, &ride->sway_speed, 3.1415927f, rate, rate, D_0015EE6C * 6.2831855f);
+    }
+    marker = func_001FA898(first_path->p[first_index].w);
+    if (first_index != 0)
+        prev_marker = func_001FA898(first_path->p[first_index - 1].w);
+    else
+        prev_marker = -1;
+    if (marker >= 0 || prev_marker >= 0) {
+        first_path->p[first_index].w = -1.0f;
+        first_path->p[first_index - 1].w = -1.0f;
+        if (marker < 8 && prev_marker < 8) {
+            func_0022EEB8(0, 0, moby);
+            sound = D_L06_0016016C + (ride->sound_slot[marker] << 7);
+            func_L06_00304B88_045A0(6.0f, (struct Moby_045A0 *)moby, sound + 0x30, sound, 6);
+        } else if (marker == 10 || prev_marker == 10) {
+            func_0022EEB8(1, 0, moby);
+            func_L06_00304FA8_045A0((struct Moby_045A0 *)moby);
+        }
+    }
+    return ride->progress == 1.0f;
+}
 INCLUDE_ASM("asm/overlays", func_L06_00304B88);
 typedef u32 u128_04FA8 __attribute__((mode(TI), aligned(16)));
 typedef struct {

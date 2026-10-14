@@ -1020,7 +1020,87 @@ void func_L00_002CC868(Moby *m) {
     func_001F9C30_2CC868(&c, &b, func_002140F8_2CC868(D_0015EE6C_2CC868 * 0.5f, D_0015EE6C_2CC868 + D_0015EE6C_2CC868) / len);
     func_L00_0026EBC0_2CC868(&*(Vec4A *)&m->pos, &c, 0x7F2F4F6F, func_L00_00258BC8_2CC868(func_001F9850_2CC868(10), func_001F9850_2CC868(15)), 30000.0f);
 }
-INCLUDE_ASM("asm/overlays", func_L00_002CD110);
+typedef u32 u128_CD110 __attribute__((mode(TI), aligned(16)));
+typedef union {
+    u128_CD110 q;
+    f32 f[4];
+} V4_CD110;
+extern void func_L00_002688A8(void *);
+extern f32 func_002140F8(f32, f32);
+extern s32 func_L00_00258BC8(s32, s32);
+extern s32 func_002140B0(s32);
+extern s32 func_001F9850(s32);
+extern void func_L00_001FF4B0(void *, void *, f32);
+extern void *func_L00_0026EBC0(void *, void *, u32, s32, f32);
+extern u8 *func_L00_0026DEA0(f32, f32, f32, f32, void *, s32, void *, u32);
+extern f32 D_0015EE6C MACRO_ADDR;
+extern f32 D_0015EE60 MACRO_ADDR;
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002c8440.c, FUN_L00_002cbcc0. */
+void func_L00_002CD110(u8 *m, s32 enabled)
+{
+    s32 i;
+    s32 j;
+    void **handle;
+    u8 *pos;
+    V4_CD110 vectors[2];
+    s32 lifetime;
+    s32 color;
+    s32 sign;
+    u8 *effect;
+    s32 alpha;
+
+    handle = (void **)(*(u8 **)(m + 0x78) + 0x2c);
+    for (i = 16; i >= 0; i--) {
+        if (*handle != 0)
+            func_L00_002688A8(*handle);
+        *handle++ = 0;
+    }
+    pos = m + 0x10;
+
+    if (enabled != 0) {
+        V4_CD110 *vector = &vectors[1];
+        for (j = 4; j >= 0; j--) {
+            vectors[1].q = 0;
+            vectors[1].f[0] = func_002140F8(-1.0f, 1.0f);
+            vectors[1].f[1] = func_002140F8(-1.0f, 1.0f);
+            vectors[1].f[2] = func_002140F8(-1.0f, 1.0f);
+            vectors[0].q = vectors[1].q;
+            func_L00_001FF4B0(vector, &vectors[0],
+                func_002140F8(D_0015EE6C * 3.0f, D_0015EE6C * 6.0f));
+            lifetime = func_L00_00258BC8(func_001F9850(10), func_001F9850(15));
+            func_L00_0026EBC0(pos, vector, 0x7f2f4f6f, lifetime, 35000.0f);
+        }
+    }
+
+    {
+        s32 j;
+        for (j = 2; j >= 0; j--) {
+            color = ((u32)func_L00_00258BC8(0x20, 0x80) << 24) | 0x606060;
+            sign = func_002140B0(2) ? -1 : 1;
+            vectors[0].q = 0;
+            vectors[0].f[2] = 1.0f;
+            vectors[0].f[3] = 1.0f;
+            vectors[0].f[2] = func_002140F8(0.01f, 0.025f) * D_0015EE60;
+            effect = func_L00_0026DEA0(0.2f, 1.0f, 1.02f, 140000.0f,
+                pos, sign, &vectors[0], color);
+            if (effect != 0) {
+                *(s16 *)(effect + 0xa) = func_001F9850(func_L00_00258BC8(50, 80));
+                /* The direction is no longer needed; retain the effect field address. */
+                i = (s32)(effect + 0x20);
+                *(s32 *)(i + 4) = 2;
+                ((u8 *)i)[0xa] = color >> 24;
+                ((u8 *)i)[0xb] = effect[0xa];
+                alpha = func_002140B0(2);
+                if (alpha) {
+                    /* The fixed low color byte is 0x60, so the alpha byte is 0x44. */
+                    alpha = 0x44;
+                    effect[3] = alpha;
+                }
+            }
+        }
+    }
+}
 extern char *func_0020D348_2CD3B8(int) __asm__("func_0020D348");
 extern float func_002140F8(float, float);
 extern float func_L00_00258C80(float, float);

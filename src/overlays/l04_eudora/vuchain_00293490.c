@@ -25,7 +25,230 @@ void func_L04_00293530(void *unused, char *arg) {
     *(float *)(arg + 0x1BC) = -1.5707964f;
     *(float *)(arg + 0x1C0) = 0.19634955f;
 }
-INCLUDE_ASM("asm/overlays", func_L04_00293578);
+typedef f32 sceVu0FVECTOR[4] __attribute__((aligned(16)));
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} Vec4f_93578;
+struct Manip;
+struct GifEntry;
+struct AnimSeq;
+struct MobyClass_93578 {
+    u8 pad_0[0xC];
+    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
+    u8 pad_D[3];
+    u32 collision; /* collision data; copied into Moby.collision when a moby is (re)classed */
+    u8 pad_14[0x8];
+    void *retarget_table; /* retarget table: word table, indexed id * 4 + 4 (0024eec0) */
+    struct GifEntry *gifs; /* patched by patch_moby_gifs */
+    f32 scale; /* default draw scale: copied into Moby.scale, divides it */
+    s32 sound_defs; /* sound definitions, 0x20 bytes each */
+    void **callbacks; /* function-pointer table, called with the moby */
+    u8 pad_30[0x14];
+    u16 flags; /* initial Moby.flags */
+    s16 type; /* class type; 5 (a creature) is tested by targeting code */
+    struct AnimSeq *seqs[1]; /* animation sequences, indexed by Moby.seq */
+};
+struct Moby_93578 {
+    Vec4f_93578 bsphere;
+    Vec4f_93578 pos;
+    u8 state; /* >= 0xFE: dead, waiting to respawn */
+    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
+    u8 class_slot; /* class slot: pclass = D_L00_00197300[class_slot] (crate_update) */
+    u8 alpha; /* 0x80 by default; 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
+    struct MobyClass_93578 *pclass;
+    struct Moby_93578 *next;
+    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
+    u8 update_dist; /* update distance; 0xFF (always) or 0x7F for beams, set by spawners */
+    u8 visible; /* drawn last frame; set to 1 by spawners */
+    s16 draw_dist; /* draw distance; 0xFF (0x7F for beams), set by spawners */
+    u16 flags;
+    u16 occlusion; /* occlusion bits; 0x7F80 set by spawners */
+    u64 spawn_frame; /* frame count at which it may respawn */
+    Vec4f_93578 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
+    u8 frame; /* animation frame */
+    u8 prev_frame; /* frame index in prev_seq */
+    u8 seq; /* animation sequence id */
+    u8 prev_seq;
+    f32 anim_time;
+    f32 anim_speed;
+    u8 pad5C[8];
+    struct Manip *manips;
+    void *cur_frame_data;
+    void *prev_frame_data;
+    u8 anim_flags;
+    u8 unk71; /* set to 0xFF when a moby changes class */
+    u8 unk72;
+    u8 unk73;
+    void (*update)(struct Moby_93578 *moby);
+    u8 *pvars;
+    u8 unk7C;
+    u8 sound_slot; /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
+    u8 anim_trigger_count;
+    u8 shadow_range; /* shadow range in units of 1024; 0x17 from FUN_L09_002c5990 near D_L09_00166F40 */
+    u8 pad80[6];
+    s16 unk86;
+    u8 pad88[8];
+    s32 glow_color; /* glow colour (class header + 0x40) */
+    u32 collision; /* collision data, from the class header (MobyClass.collision) */
+    s32 collision_disable; /* per-primitive collision disable bits; 1 while a carrier holds the moby (FUN_L00_002c7a58) */
+    u8 pad9C[8];
+    u8 hit_slot; /* hit-message slot (0xFF: none) */
+    u8 padA5;
+    s16 oclass;
+    u8 padA8[8];
+    u8 mission; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
+    u8 padB1;
+    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
+    s16 unkB4;
+    u8 padB6[2];
+    void *parent; /* 0xB8: spawner (bolt source record); its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
+    u8 command; /* external command byte */
+    u8 padBD[3];
+    Vec4f_93578 rot_row0; /* 0xC0: rows of the matrix built from rot (FUN_001fa030) */
+    Vec4f_93578 rot_row1;
+    Vec4f_93578 rot_row2;
+    u8 padF0[0x10];
+};
+typedef struct {
+    /* 0x00 */ u8 unk0;
+    /* 0x01 */ u8 attached;
+    /* 0x02 */ u8 pad2[0xE];
+    /* 0x10 */ sceVu0FVECTOR rot; /* quaternion, turned by FUN_L04_00292d48 */
+    /* 0x20 */ u8 pad20[0x20];
+} LegRigManip_93578;
+typedef struct {
+    /* 0x00 */ u8 joint;
+    /* 0x01 */ u8 joint2;
+    /* 0x02 */ u8 slot_a;
+    /* 0x03 */ u8 slot_b;
+    /* 0x04 */ u8 pad4[4];
+    /* 0x08 */ f32 yaw;
+    /* 0x0C */ f32 lower_turn; /* turns manip_a */
+    /* 0x10 */ f32 lower_turn_speed;
+    /* 0x14 */ f32 upper_turn; /* turns manip_b */
+    /* 0x18 */ f32 upper_turn_speed;
+    /* 0x1C */ f32 angle_min; /* set by FUN_L04_00292370 */
+    /* 0x20 */ f32 angle_max;
+    /* 0x24 */ u8 pad24[0xC];
+    /* 0x30 */ LegRigManip_93578 manip_a;
+    /* 0x70 */ LegRigManip_93578 manip_b;
+} LegRigLeg_93578;
+typedef struct {
+    /* 0x00 */ f32 span[2];
+    /* 0x08 */ f32 from[2];
+    /* 0x10 */ f32 to[2];
+} LegRigPhase_93578;
+typedef struct {
+    /* 0x00 */ s32 id; /* animation sequence id */
+    /* 0x04 */ f32 unk4;
+    /* 0x08 */ f32 rate; /* unk4 / FUN_001f96b0(len * 2) */
+    /* 0x0C */ f32 start; /* FUN_L04_002418b0(class slot, id) */
+    /* 0x10 */ f32 len; /* FUN_L04_00241910(class slot, id) - start */
+    /* 0x14 */ u8 pad14[0xC];
+    /* 0x20 */ LegRigPhase_93578 phase[2];
+} LegRigAnim_93578;
+typedef struct {
+    /* 0x000 */ f32 pts[6][4]; /* joint positions from FUN_0020cd48 */
+    /* 0x060 */ u8 pad60[0x10];
+    /* 0x070 */ LegRigAnim_93578 *anims[13];
+    /* 0x0A4 */ u8 padA4[0xC];
+    /* 0x0B0 */ u8 unkB0;
+    /* 0x0B1 */ u8 unkB1;
+    /* 0x0B2 */ u8 unkB2;
+    /* 0x0B3 */ u8 unkB3;
+    /* 0x0B4 */ u8 jointB4;
+    /* 0x0B5 */ u8 jointB5;
+    /* 0x0B6 */ u8 mode;
+    /* 0x0B7 */ u8 unkB7;
+    /* 0x0B8 */ s32 unkB8;
+    /* 0x0BC */ s32 unkBC;
+    /* 0x0C0 */ f32 speed;
+    /* 0x0C4 */ f32 unkC4;
+    /* 0x0C8 */ s32 unkC8;
+    /* 0x0CC */ f32 unkCC;
+    /* 0x0D0 */ f32 unkD0;
+    /* 0x0D4 */ f32 unkD4;
+    /* 0x0D8 */ s32 unkD8;
+    /* 0x0DC */ f32 unkDC;
+    /* 0x0E0 */ f32 unkE0;
+    /* 0x0E4 */ s32 unkE4;
+    /* 0x0E8 */ s32 unkE8;
+    /* 0x0EC */ s16 unkEC;
+    /* 0x0EE */ s16 unkEE;
+    /* 0x0F0 */ LegRigLeg_93578 legs[2];
+} LegRig_93578;
+extern char D_L04_001DB660[];
+extern char D_L04_001DB6F0[];
+extern void func_001E9730();
+extern void func_001F9978(void);
+extern float func_L04_00242868(int, int);
+extern float func_L04_002428C8(int, int);
+extern float func_001F9878(float);
+extern void func_0020DB98_93578(struct Moby_93578 *m, int count, int *joints, void *out) __asm__("func_0020DB98");
+extern void func_0020DAF8_93578(struct Moby_93578 *m, int joint, float *mtx) __asm__("func_0020DAF8");
+extern float func_L00_001FF860(float, float);
+extern void func_0020D960_93578(struct Moby_93578 *m, int slot, LegRigManip_93578 *manip) __asm__("func_0020D960");
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l04/runtime/dma/002922d0.c, FUN_L04_002923b8. */
+void func_L04_00293578(struct Moby_93578 *moby, LegRig_93578 *rig) {
+    int joints[6];
+    float matrix[4][4];
+    int i;
+    int j;
+    int k;
+
+    for (i = 0; i < 13; i++) {
+        if (rig->anims[i]->id < 0) {
+            func_001E9730(D_L04_001DB660, i, moby->oclass);
+            func_001F9978();
+        }
+        rig->anims[i]->start = func_L04_00242868(moby->class_slot, rig->anims[i]->id);
+        rig->anims[i]->len = func_L04_002428C8(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
+        if (rig->anims[i]->len != 0.0f) {
+            for (j = 0; j < 2; j++) {
+                rig->anims[i]->phase[1].span[j] = rig->anims[i]->phase[1].from[j] <= rig->anims[i]->phase[1].to[j]
+                    ? rig->anims[i]->phase[1].to[j] - rig->anims[i]->phase[1].from[j]
+                    : rig->anims[i]->phase[1].to[j] + rig->anims[i]->len - rig->anims[i]->phase[1].from[j];
+                rig->anims[i]->phase[0].span[j] = rig->anims[i]->phase[0].from[j] <= rig->anims[i]->phase[0].to[j]
+                    ? rig->anims[i]->phase[0].to[j] - rig->anims[i]->phase[0].from[j]
+                    : rig->anims[i]->phase[0].to[j] + rig->anims[i]->len - rig->anims[i]->phase[0].from[j];
+            }
+            rig->anims[i]->rate = rig->anims[i]->unk4 / func_001F9878(rig->anims[i]->len + rig->anims[i]->len);
+        }
+    }
+    joints[0] = rig->legs[0].joint;
+    joints[1] = rig->legs[0].joint2;
+    joints[2] = rig->legs[1].joint;
+    joints[3] = rig->legs[1].joint2;
+    joints[4] = rig->jointB4;
+    joints[5] = rig->jointB5;
+    func_0020DB98_93578(moby, 6, joints, rig);
+    for (k = 0; k < 2; k++) {
+        func_0020DAF8_93578(moby, rig->legs[k].joint, matrix[0]);
+        rig->legs[k].upper_turn = 0;
+        rig->legs[k].lower_turn = 0;
+        rig->legs[k].yaw = func_L00_001FF860(matrix[1][0], matrix[1][1]);
+        if (rig->legs[k].manip_b.attached == 0)
+            func_0020D960_93578(moby, rig->legs[k].slot_b, &rig->legs[k].manip_b);
+        if (rig->legs[k].manip_a.attached == 0)
+            func_0020D960_93578(moby, rig->legs[k].slot_a, &rig->legs[k].manip_a);
+    }
+    rig->unkEE = 0;
+    rig->unkB7 = 0;
+    rig->unkB8 = 0;
+    rig->unkBC = 0;
+    rig->speed = 0.0f;
+    rig->unkC8 = 0;
+    rig->unkE8 = 0;
+    rig->unkD8 = 0;
+    rig->unkE4 = 0;
+    rig->unkEC = 0;
+    rig->mode = 5;
+    func_001E9730(D_L04_001DB6F0, 0x250);
+}
 extern int func_L00_002A2680(int *a, char *b);
 
 // Finds the entry of arg1's 13-pointer table whose first word equals arg0's byte at 0x52, then calls on it or returns a byte.

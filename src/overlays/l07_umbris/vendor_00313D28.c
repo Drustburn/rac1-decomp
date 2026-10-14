@@ -1538,7 +1538,90 @@ void func_L07_00315528(unsigned char *m) {
     if (m[0x20] < 0xA) func_L00_0025B040(m, 2.5f);
     func_L07_00313530((char *)d);
 }
-INCLUDE_ASM("asm/overlays", func_L07_00318CE0);
+extern s32 D_0015EF88 MACRO_ADDR;
+typedef float RopeVec[4] __attribute__((aligned(16)));
+extern u64 func_001F4868(int);
+extern void func_00234C98(int, u64);
+extern void func_L00_001FD1D8(void *, int, int);
+extern short D_L07_00161C04;
+extern short D_L07_00161C08;
+extern short D_L07_00161C0C;
+extern short D_L07_0020DE88[];
+typedef struct {
+    RopeVec pos[4];
+    u32 color[4];
+    float uv[8];
+    u64 header[4];
+} L07RopeDrawPacket;
+extern RopeVec D_L07_0020DEA0[][20];
+
+/* Draws the rope grid as textured quads between neighbouring rows, each row faded by its level.
+   Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l07/gameplay/entities/00312948.c, FUN_L07_00317910. */
+void func_L07_00318CE0(void) {
+    L07RopeDrawPacket packet;
+    float phase;
+    float row_phase;
+    float end_phase;
+    int row;
+    int column;
+    int k;
+    int color;
+    float phase_step;
+    float column_step;
+
+    packet.header[1] = func_001F4868(0x15);
+    packet.header[2] = 0xff9000000260ULL;
+    packet.header[3] = 0x8000000048ULL;
+    packet.header[0] = 0;
+    phase = (*(float *)&D_L07_00161C04);
+    (*(float *)&D_L07_00161C04) += 0.001f;
+    if ((*(float *)&D_L07_00161C04) > 7.0f) (*(float *)&D_L07_00161C04) -= 7.0f;
+    func_00234C98(0x47, 0x5301b);
+    phase_step = 0.3f;
+    phase += phase_step;
+    column_step = 0.05f;
+    func_00234C98(0x4e, (D_0015EF88 >> 13) | 0x1000000 | ((u64)0x8000 << 17));
+    for (row = 1; row < 10; row++) {
+        row_phase = (*(float *)&D_L07_00161C08);
+        (*(float *)&D_L07_00161C08) += (*(float *)&D_L07_00161C0C);
+        if ((*(float *)&D_L07_00161C08) > 7.0f) (*(float *)&D_L07_00161C08) -= 7.0f;
+        for (column = 0; column < 20; column++) {
+            qcopy(packet.pos[0], D_L07_0020DEA0[row][column]);
+            qcopy(packet.pos[1], D_L07_0020DEA0[row][(column + 1) % 20]);
+            qcopy(packet.pos[2], D_L07_0020DEA0[row - 1][column]);
+            qcopy(packet.pos[3], D_L07_0020DEA0[row - 1][(column + 1) % 20]);
+            end_phase = row_phase + column_step;
+            color = D_L07_0020DE88[row];
+            for (k = 0; k < 2; k++) {
+                if (color < 0) color = 0;
+                if (color > 64) color = 64;
+                color = (color << 24) | 0x404040;
+                packet.color[k * 2 + 1] = packet.color[k * 2] = color;
+                color = D_L07_0020DE88[row - 1];
+            }
+            if (row == 1) {
+                packet.color[3] = 0x20404040;
+                packet.color[2] = 0x20404040;
+            } else if (row == 9) {
+                packet.color[1] = 0x404040;
+                packet.color[0] = 0x404040;
+            }
+            packet.uv[0] = phase;
+            packet.uv[1] = row_phase;
+            packet.uv[2] = phase;
+            packet.uv[3] = end_phase;
+            packet.uv[4] = phase - phase_step;
+            packet.uv[5] = row_phase;
+            packet.uv[6] = phase - phase_step;
+            packet.uv[7] = end_phase;
+            row_phase = end_phase;
+            func_L00_001FD1D8(&packet, 0, 0);
+        }
+        phase += phase_step;
+    }
+    func_00234C98(0x4e, (s64)(D_0015EF88 >> 13) | 0x1000000);
+    func_00234C98(0x47, 0x5360b);
+}
 typedef int u128_319080 __attribute__((mode(TI)));
 typedef union {
     u128_319080 q;

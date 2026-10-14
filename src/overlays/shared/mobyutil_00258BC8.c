@@ -695,7 +695,32 @@ void func_L00_0025A8C0(char *arg, int a, int b, void *src, float scale) {
     *(int *)(arg + 0x20) = 1;
     qcopy(arg, src);
 }
-INCLUDE_ASM("asm/overlays", func_L00_0025A8E8);
+void func_L00_0025A8C0_5A8E8(char *a, int b, int c, float d, void *q) __asm__("func_L00_0025A8C0");
+void func_001F9C30(void *out, void *a, f32 scale);
+f32 func_001F9F90(f32 radians);
+f32 func_001F9FA8(f32 radians);
+extern int func_L00_001F2BE8(void *, float, int, void *, void *);
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/00259710.c, FUN_L00_002598b0. */
+int func_L00_0025A8E8(void *moby, void *position, int c, float d, float e, float f, int g, int h, int i) {
+    float direction[4] __attribute__((aligned(16)));
+    char descriptor[0x30] __attribute__((aligned(16)));
+    if (*(unsigned short *)((char *)moby + 0x34) & 0x100) {
+        qcopy(direction, (char *)moby + 0xc0);
+    } else {
+        direction[0] = func_001F9F90(*(float *)((char *)moby + 0x48));
+        direction[1] = func_001F9FA8(*(float *)((char *)moby + 0x48));
+        direction[2] = 0.0f;
+    }
+    func_001F9C30(direction, direction, f);
+    direction[2] = 1.0f;
+    direction[3] = 5627.9248046875f;
+    func_L00_0025A8C0_5A8E8(descriptor, (int)moby, c, e, direction);
+    descriptor[0x18] = g;
+    descriptor[0x19] = h;
+    *(unsigned short *)(descriptor + 0x1a) = *(unsigned short *)((char *)moby + 0xa6);
+    return func_L00_001F2BE8(position, d, i, moby, descriptor);
+}
 extern void func_L00_00250800(void *, int, void *);
 extern int func_L00_0025A8E8(void *, void *, int, float, float, float, int, int, int);
 
