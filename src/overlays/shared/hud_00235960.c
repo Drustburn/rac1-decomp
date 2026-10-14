@@ -1370,7 +1370,83 @@ void func_L00_0023ABB0(HudElem *e) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_0023AC68);
+extern int D_0013E600[];
+extern int D_0015EE80 MACRO_ADDR;
+extern int D_L00_0015F6B0 MACRO_ADDR;
+extern short D_L00_0015F9CC;
+extern short D_L00_0015F9D0;
+extern short D_L00_0015F9D4;
+extern short D_L00_0015F9D8;
+extern short D_L00_0015F9DC;
+extern short D_L00_0015F9E0;
+extern short D_L00_0015F9E4;
+extern short D_L00_0015F9E8;
+extern char D_L00_0015F9F0[];
+extern int func_00116248(char *str, const char *fmt, ...);
+extern float func_001F9FA8(float);
+extern int func_001FA8A8(int, int, float);
+extern void func_L00_001FB7F8(int, int, int, char *, int);
+
+int func_L00_0023AC68(char *m) {
+    char buf[16];
+    unsigned char *q;
+    int x, y, panel_right, panel_left, slide, alpha, text_alpha;
+    int color, shadow, period, text_x, text_y;
+    float open, text, pulse, scaled_text;
+    char *g = D_0013F450;
+
+    {
+        int panel_y = D_0013E600[1] - 42;
+        int alternate_y = D_0013E600[1] - 50;
+        y = panel_y;
+        if (D_0015EE80 == 0)
+            y = alternate_y;
+    }
+    x = *(int *)(m + 0x50);
+    if (*(unsigned char *)(g + 0x20A4) == 2)
+        return *(int *)(m + 0x58);
+    if (*(int *)(g + 0x2084) == 50)
+        return *(int *)(m + 0x58);
+    q = (unsigned char *)(m + 0x70);
+    if (q[0] == 0)
+        return *(int *)(m + 0x58);
+
+    open = func_001FA888(q[0]) / func_001FA888(*(int *)&D_L00_0015F8D0);
+    if (1.0f < open)
+        open = 1.0f;
+    else if (open < 0.0f)
+        open = 0.0f;
+    text = func_001FA888(q[1]) / func_001FA888(*(int *)&D_L00_0015F8D0);
+    if (1.0f < text)
+        text = 1.0f;
+    else if (text < 0.0f)
+        text = 0.0f;
+
+    text_alpha = func_001FA898(text * 128.0f);
+    alpha = func_001FA898((float)*(int *)&D_L00_0015F9CC * open);
+    panel_right = x + *(int *)&D_L00_0015F9D4;
+    slide = func_001FA898((float)*(int *)&D_L00_0015F9D0 * open);
+    func_00200650(func_00200198(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
+    panel_left = panel_right - slide;
+    func_00200468(func_00200198(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
+    func_00200468(func_00200198(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
+    func_L00_0023BAB8(m, func_00200198(0x754f, D_L00_0015F6B0 % 60 >> 1), x - 32, y, 0, text_alpha);
+
+    func_00116248(buf, D_L00_0015F9F0);
+    text_x = x + *(int *)&D_L00_0015F9D8;
+    text_y = y + *(int *)&D_L00_0015F9DC;
+    period = func_001F9850(*(int *)&D_L00_0015F9E8);
+    pulse = func_001F9FA8((float)(D_L00_0015F6B0 % period) /
+                     func_001FA888(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
+    if (pulse < 0.0f)
+        pulse = 0.0f;
+    scaled_text = pulse * text;
+    shadow = func_001FA8A8(0, 0x80000000, scaled_text);
+    color = func_001FA8A8(*(int *)&D_L00_0015F9E0, *(int *)&D_L00_0015F9E4, scaled_text);
+    func_L00_001FB7F8(text_x + 1, text_y + 1, shadow, buf, -1);
+    func_L00_001FB7F8(text_x, text_y, color, buf, -1);
+    return *(int *)(m + 0x58);
+}
 extern short D_00140A86 NOT_SDA;
 extern int func_00200198(int, int);
 extern void func_L00_00236468(HudElem *, int *, int *, int, int);

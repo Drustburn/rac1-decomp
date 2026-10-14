@@ -2440,7 +2440,88 @@ void func_L18_002F16D8(char *moby, void *out) {
     FastVecAdd(out, v, data + 0x120);
     *(int *)(data + 0x160) = scale_ticks(180);
 }
-INCLUDE_ASM("asm/overlays", func_L18_002F1780);
+extern short D_L18_001622C8;
+struct GeometryQuad_1780 {
+    Vec4 positions[4];
+    u32 colors[4];
+    f32 texture_coordinates[4][2];
+    union {
+        u64 value;
+        volatile u64 ordered;
+    } reserved;
+    u64 texture;
+    u64 texture_state;
+    u64 primitive;
+};
+extern short D_L18_001622CC;
+extern short D_L18_001622D0;
+extern short D_L18_001622D4;
+extern short D_L18_001622D8;
+extern short D_L18_001622DC;
+extern short D_L18_001622E0;
+extern short D_L18_001622E4;
+extern void func_001153FC(void *, int, int);
+extern float D_L18_001DA5C0[4][2];
+extern char *D_L18_00160058 MACRO_ADDR;
+void func_L18_002F1780(struct Moby *moby) {
+    struct GeometryQuad_1780 quads[16];
+    float extra[8];
+    short *p;
+    struct Moby *m;
+    char *data;
+    float offset;
+    float t;
+    int i;
+    int j;
+    int k;
+    int n;
+    int base;
+
+    if (*(int *)&D_L18_001622C8 != 0) {
+        return;
+    }
+    for (i = 0; i < 16; i++) {
+        quads[i].texture = ((long (*)(int))func_001F4868)(19);
+        quads[i].reserved.value = 0;
+        quads[i].texture_state = 0xFF9000000260ULL;
+        quads[i].primitive = (u64)*(int *)&D_L18_001622D0 | ((u64)*(int *)&D_L18_001622D4 << 2) | ((u64)*(int *)&D_L18_001622D8 << 4) |
+                             ((u64)*(int *)&D_L18_001622DC << 6) | 0x8000000000ULL;
+        offset = func_001FA888((D_L18_0015F6B0 + 3) & 3) * 0.0625f;
+        for (j = 0; j < 4; j++) {
+            quads[i].texture_coordinates[j][0] = D_L18_001DA5C0[j][0];
+            quads[i].texture_coordinates[j][1] = D_L18_001DA5C0[j][1];
+            t = func_001FA888(i + 1 - (j >> 1)) * 0.25f + offset;
+            if (t > 1.0f) {
+                t = 1.0f;
+            } else if (t < 0.0f) {
+                t = 0.0f;
+            }
+            quads[i].colors[j] = func_001FA8A8(*(int *)&D_L18_001622E0, *(int *)&D_L18_001622E4, t);
+        }
+    }
+    func_001153FC(extra, 0, 0x20);
+    extra[2] = 0.15f;
+    extra[6] = -0.15f;
+    p = (short *)D_L18_001AC540[moby->group];
+    do {
+    again:
+        m = (struct Moby *)(((*p & 0x7FFF) << 8) + (int)D_L18_00160058);
+        if (m->oclass != 0x54B) {
+            goto again;
+        }
+        data = (char *)m->pvars;
+        for (n = 0; n < *(short *)(data + 0x164); n++) {
+            base = (*(short *)(data + 0x166) - n + 15) & 15;
+            if (*(int *)&D_L18_001622CC == 0) {
+                for (k = 0; k < 4; k++) {
+                    func_001F9BD8(&quads[n].positions[k], data + 0x10 + (((base + (k >> 1)) & 15) << 4),
+                                   extra + ((k & 1) << 2));
+                }
+                func_L00_001FD1D8(&quads[n], 0, 0);
+            }
+        }
+    } while (*p++ >= 0);
+}
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_00264690(void *, int, float, float);
@@ -2489,7 +2570,7 @@ void impl_2F1AB0(char *moby) {
     } while (*(p++) >= 0);
 }
 extern short D_L18_001622C0;
-extern void func_L18_002F1780(void);
+extern void func_L18_002F1780(struct Moby *);
 extern void func_L18_002F1AB0(void);
 
 /* Advance a ring of recorded positions, store the moby's position, and register draw callbacks once per frame. */

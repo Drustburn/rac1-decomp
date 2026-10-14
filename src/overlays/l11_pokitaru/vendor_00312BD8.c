@@ -1519,7 +1519,32 @@ void func_L11_003173C8(char *m, float *p) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L11_00317500);
+extern char *D_L11_00160058 MACRO_ADDR;
+short func_L11_00317500(struct Moby_15788 *self_) {
+    struct Moby *self = (struct Moby *)self_;
+    unsigned short *p;
+    short n;
+    char *base;
+
+    if (self->group == 0xFF)
+        return 0;
+    p = (unsigned short *)D_L11_001AC540[self->group];
+    n = 0;
+    if (p == 0)
+        return 0;
+    base = D_L11_00160058;
+    for (;;) {
+        struct Moby *moby = (struct Moby *)(base + ((*p & 0x7FFF) << 8));
+        if (moby->oclass == 0x4DE) {
+            if (moby->state >= 13) {
+                if (moby->state < 18)
+                    n++;
+            }
+        }
+        if ((short)*p++ < 0)
+            return n;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L11_00317518);
 /* whether the moby is in state 20, 11, 18 or 12 */
 int func_L11_00317598(struct Moby *m) {

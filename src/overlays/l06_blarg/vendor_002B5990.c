@@ -195,7 +195,28 @@ void func_L06_002EB260(int index) {
         }
     } while (*p++ >= 0);
 }
-INCLUDE_ASM("asm/overlays", func_L06_002EB2D0);
+int func_L06_002EB2D0(int index) {
+    unsigned short *p = (unsigned short *)D_L06_001AC340[index];
+    char *base;
+    char *moby;
+    if (p == 0)
+        return 1;
+    base = D_L06_00160058;
+    for (;;) {
+        moby = base + ((*p & 0x7FFF) << 8);
+        if (moby != 0 && *(short *)(moby + 0xA6) == 0x33B) {
+            unsigned char s = moby[0x20];
+            if (s != 0xFE) {
+                if (s != 0xFD) {
+                    if (s != 0x10)
+                        return 0;
+                }
+            }
+        }
+        if ((short)*p++ < 0)
+            return 1;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L06_002EB2F8);
 INCLUDE_ASM("asm/overlays", func_L06_002EB348);
 extern char D_0013E633[];

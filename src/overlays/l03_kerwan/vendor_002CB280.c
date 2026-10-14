@@ -1387,7 +1387,124 @@ void func_L03_002DC648(struct RailSpawnerMoby *moby) {
         vars->voice = func_L00_0028EF68_DC648(0, 4, moby, 0x382);
 }
 INCLUDE_ASM("asm/overlays", func_L03_002DC920);
-INCLUDE_ASM("asm/overlays", func_L03_002DD158);
+/* functional: high. Only registers, scheduling, the frame layout and the order of independent stores differ from retail; the reads, writes, calls, their arguments and order, and the float multiply order are retail's (the unset w lanes of the two state-3 vectors are never written, as in retail). */
+/* Level 3 (Kerwan) Robot Qwark (moby class 914) update. A hero close enough
+ * (< 26) while m[0x31] is set triggers func_L00_0025B178 and m[0x7F] = 21.
+ * If its saved bit (level table or per-save bitfield) is set it goes to state
+ * 3. A hit of type 3 while the bit is clear plays the first-time cutscene
+ * flag/sound, throws debris (func_L00_0025F4A8), enters state 3 and sets both
+ * bits. Then a state machine: 0 copies the hero's 0x38 word and starts the
+ * talk, 1 waits for the talk and plays its animation, 2 handles the talk
+ * camera, 3 emits a random puff (func_L00_0026DD70) around it. */
+typedef unsigned int u128_DD158 __attribute__((mode(TI), aligned(16)));
+
+extern int func_L00_002676E8(void *, unsigned char *);
+extern void func_L01_00279398(float, void *);
+extern void func_00213D28(unsigned char *, int, int);
+extern int func_0022EE28(int, int, int);
+extern void func_L00_001FF240(void *, void *, void *);
+extern void func_L00_0026DD70(void *, void *, int, int, float, int);
+
+extern unsigned char D_0013D50F[] ;
+extern unsigned char D_0013D5CA[] ;
+extern unsigned char D_0013D4A5[] ;
+
+typedef struct { unsigned char pad[0x454]; unsigned char collected[1]; } SaveFlags_DD158;
+#define SAVEFLAGS ((SaveFlags_DD158 *)&D_L03_001BB640)
+extern int D_L03_001BA8E0[] ;
+extern int D_0015EE84  MACRO_ADDR;
+extern char *D_001414D0[] ;
+extern short D_L03_0016016C ;
+extern int D_L03_0015F6A8;
+#define WARPTAB (*(char **)&D_L03_0016016C)
+
+typedef struct { int pad0[8]; int source; int pad1; unsigned char type; } Hit_DD158;
+typedef struct { unsigned char pad[4]; short mode; unsigned char pad2[0x30]; short unk36; unsigned char pad3[0x14]; int warp; } Vars_DD158;
+
+void func_L03_002DD158(unsigned char *m) {
+    Vars_DD158 *d = *(Vars_DD158 **)(m + 0x78);
+    Hit_DD158 *hit;
+    unsigned char type;
+    char *w;
+    float vel[4] __attribute__((aligned(16)));
+    float pos[4] __attribute__((aligned(16)));
+    float tmp[4] __attribute__((aligned(16)));
+
+    if (m[0x31] != 0 && func_001F9D10(m + 0x10, D_L03_00166F40) < 26.0f) {
+        func_L00_0025B178(m);
+        m[0x7F] = 21;
+    }
+    if (SAVEFLAGS->collected[(short)*(unsigned short *)(m + 0xB2)] != 0 ||
+        (D_0014C290[D_0015EE84][(short)*(unsigned short *)(m + 0xB2) >> 5] >> (*(unsigned short *)(m + 0xB2) & 0x1F)) & 1) {
+        if (m[0x20] != 3) {
+            m[0x20] = 3;
+            func_00213D28(m, 1, 0);
+        }
+    }
+    hit = (Hit_DD158 *)func_L00_0025B478(m, -1, 0);
+    if (hit != 0 && hit->source != 0 && (type = hit->type) == 3 &&
+        SAVEFLAGS->collected[(short)*(unsigned short *)(m + 0xB2)] == 0 &&
+        (((D_0014C290[D_0015EE84][(short)*(unsigned short *)(m + 0xB2) >> 5] >> (*(unsigned short *)(m + 0xB2) & 0x1F)) ^ 1) & 1)) {
+        unsigned char *p5 = D_0013D50F + 1;
+        if (p5[5] == 0) {
+            p5[5] = 1;
+            func_0022EE28(1, 0, 0);
+            func_L00_00264DB8(0x53DB, -1);
+        }
+        *(u128_DD158 *)pos = *(u128_DD158 *)(m + 0x10);
+        pos[2] += 1.0f;
+        *(u128_DD158 *)vel = 0;
+        func_L00_0025F4A8(m, vel, pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+        m[0x20] = type;
+        func_00213D28(m, 1, 0);
+        D_0014C290[D_0015EE84][(short)*(unsigned short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+        D_L03_001BA8E0[(short)*(unsigned short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
+    }
+    m[0xA4] = 0xFF;
+    if (D_0013D5CA[0xA] != 0 && m[0x20] != 3) {
+        return;
+    }
+    switch (m[0x20]) {
+    case 0:
+        *(unsigned long *)(m + 0x38) = *(unsigned long *)(D_001414D0[0] + 0x38);
+        m[0x20] = 1;
+        func_L00_002676E8(m, (unsigned char *)d);
+        if (D_0013D4A5[4] != 0) {
+            d->mode = 1;
+            d->unk36 = 2;
+        }
+        break;
+    case 1:
+        if (func_L00_00267290(m, (unsigned char *)d)) {
+            D_0013D4A5[4] = 1;
+            func_L01_00279398(2.7f, m);
+            m[0x20] = 2;
+        }
+        break;
+    case 2:
+        if (D_L03_0015F6A8 == 2) {
+            break;
+        }
+        m[0x20] = 1;
+        if (d->mode == 2 && d->warp != -1) {
+            w = WARPTAB + d->warp * 128;
+            func_L00_00286128((unsigned char *)(w + 0x30), (unsigned char *)(w + 0x70));
+        }
+        break;
+    case 3:
+        vel[0] = func_001F9F90(func_00214158()) * (func_002140F8(0.0f, 0.25f) * D_0015EE6C);
+        vel[1] = func_001F9FA8(func_00214158()) * (func_002140F8(0.0f, 0.25f) * D_0015EE6C);
+        vel[2] = 0.0f;
+        pos[0] = func_001F9F90(func_00214158()) * func_002140F8(0.0f, 0.5f) * func_002140F8(0.0f, 1.0f);
+        pos[1] = func_001F9FA8(func_00214158()) * func_002140F8(0.0f, 0.5f) * func_002140F8(0.0f, 1.0f);
+        pos[2] = 0.0f;
+        func_L00_001FF240(tmp, pos, m + 0x10);
+        if (func_002140B0(3) == 0) {
+            func_L00_0026DD70(pos, vel, 0x20202020, 0x7F7F7F, 157500.0f, func_001F9850(func_L00_00258BC8(0x3C, 0x78)));
+        }
+        break;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L03_002DDE38);
 INCLUDE_ASM("asm/overlays", func_L03_002DDE9C);
 /* whether the moby is a taxi (class 0x3F4), active, with its pvars word at +0x7C equal to 1. Adapted from Lombyte (MIT) for PAL: src/overlays/l03/gameplay/entities/002c9eb8.c, FUN_L03_002dcb30. */

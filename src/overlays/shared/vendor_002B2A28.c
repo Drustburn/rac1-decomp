@@ -428,7 +428,17 @@ int func_L14_002B4B70(int index) {
  return count;
 }
 INCLUDE_ASM("asm/overlays", func_L14_002B4B84);
-INCLUDE_ASM("asm/overlays", func_L14_002B4BF0);
+int func_L14_002B4BF0(unsigned char *m) {
+    unsigned short *p;
+    if (*(volatile unsigned char *)(m + 0x21) == 0xFF || (p = (unsigned short *)D_L14_001AC2C0[m[0x21]]) == 0)
+        return 1;
+    do {
+        char *moby = D_L14_00160098 + ((*p & 0x7FFF) << 8);
+        if (*(short *)(moby + 0xA6) == 0x1C && *(unsigned char *)(moby + 0x20) == 2)
+            return 0;
+    } while ((short)*p++ >= 0);
+    return 1;
+}
 INCLUDE_ASM("asm/overlays", func_L14_002B4C2C);
 typedef struct {
     float m[4][4];
@@ -577,7 +587,100 @@ int func_L14_002DAC00(int i)
     data[2] = scale_ticks(0x3C);
     return r;
 }
-INCLUDE_ASM("asm/overlays", func_L14_002DFA70);
+typedef struct { float x, y, z, w; } Vec4_df;
+struct MobyDf {
+    char pad0[0x10];
+    Vec4_df pos;
+    char pad20[0x20];
+    Vec4_df rot;
+    char pad50[0x28];
+    unsigned char *pvars;
+};
+struct Moby_00AC8;
+extern f32 D_0015EE64 MACRO_ADDR;
+extern short D_L14_00161BF0;
+extern short D_L14_00161BEC;
+extern short D_L14_00161BE8;
+extern void func_L14_002E0040(struct MobyDf *);
+extern void func_001F49B0(void (*)(void), void *);
+extern float func_001F9B88(float);
+extern int func_001F9908(void *);
+extern int func_002140B0(int);
+extern int func_L00_00258BC8(int, int);
+extern float func_002140F8(float, float);
+extern int func_L00_001F10E0(float, void *, int, void *);
+extern void func_L00_0025F4A8(struct Moby_00AC8 *, void *, void *, float, float, int, int, int,
+                                 float, float, float, float, int, float, int, int, int, int);
+extern void func_L00_0026DA50(void *, void *, int, int, int, int, float);
+extern void *func_L00_0026DEA0(void *, float, float, float, int, void *, float, int);
+extern void func_0020D678(struct Moby_00AC8 *);
+extern float D_L14_0015F660[] MACRO_ADDR;
+
+void func_L14_002DFA70(struct MobyDf *moby) {
+    float *velocity = (float *)moby->pvars;
+    int i;
+    int n;
+    int alpha;
+    int color;
+    float size;
+    float absolute_velocity;
+    unsigned char *particle;
+    unsigned char *fade;
+
+    if (func_002140B0(2) != 0) {
+        func_001F49B0((void (*)(void))func_L14_002E0040, moby);
+    }
+    func_001F9BD8(&moby->pos, &moby->pos, velocity);
+    absolute_velocity = func_001F9B88(velocity[0]);
+    if ((*(float *)&D_L14_00161BF0) * D_0015EE60 < absolute_velocity) {
+        velocity[0] *= ((*(float *)&D_L14_00161BEC) - 1.0f) * D_0015EE60 + 1.0f;
+    }
+    absolute_velocity = func_001F9B88(velocity[1]);
+    if ((*(float *)&D_L14_00161BF0) * D_0015EE60 < absolute_velocity) {
+        velocity[1] *= ((*(float *)&D_L14_00161BEC) - 1.0f) * D_0015EE60 + 1.0f;
+    }
+    if (velocity[2] > 0.0f) {
+        velocity[2] *= ((*(float *)&D_L14_00161BEC) - 1.0f) * D_0015EE60 + 1.0f;
+    }
+    velocity[2] -= (*(float *)&D_L14_00161BE8) * D_0015EE64;
+    moby->rot.x = func_001FA748(moby->rot.x, velocity[4]);
+    moby->rot.y = func_001FA748(moby->rot.y, velocity[5]);
+    moby->rot.z = func_001FA748(moby->rot.z, velocity[6]);
+
+    if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
+        moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
+        moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
+        func_0020D678((struct Moby_00AC8 *)moby);
+        return;
+    }
+    if (func_001F9908(velocity + 8) != 0 || func_L00_001F10E0(0.5f, &moby->pos, 0, *(void **)(velocity + 9)) != 0) {
+        func_L00_0025F4A8((struct Moby_00AC8 *)moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4,
+                             1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
+        func_L00_001F10E0(1.0f, &moby->pos, 0, *(void **)(D_0013E633 + 0x2E9D));
+        func_0020D678((struct Moby_00AC8 *)moby);
+        return;
+    }
+    func_L00_0026DA50(&moby->pos, D_L14_0015F660, 0x4F007FFF, 0x1FFFFFFF,
+                         func_L00_00258BC8(func_001F9850(10), func_001F9850(20)), 1, 60000.0f);
+    for (i = 0; i < 2; i++) {
+        n = func_002140B0(6);
+        if (func_002140B0(2) != 0) n = -n;
+        size = func_002140F8(40000.0f, 100000.0f);
+        color = func_L00_00258BC8(0x30, 0xFF);
+        alpha = 0x60000000;
+        particle = (unsigned char *)func_L00_0026DEA0(&moby->pos, 0.025f, 1.0f, 1.0f, n,
+                                        D_L14_0015F660, size,
+                                        color | ((color << 16) | ((color << 8) | alpha)));
+        if (particle != 0) {
+            particle[3] = 0x44;
+            fade = particle + 0x20;
+            *(short *)(particle + 0xA) = func_001F9850(0x3C);
+            *(int *)(fade + 4) = 2;
+            fade[0xA] = 0x60;
+            fade[0xB] = particle[0xA];
+        }
+    }
+}
 extern short D_L14_00161BD8;
 extern short D_L14_00161BDC;
 extern short D_L14_00161BE0;
@@ -807,7 +910,7 @@ typedef struct {
     T_eca8 tail;
 } P_eca8;
 extern int func_002140B0(int);
-extern P_eca8 *func_L00_0026DEA0(void *, float, float, float, int, void *, float, int);
+extern void *func_L00_0026DEA0(void *, float, float, float, int, void *, float, int);
 extern float D_L14_0015F660[] MACRO_ADDR;
 extern short D_L14_0016209C;
 extern short D_L14_001620A0;
