@@ -7,6 +7,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 |---|---|---|---|---|
 | [`func_L00_002C12B0`](shared/func_L00_002C12B0.c) | shared | 5996 | BYTES 12/5996 | 99.8% |
 | [`func_L07_003109D0`](l07_umbris/func_L07_003109D0.c) | l07_umbris | 6140 | BYTES 20/6140 | 99.7% |
+| [`func_L15_002C6950`](l15_quartu/func_L15_002C6950.c) | l15_quartu | 4816 | BYTES 26/4816 | 99.5% |
 | [`func_L12_00304038`](l12_hoven/func_L12_00304038.c) | l12_hoven | 724 | BYTES 4/724 | 99.5% |
 | [`func_L01_002F0B48`](shared/func_L01_002F0B48.c) | shared | 788 | BYTES 5/788 | 99.4% |
 | [`func_L07_0031E6B0`](l07_umbris/func_L07_0031E6B0.c) | l07_umbris | 1196 | BYTES 8/1196 | 99.3% |
