@@ -764,7 +764,7 @@ void func_L06_0030ACA0(char *moby) {
 }
 extern void func_0020D678(void *);
 extern void func_001F49B0(void *, void *);
-extern void func_L06_0030D3E8(void);
+extern void func_L06_0030D3E8(char *);
 
 /* UpdateMoby: state 0 deletes, state 1 draws and times out */
 void func_L06_0030D2A0(char *m) {
@@ -803,7 +803,73 @@ void func_L06_0030D338(char *src, int a1, int a2, int a3) {
         m[0x20] = 1;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L06_0030D3E8);
+extern unsigned char D_0013E15A[];
+extern void func_001F2418(float *, void *);
+extern void func_L02_0020BF88(void *, void *, void *, u64, int);
+extern s32 D_L06_001624A4_FF000 SDATA(D_L06_001624A4);
+extern s32 D_L06_001624A8_FF000 SDATA(D_L06_001624A8);
+extern s32 D_L06_001624AC_FF000 SDATA(D_L06_001624AC);
+extern s32 D_L06_001624B0_FF000 SDATA(D_L06_001624B0);
+extern s32 D_L06_001624B4_FF000 SDATA(D_L06_001624B4);
+extern s32 D_L06_001624B8_FF000 SDATA(D_L06_001624B8);
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/vendor/00307578.c, FUN_L06_0030bfa8. */
+void func_L06_0030D3E8(char *moby) {
+    float *d = *(float **)(moby + 0x78);
+    Vec4f pos;
+    s64 corners[4];
+    u32 colors[4];
+    s32 uvs[4];
+    float screen[4];
+    float size;
+    float fade;
+    s32 y, x, radius;
+    s32 raw_x;
+    u64 texture;
+    u32 color;
+    s32 *screen_center;
+    float screen_offset;
+
+    qcopy(&pos, moby + 0x10);
+    size = d[0];
+    if (1.0f < size) size = 1.0f;
+    fade = d[0] - 1.0f;
+    if (1.0f < fade) fade = 1.0f;
+    else if (fade < 0.0f) fade = 0.0f;
+    func_00234C98(0x47, 0x5380B);
+    func_001F2418(screen, &pos);
+    screen_center = (s32 *)(D_0013E15A + 0x4A6);
+    raw_x = func_001FA898(screen[0] - (float)screen_center[4]);
+    screen_offset = (float)screen_center[4];
+    y = func_001FA898(screen[1] - screen_offset);
+    x = raw_x - 0x1000;
+    y -= 0x1000;
+    uvs[0] = D_L06_001624AC_FF000;
+    uvs[1] = D_L06_001624B0_FF000;
+    uvs[2] = D_L06_001624B4_FF000;
+    uvs[3] = D_L06_001624B8_FF000;
+    color = func_001FA8A8_00AB0(fade, *(s32 *)&d[2], *(s32 *)&d[3]);
+    colors[3] = color;
+    colors[2] = color;
+    colors[1] = color;
+    colors[0] = color;
+    radius = func_001FA898((float)(D_L06_001624A8_FF000 << 4) * size);
+    corners[3] = 0xfffff080008000LL;
+    corners[2] = 0xfffff080008000LL;
+    corners[1] = 0xfffff080008000LL;
+    corners[0] = 0xfffff080008000LL;
+    corners[0] += (y - radius) << 16;
+    corners[0] += x + radius;
+    corners[1] += (y - radius) << 16;
+    corners[1] += x - radius;
+    corners[2] += (y + radius) << 16;
+    corners[2] += x + radius;
+    corners[3] += (y + radius) << 16;
+    corners[3] += x - radius;
+    texture = func_001F4868(D_L06_001624A4_FF000);
+    func_L02_0020BF88(corners, uvs, colors, texture, 1);
+    func_00234C98(0x47, 0x5360B);
+}
 extern char *D_L06_0015F050 MACRO_ADDR;
 
 // If the moby's kind is 0x12, set a flag in the table entry it indexes.
