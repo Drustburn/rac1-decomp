@@ -1370,7 +1370,99 @@ void func_L00_0023ABB0(HudElem *e) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_0023AC68);
+typedef struct {
+    u8 pad0[0x50];
+    s32 x;
+    u8 pad54[4];
+    s32 ret;
+    u8 pad5c[0x14];
+    u8 ab[2];
+} Hud_0AC68;
+
+extern s32 D_0013E604_0AC68 __asm__("D_0013E604") NOT_SDA;
+extern s32 D_0015EE80_0AC68 __asm__("D_0015EE80") MACRO_ADDR;
+extern s32 D_L00_0015F6B0_0AC68 __asm__("D_L00_0015F6B0") MACRO_ADDR;
+extern char D_L00_0015F9F0_0AC68[] __asm__("D_L00_0015F9F0");
+extern s32 D_L00_0015F8D0_0AC68 SDATA(D_L00_0015F8D0);
+extern s32 D_L00_0015F9CC_0AC68 SDATA(D_L00_0015F9CC);
+extern s32 D_L00_0015F9D0_0AC68 SDATA(D_L00_0015F9D0);
+extern s32 D_L00_0015F9D4_0AC68 SDATA(D_L00_0015F9D4);
+extern s32 D_L00_0015F9D8_0AC68 SDATA(D_L00_0015F9D8);
+extern s32 D_L00_0015F9DC_0AC68 SDATA(D_L00_0015F9DC);
+extern s32 D_L00_0015F9E0_0AC68 SDATA(D_L00_0015F9E0);
+extern s32 D_L00_0015F9E4_0AC68 SDATA(D_L00_0015F9E4);
+extern s32 D_L00_0015F9E8_0AC68 SDATA(D_L00_0015F9E8);
+extern f32 func_001FA888_0AC68(s32) __asm__("func_001FA888");
+extern s32 func_001FA898_0AC68(f32) __asm__("func_001FA898");
+extern s32 func_00200198_0AC68(s32, s32) __asm__("func_00200198");
+extern void func_00200650_0AC68(s32, s32, s32, s32, s32, s32) __asm__("func_00200650");
+extern void func_00200468_0AC68(s32, s32, s32, s32, s32, s32) __asm__("func_00200468");
+extern void func_L00_0023BAB8_0AC68(void *, s32, s32, s32, s32, s32) __asm__("func_L00_0023BAB8");
+extern s32 func_00116248_0AC68(char *, const char *, ...) __asm__("func_00116248");
+extern s32 func_001F9850_0AC68(s32) __asm__("func_001F9850");
+extern f32 func_001F9FA8_0AC68(f32) __asm__("func_001F9FA8");
+extern int func_001FA8A8_0AC68(int, int, f32) __asm__("func_001FA8A8");
+extern void func_L00_001FB7F8_0AC68(s32, s32, s32, char *, s32) __asm__("func_L00_001FB7F8");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/ui/text/002377b8.c, FUN_L00_0023a2d0. */
+s32 func_L00_0023AC68(Hud_0AC68 *m) {
+    char buf[16];
+    u8 *q;
+    s32 x, y, panel_right, panel_left, slide, alpha, text_alpha;
+    s32 color, shadow, period, text_x, text_y;
+    s32 panel_y, alternate_y;
+    f32 open, text, pulse, scaled_text;
+
+    panel_y = D_0013E604_0AC68 - 42;
+    alternate_y = D_0013E604_0AC68 - 50;
+    y = panel_y;
+    if (D_0015EE80_0AC68 == 0)
+        y = alternate_y;
+    x = m->x;
+    if ((u8)D_0013F450[0x20A4] == 2)
+        return m->ret;
+    if (*(s32 *)(D_0013F450 + 0x2084) == 50)
+        return m->ret;
+    q = m->ab;
+    if (q[0] == 0)
+        return m->ret;
+
+    open = func_001FA888_0AC68(q[0]) / func_001FA888_0AC68(D_L00_0015F8D0_0AC68);
+    if (1.0f < open)
+        open = 1.0f;
+    else if (open < 0.0f)
+        open = 0.0f;
+    text = func_001FA888_0AC68(q[1]) / func_001FA888_0AC68(D_L00_0015F8D0_0AC68);
+    if (1.0f < text)
+        text = 1.0f;
+    else if (text < 0.0f)
+        text = 0.0f;
+
+    text_alpha = func_001FA898_0AC68(text * 128.0f);
+    alpha = func_001FA898_0AC68((f32)D_L00_0015F9CC_0AC68 * open);
+    panel_right = x + D_L00_0015F9D4_0AC68;
+    slide = func_001FA898_0AC68((f32)D_L00_0015F9D0_0AC68 * open);
+    func_00200650_0AC68(func_00200198_0AC68(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
+    panel_left = panel_right - slide;
+    func_00200468_0AC68(func_00200198_0AC68(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
+    func_00200468_0AC68(func_00200198_0AC68(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
+    func_L00_0023BAB8_0AC68(m, func_00200198_0AC68(0x754f, D_L00_0015F6B0_0AC68 % 60 >> 1), x - 32, y, 0, text_alpha);
+
+    func_00116248_0AC68(buf, D_L00_0015F9F0_0AC68);
+    text_x = x + D_L00_0015F9D8_0AC68;
+    text_y = y + D_L00_0015F9DC_0AC68;
+    period = func_001F9850_0AC68(D_L00_0015F9E8_0AC68);
+    pulse = func_001F9FA8_0AC68((f32)(D_L00_0015F6B0_0AC68 % period) /
+                     func_001FA888_0AC68(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
+    if (pulse < 0.0f)
+        pulse = 0.0f;
+    scaled_text = pulse * text;
+    shadow = func_001FA8A8_0AC68(0, 0x80000000, scaled_text);
+    color = func_001FA8A8_0AC68(D_L00_0015F9E0_0AC68, D_L00_0015F9E4_0AC68, scaled_text);
+    func_L00_001FB7F8_0AC68(text_x + 1, text_y + 1, shadow, buf, -1);
+    func_L00_001FB7F8_0AC68(text_x, text_y, color, buf, -1);
+    return m->ret;
+}
 extern short D_00140A86 NOT_SDA;
 extern int func_00200198(int, int);
 extern void func_L00_00236468(HudElem *, int *, int *, int, int);
