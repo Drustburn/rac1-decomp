@@ -1439,7 +1439,7 @@ void func_L05_00317720(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L05_00317B68);
+/* Rotor update: vendor_00317B68.c. */
 extern float D_0015EE64 MACRO_ADDR;
 extern short D_L05_00161F90;
 extern void func_L00_00263950(char *, char *, int, float, float);
