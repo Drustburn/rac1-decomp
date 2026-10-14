@@ -1448,7 +1448,116 @@ void func_L10_002DB278(char *moby) {
         DeleteMoby(moby);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L10_002DB688);
+typedef int OvlQuad_B688 __attribute__((mode(TI)));
+
+extern char D_L10_001DD4D0_B688[] __asm__("D_L10_001DD4D0");
+extern char D_L10_001DD510_B688[] __asm__("D_L10_001DD510");
+extern unsigned char D_L10_00161D28_B688[] __asm__("D_L10_00161D28");
+extern unsigned char D_001414F4_B688[] __asm__("D_001414F4");
+extern char D_0013E650_B688[] __asm__("D_0013E650");
+extern char D_L10_001672C0_B688[] __asm__("D_L10_001672C0");
+extern s32 D_0015EE84_B688 __asm__("D_0015EE84") MACRO_ADDR;
+extern float D_L10_00161D18_B688 SDATA(D_L10_00161D18);
+extern void func_L10_002DBA50(struct Moby *);
+extern int func_001E9730_B688() __asm__("func_001E9730");
+extern void func_0020D678_B688(void *) __asm__("func_0020D678");
+extern s32 func_002140B0_B688(s32) __asm__("func_002140B0");
+extern float func_001FA748_B688(float, float) __asm__("func_001FA748");
+extern int func_001F9850_B688(int) __asm__("func_001F9850");
+extern int func_001FA898_B688(float) __asm__("func_001FA898");
+extern float func_001F9B50_B688(float) __asm__("func_001F9B50");
+extern float func_001F9D10_B688(void *, void *) __asm__("func_001F9D10");
+extern int func_L00_00200290_B688(void *, float) __asm__("func_L00_00200290");
+extern void func_001F49B0_B688(void *, void *) __asm__("func_001F49B0");
+extern int func_L00_0028EB98_B688(void *, int) __asm__("func_L00_0028EB98");
+extern int func_0022ED80_B688(int, int, int) __asm__("func_0022ED80");
+extern void func_L00_0028EBF0_B688(s32) __asm__("func_L00_0028EBF0");
+extern int func_001F9908_B688(void *) __asm__("func_001F9908");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l10/gameplay/entities/00295a38.c, FUN_L10_002da2c8. */
+void func_L10_002DB688(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    union { unsigned char order[10]; float position2[4]; } scratch;
+    float position1[4];
+    int pass, i, copy_index;
+
+    if (*(int *)(data + 0xC) == -1) {
+        func_001E9730_B688(D_L10_001DD4D0_B688);
+        func_001E9730_B688(D_L10_001DD510_B688, *(short *)&moby->save_id);
+        func_0020D678_B688(moby);
+    }
+    switch (moby->state) {
+    case 0:
+        if (D_0015EE84_B688 == 10 && D_001414F4_B688[0] == 1) {
+            func_0020D678_B688(moby);
+            break;
+        }
+        memcpy(scratch.order, D_L10_00161D28_B688, 10);
+        for (pass = 0; pass < 10; pass++) {
+            for (i = 0; i < func_002140B0_B688(9); i++) {
+                unsigned char tmp = scratch.order[i + 1];
+                scratch.order[i + 1] = scratch.order[i];
+                scratch.order[i] = tmp;
+            }
+        }
+        copy_index = 0;
+        if (*(int *)(data + 4) > 0) {
+            char *dest = data + 0x10;
+            do {
+                dest[copy_index] = scratch.order[copy_index];
+                copy_index++;
+            } while (copy_index < *(int *)(data + 4));
+        }
+        {
+            float timer;
+            float new_rotation = func_001FA748_B688(moby->rot.z, 1.5707964f);
+            moby->unk30 = 0x60;
+            moby->state = 1;
+            timer = D_L10_00161D18_B688 * 60.0f;
+            moby->rot.z = new_rotation;
+            *(int *)(data + 0x30) = -1;
+            *(int *)(data + 0x34) = func_001F9850_B688(func_001FA898_B688(timer));
+        }
+
+        moby->flags |= 0x41;
+        break;
+    case 1: {
+        float half_height, half_width, radius_squared;
+        half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        half_width = *(float *)data * 0.5f;
+        *(OvlQuad_B688 *)position1 = *(OvlQuad_B688 *)&moby->pos;
+        radius_squared = half_height * half_height;
+        position1[2] += half_height;
+        position1[3] = func_001F9B50_B688(radius_squared + half_width * half_width);
+        if (func_001F9D10_B688(&moby->pos, D_L10_001672C0_B688) < 80.0f && 0.0f <= (float)func_L00_00200290_B688(position1, 80.0f))
+            func_001F49B0_B688((void *)func_L10_002DBA50, moby);
+        if (func_L00_0028EB98_B688(moby, *(int *)(data + 0x30)) == 0)
+            *(int *)(data + 0x30) = func_0022ED80_B688(0, 4, (int)moby);
+        break;
+    }
+    case 2: {
+        int voice;
+        float half_height, half_width, radius_squared;
+        func_001F9908_B688(data + 0x34);
+        voice = *(int *)(data + 0x30);
+        if (voice != -1) {
+            unsigned char *entry = (unsigned char *)D_0013E650_B688 + voice * 0x70;
+            if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
+                func_L00_0028EBF0_B688(voice);
+        }
+        *(int *)(data + 0x30) = -1;
+        half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
+        half_width = *(float *)data * 0.5f;
+        *(OvlQuad_B688 *)scratch.position2 = *(OvlQuad_B688 *)&moby->pos;
+        radius_squared = half_height * half_height;
+        scratch.position2[2] += half_height;
+        scratch.position2[3] = func_001F9B50_B688(radius_squared + half_width * half_width);
+        if (func_001F9D10_B688(&moby->pos, D_L10_001672C0_B688) < 80.0f && 0.0f <= (float)func_L00_00200290_B688(scratch.position2, 80.0f))
+            func_001F49B0_B688((void *)func_L10_002DBA50, moby);
+        break;
+    }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L10_002DBA50);
 INCLUDE_ASM("asm/overlays", func_L10_002DE018);
 typedef int OvlQuad_2DE630 __attribute__((mode(TI)));
