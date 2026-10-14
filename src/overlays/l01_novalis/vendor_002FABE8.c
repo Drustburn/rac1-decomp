@@ -5,7 +5,109 @@
 #include "moby.h"
 #include "vector.h"
 
-INCLUDE_ASM("asm/overlays", func_L01_002FABE8);
+typedef int u128p __attribute__((mode(TI)));
+typedef union {
+    u128p q;
+    float f[4];
+} DebrisVec;
+typedef struct {
+    unsigned int c[3];
+} DebrisColors;
+typedef struct {
+    unsigned char pad0[0x2C];
+    float force;
+} DebrisHit;
+typedef struct {
+    unsigned char pad0[0x10];
+    float pos[4];
+    unsigned char pad20[0x28];
+    float rotz;
+    unsigned char pad4c[0x58];
+    unsigned char hit_slot;
+} DebrisMoby;
+extern DebrisColors D_L01_00161CE0;
+extern float D_0015EE6C MACRO_ADDR;
+extern float func_002140F8(float, float);
+extern int func_002140B0(int);
+extern float func_001F9F90(float);
+extern float func_001F9FA8(float);
+extern void func_L00_001FF4B0(void *, void *, float);
+extern void func_001F9BD8(void *, void *, void *);
+extern int func_L00_00258BC8(int, int);
+extern int func_001F9850(int);
+extern void func_L00_0026DD70(void *, void *, int, int, float, int);
+extern void func_L00_002584A8(void *, int, int);
+extern void func_0020D678(void *);
+extern char *func_L00_0025B478(void *, int, int);
+extern int func_0022ED80(int, int, int);
+extern void func_L01_002F9908(void *, void *, u32, s32, f32, f32, f32, f32, s32);
+
+void func_L01_002FABE8(DebrisMoby *m) {
+    DebrisHit *hit;
+    int i;
+    int j;
+    float s;
+
+    hit = (DebrisHit *)func_L00_0025B478(m, 0x10000, 0);
+    m->hit_slot = 0xFF;
+    if (hit != 0 && hit->force > 0.0f) {
+        func_0022ED80(0, 0x10, (int)m);
+        for (i = 0; i < 200; i++) {
+            {
+                DebrisVec vel;
+                DebrisVec pos;
+                DebrisVec off;
+
+                pos.q = 0;
+                pos.f[0] = func_002140F8(-1.0f, 1.0f);
+                pos.f[1] = func_002140F8(-1.0f, 1.0f);
+                pos.f[2] = func_002140F8(-1.0f, 1.0f);
+                off.q = 0;
+                vel.q = pos.q;
+                s = func_002140F8(-1.0f, 1.0f);
+                s *= func_001F9F90(m->rotz);
+                off.f[0] = s;
+                s = func_002140F8(-0.3f, 0.3f);
+                s *= func_001F9FA8(m->rotz);
+                off.f[1] = s;
+                off.f[2] = func_002140F8(0.0f, 2.0f);
+                pos.q = off.q;
+                func_001F9BD8(&pos, &pos, &m->pos);
+                func_L00_001FF4B0(&vel, &vel, func_002140F8(0.5f, 1.5f) * D_0015EE6C);
+                s = func_002140F8(0.5f, 1.0f) * 210000.0f;
+                func_L00_0026DD70(&pos, &vel, 0x5F787878, 0x181818, s, func_001F9850(func_L00_00258BC8(30, 90)));
+            }
+        }
+        for (j = 0; j < 40; j++) {
+            DebrisColors colors;
+            DebrisVec vel;
+            DebrisVec pos;
+            DebrisVec off;
+
+            colors = D_L01_00161CE0;
+            pos.q = 0;
+            pos.f[0] = func_002140F8(-1.0f, 1.0f);
+            pos.f[1] = func_002140F8(-1.0f, 1.0f);
+            pos.f[2] = func_002140F8(-1.0f, 1.0f);
+            off.q = 0;
+            vel.q = pos.q;
+            s = func_002140F8(-1.2f, 1.2f);
+            s *= func_001F9F90(m->rotz);
+            off.f[0] = s;
+            s = func_002140F8(-0.4f, 0.4f);
+            s *= func_001F9FA8(m->rotz);
+            off.f[1] = s;
+            off.f[2] = func_002140F8(0.5f, 2.0f);
+            pos.q = off.q;
+            func_001F9BD8(&pos, &pos, &m->pos);
+            func_L00_001FF4B0(&vel, &vel, func_002140F8(1.0f, 5.0f) * D_0015EE6C);
+            ((void (*)(void *, void *, int, float, int, float, float, float, int))func_L01_002F9908)(&pos, &vel, colors.c[func_002140B0(3)], func_002140F8(0.04f, 0.09f),
+                              func_L00_00258BC8(60, 180), 1.0f, 1.0f, 0.75f, 0);
+        }
+        func_L00_002584A8(m, 0, -1);
+        func_0020D678(m);
+    }
+}
 typedef struct {
     int pad0[4];
     void *moby;
