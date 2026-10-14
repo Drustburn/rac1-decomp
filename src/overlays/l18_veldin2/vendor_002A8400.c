@@ -2632,7 +2632,7 @@ extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_L00_0025AAC0(int, void *);
 extern void func_L00_0025A8E8(int, float, void *, int, float, float, int, int, int);
-extern void func_L18_002DD8A8(void);
+extern void func_L18_002DD8A8(void *);
 extern short D_L18_00161D30;
 
 /* UpdateMoby_628 */
@@ -2698,7 +2698,105 @@ void func_L18_002DD848(char *moby, void *pos, float f)
         d[2] = scale_ticks(*(int *)&D_L18_00161D2C);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L18_002DD8A8);
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_D8A8;
+typedef struct { float u, v; } UV_D8A8;
+typedef struct {
+    V_D8A8 corner[4];
+    unsigned int color[4];
+    UV_D8A8 uv[4];
+    long unk70, tex, unk80, unk88;
+} Q_D8A8;
+
+extern int D_L18_00161D2C_D8A8 SDATA(D_L18_00161D2C);
+extern int D_L18_00161D34_D8A8 SDATA(D_L18_00161D34);
+extern int D_L18_00161D38_D8A8 SDATA(D_L18_00161D38);
+extern int D_L18_00161D3C_D8A8 SDATA(D_L18_00161D3C);
+extern int D_L18_00161D40_D8A8 SDATA(D_L18_00161D40);
+extern int D_L18_00161D48_D8A8 SDATA(D_L18_00161D48);
+extern int D_L18_00161D4C_D8A8 SDATA(D_L18_00161D4C);
+extern float D_L18_00161D50_D8A8 SDATA(D_L18_00161D50);
+extern float D_L18_00161D54_D8A8 SDATA(D_L18_00161D54);
+extern float D_L18_00161D58_D8A8 SDATA(D_L18_00161D58);
+extern float D_L18_00161D5C_D8A8 SDATA(D_L18_00161D5C);
+extern float D_L18_00161D64_D8A8 SDATA(D_L18_00161D64);
+extern float D_L18_001D4600_D8A8[] __asm__("D_L18_001D4600");
+extern void func_001FA190_D8A8(void *) __asm__("func_001FA190");
+extern int func_001F4868_D8A8(int) __asm__("func_001F4868");
+extern void func_L00_001FD1D8_D8A8(void *, void *, int) __asm__("func_L00_001FD1D8");
+extern void func_001FA4F0_D8A8(void *, void *, void *) __asm__("func_001FA4F0");
+extern float func_001FA888_D8A8(int) __asm__("func_001FA888");
+extern int func_001F9850_D8A8(int) __asm__("func_001F9850");
+extern float func_001FA748_D8A8(float, float) __asm__("func_001FA748");
+extern float func_001F9F90_D8A8(float) __asm__("func_001F9F90");
+extern float func_001F9FA8_D8A8(float) __asm__("func_001F9FA8");
+extern int func_001FA8A8_D8A8(int, int, float) __asm__("func_001FA8A8");
+extern int func_001FA898_D8A8(float) __asm__("func_001FA898");
+extern void func_001F9BC0_D8A8(void *) __asm__("func_001F9BC0");
+extern void func_001FA1F8_D8A8(void *, void *) __asm__("func_001FA1F8");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l18/gameplay/entities/002a7220.c, FUN_L18_002dc4b8. */
+void func_L18_002DD8A8(void *moby_v) {
+    char *moby = moby_v;
+    Q_D8A8 quad[4];
+    V_D8A8 mat[4];
+    V_D8A8 rot[3];
+    V_D8A8 ang;
+    float *p;
+    int i, j, k;
+    int c;
+    float t, r, d, s, gi;
+
+    p = *(float **)(moby + 0x78);
+    func_001FA190_D8A8(mat);
+    qcopy(&mat[3], moby + 0x10);
+    mat[3].f[2] = mat[3].f[2] + D_L18_00161D54_D8A8;
+    mat[3].f[3] = 1.0f;
+    for (i = 0; i < 4; i++) {
+        quad[i].tex = func_001F4868_D8A8(14);
+        gi = D_L18_00161D5C_D8A8 * (float)i;
+        quad[i].unk70 = 0;
+        quad[i].unk80 = 0xFF9000000260L;
+        quad[i].unk88 = (long)D_L18_00161D34_D8A8 | ((long)D_L18_00161D38_D8A8 << 2) |
+                        ((long)D_L18_00161D3C_D8A8 << 4) | ((long)D_L18_00161D40_D8A8 << 6) | 0x8000000000L;
+        t = p[1] + (float)i * 0.25f;
+        r = p[0] + gi;
+        t = t - (float)func_001FA898_D8A8(t);
+        c = func_001FA8A8_D8A8(D_L18_00161D48_D8A8, D_L18_00161D4C_D8A8, t);
+        s = t * D_L18_00161D64_D8A8;
+        if (s > 1.0f) s = 1.0f;
+        c = func_001FA8A8_D8A8(c & 0xFFFFFF, c, s);
+        d = func_001FA888_D8A8(((int *)p)[2]);
+        s = d / (float)func_001F9850_D8A8(D_L18_00161D2C_D8A8);
+        if (s > 1.0f) {
+            s = 1.0f;
+        } else if (s < 0.0f) {
+            s = 0.0f;
+        }
+        c = func_001FA8A8_D8A8(c & 0xFFFFFF, c, s);
+        for (j = 0; j < 4; j++) {
+            float a;
+            quad[i].uv[j].u = D_L18_001D4600_D8A8[j * 2];
+            quad[i].uv[j].v = D_L18_001D4600_D8A8[j * 2 + 1];
+            quad[i].corner[j].f[2] = (j & 1) ? t * D_L18_00161D58_D8A8 : -t * D_L18_00161D58_D8A8;
+            a = func_001FA748_D8A8((float)(j >> 1) * (D_L18_00161D50_D8A8 * 0.017453292f) - 3.14159f,
+                              D_L18_00161D50_D8A8 * 0.25f * (float)i * 0.017453292f);
+            quad[i].corner[j].f[0] = func_001F9F90_D8A8(a) * r;
+            quad[i].corner[j].f[1] = func_001F9FA8_D8A8(a) * r;
+            quad[i].corner[j].f[3] = 1.0f;
+            quad[i].color[j] = c;
+        }
+    }
+    func_001F9BC0_D8A8(&ang);
+    ang.f[2] = D_L18_00161D50_D8A8 * 0.017453292f;
+    func_001FA1F8_D8A8(&rot[0], &ang);
+    for (k = 0; (float)k < 360.0f / D_L18_00161D50_D8A8; k++) {
+        func_L00_001FD1D8_D8A8(&quad[0], mat, 0);
+        func_L00_001FD1D8_D8A8(&quad[1], mat, 0);
+        func_L00_001FD1D8_D8A8(&quad[2], mat, 0);
+        func_L00_001FD1D8_D8A8(&quad[3], mat, 0);
+        func_001FA4F0_D8A8(mat, mat, &rot[0]);
+    }
+}
 extern float func_00214D28(float *p, float target, float maxstep);
 extern void func_L00_00217718(void *, void *, int, int);
 extern void func_L00_002EBF50(void *, void *, int, int, int);
