@@ -1321,7 +1321,93 @@ void func_L01_002F0938(unsigned char *moby) {
     }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L01_002F0B48);
+typedef int u128_0B48 __attribute__((mode(TI)));
+
+extern f32 D_0015EE6C_0B48 __asm__("D_0015EE6C") MACRO_ADDR;
+extern f32 D_0015EE70_0B48 __asm__("D_0015EE70") MACRO_ADDR;
+extern s32 D_L01_00161A7C_0B48 SDATA(D_L01_00161A7C);
+extern s32 D_L01_00161A80_0B48 SDATA(D_L01_00161A80);
+extern f32 D_L01_00161A84_0B48 SDATA(D_L01_00161A84);
+extern f32 D_L01_00161A88_0B48 SDATA(D_L01_00161A88);
+extern f32 D_L01_00161A8C_0B48 SDATA(D_L01_00161A8C);
+extern f32 D_L01_00161A90_0B48 SDATA(D_L01_00161A90);
+extern f32 D_L01_00161A94_0B48 SDATA(D_L01_00161A94);
+extern f32 D_L01_00161A98_0B48 SDATA(D_L01_00161A98);
+extern f32 D_L01_00161A9C_0B48 SDATA(D_L01_00161A9C);
+extern f32 D_L01_00161AA0_0B48 SDATA(D_L01_00161AA0);
+extern f32 D_L01_00161AA4_0B48 SDATA(D_L01_00161AA4);
+extern f32 D_L01_00161AA8_0B48 SDATA(D_L01_00161AA8);
+extern s32 D_L01_00161AAC_0B48 SDATA(D_L01_00161AAC);
+extern s32 D_L01_00161AB0_0B48 SDATA(D_L01_00161AB0);
+extern s32 D_L01_00161AB4_0B48 SDATA(D_L01_00161AB4);
+extern s32 D_L01_00161AB8_0B48 SDATA(D_L01_00161AB8);
+extern s32 D_L01_00161ABC_0B48 SDATA(D_L01_00161ABC);
+extern s32 D_L01_00161AC0_0B48 SDATA(D_L01_00161AC0);
+extern s32 D_L01_00161AC4_0B48 SDATA(D_L01_00161AC4);
+extern f32 D_L01_00161AC8_0B48 SDATA(D_L01_00161AC8);
+extern void func_L00_00260958_0B48(void *, f32) __asm__("func_L00_00260958");
+extern float func_00214158_0B48(void) __asm__("func_00214158");
+extern float func_002140F8_0B48(float, float) __asm__("func_002140F8");
+extern void func_001F9C30_0B48(void *, void *, float) __asm__("func_001F9C30");
+extern float func_001F9F90_0B48(float) __asm__("func_001F9F90");
+extern float func_001F9FA8_0B48(float) __asm__("func_001F9FA8");
+extern s32 func_001F9850_0B48(s32) __asm__("func_001F9850");
+extern int func_001FA8A8_0B48(f32, s32, s32) __asm__("func_001FA8A8");
+extern f32 func_001F9878_0B48(f32) __asm__("func_001F9878");
+extern s32 func_001FA898_0B48(f32) __asm__("func_001FA898");
+extern char *func_00219780_0B48(void *, void *, void *, int, int, int, int, int, int) __asm__("func_00219780");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/entities/002b8c08.c, FUN_L01_002ef770. */
+void func_L01_002F0B48(unsigned char *moby, f32 *mode) {
+    char *data = (char *)((struct Moby *)moby)->pvars;
+    f32 pos[4], origin[4], velocity[4];
+    u128_0B48 *dest;
+    f32 *origin_copy;
+    u128_0B48 *source;
+    f32 angle, radius, vertical, lateral, scale, scaled_radius, scaled_vertical;
+    s32 i, next, j, lower, upper, first, second, duration;
+
+    i = 0;
+    if (D_L01_00161A7C_0B48 > 0) {
+      source = (u128_0B48 *)(moby + 0x10);
+      dest = (u128_0B48 *)pos;
+      origin_copy = origin;
+      do {
+        qcopy_nc(dest, source);
+        func_L00_00260958_0B48(dest, D_L01_00161A84_0B48 * *(f32 *)(data + 0x250));
+        pos[2] += 1.0f;
+        angle = func_00214158_0B48();
+        radius = func_002140F8_0B48(D_L01_00161A90_0B48, D_L01_00161A94_0B48);
+        lateral = func_002140F8_0B48(D_L01_00161A98_0B48, D_L01_00161A9C_0B48);
+        vertical = func_002140F8_0B48(0.0f, D_L01_00161AC8_0B48);
+        func_001F9C30_0B48(origin_copy, mode, vertical * D_0015EE6C_0B48);
+        scale = func_001F9F90_0B48(angle);
+        origin[0] += scale * (radius * D_0015EE6C_0B48);
+        scale = func_001F9FA8_0B48(angle);
+        scaled_radius = radius * D_0015EE6C_0B48;
+        origin[1] += scale * scaled_radius;
+        scaled_vertical = lateral * D_0015EE6C_0B48;
+        origin[2] += scaled_vertical;
+        qcopy(velocity, origin_copy);
+        next = i + 1;
+        velocity[2] -= D_L01_00161AA0_0B48 * D_0015EE70_0B48 * (f32)func_001F9850_0B48(D_L01_00161AC0_0B48);
+        for (j = 0; j < D_L01_00161A80_0B48; j++) {
+            scale = func_002140F8_0B48(0.5f, 1.5f);
+            origin[3] = scale * D_L01_00161AA4_0B48;
+            velocity[3] = scale * D_L01_00161AA8_0B48;
+            func_L00_00260958_0B48(pos, D_L01_00161A88_0B48);
+            func_L00_00260958_0B48(velocity, D_L01_00161A8C_0B48 * D_0015EE6C_0B48);
+            lower = func_001FA8A8_0B48(func_002140F8_0B48(0.0f, 1.0f), D_L01_00161AAC_0B48, D_L01_00161AB4_0B48);
+            upper = func_001FA8A8_0B48(func_002140F8_0B48(0.0f, 1.0f), D_L01_00161AB0_0B48, D_L01_00161AB8_0B48);
+            first = func_001F9850_0B48(D_L01_00161ABC_0B48);
+            second = func_001F9850_0B48(D_L01_00161AC0_0B48);
+            duration = func_001FA898_0B48(func_001F9878_0B48(func_002140F8_0B48((f32)D_L01_00161AC4_0B48 * 0.5f, (f32)D_L01_00161AC4_0B48 * 2.5f)));
+            func_00219780_0B48(pos, origin_copy, velocity, lower, upper, first, second, duration, -1);
+        }
+        i = next;
+      } while (i < D_L01_00161A7C_0B48);
+    }
+}
 extern int func_L00_002DCDA8(void *);
 
 // Updates the state when the vendor predicate permits it.
