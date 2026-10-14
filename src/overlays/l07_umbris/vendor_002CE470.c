@@ -1173,7 +1173,7 @@ void func_L07_0030F4C0(char *a, char *b, char *c) {
     }
 }
 extern void func_0020D678(void *);
-extern void func_L07_0030F0D0(void);
+extern void func_L07_0030F0D0(unsigned char *);
 extern char *D_L07_00160064 MACRO_ADDR;
 
 // Fades a moby in and out by its progress, then runs its per-moby callbacks.

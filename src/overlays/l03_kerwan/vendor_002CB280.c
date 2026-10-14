@@ -1228,7 +1228,231 @@ void func_L03_002DBAD8(char *moby) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L03_002DBC38);
+struct TalkState_hg {
+    u8 pad0[4];
+    s16 mode;
+    u8 pad6[0x1A];
+    void *script;
+    u8 pad24[0x12];
+    s16 unk36;
+    u8 pad38[0x10];
+    s32 unk48;
+    s32 warp;
+};
+struct QuestGiverVars_hg {
+    u8 pad0[0x80];
+    struct TalkState_hg talk;
+    s32 reward;
+    s32 link;
+    s32 link_arg;
+    u8 padDC[4];
+    u8 body[0x64];
+    f32 pitch;
+    f32 yaw;
+    u8 pad14C[4];
+    f32 height;
+    u8 pad154[0xC];
+    u8 head[0x80];
+    Vec4 target;
+    s32 watch_timer;
+    s32 target_timer;
+};
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} LevelState_hg;
+extern u8 D_0013D5CA[];
+extern u8 D_0014171B[];
+extern int D_0015EE84 MACRO_ADDR;
+extern char *D_L03_00160058 MACRO_ADDR;
+extern u8 D_L03_001BAA30[];
+extern char D_L03_00161C38[];
+extern LevelState_hg D_L03_001BA9E0;
+extern u8 D_L03_0015FD08[];
+extern short D_L03_0016016C;
+extern void func_L01_0029C2A0(void *, int, struct Moby *, int, void *);
+extern int func_L00_002676E8(void *, unsigned char *);
+extern int func_L00_00267290(struct Moby *, struct TalkState_hg *);
+extern void func_L02_0025D750(struct Moby *);
+extern void func_L01_00279398(float, void *);
+extern void func_L00_002512D8(int);
+extern void func_L00_00286128(void *, void *);
+extern void func_L00_002618D8(int, int);
+extern void func_L00_00264DB8(int, int);
+extern void func_0020BFC8(int, int);
+extern void func_0020D678(void *);
+extern f32 func_001FA850(f32, f32);
+#define LINK_HELPER(M, V) \
+    t = (struct Moby *)((V->link << 8) + (int)D_L03_00160058); \
+    if (t->oclass == 0x3F4) { flag = (s32 *)(t->pvars + 0x8C); *flag = 1; func_L01_0029C2A0(flag, 4, M, 2, D_L03_001BAA30); }
+extern void func_001F9908(int *arg0);
+extern f32 func_001F9878(f32);
+extern int func_001FA898(f32);
+extern f32 func_001FA748(f32, f32);
+extern f32 func_001FA790(f32, f32);
+extern f32 func_001F9CE8(void *);
+extern void func_L00_00263950(void *, void *, int, f32, f32);
+
+void func_L03_002DBC38(struct Moby *m) {
+    struct QuestGiverVars_hg *v = (struct QuestGiverVars_hg *)m->pvars;
+    struct TalkState_hg *talk = &v->talk;
+    struct Moby *t;
+    struct Moby *o;
+    u8 group;
+    s32 *flag;
+    Vec4 *g;
+    struct Hero *h;
+    float scratch_target[4];
+    float eye[4];
+    float delta[4];
+    float rate;
+    float head_rate;
+    float yaw;
+    float pitch;
+    int tracking;
+
+    func_L03_002DBAD8(m);
+    switch (m->state) {
+    case 0:
+        if (D_0013D5CA[10] != 0) {
+            if (v->link != -1) {
+                LINK_HELPER(m, v)
+            }
+            func_0020D678(m);
+            return;
+        }
+        if ((D_0014171B + 0xAA35)[m->unkB0 + (D_0015EE84 << 4)] == 0xFF && v->link != -1) {
+            LINK_HELPER(m, v)
+        }
+        m->spawn_frame = *(u64 *)(*(char **)&D_0013E633[0x2E9D] + 0x38);
+        m->state = 1;
+        talk->script = D_L03_00161C38;
+        v->talk.unk48 = 5;
+        ((void (*)(struct Moby *, struct TalkState_hg *))func_L00_002676E8)(m, talk);
+        func_L02_0025D750(m);
+        break;
+    case 1:
+        if (func_L00_00267290(m, talk)) {
+            func_L01_00279398(2.3f, m);
+            m->state = 2;
+            if (v->link != -1) {
+                LINK_HELPER(m, v)
+            }
+        }
+        break;
+    case 2:
+        if (D_L03_0015F6A8 != 2) {
+            if (v->talk.mode != 2) {
+                func_L00_002512D8(m->unkB0);
+                if (v->link != -1) {
+                    LINK_HELPER(m, v)
+                }
+                if (v->talk.warp != -1) {
+                    func_L00_00286128((*(char **)&D_L03_0016016C) + v->talk.warp * 128 + 0x30,
+                                      (*(char **)&D_L03_0016016C) + v->talk.warp * 128 + 0x70);
+                }
+            }
+            m->state = 1;
+            if (v->talk.mode == 2) {
+                func_L00_002618D8(0xC, 1);
+                func_L00_00264DB8(0xBC8, -1);
+                if (v->reward != -1) {
+                    D_L03_001BA9E0.collected[(s16)((struct Moby *)((v->reward << 8) + (int)D_L03_00160058))->save_id] =
+                        ((struct Moby *)((v->reward << 8) + (int)D_L03_00160058))->unkB0 + 2;
+                    o = (struct Moby *)((v->reward << 8) + (int)D_L03_00160058);
+                    if (o->unkB0 == 0xFF)
+                        goto record;
+                    do {
+                        group = o->unkB0;
+                    } while (0);
+                    if (D_L03_0015FD08[group] != 0xFF && (D_0014171B + 0xAA35)[group + (D_0015EE84 << 4)] == 0xFF) {
+                        do {
+                        record:
+                            D_L03_001BB640.collected[(s16)o->save_id] = o->unkB0 + 2;
+                        } while (0);
+                    }
+                    func_0020D678(D_L03_00160058 + (v->reward << 8));
+                }
+                if (v->link != -1) {
+                    t = (struct Moby *)((v->link << 8) + (int)D_L03_00160058);
+                    if (t->oclass == 0x3F4) {
+                        u8 *tv = t->pvars;
+                        *(s32 *)(tv + 0x7C) = 0;
+                        *(s32 *)(tv + 0x8C) = 0;
+                        *(s32 *)(tv + 0xA0) = v->link_arg;
+                    }
+                }
+                func_0020BFC8(0, -1);
+                func_0020D678(m);
+                return;
+            }
+        } else if (v->talk.unk36 == 2 && v->link != -1) {
+            t = (struct Moby *)((v->link << 8) + (int)D_L03_00160058);
+            if (t->oclass == 0x3F4) {
+                u8 *tv = t->pvars;
+                *(s32 *)(tv + 0x7C) = 0;
+                *(s32 *)(tv + 0x8C) = 0;
+                *(s32 *)(tv + 0xA0) = v->link_arg;
+            }
+        }
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->prev_seq == 0) {
+        g = &D_0013F450.motion.pos;
+        tracking = 1;
+        if (func_001F9D48(&m->pos, g) < 8.0f &&
+            (h = (struct Hero *)((u8 *)g - 0x80),
+             func_001FA850(m->rot.z, func_L00_001FF860(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
+                1.5707964f) {
+            if (func_001F9CB8((u8 *)g + 0x80) > 0.01f) {
+                v->watch_timer = func_001F9850(120);
+            } else {
+                ((int (*)(s32 *))func_001F9908)(&v->watch_timer);
+            }
+        } else if (v->watch_timer) {
+            v->watch_timer = 0;
+            qcopy(&v->target, &D_0013F450.motion.unkD0);
+        }
+        if (((int (*)(s32 *))func_001F9908)(&v->target_timer)) {
+            float heading;
+            v->target_timer = func_001FA898(func_001F9878(func_002140F8(180.0f, 300.0f)));
+            heading = func_001FA748(m->rot.z, func_002140F8(-90.0f, 90.0f) * 0.0174532925f);
+            func_00215C00(&v->target, 6.0f, heading, func_002140F8(0.0f, 30.0f) * 0.0174532925f);
+            func_001F9BD8(&v->target, &v->target, &m->pos);
+        }
+        if (v->watch_timer) {
+            qcopy(scratch_target, &D_0013F450.motion.unkD0);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch_target, &v->target);
+        }
+    }
+    if (tracking) {
+        qcopy(eye, &m->pos);
+        eye[2] += 1.0f;
+        func_001F9BF0(delta, scratch_target, eye);
+        yaw = func_001FA790(func_L00_001FF860(delta[0], delta[1]), m->rot.z);
+        pitch = -func_L00_001FF860(func_001F9CE8(delta), delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        v->pitch = pitch;
+        v->yaw = yaw * 0.5f;
+    }
+    if (D_0015EEB0[0])
+        v->height = 2.75f;
+    func_L00_00263950(m, v->body, 0, rate * D_0015EE64, head_rate * D_0015EE64);
+    func_L00_00263950(m, v->head, 1, rate * D_0015EE64, head_rate * D_0015EE64);
+}
 struct Manip_DC3E8;
 struct GifEntry_DC3E8;
 struct AnimSeq_DC3E8;

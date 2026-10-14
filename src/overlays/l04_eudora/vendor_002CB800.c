@@ -934,7 +934,166 @@ void func_L04_002D8348(char *moby) {
     FastVecAdd(moby + 0x10, a, b);
     qcopy(dst + 0x10, moby + 0x10);
 }
-INCLUDE_ASM("asm/overlays", func_L04_002D9270);
+typedef unsigned int VecQuadP __attribute__((mode(TI), aligned(16)));
+typedef union { VecQuadP q; float f[4]; int i[4]; } Vec4P;
+struct MobyP {
+    unsigned char pad0[0x10];
+    Vec4P pos;
+    unsigned char state; unsigned char pad21[0xB];
+    float scale;
+    unsigned char update_dist; unsigned char pad31; short draw_dist;
+    unsigned char pad34[0xC];
+    struct { float x, y, z; } rot;
+    unsigned char pad4c[0x78 - 0x4C];
+    void *pvars;
+};
+#define frame_time D_0015EE6C
+#define fast_cos func_001F9F90
+#define fast_sin func_001F9FA8
+#define random_float_between func_002140F8
+#define fast_add_rotations func_001FA748
+#define normalize_vector_xyz func_L00_001FF4B0
+#define add_vector_xyz func_001F9BD8
+#define scale_vector_xyz func_001F9C30
+#define rib_p func_002140B0
+#define cif_p func_001FA888
+extern float func_001F9CE8(void *);
+#define vector_length_xy func_001F9CE8
+extern int func_001F9908(s32 *);
+extern int func_L00_00258BC8(int, int);
+#define random_int_between func_L00_00258BC8
+#define collision_line ((int (*)(void *, void *, int, void *, void *))(func_L00_001EFFF0))
+extern void func_L00_001FF610(void *, void *, void *);
+extern float D_L04_001CBBC0[6];
+extern char D_L04_00174060[];
+
+/* Three-state motion update. The saved position is restored when the timer expires. */
+void func_L04_002D9270(struct MobyP *moby) {
+    Vec4P random;
+    Vec4P old;
+    Vec4P work;
+    Vec4P initialDirection;
+    Vec4P direction;
+    char *data = (char *)moby->pvars;
+    float speed;
+    float amount;
+    int timer;
+    float *motion;
+
+    old.q = 0;
+    old.f[0] = random_float_between(-1.0f, 1.0f);
+    old.f[1] = random_float_between(-1.0f, 1.0f);
+    old.f[2] = random_float_between(-1.0f, 1.0f);
+    random.q = old.q;
+    speed = vector_length_xy(data);
+    qcopy(&old, &moby->pos);
+    switch (moby->state) {
+    case 0:
+        qcopy(data + 0x30, &moby->pos);
+        *(int *)(data + 0x40) = *(int *)(data + 0x44) = random_int_between(120, 2400);
+        *(float *)(data + 0x4c) = moby->scale * random_float_between(0.8f, 1.2f);
+        moby->state = 1;
+        break;
+    case 1:
+        if (!(func_001F9D48(&moby->pos, D_L04_00166FC0) < 32.0f))
+            return;
+        if (!func_001F9908((int *)(data + 0x44)))
+            return;
+        direction.q = 0;
+        direction.f[0] = random_float_between(-1.0f, 1.0f);
+        direction.f[1] = random_float_between(-1.0f, 1.0f);
+        direction.f[2] = random_float_between(-1.0f, 1.0f);
+        moby->update_dist = 0xff;
+        moby->draw_dist = 0x40;
+        moby->scale = 0.0f;
+        motion = (float *)moby->pvars;
+        initialDirection.q = direction.q;
+        normalize_vector_xyz(&initialDirection, &initialDirection, D_L04_001CBBC0[5] / 5.0f);
+        motion[0] = D_L04_001CBBC0[5] * fast_cos(D_L04_001CBBC0[1]);
+        { float sn = fast_sin(D_L04_001CBBC0[1]); float st = D_L04_001CBBC0[5]; float ft = frame_time;
+        motion[1] = st * sn;
+        motion[2] = ft * -0.5f; }
+        normalize_vector_xyz(&moby->rot, &initialDirection, 3.1415927f);
+        normalize_vector_xyz(motion + 8, &initialDirection, 0.098174773f);
+        normalize_vector_xyz(motion + 4, &initialDirection, D_L04_001CBBC0[5] * 0.5f);
+        *(int *)(motion + 16) = *(int *)(motion + 17) = random_int_between(720, 1200);
+        moby->state = 2;
+        return;
+    case 2:
+        func_001F9908((int *)(data + 0x44));
+        normalize_vector_xyz(&random, &random, D_L04_001CBBC0[5] / 10.0f);
+        add_vector_xyz(data + 0x10, data + 0x10, &random);
+        normalize_vector_xyz(&work, data + 0x10, 5.0f);
+        normalize_vector_xyz(data + 0x10, data + 0x10, D_L04_001CBBC0[5] * 0.5f);
+        add_vector_xyz(&work, &work, &moby->pos);
+        if (collision_line(&old, &work, 6, 0, 0) && !rib_p(8)) {
+            func_L00_001FF610(data + 0x10, data + 0x10, D_L04_00174060 + 0x20);
+            *(float *)(data + 0x18) += D_L04_001CBBC0[5] / 10.0f;
+        }
+        add_vector_xyz(data, data, data + 0x10);
+        work.f[0] = D_L04_001CBBC0[5] * fast_cos(D_L04_001CBBC0[1]);
+        work.f[1] = D_L04_001CBBC0[5] * fast_sin(D_L04_001CBBC0[1]);
+        work.f[2] = frame_time * -0.5f;
+        scale_vector_xyz(&work, &work, 0.4f);
+        scale_vector_xyz(data, data, 0.6f);
+        add_vector_xyz(data, &work, data);
+        add_vector_xyz(&moby->pos, &moby->pos, data);
+        if (collision_line(&old, &moby->pos, 6, 0, 0)) {
+            qcopy(&moby->pos, D_L04_00174060);
+            func_L00_001FF610(data, data, D_L04_00174060 + 0x20);
+            scale_vector_xyz(data, data, 0.25f);
+            add_vector_xyz(&moby->pos, &moby->pos, data);
+            *(float *)(data + 8) += D_L04_001CBBC0[5] / 5.0f;
+        }
+        if (D_L04_001CBBC0[5] < speed)
+            normalize_vector_xyz(data, data, D_L04_001CBBC0[5]);
+        {
+            float amount = frame_time * -0.5f;
+            if (amount < *(float *)(data + 8))
+                *(float *)(data + 8) += amount / 10.0f;
+            else
+                *(float *)(data + 8) = amount;
+        }
+        moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x20));
+        moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x24));
+        moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x28));
+        if (*(int *)(data + 0x40) - func_001F9850(10) < *(int *)(data + 0x44)) {
+            amount = cif_p(*(int *)(data + 0x44) - *(int *)(data + 0x40));
+            moby->scale = (*(float *)(data + 0x4c) * amount) / func_001F9878(10.0f);
+        } else {
+            if (*(int *)(data + 0x44) < func_001F9850(100))
+                moby->scale *= 0.99f;
+            else
+                moby->scale = *(float *)(data + 0x4c);
+        }
+        if (*(int *)(data + 0x44) > 0)
+            return;
+        qcopy(&moby->pos, data + 0x30);
+        timer = random_int_between(120, 2400);
+        /* Preserve the retail ordering of the timer reload stores. */
+        *(volatile int *)(data + 0x40) = timer;
+        *(volatile int *)(data + 0x44) = timer;
+        moby->state = 1;
+        break;
+    default:
+        return;
+    }
+    moby->scale = 0.0f;
+}
+
+#undef frame_time
+#undef fast_cos
+#undef fast_sin
+#undef random_float_between
+#undef fast_add_rotations
+#undef normalize_vector_xyz
+#undef add_vector_xyz
+#undef scale_vector_xyz
+#undef rib_p
+#undef cif_p
+#undef vector_length_xy
+#undef random_int_between
+#undef collision_line
 INCLUDE_ASM("asm/overlays", func_L04_002E2B48);
 // Return float constant
 float func_L04_002E2B90(void) {

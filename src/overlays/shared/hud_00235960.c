@@ -270,7 +270,22 @@ void func_L00_00236750(HudElem *e) {
     e->h = 0x20;
     func_L00_00236610(e);
 }
-INCLUDE_ASM("asm/overlays", func_L00_002367A8);
+int func_L00_002367A8(int key, int val) {
+    int i;
+    int r;
+    HudBank *e;
+    r = 1;
+    for (i = 0; i < 13; i++) {
+        if (D_L00_0017DD50[i].unk64 == key)
+            break;
+    }
+    if (i < 13 && D_L00_0017DD50[i].unk68 == 0) {
+        e = D_L00_0017DD50 + i;
+        e->unk7C = (val < e->unk7C) ? e->unk7C : val;
+        return 0;
+    }
+    return 1;
+}
 
 /* Eases a counter's shown value toward its target and animates its two drifting digits. */
 void func_L00_00236830(HudElem *e) {
