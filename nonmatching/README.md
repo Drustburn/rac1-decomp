@@ -17,6 +17,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L14_002B2A28`](shared/func_L14_002B2A28.c) | shared | 3620 | BYTES 50/3620 | 98.6% |
 | [`func_L09_00306DD8`](l09_gaspar/func_L09_00306DD8.c) | l09_gaspar | 488 | BYTES 7/488 | 98.6% |
 | [`func_L00_0026ABC0`](shared/func_L00_0026ABC0.c) | shared | 1780 | BYTES 26/1780 | 98.5% |
+| [`func_L10_002E5E48`](l10_orxon/func_L10_002E5E48.c) | l10_orxon | 3804 | BYTES 58/3804 | 98.5% |
 | [`func_L05_00317B68`](l05_rilgar/func_L05_00317B68.c) | l05_rilgar | 368 | BYTES 7/368 | 98.1% |
 | [`func_L00_0024A798`](shared/func_L00_0024A798.c) | shared | 288 | BYTES 7/288 | 97.6% |
 | [`func_L00_0024A60C`](shared/func_L00_0024A60C.c) | shared | 76 | BYTES 2/76 | 97.4% |
