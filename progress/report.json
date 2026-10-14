@@ -1,12 +1,12 @@
 {
  "measures": {
-  "fuzzy_match_percent": 83.38264735477838,
+  "fuzzy_match_percent": 83.5498523381764,
   "total_code": "3712808",
-  "matched_code": "3041136",
-  "matched_code_percent": 81.90932577176089,
+  "matched_code": "3047344",
+  "matched_code_percent": 82.0765307551589,
   "total_functions": 5109,
-  "matched_functions": 4366,
-  "matched_functions_percent": 85.45703660207477,
+  "matched_functions": 4367,
+  "matched_functions_percent": 85.47660990409082,
   "complete_code": "482572",
   "complete_code_percent": 12.997494079952425,
   "total_units": 141,
@@ -36902,13 +36902,13 @@
   {
    "name": "Level 02: Aridia",
    "measures": {
-    "fuzzy_match_percent": 88.95298642178793,
+    "fuzzy_match_percent": 95.04356016011302,
     "total_code": "101928",
-    "matched_code": "90668",
-    "matched_code_percent": 88.95298642178793,
+    "matched_code": "96876",
+    "matched_code_percent": 95.04356016011302,
     "total_functions": 64,
-    "matched_functions": 59,
-    "matched_functions_percent": 92.1875,
+    "matched_functions": 60,
+    "matched_functions_percent": 93.75,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -37089,7 +37089,7 @@
     {
      "name": "func_L02_002D5250",
      "size": "6208",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "759232",
      "metadata": {
       "virtual_address": "2970192"
@@ -49701,13 +49701,13 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 83.6630503697444,
+    "fuzzy_match_percent": 83.8542358800508,
     "total_code": "3247108",
-    "matched_code": "2662012",
-    "matched_code_percent": 81.98101202670192,
+    "matched_code": "2668220",
+    "matched_code_percent": 82.17219753700832,
     "total_functions": 3429,
-    "matched_functions": 2852,
-    "matched_functions_percent": 83.1729367162438,
+    "matched_functions": 2853,
+    "matched_functions_percent": 83.2020997375328,
     "complete_code": "281192",
     "complete_code_percent": 8.659767399174896
    }
@@ -49761,13 +49761,13 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 89.40043284078027,
+    "fuzzy_match_percent": 89.7037829834643,
     "total_code": "2046480",
-    "matched_code": "1798616",
-    "matched_code_percent": 87.88827645518158,
+    "matched_code": "1804824",
+    "matched_code_percent": 88.1916265978656,
     "total_functions": 1449,
-    "matched_functions": 1278,
-    "matched_functions_percent": 88.19875776397515,
+    "matched_functions": 1279,
+    "matched_functions_percent": 88.26777087646653,
     "complete_code": "281192",
     "complete_code_percent": 13.740275986083422
    }
@@ -49806,13 +49806,13 @@
    "id": "level_02",
    "name": "Level 02: Aridia",
    "measures": {
-    "fuzzy_match_percent": 88.95298642178793,
+    "fuzzy_match_percent": 95.04356016011302,
     "total_code": "101928",
-    "matched_code": "90668",
-    "matched_code_percent": 88.95298642178793,
+    "matched_code": "96876",
+    "matched_code_percent": 95.04356016011302,
     "total_functions": 64,
-    "matched_functions": 59,
-    "matched_functions_percent": 92.1875,
+    "matched_functions": 60,
+    "matched_functions_percent": 93.75,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
