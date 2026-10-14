@@ -980,7 +980,51 @@ void func_L01_003015F8(struct Moby *moby) {
         moby->state = 1;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L01_00303810);
+typedef struct { int width; int height; int half_width; int half_height; } SE_303810p;
+extern SE_303810p D_0013E600;
+extern long func_001F4868(int);
+extern int func_001FA898(float);
+extern void func_001F5800(int, int, int, int, int, int, int, int, long, long);
+
+void func_L01_00303810(char *moby) {
+    int *vars = *(int **)(moby + 0x78);
+    int row_count;
+    int column_count;
+    int row;
+    int column;
+    float screen_center[2];
+    volatile float coordinate[2];
+    float opacity;
+    int color;
+    int texture_x;
+    int texture_y;
+    int draw_x;
+    int draw_y;
+    int tile_size = 32;
+    int tile_half;
+    long texture;
+
+    screen_center[0] = func_001FA888(D_0013E600.half_width);
+    screen_center[1] = func_001FA888(D_0013E600.half_height);
+    texture = func_001F4868(30);
+    row_count = D_0013E600.width / 32 + 1;
+    column_count = D_0013E600.height / 32 + 1;
+    for (row = 0; row < row_count; row++) {
+        int base_color = 0xff7f7f;
+        for (column = 0; column < column_count; column++) {
+            coordinate[0] = (float)(row * 32);
+            coordinate[1] = (float)(column * 32);
+            tile_half = tile_size >> 1;
+            opacity = func_001FA888(vars[0x50]) * 127.5f / func_001FA888(func_001F9850(90));
+            color = (func_001FA898(opacity) << 24) + base_color;
+            texture_x = func_002140B0(32);
+            texture_y = func_002140B0(32);
+            draw_x = func_001FA898(coordinate[0] - (float)tile_half);
+            draw_y = func_001FA898(coordinate[1] - (float)tile_half);
+            func_001F5800(draw_x, draw_y, 32, 32, texture_x, texture_y, 32, 32, color, texture);
+        }
+    }
+}
 extern char D_0013E633[];
 extern char *D_L01_00160064 MACRO_ADDR;
 extern char *D_L01_001B0C30[];

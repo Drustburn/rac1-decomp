@@ -1906,7 +1906,14 @@ int func_L00_0025F410(void *moby) {
     return (unsigned int)*(unsigned short *)((char *)moby + 0xA6) - 0x1F4 < 0x29;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0025F420);
-INCLUDE_ASM("asm/overlays", func_L00_0025F450);
+int func_L00_0025F450(void *p) {
+    short v = *(short *)((char *)p + 0xA6);
+    if (v == 0xE2 || v == 0xCC || v == 0xDE || v == 0x3EE || v == 0xD6 || v == 0xE1 || v == 0xD5 ||
+        v == 0xDF) {
+        return 1;
+    }
+    return 0;
+}
 typedef int u128_25F4A8 __attribute__((mode(TI)));
 typedef struct { float f[4]; } Q_25F4A8;
 typedef struct { char p0[0x18]; unsigned char b18; unsigned char b19; unsigned short h1A; char p1C[0x14]; } Ev_25F4A8;

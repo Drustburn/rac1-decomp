@@ -1467,7 +1467,116 @@ void func_L06_00304418(char *m) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L06_003045A0);
+struct Moby; struct Moby_04FA8;
+extern float D_0015EE70  MACRO_ADDR;
+extern float D_0015EE6C  MACRO_ADDR;
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) PathPoint_303160;
+typedef struct {
+    int n;
+    int pad[3];
+    PathPoint_303160 p[1];
+} Path_303160;
+struct PathRide_303160 {
+    char pad0[0x60];
+    int path_a[5];
+    int path_b[5];
+    int path_c[5];
+    char pad1[0x14];
+    float sway;
+    float sway_speed;
+    char pad2[0x0C];
+    float scale_start;
+    float scale_end;
+    char pad3[4];
+    int sound_slot[9];
+    float progress;
+};
+extern float func_00214D28(float *p, float target, float maxstep);
+extern int func_001FA898(float);
+extern float func_L00_0025CE58(float *p, float *v, float a, float b, float c, float d);
+extern int func_0022EEB8(int, int, void *);
+extern void func_L06_00304B88(float, struct Moby_04FA8 *, void *, void *, int);
+extern void func_L06_00304FA8(struct Moby_04FA8 *);
+extern char D_L06_001B0FB0[] ;
+extern char *D_L06_0016016C  MACRO_ADDR;
+/* Moves the moby along three paths and plays the sound marked on the path points. */
+int func_L06_003045A0(char *moby, int path) {
+    float rotation[4], position[4];
+    struct PathRide_303160 *ride = *(struct PathRide_303160 **)(moby + 0x78);
+    Path_303160 *first_path = ((Path_303160 **)D_L06_001B0FB0)[ride->path_a[path]];
+    Path_303160 *middle_path = ((Path_303160 **)D_L06_001B0FB0)[ride->path_b[path]];
+    Path_303160 *third_path = ((Path_303160 **)D_L06_001B0FB0)[ride->path_c[path]];
+    float time, first_index_f, first_fraction, third_fraction, angle, rate;
+    int first_index, middle_index, third_index, marker, prev_marker;
+    char *sound;
+
+    func_00214D28(&ride->progress, 1.0f, 1.0f / (float)func_001F9850(0x4B0));
+    time = ride->progress * (float)(first_path->n - 1);
+    first_index = func_001FA898(time);
+    first_index_f = (float)first_index;
+    first_fraction = time - first_index_f;
+    middle_index = func_001FA898(ride->progress * (float)(middle_path->n - 1));
+    time = ride->progress * (float)(third_path->n - 1);
+    third_fraction = time - first_index_f;
+    third_index = func_001FA898(time);
+    func_001F9C08(position, &first_path->p[first_index], &first_path->p[first_index + 1], first_fraction);
+    func_001F9C08(moby + 0x10, &third_path->p[third_index], &third_path->p[third_index + 1], third_fraction);
+    func_L00_002EBE88(position);
+    if (third_index > 0) {
+        angle = func_L00_001FF860(third_path->p[third_index].x - third_path->p[third_index - 1].x, third_path->p[third_index].y - third_path->p[third_index - 1].y);
+        *(float *)(moby + 0x48) = func_001FA748(
+            func_001FA790(func_L00_001FF860(third_path->p[third_index + 1].x - third_path->p[third_index].x, third_path->p[third_index + 1].y - third_path->p[third_index].y), angle) * third_fraction,
+            angle);
+        angle = -func_L00_001FF860(func_001F9D48(&third_path->p[third_index - 1], &third_path->p[third_index]), third_path->p[third_index].z - third_path->p[third_index - 1].z);
+        *(float *)(moby + 0x44) = func_001FA748(
+            func_001FA790(-func_L00_001FF860(func_001F9D48(&third_path->p[third_index], &third_path->p[third_index + 1]), third_path->p[third_index + 1].z - third_path->p[third_index].z),
+                           angle) * third_fraction,
+            angle);
+        *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * func_001F9F90(ride->sway);
+        *(float *)(moby + 0x48) = func_001FA748(*(float *)(moby + 0x48), ride->sway);
+    } else {
+        *(float *)(moby + 0x44) =
+            -func_L00_001FF860(func_001F9D48(&third_path->p[0], &third_path->p[1]), third_path->p[1].z - third_path->p[0].z);
+        *(float *)(moby + 0x48) = func_L00_001FF860(third_path->p[1].x - third_path->p[0].x, third_path->p[1].y - third_path->p[0].y);
+    }
+    if (first_index > 0 && middle_index > 0) {
+        func_001F9BC0(rotation);
+        angle = func_L00_001FF860(middle_path->p[middle_index].x - position[0], middle_path->p[middle_index].y - position[1]);
+        rotation[2] = func_001FA748(
+            func_001FA790(func_L00_001FF860(middle_path->p[middle_index + 1].x - position[0], middle_path->p[middle_index + 1].y - position[1]), angle) * third_fraction, angle);
+        angle = -func_L00_001FF860(func_001F9D48(position, &middle_path->p[middle_index]), middle_path->p[middle_index].z - position[2]);
+        rotation[1] = func_001FA748(
+            func_001FA790(-func_L00_001FF860(func_001F9D48(position, &middle_path->p[middle_index + 1]), middle_path->p[middle_index + 1].z - position[2]), angle) * third_fraction,
+            angle);
+        func_L00_002EBEE0(rotation);
+    }
+    *(float *)(moby + 0x2C) =
+        *(float *)(*(char **)(moby + 0x24) + 0x24) * (ride->scale_start - (ride->scale_start - ride->scale_end) * ride->progress);
+    if (ride->progress > 0.8f) {
+        rate = D_0015EE70 * 12.566371f;
+        func_L00_0025CE58(&ride->sway, &ride->sway_speed, 3.1415927f, rate, rate, D_0015EE6C * 6.2831855f);
+    }
+    marker = func_001FA898(first_path->p[first_index].w);
+    if (first_index != 0)
+        prev_marker = func_001FA898(first_path->p[first_index - 1].w);
+    else
+        prev_marker = -1;
+    if (marker >= 0 || prev_marker >= 0) {
+        first_path->p[first_index].w = -1.0f;
+        first_path->p[first_index - 1].w = -1.0f;
+        if (marker < 8 && prev_marker < 8) {
+            func_0022EEB8(0, 0, moby);
+            sound = D_L06_0016016C + (ride->sound_slot[marker] << 7);
+            func_L06_00304B88(6.0f, (struct Moby_04FA8 *)moby, sound + 0x30, sound, 6);
+        } else if (marker == 10 || prev_marker == 10) {
+            func_0022EEB8(1, 0, moby);
+            func_L06_00304FA8((struct Moby_04FA8 *)moby);
+        }
+    }
+    return ride->progress == 1.0f;
+}
 INCLUDE_ASM("asm/overlays", func_L06_00304B88);
 typedef u32 u128_04FA8 __attribute__((mode(TI), aligned(16)));
 typedef struct {

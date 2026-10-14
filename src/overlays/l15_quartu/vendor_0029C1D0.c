@@ -5,7 +5,150 @@
 #include "vector.h"
 #include "moby.h"
 
-INCLUDE_ASM("asm/overlays", func_L15_0029C1D0);
+typedef struct {
+    Vec4 home;
+    s32 open_volume;
+    s32 close_volume;
+    f32 travel;
+    s32 trigger;
+    s32 sound;
+    f32 duration;
+    s32 lock;
+} MovingVars_ZZ;
+
+typedef struct {
+    char pad00[0x74];
+    u8 active;
+    char pad75[0x13];
+    struct Moby *owner;
+} VoiceSlot_ZZ;
+
+typedef struct {
+    char pad0[0x454];
+    unsigned char collected[1];
+} ULevelState;
+
+extern ULevelState D_L15_001BBB40;
+extern int D_L15_00160058 MACRO_ADDR;
+extern int D_0015EE84 MACRO_ADDR;
+extern float D_0015EE6C MACRO_ADDR;
+extern int D_L15_001BADE0[];
+extern char D_L15_00167440[];
+extern float func_001F9F90(float);
+extern float func_001F9FA8(float);
+extern void func_001F9BD8(void *, void *, void *);
+extern int func_0022ED80(int, int, int);
+extern int func_00215570(void *, int);
+extern void func_L00_0028EBF0(int);
+extern unsigned char D_0013E633[];
+extern unsigned char D_0014171B[] NOT_SDA;
+#define D_0013F3D0 (D_0013E633 + 0xE9D)
+#define D_0013E550 ((char *)D_0013E633 + 0x1D)
+#define D_0014C190 ((char *)D_0014171B + 0xAB75)
+
+void func_L15_0029C1D0(struct Moby *m)
+{
+    MovingVars_ZZ *d = (MovingVars_ZZ *)m->pvars;
+    Vec4 offset;
+    Vec4 pos;
+    s32 slot;
+    s32 trigger_active;
+    u32 mask;
+    u32 *bits;
+
+    switch (m->state) {
+    case 0:
+        d->home.q = *(VecQuad *)&m->pos;
+        m->state = 1;
+        return;
+    case 1:
+        trigger_active = 0;
+        d->travel = 0;
+        if (d->trigger != -1) {
+            struct Moby *other = (struct Moby *)((char *)(s32)D_L15_00160058 + d->trigger * 0x100);
+            if (other->oclass == 0x4b9) {
+                if (other->state == 4) {
+                    trigger_active = 1;
+                    goto check_lock;
+                }
+            }
+            if (other->oclass == 0x596) {
+                trigger_active = other->state == 4;
+            }
+        }
+check_lock:
+        if (d->lock != 0) {
+            if (D_L15_001BBB40.collected[(s16)m->save_id] != 0 ||
+                ((*(s32 *)(D_0014C190 + (D_0015EE84 * 0x100 + ((s16)m->save_id >> 5) * 4)) >> (m->save_id & 31)) & 1) != 0)
+                trigger_active = 1;
+        }
+        if (func_00215570(D_0013F3D0, d->open_volume)) {
+            m->state = 2;
+        } else if (trigger_active) {
+            m->state = 2;
+        }
+        return;
+    case 2:
+        if (((VoiceSlot_ZZ *)(D_0013E550 + d->sound * 0x70))->owner != m ||
+            ((VoiceSlot_ZZ *)(D_0013E550 + d->sound * 0x70))->active == 0)
+            d->sound = func_0022ED80(0, 4, (int)m);
+        if (d->duration < (d->travel = d->travel + (d->duration / 0.6f) * D_0015EE6C)) {
+            slot = d->sound;
+            if (slot != -1) {
+                if (((VoiceSlot_ZZ *)(D_0013E550 + slot * 0x70))->owner == m &&
+                    ((VoiceSlot_ZZ *)(D_0013E550 + slot * 0x70))->active != 0)
+                    func_L00_0028EBF0(slot);
+            }
+            d->travel = d->duration;
+            d->sound = -1;
+            if (d->trigger != -1 || d->lock != 0) {
+                mask = 1U << (m->save_id & 31);
+                bits = (u32 *)(D_0014C190 + (((s16)m->save_id >> 5) * 4 + D_0015EE84 * 0x100));
+                *bits |= mask;
+                D_L15_001BADE0[((s16)m->save_id >> 5)] |= 1U << (m->save_id & 31);
+                m->state = 5;
+            } else {
+                m->state = 3;
+            }
+        }
+        offset.f[0] = func_001F9F90(m->rot.z) * -d->travel;
+        offset.f[1] = func_001F9FA8(m->rot.z) * -d->travel;
+        offset.f[2] = 0.0f;
+        func_001F9BD8(&pos, &d->home, &offset);
+        *(VecQuad *)&m->pos = pos.q;
+        return;
+    case 3:
+        if (func_00215570(D_0013F3D0, d->close_volume) ||
+            func_00215570(D_L15_00167440, d->close_volume))
+            return;
+        m->state = 4;
+        return;
+    case 4:
+        if (((VoiceSlot_ZZ *)(D_0013E550 + d->sound * 0x70))->owner != m ||
+            ((VoiceSlot_ZZ *)(D_0013E550 + d->sound * 0x70))->active == 0)
+            d->sound = func_0022ED80(0, 4, (int)m);
+        if ((d->travel = d->travel - (d->duration / 0.6f) * D_0015EE6C) < 0.0f) {
+            slot = d->sound;
+            if (slot != -1 && ((VoiceSlot_ZZ *)(D_0013E550 + slot * 0x70))->owner == m &&
+                ((VoiceSlot_ZZ *)(D_0013E550 + slot * 0x70))->active != 0)
+                func_L00_0028EBF0(slot);
+            d->travel = 0;
+            d->sound = -1;
+            m->state = 1;
+        }
+        offset.f[0] = func_001F9F90(m->rot.z) * -d->travel;
+        offset.f[1] = func_001F9FA8(m->rot.z) * -d->travel;
+        offset.f[2] = 0.0f;
+        func_001F9BD8(&pos, &d->home, &offset);
+        *(VecQuad *)&m->pos = pos.q;
+        if (func_00215570(D_0013F3D0, d->open_volume) ||
+            func_00215570(D_L15_00167440, d->open_volume))
+            m->state = 2;
+        return;
+    default:
+        return;
+    }
+}
 
 typedef struct {
     Vec4A home;   /* 0x00: x y z w at open */
@@ -316,9 +459,255 @@ void func_L15_002A4D88(struct Moby *moby) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L15_002A8AA8);
-INCLUDE_ASM("asm/overlays", func_L15_002AB4A8);
+extern char D_L15_00178780[];
+extern char D_L15_00161638[];
+extern u32 D_L15_00161648[3];
+extern unsigned char D_0013E633[];
+extern unsigned char D_0013DE55[];
+extern unsigned char D_0014171B[] NOT_SDA;
+extern int D_0015EE84 MACRO_ADDR;
+extern void func_L00_001FF4B0(void *, void *, float);
+extern void func_001F9C30(void *, void *, float);
+extern float func_001F9CB8(void *);
+extern float func_002140F8(float, float);
+extern float func_001F9F90(float);
+extern float func_001F9FA8(float);
+extern void func_L00_001FF240(void *, void *, void *);
+extern void func_001F9BF0(void *, void *, void *);
+extern int func_002140B0(int);
+extern int func_L00_00258BC8(int, int);
+extern void *func_L01_002F9908(void *, void *, int, float, int, float, float, float, int);
+extern void func_001F9BC0(void *);
+extern void func_001F9BD8(void *, void *, void *);
+extern int func_L00_00237B70(float, int, int);
+extern int func_001F9850(int);
+extern void *func_L00_0026CD70(void *, void *, int, int, float, int, int);
+extern void func_L00_002584A8(void *, int, int);
+extern void func_0020D678(void *);
+extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, unsigned char);
+
+void func_L15_002AB4A8(struct Moby *moby) {
+    char *hit = 0;
+    Vec4 velocity, hit_direction, push, offset, center;
+    u32 palette[4];
+    u32 colors[4];
+    Vec4 delta;
+    int spark, puff, pick, n;
+    u32 *color;
+    float size;
+    void *debris;
+
+    if (D_0013E633[0x2EC1] != 2 && moby->state == 1)
+        return;
+
+    for (n = 0; n < 64; n++) {
+        char *entry = D_L15_00178780 + n * 0x40;
+        if (*(struct Moby **)(entry + 0x34) != moby)
+            continue;
+        if ((*(u32 *)(entry + 0x24) & 0x80000) == 0)
+            continue;
+        hit = entry;
+        break;
+    }
+    *((u8 *)moby + 0xA4) = 0xff;
+    if (hit != 0) {
+        __builtin_memcpy(palette, D_L15_00161638, 16);
+        func_L00_001FF4B0(&hit_direction, hit + 0x10, D_0015EE6C * 10.0f);
+        func_001F9C30(&push, &hit_direction, 2.0f);
+        if (func_001F9CB8(hit) != 0.0f) {
+            center.q = *(VecQuad *)hit;
+        } else {
+            center.q = *(VecQuad *)&moby->pos;
+            center.f[2] += 6.0f;
+        }
+
+        for (spark = 0; spark < 25; spark++) {
+            float radius, angle;
+            int life;
+            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
+            radius = func_001F9F90(angle);
+            radius *= func_002140F8(-3.0f, 3.0f);
+            offset.f[0] = radius;
+            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
+            radius = func_001F9FA8(angle);
+            radius *= func_002140F8(-3.0f, 3.0f);
+            offset.f[1] = radius;
+            offset.f[2] = 0.0f;
+            offset.f[2] = func_002140F8(1.0f, 7.0f);
+            func_L00_001FF240(colors, &offset, &moby->pos);
+            func_001F9BF0(colors, &center, &offset);
+            velocity.q = *(VecQuad *)colors;
+            func_L00_001FF4B0(&velocity, &velocity, D_0015EE6C * 5.0f);
+            func_L00_001FF240(colors, &velocity, &push);
+            velocity.f[2] += D_0015EE6C * 3.0f;
+            size = func_002140F8(0.75f, 1.25f);
+            func_001F9C30(&velocity, &velocity, size);
+            pick = func_002140B0(4);
+            color = &palette[pick];
+            radius = func_002140F8(0.1f, 0.3f);
+            life = func_L00_00258BC8(100, 160);
+            size = func_002140F8(3.0f, 7.0f);
+            func_L01_002F9908(&offset, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
+        }
+        func_001F9BC0(&velocity);
+        func_L00_0025F4A8(moby, &velocity, &center, 0.0f, 0.0f, 20, 3, 4, 10.0f, 5.0f, 100000.0f, 3.0f, 0,
+                         15.0f, 1, 1, -1, 0);
+
+        for (puff = 0; puff < 20; puff++) {
+            float radius, angle;
+            int color1, color2, life;
+            __builtin_memcpy(colors, D_L15_00161648, 12);
+            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
+            radius = func_001F9F90(angle);
+            radius *= func_002140F8(-3.0f, 3.0f);
+            offset.f[0] = radius;
+            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
+            radius = func_001F9FA8(angle);
+            radius *= func_002140F8(-3.0f, 3.0f);
+            offset.f[1] = radius;
+            offset.f[2] = 0.0f;
+            func_001F9BD8(&offset, &offset, &moby->pos);
+            offset.f[2] += func_002140F8(1.0f, 5.5f);
+            func_001F9BF0(&delta, &center, &offset);
+            velocity.q = delta.q;
+            func_L00_001FF4B0(&velocity, &velocity, D_0015EE6C * 5.0f);
+            func_L00_001FF240(&delta, &velocity, &hit_direction);
+            size = func_002140F8(0.75f, 1.25f);
+            func_001F9C30(&velocity, &velocity, size);
+            size = func_002140F8(0.25f, 1.0f);
+            color1 = func_L00_00237B70(size, 0x7f000000, 0x7f182030);
+            size = func_002140F8(0.5f, 1.0f);
+            color2 = func_L00_00237B70(size, 0, 0x5f5f5f);
+            size = func_002140F8(1.0f, 3.0f) * 210000.0f;
+            life = func_001F9850(180);
+            pick = func_002140B0(3);
+            debris = func_L00_0026CD70(&offset, &velocity, color1, color2, size, life, colors[pick]);
+            if (debris != 0)
+                *(float *)((char *)debris + 0x2c) = moby->pos.z - 0.5f;
+        }
+        func_L00_002584A8(moby, 0, -1);
+        func_0020D678(moby);
+    } else {
+        *((u8 *)moby + 0xA4) = 0xff;
+        if (moby->state != 0)
+            return;
+        moby->unk32 = 0x80;
+        moby->unk30 = 0xff;
+        moby->state = 1;
+        if (D_0013DE55[3] != 0) {
+            u16 save_id = moby->save_id;
+            if ((*(s32 *)(D_0014171B + 0xAB75 + (((s16)save_id >> 5) * 4) + D_0015EE84 * 256) >> (save_id & 31)) & 1)
+                func_0020D678(moby);
+        }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L15_002C3BD8);
-INCLUDE_ASM("asm/overlays", func_L15_002C62A8);
+typedef int SQuad __attribute__((mode(TI)));
+typedef union { SQuad q; float f[4]; } SteeringVec_4f88;
+typedef struct {
+    char pad[0x150];
+    SteeringVec_4f88 delta;
+    char pad160[0x10];
+    float speed;
+    float pitch_velocity;
+    float yaw_velocity;
+    float facing_velocity;
+    char pad180[0x28];
+    float height;
+} SteeringVars_4f88;
+extern float D_0015EE70 MACRO_ADDR;
+extern float func_001F9D10(void *, void *);
+extern float func_L00_001FF860(float, float);
+extern float func_001FA790(float, float);
+extern float func_L00_00259148(float *vel, float cur, float target, float k, float d, float max);
+extern void func_L15_00248E58(float, float, struct Moby *, void *, int);
+void func_L15_002C62A8(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) {
+    SteeringVec_4f88 target;
+    SteeringVec_4f88 look_copy;
+    SteeringVec_4f88 scaled;
+    SteeringVec_4f88 origin;
+    SteeringVec_4f88 delta;
+    SteeringVec_4f88 *look_at = &look_copy;
+    SteeringVec_4f88 *target_at = &target;
+    SteeringVars_4f88 *vars = (SteeringVars_4f88 *)moby->pvars;
+    float distance;
+    float step;
+    float old_speed;
+    float limit;
+    float facing;
+    float angle;
+    float c;
+    float s;
+    float yaw_target;
+    float pitch_target;
+    float dx;
+    float dy;
+    float threshold;
+    float speed_sq;
+    float twice_step;
+    float height;
+    float pos_x;
+    float pos_y;
+#define frame_time D_0015EE6C
+#define frame_time_sq D_0015EE70
+
+    target.q = goal->q;
+    look_copy.q = look->q;
+    origin.q = *(SQuad *)&moby->pos;
+    distance = func_001F9D10(&moby->pos, target_at);
+    step = frame_time_sq * 10.0f;
+    old_speed = vars->speed;
+    speed_sq = old_speed * old_speed;
+    twice_step = step + step;
+    threshold = speed_sq / twice_step;
+    if (distance <= threshold) {
+        vars->speed = old_speed - step;
+        if (vars->speed < 0.0f) {
+            vars->speed = 0.0f;
+        }
+    } else {
+        vars->speed = old_speed + step;
+        limit = frame_time * 10.0f;
+        if (limit < vars->speed) {
+            vars->speed = limit;
+        }
+    }
+
+    func_001F9BF0(&delta, target_at, &moby->pos);
+    scaled.q = delta.q;
+    ((void (*)(float, void *, void *))func_L00_001FF4B0)(vars->speed * 0.1f, &scaled, &scaled);
+    ((void (*)(float, void *, void *))func_001F9C30)(0.9f, &delta, &vars->delta);
+    vars->delta.q = delta.q;
+    func_L00_001FF240(&delta, &vars->delta, &scaled);
+    func_L15_00248E58(1.0f, 2.0f, moby, &vars->delta, 0);
+    height = *(volatile float *)&vars->height;
+    pos_x = *(volatile float *)&moby->pos.x;
+    *(volatile float *)&moby->pos.z = height;
+    pos_y = *(volatile float *)&moby->pos.y;
+    dy = *(volatile float *)&look_at->f[1];
+    dx = *(volatile float *)&look_at->f[0];
+    dy = dy - pos_y;
+    dx = dx - pos_x;
+    facing = func_L00_001FF860(dx, dy);
+    moby->rot.z = func_L00_00259148(&vars->facing_velocity, moby->rot.z, facing,
+                                   0.01f, 0.3f, 0.1f);
+    func_001F9BF0(&delta, &moby->pos, &origin);
+    vars->delta.q = delta.q;
+    angle = func_L00_001FF860(vars->delta.f[0], vars->delta.f[1]);
+    angle = func_001FA790(angle, moby->rot.z);
+    c = func_001F9F90(angle);
+    yaw_target = (vars->speed * 0.34906584f * c) / (frame_time * 10.0f);
+    s = func_001F9FA8(angle);
+    pitch_target = (vars->speed * -0.34906584f * s) / (frame_time * 10.0f);
+    moby->rot.y = func_L00_00259148(&vars->yaw_velocity, moby->rot.y,
+        yaw_target,
+        frame_time_sq * 0.5235988f, frame_time_sq * 1.0471976f,
+        frame_time * 0.7853982f);
+    moby->rot.x = func_L00_00259148(&vars->pitch_velocity, moby->rot.x,
+        pitch_target,
+        frame_time_sq * 1.0471976f, frame_time_sq * 2.0943952f,
+        frame_time * 1.5707964f);
+}
 typedef int OvlQuad __attribute__((mode(TI)));
 typedef struct {
     union {
@@ -586,7 +975,6 @@ struct UData {
     char pad1E4[0x1C];
     unsigned char v200[0x10];
 };
-typedef struct { char pad0[0x454]; unsigned char collected[1]; } ULevelState;
 typedef struct { int idx[2]; } UPaths;
 
 extern void func_L15_002D2398(void *);
@@ -1660,7 +2048,21 @@ void func_L15_002ED318(int idx, int show) {
             return;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L15_002ED3A0);
+extern int D_L15_00160058 MACRO_ADDR;
+int func_L15_002ED3A0(int idx) {
+    unsigned short *p = (unsigned short *)D_L15_001AC140[idx];
+    int n = 0;
+    int base;
+    if (p == 0)
+        return 0;
+    base = D_L15_00160058;
+    do {
+        unsigned char *moby = (unsigned char *)(base + ((p[0] & 0x7FFF) << 8));
+        if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD)
+            n++;
+    } while ((short)*p++ >= 0);
+    return n;
+}
 INCLUDE_ASM("asm/overlays", func_L15_002ED3C4);
 extern int D_0015EE98 MACRO_ADDR;
 extern int D_L15_00184B2C;

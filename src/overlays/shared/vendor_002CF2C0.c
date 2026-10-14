@@ -35,7 +35,56 @@ char *func_L05_002D53B0(int owner, char *pos, int arg, float f0, float f1) {
     return moby;
 }
 LINKER_REMNANT("asm/overlays", func_L05_002D54C0);
-INCLUDE_ASM("asm/overlays", func_L05_002F62E8);
+extern char *D_L05_001601AC MACRO_ADDR;
+void func_L05_002F62E8(int index, int trigger_arg, int inside) {
+    int moby = *(int *)((char *)&D_L05_001601AC - 0x114) + index * 0x100;
+    char *trigger = (char *)trigger_arg;
+    short kind;
+    unsigned int flags;
+
+    if (moby == 0) {
+        return;
+    }
+    if (inside) {
+        if (trigger[0x7c] > 0) {
+            *(unsigned short *)(moby + 0x34) &= 0xfffd;
+        } else if (trigger[0x7c] < 0) {
+            *(unsigned short *)(moby + 0x34) |= 2;
+        }
+        if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xfffe;
+        } else if (trigger[0x7d] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 0;
+            flags = *(unsigned short *)(moby + 0x34) | 1;
+            *(unsigned short *)(moby + 0x34) = flags;
+        }
+        if (trigger[0x7f] > 0 && *(int *)(moby + 0x24) != 0) {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        } else if (trigger[0x7f] < 0 && *(int *)(moby + 0x24) != 0) {
+            *(int *)(moby + 0x94) = 0;
+        }
+    } else {
+        if (trigger[0x7c] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
+            *(unsigned short *)(moby + 0x34) |= 2;
+        } else if (trigger[0x7c] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
+            *(unsigned short *)(moby + 0x34) &= 0xfffd;
+        }
+        if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 0;
+            flags = *(unsigned short *)(moby + 0x34) | 1;
+            *(unsigned short *)(moby + 0x34) = flags;
+        } else if (trigger[0x7d] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            *(char *)(moby + 0x31) = 1;
+            *(unsigned short *)(moby + 0x34) &= 0xfffe;
+        }
+        if (trigger[0x7f] > 0) {
+            *(int *)(moby + 0x94) = 0;
+        } else if (trigger[0x7f] < 0) {
+            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L05_002F63DC);
 INCLUDE_ASM("asm/overlays", func_L05_002F63FC);
 extern int *D_L05_001AC040[];
@@ -461,7 +510,29 @@ void func_L05_0031AA20(void *moby_v)
     }
     *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
 }
-INCLUDE_ASM("asm/overlays", func_L05_0031AAA8);
+typedef struct {
+    char pad[0x78];
+    char *data;
+    char pad2[0x84];
+} M_p;
+#define POOL (*(char **)&D_L05_00160098)
+char *func_L05_0031AAA8(void *arg, int id) {
+    unsigned short *p = (unsigned short *)D_L05_001AC040[*((unsigned char *)arg + 0x21)];
+    char *pool;
+    int idx;
+    if (p != 0) {
+        pool = POOL;
+        do {
+            idx = *p & 0x7FFF;
+            if (*(short *)(((M_p *)pool)[idx].data + 0xB4) == id) {
+                goto found;
+            }
+        } while ((short)*p++ >= 0);
+    }
+    return 0;
+found:
+    return (char *)&((M_p *)POOL)[idx];
+}
 INCLUDE_ASM("asm/overlays", func_L05_0031AB00);
 extern float func_00214D88(float, float, float, float, float *, float *);
 extern void func_00215CA8(int *, int, void *, float *, int, float);

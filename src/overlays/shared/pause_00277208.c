@@ -553,7 +553,32 @@ void func_L00_002781D8(int arg0) {
     DoGifPaging();
 }
 LINKER_REMNANT("asm/overlays", func_L00_002788C8);
-INCLUDE_ASM("asm/overlays", func_L00_002788E0);
+struct MenuPageP { unsigned char pad0[0x38]; struct MenuPageP *back; unsigned char pad3C[4]; void *focus; };
+struct MenuSystemP { unsigned char pad0[4]; struct MenuPageP *current; struct MenuPageP *next; unsigned char pad0C[0x124 - 0xC]; int close_locked; };
+struct CtrlP { unsigned char pad[0x1C4]; unsigned int pressed_unmasked; };
+extern char D_L00_001BA070[] NOT_SDA;
+extern char D_0013CA40[];
+#define menu_system_p (*(struct MenuSystemP *)D_L00_001BA070)
+#define controller_state_p (*(struct CtrlP *)D_0013CA40)
+int func_L00_002788E0(void *screen) {
+    if (menu_system_p.current->focus != screen) {
+        return 0;
+    }
+    if ((controller_state_p.pressed_unmasked & 0xD00) && menu_system_p.close_locked == 0) {
+        return 1;
+    }
+    if (controller_state_p.pressed_unmasked & 0x10) {
+        struct MenuPageP *back = menu_system_p.current->back;
+        if (back != 0) {
+            menu_system_p.next = back;
+            return 0;
+        }
+        if (menu_system_p.close_locked == 0) {
+            return -1;
+        }
+    }
+    return 0;
+}
 INCLUDE_ASM("asm/overlays", func_L00_00278904);
 INCLUDE_ASM("asm/overlays", func_L00_00278930);
 INCLUDE_ASM("asm/overlays", func_L00_0027895C);
@@ -778,7 +803,16 @@ void func_L00_00286128(void *a0, void *a1)
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_002862E0);
-INCLUDE_ASM("asm/overlays", func_L00_00286498);
+extern unsigned char *D_L00_00160098 MACRO_ADDR;
+extern unsigned char *D_L00_0016009C MACRO_ADDR;
+int func_L00_00286498(int a, int id) {
+    unsigned char *p;
+    for (p = D_L00_00160098; p != D_L00_0016009C; p += 0x100) {
+        if (*(short *)(p + 0xB2) == id)
+            return (int)p;
+    }
+    return 0;
+}
 INCLUDE_ASM("asm/overlays", func_L00_002864CC);
 typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
 extern int func_L00_00286498(int, int);

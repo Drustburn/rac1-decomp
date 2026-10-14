@@ -404,7 +404,79 @@ void func_L12_00303CA8(Moby *moby) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L12_00304038);
+extern int func_001F9908(int *);
+extern void func_001F9BC0(void *);
+extern void func_001F9BD8(void *, void *, void *);
+extern void func_001F9C30(void *, void *, float);
+extern float func_001F9D10(void *, void *);
+extern void func_L00_00258DB0(float *, float, float);
+extern void func_001F49B0(void *, void *);
+extern short D_L12_00161E78;
+extern short D_L12_00161E7C;
+extern short D_L12_00161E80;
+extern int D_L12_00161E84 MACRO_ADDR;
+extern float D_0015EE6C MACRO_ADDR;
+extern char D_L12_001672C0[];
+
+void func_L12_00304038(struct Moby *moby) {
+    char *data = (char *)moby->pvars;
+    float cycle = (*(float *)&D_L12_00161E78) + (*(float *)&D_L12_00161E7C) * D_0015EE6C;
+    int strip;
+    (*(float *)&D_L12_00161E78) = cycle;
+    if (cycle > 1.0f) (*(float *)&D_L12_00161E78) = cycle - 1.0f;
+    for (strip = 0; strip < 4; strip++) {
+        int count;
+        int i;
+        float *points;
+        float *intermediate;
+        if (func_001F9908((int *)(data + 0x2300 + strip * 4))) {
+            int vector_count = *(int *)(data + 0x232c);
+            float intermediate_storage[vector_count][4];
+            char *timers = data + 0x2300;
+            intermediate = &intermediate_storage[0][0];
+            i = 0;
+            if (0 < *(int *)(data + 0x232c)) {
+                points = (float *)(data + strip * 0x460);
+                do {
+                    float vector_count_float;
+                    float length;
+                    float index;
+                    float rate;
+                    func_001F9BC0(points);
+                    vector_count_float = (float)*(int *)(data + 0x232c);
+                    length = *(float *)(data + 0x2324);
+                    index = (float)i;
+                    rate = (*(float *)&D_L12_00161E80) * D_0015EE6C;
+                    points[3] = 1.0f;
+                    points[0] = index * (length / vector_count_float);
+                    func_L00_00258DB0(intermediate + i * 4, 0.0f, rate);
+                    points += 4;
+                    i++;
+                } while (i < *(int *)(data + 0x232c));
+            }
+            count = 1;
+            if (count < *(int *)(data + 0x232c) - 1) {
+                points = (float *)(data + strip * 0x460 + 0x1190);
+                do {
+                    func_001F9BD8(points, intermediate_storage[count - 1], intermediate_storage[count]);
+                    func_001F9BD8(points, points, intermediate_storage[count + 1]);
+                    func_001F9C30(points, points, 0.333f);
+                    count++;
+                    points += 4;
+                } while (count < *(int *)(data + 0x232c) - 1);
+            }
+            *(int *)(timers + (strip << 2)) = D_L12_00161E84;
+        } else {
+            for (i = 1; i < *(int *)(data + 0x232c) - 1; i++) {
+                float *point = (float *)(data + strip * 0x460 + i * 16);
+                float *delta = (float *)(data + strip * 0x460 + 0x1190 + i * 16 - 16);
+                func_001F9BD8(point, point, delta);
+            }
+        }
+    }
+    if (func_001F9D10(&moby->pos, D_L12_001672C0) < 48.0f)
+        func_001F49B0(func_L12_00303CA8, moby);
+}
 typedef struct Data_304310 {
     char pad0[0x2300];
     int f2300;
