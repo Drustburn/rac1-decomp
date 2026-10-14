@@ -5,6 +5,8 @@
 The following functions adapt source from
 [Lombyte](https://github.com/mateuszklysz/Lombyte) for the PAL executable:
 
+- `src/overlays/shared/mobyfunc_0024FD50.c`: `func_L00_00250478` (animation frame packet builder; `overlays/shared/gameplay/state/0024eec0.c`, `FUN_L00_0024f440`)
+- `src/overlays/shared/vendor_002E1660.c`: `func_L00_002E72E8` (follow camera approach; `overlays/shared/gameplay/vendor/002e5e38.c`, `follow_camera_approach` / `FUN_L00_002e5e38`)
 - `src/core/00119328.c`: `func_001194C8` (`topThread`)
 - `src/game/stream.c`: `func_00217AE8` (menu entry transitions and message formatting; `src/ui/menus/fun_00216c48.c`)
 - `src/core/00119D88.c`: `func_0011C208` (`sceClose`)
