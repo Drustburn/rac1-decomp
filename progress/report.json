@@ -1,6 +1,6 @@
 {
  "measures": {
-  "fuzzy_match_percent": 84.09076662192066,
+  "fuzzy_match_percent": 84.19628856649739,
   "total_code": "3712808",
   "matched_code": "3059008",
   "matched_code_percent": 82.39068651004845,
@@ -40223,7 +40223,7 @@
   {
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 80.87738701499119,
+    "fuzzy_match_percent": 86.27562775573192,
     "total_code": "72576",
     "matched_code": "49616",
     "matched_code_percent": 68.3641975308642,
@@ -40824,7 +40824,7 @@
     {
      "name": "func_L07_00319230",
      "size": "4044",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 96.88,
      "address": "732608",
      "metadata": {
       "virtual_address": "3248688"
@@ -49701,7 +49701,7 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 84.47272805216211,
+    "fuzzy_match_percent": 84.59338394657645,
     "total_code": "3247108",
     "matched_code": "2679884",
     "matched_code_percent": 82.53140948807369,
@@ -49761,7 +49761,7 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 90.62160816621711,
+    "fuzzy_match_percent": 90.8130504085063,
     "total_code": "2046480",
     "matched_code": "1815188",
     "matched_code_percent": 88.69805715179234,
@@ -49881,7 +49881,7 @@
    "id": "level_07",
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 80.87738701499119,
+    "fuzzy_match_percent": 86.27562775573192,
     "total_code": "72576",
     "matched_code": "49616",
     "matched_code_percent": 68.3641975308642,
