@@ -2005,7 +2005,82 @@ float func_L06_002F3578(char *a, char *b, int c) {
     return r;
 }
 INCLUDE_ASM("asm/overlays", func_L06_002F3680);
-INCLUDE_ASM("asm/overlays", func_L06_002F3D40);
+typedef struct GbMoby_3D40 {
+    char p0[0x10];
+    float pos[4] __attribute__((aligned(16)));
+    unsigned char state;
+    char p21[0x57];
+    void *vars;
+    char p7C[0x2A];
+    short cls_id;
+} GbMoby_3D40;
+
+typedef struct {
+    char p0[0x174];
+    GbMoby_3D40 *target;
+    char p178[0x22];
+    short target_searched;
+    char p19C[0x170];
+    int target_group;
+} GbVars_3D40;
+
+extern int func_L00_0025A208_3D40(int *, int, int, int) __asm__("func_L00_0025A208");
+extern int func_L00_0025A2F0_3D40(int *, int, int, int) __asm__("func_L00_0025A2F0");
+extern float func_001F9D48_3D40(void *, void *) __asm__("func_001F9D48");
+extern float func_001F9B88_3D40(float) __asm__("func_001F9B88");
+extern int D_L06_001AC500_3D40[] __asm__("D_L06_001AC500");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/entities/00297d10.c, FUN_L06_002f2910. */
+void func_L06_002F3D40(void *moby_arg) {
+    GbMoby_3D40 *moby = moby_arg;
+    GbVars_3D40 *d = moby->vars;
+    GbMoby_3D40 *candidate;
+    float best = 12.0f;
+    int list;
+    int *cursor;
+
+    d->target = 0;
+    if (d->target_group != -1) {
+        func_L00_0025A208_3D40(&list, d->target_group, 0, 0);
+        while (list != 0) {
+            if (((GbMoby_3D40 *)list)->cls_id == 0x3b1 || ((GbMoby_3D40 *)list)->cls_id == 0x400 ||
+                ((GbMoby_3D40 *)list)->cls_id == 0x515 || ((GbMoby_3D40 *)list)->cls_id == 0x516) {
+                if (!(best < func_001F9D48_3D40(moby->pos, ((GbMoby_3D40 *)list)->pos)) &&
+                    !(0.2f < func_001F9B88_3D40(moby->pos[2] - ((GbMoby_3D40 *)list)->pos[2])) &&
+                    !(1.5f < func_001F9B88_3D40(moby->pos[2] - ((GbMoby_3D40 *)list)->pos[2]))) {
+                    if ((((GbMoby_3D40 *)list)->cls_id != 0x400 && ((GbMoby_3D40 *)list)->cls_id != 0x516) ||
+                        ((GbMoby_3D40 *)list)->state != 2) {
+                        if (((GbMoby_3D40 *)list)->cls_id != 0x515 || *(int *)((GbMoby_3D40 *)list)->vars != -1) {
+                            best = func_001F9D48_3D40(moby->pos, ((GbMoby_3D40 *)list)->pos);
+                            d->target = (GbMoby_3D40 *)list;
+                        }
+                    }
+                }
+            }
+            func_L00_0025A2F0_3D40(&list, list, 0, 0);
+        }
+    } else {
+        cursor = D_L06_001AC500_3D40;
+        while ((candidate = (GbMoby_3D40 *)*cursor) != 0) {
+            if (candidate->cls_id == 0x3b1 || candidate->cls_id == 0x400 ||
+                candidate->cls_id == 0x515 || candidate->cls_id == 0x516) {
+                if (!(best < func_001F9D48_3D40(moby->pos, candidate->pos)) &&
+                    !(0.2f < func_001F9B88_3D40(moby->pos[2] - candidate->pos[2])) &&
+                    !(1.5f < func_001F9B88_3D40(moby->pos[2] - candidate->pos[2]))) {
+                    if ((candidate->cls_id != 0x400 && candidate->cls_id != 0x516) ||
+                        candidate->state != 2) {
+                        if (candidate->cls_id != 0x515 || *(int *)candidate->vars != -1) {
+                            best = func_001F9D48_3D40(moby->pos, candidate->pos);
+                            d->target = candidate;
+                        }
+                    }
+                }
+            }
+            cursor++;
+        }
+    }
+    d->target_searched = 1;
+}
 INCLUDE_ASM("asm/overlays", func_L06_002F4058);
 extern int func_L00_0025A208(int *, int, int, int);
 extern int func_L00_0025A2F0(int *, int, int, int);
