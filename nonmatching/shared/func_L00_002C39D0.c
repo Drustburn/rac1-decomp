@@ -274,7 +274,8 @@ L423C:
     } else {
         f14 = func_001FA888(D_0013E15A[0x4D0]) * 2.5f + 8.5f;
     }
-    func_L00_002C3790(W, Z, (float *)t2, f20, f14, 0.00000999999975f);
+    /* Retail: $f13 = 1e-5 and $f14 = the range, func_L00_002C3790's limit on the throw's distance. */
+    func_L00_002C3790(W, Z, (float *)t2, f20, 0.00000999999975f, f14);
 
 L42B0:
     switch (m[0x20]) {
