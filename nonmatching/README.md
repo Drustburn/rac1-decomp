@@ -27,6 +27,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L11_00317500`](l11_pokitaru/func_L11_00317500.c) | l11_pokitaru | 24 | BYTES 4/148 | 97.3% |
 | [`func_L00_00267290`](shared/func_L00_00267290.c) | shared | 904 | BYTES 28/904 | 96.9% |
 | [`func_L05_0024C558`](shared/func_L05_0024C558.c) | shared | 900 | BYTES 28/900 | 96.9% |
+| [`func_L07_00319230`](l07_umbris/func_L07_00319230.c) | l07_umbris | 4044 | BYTES 126/4044 | 96.9% |
 | [`func_L04_002CB800`](l04_eudora/func_L04_002CB800.c) | l04_eudora | 4972 | BYTES 159/4972 | 96.8% |
 | [`func_L00_001F4918`](shared/func_L00_001F4918.c) | shared | 4932 | BYTES 169/4932 | 96.6% |
 | [`func_L09_002F1198`](l09_gaspar/func_L09_002F1198.c) | l09_gaspar | 500 | BYTES 18/500 | 96.4% |
