@@ -1739,7 +1739,93 @@ void func_L11_00318AE8(char *moby) {
     func_001F9C08(moby + 0x10, a, pb, *(float *)(d + 0x6C));
 }
 INCLUDE_ASM("asm/overlays", func_L11_00318C90);
-INCLUDE_ASM("asm/overlays", func_L11_00319108);
+struct L11ChainVars_19108 {
+    u8 pad0[0x64];
+    s32 count;
+    u8 pad68[8];
+    struct Moby *links[8];
+    s16 offsets[8];
+    f32 frac[8];
+    f32 catchup[8];
+    f32 health;
+    u8 padE4[0xC];
+    char *path;
+};
+
+extern char D_00141D18_19108[] __asm__("D_00141D18");
+extern float D_L11_0015F660_19108[] __asm__("D_L11_0015F660") MACRO_ADDR;
+extern float D_L11_001623C0_19108 SDATA(D_L11_001623C0);
+extern float D_0015EE60_19108 __asm__("D_0015EE60") MACRO_ADDR;
+extern float D_0015EE70_19108 __asm__("D_0015EE70") MACRO_ADDR;
+extern struct Moby *func_L00_0025B478_19108(void *, s32, s32) __asm__("func_L00_0025B478");
+extern f32 func_00214D28_19108(f32 *, f32, f32) __asm__("func_00214D28");
+extern void func_L11_003198F8_19108(struct Moby *) __asm__("func_L11_003198F8");
+extern s32 func_0022ED80_19108(s32, s32, void *) __asm__("func_0022ED80");
+extern void func_001F9C30_19108(void *, void *, float) __asm__("func_001F9C30");
+extern void func_L00_00260108_19108(void *, void *, int, float, float) __asm__("func_L00_00260108");
+extern s32 func_001F9850_19108(s32) __asm__("func_001F9850");
+extern void func_L00_00265050_19108(char *, int, float *, char *, int, int, float *, float *, float, float *) __asm__("func_L00_00265050");
+extern void func_0020D678_19108(void *) __asm__("func_0020D678");
+
+/* Adapted from Lombyte (MIT) for PAL: src/overlays/l11/gameplay/vendor/00315968.c, FUN_L11_00317c98. */
+void func_L11_00319108(void *moby_v) {
+    struct Moby *moby = moby_v;
+    struct L11ChainVars_19108 *d = (struct L11ChainVars_19108 *)moby->pvars;
+    int i;
+    int k;
+    int idx = -1;
+    float total = 0.0f;
+    float vec[4];
+
+    for (i = 0; i < d->count; i++) {
+        struct Moby *hit = func_L00_0025B478_19108(d->links[i], -1, 0);
+        if (hit != 0) {
+            idx = i;
+            total += hit->scale;
+            d->links[i]->unkA4 = 0xFF;
+        }
+    }
+    func_00214D28_19108(&d->health, 0.0f, total);
+    if (total != 0.0f && d->health / 80.0f * 8.0f <= (float)(d->count - 1)) {
+        struct Moby *src;
+        struct Moby *dst;
+        *(u16 *)D_00141D18_19108 = 0xFFFF;
+        d->count--;
+        func_L11_003198F8_19108(d->links[d->count]);
+        src = d->links[idx];
+        dst = d->links[d->count];
+        qcopy(&dst->pos, &src->pos);
+        qcopy(&dst->rot, &src->rot);
+        func_0022ED80_19108(1, 0, dst);
+        if (idx < d->count) {
+            float diff = d->offsets[idx] - d->offsets[idx + 1];
+            int j;
+            for (j = idx; j < d->count; j++) {
+                d->catchup[j] = d->catchup[j + 1];
+            }
+            d->catchup[idx] += diff;
+            if (d->catchup[idx] < 0.0f) {
+                d->catchup[idx] += (float)*(s32 *)d->path;
+            }
+        }
+        for (k = idx; k < d->count; k++) {
+            d->offsets[k] = d->offsets[k + 1];
+        }
+        if (d->count == 0) {
+            char *p1 = (char *)&moby->pos;
+            char *p2 = (char *)&moby->rot;
+            float *dv = D_L11_0015F660_19108;
+            func_001F9C30_19108(vec, &moby->unkC0, D_L11_001623C0_19108 * D_0015EE60_19108);
+            vec[2] += D_0015EE60_19108 * 0.08f;
+            func_0022ED80_19108(2, 0, moby);
+            func_L00_00260108_19108(moby, p1, -1, 3.0f, 13.0f);
+            func_L00_00265050_19108((char *)moby, 0x602, (float *)p1, p2, func_001F9850_19108(0x5A), 0, vec, dv, D_0015EE70_19108 * 12.0f, dv);
+            func_L00_00265050_19108((char *)moby, 0x603, (float *)p1, p2, func_001F9850_19108(0x5A), 0, vec, dv, D_0015EE70_19108 * 12.0f, dv);
+            func_L00_00265050_19108((char *)moby, 0x784, (float *)p1, p2, func_001F9850_19108(0x5A), 0, vec, dv, D_0015EE70_19108 * 12.0f, dv);
+            func_0020D678_19108(moby);
+        }
+    }
+}
 int func_L11_003194C0(char *moby, void **out) {
     char *data = *(char **)(moby + 0x78);
     int i;
