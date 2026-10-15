@@ -1938,7 +1938,65 @@ void func_L00_0023D9C0(void) {
     }
     D_0015EF24 += 0xB4;
 }
-INCLUDE_ASM("asm/overlays", func_L00_0023DB30);
+extern unsigned char D_0015EED0[] MACRO_ADDR;
+extern int D_L00_001C4198[];
+extern void func_L00_0023DD70(int idx);
+extern unsigned char D_0013D5C8[] NOT_SDA;
+extern unsigned char D_0013D5F0[] NOT_SDA;
+extern int D_00141FA0[] NOT_SDA;
+extern int D_00141760 NOT_SDA;
+extern void func_L00_002618D8(int, int);
+
+/* Initialise the vendor stock list: fixed defaults once the level is at least 19, else prune unknown entries. */
+void func_L00_0023DB30(void) {
+    int i, j, v, k;
+    unsigned char c;
+    if (D_0015EE84 >= 0x13) {
+        for (k = 0; k < 0x25; k++) {
+            D_0013D5C8[k] = 1;
+            D_0013D5F0[k] = 1;
+        }
+        D_0015EED0[0] = 0x4A;
+        D_0015EED0[1] = 0x50;
+        D_0015EED0[2] = 0x4F;
+        D_0015EED0[3] = 0x54;
+        D_0015EED0[4] = 0x51;
+        D_0015EED0[5] = 0x4E;
+        D_0015EED0[6] = 0x4B;
+        D_0015EED0[7] = 0x52;
+        D_0015EED0[8] = 0x4D;
+        D_0015EED0[9] = 0x59;
+        D_0015EED0[10] = 0x58;
+        D_0015EED0[11] = 0x53;
+        D_00141FA0[0] = 0xF;
+        D_00141FA0[1] = 0xC;
+        D_00141FA0[2] = 0xD;
+        D_00141FA0[3] = 0xB;
+        D_00141FA0[4] = 0x11;
+        D_00141FA0[5] = 0xA;
+        D_00141FA0[6] = 0x10;
+        D_00141FA0[7] = 0x13;
+    } else {
+        if (D_0013D5C8[10] == 0) {
+            func_L00_002618D8(0xA, 1);
+            D_0015EED0[0] = 0x4A;
+            D_00141760 = 0xA;
+        }
+        for (i = 0; i < 12; i++) {
+            c = D_0015EED0[i];
+            if (c == 0xFF) continue;
+            v = c & 0x3F;
+            if (v == 10) continue;
+            for (j = 0; j < 19; j++) {
+                if (D_L00_001C4198[j] == v) break;
+            }
+            if (j == 19 || v == 0) {
+                D_0015EED0[i] = 0xFF;
+            }
+        }
+        func_L00_0023DD70(D_0015EE84);
+    }
+}
 extern int D_L00_001C4198[];
 extern unsigned char D_0015EED0[] MACRO_ADDR;
 
