@@ -405,7 +405,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L10_002BFBB8`](functional/func_L10_002BFBB8.c) | functional | 1936 | ? | - |
 | [`func_L10_002DBA50`](functional/func_L10_002DBA50.c) | functional | 1368 | ? | - |
 | [`func_L10_002DE018`](functional/func_L10_002DE018.c) | functional | 948 | ? | - |
-| [`func_L10_002E9718`](l10_orxon/func_L10_002E9718.c) | l10_orxon | 608 | SIZE ours 600 / retail 608 | - |
 | [`func_L10_002EA578`](functional/func_L10_002EA578.c) | functional | 1164 | ? | - |
 | [`func_L10_002F6F18`](shared/func_L10_002F6F18.c) | shared | 960 | SIZE ours 968 / retail 960 | - |
 | [`func_L10_002F72D8`](shared/func_L10_002F72D8.c) | shared | 1756 | SIZE ours 1752 / retail 1756 | - |
