@@ -403,7 +403,40 @@ void func_L00_00236AB8(HudElem *e) {
     }
     func_L00_0023B440((char *)e + 0x40);
 }
-INCLUDE_ASM("asm/overlays", func_L00_00236BF8);
+extern float func_002140F8(float, float);
+extern float D_L00_0017E760[][4];
+extern short D_L00_0015F830;
+extern short D_L00_0015F834;
+extern short D_L00_0015F838;
+extern short D_L00_0015F83C;
+
+/* fills 100 hud particle records with randomised positions and drift */
+void func_L00_00236BF8(HudElem *e) {
+    int i;
+    float v, lo, span, hi;
+    int n;
+
+    func_L00_00236710(e);
+    for (i = 0; i < 100; i++) {
+        v = *(float *)&D_L00_0015F830;
+        if (i >= 10) {
+            v = *(float *)&D_L00_0015F834;
+            if (i >= 20) v = *(float *)&D_L00_0015F838;
+        }
+        n = *(int *)&D_L00_0015F83C;
+        span = (232.0f - (v + v)) / (float)n;
+        lo = (v - 116.0f) + (float)(i % n) * span;
+        hi = lo + span;
+        D_L00_0017E760[i][0] = func_002140F8(v - 17.0f, 17.0f - v);
+        D_L00_0017E760[i][1] = func_002140F8(lo, hi);
+        D_L00_0017E760[i][2] = func_002140F8(-0.4f, 0.4f);
+        D_L00_0017E760[i][3] = func_002140F8(-0.6f, 0.6f);
+        D_L00_0017E760[i][2] += func_002140F8(-0.4f, 0.4f);
+        D_L00_0017E760[i][3] += func_002140F8(-0.6f, 0.6f);
+        D_L00_0017E760[i][2] += func_002140F8(-0.4f, 0.4f);
+        D_L00_0017E760[i][3] += func_002140F8(-0.6f, 0.6f);
+    }
+}
 extern void func_L00_00236830_v(HudElem *) __asm__("func_L00_00236830");
 extern int D_L00_0015F4F8 MACRO_ADDR;
 extern float D_L00_0017E760[][4];

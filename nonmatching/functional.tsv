@@ -278,7 +278,6 @@ func_L06_00305E38	nonmatching/l06_blarg/func_L06_00305E38.c
 func_L07_00313D28	nonmatching/l07_umbris/func_L07_00313D28.c
 func_L08_002D36F8	nonmatching/l08_batalia/func_L08_002D36F8.c
 func_L08_002F7318	nonmatching/l08_batalia/func_L08_002F7318.c
-func_L10_002E4E50	nonmatching/l10_orxon/func_L10_002E4E50.c
 func_L10_002E9718	nonmatching/l10_orxon/func_L10_002E9718.c
 func_L12_00304038	nonmatching/functional/func_L12_00304038.c
 func_L13_00307798	nonmatching/l13_gemlik/func_L13_00307798.c
@@ -296,7 +295,6 @@ func_L18_002FDCC4	nonmatching/l18_veldin2/func_L18_002FDCC4.c
 func_L00_001F4918	nonmatching/shared/func_L00_001F4918.c
 func_L00_001F92E8	nonmatching/shared/func_L00_001F92E8.c
 func_L00_001FCC50	nonmatching/shared/func_L00_001FCC50.c
-func_L00_00236BF8	nonmatching/shared/func_L00_00236BF8.c
 func_L00_00236F38	nonmatching/shared/func_L00_00236F38.c
 func_L00_002377E0	nonmatching/shared/func_L00_002377E0.c
 func_L00_002381D0	nonmatching/shared/func_L00_002381D0.c

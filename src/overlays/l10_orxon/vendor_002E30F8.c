@@ -726,7 +726,90 @@ void func_L10_002E30F8(Moby2E30F8 *m) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L10_002E4E50);
+extern short D_L10_00161EF4;
+extern short D_L10_00161EF8;
+extern short D_L10_00161EFC;
+extern short D_L10_00161F00;
+extern short D_L10_00161F04;
+extern short D_L10_00161F08;
+extern short D_L10_00161F0C;
+extern short D_L10_00161F10;
+extern short D_L10_00161F14;
+extern short D_L10_00161F18;
+extern short D_L10_00161F1C;
+extern short D_L10_00161F20;
+extern short D_L10_00161F24;
+extern short D_L10_00161F28;
+extern short D_L10_00161F2C;
+extern short D_L10_00161F30;
+extern short D_L10_00161F34;
+extern short D_L10_00161F38;
+extern short D_L10_00161F3C;
+extern void func_L00_00260958(float *v, float s);
+extern float func_00214158(void);
+extern void func_001F9C30(void *, void *, float);
+extern int func_001FA8A8(int, int, float);
+extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
+
+// Per-frame update of the moby in arg0: builds two vectors from its position and the trig helpers, then calls the level's helpers for each of its entries.
+void func_L10_002E4E50(void *p) {
+    char *arg0 = p;
+    float v[4];
+    float a[4];
+    float b[4];
+    float o[4];
+    char *d = *(char **)(arg0 + 0x78);
+    float f20;
+    float f21;
+    float f22;
+    float r;
+    int n = *(int *)&D_L10_00161EF4;
+    int i;
+    int j;
+    int k;
+    int x16, x17, x18, x19, r7;
+    for (i = 0; i < n; i++) {
+        { float *dst = v; char *src = arg0 + 0x10; float *d2 = dst; qcopy_nc(d2, src); }
+        func_L00_00260958(v, (*(float *)&D_L10_00161EFC));
+        v[2] = v[2] + 0.55f;
+        f22 = func_00214158();
+        f20 = func_002140F8((*(float *)&D_L10_00161F08), (*(float *)&D_L10_00161F0C));
+        f21 = func_002140F8((*(float *)&D_L10_00161F10), (*(float *)&D_L10_00161F14));
+        if (((unsigned char)arg0[0x20]) == 0xB) {
+            f20 = f20 * 0.55f;
+            f21 = f21 * 0.55f;
+            v[2] = v[2] - 0.2f;
+        }
+        r = func_001F9F90(f22);
+        a[0] = r * (f20 * D_0015EE6C);
+        r = func_001F9FA8(f22);
+        a[1] = r * (f20 * D_0015EE6C);
+        a[2] = (f21 * D_0015EE6C) + 0.0f;
+        func_001F9C30(o, d + 0x70, 0.5f);
+        o[2] = 0.0f;
+        func_001F9BD8(a, a, o);
+        qcopy(b, a);
+        k = func_001F9850((*(int *)&D_L10_00161F38));
+        b[2] = b[2] - ((*(float *)&D_L10_00161F18) * D_0015EE70) * (float)k;
+        for (j = 0; j < (*(int *)&D_L10_00161EF8); j++) {
+            r = func_002140F8(0.5f, 1.5f);
+            a[3] = r * *(float *)&D_L10_00161F1C;
+            b[3] = r * *(float *)&D_L10_00161F20;
+            func_L00_00260958(v, (*(float *)&D_L10_00161F00));
+            func_L00_00260958(b, (*(float *)&D_L10_00161F04) * D_0015EE6C);
+            r = func_002140F8(0.0f, 1.0f);
+            x19 = func_001FA8A8((*(int *)&D_L10_00161F24), (*(int *)&D_L10_00161F2C), r);
+            r = func_002140F8(0.0f, 1.0f);
+            x18 = func_001FA8A8((*(int *)&D_L10_00161F28), (*(int *)&D_L10_00161F30), r);
+            x17 = func_001F9850((*(int *)&D_L10_00161F34));
+            x16 = func_001F9850((*(int *)&D_L10_00161F38));
+            r = func_002140F8((float)(*(int *)&D_L10_00161F3C) * 0.5f, (float)(*(int *)&D_L10_00161F3C) * 2.5f);
+            r = func_001F9878(r);
+            r7 = func_001FA898(r);
+            func_00219780(v, a, b, x19, x18, x17, x16, r7, -1);
+        }
+    }
+}
 typedef int u128_2E52B0 __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_2E52B0;
 typedef struct { int count; char p4[0xC]; V_2E52B0 nodes[1]; } Path_2E52B0;
