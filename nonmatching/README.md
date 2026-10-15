@@ -350,7 +350,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_002ED088`](shared/func_L00_002ED088.c) | shared | 664 | SIZE ours 668 / retail 664 | - |
 | [`func_L00_002ED320`](functional/func_L00_002ED320.c) | functional | 1588 | ? | - |
 | [`func_L01_0021F9C8`](functional/func_L01_0021F9C8.c) | functional | 784 | ? | - |
-| [`func_L01_00228598`](functional/func_L01_00228598.c) | functional | 932 | ? | - |
 | [`func_L01_0022D688`](functional/func_L01_0022D688.c) | functional | 1956 | ? | - |
 | [`func_L01_00234970`](shared/func_L01_00234970.c) | shared | 660 | SIZE ours 668 / retail 660 | - |
 | [`func_L01_00262BC0`](functional/func_L01_00262BC0.c) | functional | 360 | ? | - |
