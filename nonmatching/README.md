@@ -41,6 +41,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L18_002EB5E8`](l18_veldin2/func_L18_002EB5E8.c) | l18_veldin2 | 924 | BYTES 172/924 | 81.4% |
 | [`func_L18_002EAB58`](l18_veldin2/func_L18_002EAB58.c) | l18_veldin2 | 1764 | BYTES 339/1764 | 80.8% |
 | [`func_L00_00210E00`](shared/func_L00_00210E00.c) | shared | 480 | BYTES 117/480 | 75.6% |
+| [`func_L00_002AE278`](shared/func_L00_002AE278.c) | shared | 1076 | BYTES 682/1076 | 36.6% |
 | [`func_001151B4`](core/func_001151B4.c) | core | 0 | ? | - |
 | [`func_00115248`](functional/func_00115248.c) | functional | 0 | ? | - |
 | [`func_001152F8`](core/func_001152F8.c) | core | 0 | ? | - |
@@ -318,7 +319,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_002A5158`](functional/func_L00_002A5158.c) | functional | 1636 | ? | - |
 | [`func_L00_002A62D0`](functional/func_L00_002A62D0.c) | functional | 1896 | ? | - |
 | [`func_L00_002AA998`](shared/func_L00_002AA998.c) | shared | 688 | SIZE ours 692 / retail 688 | - |
-| [`func_L00_002AE278`](shared/func_L00_002AE278.c) | shared | 1076 | SIZE ours 1060 / retail 1076 | - |
 | [`func_L00_002AE6B0`](functional/func_L00_002AE6B0.c) | functional | 1820 | ? | - |
 | [`func_L00_002B8AE8`](shared/func_L00_002B8AE8.c) | shared | 2624 | SIZE ours 2684 / retail 2624 | - |
 | [`func_L00_002BA7C8`](shared/func_L00_002BA7C8.c) | shared | 5292 | SIZE ours 5284 / retail 5292 | - |
