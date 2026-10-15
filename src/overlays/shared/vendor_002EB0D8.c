@@ -1248,7 +1248,167 @@ int func_L00_002EE7F8(void *arg) {
     *(short *)(p + 0x26) = 1;
     return 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_002EE948);
+extern int D_0013CBE0 NOT_SDA;
+extern int func_L00_002EE7F8(void *);
+typedef float CameraVec_ee[4] __attribute__((aligned(16)));
+typedef struct {
+    float focus[4]; float velocity[4]; unsigned char pad60[0x20];
+    float look_target[4]; float eye[4]; float offset[4]; float lateral_ease[4]; float up_ease[4];
+    float unkD0[4]; unsigned char padE0[0x10]; float look_height; unsigned char padF4[0x22];
+    unsigned char blending_in; unsigned char pad117; short blend_timer; unsigned char pad11A[2];
+    float lateral_stiffness, lateral_damping, up_stiffness, up_damping; unsigned char pad12C[4];
+} FollowCamBlock_ee;
+typedef struct { unsigned char pad1A8[8]; float unk1B0; unsigned char pad1B4[4]; int flags; } FollowCamFlags_ee;
+typedef struct { unsigned char pad1D0[0x20]; float unk1F0[4]; float unk200; unsigned char pad204[8]; } FollowCamSnap_ee;
+typedef struct {
+    float unk130[4]; float unk140[4]; unsigned char pad150[0xC]; float unk15C; float distance; float unk164;
+    unsigned char pad168[0x40]; FollowCamFlags_ee ctl; unsigned char pad1BC[0x10]; float unk1CC;
+    FollowCamSnap_ee snap; float zoom_scale; float zoom; float zoom_range; unsigned char pad218[0xE];
+    short unk226; unsigned char pad228[4]; float unk22C; int mode;
+} FollowCamTail_ee;
+typedef struct {
+    unsigned char pad20[2]; short unk22; float look_height; float distance; float unk2C; float unk30; float unk34;
+    float unk38; unsigned char pad3C[4];
+} FollowCamReset_ee;
+typedef struct {
+    float position[4]; short unk10; unsigned char pad12[0xE]; FollowCamReset_ee reset;
+    FollowCamBlock_ee follow; FollowCamTail_ee tail;
+} FollowCamState_ee;
+typedef struct {
+    int m0[4]; int pad[0x2C - 4];
+} Dummy_ee;
+struct UpdateCam_ee {
+    char pad0[0x30];
+    float pos[4];
+    unsigned char pad40[0x30];
+    void *saved_state;
+    unsigned char pad74[0x10];
+    short descriptor_index;
+};
+typedef struct {
+    unsigned char pad00[8]; int volume_25faf0; int clip_volume; int volume_25fa38; unsigned char pad14[0xC];
+    int timer; short keep_unk10; short done; float unk28; float angle; unsigned char pad30[4]; int need_still;
+    float distance; float height; float offset_scale; short not_in_mode_1; short only_in_mode_1;
+} AimCameraParams_ee;
+typedef struct {
+    float pos[3]; unsigned char pad0C[0xC]; float yaw; void *params;
+} CameraDescriptor_ee;
+
+#define FOLLOW_CAM_STATE_ee(cam) ((FollowCamState_ee *)(cam)->saved_state)
+typedef struct { unsigned char pad0[0x80]; struct { float pos[4]; } motion; unsigned char pad90[0x200]; float gravity_dir[4]; } HeroLike_ee;
+
+void func_L00_002EE948(void *cam_) {
+    struct UpdateCam_ee *cam = cam_;
+    CameraVec_ee pos;
+    CameraVec_ee to_pos;
+    CameraVec_ee tmp;
+    CameraVec_ee level;
+    AimCameraParams_ee *params;
+    struct UpdateCam_ee *rec;
+    float (*rec_pos)[4];
+    FollowCamState_ee *rig;
+    FollowCamState_ee *state;
+    FollowCamBlock_ee *follow;
+    FollowCamTail_ee *tail;
+    FollowCamSnap_ee *snap;
+    FollowCamReset_ee *reset;
+    float up;
+    float angle;
+
+    params = *(AimCameraParams_ee **)(D_L00_0015F050 + cam->descriptor_index * 32 + 0x1C);
+    if (func_L00_002EE7F8(cam)) {
+        if (func_L00_002E9870(cam) <= 0) {
+            if (params->timer) {
+                params->done = 1;
+            }
+            params->timer = 0;
+            return;
+        }
+        if (!(D_0013CBE0 & 5)) {
+            goto run;
+        }
+    }
+    if (params->timer) {
+        params->done = 1;
+    }
+    params->timer = 0;
+    func_L00_002E9838(cam);
+    return;
+run:
+    if (params->timer < 2) {
+        {
+            pos[0] = *(float *)(D_L00_0015F050 + cam->descriptor_index * 32 + 0);
+            pos[1] = *(float *)(D_L00_0015F050 + cam->descriptor_index * 32 + 4);
+            pos[2] = *(float *)(D_L00_0015F050 + cam->descriptor_index * 32 + 8);
+        }
+        *(int *)&pos[3] = 0;
+        func_001F9BF0(to_pos, pos, &(*(HeroLike_ee *)D_0013F450).motion.pos);
+        up = func_001F9C78(to_pos, (*(HeroLike_ee *)D_0013F450).gravity_dir);
+        func_001F9C30(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, up);
+        func_001F9BF0(level, to_pos, tmp);
+        params->distance = func_001F9CB8(level);
+        params->height = -up;
+        angle = params->angle;
+        if (func_001F9B88(angle) == 1.5707964f) {
+            *(int *)&params->offset_scale = 0;
+        } else {
+            params->offset_scale = params->height - params->distance * (func_001F9FA8(angle) / func_001F9F90(angle));
+        }
+        rec = (struct UpdateCam_ee *)D_L00_00166F00;
+        rig = FOLLOW_CAM_STATE_ee(rec);
+        rec_pos = &rec->pos;
+        follow = &rig->follow;
+        tail = &rig->tail;
+        snap = &rig->tail.snap;
+        state = rig;
+        reset = &state->reset;
+        qcopy(rec_pos, pos);
+        tail->unk15C = params->distance;
+        tail->distance = params->height;
+        follow->look_height = params->offset_scale;
+        func_001F9C30(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, -tail->distance);
+        func_001F9BD8(state->follow.eye, &(*(HeroLike_ee *)D_0013F450).motion.pos, tmp);
+        func_001F9BF0(tail->unk130, pos, state->follow.eye);
+        qcopy(state->tail.unk140, tail->unk130);
+        func_001F9C30(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, -follow->look_height);
+        func_001F9BD8(state->follow.look_target, &(*(HeroLike_ee *)D_0013F450).motion.pos, tmp);
+        qcopy(state->follow.unkD0, state->follow.look_target);
+        qcopy(follow->focus, &(*(HeroLike_ee *)D_0013F450).motion.pos);
+        qcopy(state->follow.offset, follow->focus);
+        qcopy(state->position, rec_pos);
+        qcopy(state->tail.snap.unk1F0, rec_pos);
+        *(int *)&snap->unk200 = 0;
+        *(int *)&reset->unk34 = 0;
+        reset->look_height = follow->look_height;
+        { float zero = reset->unk34;
+        float distance = tail->distance;
+        reset->distance = distance;
+        reset->unk22 = 0;
+        reset->unk38 = zero;
+        reset->unk30 = zero;
+        reset->unk2C = zero; }
+    }
+    params->timer += 1;
+    if (func_001F9850(200) < params->timer) {
+        params->timer = func_001F9850(200);
+    }
+    if (params->distance != 0.0f) {
+        func_L00_002E9900(0, params->distance, 0.003f);
+        func_L00_002E9AD0();
+    }
+    if (params->height != 0.0f) {
+        func_L00_002E9968(params->height, 0.003f);
+    }
+    if (params->offset_scale != 0.0f) {
+        func_L00_002E99A0(0, params->offset_scale, 0.005f);
+    }
+    if (params->unk28 != 0.0f) {
+        func_L00_002E99F0(params->unk28 * 0.017453292f);
+    }
+    if (params->keep_unk10 == 0) {
+        func_L00_002E9A18(0);
+    }
+}
 extern char *D_L00_0015F050 MACRO_ADDR;
 extern int D_L00_0015F6A8 MACRO_ADDR;
 extern int func_L00_002EE7F8(void *);
