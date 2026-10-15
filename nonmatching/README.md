@@ -166,7 +166,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_0021B298`](game/func_0021B298.c) | game | 2296 | ? | - |
 | [`func_0021C840`](functional/func_0021C840.c) | functional | 1368 | ? | - |
 | [`func_00220690`](functional/func_00220690.c) | functional | 612 | ? | - |
-| [`func_00221380`](game/func_00221380.c) | game | 776 | ? | - |
 | [`func_002243E8`](functional/func_002243E8.c) | functional | 832 | ? | - |
 | [`func_00224728`](game/func_00224728.c) | game | 1288 | ? | - |
 | [`func_00226808`](game/func_00226808.c) | game | 0 | ? | - |
@@ -430,7 +429,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L08_00211A38`](functional/func_L08_00211A38.c) | functional | 48 | ? | - |
 | [`func_L08_00259040`](functional/func_L08_00259040.c) | functional | 116 | ? | - |
 | [`func_L08_002D36F8`](l08_batalia/func_L08_002D36F8.c) | l08_batalia | 1792 | SIZE ours 1760 / retail 1792 | - |
-| [`func_L08_002D4B80`](functional/func_L08_002D4B80.c) | functional | 1276 | ? | - |
 | [`func_L08_002D55E0`](functional/func_L08_002D55E0.c) | functional | 2504 | ? | - |
 | [`func_L08_002D7010`](functional/func_L08_002D7010.c) | functional | 1860 | ? | - |
 | [`func_L08_002DBF68`](functional/func_L08_002DBF68.c) | functional | 3480 | ? | - |
