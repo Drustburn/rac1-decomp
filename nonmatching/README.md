@@ -317,7 +317,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_0029A940`](shared/func_L00_0029A940.c) | shared | 504 | SIZE ours 496 / retail 504 | - |
 | [`func_L00_0029ADD8`](shared/func_L00_0029ADD8.c) | shared | 404 | SIZE ours 400 / retail 404 | - |
 | [`func_L00_0029AFB8`](shared/func_L00_0029AFB8.c) | shared | 756 | SIZE ours 748 / retail 756 (cannot land as written) | - |
-| [`func_L00_0029BA20`](shared/func_L00_0029BA20.c) | shared | 1208 | SIZE ours 1196 / retail 1208 | - |
 | [`func_L00_0029CDE0`](functional/func_L00_0029CDE0.c) | functional | 2984 | ? | - |
 | [`func_L00_0029D988`](shared/func_L00_0029D988.c) | shared | 5164 | SIZE ours 5156 / retail 5164 (cannot land as written) | - |
 | [`func_L00_0029FD68`](shared/func_L00_0029FD68.c) | shared | 1164 | SIZE ours 1156 / retail 1164 (cannot land as written) | - |
@@ -422,7 +421,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L07_0030E8B8`](l07_umbris/func_L07_0030E8B8.c) | l07_umbris | 1748 | SIZE ours 1732 / retail 1748 | - |
 | [`func_L07_0030F0D0`](functional/func_L07_0030F0D0.c) | functional | 1008 | ? | - |
 | [`func_L07_00313D28`](l07_umbris/func_L07_00313D28.c) | l07_umbris | 1148 | SIZE ours 1120 / retail 1148 | - |
-| [`func_L07_0031BDB8`](functional/func_L07_0031BDB8.c) | functional | 1268 | ? | - |
 | [`func_L08_00211A38`](functional/func_L08_00211A38.c) | functional | 48 | ? | - |
 | [`func_L08_00259040`](functional/func_L08_00259040.c) | functional | 116 | ? | - |
 | [`func_L08_002D36F8`](l08_batalia/func_L08_002D36F8.c) | l08_batalia | 1792 | SIZE ours 1760 / retail 1792 | - |

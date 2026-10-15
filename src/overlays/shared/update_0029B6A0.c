@@ -112,7 +112,238 @@ void func_L00_0029B770(s32 skip_unflagged) {
         D_L00_001CA7C0_9B770.count++;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_0029BA20);
+typedef u32 Q_pv __attribute__((mode(TI), aligned(16)));
+typedef union { Q_pv q; f32 f[4]; s32 i[4]; } Vq_pv;
+typedef struct {
+    s32 item;
+    s32 selected;
+    s32 state;
+    s32 unused;
+    s32 sound;
+} VendorEntry_pv;
+typedef struct {
+    s32 f0;
+    s32 f4;
+    s32 f8;
+    s32 fC;
+    s32 f10;
+    s32 f14;
+    s32 f18;
+    char *moby;
+    u8 pad20[0x18];
+    s32 timer;
+    s32 f3C;
+    s32 mode;
+    s32 f44;
+    s32 f48;
+    s32 scroll;
+    s32 item_text;
+    s32 title_text;
+    s32 cursor;
+    s32 f5C;
+    Vq_pv eye;
+    Vq_pv look;
+    u8 pad80[0x50];
+    VendorEntry_pv entries[16];
+    u8 pad210[0x210 - 0xD0 - 16 * 0x14];
+    s32 count;
+    u8 pad214[0xC];
+} Vendor_pv;
+typedef struct {
+    u8 pad[0xE];
+    u16 text;
+    u8 tail[0x18 - 0x10];
+} VendorItem_pv;
+typedef struct {
+    u8 b0;
+    u8 hidden;
+    u8 pad2[0x32];
+    f32 offset;
+    u8 pad38[8];
+} VendorSlot_pv;
+typedef struct {
+    u8 pad0[0x10];
+    Vq_pv pos;
+    u8 state;
+    u8 pad21[0x11];
+    s16 h32;
+    u8 pad34[0xC];
+    Vq_pv rot;
+    u8 pad50[8];
+    f32 f58;
+} VendorMoby_pv;
+
+#define VP (*(Vendor_pv *)D_L00_001CA7C0)
+extern VendorSlot_pv D_L00_00165F80[4];
+typedef struct { u8 p[0x140]; f32 x; f32 y; f32 z; } VendorCam_pv;
+extern VendorCam_pv D_L00_00166D80;
+extern s32 D_L00_00161F18 MACRO_ADDR;
+extern s32 D_L00_00161F20 MACRO_ADDR;
+extern s32 D_L00_00161F24 MACRO_ADDR;
+extern s32 D_L00_00161F30 MACRO_ADDR;
+extern s32 D_0015EE98 MACRO_ADDR;
+extern s32 D_0013D530[];
+extern Vq_pv D_L00_00180360;
+extern s32 D_L00_0015F6BC MACRO_ADDR;
+extern s32 D_L00_0015F4FC MACRO_ADDR;
+extern short D_L00_0015F500;
+extern char D_0013E633[];
+
+extern s32 D_L00_00161248 MACRO_ADDR;
+extern s32 D_L00_0016124C MACRO_ADDR;
+extern void func_001F99B0(void *, s32, s32);
+extern VendorMoby_pv *func_0020D348(s32);
+extern void func_001F9BC0(void *);
+extern void func_L00_00251E30(void *);
+extern void func_0012E528(s32);
+extern void func_00216EF0(s32);
+extern int func_0012DDC0(void);
+extern void func_L00_0029B770(s32);
+extern void func_L00_0023B890(void);
+extern s32 func_001FFB38(s32, s32, void *, void *, void *, void *, s32);
+extern void func_L00_0023A658(void);
+extern void func_L00_0023A690(void);
+extern void func_L00_0023A788(void);
+extern void func_L00_0023B0F8(void);
+extern void func_L00_00236830(void);
+extern void func_L00_0023B140(void);
+extern s32 func_0022ED80(s32, s32, void *);
+extern void func_001F4E08(s32);
+extern void func_L00_00203FB8(void);
+extern s32 func_L00_00222B80(s32, s32);
+extern void func_L00_00233868(void);
+extern void func_00213D28(void *, s32, s32);
+extern void func_001F9EC0(void *, void *, void *);
+extern void func_001F9BD8(void *, void *, void *);
+extern f32 func_001FA748(f32, f32);
+extern void func_L00_002EBF50(void *, void *, s32, s32, s32);
+extern void func_L00_002EBE88(void *);
+extern void func_L00_002EBEE0(void *);
+extern void func_0020D960(char *, s32, void *);
+
+extern short D_L00_00161120;
+extern f32 D_L00_00161128 MACRO_ADDR;
+extern Vq_pv D_L00_00180350;
+extern short D_L00_00161190;
+extern short D_L00_001611A0;
+extern u8 D_L00_001CA9E0[];
+extern s32 D_0015EE88 MACRO_ADDR;
+extern f32 D_0015EE60 MACRO_ADDR;
+void func_L00_0029BA20(VendorMoby_pv *m) {
+    extern s32 D_L00_00173F00[];
+    s32 i;
+    Vq_pv *v;
+    s32 half;
+    s32 sel;
+    s32 k;
+    VendorSlot_pv *slot;
+
+    func_001F99B0((Vendor_pv *)D_L00_001CA7C0, 0, 0x220);
+    func_001F99B0(D_L00_001CA9E0, 0, 0x40);
+    if (m == 0) {
+        m = func_0020D348(0xB);
+        *(s16 *)((char *)m + 0x32) = 0x40;
+        *(f32 *)((char *)m + 0x10) = D_L00_00166D80.x + *(f32 *)&D_L00_00161120;
+        *(f32 *)((char *)m + 0x14) = D_L00_00166D80.y;
+        *(f32 *)((char *)m + 0x18) = D_L00_00166D80.z - D_L00_00161128;
+        func_001F9BC0(&m->rot);
+        m->rot.f[2] = 3.1415927f;
+        func_L00_00251E30(m);
+        m->state = 3;
+        VP.mode = 1;
+    }
+    if ((VP.timer = D_0015EE88 - 1) < 0) {
+        VP.timer = 0;
+    }
+    VP.f44 = 0;
+    VP.f48 = VP.title_text = VP.item_text = -1;
+    VP.cursor = 0;
+    D_L00_00161F18 = 0;
+    D_L00_00161F20 = 0;
+    VP.f5C = 0;
+    D_L00_00161F30 = 0;
+    D_L00_00161F24 = 0;
+    func_0012E528(0x1D);
+    func_00216EF0(0);
+    func_0012DDC0();
+    func_L00_0029B770(VP.mode != 0);
+    half = VP.count;
+    sel = half / 2;
+    if (half < 3) sel = 1;
+    VP.cursor = half / 2;
+    VP.scroll = (sel - half / 2) * 0x28;
+    func_L00_0023B890();
+    VP.title_text = func_001FFB38(0x12, 0x754E, func_L00_0023A658, func_L00_0023A690,
+                                               func_L00_0023A788, &D_0015EE98, 0x98967F);
+    if (VP.entries[VP.cursor].selected == 1) {
+        s32 item = VP.entries[VP.cursor].item;
+
+        VP.item_text = func_001FFB38(0x30, item + 0xEA60, func_L00_0023B0F8,
+                                                  func_L00_00236830, func_L00_0023B140,
+                                                  &D_0013D530[item], D_L00_001C43B0[item].hE);
+    }
+    D_L00_0015F6BC = 1;
+    VP.f0 = 0;
+    VP.f10 = D_L00_00173F00[2] + 0x60000;
+    VP.f14 = D_L00_00173F00[1] + 0x60000;
+    VP.f8 = 0;
+    VP.moby = (char *)m;
+    func_0022ED80(3, 0, m);
+    if (VP.mode == 0) {
+        func_001F4E08(4);
+    }
+    func_L00_00203FB8();
+    *(f32 *)&D_L00_0015F4FC = 1.0f;
+    *(s32 *)((char *)&D_L00_0015F6BC - 0x14) = 5;
+    *(s32 *)&D_L00_0015F500 = 0;
+    func_L00_00222B80(100, 1);
+    {
+        u8 *hp = (u8 *)D_0013E633 + 0xE1D;
+        hp[0x20AC] = 1;
+        hp[0x20A5] = 1;
+    }
+    func_L00_00233868();
+    if (VP.mode != 0) {
+        func_00213D28(m, 3, 0);
+    } else {
+        func_00213D28(m, 2, 0);
+    }
+    m->f58 = D_0015EE60 * 0.5f;
+    if (VP.mode == 0) {
+        func_001F9EC0(&VP.eye, &D_L00_00161120, VP.moby + 0xC0);
+        func_001F9BD8(&VP.eye, &VP.eye, VP.moby + 0x10);
+        VP.look.f[2] = func_001FA748(*(f32 *)(VP.moby + 0x48), 3.1415927f);
+        func_L00_002EBF50(&VP.eye, &VP.look, 1, 0, 0);
+        func_L00_002EBE88(&VP.eye);
+        func_L00_002EBEE0(&VP.look);
+    }
+    v = &D_L00_00180350;
+    func_001F9EC0(v, &D_L00_00161190, VP.moby + 0xC0);
+    qcopy(v - 1, &D_L00_001611A0);
+    v += 2;
+    qzero(v);
+    qzero(&D_L00_00180360);
+    for (i = 0; i < 4; i++) {
+        slot = &D_L00_00165F80[i];
+        if (slot->hidden == 0) {
+            func_0020D960(VP.moby, i + 0x14, slot);
+        }
+    }
+    if (VP.count < 8) {
+        k = 7 - VP.count;
+        D_L00_00165F80[0].offset = k * 0x681;
+        D_L00_00165F80[1].offset = k * -0x681;
+        D_L00_00165F80[2].offset = k * 0x681;
+        D_L00_00165F80[3].offset = k * -0x681;
+    } else {
+        D_L00_00165F80[0].offset = 0;
+        D_L00_00165F80[1].offset = 0;
+        D_L00_00165F80[2].offset = 0;
+        D_L00_00165F80[3].offset = 0;
+    }
+    D_L00_00161248 = 0;
+    D_L00_0016124C = 0;
+}
 extern void func_001FFDA0(int, int);
 extern void func_001FFFA0(void);
 extern int func_L00_00222B80(int, int);
