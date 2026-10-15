@@ -2218,7 +2218,46 @@ void func_L02_002DE418(char *m) {
     func_L00_0025E590(m, d + 0x60);
     func_L00_001FEF78(m + 0xBC);
 }
-INCLUDE_ASM("asm/overlays", func_L02_002DE6E0);
+typedef struct {
+    char pad0[0x20];
+    unsigned char state;
+    unsigned char group;
+    char pad22[0x84];
+    short type;
+    char padA8[0xC];
+    short hp;
+    char padB6[2];
+    void *target;
+    char padBC[0x44];
+} Level02GroupMoby;
+
+char *func_L02_002DE6E0(char *m) {
+    Level02GroupMoby *owner = (Level02GroupMoby *)m;
+    short *group_ids;
+    Level02GroupMoby *g;
+    Level02GroupMoby *mobys;
+    if (((volatile unsigned char *)m)[0x21] == 0xFF) {
+        return 0;
+    }
+    group_ids = (short *)D_L02_001AC140[((unsigned char *)m)[0x21]];
+    mobys = (Level02GroupMoby *)D_L02_00160058_m;
+    do {
+        int i = *(unsigned short *)group_ids & 0x7FFF;
+        if (mobys[i].type == 0x244 && mobys[i].state == 0x1A) {
+            mobys[i].target = owner;
+            if (owner->hp < mobys[i].hp) {
+                mobys[i].hp = owner->hp;
+            }
+            g = (Level02GroupMoby *)((char *)(i << 8) + D_L02_00160058_m);
+            owner->hp -= g->hp;
+            if (owner->hp <= 0) {
+                owner->hp = 1;
+            }
+            return (char *)g;
+        }
+    } while (*group_ids++ >= 0);
+    return 0;
+}
 INCLUDE_ASM("asm/overlays", func_L02_002DE6FC);
 INCLUDE_ASM("asm/overlays", func_L02_002DE798);
 /* four-state update: waits for a flag, plays a transition, and rolls a random heading on entering state 2 or 7 */

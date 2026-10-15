@@ -369,7 +369,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L02_00250C78`](functional/func_L02_00250C78.c) | functional | 836 | ? | - |
 | [`func_L02_00265E88`](functional/func_L02_00265E88.c) | functional | 860 | ? | - |
 | [`func_L02_002DA820`](functional/func_L02_002DA820.c) | functional | 4072 | ? | - |
-| [`func_L02_002DE6E0`](l02_aridia/func_L02_002DE6E0.c) | l02_aridia | 28 | SIZE ours 192 / retail 200 | - |
 | [`func_L02_002DF0C0`](l02_aridia/func_L02_002DF0C0.c) | l02_aridia | 4852 | SIZE ours 4828 / retail 4852 | - |
 | [`func_L02_002EB648`](shared/func_L02_002EB648.c) | shared | 1468 | SIZE ours 1472 / retail 1468 | - |
 | [`func_L02_002FCE00`](shared/func_L02_002FCE00.c) | shared | 2244 | SIZE ours 2236 / retail 2244 | - |
