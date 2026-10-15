@@ -1809,7 +1809,131 @@ void func_L01_0030C090(Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L01_0030CDF0);
+typedef unsigned int u128_D568 __attribute__((mode(TI), aligned(16)));
+typedef struct {
+    unsigned char pad0[0x30];
+    int scene;
+    int frame;
+    unsigned char pad38[0x178 - 0x38];
+    struct Moby *slot[5];
+} CutsceneFx_D568;
+typedef union {
+    u128_D568 q;
+    float f[4];
+} FxVec_D568;
+typedef struct {
+    unsigned char pad0[4];
+    int unk4;
+    unsigned char pad8[2];
+    unsigned char unkA;
+    unsigned char unkB;
+} FxSparkTail_D568;
+typedef struct {
+    unsigned char pad0[9];
+    unsigned char unk9;
+    short unkA;
+    unsigned char padC[0x20 - 0xC];
+    FxSparkTail_D568 tail;
+} FxSpark_D568;
+typedef struct {
+    Vec4f vel;
+    Vec4f spin;
+    s32 timer;
+    s32 owner;
+} BlobVars;
+
+typedef struct {
+    u8 pad0[0x1C];
+    s32 have_normal;
+    u8 pad20[0x20];
+    Vec4f normal;
+} BlobHitInfo;
+
+extern short D_L01_001620E8;
+extern short D_L01_001620EC;
+extern short D_L01_001620F0;
+extern float D_0015EE60 MACRO_ADDR;
+extern float D_0015EE70 MACRO_ADDR;
+extern BlobHitInfo D_L01_00174340;
+extern void func_L01_0030D380(void);
+extern int func_L00_001F10E0(float, void *, int, void *);
+extern void func_L00_001FF610(void *, void *, void *);
+extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void func_L00_0026DA50(void *, void *, int, int, float, int, int);
+extern FxSpark_D568 *func_L00_0026DEA0(void *, float, float, float, int, void *, float, int);
+
+void func_L01_0030CDF0(struct Moby *m) {
+    BlobVars *v;
+    int hit;
+    int i;
+    int n;
+    int c;
+    int alpha;
+    int grey;
+    float s;
+    u8 *p;
+    u8 *q;
+
+    v = (BlobVars *)m->pvars;
+    if (func_002140B0(2)) {
+        func_001F49B0(func_L01_0030D380, m);
+    }
+    func_001F9BD8(&m->pos, &m->pos, v);
+    if (func_001F9B88(v->vel.x) > *(float *)&D_L01_001620F0 * D_0015EE60) {
+        v->vel.x *= (*(float *)&D_L01_001620EC - 1.0f) * D_0015EE60 + 1.0f;
+    }
+    if (func_001F9B88(v->vel.y) > *(float *)&D_L01_001620F0 * D_0015EE60) {
+        v->vel.y *= (*(float *)&D_L01_001620EC - 1.0f) * D_0015EE60 + 1.0f;
+    }
+    if (v->vel.z > 0.0f) {
+        v->vel.z *= (*(float *)&D_L01_001620EC - 1.0f) * D_0015EE60 + 1.0f;
+    }
+    v->vel.z -= *(float *)&D_L01_001620E8 * D_0015EE70;
+    m->rot.x = func_001FA748(m->rot.x, v->spin.x);
+    m->rot.y = func_001FA748(m->rot.y, v->spin.y);
+    m->rot.z = func_001FA748(m->rot.z, v->spin.z);
+    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f ||
+        m->pos.z < 2.0f || m->pos.z > 1021.0f) {
+        func_0020D678(m);
+        return;
+    }
+    hit = func_L00_001F10E0(2.0f, &m->pos, 0, (void *)v->owner);
+    if (func_001F9908(&v->timer) || hit) {
+        if (hit) {
+            if (D_L01_00174340.have_normal) {
+                func_L00_001FF610(v, v, &D_L01_00174340.normal);
+            } else {
+                func_001F9BC0(v);
+            }
+        }
+        func_L00_0025F4A8(m, v, &m->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, 0, 15.0f, 1, 1,
+                         -1, 0);
+        func_0020D678(m);
+        return;
+    }
+    s = func_002140F8(0.5f, 1.5f) * 210000.0f;
+    func_L00_0026DA50(&m->pos, D_L01_0015F660, 0x4F007FFF, 0x1FFFFFFF, s,
+               func_L00_00258BC8(func_001F9850(10), func_001F9850(20)), 1);
+    alpha = 0x60000000;
+    for (i = 0; i < 2; i++) {
+        n = func_002140B0(6);
+        if (func_002140B0(2)) {
+            n = -n;
+        }
+        s = func_002140F8(40000.0f, 100000.0f);
+        c = func_L00_00258BC8(0x30, 0xFF);
+        grey = (c << 8) | 0x60000000;
+        p = func_L00_0026DEA0(&m->pos, 0.025f, 1.0f, 1.0f, n, D_L01_0015F660, s, c | ((c << 16) | grey));
+        if (p != 0) {
+            p[3] = 0x44;
+            q = p + 0x20;
+            *(s16 *)(p + 0xA) = func_001F9850(60);
+            *(s32 *)(q + 4) = 2;
+            q[0xA] = alpha >> 24;
+            q[0xB] = p[0xA];
+        }
+    }
+}
 extern float func_002140F8(float, float);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern float func_L00_00258C80(float lo, float hi);
@@ -1844,32 +1968,6 @@ char *func_L01_0030D248(char *src, void *dir, float scale) {
 }
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
-typedef unsigned int u128_D568 __attribute__((mode(TI), aligned(16)));
-typedef struct {
-    unsigned char pad0[0x30];
-    int scene;
-    int frame;
-    unsigned char pad38[0x178 - 0x38];
-    struct Moby *slot[5];
-} CutsceneFx_D568;
-typedef union {
-    u128_D568 q;
-    float f[4];
-} FxVec_D568;
-typedef struct {
-    unsigned char pad0[4];
-    int unk4;
-    unsigned char pad8[2];
-    unsigned char unkA;
-    unsigned char unkB;
-} FxSparkTail_D568;
-typedef struct {
-    unsigned char pad0[9];
-    unsigned char unk9;
-    short unkA;
-    unsigned char padC[0x20 - 0xC];
-    FxSparkTail_D568 tail;
-} FxSpark_D568;
 extern u128_D568 D_L01_00162100 MACRO_ADDR;
 extern void func_L00_00264870(struct Moby *);
 extern void func_L00_00250800(struct Moby *, int, void *);

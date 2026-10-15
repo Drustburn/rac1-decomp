@@ -3143,4 +3143,160 @@ void func_L09_0030A560(char *moby) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L09_0030AFB8);
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec4 node[1];
+} PathNodes_00309c08;
+typedef struct {
+    u8 pad0[0x70];
+    u8 unk70[0x38];
+    f32 speed;
+    s32 path;
+    u8 padB0[8];
+    s16 dir;
+    s16 node;
+    f32 yaw_offset;
+    f32 spin;
+    u8 padC4[8];
+    f32 lag;
+} PathFlyerVars_00309c08;
+extern void func_0020D960(struct Moby *, s32, void *);
+extern u8 D_0013E633[];
+extern u8 D_0014171B[] NOT_SDA;
+#define frame_time D_0015EE6C
+#define hero (*(Hero *)(D_0013E633 + 0xE1D))
+extern int func_L09_0030B648(struct Moby *);
+
+#define attach_manipulator func_0020D960
+#define scale_vector_00309c08 ((void (*)(f32, void *, void *))func_001F9C30)
+#define check_voice_target_00309c08 ((s32 (*)(void *, s32))func_L00_0028EB98)
+#define FUN_L00_00260738 ((void (*)(void *, void *, void *, void *))func_L00_002617B0)
+#define FUN_L00_00262b00 ((void (*)(float, float, char *, float *, float *))func_L00_00263B78)
+#define FUN_L00_00262b80 ((void (*)(void *, char *, char *, float, float, float))func_L00_00263BF8)
+#define allocate_voice_for_target_entry ((int (*)(int, int, void *))func_0022ED80)
+#define release_voice_slot ((void (*)(int))func_L00_0028EBF0)
+#define is_point_inside_clip_volume ((int (*)(void *, int))func_00215570)
+#define add_vector_xyz ((void (*)(void *, void *, void *))func_001F9BD8)
+#define atan2_f ((f32 (*)(f32, f32))func_L00_001FF860)
+#define fast_add_rotations ((f32 (*)(f32, f32))func_001FA748)
+#define vector_distance ((f32 (*)(void *, void *))func_001F9D48)
+#define FUN_L09_0030a298 func_L09_0030B648
+void func_L09_0030AFB8(struct Moby *moby) {
+    PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
+    PathNodes_00309c08 *path = (PathNodes_00309c08 *)D_L09_001B0930[vars->path];
+    Vec4 *position = (Vec4 *)&moby->pos;
+    Vec4 original;
+    Vec4 rotation;
+    s16 dir;
+    s32 voice;
+
+    scale_vector_00309c08(-1.0f, &original, position);
+    qcopy(&rotation, &moby->rot);
+    if (vars == 0) return;
+
+    switch (moby->state) {
+    case 0:
+        moby->unk30 = 0xFF;
+        vars->yaw_offset = 3.1415927f;
+        *(s32 *)((u8 *)vars + 0xC4) = -1;
+        *(s32 *)((u8 *)vars + 0xC8) = 0;
+        vars->lag = 0.0f;
+        if (*(s32 *)((u8 *)vars + 0xA0) != 0) {
+            PathNodes_00309c08 *path;
+            attach_manipulator(moby, 0, (u8 *)vars + 0x60);
+            path = (PathNodes_00309c08 *)D_L09_001B0930[vars->path];
+            moby->state = 1;
+            if ((D_0014171B + 0xAA35)[moby->unkB0 + (D_0015EE84 << 4)] == 0xFF) {
+                vars->dir = -1;
+                vars->node = path->count - 2;
+                qcopy(position, (Vec4 *)((path->count << 4) + (s32)path));
+            } else {
+                vars->dir = 1;
+                vars->node = 1;
+                qcopy(position, &path->node[0]);
+            }
+            moby->rot.z = atan2_f(path->node[vars->node].f[0] - moby->pos.x,
+                                   path->node[vars->node].f[1] - moby->pos.y);
+        }
+        moby->rot.z = fast_add_rotations(moby->rot.z, 3.1415927f);
+        break;
+    case 2:
+        vars->lag += (1.0f - vars->lag) * 0.01f;
+        FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
+                          (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
+        FUN_L00_00262b80(moby, (char *)vars + 0xD0, (char *)vars + 0xD4,
+                          vars->lag * 0.08726646f, frame_time * 0.31415927f,
+                          frame_time * 0.4886922f);
+        if (hero.ground_moby != moby) moby->state = 1;
+        break;
+    case 1:
+        vars->lag += (1.0f - vars->lag) * 0.01f;
+        FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
+                          (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
+        FUN_L00_00262b80(moby, (char *)vars + 0xD0, (char *)vars + 0xD4,
+                          vars->lag * 0.08726646f, frame_time * 0.31415927f,
+                          frame_time * 0.4886922f);
+        if (*(s32 *)((u8 *)vars + 0xC8) != 0) {
+            if ((vars->dir > 0 && *(s32 *)((u8 *)vars + 0xB4) != -1 && is_point_inside_clip_volume(D_0013E633 + 0xE9D, *(s32 *)((u8 *)vars + 0xB4))) ||
+                (vars->dir < 0 && *(s32 *)((u8 *)vars + 0xB0) != -1 && is_point_inside_clip_volume(D_0013E633 + 0xE9D, *(s32 *)((u8 *)vars + 0xB0)))) {
+                moby->state = 3;
+            }
+        }
+        if (hero.ground_moby == moby && hero.air_frames.s == 0) {
+            *(s32 *)((u8 *)vars + 0xC8) = 1;
+            moby->state = 3;
+        }
+        break;
+    case 3:
+        if ((D_L09_0015F6B0 & 7) == (((s32)moby >> 8) & 7)) {
+            if (*(s32 *)((u8 *)vars + 0xC4) == -1 ||
+                (!check_voice_target_00309c08(moby, *(s32 *)((u8 *)vars + 0xC4)) &&
+                 *(s32 *)((u8 *)vars + 0xC4) == -1)) {
+                *(s32 *)((u8 *)vars + 0xC4) = allocate_voice_for_target_entry(0, 4, moby);
+            }
+        }
+        if (vars->yaw_offset == 0.0f) {
+            if (vars->dir < 0) {
+                if (*(s32 *)((u8 *)vars + 0xB4) == -1 ||
+                    !is_point_inside_clip_volume(D_0013E633 + 0xE9D, *(s32 *)((u8 *)vars + 0xB4)))
+                    goto test_forward;
+                if (!(vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f) ||
+                    !(vector_distance(&moby->pos, &path->node[0]) > 8.0f))
+                    goto advance_path;
+                vars->dir = 1;
+                vars->yaw_offset = 3.1415927f;
+            } else {
+            test_forward:
+                if (vars->dir > 0 && *(s32 *)((u8 *)vars + 0xB0) != -1 &&
+                    is_point_inside_clip_volume(D_0013E633 + 0xE9D, *(s32 *)((u8 *)vars + 0xB0)) &&
+                    vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
+                    vector_distance(&moby->pos, &path->node[0]) > 8.0f) {
+                    vars->dir = -1;
+                    vars->yaw_offset = 3.1415927f;
+                }
+            }
+        }
+    advance_path:
+        if (FUN_L09_0030a298(moby)) {
+            voice = *(s32 *)((u8 *)vars + 0xC4);
+            if (voice != -1) {
+                u8 *entry = (u8 *)D_0013E633 + 0x1D + voice * 0x70;
+                if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
+                    release_voice_slot(voice);
+            }
+            *(s32 *)((u8 *)vars + 0xC4) = -1;
+            vars->lag = 0.0f;
+            *(s32 *)((u8 *)vars + 0xDC) = 0;
+            moby->state = 2;
+            vars->yaw_offset = 3.1415927f;
+            dir = vars->dir;
+            vars->dir = -dir;
+            if ((s16)-dir > 0) vars->node = 0;
+            else vars->node = path->count - 1;
+        }
+        break;
+    }
+    add_vector_xyz(&original, &original, &moby->pos);
+    FUN_L00_00260738((u8 *)vars + 0x20, &original, &rotation, &moby->rot);
+}

@@ -1073,7 +1073,117 @@ void func_L05_00254030(void) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L05_00254328);
+typedef unsigned char u8_a;
+extern int func_L00_0025A208(void **, int, int, int);
+extern int func_L00_0025A2F0(void **, void *, int, int);
+extern void func_001F9BF0(float *, void *, void *);
+extern void func_001FA190(float *);
+extern void func_001FA4A0(float *, void *);
+extern void func_001F9EE8(float *, float *, float *);
+extern float func_001F9D10(void *, void *);
+extern float func_001F9FA8(float);
+extern float func_001FA888(int);
+extern unsigned char D_0013D50F[] NOT_SDA;
+extern void func_L05_0023E348(int);
+
+#define HERO ((struct Hero *)((char *)D_0013E633 + 0xE1D))
+
+void func_L05_00254328(void) {
+    u8_a *state;
+    u8_a *first;
+    u8_a *second;
+    u8_a *third;
+    float delta[4];
+    float matrix[16];
+    int *ap;
+    int count, red, green, blue;
+    float period, wave, ratio;
+
+    if (HERO->unk86C == 0)
+        return;
+    state = *(u8_a **)(HERO->unk86C + 0x78);
+    if (*(int *)(state + 0x44) != -1) {
+        func_L00_0025A208((void **)&first, *(int *)(state + 0x44), 0, 0);
+        if (first != 0) {
+            do {
+                if (*(short *)(first + 0xA6) == 0x473 && func_L00_001FEF78(first + 0xBC) != 0) {
+                    func_001F9BF0(delta, first + 0x10, (char *)D_0013E633 + 0xEED);
+                    func_001FA190(matrix);
+                    func_001FA4A0(matrix, first + 0xC0);
+                    func_001F9EE8(delta, delta, matrix);
+                    if (func_001F9B88(delta[0]) < 0.5f && func_001F9B88(delta[1]) < 2.9f && func_001F9B88(delta[2]) < 2.9f) {
+                        HERO->unk8C4 += **(int **)(first + 0x78);
+                        first[0xBC] = func_001F9850(0x3C);
+                        if (HERO->unk86C != 0)
+                            func_0022ED80(1, 0, (int)HERO->unk86C);
+                    }
+                }
+                func_L00_0025A2F0((void **)&first, first, 0, 0);
+            } while (first != 0);
+        }
+    }
+    count = func_001F9850(0x32);
+    period = func_001FA888(count);
+    ratio = (float)(*(int *)&D_L05_0015F6B0 % count) / period;
+    ratio += ratio;
+    wave = func_001F9FA8(ratio * 3.1415927f + -3.1415927f);
+    red = func_001FA898(wave * 48.0f) + 0x68;
+    green = func_001FA898(wave * 64.0f) + 0xD0;
+    blue = func_001FA898(wave * 24.0f) + 0x3C;
+    if (green > 0xFF)
+        green = 0xFF;
+    if (*(int *)(state + 0x48) != -1) {
+        if (HERO->unk8BC == 0) {
+            func_L00_0025A208((void **)&second, *(int *)(state + 0x48), 0, 0);
+            if (second != 0) {
+                unsigned int color = (blue << 16) | (0x80000000U | (green << 8)) | red;
+                do {
+                    if (*(short *)(second + 0xA6) == 0x474) {
+                        *(unsigned short *)(second + 0x34) |= 0x10;
+                        *(unsigned int *)(second + 0x90) = color;
+                        if (func_L00_001FEF78(second + 0xBC) != 0) {
+                            func_001F9BF0(delta, second + 0x10, (char *)D_0013E633 + 0xE9D);
+                            func_001FA190(matrix);
+                            func_001FA4A0(matrix, second + 0xC0);
+                            func_001F9EE8(delta, delta, matrix);
+                            if (func_001F9B88(delta[0]) < 2.8f && func_001F9B88(delta[1]) < 1.25f && func_001F9B88(delta[2]) < 1.5f) {
+                                HERO->unk8C4 += **(int **)(second + 0x78);
+                                second[0xBC] = func_001F9850(0x3C);
+                                if (HERO->unk86C != 0)
+                                    func_0022ED80(1, 0, (int)HERO->unk86C);
+                            }
+                        }
+                    }
+                    func_L00_0025A2F0((void **)&second, second, 0, 0);
+                } while (second != 0);
+            }
+        }
+    }
+    if (*(int *)(state + 0x4C) != -1) {
+        func_L00_0025A208((void **)&third, *(int *)(state + 0x4C), 0, 0);
+        if (third != 0) {
+        ap = (int *)(D_0013D50F + 0x21);
+        do {
+            if (*(short *)(third + 0xA6) == 0x1D6 && func_L00_001FEF78(third + 0xBC) != 0 && func_001F9D10((char *)D_0013E633 + 0xEED, third + 0x10) < 1.5f) {
+                struct Hero *g = HERO;
+                third[0xBC] = func_001F9850(300);
+                if (*(int *)((u8_a *)g + 0x10B8) != 0x24) {
+                    *(int *)((u8_a *)g + 0x20B8) = 0x24;
+                    g->unk20AC = 0;
+                    func_L05_0023E348(0);
+                    g->unk20AC = 1;
+                }
+                g->unk8CE++;
+                if (g->unk8CE > 3)
+                    g->unk8CE = 3;
+                *(int *)((u8_a *)g + 0x20B8) = 0x24;
+                ap[36]++;
+            }
+            func_L00_0025A2F0((void **)&third, third, 0, 0);
+        } while (third != 0);
+        }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L05_00254838);
 INCLUDE_ASM("asm/overlays", func_L05_00254B38);
 typedef int u128_254DE8 __attribute__((mode(TI)));

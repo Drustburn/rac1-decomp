@@ -139,7 +139,61 @@ s32 func_L00_002629E0(s32 path_index, Vec4 *start, Vec4 *end) {
     }
     return 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00262BC0);
+extern void func_001F9BF0(void *, void *, void *);
+extern float func_001F9CB8(void *);
+extern void func_L00_001FF4B0(void *, void *, float);
+extern void func_001F9BC0(void *);
+extern void func_001F9EC0(void *, void *, void *);
+extern void func_001F9C08(void *, void *, void *, float);
+
+int func_L00_00262BC0(int idx, void *a, void *b, void *c) {
+    float v[4], w[4], z[4], t[4], u[4];
+    float best;
+    float zero;
+    int found = 0;
+    int i = 1;
+    int offset;
+    float *prev;
+    float *cur;
+    func_001F9BF0(v, b, a);
+    v[2] = 0;
+    func_L00_001FF4B0(v, v, 1.0f / func_001F9CB8(v));
+    func_001F9BC0(w);
+    w[0] = v[1];
+    w[1] = -v[0];
+    func_001F9BC0(z);
+    z[2] = 1.0f;
+    best = 1.0f;
+    func_001F9BF0(t, (char *)D_L00_001B0830_2629E0[idx] + 0x10, a);
+    func_001F9EC0(t, t, v);
+    prev = t;
+    cur = u;
+    if (i < D_L00_001B0830_2629E0[idx]->count) {
+        offset = 0x20;
+        zero = 0.0f;
+        do {
+            func_001F9BF0(cur, (char *)D_L00_001B0830_2629E0[idx] + offset, a);
+            func_001F9EC0(cur, cur, v);
+            if (t[3] != zero || u[3] != zero) {
+                if (u[1] * t[1] < 0.0f) {
+                    float x = (t[0] - u[0]) / (t[1] - u[1]) * -u[1] + u[0];
+                    if (x > 0.0f && x < best) {
+                        best = x;
+                        found = 1;
+                        qcopy(prev, cur);
+                        goto next;
+                    }
+                }
+            }
+            qcopy(prev, cur);
+        next:
+            i++;
+            offset += 0x10;
+        } while (i < D_L00_001B0830_2629E0[idx]->count);
+    }
+    func_001F9C08(c, a, b, best);
+    return found;
+}
 LINKER_REMNANT("asm/overlays", func_L00_00262DE8);
 typedef int OvlQuad __attribute__((mode(TI)));
 typedef union {

@@ -918,7 +918,62 @@ void func_L14_002E1110(struct Moby_E1110 *moby) {
     if (func_002140B0(2) != 0)
         func_L14_002E17B8_E1110(moby);
 }
-INCLUDE_ASM("asm/overlays", func_L14_002E1570);
+extern void func_002156E0(void *, void *, void *, float);
+extern float func_L00_00258C80(float, float);
+extern void func_L00_0025EFC0(void *, void *, void *, void *, void *, int, float, float, float);
+extern short D_L14_00161C00;
+extern short D_L14_00161C04;
+extern short D_L14_00161C08;
+extern short D_L14_00161C0C;
+
+unsigned char *func_L14_002E1570(char *owner, float *scale, int mode) {
+    unsigned char *m = func_0020D348(0x193);
+    unsigned char *pos;
+    if (m != 0) {
+        char *d = *(char **)(m + 0x78);
+        float vec[8];
+        pos = m + 0x10;
+        qcopy(pos, owner + 0x10);
+        *(float *)(m + 0x48) = *(float *)(owner + 0x48);
+        m[0x20] = mode;
+        m[0x30] = 0xFF;
+        *(short *)(m + 0x32) = 0xFF;
+        m[0x31] = 1;
+        *(char **)d = owner;
+        if (m[0x20] == 0) {
+            int index;
+            char *path;
+            int *fields = (int *)d;
+            ((Data_dfd10 *)d)->timer = func_001F9850(90);
+            path = (char *)D_L14_0015F7EC;
+            *(float *)(d + 8) = *scale * D_0015EE6C;
+            index = *(int *)(*(char **)(owner + 0x78) + 0x60);
+            fields[5] = 0;
+            fields[3] = index;
+            fields[4] = 0;
+            func_L00_0025EFC0(*(void **)(path + index * 0x20 + 0x10),
+                pos, vec, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(d + 0x14));
+        } else {
+            float angle;
+            *(int *)(d + 4) = func_001F9850(200);
+            func_001F9BF0(vec, pos, D_0013E633 + 0xE9D);
+            vec[2] = 0.0f;
+            func_L00_001FF4B0(vec, vec,
+                func_002140F8(*(float *)&D_L14_00161C00 * D_0015EE60,
+                              *(float *)&D_L14_00161C04 * D_0015EE60));
+            func_001F9CA0(vec + 4, D_0013E633 + 0xE9D + 0x210, vec);
+            angle = func_L00_00258C80(0.5759586691856384f, 1.3962633609771729f);
+            func_002156E0(d + 0x30, vec, D_0013E633 + 0xE9D + 0x210, angle);
+            *(float *)(d + 0x38) = func_002140F8(*(float *)&D_L14_00161C08 * D_0015EE60,
+                *(float *)&D_L14_00161C0C * D_0015EE60);
+            *(float *)(d + 0x20) = func_L00_00258C80(0.0f, 0.008726646f);
+            *(float *)(d + 0x24) = func_L00_00258C80(0.05235988f, 0.13962634f);
+            *(float *)(d + 0x28) = func_L00_00258C80(0.0f, 0.017453293f);
+        }
+        func_L00_00251E30(m);
+    }
+    return m;
+}
 typedef struct Vars_2E17B8 {
     char pad0[0x18];
     float f18;                    /* 0x18 */

@@ -1610,7 +1610,228 @@ void func_L03_002DC648(struct RailSpawnerMoby *moby) {
     if (!func_L00_0028EB98_DC648(moby, vars->voice))
         vars->voice = func_L00_0028EF68_DC648(0, 4, moby, 0x382);
 }
-INCLUDE_ASM("asm/overlays", func_L03_002DC920);
+extern u8 D_0013D50F[];
+extern u8 D_0013D605[];
+extern void func_L03_002DC848(struct Moby *);
+extern void func_L00_00217718(void *, void *, int, int);
+struct TalkRecord_gd {
+    u8 pad0[4];
+    s16 mode;
+    u8 pad6[0x30];
+    s16 unk36;
+    u8 pad38[0x8];
+};
+struct LookAt_gd {
+    u8 pad0[0x64];
+    f32 pitch;
+    f32 yaw;
+    u8 pad6C[4];
+    f32 height;
+    u8 pad74[0xC];
+};
+struct GuideVars_gd {
+    struct TalkRecord_gd talk;
+    struct LookAt_gd head;
+    struct LookAt_gd body;
+    s32 turned;
+    s32 reward;
+    s32 link;
+    s32 warp;
+    Vec4 target;
+    u8 pad160[4];
+    s32 watch_timer;
+    s32 target_timer;
+};
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} LevelState_gd;
+typedef struct {
+    u8 pad0[0x14C];
+    s32 unk14C;
+} GameFlags_gd;
+#define WT (((char **)&D_L03_00160058)[0x45])
+
+#define stage (D_0014171B + 0xAA35)
+#define BASE_gd ((char *)D_L03_00160058)
+static inline u8 flag2(void) { u8 *p = D_0013D50F + 0xB9; return p[2]; }
+void func_L03_002DC920(struct Moby *m) {
+    struct GuideVars_gd *v = (struct GuideVars_gd *)m->pvars;
+    struct Moby *t;
+    struct Moby *o;
+    Vec4 *g;
+    struct Hero *h;
+    float scratch_target[4];
+    float eye[4];
+    float delta[4];
+    float rate;
+    float head_rate;
+    float yaw;
+    float pitch;
+    int tracking;
+    u8 group;
+
+    func_L03_002DC848(m);
+    switch (m->state) {
+    case 0:
+        if (*(s32 *)(D_0013D605 + 0x1FF) == 0) {
+            m->rot.z = func_001FA748(m->rot.z, 3.1415927f);
+            v->turned = 0;
+        } else {
+            v->turned = 1;
+        }
+        if (stage[m->unkB0 + (D_0015EE84 << 4)] == 0xFF && v->link != -1) {
+            t = (struct Moby *)((v->link << 8) + (int)D_L03_00160058);
+            if (t->oclass == 0x3F4) {
+                *(s32 *)(t->pvars + 0x8C) = 1;
+            }
+        }
+        m->spawn_frame = *(u64 *)(*(char **)&D_0013E633[0x2E9D] + 0x38);
+        m->state = 1;
+        func_L00_002676E8(m, &v->talk);
+        func_L02_0025D750(m);
+        if (D_0013D5CA[0] != 0) {
+            v->talk.unk36 = -1;
+        }
+        break;
+    case 1:
+    {
+        if (flag2() != 0) {
+        if (v->reward != -1) {
+            t = (struct Moby *)((v->reward << 8) + (int)D_L03_00160058);
+            if (t->oclass == 0x3E5 && t->state == 0) {
+                t->state = 1;
+                D_L03_001BA9E0.collected[(s16)((struct Moby *)((v->reward << 8) + (int)D_L03_00160058))->save_id] =
+                    ((struct Moby *)((v->reward << 8) + (int)D_L03_00160058))->unkB0 + 2;
+                o = (struct Moby *)((v->reward << 8) + (int)D_L03_00160058);
+                {
+                    s32 k = o->unkB0;
+                    u32 u = k & 0xFF;
+                    if (k == 0xFF || (D_L03_0015FD08[u] != 0xFF && stage[u + (D_0015EE84 << 4)] == 0xFF)) {
+                        D_L03_001BB640.collected[(s16)o->save_id] = k + 2;
+                    }
+                }
+            }
+        }
+        if (flag2() != 0 && stage[m->unkB0 + (D_0015EE84 << 4)] == 0xFF) {
+            break;
+        }
+        }
+        if (func_L00_00267290(m, &v->talk)) {
+            if (v->turned == 0) {
+                m->rot.z = func_001FA748(m->rot.z, 3.1415927f);
+                v->turned = 1;
+            }
+            func_L01_00279398(2.7f, m);
+            m->unk58 = 0.0f;
+            m->state = 2;
+        }
+        break;
+    }
+    case 2:
+        if (D_L03_0015F6A8 == 2) {
+            break;
+        }
+        m->unk58 = 1.0f;
+        if (v->talk.mode != 2) {
+            func_L00_002512D8(m->unkB0);
+            if (v->link != -1) {
+                t = (struct Moby *)((v->link << 8) + (int)D_L03_00160058);
+                if (t->oclass == 0x3F4) {
+                    *(s32 *)(t->pvars + 0x8C) = 1;
+                }
+            }
+            if (v->warp != -1) {
+                func_L00_00286128(WT + v->warp * 128 + 0x30, WT + v->warp * 128 + 0x70);
+            }
+        }
+        m->state = 1;
+        if (v->talk.mode != 2) {
+            break;
+        }
+        func_L00_002618D8(2, 1);
+        func_L00_00264DB8(0xBC7, -1);
+        if (v->reward != -1) {
+            t = (struct Moby *)((v->reward << 8) + (int)D_L03_00160058);
+            if (t->oclass == 0x3E5 && t->state == 0) {
+                t->state = 1;
+                D_L03_001BA9E0.collected[(s16)((struct Moby *)((v->reward << 8) + (int)D_L03_00160058))->save_id] =
+                    ((struct Moby *)((v->reward << 8) + (int)D_L03_00160058))->unkB0 + 2;
+                o = (struct Moby *)((v->reward << 8) + (int)D_L03_00160058);
+                if (o->unkB0 == 0xFF)
+                    goto rec2;
+                do {
+                    group = o->unkB0;
+                } while (0);
+                if (D_L03_0015FD08[group] != 0xFF && stage[group + (D_0015EE84 << 4)] == 0xFF) {
+                rec2:
+                    D_L03_001BB640.collected[(s16)o->save_id] = o->unkB0 + 2;
+                }
+            }
+        }
+        if (v->warp != -1) {
+            func_L00_00286128(WT + v->warp * 128 + 0x30, WT + v->warp * 128 + 0x70);
+        }
+        ((int (*)(int, int))func_0020BFC8)(0, -1);
+        func_L00_00217718(WT + v->warp * 128 + 0x30, WT + v->warp * 128 + 0x70, 0, 1);
+        break;
+    }
+    rate = 0.02f;
+    head_rate = 0.3f;
+    tracking = 0;
+    if (m->prev_seq == 0) {
+        g = &D_0013F450.motion.pos;
+        tracking = 1;
+        if (func_001F9D48(&m->pos, g) < 8.0f &&
+            (h = (struct Hero *)((u8 *)g - 0x80),
+             func_001FA850(m->rot.z, func_L00_001FF860(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
+                1.5707964f) {
+            if (func_001F9CB8((u8 *)g + 0x80) > 0.01f) {
+                v->watch_timer = func_001F9850(120);
+            } else {
+                ((int (*)(s32 *))func_001F9908)(&v->watch_timer);
+            }
+        } else if (v->watch_timer) {
+            v->watch_timer = 0;
+            qcopy(&v->target, &D_0013F450.motion.unkD0);
+        }
+        if (((int (*)(s32 *))func_001F9908)(&v->target_timer)) {
+            float heading;
+            v->target_timer = func_001FA898(func_001F9878(func_002140F8(180.0f, 300.0f)));
+            heading = func_001FA748(m->rot.z, func_002140F8(-90.0f, 90.0f) * 0.0174532925f);
+            func_00215C00(&v->target, 6.0f, heading, func_002140F8(0.0f, 30.0f) * 0.0174532925f);
+            func_001F9BD8(&v->target, &v->target, &m->pos);
+        }
+        if (v->watch_timer) {
+            qcopy(scratch_target, &D_0013F450.motion.unkD0);
+            rate = 0.04f;
+            head_rate = 0.3f;
+        } else {
+            qcopy(scratch_target, &v->target);
+        }
+    }
+    if (tracking) {
+        qcopy(eye, &m->pos);
+        eye[2] += 1.0f;
+        func_001F9BF0(delta, scratch_target, eye);
+        yaw = func_001FA790(func_L00_001FF860(delta[0], delta[1]), m->rot.z);
+        pitch = -func_L00_001FF860(func_001F9CE8(delta), delta[2]);
+        if (yaw > 1.5707964f)
+            yaw = 1.5707964f;
+        else if (yaw < -1.5707964f)
+            yaw = -1.5707964f;
+        if (pitch > 0.5235988f)
+            pitch = 0.5235988f;
+        else if (pitch < -0.5235988f)
+            pitch = -0.5235988f;
+        v->head.pitch = pitch;
+        v->body.yaw = v->head.yaw = yaw * 0.5f;
+    }
+    if (D_0015EEB0[0])
+        v->head.height = 2.75f;
+    func_L00_00263950(m, &v->head, 1, rate * D_0015EE64, head_rate * D_0015EE64);
+    func_L00_00263950(m, &v->body, 0, rate * D_0015EE64, head_rate * D_0015EE64);
+}
 /* functional: high. Only registers, scheduling, the frame layout and the order of independent stores differ from retail; the reads, writes, calls, their arguments and order, and the float multiply order are retail's (the unset w lanes of the two state-3 vectors are never written, as in retail). */
 /* Level 3 (Kerwan) Robot Qwark (moby class 914) update. A hero close enough
  * (< 26) while m[0x31] is set triggers func_L00_0025B178 and m[0x7F] = 21.

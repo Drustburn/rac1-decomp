@@ -231,9 +231,6 @@ void func_L01_002B9E68(f32 *pos, s32 index, s32 mode) {
     }
     func_L01_00263338(mode, value);
 }
-INCLUDE_ASM("asm/overlays", func_L01_002BA150);
-void func_L01_002B9DC0(f32 *pos);
-void func_L01_002B9E68(f32 *pos, s32 index, s32 mode);
 struct DmaTag {
     u32 tag;
     u32 addr;
@@ -248,11 +245,90 @@ union PacketCursor {
     u8 *bytes;
     s32 addr;
 };
+extern union PacketCursor D_L01_00161240 MACRO_ADDR;
+
+typedef int u128_2BA150 __attribute__((mode(TI)));
+extern void func_001FA1C0(float *, float);
+extern void func_001F9C30(void *, void *, float);
+extern void func_00234B48(void *, int);
+extern void func_001FA540(void *, void *, void *);
+extern void func_001FB848(void);
+extern char D_L01_001672C0[];
+extern int D_L01_0015F6C4 MACRO_ADDR;
+extern unsigned short D_0010E800 NOT_SDA;
+extern char D_0010E810[];
+extern char D_L01_0016CF40[];
+extern char D_L01_001CAF00[];
+extern short D_L01_001612B4;
+extern short D_L01_001612A8;
+extern short D_L01_001612AC;
+extern short D_L01_001612B0;
+
+void func_L01_002BA150(void)
+{
+    float m[4][4];
+    struct DmaTag *base;
+    u8 *p;
+    char *camera;
+
+    func_001FA1C0(m, 1024.0f);
+    func_001F9C30(m[3], D_L01_001672C0, -1024.0f);
+    m[3][3] = 1.0f;
+    if (D_L01_0015F6C4 != 7) {
+        func_00234B48(D_0010E810, D_0010E800);
+        D_L01_0015F6C4 = 7;
+    }
+    D_L01_00161240.tag->tag = 0x10000000;
+    D_L01_00161240.tag->addr = 0;
+    D_L01_00161240.tag->vif0 = 0x11000000;
+    D_L01_00161240.tag->vif1 = 0x1000404;
+    base = D_L01_00161240.tag;
+    base[1].tag = 0;
+    base[1].addr = 0;
+    base[1].vif0 = 0;
+    base[1].vif1 = 0x6C0C43A4;
+    func_001FA540(base + 2, D_L01_001672C0 - 0x100, m);
+    func_001FA540(base + 6, D_L01_001672C0 - 0x80, m);
+    base[10].tag = 0x8000;
+    base[10].addr = 0x303EC000;
+    base[10].vif0 = 0x412;
+    camera = D_L01_0016CF40;
+    *(float *)&base[10].vif1 = *(float *)(camera + 0x210);
+    p = (u8 *)(base + 11);
+    qcopy(p, camera + 0x190);
+    p = (u8 *)(base + 12);
+    qcopy(p, camera + 0x1A0);
+    *(float *)&base[13].tag = *(float *)(camera + 0x22C);
+    *(float *)&base[13].addr = *(float *)(camera + 0x228);
+    base[13].vif0 = 0;
+    base[13].vif1 = 0;
+    base[14].addr = 0x20001D2;
+    base[14].vif0 = 0x15000000;
+    base[14].tag = 0x3000000;
+    base[14].vif1 = 0;
+    p = (u8 *)(base + 15);
+    D_L01_00161240.tag->tag |= ((p - (u8 *)D_L01_00161240.tag) >> 4) - 1;
+    D_L01_00161240.bytes = p;
+    func_001FB848();
+    D_L01_00161240.tag->tag = 0x30000007;
+    D_L01_00161240.tag->addr = (u32)D_L01_001CAF00;
+    D_L01_00161240.tag->vif0 = 0;
+    D_L01_00161240.tag->vif1 = 0x50000007;
+    *(unsigned *)&D_L01_001612A8 = 0xFFFFFFFFu;
+    *(unsigned *)&D_L01_001612AC = 0xFFFFFFFFu;
+    *(unsigned *)&D_L01_001612B0 = 0xFFFFFFFFu;
+    *(unsigned *)&D_L01_001612B4 = 0xFFFFFFFFu;
+    D_L01_00161240.tag++;
+}
+#define DmaTag DmaTag_x
+#define PacketCursor PacketCursor_x
+
+void func_L01_002B9DC0(f32 *pos);
+void func_L01_002B9E68(f32 *pos, s32 index, s32 mode);
 extern short D_L01_001612A8;
 extern short D_L01_001612AC;
 extern short D_L01_001612B0;
 extern short D_L01_001612B4;
-extern union PacketCursor D_L01_00161240 MACRO_ADDR;
 void func_L01_002BA150(void);
 extern void func_L01_00262BC0_BA380(void *, void *) __asm__("func_L01_00262BC0");
 extern void func_L01_00262DA8(f32 *);

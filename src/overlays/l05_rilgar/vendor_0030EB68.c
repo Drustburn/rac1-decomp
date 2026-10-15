@@ -2443,7 +2443,247 @@ void func_L05_0031B138(char *moby) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L05_0031B15C);
-INCLUDE_ASM("asm/overlays", func_L05_0031D450);
+extern void func_L00_00203F20(int, int);
+extern void func_L00_002D6CE0(void *);
+#define hero (hero_a[0])
+#define D_001413DC (D_001413DC_a[0])
+#define D_0013D464 (D_0013D464_a[0])
+#define D_0013F64C (D_0013F64C_a[0])
+#define D_0013F65E (*(short *)(D_0013F3D0 + 0x28e))
+#define D_L05_0015FFD8 (D_L05_0015FFD8_a[0])
+extern int D_0015EFA4 MACRO_ADDR;
+typedef struct { unsigned short count, best; int flags; } VendorEventRecord;
+#define D_00141B8C (D_00141968[68].flags)
+#define D_00141BAC (D_00141968[72].flags)
+#define D_00141BF4 (D_00141968[81].flags)
+#define D_00141CFC (D_00141968[114].flags)
+#define D_00141A82 (D_00141968[35].best)
+#define D_00141A88 (D_00141968[36].count)
+#define D_00141A8A (D_00141968[36].best)
+#define D_00141A8C (D_00141968[36].flags)
+#define D_00141A90 (D_00141968[37].count)
+#define D_00141A92 (D_00141968[37].best)
+#define D_00141A94 (D_00141968[37].flags)
+#define D_00141A98 (D_00141968[38].count)
+#define D_00141A9C (D_00141968[38].flags)
+#define D_00141A78 (D_00141968[34].count)
+#define D_00141C58 (D_00141968[94].count)
+#define D_00141C5A (D_00141968[94].best)
+#define D_00141C5C (D_00141968[94].flags)
+#define D_00141B88 (D_00141968[68].count)
+#define D_00141BB8 (D_00141968[74].count)
+typedef struct {
+    unsigned char pad_0[74];
+    unsigned short D_00141892;
+    unsigned char pad_4c[12];
+    unsigned short D_001418A0;
+    unsigned char pad_5a[6];
+    unsigned short D_001418A8;
+    unsigned char pad_62[46];
+    unsigned short D_001418D8;
+    unsigned char pad_92[86];
+    unsigned short D_00141930;
+} L05Fields_00141848;
+#define l05_00141848 (l05_00141848_a[0])
+#define D_00141892 (l05_00141848.D_00141892)
+#define D_001418A8 (l05_00141848.D_001418A8)
+#define D_001418A0 (l05_00141848.D_001418A0)
+#define D_00141930 (l05_00141848.D_00141930)
+#define D_001418D8 (l05_00141848.D_001418D8)
+typedef struct {
+    unsigned char pad_0[82];
+    unsigned short D_00141772;
+    unsigned char pad_54[38];
+    unsigned short D_0014179A;
+    unsigned char pad_7c[6];
+    unsigned short D_001417A2;
+    unsigned char pad_84[6];
+    unsigned short D_001417AA;
+    unsigned char pad_8c[22];
+    unsigned short D_001417C2;
+} L05Fields_00141720;
+#define l05_00141720 (l05_00141720_a[0])
+#define D_001417A2 (l05_00141720.D_001417A2)
+#define D_0014179A (l05_00141720.D_0014179A)
+#define D_001417C2 (l05_00141720.D_001417C2)
+#define D_00141772 (l05_00141720.D_00141772)
+#define D_001417AA (l05_00141720.D_001417AA)
+typedef struct {
+    unsigned char D_0013D388;
+    unsigned char pad_1[12];
+    unsigned char menu_item_enabled_1;
+} L05Fields_0013D388;
+#define l05_0013D388 (l05_0013D388_a[0])
+#define D_0013D388 (l05_0013D388.D_0013D388)
+#define menu_item_enabled_1 (l05_0013D388.menu_item_enabled_1)
+typedef struct {
+    unsigned char pad_0[15];
+    unsigned char D_0013D4CF;
+    unsigned char pad_10[6];
+    unsigned char D_0013D4D6;
+} L05Fields_0013D4C0;
+#define l05_0013D4C0 (l05_0013D4C0_a[0])
+#define D_0013D4D6 (l05_0013D4C0.D_0013D4D6)
+#define D_0013D4CF (l05_0013D4C0.D_0013D4CF)
+#define D_0013E633_x ((char *)&D_0013E633)
+#define D_0014171B_x ((char *)&D_0014171B)
+#define D_0013D355_x D_0013D355
+#define D_0013D50F_x D_0013D50F
+#define is_point_inside_clip_volume ((int (*)(void *, int))func_00215570)
+#define scale_game_frames ((int (*)(int))func_001F9850)
+#define FUN_L00_00203908 func_L00_00203F20
+#define FUN_L00_002d5830 func_L00_002D6CE0
+#define FUN_001f99f8 ((void (*)(void *))func_001F9BC0)
+extern char D_0013F4D0[];
+#define D_0013F3D0 D_0013F4D0
+#define hero_a (&D_0013F450)
+extern int D_001414DC[];
+#define D_001413DC_a D_001414DC
+extern int D_0013D56C[];
+#define D_0013D464_a D_0013D56C
+#define D_0014C050 ((unsigned char *)D_0014C150)
+extern int D_0014EF90[];
+#define D_0014EE90 D_0014EF90
+extern int D_0013F74C[];
+#define D_0013F64C_a D_0013F74C
+#define frame_number (*(int *)&D_L05_0015F6B0)
+#define D_L05_0015FFD8_a ((int *)&D_L05_00160098)
+#define D_L05_0015ED84 (*(int *)&D_0015EE84)
+#define D_L05_0015EEA4 D_0015EFA4
+extern VendorEventRecord D_00141A68[];
+#define D_00141968 D_00141A68
+extern L05Fields_00141848 D_00141948[];
+#define l05_00141848_a D_00141948
+extern L05Fields_00141720 D_00141820[];
+#define l05_00141720_a D_00141820
+extern L05Fields_0013D388 D_0013D490[];
+#define l05_0013D388_a D_0013D490
+extern L05Fields_0013D4C0 D_0013D5C8[];
+#define l05_0013D4C0_a D_0013D5C8
+void func_L05_0031D450(unsigned char *moby) {
+    int *data = *(int **)(moby + 0x78);
+    int value, elapsed, limit;
+    char *pp;
+    moby[0x30] = 0xff;
+
+    if (is_point_inside_clip_volume(D_0013F3D0, data[20])) {
+        if (*(int *)(D_0013F3D0 + 0x200c) == 0x12 && data[26]++ > scale_game_frames(0x168)) {
+            if ((unsigned int)(D_00141B8C & (1 << D_L05_0015ED84)) < 1)
+                FUN_L00_00203908(0x3f0, 0x44);
+        } else if (D_001413DC == 0x11 || menu_item_enabled_1) {
+            D_00141B88 = 0xffff;
+        }
+    }
+    if (is_point_inside_clip_volume(D_0013F3D0, data[16])) {
+        elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141892 * 600;
+        limit = (int)((float)scale_game_frames(0xe10) * 60.0f);
+        if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << D_L05_0015ED84)) < 1)
+            FUN_L00_00203908(0x7dd, 0x48);
+    }
+    if (frame_number < scale_game_frames(60) && D_001418A8 && !D_001418A0 && D_00141BF4 >= 0)
+        FUN_L00_00203908(0x4e27, 0x51);
+    if (frame_number < scale_game_frames(60) && D_00141930) {
+        if (D_00141CFC >= 0) FUN_L00_00203908(0x4e28, 0x72);
+        D_00141930 = 0;
+    }
+    if (!D_0013D4D6) {
+        pp = D_0013F3D0;
+        if (is_point_inside_clip_volume(pp, data[9]) && !*(int *)(pp + 0x27c)) {
+            elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141A82 * 600;
+            limit = (int)((float)scale_game_frames(18) * 60.0f);
+            if (limit < elapsed || D_00141A82 * 600 == 0)
+                FUN_L00_00203908(0x138a, 0x23);
+            else {
+                value = scale_game_frames(D_L05_0015EEA4) / 600;
+                if (D_00141A82 < value)
+                    D_00141A82 = scale_game_frames(D_L05_0015EEA4) / 600;
+            }
+        }
+    }
+    if (D_0013D4D6) {
+        pp = D_0013F3D0;
+        if (is_point_inside_clip_volume(pp, data[9]) && !*(int *)(pp + 0x27c)) {
+            if (D_00141A88 != 0) {
+                elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141A8A * 600;
+                limit = (int)((float)scale_game_frames(18) * 60.0f);
+                if (limit < elapsed || D_00141A8A * 600 == 0)
+                    FUN_L00_00203908(0x138b, 0x24);
+                else {
+                    value = scale_game_frames(D_L05_0015EEA4) / 600;
+                    if (D_00141A8A < value)
+                        D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
+                }
+            } else {
+                D_00141A88++;
+                value = scale_game_frames(D_L05_0015EEA4) / 600;
+                if (D_00141A8A < value)
+                    D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
+                D_00141A8C = D_00141A8C | (1 << D_L05_0015ED84) | 0x80000000;
+            }
+        }
+        if (D_001413DC == 0x13) D_00141A88 = -1;
+    }
+    if (D_00141A98 < 2) {
+        if (D_0014C150[D_L05_0015ED84][data[8]] == 0xff) {
+            if (D_00141A90 < 0xffff)
+                D_00141A90 = D_00141A90 + 1;
+            value = scale_game_frames(D_L05_0015EEA4) / 600;
+            if (D_00141A92 < value)
+                D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
+            D_00141A94 = D_00141A94 | (1 << D_L05_0015ED84) | 0x80000000;
+        } else if (D_0014EE90[data[8]] > 2 && is_point_inside_clip_volume(D_0013F3D0, data[11])) {
+            elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417A2 * 600;
+            if (scale_game_frames(18000) < elapsed) {
+                elapsed = scale_game_frames(D_L05_0015EEA4) - D_0014179A * 600;
+                if (scale_game_frames(18000) < elapsed) {
+                    elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417C2 * 600;
+                    if (scale_game_frames(18000) < elapsed) {
+                        elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141772 * 600;
+                        if (scale_game_frames(18000) < elapsed) {
+                            elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417AA * 600;
+                            if (scale_game_frames(18000) < elapsed && D_00141A9C >= 0)
+                                FUN_L00_00203908(0x138d, 0x26);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (D_0013D388 && D_00141A78 == 0 && D_001413DC == 0x16)
+        FUN_L00_00203908(0x1389, 0x22);
+    if (D_00141C58 == 0) {
+        if (hero.state.current == 10 &&
+            (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
+            if (D_00141C58 < 0xffff)
+                D_00141C58 = D_00141C58 + 1;
+            value = scale_game_frames(D_L05_0015EEA4) / 600;
+            if (D_00141C5A < value)
+                D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
+            D_00141C5C = D_00141C5C | (1 << D_L05_0015ED84) | 0x80000000;
+        }
+        if (hero.state.control_mode == 0x12) {
+            if (is_point_inside_clip_volume(data + 4, data[13]) || is_point_inside_clip_volume(data + 4, data[14])) {
+                FUN_001f99f8(data + 4);
+                data[24]++;
+            }
+        } else if (data[24] > 1 &&
+                   (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14])))
+            FUN_L00_00203908(0x138e, 0x5e);
+    }
+    if (!D_001418D8 && !D_00141BB8 && D_0013D4CF &&
+        is_point_inside_clip_volume(D_0013F3D0, data[18]) && D_0013D464 >= 20)
+        FUN_L00_00203908(20000, 0x4a);
+    value = data[21];
+    if (value != -1 && D_0014C150[D_L05_0015ED84][data[22]] == 0xff &&
+        D_0014C150[D_L05_0015ED84][data[8]] == 0xff &&
+        (frame_number < 5 || (D_0013F64C &&
+          (*(short *)(D_0013F64C + 0xa6) == 0x3e6 || *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
+        FUN_L00_002d5830((void *)(D_L05_0015FFD8 + value * 256));
+        data[21] = -1;
+    }
+    qcopy(data, D_0013F3D0);
+    if (!D_0013F65E) qcopy(data + 4, D_0013F3D0);
+}
 extern void func_L00_00264870(int);
 
 /* UpdateMoby_1550 (names.tsv role). State 0 arms it: state 1 and byte 0x30 = 0xFF. In state 1,
