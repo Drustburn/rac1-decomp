@@ -3480,7 +3480,7 @@ typedef struct {
     f32 f80;
     f32 f84;
     f32 f88;
-} L14CartVars_FD578;
+} Class908Vars_FD578;
 
 extern int func_L00_0025B478_FD578(struct Moby *, int, int) __asm__("func_L00_0025B478");
 extern void func_L00_00260108_FD578(float, float, struct Moby *, void *, int) __asm__("func_L00_00260108");
@@ -3508,7 +3508,7 @@ extern char *D_L14_001B0F30_FD578[] __asm__("D_L14_001B0F30");
 
 /* Adapted from Lombyte (MIT) for PAL: src/overlays/l14/gameplay/entities/002df080.c, FUN_L14_002fc0f0. */
 void func_L14_002FD578(struct Moby *moby) {
-    L14CartVars_FD578 *data = (L14CartVars_FD578 *)moby->pvars;
+    Class908Vars_FD578 *data = (Class908Vars_FD578 *)moby->pvars;
     int hit = func_L00_0025B478_FD578(moby, 0x800000, 0);
     int index;
     int path_index;
