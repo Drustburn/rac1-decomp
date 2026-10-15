@@ -476,7 +476,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L15_002D7C00`](functional/func_L15_002D7C00.c) | functional | 4012 | ? | - |
 | [`func_L15_002E6D48`](shared/func_L15_002E6D48.c) | shared | 1300 | SIZE ours 1288 / retail 1300 | - |
 | [`func_L15_002EDB50`](l15_quartu/func_L15_002EDB50.c) | l15_quartu | 2312 | SIZE ours 2332 / retail 2312 | - |
-| [`func_L15_002EE458`](shared/func_L15_002EE458.c) | shared | 912 | SIZE ours 904 / retail 912 | - |
+| [`func_L15_002EE458`](shared/func_L15_002EE458.c) | shared | 912 | SIZE ours 908 / retail 912 | - |
 | [`func_L18_002EBBF0`](l18_veldin2/func_L18_002EBBF0.c) | l18_veldin2 | 1236 | SIZE ours 1200 / retail 1236 | - |
 | [`func_L18_002F1444`](l18_veldin2/func_L18_002F1444.c) | l18_veldin2 | 204 | SIZE ours 200 / retail 204 | - |
 | [`func_L18_002F9D48`](functional/func_L18_002F9D48.c) | functional | 3732 | ? | - |
