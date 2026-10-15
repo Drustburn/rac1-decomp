@@ -1101,7 +1101,151 @@ void func_L07_0030E128(int arg) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L07_0030E370);
+typedef int Q30E370 __attribute__((mode(TI)));
+extern void func_001F9EC0(void *, void *, void *);
+extern int D_0015EE84 MACRO_ADDR;
+extern char D_0014171B[];
+extern int D_L07_001845A8[];
+extern char *D_L07_00160058 MACRO_ADDR;
+extern float D_0015EE60 MACRO_ADDR;
+
+typedef struct {
+    float origin_x;
+    float origin_y;
+    float origin_z;
+    short sound_slot;
+    signed char trigger_sound;
+    signed char arrival_sound;
+    int target_index;
+    short flag_index;
+    short target_state;
+    int target_state_word;
+    float radius;
+} Vars30E370;
+
+void func_L07_0030E370(unsigned char *moby) {
+    Vars30E370 *vars = *(Vars30E370 **)(moby + 0x78);
+    float origin[4];
+    float rotated[4] __attribute__((aligned(16)));
+    float step[4] __attribute__((aligned(16)));
+    unsigned char *target;
+    short voice;
+    float distance;
+    float step_size;
+
+    origin[0] = vars->origin_x;
+    origin[1] = vars->origin_y;
+    origin[2] = vars->origin_z;
+    origin[3] = 0.0f;
+    if (moby[0xB0] != 0xff && ((unsigned char *)(D_0014171B + 0xAA35))[moby[0xB0] + (D_0015EE84 << 4)] == 0xff)
+        vars->target_index = -1;
+
+    switch (moby[0x20]) {
+    case 0:
+    {
+        float *pos = (float *)(moby + 0x10);
+        vars->origin_x = pos[0];
+        vars->origin_y = pos[1];
+        vars->origin_z = pos[2];
+        vars->sound_slot = -1;
+        if (vars->flag_index != -1)
+            D_L07_001845A8[vars->flag_index] = 0;
+        moby[0x20] = 1;
+        break;
+    }
+    case 1:
+        if (vars->target_index != -1) {
+            target = (unsigned char *)(D_L07_00160058 + vars->target_index * 0x100);
+            if (target != 0 && target[0x20] != 0xfe && target[0x20] != 0xfd &&
+                target[0x20] != vars->target_state)
+                return;
+        }
+        if (vars->trigger_sound != -1)
+            func_0022ED80(vars->trigger_sound, 0, (int)moby);
+        moby[0x20] = 2;
+        break;
+    case 2:
+        if (vars->target_index != -1 &&
+            (target = (unsigned char *)(D_L07_00160058 + vars->target_index * 0x100)) != 0 &&
+            target[0x20] != 0xfe && target[0x20] != 0xfd &&
+            target[0x20] == vars->target_state_word) {
+            func_0022ED80(vars->trigger_sound, 0, (int)moby);
+            moby[0x20] = 4;
+            break;
+        }
+        distance = func_001F9D48((float *)(moby + 0x10), origin);
+        if (vars->radius < distance) {
+            if (vars->arrival_sound != -1)
+                func_0022ED80(vars->arrival_sound, 0, (int)moby);
+            if (vars->flag_index != -1)
+                D_L07_001845A8[vars->flag_index] = 1;
+            moby[0x20] = 3;
+        } else {
+            *(Q30E370 *)step = 0;
+            step[1] = -(D_0015EE60 * 0.01f);
+            *(Q30E370 *)rotated = *(Q30E370 *)step;
+            if (*(short *)(moby + 0xA6) == 0x3f5 || *(short *)(moby + 0xA6) == 0x429)
+                rotated[1] = -rotated[1];
+            func_001F9EC0(step, rotated, moby + 0xC0);
+            func_001F9BD8(moby + 0x10, moby + 0x10, step);
+            return;
+        }
+        break;
+    case 3:
+        if (vars->target_index != -1) {
+            target = (unsigned char *)(D_L07_00160058 + vars->target_index * 0x100);
+            if (target != 0 && target[0x20] != 0xfe && target[0x20] != 0xfd) {
+                if (target[0x20] != vars->target_state_word)
+                    return;
+                if (vars->trigger_sound != -1)
+                    func_0022ED80(vars->trigger_sound, 0, (int)moby);
+                moby[0x20] = 4;
+            }
+        }
+        break;
+    case 4:
+        if (vars->target_index == -1 ||
+            (target = (unsigned char *)(D_L07_00160058 + vars->target_index * 0x100)) == 0 ||
+            target[0x20] == 0xfe || target[0x20] == 0xfd ||
+            target[0x20] == vars->target_state) {
+            func_0022ED80(vars->trigger_sound, 0, (int)moby);
+            moby[0x20] = 2;
+            return;
+        }
+        distance = func_001F9D48((float *)(moby + 0x10), origin);
+        step_size = D_0015EE60 * 0.01f;
+        if (distance <= step_size) {
+            float *p = (float *)(moby + 0x10);
+            p[0] = vars->origin_x;
+            p[1] = vars->origin_y;
+            p[2] = vars->origin_z;
+            p[3] = 0.0f;
+            voice = vars->sound_slot;
+            if (voice != -1) {
+                unsigned char *slot = (unsigned char *)D_0013E633 + 0x1D + voice * 0x70;
+                if (*(unsigned char **)(slot + 0x88) == moby && slot[0x74] != 0)
+                    func_L00_0028EBF0(voice);
+            }
+            vars->sound_slot = -1;
+            if (vars->arrival_sound != -1)
+                func_0022ED80(vars->arrival_sound, 0, (int)moby);
+            if (vars->flag_index != -1)
+                D_L07_001845A8[vars->flag_index] = 0;
+            moby[0x20] = 1;
+            break;
+        }
+        *(Q30E370 *)step = 0;
+        step[1] = step_size;
+        *(Q30E370 *)rotated = *(Q30E370 *)step;
+        if (*(short *)(moby + 0xA6) == 0x3f5 || *(short *)(moby + 0xA6) == 0x429)
+            rotated[1] = -rotated[1];
+        func_001F9EC0(step, rotated, moby + 0xC0);
+        func_001F9BD8(moby + 0x10, moby + 0x10, step);
+        break;
+    case 5:
+        break;
+    }
+}
 extern char D_L07_00208820[];
 extern void func_L02_002A52B0(void *, float);
 extern int func_00215570(void *, int);

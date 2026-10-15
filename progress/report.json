@@ -1,12 +1,12 @@
 {
  "measures": {
-  "fuzzy_match_percent": 87.65275444353709,
+  "fuzzy_match_percent": 87.73948125515784,
   "total_code": "3712808",
-  "matched_code": "3193820",
-  "matched_code_percent": 86.02168493496028,
+  "matched_code": "3197040",
+  "matched_code_percent": 86.10841174658103,
   "total_functions": 5109,
-  "matched_functions": 4520,
-  "matched_functions_percent": 88.47132511254648,
+  "matched_functions": 4523,
+  "matched_functions_percent": 88.53004501859463,
   "complete_code": "611816",
   "complete_code_percent": 16.478525148620665,
   "total_units": 141,
@@ -14203,13 +14203,13 @@
   {
    "name": "game/pause",
    "measures": {
-    "fuzzy_match_percent": 79.0392725355825,
+    "fuzzy_match_percent": 80.31760674749604,
     "total_code": "60704",
-    "matched_code": "47980",
-    "matched_code_percent": 79.0392725355825,
+    "matched_code": "48756",
+    "matched_code_percent": 80.31760674749604,
     "total_functions": 155,
-    "matched_functions": 143,
-    "matched_functions_percent": 92.25806451612904,
+    "matched_functions": 144,
+    "matched_functions_percent": 92.90322580645162,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -14867,7 +14867,7 @@
     {
      "name": "func_00221380",
      "size": "776",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "30584",
      "metadata": {
       "virtual_address": "2233216"
@@ -18282,13 +18282,13 @@
   {
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 77.88207707966164,
+    "fuzzy_match_percent": 77.98835479432431,
     "total_code": "1200628",
-    "matched_code": "913140",
-    "matched_code_percent": 76.05519777982856,
+    "matched_code": "914416",
+    "matched_code_percent": 76.16147549449121,
     "total_functions": 1980,
-    "matched_functions": 1648,
-    "matched_functions_percent": 83.23232323232324,
+    "matched_functions": 1649,
+    "matched_functions_percent": 83.28282828282828,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -31375,7 +31375,7 @@
     {
      "name": "func_L08_002D4B80",
      "size": "1276",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "957944",
      "metadata": {
       "virtual_address": "2968448"
@@ -40223,13 +40223,13 @@
   {
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 90.90525738536155,
+    "fuzzy_match_percent": 92.51460482804232,
     "total_code": "72576",
-    "matched_code": "52976",
-    "matched_code_percent": 72.99382716049382,
+    "matched_code": "54144",
+    "matched_code_percent": 74.60317460317461,
     "total_functions": 80,
-    "matched_functions": 70,
-    "matched_functions_percent": 87.5,
+    "matched_functions": 71,
+    "matched_functions_percent": 88.75,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -40410,7 +40410,7 @@
     {
      "name": "func_L07_0030E370",
      "size": "1168",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "687872",
      "metadata": {
       "virtual_address": "3203952"
@@ -49686,13 +49686,13 @@
    "id": "executable",
    "name": "Executable",
    "measures": {
-    "fuzzy_match_percent": 81.91024264547993,
+    "fuzzy_match_percent": 82.07687352372773,
     "total_code": "465700",
-    "matched_code": "381372",
-    "matched_code_percent": 81.89220528237063,
+    "matched_code": "382148",
+    "matched_code_percent": 82.05883616061843,
     "total_functions": 1680,
-    "matched_functions": 1516,
-    "matched_functions_percent": 90.23809523809524,
+    "matched_functions": 1517,
+    "matched_functions_percent": 90.29761904761905,
     "complete_code": "201380",
     "complete_code_percent": 43.24243074940949
    }
@@ -49701,13 +49701,13 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 88.4763450799912,
+    "fuzzy_match_percent": 88.55161205602033,
     "total_code": "3247108",
-    "matched_code": "2812448",
-    "matched_code_percent": 86.61393461504822,
+    "matched_code": "2814892",
+    "matched_code_percent": 86.68920159107735,
     "total_functions": 3429,
-    "matched_functions": 3004,
-    "matched_functions_percent": 87.60571595217264,
+    "matched_functions": 3006,
+    "matched_functions_percent": 87.66404199475066,
     "complete_code": "410436",
     "complete_code_percent": 12.640047697828345
    }
@@ -49716,13 +49716,13 @@
    "id": "game",
    "name": "Executable game code",
    "measures": {
-    "fuzzy_match_percent": 81.49979796560145,
+    "fuzzy_match_percent": 81.67020958872824,
     "total_code": "455368",
-    "matched_code": "371040",
-    "matched_code_percent": 81.48135134660319,
+    "matched_code": "371816",
+    "matched_code_percent": 81.65176296972997,
     "total_functions": 1646,
-    "matched_functions": 1482,
-    "matched_functions_percent": 90.03645200486027,
+    "matched_functions": 1483,
+    "matched_functions_percent": 90.09720534629405,
     "complete_code": "191048",
     "complete_code_percent": 41.954638885472846
    }
@@ -49746,13 +49746,13 @@
    "id": "common",
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 77.88207707966164,
+    "fuzzy_match_percent": 77.98835479432431,
     "total_code": "1200628",
-    "matched_code": "913140",
-    "matched_code_percent": 76.05519777982856,
+    "matched_code": "914416",
+    "matched_code_percent": 76.16147549449121,
     "total_functions": 1980,
-    "matched_functions": 1648,
-    "matched_functions_percent": 83.23232323232324,
+    "matched_functions": 1649,
+    "matched_functions_percent": 83.28282828282828,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49761,13 +49761,13 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 94.69178564168719,
+    "fuzzy_match_percent": 94.7488592510066,
     "total_code": "2046480",
-    "matched_code": "1899308",
-    "matched_code_percent": 92.80852976818733,
+    "matched_code": "1900476",
+    "matched_code_percent": 92.86560337750674,
     "total_functions": 1449,
-    "matched_functions": 1356,
-    "matched_functions_percent": 93.58178053830228,
+    "matched_functions": 1357,
+    "matched_functions_percent": 93.65079365079364,
     "complete_code": "410436",
     "complete_code_percent": 20.05570540635628
    }
@@ -49881,13 +49881,13 @@
    "id": "level_07",
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 90.90525738536155,
+    "fuzzy_match_percent": 92.51460482804232,
     "total_code": "72576",
-    "matched_code": "52976",
-    "matched_code_percent": 72.99382716049382,
+    "matched_code": "54144",
+    "matched_code_percent": 74.60317460317461,
     "total_functions": 80,
-    "matched_functions": 70,
-    "matched_functions_percent": 87.5,
+    "matched_functions": 71,
+    "matched_functions_percent": 88.75,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
