@@ -2341,7 +2341,213 @@ void func_L13_00309330(struct Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L13_0030A1C8);
+/* NON_MATCHING func_L13_0030A1C8 -- src/overlays/l13_gemlik/vendor_002EBD00.c
+ * Best so far: SIZE ours 1648 / retail 1632, checked 2026-10-09.
+ * Not built into anything: the retail assembly stays in the source file
+ * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
+ * What the last attempts found:
+ *   Level 13 moby update: effect state machine on moby[0x20] with a 12-way jump table on a value from func_0025B4D
+ *   Best by size: p3.c (1648 vs 1632, 16 over). Cases 3-10 before 1/2 and the f20 branch sense match retail's layo
+ *   Unblock: the saved-register set (regalloc.py on p3.c) and the 0x1A4/0x164 store shape around func_00215570.
+ */
+extern void func_L13_0030A9B0(Moby *);
+extern void func_L00_0025D5B0(void *, void *, float, int, int, int);
+extern int func_L00_00260FB0(void *, void *, float, int, int, void *, int);
+extern float func_00214358(void *, int, float);
+extern int func_L00_001F3958(void);
+extern char D_L13_00160700[] MACRO_ADDR;
+extern char D_L13_001741C0[] MACRO_ADDR;
+extern short D_L13_00161EE8;
+extern short D_L13_00161EF0;
+extern short D_L13_00161EF4;
+extern short D_L13_00161EF8;
+extern short D_L13_00161EFC;
+
+struct WalkerVars_a1c8 {
+    u8 pad0[0x20];
+    float health;
+    u8 pad24[2];
+    short stun_timer;
+    u8 pad28[0x10];
+    int init;
+    u8 pad3C[0x24];
+    u8 anim[8];
+    float fall_speed;
+    u8 pad6C[0xC];
+    float knock_up;
+    float knock_back;
+    int hit_sound;
+    u8 pad84[4];
+    float hit_scale;
+    u8 pad8C[0x24];
+    float knock_min;
+    float knock_max;
+    u8 padB8[0x58];
+    u8 flash[7];
+    u8 flash_time;
+    u8 pad118[8];
+    float target[4];
+    u8 pad130[0x30];
+    int start_frame;
+    int mode;
+    u8 pad168[8];
+    float home[4];
+    int path;
+    int idle_timer;
+    u8 pad188[8];
+    float range;
+    u8 pad194[8];
+    float near_range;
+    float far_range;
+    int target_moby;
+};
+
+void func_L13_0030A1C8(Moby *moby)
+{
+    struct WalkerVars_a1c8 *vars = (struct WalkerVars_a1c8 *)moby->pvars;
+    char *hit;
+    int code;
+    int kind;
+    float damage;
+    float ground;
+    int *path;
+    float push[4];
+    int st;
+
+    moby->scale = moby->pclass->scale * *(float *)&D_L13_00161EE8;
+    func_L13_0030A9B0(moby);
+    if (vars->init != 0) {
+        vars->idle_timer = func_001FA898(func_001F9878(func_002140F8(180.0f, 240.0f)));
+        vars->init = 0;
+    }
+    func_001F9908(&vars->idle_timer);
+    damage = 0.0f;
+    hit = func_L00_0025B478(moby, 0x330000, 0);
+    code = func_L00_0025B4D0(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    if (kind != 1 && moby->state != 0x10) {
+        if (hit != 0 && *(Moby **)(hit + 0x20) != 0 && (*(Moby **)(hit + 0x20))->oclass == 0x4EE) {
+            damage = 0.0f;
+        }
+        vars->health -= damage;
+        if (vars->health <= 0.0f) {
+            code = 1;
+        }
+        vars->hit_sound = 0x2CD;
+        vars->hit_scale = 0.7f;
+        switch (code) {
+        case 0:
+        case 11:
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+            {
+            float ku, kb;
+            moby->state = 0xF;
+            st = func_001F9850(0x3C);
+            ku = *(float *)&D_L13_00161EF0 * D_0015EE6C;
+            kb = *(float *)&D_L13_00161EF4 * D_0015EE6C;
+            vars->stun_timer = st;
+            vars->knock_up = ku;
+            vars->knock_back = kb;
+            vars->knock_min = 8.0f;
+            vars->knock_max = 15.0f;
+            func_L00_0025D5B0(moby, vars->anim, func_L00_001FF860(*(float *)(hit + 0x10), *(float *)(hit + 0x14)), 7, 1, 0);
+            vars->flash_time = 0xFA;
+            }
+            break;
+        case 1:
+        case 2:
+            {
+            float ku, kb;
+            moby->state = 0x10;
+            ku = *(float *)&D_L13_00161EF8 * D_0015EE6C;
+            kb = *(float *)&D_L13_00161EFC * D_0015EE6C;
+            moby->flags &= ~0x1000;
+            vars->knock_up = ku;
+            vars->knock_min = 9.0f;
+            vars->knock_back = kb;
+            vars->knock_max = 17.0f;
+            func_L00_0025D5B0(moby, vars->anim, func_L00_001FF860(*(float *)(hit + 0x10), *(float *)(hit + 0x14)), 8, 1, 0);
+            vars->flash_time = 0xFA;
+            func_L00_002584A8(moby, 0, -1);
+            }
+            break;
+        }
+        func_L00_0025E4B0(moby, (short *)vars->flash);
+    }
+    moby->unkA4 = 0xFF;
+    func_L00_0025E590(moby, vars->flash);
+    if (vars->idle_timer != 0) {
+        vars->range = vars->far_range;
+    } else {
+        vars->range = vars->near_range;
+    }
+    path = (int *)D_L13_001B0AB0[vars->path];
+    if (func_L00_00260FB0(moby, vars->target, vars->range, 0, 0, path + 4, *path) != 2) {
+        if (vars->range < func_001F9D48(vars->home, vars->target)
+            || func_001F9B88(moby->pos.z - vars->target[2]) > 3.0f) {
+            vars->mode = 2;
+        }
+        if (vars->target_moby != -1 && func_00215570(vars->target, vars->target_moby) == 0) {
+            vars->mode = 2;
+        } else {
+            vars->target_moby = -1;
+        }
+    }
+    if (vars->start_frame == 0) {
+        vars->start_frame = *(int *)(D_0013E633 + 0x2E9D);
+    }
+    ground = func_00214358(&moby->pos, 0, 0.5f);
+    if (ground != 0.0f) {
+        switch (func_L00_001F3958()) {
+        case 0:
+        case 1:
+        case 3:
+        case 11:
+        case 13:
+            moby->flags &= ~0x1000;
+            func_L00_002584A8(moby, 0, -1);
+            func_L00_0025F4A8(moby, D_L13_00160700, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+            func_0020D678(moby);
+            return;
+        default:
+            if (moby->state < 0xF) {
+                char *g = D_L13_001741C0;
+
+                if (func_L00_001FF860(*(float *)(g + 0x48), func_001F9CE8(g + 0x40)) > 0.6981317f) {
+                    func_L00_001FF4B0(push, g + 0x40, 0.05f);
+                    func_001F9BD8(&moby->pos, &moby->pos, push);
+                }
+                if (ground < moby->pos.z) {
+                    vars->fall_speed -= D_0015EE70 * 9.8f;
+                    moby->pos.z += vars->fall_speed;
+                    if (moby->pos.z < ground) {
+                        vars->fall_speed = 0.0f;
+                        moby->pos.z = ground;
+                    }
+                } else if (moby->pos.z < ground) {
+                    moby->pos.z += 0.05f;
+                }
+            }
+            break;
+        }
+    } else {
+        if (moby->state < 0xF) {
+            vars->fall_speed -= D_0015EE70 * 9.8f;
+            moby->pos.z += vars->fall_speed;
+        }
+    }
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f
+        || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+        func_0020D678(moby);
+    }
+}
 extern float func_00214358(void *,int,float);
 extern void func_L00_001FF4B0(void *,void *,float);
 extern void func_L00_00250800(void *,int,void *);
