@@ -32,6 +32,7 @@ The following functions adapt source from
 - `src/overlays/l05_rilgar/vendor_002D28D0.c`: `func_L05_003054B0` (path collision and nearest wall distance; adapts this project's matched `func_L00_00262DF0`, based on Lombyte's `src/overlays/shared/gameplay/state/00261968.c`, `FUN_L00_00261d78`, MIT; the distance tracking and return follow the PAL assembly)
 - `src/overlays/shared/mobyfunc_0024FD50.c`: `func_L00_00250478` (animation frame packet builder; `overlays/shared/gameplay/state/0024eec0.c`, `FUN_L00_0024f440`)
 - `src/overlays/shared/vendor_002E1660.c`: `func_L00_002E72E8` (follow camera approach; `overlays/shared/gameplay/vendor/002e5e38.c`, `follow_camera_approach` / `FUN_L00_002e5e38`)
+- `src/overlays/shared/vendor_002E1660.c`: `func_L00_002E99A0` (follow camera offset and scale; `src/overlays/shared/gameplay/vendor/002df730.c`, `follow_camera_set_offset_scale` / `FUN_L00_002e84f0`)
 - `src/core/00119328.c`: `func_001194C8` (`topThread`)
 - `src/game/stream.c`: `func_00217AE8` (menu entry transitions and message formatting; `src/ui/menus/fun_00216c48.c`)
 - `src/core/00119D88.c`: `func_0011C208` (`sceClose`)
