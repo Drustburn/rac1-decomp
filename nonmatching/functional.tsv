@@ -163,7 +163,6 @@ func_L00_002A62D0	nonmatching/functional/func_L00_002A62D0.c
 func_L11_0031A738	nonmatching/functional/func_L11_0031A738.c
 func_L10_002EA578	nonmatching/functional/func_L10_002EA578.c
 func_L05_002F9BA0	nonmatching/functional/func_L05_002F9BA0.c
-func_L15_002E6D48	nonmatching/functional/func_L15_002E6D48.c
 func_L05_0030DA08	nonmatching/functional/func_L05_0030DA08.c
 func_L15_002D7C00	nonmatching/functional/func_L15_002D7C00.c
 func_L00_002777C0	nonmatching/functional/func_L00_002777C0.c
@@ -275,12 +274,10 @@ func_L04_00296938	nonmatching/l04_eudora/func_L04_00296938.c
 func_L06_002F71A8	nonmatching/l06_blarg/func_L06_002F71A8.c
 func_L06_003010E0	nonmatching/l06_blarg/func_L06_003010E0.c
 func_L06_00303858	nonmatching/l06_blarg/func_L06_00303858.c
-func_L06_00304B88	nonmatching/l06_blarg/func_L06_00304B88.c
 func_L06_00305E38	nonmatching/l06_blarg/func_L06_00305E38.c
 func_L07_00313D28	nonmatching/l07_umbris/func_L07_00313D28.c
 func_L08_002D36F8	nonmatching/l08_batalia/func_L08_002D36F8.c
 func_L08_002F7318	nonmatching/l08_batalia/func_L08_002F7318.c
-func_L09_0030AFB8	nonmatching/l09_gaspar/func_L09_0030AFB8.c
 func_L10_002E4E50	nonmatching/l10_orxon/func_L10_002E4E50.c
 func_L10_002E9718	nonmatching/l10_orxon/func_L10_002E9718.c
 func_L12_00304038	nonmatching/functional/func_L12_00304038.c
