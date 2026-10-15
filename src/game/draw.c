@@ -2494,7 +2494,54 @@ void func_001F7648(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, i
     s[11] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_001F7680);
+extern int D_0015EF84 MACRO_ADDR;
+extern int D_0013E604[];
+#define PK ((unsigned char *)D_00161000)
+
+void func_001F7680(unsigned int source) {
+    int remaining = D_0013E604[0];
+    int destination = D_0015EF84 >> 8;
+    unsigned long count;
+    unsigned long transfer;
+    unsigned char *packet;
+    unsigned long *words;
+
+    do {
+        count = (long)remaining;
+        if (count > 0x80)
+            count = 0x80;
+        *(unsigned int *)(PK + 0) = 0x10000006;
+        remaining -= 0x80;
+        *(unsigned int *)(PK + 4) = 0;
+        *(unsigned int *)(PK + 8) = 0;
+        *(unsigned int *)(PK + 12) = 0x50000006;
+        packet = PK;
+        D_00161000 = (int *)(packet + 0x10);
+        transfer = (unsigned long)count << 7;
+        words = (unsigned long *)(packet + 0x10);
+        words[0] = 0x4000000000000001UL;
+        words[1] = 0x0eeeeeee;
+        words[2] = ((unsigned long)(unsigned int)destination << 32) | 0x8000000000000UL;
+        words[3] = 0x50;
+        words[4] = 0;
+        words[5] = 0x51;
+        words[6] = ((unsigned long)count << 32) | 0x200;
+        words[7] = 0x52;
+        words[8] = 0;
+        words[9] = 0x53;
+        words[10] = transfer | 0x0800000000008000UL;
+        words[11] = 0;
+        D_00161000 = (int *)(packet + 0x70);
+        *(unsigned int *)(packet + 0x70) = (unsigned int)(long)(int)(transfer | 0x30000000);
+        *(unsigned int *)(PK + 4) = source;
+        source += (int)(count * 0x800);
+        destination += (int)(count * 8);
+        *(unsigned int *)(PK + 8) = 0;
+        *(unsigned int *)(PK + 12) = (unsigned int)transfer | 0x50000000;
+        D_00161000 = (int *)(PK + 0x10);
+    } while (remaining > 0);
+    func_00234E80();
+}
 
 extern short D_0015F448;              /* SDA, gp -0x78B8 */
 extern unsigned short D_0010E800 NOT_SDA;
