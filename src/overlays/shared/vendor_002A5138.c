@@ -249,7 +249,7 @@ extern void func_L00_001FFED8(void *, int, float);
 extern float func_L00_001FF860(float, float);
 extern int func_00215F80(int, int);
 extern void func_L00_0029BA20(void *);
-extern void func_L00_002A62D0(char *);
+extern void func_L00_002A62D0(void);
 extern int D_L00_0015F6B0 MACRO_ADDR;
 extern short D_L00_0016146C;
 extern short D_L00_00161464;
