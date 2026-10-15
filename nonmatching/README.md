@@ -429,7 +429,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L08_00303998`](shared/func_L08_00303998.c) | shared | 1440 | SIZE ours 1456 / retail 1440 | - |
 | [`func_L08_00318468`](shared/func_L08_00318468.c) | shared | 648 | SIZE ours 644 / retail 648 | - |
 | [`func_L09_0030AFB8`](l09_gaspar/func_L09_0030AFB8.c) | l09_gaspar | 1580 | SIZE ours 1556 / retail 1580 | - |
-| [`func_L10_00299D18`](l10_orxon/func_L10_00299D18.c) | l10_orxon | 1232 | SIZE ours 1220 / retail 1232 | - |
 | [`func_L10_002BFBB8`](functional/func_L10_002BFBB8.c) | functional | 1936 | ? | - |
 | [`func_L10_002DBA50`](functional/func_L10_002DBA50.c) | functional | 1368 | ? | - |
 | [`func_L10_002DE018`](functional/func_L10_002DE018.c) | functional | 948 | ? | - |
