@@ -16,6 +16,7 @@ The following functions adapt source from
 - `src/overlays/l12_hoven/vendor_002EDAA0.c`: `func_L12_003061E0` (`src/overlays/l12/gameplay/vendor/003028c8.c`, `FUN_L12_00304e00`)
 - `src/overlays/l15_quartu/vendor_0029C1D0.c`: `func_L15_002A8AA8` (`src/overlays/l15/gameplay/entities/0029aff0.c`, `FUN_L15_002a7880`)
 - `src/overlays/l18_veldin2/vendor_002A8400.c`: `func_L18_002D96B0` (`src/overlays/l18/gameplay/entities/002a7220.c`, `FUN_L18_002d82c0`)
+- `src/overlays/l18_veldin2/vendor_002A8400.c`: `func_L18_002F1420` (`src/overlays/l18/gameplay/vendor/002efb88.c`, `FUN_L18_002f0030`)
 - `src/overlays/l18_veldin2/vendor_002F9D48.c`: `func_L18_002FB318` (`src/overlays/l18/gameplay/vendor/002f88e8.c`, `FUN_L18_002f9eb8`)
 - `src/overlays/shared/mobyfunc_002649C8.c`: `func_L01_002649D8` (`src/overlays/shared/gameplay/state/00263a28.c`, `FUN_L01_00263a28`)
 - `src/overlays/shared/mobyutil_00258BC8.c`: `func_L00_0025A8E8` (`src/overlays/shared/gameplay/entities/00259710.c`, `FUN_L00_002598b0`)
