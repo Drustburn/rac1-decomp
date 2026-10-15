@@ -20,7 +20,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_0024A60C`](shared/func_L00_0024A60C.c) | shared | 76 | BYTES 2/76 | 97.4% |
 | [`func_L12_003078C8`](l12_hoven/func_L12_003078C8.c) | l12_hoven | 832 | BYTES 22/832 | 97.4% |
 | [`func_L07_00319230`](l07_umbris/func_L07_00319230.c) | l07_umbris | 4044 | BYTES 126/4044 | 96.9% |
-| [`func_L04_002CB800`](l04_eudora/func_L04_002CB800.c) | l04_eudora | 4972 | BYTES 159/4972 | 96.8% |
 | [`func_L00_001F4918`](shared/func_L00_001F4918.c) | shared | 4932 | BYTES 169/4932 | 96.6% |
 | [`func_L18_002FD5C0`](l18_veldin2/func_L18_002FD5C0.c) | l18_veldin2 | 988 | BYTES 36/988 | 96.4% |
 | [`func_L00_001F8750`](shared/func_L00_001F8750.c) | shared | 116 | BYTES 6/116 | 94.8% |
