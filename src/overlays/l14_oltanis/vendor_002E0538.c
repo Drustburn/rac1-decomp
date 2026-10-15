@@ -3259,7 +3259,26 @@ void func_L14_002F25C8(char *moby)
     *(float *)(data + 0xD4) = x * k;
     *(float *)(data + 0xD8) = y * k;
 }
-INCLUDE_ASM("asm/overlays", func_L14_002F2778);
+extern int D_L14_001600B4 MACRO_ADDR;
+extern unsigned short *D_L14_001AC2C0[];
+Moby *func_L14_002F2778(char *moby, int tag) {
+    unsigned short *p;
+    char *pool;
+    int idx;
+    int g = *(unsigned char *)(moby + 0x21);
+    if (g < D_L14_001600B4 && (p = D_L14_001AC2C0[g]) != 0) {
+        pool = (char *)D_L14_00160098;
+        do {
+            idx = *p & 0x7FFF;
+            if (*(short *)(*(char **)((idx << 8) + (int)pool + 0x78) + 0xB4) == tag) {
+                goto found;
+            }
+        } while ((short)*p++ >= 0);
+    }
+    return 0;
+found:
+    return (Moby *)((char *)D_L14_00160098 + (idx << 8));
+}
 extern void func_00215F80(int, int);
 
 /* Vendor text: pick the message from the vendor data state. */

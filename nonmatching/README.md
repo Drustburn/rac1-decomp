@@ -26,7 +26,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_002366DC`](shared/func_L00_002366DC.c) | shared | 48 | BYTES 3/48 | 93.8% |
 | [`func_L18_002DD8A8`](l18_veldin2/func_L18_002DD8A8.c) | l18_veldin2 | 1116 | BYTES 74/1116 | 93.4% |
 | [`func_L18_002DCE10`](l18_veldin2/func_L18_002DCE10.c) | l18_veldin2 | 1116 | BYTES 75/1116 | 93.3% |
-| [`func_L14_002F2778`](l14_oltanis/func_L14_002F2778.c) | l14_oltanis | 104 | BYTES 9/112 | 92.0% |
 | [`func_L15_002F8D9C`](l15_quartu/func_L15_002F8D9C.c) | l15_quartu | 12 | BYTES 1/12 | 91.7% |
 | [`func_L18_002F1420`](l18_veldin2/func_L18_002F1420.c) | l18_veldin2 | 36 | BYTES 20/240 | 91.7% |
 | [`func_L00_001F3980`](shared/func_L00_001F3980.c) | shared | 8 | BYTES 1/8 | 87.5% |

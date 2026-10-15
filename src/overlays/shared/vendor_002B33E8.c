@@ -1789,7 +1789,7 @@ extern s32 func_L00_00258BC8(s32, s32);
 extern void func_00213DE0_B8208(Moby *, s32, s32, s32) __asm__("func_00213DE0");
 extern s32 func_0022ED80_B8208(s32, s32, Moby *) __asm__("func_0022ED80");
 extern s32 func_001FA898(f32);
-extern void func_L00_002B7EC0(Moby *, f32);
+extern int func_L00_002B7EC0(Moby *, f32);
 extern void func_L00_0028EBF0(s32);
 extern void func_L00_002B8690(Moby *);
 typedef struct { u8 p0[0x10A0]; u32 w10A0; u8 p10A4[0x10]; u32 w10B4; u8 p10B8[0x20AC-0x10B8]; u8 b20AC; } GS;
