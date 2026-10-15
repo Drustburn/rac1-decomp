@@ -2563,7 +2563,48 @@ void func_L12_00307730(struct Moby *moby, int slot) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L12_003078C8);
-INCLUDE_ASM("asm/overlays", func_L12_00307C08);
+extern int D_L12_0015F6B0 MACRO_ADDR;
+extern int func_001FA898(float);
+extern float func_001FA888(int);
+
+void func_L12_00307C08(char *moby) {
+    int i;
+    int alpha = 0x80000000;
+    char *data = *(char **)(moby + 0x78);
+    for (i = 0; i < 18; i++) {
+        char *other;
+        int period;
+        float sine;
+        float color;
+        int red;
+        int green;
+        int blue;
+        int packed_color;
+        float phase;
+        float divisor;
+        if (i == 17) {
+            other = moby;
+        } else {
+            other = (char *)D_L12_00160058_303CA8 + ((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8);
+        }
+        if (*(short *)(other + 0xA6) == 0x4FE) continue;
+        {
+            period = func_001F9850(0xAA);
+            divisor = func_001FA888(period);
+            phase = (float)(D_L12_0015F6B0 % period) / divisor;
+            sine = func_001F9FA8((phase + phase) * 3.1415927f + -3.1415927f);
+            color = sine * 70.0f;
+            red = func_001FA898(color);
+            green = func_001FA898(color);
+            blue = func_001FA898(sine * 10.0f);
+            packed_color = ((blue + 0x46) << 16) | alpha |
+                ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8) |
+                (red + 0xB4 > 0xFF ? 0xFF : red + 0xB4);
+            *(unsigned short *)(other + 0x34) |= 0x10;
+            *(int *)(other + 0x90) = packed_color;
+        }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L12_00307DB0);
 extern float func_002140F8(float, float);
 extern void func_L00_0026ED30(float, void *, int);
