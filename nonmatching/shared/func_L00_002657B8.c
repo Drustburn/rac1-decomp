@@ -3,9 +3,10 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15 cnobis: state read once per round (u8 local) and D_L00_001600A4/D_L00_00160098 MACRO_ADDR match ret
- *   Only the update call differs: retail "beqz fn; nop; daddu a0; jalr fn; nop", ours fills both slots (beql + lhu
- *   Tried fn local/cast/unprototyped, for/while/continue, if/else order, separate loop vars: all 256 of 260.
+ *   2026-10-15 cnobis: state read once per round (u8 local) and D_L00_001600A4/D_L00_00160098 MACRO_ADDR match
+ *   retail. Only the update call differs: retail "beqz fn; nop; daddu a0; jalr fn; nop", ours fills both slots
+ *   (beql + lhu). Tried fn local/cast/unprototyped, for/while/continue, if/else order, separate loop vars: all
+ *   256 of 260.
  */
 
 /*

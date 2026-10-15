@@ -3,10 +3,11 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15 cnobis: right size with hero.items[i] slots (slot pointer), switch on state, index loop over unk18F
- *   State 3 as one call "if ((obj[0x70] & 2) || i == 1 || i == 0)" gives retail's single call site and size.
- *   Left: retail recomputes the hero base each round and builds the slot base with mtlo/madd, ours hoists it (mult
- *   madd appears in matched C only for "global_array + i * 0x50" passed on (func_L00_002BC860); byte and typed for
+ *   2026-10-15 cnobis: right size with hero.items[i] slots (slot pointer), switch on state, index loop over
+ *   unk18F0[3]. State 3 as one call "if ((obj[0x70] & 2) || i == 1 || i == 0)" gives retail's single call site
+ *   and size. Left: retail recomputes the hero base each round and builds the slot base with mtlo/madd, ours
+ *   hoists it (mult+addu). madd appears in matched C only for "global_array + i * 0x50" passed on
+ *   (func_L00_002BC860); byte and typed forms here stay mult.
  */
 extern int D_L00_0015F4F8_10E00 __asm__("D_L00_0015F4F8") MACRO_ADDR;
 extern void func_L00_00210558(int);
