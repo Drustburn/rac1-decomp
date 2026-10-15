@@ -3,7 +3,11 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15: the hero through Hero (state.current, moby->flags, unk22C8, unk640[3]) and the transform loop as a
+ *   2026-10-15: the hero through Hero (state.current, moby->flags, unk22C8, unk640[3]) and the transform loop
+ *   as an index loop over D_L00_001E6290/D_L00_001E6280 (i from 1 to 9) give 672 of 680 bytes. The loop body
+ *   now matches. Left: retail keeps a in $16, reuses $16 for &s[3] after a dies, then copies it to $20 for the
+ *   loop and counts in $16. Ours keeps &s[3] in its own saved register. Passing &s[3] directly instead of h
+ *   changes nothing.
  */
 #include "hero.h"
 extern Hero hero_2DF168 __asm__("D_0013F450");

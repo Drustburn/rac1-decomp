@@ -3,7 +3,13 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15: rewritten without goto. The save block at D_L00_001BB5C0 is a struct (PauseSave), read directly so
+ *   2026-10-15: rewritten without goto. The save block at D_L00_001BB5C0 is a struct (PauseSave), read
+ *   directly so retail's kept %hi comes out, the hero through Hero (motion.pos, motion.rot, moby re-read per
+ *   store), the voice block as D_0013E650 (a separate symbol, so gcc no longer derives it from the hero's
+ *   address), the kind as a switch with default, and the moby search as an index loop. Size 436 = retail,
+ *   BYTES 46/436. Left: in the voice block retail loads the bytes 0x40-0x42 into t0/a1/a2 and the sound
+ *   halfword last. Ours loads the halfword first and uses other registers, and the loop keeps e and i in other
+ *   registers. A local voice pointer and the loop with the assignment in its condition change nothing.
  */
 #include "common.h"
 #include "hero.h"

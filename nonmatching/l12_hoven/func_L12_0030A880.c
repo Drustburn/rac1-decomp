@@ -3,7 +3,13 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15: the index select. Every plain form (ternary, default then override, if/else, short or int index, f
+ *   2026-10-15: the index select. Every plain form (ternary, default then override, if/else, short or int
+ *   index, function-scope index) compiles to xori/movn. Retail branches. A `static inline unsigned char`
+ *   helper returning 2 or 0 keeps the branch (the subreg lever in DECOMP_PROGRESS.md). With it inline in the
+ *   subscript (variant p) only two instructions are missing: retail keeps the %hi of D_L12_0016CD60 in $4 and
+ *   rebuilds the base at the call as `addiu %lo` then `addiu 0x178`. Ours folds both into one addiu. Putting
+ *   the index in its own local threads the jump (BYTES 10/152, same size). A list pointer at function scope
+ *   gets hoisted. Not tried: GCSE-sensitive forms that reference the global in two separate blocks.
  */
 #include "common.h"
 extern int D_L12_0015F6A8 MACRO_ADDR;

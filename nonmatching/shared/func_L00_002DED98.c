@@ -3,7 +3,13 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15: BYTES 4/948. Three changes got here: the 0.3f step in a local (`step = 0.3f;` right before `a += s
+ *   2026-10-15: BYTES 4/948. Three changes got here: the 0.3f step in a local (`step = 0.3f;` right before `a
+ *   += step`, so the pre-loop add and the loop share one register as in retail), the colour loop as an index
+ *   loop `for (k = 0; k < 2; k++)` over s.col[k * 2] (GCC derives the pointer and the down counter itself,
+ *   after the hoisted constants, as retail does), and the row reads in retail's order (y = D_L00_001E6358[i -
+ *   1] before v = [i]). Left: the spill slots of the two row pointers are swapped (ours [i-1] at 0xD0, retail
+ *   at 0xD4). Reading v first, other spellings of [i - 1] and declaration orders do not swap them. Retail
+ *   computes &D[i-1] first at the top of the row yet gives it the higher slot.
  */
 extern short D_L00_001E6358[];
 extern short D_L00_00161C18;

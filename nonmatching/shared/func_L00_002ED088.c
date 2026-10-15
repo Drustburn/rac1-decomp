@@ -3,7 +3,12 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15: the hero as a local struct (moby 0x2080, state 0x2084, unk964, unk994, unk9AC; the file cannot inc
+ *   2026-10-15: the hero as a local struct (moby 0x2080, state 0x2084, unk964, unk994, unk9AC; the file cannot
+ *   include hero.h because it defines its own Vec4) brings the size to retail's 664, BYTES 87/664. Retail
+ *   keeps the hero's %hi in $a1 from the prologue and rebuilds the address twice. Left: retail loads
+ *   D_0015EE84 and the hero's %hi before the m+0x70 load and the zero store (a float zero store does not
+ *   change that), and the constants of the q + 0xA0 block load in another order. The if/else with a store in
+ *   each arm is right: `f = 1.5f; if (...) f = 2.0f;` loses retail's duplicated store (660 bytes).
  */
 #include "common.h"
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;

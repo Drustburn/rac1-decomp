@@ -3,9 +3,13 @@
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-15: func_L00_001EAD88 is one function of 1044 bytes in six catalogue pieces (joined: EADE8 EADEC EB0A0
- *   Needed: tools/jump_tables.py and tools/overlay_check.py read a joined function's pieces for its jump table; an
- *   best.c: BYTES 2/1044. The pointer to the channel is set after the type test. Left: count and sum_count sit in 
+ *   2026-10-15: one function of 1044 bytes in six catalogue pieces (joined.tsv). Updates eight pulse channels
+ *   at D_L00_00166100 (16 bytes each) and averages them into out[0..1]. Its switch has six cases (none,
+ *   square, triangle, ramp up, ramp down, FastCos pulse). Needed: the jump table tools read joined pieces, an
+ *   explicit case 0, timers life/delay/time through D_L00_00166100[i], the pointer set after the type test,
+ *   amp converted once. BYTES 2/1044: count and sum_count get swapped saved registers. Their address pseudos
+ *   (sp+0x10, sp+0x20) tie, and ours always numbers sp+0x10 first. No declaration order, init order, arm order
+ *   or acc[3][4] array changes it.
  */
 #include "common.h"
 extern float func_001FA888(int);
