@@ -60,7 +60,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_00129690`](functional/func_00129690.c) | functional | 0 | ? | - |
 | [`func_00129CA0`](core/func_00129CA0.c) | core | 0 | ? | - |
 | [`func_00129E30`](functional/func_00129E30.c) | functional | 0 | ? | - |
-| [`func_00129F40`](core/func_00129F40.c) | core | 0 | ? | - |
 | [`func_0012A0F8`](core/func_0012A0F8.c) | core | 0 | ? | - |
 | [`func_0012A558`](functional/func_0012A558.c) | functional | 0 | ? | - |
 | [`func_0012A7E8`](functional/func_0012A7E8.c) | functional | 0 | ? | - |
