@@ -2783,7 +2783,7 @@ extern short D_L18_00161F70;
 extern void func_L18_002EBBF0(void *);
 extern void func_L18_002EC0C8(void *);
 extern void func_L18_002EC290(void *);
-extern void func_L18_002EB5E8(void);
+extern void func_L18_002EB5E8(char *);
 extern void func_L00_0025A8E8_2EB260(int, void *, float, int, float, float, int, int, int) __asm__("func_L00_0025A8E8");
 
 void func_L18_002EB260(char *moby) {
