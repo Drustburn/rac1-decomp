@@ -776,7 +776,41 @@ void func_L00_0029AD18(void) {
     func_00120F30(0);
     func_L00_0029AB38();
 }
-INCLUDE_ASM("asm/overlays", func_L00_0029ADD8);
+extern void func_001F99B0(void *, int, int);
+extern int func_00217628(int, int, int);
+extern int D_L00_0015F700[4] MACRO_ADDR;
+extern int D_L00_00173F00[];
+extern int D_L00_0016128C MACRO_ADDR;
+typedef struct { int a; int b; } LL9;
+typedef struct { char pad[0x16A8]; LL9 normal[20]; LL9 alt[20]; } G9;
+extern G9 D_00137C80;
+
+/* starts the slideshow: resets state, rebases the level data pointers, and starts the first two streams */
+void func_L00_0029ADD8(void) {
+    int t;
+    func_00217748(0);
+    func_001F4E08(8);
+    D_L00_0015F6BC = 1;
+    *(float *)&D_L00_0015F4FC = 1.0f;
+    D_L00_0015F6A8 = 7;
+    func_001F99B0(D_L00_0015F700, 0, 16);
+    t = D_L00_0016128C - 0xE0000;
+    D_L00_0015F700[2] = D_L00_00173F00[1] + t;
+    D_L00_0015F700[3] = D_L00_00173F00[2] + t;
+    D_L00_0016128C = t;
+    if (D_0015EE80 != 0) {
+        func_00217628(D_L00_0015F700[2], D_00137C80.alt[((short *)D_L00_0015F700)[1]].a, D_00137C80.alt[((short *)D_L00_0015F700)[1]].b);
+    } else {
+        func_00217628(D_L00_0015F700[2], D_00137C80.normal[((short *)D_L00_0015F700)[1]].a, D_00137C80.normal[((short *)D_L00_0015F700)[1]].b);
+    }
+    func_00217748(1);
+    ((short *)D_L00_0015F700)[1]++;
+    if (D_0015EE80 != 0) {
+        func_00217628(D_L00_0015F700[3], D_00137C80.alt[((short *)D_L00_0015F700)[1]].a, D_00137C80.alt[((short *)D_L00_0015F700)[1]].b);
+    } else {
+        func_00217628(D_L00_0015F700[3], D_00137C80.normal[((short *)D_L00_0015F700)[1]].a, D_00137C80.normal[((short *)D_L00_0015F700)[1]].b);
+    }
+}
 extern void func_00234AC8(int);
 extern void func_00217588(void);
 extern int D_L00_0015F4FC MACRO_ADDR;

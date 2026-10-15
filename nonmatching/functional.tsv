@@ -329,7 +329,6 @@ func_L00_0027D3D8	nonmatching/shared/func_L00_0027D3D8.c
 func_L00_002862E0	nonmatching/shared/func_L00_002862E0.c
 func_L00_00299B68	nonmatching/shared/func_L00_00299B68.c
 func_L00_0029A940	nonmatching/shared/func_L00_0029A940.c
-func_L00_0029ADD8	nonmatching/shared/func_L00_0029ADD8.c
 func_L00_0029AFB8	nonmatching/shared/func_L00_0029AFB8.c
 func_L00_0029D988	nonmatching/shared/func_L00_0029D988.c
 func_L00_0029FD68	nonmatching/shared/func_L00_0029FD68.c
@@ -351,7 +350,6 @@ func_L00_002ED088	nonmatching/shared/func_L00_002ED088.c
 func_L02_002EB648	nonmatching/shared/func_L02_002EB648.c
 func_L03_002C5AE0	nonmatching/shared/func_L03_002C5AE0.c
 func_L03_002E99F0	nonmatching/shared/func_L03_002E99F0.c
-func_L05_00254328	nonmatching/shared/func_L05_00254328.c
 func_L05_00254838	nonmatching/shared/func_L05_00254838.c
 func_L05_00254B38	nonmatching/shared/func_L05_00254B38.c
 func_L05_002559F0	nonmatching/shared/func_L05_002559F0.c
