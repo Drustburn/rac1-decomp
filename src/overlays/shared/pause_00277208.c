@@ -620,7 +620,39 @@ int func_L00_0027A398(char *arg0, int arg1) {
     return 0;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0027A3AC);
-INCLUDE_ASM("asm/overlays", func_L00_0027D3D8);
+extern struct CtrlP D_0013CA40_27D3D8 __asm__("D_0013CA40");
+extern struct MenuSystemP D_L00_001BA070_27D3D8 __asm__("D_L00_001BA070");
+extern int D_0013D48C;
+extern int D_L00_00184514;
+extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
+extern int D_L00_0015F6A4 MACRO_ADDR;
+extern int D_L00_0015F650 MACRO_ADDR;
+
+/* input of a pause menu entry: accept returns -1, cancel goes back a page or returns -1 when closing is allowed, and 0x20 sets the transition flags */
+int func_L00_0027D3D8(char *entry) {
+ unsigned int pressed = D_0013CA40_27D3D8.pressed_unmasked;
+ if (pressed & 0xD00) {
+  if (*(int *)(entry + 0x30) & 0x20) D_L00_00184514 = D_0015EE84_m;
+  return -1;
+ }
+ if (pressed & 0x10) {
+  struct MenuPageP *back;
+  if (*(int *)(entry + 0x30) & 0x20) D_L00_00184514 = D_0015EE84_m;
+  back = D_L00_001BA070_27D3D8.current->back;
+  if (back) {
+   D_L00_001BA070_27D3D8.next = back;
+   return 0;
+  }
+  if (!D_L00_001BA070_27D3D8.close_locked) return -1;
+ }
+ if (D_0013CA40_27D3D8.pressed_unmasked & 0x20) {
+  D_0013D48C = 0;
+  D_L00_0015F6A4 = -1;
+  D_L00_0015F650 = 1;
+  D_L00_0015F6BC = 1;
+ }
+ return 0;
+}
 INCLUDE_ASM("asm/overlays", func_L00_0027D454);
 INCLUDE_ASM("asm/overlays", func_L00_0027D464);
 INCLUDE_ASM("asm/overlays", func_L00_00280708);
