@@ -51,10 +51,12 @@ import rabbitizer as rz  # noqa: E402
 from elftools.elf.elffile import ELFFile  # noqa: E402
 from elftools.elf.relocation import RelocationSection  # noqa: E402
 
-CC = "toolchain/sn-prodg-24/local/sce/ee/gcc/bin/ee-gcc2953.exe"
+# Absolute: Windows' CreateProcess won't resolve a relative forward-slash
+# path to an .exe (tools/toolchain.py).
+CC = str(Path("toolchain/sn-prodg-24/local/sce/ee/gcc/bin/ee-gcc2953.exe").resolve())
 # Sony SDK sources built with the SDK's 2.9-ee (Makefile.sn's EE29_CORE: the
 # objects marked `ee29` in config/core_text.objects).
-CC29 = "toolchain/sn-prodg-24/local/sce/ee/gcc/bin/ee-gcc.exe"
+CC29 = str(Path("toolchain/sn-prodg-24/local/sce/ee/gcc/bin/ee-gcc.exe").resolve())
 EE29_INC = "-Itoolchain/sn-prodg-24/local/sce/ee/gcc/lib/gcc-lib/ee/2.9-ee-991111/include"
 EE29_SOURCES = ee29_sources()
 CFLAGS = ["-O2", "-G2", "-Iinclude", "-Wa,-I,."] + os.environ.get("TRY_CFLAGS", "").split()  # extra flags for experiments
