@@ -39,6 +39,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -189,6 +190,37 @@ GP = 0x166D00
 _ADDRS = None
 
 
+
+def build_dumping(name, seg, src, first, last, candidate, work):
+    """build(), but with dump flags (-d...) in TRY_CFLAGS: GCC writes its dumps to the
+    current directory as src.c.<pass>, so hold tools/regalloc.py's lock and move them
+    into WORK, or concurrent runs take each other's dumps."""
+    if not any(f.startswith("-d") for f in os.environ.get("TRY_CFLAGS", "").split()):
+        return build(name, seg, src, first, last, candidate, work)
+    lock = Path("build-sn/regalloc/.lock")
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    while True:
+        try:
+            lock.mkdir()
+            break
+        except FileExistsError:
+            try:
+                if time.time() - lock.stat().st_mtime > 600:
+                    lock.rmdir()
+            except OSError:
+                pass
+            time.sleep(1)
+    try:
+        for d in Path(".").glob("src.c.*"):
+            d.unlink()
+        obj = build(name, seg, src, first, last, candidate, work)
+        work.mkdir(parents=True, exist_ok=True)
+        for d in Path(".").glob("src.c.*"):
+            d.replace(work / d.name)
+    finally:
+        lock.rmdir()
+    return obj
+
 def symbol_address(name):
     """A symbol's retail address: config/symbol_addrs.txt, then the address a
     func_/D_/jtbl_ name carries (an alias may add a _suffix), then _gp."""
@@ -325,7 +357,7 @@ def main():
     for cand in cands:
         # Several candidates: label each line, and keep going past failures.
         label = f"{Path(cand).name:10s} " if len(cands) > 1 else ""
-        obj = build(name, seg, src, first, last, Path(cand).read_text(), work)
+        obj = build_dumping(name, seg, src, first, last, Path(cand).read_text(), work)
         if obj is None:
             verdict = "COMPILE failed"
         elif is_overlay:
