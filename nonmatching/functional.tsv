@@ -98,7 +98,6 @@ func_0020EA70	nonmatching/game/func_0020EA70.c
 func_001FA1F8	nonmatching/game/func_001FA1F8.c
 func_L00_00251E30	nonmatching/game/func_L00_00251E30.c
 func_L00_00251B58	nonmatching/game/func_L00_00251B58.c
-func_0021A610	nonmatching/game/func_0021A610.c
 func_0021B298	nonmatching/game/func_0021B298.c
 func_00202AA8	nonmatching/game/func_00202AA8.c
 func_001FA218	nonmatching/game/func_001FA218.c
@@ -216,7 +215,6 @@ func_L00_00286068	nonmatching/shared/func_L00_00286068.c
 func_L03_002ED138	nonmatching/functional/func_L03_002ED138.c
 func_L18_002EAB58	nonmatching/l18_veldin2/func_L18_002EAB58.c
 func_L07_0030C3E0	nonmatching/functional/func_L07_0030C3E0.c
-func_L13_002C3840	nonmatching/functional/func_L13_002C3840.c
 func_L01_002E1FE0	nonmatching/functional/func_L01_002E1FE0.c
 func_L12_002E8640	nonmatching/functional/func_L12_002E8640.c
 func_L00_002A5158	nonmatching/functional/func_L00_002A5158.c
@@ -326,7 +324,6 @@ func_L05_00263500	nonmatching/functional/func_L05_00263500.c
 func_L08_002EB770	nonmatching/functional/func_L08_002EB770.c
 func_00125F88	nonmatching/functional/func_00125F88.c
 func_L01_00262DA8	nonmatching/functional/func_L01_00262DA8.c
-func_L15_001FFED0	nonmatching/functional/func_L15_001FFED0.c
 func_L00_002BF958	nonmatching/functional/func_L00_002BF958.c
 func_L06_002D9B08	nonmatching/functional/func_L06_002D9B08.c
 func_L06_0021E7B8	nonmatching/functional/func_L06_0021E7B8.c
@@ -362,7 +359,6 @@ func_L10_002DE018	nonmatching/functional/func_L10_002DE018.c
 func_L08_002D7010	nonmatching/functional/func_L08_002D7010.c
 func_L06_003006F8	nonmatching/functional/func_L06_003006F8.c
 func_L13_00308860	nonmatching/functional/func_L13_00308860.c
-func_L18_002FD5C0	nonmatching/functional/func_L18_002FD5C0.c
 func_00227100	nonmatching/functional/func_00227100.c
 func_L18_002F9D48	nonmatching/functional/func_L18_002F9D48.c
 func_L05_002D28D0	nonmatching/functional/func_L05_002D28D0.c
@@ -398,6 +394,5 @@ func_L10_002E5E48	nonmatching/l10_orxon/func_L10_002E5E48.c
 func_L05_003033A0	nonmatching/l05_rilgar/func_L05_003033A0.c
 func_00220690	nonmatching/functional/func_00220690.c
 func_L07_00319230	nonmatching/l07_umbris/func_L07_00319230.c
-func_L15_0029E8A0	nonmatching/shared/func_L15_0029E8A0.c
 func_L12_00306890	nonmatching/l12_hoven/func_L12_00306890.c
 func_L00_002D8898	nonmatching/shared/func_L00_002D8898.c
