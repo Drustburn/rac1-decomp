@@ -846,7 +846,17 @@ int func_L00_00284E70(int id) {
     return 1;
 }
 INCLUDE_ASM("asm/overlays", func_L00_00284EA0);
-INCLUDE_ASM("asm/overlays", func_L00_00284EB8);
+/* Looks for id in the five {id, flags} pairs at D_L00_001BA548; if found clears flag 4 and returns 0, else returns 1. Joined with the copy of func_L00_00284EA0 after it. */
+int func_L00_00284EB8(int id) {
+    int i;
+    for (i = 0; i < 5; i++) {
+        if (D_L00_001BA548_84E70[i * 2] == id) {
+            D_L00_001BA548_84E70[i * 2 + 1] &= ~4;
+            return 0;
+        }
+    }
+    return 1;
+}
 typedef struct { int f[14]; } Rec;
 extern int D_L00_001604D0 MACRO_ADDR;
 extern Rec D_L00_001BA350[];
