@@ -39,7 +39,12 @@ int func_L00_0024A210(int item, float a, float b, float x) {
  return x >= 39.0f;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024A25C);
-INCLUDE_ASM("asm/overlays", func_L00_0024A320);
+extern unsigned char D_0013D4E0[];
+/* a >= 190: D_0013D4E0 != 0; else x >= 58.5f (the joined tail). */
+int func_L00_0024A320(int a, float b, float c, float x) {
+    if (a >= 190) return D_0013D4E0[0] != 0;
+    return x >= 58.5f;
+}
 int func_L00_0024A338(float a, float b, float x) { return x >= 58.5f; }
 /* a < 221: 232.0f <= x <= 235.0f and D_0013D4E6 != 0; else x <= 180.0f (the joined tail). */
 extern unsigned char D_0013D4E6[];
