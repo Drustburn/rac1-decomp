@@ -83,3 +83,6 @@ config/ghidra_*.json
 
 # Written in CI by tools/gen_functional_list.py, not committed
 progress/functional.json
+
+# tools/behave build output
+tools/behave/target/
