@@ -7243,7 +7243,143 @@ int func_00224040(char *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_002243E8);
+extern void func_0022F4A0(int arg0);
+extern short D_0013E15A_43E8[] __asm__("D_0013E15A");
+
+/* Load-slot menu handler (func_00224040's sibling): with a load armed it either aborts or starts the sound fade and loads; otherwise pad handling with slot selection. */
+int func_002243E8(char *arg0) {
+    char *g = D_001D5F70;
+    int old = *(int *)(arg0 + 0x40);
+
+    if (*(int *)(g + 0x128) != 0) {
+        char *d = D_0013D390;
+
+        if (*(int *)(d + 0xDC) >= 3) {
+            return 0;
+        }
+        if (*(int *)(d + 0xE4) >= 0) {
+            return 0;
+        }
+        if (*(int *)(g + 0x154) < 11) {
+            return 0;
+        }
+        *(int *)(g + 0x128) = 0;
+        if (*(int *)(d + 0xEC) != 0 || *(int *)(d + 0x1C) != 0 || D_0015FF4C != 0) {
+            char *d2 = D_0013D390;
+            char *g4 = D_001D5F70;
+
+            D_0015EFB4_m |= 0x100;
+            *(int *)(d2 + 0xFC) = 0;
+            func_001FBC80(3, *(void **)(g4 + 4), 0);
+            return 0;
+        }
+        {
+            int t = D_0015EEF0;
+            char *s = D_0013E650;
+
+            *(int *)(d + 0xFC) = 1;
+            *(int *)(s + 0x48) = t * 8 / 10;
+            *(int *)(s + 0x4C) = D_0015EEEC_1DB30;
+            *(int *)(s + 0x50) = t * 8 / 10;
+            *(int *)(s + 0x54) = t * 7 / 10;
+            *(int *)(s + 0x58) = t * 7 / 10;
+            *(int *)(s + 0x5C) = t;
+            func_0012E380_1DB30(D_0015EEE8_1DB30 == 0);
+            func_0022F4A0(D_0015EE84);
+            *(short *)D_0013E15A_43E8 = 0;
+            return 0;
+        }
+    }
+    {
+        char *pad = D_0013CA40;
+        if (*(int *)(pad + 0x1C4) & 0xD00) {
+            if (*(int *)(g + 0x124) == 0) {
+                return 1;
+            }
+        }
+    }
+    {
+        char *pad = D_0013CA40;
+        if (*(int *)(pad + 0x1C4) & 0x10) {
+            char *g2 = D_001D5F70;
+            int t = *(int *)(*(char **)(g2 + 4) + 0x38);
+            if (t != 0) {
+                *(int *)(g2 + 8) = t;
+                return 0;
+            }
+            if (*(int *)(g2 + 0x124) == 0) {
+                return -1;
+            }
+        }
+    }
+    if (D_0015EFB0_m != 0x10 && D_0015EFB0_m != 1) {
+        char *g2 = D_001D5F70;
+        *(int *)(g2 + 8) = *(int *)(*(char **)(g2 + 4) + 0x38);
+        return 0;
+    }
+    {
+        char *d = D_0013D390;
+        int p;
+        int x;
+
+        if (*(int *)(d + 0xDC) >= 3) {
+            return 0;
+        }
+        if (*(int *)(d + 0xE4) >= 0) {
+            return 0;
+        }
+        {
+            char *g2 = D_001D5F70;
+            if (*(int *)(g2 + 0x154) < 11) {
+                return 0;
+            }
+        }
+        if (*(int *)(d + 8) != 2) {
+            return 0;
+        }
+        if (*(int *)(arg0 + 0x30) & 1) {
+            char *pad = D_0013CA40;
+            p = *(int *)(pad + 0x1B4);
+        } else {
+            char *pad = D_0013CA40;
+            p = *(int *)(pad + 0x1C4);
+        }
+        x = D_0015EF34;
+        *(int *)(arg0 + 0x40) = x;
+        if ((p & 0x1000) && x != 0) {
+            *(int *)(arg0 + 0x40) = x - 1;
+        }
+        if ((p & 0x4000) && *(int *)(arg0 + 0x40) < 4) {
+            *(int *)(arg0 + 0x40) = *(int *)(arg0 + 0x40) + 1;
+        }
+        D_0015EF34 = *(int *)(arg0 + 0x40);
+        if (p & 0x40) {
+            char *d2 = D_0013D390;
+
+            if (*(int *)(d2 + 8) == 2) {
+                if (*(int *)(d2 + 0x20 + D_0015EF34 * 0x1C) >= 0) {
+                    char *g2;
+
+                    func_0022ED80(0, 0x11, *(int *)(arg0 + 0x14));
+                    *(int *)(d2 + 0xC8) = 0;
+                    *(int *)(d2 + 0x14) = *(int *)(arg0 + 0x40);
+                    if (*(int *)(d2 + 0xE4) < 0) {
+                        *(int *)(d2 + 0xE8) = 0;
+                        *(int *)(d2 + 0xE4) = 0xD;
+                    }
+                    g2 = D_001D5F70;
+                    *(int *)(g2 + 0x128) = 1;
+                    *(int *)(g2 + 0x12C) = 0x4FB6;
+                    D_0015FF4C = 0;
+                }
+            }
+        }
+    }
+    if (*(int *)(arg0 + 0x40) != old) {
+        func_0022ED80(1, 0x11, *(int *)(arg0 + 0x14));
+    }
+    return 0;
+}
 
 typedef struct __attribute__((packed)) {
     s64 v;
@@ -8700,7 +8836,205 @@ int func_002270B0(int arg0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_00227100);
+typedef struct {
+    int unk00;
+    int arg[13];
+} Rec38_q;
+extern Rec38_q D_001D6250_q[] __asm__("D_001D6250");
+typedef struct {
+    u8 pad0[0x30];
+    s32 items[3];
+    u8 pad3C[0x64];
+    s32 buf[2];
+    u8 padA8[0x14];
+    s32 readOff;
+    u8 padC0[8];
+    u8 loaded[2];
+    u8 idx;
+    u8 pending;
+    u32 base;
+    u8 padD0[0x7C];
+    s32 streamed;
+} Pv_q;
+extern Pv_q D_001D5F70_q[] __asm__("D_001D5F70");
+extern struct Hdr16_1CE60 D_001517D0_q[] __asm__("D_001517D0");
+extern Rec38_q D_001D6410_q[] __asm__("D_001D6410");
+extern int D_00160450 MACRO_ADDR;
+typedef struct {
+    u8 pad0[0x48];
+    int anim[1];
+} Cls_q;
+typedef struct {
+    u8 pad0[0x18];
+    struct {
+        int a;
+        int b;
+    } e[1];
+} Tbl_q;
+extern Tbl_q D_00137C80_q[] __asm__("D_00137C80");
+extern char *D_001B3580[] NOT_SDA;
+extern void func_0020C468(int, int);
+extern int func_00217628(int, int, int);
+extern void func_00203B18(char *, int);
+extern int func_00227928(void);
+extern void func_00227B00(s32, s32);
+extern void func_00213F28(void *, int, int, int, int);
+extern void func_00213D28_q(void *, int, int) __asm__("func_00213D28");
+extern void func_00225DF8(void);
+
+int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char **o2) __asm__("func_00227100");
+
+/* Runs the item-preview animation stream queue: finishes a pending buffer, starts the next read, and on a ready entry swaps in the preview mobys. */
+int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char **o2) {
+    int flagA = 0;
+    int flagB = 0;
+    int result = 0;
+    char *p;
+
+    if (D_00160450 == 0) {
+        return 0;
+    }
+    {
+        if (*(unsigned char *)(moby + 0x70) & 2) {
+            flagA = 1;
+            if (D_001D6410_q[0].arg[2] == 0 || --D_001D6410_q[0].arg[2] == 0) {
+                flagB = 1;
+            }
+        }
+        {
+            if (D_001D5F70_q[0].pending != 0) {
+                if (D_001517D0_q[0].unk8 == 0) {
+                    int n = D_001D5F70_q[0].pending - 1;
+                    int *slot = D_001D5F70_q[0].buf + n;
+                    int buf = *slot;
+                    func_0020C468(buf + D_001D5F70_q[0].readOff, buf);
+                    D_001D5F70_q[0].readOff = 0;
+                    func_002270B0(buf);
+                    D_001D5F70_q[0].loaded[n] = D_001D5F70_q[0].streamed;
+                    if (D_001D6250_q[0].arg[0] == D_001D5F70_q[0].streamed) {
+                        D_001D6250_q[0].unk00 = 2;
+                    }
+                    ((Cls_q *)D_001B3580[0])->anim[D_001D5F70_q[0].streamed] = *slot;
+                    func_00203B18(D_001B3580[0], D_001D5F70_q[0].streamed);
+                    D_001D5F70_q[0].pending = 0;
+                }
+            }
+        }
+        if (D_001D5F70_q[0].pending == 0 && D_001517D0_q[0].unk8 == 0 &&
+            D_00160450 > 0 && D_001D6250_q[0].unk00 == 0) {
+            int idx = D_001D5F70_q[0].idx;
+            unsigned char *ld = D_001D5F70_q[0].loaded;
+            unsigned int want = D_001D6250_q[0].arg[0];
+            if (ld[idx] == want || ld[idx == 0] == want) {
+                D_001D6250_q[0].unk00 = 2;
+            } else if (want < D_001D5F70_q[0].base) {
+                D_001D6250_q[0].unk00 = 3;
+            } else {
+                int k = want - D_001D5F70_q[0].base;
+                int buf = D_001D5F70_q[0].buf[idx];
+                int sz = D_00137C80_q[0].e[k].b << 11;
+                int addr = buf + func_00227018(buf) - sz;
+                D_001D5F70_q[0].readOff = addr - buf;
+                if (func_00217628(addr, D_00137C80_q[0].e[k].a, D_00137C80_q[0].e[k].b) == 0) {
+                    func_001F9978();
+                }
+                func_00227068(buf);
+                D_001D5F70_q[0].pending = D_001D5F70_q[0].idx + 1;
+                ld[D_001D5F70_q[0].idx] = 0xFF;
+                D_001D6250_q[0].unk00 = 1;
+                D_001D5F70_q[0].streamed = D_001D6250_q[0].arg[0];
+            }
+        }
+        if (D_00160450 > 0 && (unsigned int)(D_001D6250_q[0].unk00 - 2) < 2) {
+            int item = D_001D6250_q[0].arg[3];
+            if (item != 0 && D_001D5F70_q[0].items[0] != item &&
+                D_001D5F70_q[0].items[2] != item && D_001D5F70_q[0].items[1] != item) {
+                result = 0;
+                func_00227928();
+            } else if (D_001D6250_q[0].arg[1] == 0) {
+                result = 1;
+            } else if (D_001D6250_q[0].arg[1] == 1 && flagA != 0) {
+                result = 1;
+            } else if (D_001D6250_q[0].arg[1] == 2 && flagB != 0) {
+                result = 1;
+            } else if (D_001D6250_q[0].arg[1] == 3) {
+                result = 0;
+                func_00227928();
+            }
+        }
+        if (result != 0) {
+            D_001D6410_q[0] = D_001D6250_q[0];
+            func_00227928();
+            func_00227A70();
+            func_00227B00(D_001D6410_q[0].arg[11], D_001D6410_q[0].arg[12]);
+            func_00213F28(moby, D_001D6410_q[0].arg[0], 0, 10, 5);
+            if (D_001D6410_q[0].arg[0] == D_001D5F70_q[0].loaded[0]) {
+                D_001D5F70_q[0].idx = 1;
+            } else if (D_001D6410_q[0].arg[0] == D_001D5F70_q[0].loaded[1]) {
+                D_001D5F70_q[0].idx = 0;
+            }
+            if (D_001864D0_1F238[D_001D6410_q[0].arg[3]].item_type == 2) {
+                if (m2 != 0) {
+                    func_00213F28(m2, D_001D6410_q[0].arg[4], 0, 10, 5);
+                }
+                if (m1 != 0) {
+                    func_00213D28_q(m1, 1, 0);
+                }
+            } else if (m1 != 0) {
+                func_00213F28(m1, D_001D6410_q[0].arg[4], 0, 10, 5);
+            }
+            *o0 = (char *)func_002267C0((int)*o0);
+            *o1 = (char *)func_002267C0((int)*o1);
+            *o2 = (char *)func_002267C0((int)*o2);
+            if (D_001D6410_q[0].arg[5] != -1) {
+                if ((*o0 = func_00226720(D_001D6410_q[0].arg[5])) != 0) {
+                    func_00213D28_q(*o0, D_001D6410_q[0].arg[6], 0);
+                    func_00213DE0(*o0, D_001D6410_q[0].arg[6], 0, 10);
+                    *(short *)(*o0 + 0x34) = 0;
+                    p = *o0;
+                    qcopy(p + 0x10, moby + 0x10);
+                    qcopy(p + 0x40, moby + 0x40);
+                    if (*(short *)(p + 0xA6) == 0x4A) {
+                        *(float *)(p + 0x2C) = *(float *)(p + 0x2C) * 3.0f;
+                    }
+                    func_0020ED48(*o0);
+                    *(void **)(*o0 + 0x74) = func_00225DF8;
+                }
+            }
+            if (D_001D6410_q[0].arg[7] != -1) {
+                if ((*o1 = func_00226720(D_001D6410_q[0].arg[7])) != 0) {
+                    func_00213D28_q(*o1, D_001D6410_q[0].arg[8], 0);
+                    func_00213DE0(*o1, D_001D6410_q[0].arg[8], 0, 10);
+                    *(short *)(*o1 + 0x34) = 0;
+                    p = *o1;
+                    qcopy(p + 0x10, moby + 0x10);
+                    qcopy(p + 0x40, moby + 0x40);
+                    if (*(short *)(p + 0xA6) == 0x4A) {
+                        *(float *)(p + 0x2C) = *(float *)(p + 0x2C) * 3.0f;
+                    }
+                    func_0020ED48(*o1);
+                    *(void **)(*o1 + 0x74) = func_00225DF8;
+                }
+            }
+            if (D_001D6410_q[0].arg[9] != -1) {
+                if ((*o2 = func_00226720(D_001D6410_q[0].arg[9])) != 0) {
+                    func_00213D28_q(*o2, D_001D6410_q[0].arg[10], 0);
+                    func_00213DE0(*o2, D_001D6410_q[0].arg[10], 0, 10);
+                    *(short *)(*o2 + 0x34) = 0;
+                    p = *o2;
+                    qcopy(p + 0x10, moby + 0x10);
+                    qcopy(p + 0x40, moby + 0x40);
+                    if (*(short *)(p + 0xA6) == 0x4A) {
+                        *(float *)(p + 0x2C) = *(float *)(p + 0x2C) * 3.0f;
+                    }
+                    func_0020ED48(*o2);
+                    *(void **)(*o2 + 0x74) = func_00225DF8;
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 extern int D_00160450 MACRO_ADDR;
 typedef struct {
@@ -9272,7 +9606,83 @@ void func_00228458(int arg0, int idx, int n) {
     func_002298B0(arg0, ((int *)&D_00160460)[idx]);
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_002284E8);
+struct DisplayDims_284E8 {
+    u8 pad_0[0x150];
+    s16 display_width; /* 0x150 */
+    s16 display_height; /* 0x152 */
+};
+extern struct DisplayDims_284E8 D_00151880_284E8 __asm__("D_00151880");
+extern s32 *D_00161000_284E8 __asm__("D_00161000") MACRO_ADDR;
+extern void func_00234C98_284E8(s32, s64) __asm__("func_00234C98");
+
+/* Appends a DMA packet drawing 32-pixel-wide sprite strips over the screen in a fixed grey (0x7F808080). */
+void func_002284E8(void) {
+    s32 *base;
+    s64 *commands;
+    s64 *vertices;
+    struct DisplayDims_284E8 *dimensions;
+    s32 strip_count;
+    s32 display_height;
+    s32 display_width;
+    s32 strip_index;
+    s32 left_x;
+    s32 top_y;
+    s32 right_x;
+    s32 bottom_y;
+    s32 negative_half_width;
+    s32 dividend;
+    s64 packed_top_y;
+    s64 packed_bottom_y;
+    s64 first;
+    s64 second;
+
+    dimensions = &D_00151880_284E8;
+    display_width = dimensions->display_width;
+    display_height = dimensions->display_height;
+    dividend = (display_width > -1) ? display_width : (display_width + 0x1F);
+    strip_count = dividend >> 5;
+    func_00234C98_284E8(0x42, 0x64);
+    strip_index = 0;
+    D_00161000_284E8[0] = (strip_count + 5) | 0x10000000;
+    D_00161000_284E8[1] = 0;
+    D_00161000_284E8[2] = 0;
+    D_00161000_284E8[3] = (strip_count + 5) | 0x50000000;
+    base = D_00161000_284E8;
+    commands = (s64 *)(base + 4);
+    D_00161000_284E8 = (s32 *)commands;
+    ((s64 *)base)[2] = 0x1000000000000001;
+    commands[1] = 0xE;
+    commands[2] = 0x31001;
+    commands[3] = 0x47;
+    commands[4] = 0x2400000000008001;
+    commands[5] = 0x10;
+    commands[6] = 0x146;
+    commands[7] = 0x7F808080;
+    commands[8] = (s64)(strip_count | 0x8000) | 0x2400000000000000;
+    commands[9] = 0x44;
+    if (strip_index < strip_count) {
+        bottom_y = display_height * 8 + 0x7FF0;
+        top_y = 0x8000 - display_height * 8;
+        negative_half_width = -(display_width * 8);
+        packed_top_y = (s64)top_y << 16;
+        left_x = negative_half_width + 0x8000;
+        right_x = negative_half_width + 0x8200;
+        packed_bottom_y = (s64)bottom_y << 16;
+        vertices = (s64 *)(base + 0x18);
+        do {
+            first = (s64)left_x | packed_top_y;
+            second = (s64)right_x | packed_bottom_y;
+            *vertices = first;
+            strip_index++;
+            vertices++;
+            right_x += 0x200;
+            *vertices = second;
+            left_x += 0x200;
+            vertices++;
+        } while (strip_index < strip_count);
+    }
+    D_00161000_284E8 = (s32 *)((u8 *)D_00161000_284E8 + (strip_count * 0x10 + 0x50));
+}
 
 /* The display mode block: only the two sizes this function reads. */
 struct DisplayDims_28690 {

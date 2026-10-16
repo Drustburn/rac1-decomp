@@ -681,6 +681,20 @@ int func_L00_00247620(int id) {
     return -1;
 }
 INCLUDE_ASM("asm/overlays", func_L00_00247650);
-INCLUDE_ASM("asm/overlays", func_L00_002477A0);
+extern int *D_L00_00160360 MACRO_ADDR;
+
+/* Returns the index of key in the zero-terminated id list (at most 20 entries), or -1. */
+int func_L00_002477A0(int key) {
+    int *list = D_L00_00160360;
+    int *p = list;
+    int i;
+
+    for (i = 0; *p != 0 && i < 20; i++, p++) {
+        if (list[i] == key) {
+            return i;
+        }
+    }
+    return -1;
+}
 INCLUDE_ASM("asm/overlays", func_L00_002477D0);
 INCLUDE_ASM("asm/overlays", func_L00_00248EF8);

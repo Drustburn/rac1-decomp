@@ -556,7 +556,139 @@ void func_L14_002B3850(struct Moby *m)
     func_001F9BD8_2B3850(&pv->beam_end, &pv->beam_start, &dy);
     func_001F49B0_2B3850(func_L14_002B3B78_2B3850, m);
 }
-INCLUDE_ASM("asm/overlays", func_L14_002B3B78);
+extern void func_001F9BF0(void *, void *, void *);
+extern void func_001F9CA0(void *, void *, void *);
+extern void func_001F9C30(void *, void *, float);
+extern void func_001F9EE8(void *, void *, void *);
+extern void func_L00_001FD1D8(void *, void *, s32);
+u64 func_001F4868(s32);
+extern char D_L14_001675C0[];
+extern Vec4 D_L14_001D8B50[];
+extern f32 D_L14_00161574_3B78 SDATA(D_L14_00161574);
+extern f32 D_L14_00161584_3B78 SDATA(D_L14_00161584);
+extern f32 D_L14_00161588_3B78 SDATA(D_L14_00161588);
+
+// Draws five GIF line packets from the moby's beam points at data+0x1E0..0x220.
+void func_L14_002B3B78(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    struct {
+        Vec4 o[4];
+        unsigned int c[4];
+        float g[8];
+        u64 t[4];
+    } pk;
+    Vec4 m[4];
+    Vec4 w;
+    char *pp;
+    char *q;
+    char *r;
+    int i;
+    int j;
+    int a;
+
+    qcopy(&m[3], data + 0x1E0);
+    m[3].f[3] = 1.0f;
+    func_001F9BF0(&m[0], D_L14_001675C0, &m[3]);
+    func_L00_001FF4B0(&m[0], &m[0], 1.0f);
+    func_001F9CA0(&m[1], &m[0], D_0013E633 + 0x10AD);
+    func_L00_001FF4B0(&m[1], &m[1], -1.0f);
+    func_001F9CA0(&m[2], &m[1], &m[0]);
+    pk.t[1] = func_001F4868(11);
+    pk.t[3] = 0x8000000048ULL;
+    pk.t[2] = 0xFF9000000260ULL;
+    pk.t[0] = 5;
+    pk.c[3] = 0x80FFFFFF;
+    pk.c[2] = 0x80FFFFFF;
+    pk.c[1] = 0x80FFFFFF;
+    pk.c[0] = 0x80FFFFFF;
+    pk.g[0] = 0.0f;
+    pk.g[1] = 0.0f;
+    pk.g[2] = 0.0f;
+    pk.g[3] = 1.0f;
+    pk.g[4] = 1.0f;
+    pk.g[5] = 0.0f;
+    pk.g[6] = 1.0f;
+    pk.g[7] = 1.0f;
+    for (i = 0; i < 4; i++) {
+        func_001F9C30(&pk.o[i], &D_L14_001D8B50[i], 0.4f);
+        func_001F9EE8(&pk.o[i], &pk.o[i], &m[0]);
+    }
+    func_L00_001FD1D8(&pk, 0, 0);
+
+    qcopy(&m[3], data + 0x200);
+    pp = data + 0x220;
+    func_001F9BF0(&m[0], D_L14_001675C0, &m[3]);
+    r = data + 0x210;
+    q = data + 0x1F0;
+    func_L00_001FF4B0(&m[0], &m[0], 1.0f);
+    func_001F9CA0(&m[1], &m[0], D_0013E633 + 0x10AD);
+    func_L00_001FF4B0(&m[1], &m[1], -1.0f);
+    func_001F9CA0(&m[2], &m[1], &m[0]);
+    pk.c[3] = 0x202020FF;
+    pk.c[2] = 0x202020FF;
+    pk.c[1] = 0x202020FF;
+    pk.c[0] = 0x202020FF;
+    for (j = 0; j < 4; j++) {
+        func_001F9C30(&pk.o[j], &D_L14_001D8B50[j], 0.2f);
+        func_001F9EE8(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    func_L00_001FD1D8(&pk, 0, 0);
+
+    qcopy(&m[3], q);
+    func_001F9BF0(&m[0], D_L14_001675C0, &m[3]);
+    func_L00_001FF4B0(&m[0], &m[0], 1.0f);
+    func_001F9CA0(&m[1], &m[0], D_0013E633 + 0x10AD);
+    func_L00_001FF4B0(&m[1], &m[1], -1.0f);
+    func_001F9CA0(&m[2], &m[1], &m[0]);
+    func_001F9C30(&w, &m[0], D_L14_00161574_3B78);
+    func_001F9BD8(&m[3], &m[3], &w);
+    pk.c[3] = 0x4020FF20;
+    pk.c[2] = 0x4020FF20;
+    pk.c[1] = 0x4020FF20;
+    pk.c[0] = 0x4020FF20;
+    a = 0x40;
+    for (j = 0; j < 4; j++) {
+        func_001F9C30(&pk.o[j], &D_L14_001D8B50[j], 0.2f);
+        func_001F9EE8(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    func_L00_001FD1D8(&pk, 0, 0);
+
+    qcopy(&m[3], r);
+    func_001F9BF0(&m[0], D_L14_001675C0, &m[3]);
+    func_L00_001FF4B0(&m[0], &m[0], 1.0f);
+    func_001F9CA0(&m[1], &m[0], D_0013E633 + 0x10AD);
+    func_L00_001FF4B0(&m[1], &m[1], -1.0f);
+    func_001F9CA0(&m[2], &m[1], &m[0]);
+    func_001F9C30(&w, &m[0], D_L14_00161584_3B78);
+    func_001F9BD8(&m[3], &m[3], &w);
+    pk.c[3] = (a << 24) | 0xFF2020;
+    pk.c[2] = (a << 24) | 0xFF2020;
+    pk.c[1] = (a << 24) | 0xFF2020;
+    pk.c[0] = (a << 24) | 0xFF2020;
+    for (j = 0; j < 4; j++) {
+        func_001F9C30(&pk.o[j], &D_L14_001D8B50[j], D_L14_00161588_3B78);
+        func_001F9EE8(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    func_L00_001FD1D8(&pk, 0, 0);
+
+    qcopy(&m[3], pp);
+    func_001F9BF0(&m[0], D_L14_001675C0, &m[3]);
+    func_L00_001FF4B0(&m[0], &m[0], 1.0f);
+    func_001F9CA0(&m[1], &m[0], D_0013E633 + 0x10AD);
+    func_L00_001FF4B0(&m[1], &m[1], -1.0f);
+    func_001F9CA0(&m[2], &m[1], &m[0]);
+    func_001F9C30(&w, &m[0], D_L14_00161584_3B78);
+    func_001F9BD8(&m[3], &m[3], &w);
+    pk.c[3] = (a << 24) | 0xFF2020;
+    pk.c[2] = (a << 24) | 0xFF2020;
+    pk.c[1] = (a << 24) | 0xFF2020;
+    pk.c[0] = (a << 24) | 0xFF2020;
+    for (j = 0; j < 4; j++) {
+        func_001F9C30(&pk.o[j], &D_L14_001D8B50[j], D_L14_00161588_3B78);
+        func_001F9EE8(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    func_L00_001FD1D8(&pk, 0, 0);
+}
 struct Manip;
 struct GifEntry;
 struct AnimSeq;

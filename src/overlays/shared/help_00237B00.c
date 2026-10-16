@@ -1185,7 +1185,71 @@ void func_L05_00254328(void) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L05_00254838);
-INCLUDE_ASM("asm/overlays", func_L05_00254B38);
+typedef int u128_254B38 __attribute__((mode(TI)));
+extern char *D_L05_001B0CB0_254B38[] __asm__("D_L05_001B0CB0");
+extern float func_00214358(void *, int, float);
+extern void func_001F9BC0(void *);
+
+/* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
+void func_L05_00254B38(float *out, float *rot) {
+    char *g = (char *)D_0013E633 + 0xE1D;
+    char *m = *(char **)(g + 0x86C);
+    char *path;
+    float distance;
+    int i, best;
+    float tmp[4] __attribute__((aligned(16)));
+
+    if (m == 0) {
+        qcopy(out, g + 0x80);
+        qcopy(rot, g + 0x90);
+        return;
+    }
+    path = D_L05_001B0CB0_254B38[*(int *)(*(char **)(m + 0x78) + 0x24)];
+    distance = 9999999.0f;
+    best = 0;
+    for (i = 0; i < *(int *)path; i += 2) {
+            char *h = (char *)D_0013E633 + 0xE1D;
+            char *p = path + i * 16;
+            float limit = 4.0f;
+            float angle = func_L00_001FF860(*(float *)(p + 0x10) - *(float *)(h + 0x80), *(float *)(p + 0x14) - *(float *)(h + 0x84));
+            int n2 = *(int *)path + 2;
+            int next = (i + n2) % *(int *)path;
+            char *q = path + next * 16;
+            if (func_001FA850(angle, func_L00_001FF860(*(float *)(q + 0x10) - *(float *)(p + 0x10), *(float *)(q + 0x14) - *(float *)(p + 0x14))) > 1.5707964f) {
+                float d;
+                if (D_0015EE84_2523C8 == 0x10 && *(char **)(h + 0x8B4) != 0) {
+                    char *verts = *(char **)(h + 0x8B4);
+                    char *v1 = verts + *(short *)(h + 0x8C8) * 16;
+                    char *v2 = verts + *(short *)(h + 0x898) * 16;
+                    float z1 = *(float *)(v1 + 0x18);
+                    float z2 = *(float *)(v2 + 0x18);
+                    if (z1 < z2) {
+                        if (func_001F9B88(z2 - *(float *)(p + 0x18)) > limit)
+                            goto next_point;
+                    } else {
+                        if (func_001F9B88(z1 - *(float *)(p + 0x18)) > limit)
+                            goto next_point;
+                    }
+                }
+                d = func_001F9D48(D_0013E633 + 0xE9D, path + i * 16 + 0x10);
+                if (d < distance) {
+                    distance = d;
+                    best = i;
+                }
+            }
+        next_point:;
+    }
+    qcopy(out, path + best * 16 + 0x10);
+    qcopy(tmp, out);
+    tmp[2] += 2.0f;
+    out[2] = func_00214358(tmp, 0, 0.5f);
+    func_001F9BC0(rot);
+    {
+        float *a = (float *)(path + best * 16);
+        float *b = (float *)(path + (best + 1) * 16);
+        rot[2] = func_L00_001FF860(b[4] - a[4], b[5] - a[5]);
+    }
+}
 typedef int u128_254DE8 __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Node_254DE8;
 typedef struct { int n; int pad[3]; Node_254DE8 p[1]; } Path_254DE8;

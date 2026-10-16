@@ -733,7 +733,93 @@ int func_L12_002E41C8(char *moby, float target) {
     }
     return r;
 }
-INCLUDE_ASM("asm/overlays", func_L12_002E43A8);
+extern short D_L12_001618BC;
+extern short D_L12_001618C0;
+extern short D_L12_001618C4;
+extern short D_L12_001618C8;
+extern short D_L12_001618CC;
+extern short D_L12_001618D0;
+extern short D_L12_001618D4;
+extern short D_L12_001618D8;
+extern short D_L12_001618DC;
+extern short D_L12_001618E0;
+extern short D_L12_001618E4;
+extern short D_L12_001618E8;
+extern short D_L12_001618EC;
+extern short D_L12_001618F0;
+extern short D_L12_001618F4;
+extern short D_L12_001618F8;
+extern short D_L12_001618FC;
+extern short D_L12_00161900;
+extern short D_L12_00161904;
+extern void func_L00_00260958(float *v, float s);
+extern void func_001F9C30(void *, void *, float);
+extern int func_001FA8A8(int, int, float);
+extern float func_001F9878(float);
+
+/* Level 12 hoven: spawns a burst of particles around the moby (port of func_L10_002E4E50's shape). */
+void func_L12_002E43A8(struct Moby *mp) {
+    char *arg0 = (char *)mp;
+    float v[4];
+    float a[4];
+    float b[4];
+    float o[4];
+    char *d;
+    float f20;
+    float f21;
+    float f22;
+    float r;
+    int n = *(int *)&D_L12_001618BC;
+    int i;
+    int j;
+    int k;
+    int x16, x17, x18, x19, r7;
+    d = *(char **)(arg0 + 0x78);
+    if (((unsigned char)arg0[0x20]) == 0xF) {
+        n = func_001FA898_r((float)n * 1.5f);
+    }
+    for (i = 0; i < n; i++) {
+        { float *dst = v; char *src = arg0 + 0x10; float *d2 = dst; qcopy_nc(d2, src); }
+        func_L00_00260958(v, (*(float *)&D_L12_001618C4));
+        v[2] = v[2] + 0.55f;
+        f22 = func_00214158();
+        f20 = func_002140F8((*(float *)&D_L12_001618D0), (*(float *)&D_L12_001618D4));
+        f21 = func_002140F8((*(float *)&D_L12_001618D8), (*(float *)&D_L12_001618DC));
+        if (((unsigned char)arg0[0x20]) == 0xF) {
+            f20 = f20 * 0.55f;
+            f21 = f21 * 0.55f;
+            v[2] = v[2] - 0.2f;
+        }
+        r = func_001F9F90(f22);
+        a[0] = r * (f20 * D_0015EE6C);
+        r = func_001F9FA8(f22);
+        a[1] = r * (f20 * D_0015EE6C);
+        a[2] = (f21 * D_0015EE6C) + 0.0f;
+        func_001F9C30(o, d + 0x120, 0.5f);
+        o[2] = 0.0f;
+        func_001F9BD8(a, a, o);
+        qcopy(b, a);
+        k = func_001F9850((*(int *)&D_L12_00161900));
+        b[2] = b[2] - ((*(float *)&D_L12_001618E0) * D_0015EE70) * (float)k;
+        for (j = 0; j < (*(int *)&D_L12_001618C0); j++) {
+            r = func_002140F8(0.5f, 1.5f);
+            a[3] = r * *(float *)&D_L12_001618E4;
+            b[3] = r * *(float *)&D_L12_001618E8;
+            func_L00_00260958(v, (*(float *)&D_L12_001618C8));
+            func_L00_00260958(b, (*(float *)&D_L12_001618CC) * D_0015EE6C);
+            r = func_002140F8(0.0f, 1.0f);
+            x19 = func_001FA8A8((*(int *)&D_L12_001618EC), (*(int *)&D_L12_001618F4), r);
+            r = func_002140F8(0.0f, 1.0f);
+            x18 = func_001FA8A8((*(int *)&D_L12_001618F0), (*(int *)&D_L12_001618F8), r);
+            x17 = func_001F9850((*(int *)&D_L12_001618FC));
+            x16 = func_001F9850((*(int *)&D_L12_00161900));
+            r = func_002140F8((float)(*(int *)&D_L12_00161904) * 0.5f, (float)(*(int *)&D_L12_00161904) * 2.5f);
+            r = func_001F9878(r);
+            r7 = func_001FA898_r(r);
+            func_00219780(v, a, b, x19, x18, x17, x16, r7, -1);
+        }
+    }
+}
 typedef struct {
     u8 pad0[0x20];
     f32 health; /* 0x20 */
