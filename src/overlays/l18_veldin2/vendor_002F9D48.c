@@ -115,7 +115,7 @@ extern void func_0020DAF8(void *, int, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_L00_00264690(void *, int, float, float);
-extern int D_L18_0015F6B0;
+extern int D_L18_0015F6B0 MACRO_ADDR;
 extern int D_L18_001624F0;
 extern int D_L18_001624E8;
 extern int D_L18_001624EC;
@@ -760,7 +760,160 @@ void func_L18_002FD058(unsigned char *m) {
         AddDrawCallback(func_L18_002FDD20, m);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L18_002FD5C0);
+typedef struct {
+    char pad0[0x20];
+    float health;
+    char pad24[0x3C];
+    char anim[0x7];
+    unsigned char anim_flags;
+    char pad68[8];
+    char fall[0x10];
+    float unk80;
+    float unk84;
+    float unk88;
+    float unk8C;
+    int unk90;
+    int unk94;
+    float unk98;
+    char pad9C[0x11];
+    unsigned char unkAD;
+    char padAE[0xE];
+    float unkBC;
+    float unkC0;
+    float unkC4;
+    char padC8[0xB8];
+    u128 target;
+    char pad190[0x30];
+    void *target_moby;
+    int target_mode;
+    char pad1C8[0x18];
+    int path;
+    char pad1E4[0x14];
+    float spin;
+} SentryVars_5C0;
+
+extern short D_L18_00162694;
+extern short D_L18_001626A4;
+extern short D_L18_001626A8;
+extern short D_L18_0016269C;
+extern short D_L18_001626A0;
+extern short D_L18_0016268C;
+extern short D_L18_001626AC;
+extern short D_L18_001626B0;
+extern short D_L18_001626B4;
+extern short D_L18_001626B8;
+extern int D_L18_001B11B0[];
+extern char D_0013E633[];
+extern void func_L18_002FDF58(unsigned char *);
+extern char *func_L00_0025B478(void *, int, int);
+extern int func_L00_0025B4D0(void *, void *, void *, int, void *, void *, int, int);
+extern void func_L00_0025BBA0(void *, float *, void *, void *);
+extern void func_L00_0025D5B0(float, void *, void *, int, int, int);
+extern void func_L00_0025E4B0(void *, void *);
+extern void func_L00_0025E590(void *, void *);
+extern int func_L00_00260FB0(float, void *, void *, int, int, int *, int);
+#define F(x) (*(float *)&x)
+
+#include "hero.h"
+#define hero (*(Hero *)(D_0013E633 + 0xE1D))
+
+void func_L18_002FD5C0(void *m_) {
+    struct Moby *m = m_;
+    SentryVars_5C0 *d = (SentryVars_5C0 *)m->pvars;
+    union { u128 q; float f[4]; } v;
+    int hit;
+    float dmg;
+    float angle;
+    float speed;
+    char *coll;
+    int a;
+    int b;
+
+    if (m->state == 0 || m->state == 8) {
+        return;
+    }
+    if (m->state != 7 && (*(int *)&D_L18_0015F6B0) != (*(int *)&D_L18_00162694)) {
+        (*(int *)&D_L18_00162694) = (*(int *)&D_L18_0015F6B0);
+        func_001F49B0((void *)func_L18_002FDF58, m);
+    }
+    speed = F(D_L18_001626A4);
+    if (m->state == 4 || m->state == 5) {
+        speed = F(D_L18_001626A8);
+    }
+    d->spin = func_001FA748(d->spin, speed * 0.017453292f * D_0015EE6C);
+    *(int *)((char *)m + 0x90) = func_001FA8A8((*(int *)&D_L18_0016269C), (*(int *)&D_L18_001626A0),
+                                func_001F9FA8(d->spin) * 0.5f + 0.5f);
+    if (m->pos.z < 100.0f && m->state != 7) {
+        m->state = 6;
+    }
+    m->scale = m->pclass->scale * F(D_L18_0016268C);
+    if (hero.state.current == 0x72 || D_L18_0015F6A8 == 2) {
+        if (m->state != 7) {
+            m->state = 8;
+            if (*((u8 *)m + 0x53) != 0) {
+                func_00213DE0(m, 0, 0, func_001F9850(10));
+            }
+            *(int *)((char *)m + 0x94) = 0;
+            *(u16 *)((char *)m + 0x34) = (*(u16 *)((char *)m + 0x34) | 0x41) & ~0x1000;
+            return;
+        }
+    }
+    dmg = 0.0f;
+    coll = func_L00_0025B478(m, 0x330000, 0);
+    func_L00_0025B4D0(m, coll, &d->health, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && m->state != 6 && dmg != 0.0f) {
+        d->health -= dmg;
+        if (d->health <= 0.0f) {
+            if (func_002140B0(2) != 0) {
+                m->state = 6;
+            } else {
+                float k = D_0015EE70;
+                float t0 = F(D_L18_001626AC) * k;
+                float t1 = F(D_L18_001626B0) * k;
+                float t2 = F(D_L18_001626B4) * D_0015EE6C;
+                float t3 = F(D_L18_001626B8) * D_0015EE6C;
+                b = 0x200;
+                d->unk90 = b;
+                k = 0.5f;
+                d->unk98 = k;
+                d->unk80 = t0;
+                d->unk84 = t1;
+                d->unk88 = t2;
+                d->unk8C = t3;
+                a = 0x29;
+                d->unk94 = a;
+                d->unkAD = 0;
+                d->unkBC = D_0015EE6C + D_0015EE6C;
+                *(u16 *)((char *)m + 0x34) &= ~0x1000;
+                v.q = *(u128 *)(coll + 0x10);
+                func_L00_0025BBA0(&v, &angle, &d->unk88, &d->unk8C);
+                func_L00_0025D5B0(angle, m, d->fall, 3, 1, 0);
+                d->unkC0 = 7.5f;
+                d->unkC4 = 15.0f;
+                m->state = 5;
+                *(int *)((char *)m + 0x94) = 0;
+                d->anim_flags = 0x78;
+                func_L00_0025E4B0(m, d->anim);
+            }
+        }
+    }
+    *((u8 *)m + 0xA4) = 0xFF;
+    func_L00_0025E590(m, d->anim);
+    b = (int)&D_L18_001B11B0[d->path];
+    a = *(int *)b;
+    func_L00_00260FB0(512.0f, m, &d->target, 0, 0, (int *)(a + 0x10), *(int *)a);
+    if (d->target_mode == 2) {
+        if (hero.state.control_mode == 0xF) {
+            int *list = (int *)hero.unk560;
+            qcopy(&d->target, (char *)list + *list * 16);
+        } else {
+            qcopy(&d->target, &hero.motion.pos);
+        }
+    }
+    if (d->target_moby == 0) {
+        d->target_moby = hero.moby;
+    }
+}
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVec;
 extern float func_001F9D48(float *, float *);
 extern float func_00214D88(float *, float *, float, float, float, float);

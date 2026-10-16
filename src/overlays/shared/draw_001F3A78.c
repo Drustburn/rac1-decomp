@@ -757,42 +757,40 @@ void func_L00_001F92C0(void) { if (D_L00_0015F6BC == 0) func_L00_002781D8(0); }
 typedef struct {
     int key;
     int pad[3];
-} CreditLine_1F92E8;
-typedef struct {
-    short state;
-    short page;
-    short wipe;
-    short frame;
-    int image;
-    int next;
-} CreditsState_1F92E8;
-extern CreditsState_1F92E8 D_L00_0015F700_1F92E8 __asm__("D_L00_0015F700") MACRO_ADDR;
-extern float D_L00_0015F4FC_r __asm__("D_L00_0015F4FC") MACRO_ADDR;
-extern CreditLine_1F92E8 D_L00_00173180[];
+} DbgRec_1F92E8;
+extern int D_L00_0015F700[4] MACRO_ADDR;
+extern float D_L00_0015F4FC MACRO_ADDR;
+extern DbgRec_1F92E8 D_L00_00173180[];
 extern void func_001F7680(int);
-extern int func_001FA898_q(float) __asm__("func_001FA898");
+extern int func_001FA898(float);
 extern void func_001F55C0(int, int, int, int);
 extern void func_001F3C10(void);
 extern void func_001F4630(int);
 extern void func_L00_001FCC50(void *, int);
 extern void func_001F4748(void);
 
-/* draws the credits: the current page picture, the fade, then each name line at the current frame */
 void func_L00_001F92E8(void) {
-    int i;
+    DbgRec_1F92E8 *p;
+    DbgRec_1F92E8 *q;
 
     if (D_L00_0015F6BC == 0) {
-        func_001F7680(D_L00_0015F700_1F92E8.image);
-        if (0.0f < D_L00_0015F4FC_r) {
-            if (1.0f < D_L00_0015F4FC_r) {
-                D_L00_0015F4FC_r = 1.0f;
+        func_001F7680(D_L00_0015F700[2]);
+        if (0.0f < D_L00_0015F4FC) {
+            if (1.0f < D_L00_0015F4FC) {
+                D_L00_0015F4FC = 1.0f;
             }
-            func_001F55C0(0, 0, 0, func_001FA898_q(D_L00_0015F4FC_r * 128.0f));
+            func_001F55C0(0, 0, 0, func_001FA898(D_L00_0015F4FC * 128.0f));
         }
         func_001F3C10();
-        func_001F4630(0);
-        for (i = 0; D_L00_00173180[i].key >= 0; i++) {
-            func_L00_001FCC50(&D_L00_00173180[i], D_L00_0015F700_1F92E8.frame);
+        ((int (*)(int))func_001F4630)(0);
+        p = D_L00_00173180;
+        if (p->key >= 0) {
+            q = p;
+            do {
+                func_L00_001FCC50(q, ((short *)D_L00_0015F700)[3]);
+                p++;
+                q++;
+            } while (p->key >= 0);
         }
         func_001F4748();
     }
