@@ -32,7 +32,29 @@ int func_L00_00249750(float a, float b, float x) {
     }
     return 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_002497A0);
+typedef struct {
+    unsigned char pad0[0x12E4];
+    unsigned char base_condition;
+    unsigned char pad12E5[0x208C - 0x12E5];
+    int control_mode;
+} Hero_2497A0;
+extern Hero_2497A0 D_0013F450_2497A0 __asm__("D_0013F450");
+
+/* item < 256: whether the hero is in control mode 0x11 or 0x12 or has base condition 1;
+   else x >= 95.0f (the joined tail) */
+int func_L00_002497A0(int item, float a, float b, float x) {
+    int r;
+
+    if (item < 256) {
+        r = 0;
+        if (D_0013F450_2497A0.control_mode == 0x11 || D_0013F450_2497A0.control_mode == 0x12 ||
+            D_0013F450_2497A0.base_condition == 1) {
+            r = 1;
+        }
+        return r;
+    }
+    return x >= 95.0f;
+}
 int func_L00_002497E0(float a, float b, float x) { return x >= 95.0f; }
 INCLUDE_ASM("asm/overlays", func_L00_00249EE0);
 INCLUDE_ASM("asm/overlays", func_L00_00249F40);
