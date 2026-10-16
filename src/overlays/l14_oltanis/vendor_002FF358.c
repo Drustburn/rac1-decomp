@@ -576,7 +576,228 @@ void func_L14_00300468(char *m) {
         func_L00_00263950(m, d + 0xD0, 1, sx * D_0015EE64, sy * D_0015EE64);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L14_00302288);
+typedef struct {
+    char pad0[0x10];
+    Vec4f vel;
+    int fade;
+    int owner;
+    short trail;
+    short bounces;
+    float fade_rate;
+} Spark_2288;
+typedef struct {
+    char pad0[0x18];
+    int owner;
+    int pad1C;
+    Vec4f hit;
+    Vec4f pad30;
+    Vec4f normal;
+} Coll_2288;
+typedef struct { float r, g, b; } Rgb_2288;
+typedef unsigned int u128_2288 __attribute__((mode(TI)));
+extern Coll_2288 D_L14_00174640;
+extern int D_L14_00174658 __attribute__((section(".data")));
+extern short D_L14_0016215C;
+extern short D_L14_00162158;
+extern short D_L14_00162160;
+extern short D_L14_00162164;
+extern short D_L14_00162170;
+extern short D_L14_00162174;
+extern int func_L00_001F10E0(void *, int, void *, float);
+extern int func_001F9908(int *);
+extern int func_001F9938(short *);
+extern void func_L00_0025C710(void *, void *, void *, float);
+extern int func_002140B0(int);
+extern float func_001FA888(int);
+extern int func_L00_001EFFF0(void *, void *, int, void *, int);
+extern void func_L00_001FF4B0(void *, void *, float);
+extern void func_L00_001FF610(void *, void *, void *);
+extern int func_0022ED80();
+extern void func_L00_001FF500(void *, void *, float);
+extern int func_001FA898(float);
+extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
+extern Rgb_2288 D_L14_00162178;
+extern float D_0015EE60 MACRO_ADDR;
+
+void func_L14_00302288(Moby *m)
+{
+  Spark_2288 *d = (Spark_2288 *) m->pvars;
+  Vec4f next;
+  Vec4f t;
+  Vec4f from;
+  float speed;
+  float lo;
+  float hi;
+  if (((func_L00_001F10E0(&m->pos, 0, m, 0.65f) != 0) && (D_L14_00174658 != 0)) && (D_L14_00174658 != d->owner))
+  {
+    m->state = 3;
+  }
+  if (func_001F9908(&d->fade) != 0)
+  {
+    m->state = 3;
+  }
+  switch (m->state)
+  {
+    case 0:
+
+    case 1:
+    {
+      func_001F9BD8(&next, &m->pos, &d->vel);
+      d->vel.z -= d->vel.w;
+      if ((m->state == 1) && (d->vel.z < 0.0f))
+      {
+        m->state = 0;
+      }
+      func_001F9938(&d->trail);
+      if (d->trail != 0)
+      {
+        int i;
+        for (i = 0; i < 3; i++)
+        {
+          float one = 1.0f;
+          float third = 0.3333f;
+          int spin;
+          char *p;
+          *((u128_2288 *) (&from)) = *((u128_2288 *) (&m->pos));
+          func_L00_0025C710(&t, &from, &next, ((float) i) * third);
+          spin = func_002140B0(6);
+          if (func_002140B0(2) != 0)
+          {
+            spin = -spin;
+          }
+          p = (char *)func_L00_0026DEA0_2FF358(&t, 0.025f, one, one, spin, D_L14_0015F660_2FF358, ((((float) d->trail) / func_001FA888(func_001F9850(*(int *)&D_L14_0016215C))) * 45000.0f) + 5000.0f, 0x80808080);
+          if (p != 0)
+          {
+            char *q = p + 0x20;
+            short fr = func_001F9850(0x78);
+            *((short *) (p + 0xA)) = fr;
+            *((int *) (q + 4)) = 2;
+            q[0xA] = 0x7F;
+            q[0xB] = p[0xA];
+          }
+        }
+
+      }
+      if ((func_L00_001EFFF0(&m->pos, &next, 0, m, 0) != 0) && ((D_L14_00174640.owner == 0) || (D_L14_00174640.owner != d->owner)))
+      {
+        qcopy(&m->pos, &D_L14_00174640.hit);
+      }
+      else
+      {
+        qcopy(&m->pos, &next);
+      }
+      if (((func_L00_001F10E0(&m->pos, 0, m, *(float *)&D_L14_00162158) != 0) && ((m->state == 0) || ((m->pos.z - D_L14_00174640.hit.z) < 0.0f))) && ((D_L14_00174640.owner == 0) || (D_L14_00174640.owner != d->owner)))
+      {
+        func_L00_001FF4B0(&t, &D_L14_00174640.normal, *(float *)&D_L14_00162158);
+        func_001F9BD8(&m->pos, &D_L14_00174640.hit, &t);
+        func_L00_001FF610(&d->vel, &d->vel, &D_L14_00174640.normal);
+        func_0022ED80(1, 0, m);
+        if (m->state == 0)
+        {
+          m->state = 1;
+          if ((++d->bounces) == 1)
+          {
+            func_L00_001FF500(&d->vel, &d->vel, *(float *)&D_L14_00162174 * D_0015EE6C);
+            d->vel.z = d->vel.z * *(float *)&D_L14_00162170;
+          }
+          else
+          {
+            func_001F9C30_2FF358(&from, &d->vel, *(float *)&D_L14_00162170);
+            if (func_001F9CE8(&from) < (*(float *)&D_L14_00162160 * D_0015EE6C))
+            {
+              func_L00_001FF500(&d->vel, &d->vel, *(float *)&D_L14_00162160 * D_0015EE6C);
+              d->vel.z *= *(float *)&D_L14_00162170;
+            }
+            else
+            {
+              qcopy(&d->vel, &from);
+            }
+          }
+        }
+        if (d->bounces >= 4)
+        {
+          float min;
+          float w;
+          float c;
+          m->state = 2;
+          d->vel.z = 0.0f;
+          w = func_001F9CE8(&d->vel);
+          c = *(float *)&D_L14_00162170;
+          min = *(float *)&D_L14_00162160;
+          d->vel.w = w;
+          min *= D_0015EE6C;
+          d->vel.w *= c;
+          if (d->vel.w < min)
+          {
+            d->vel.w = min;
+          }
+          func_L00_001FF4B0(&d->vel, &d->vel, d->vel.w);
+          d->fade_rate = 1.0f / func_001FA888(d->fade);
+        }
+      }
+      break;
+    }
+
+    case 2:
+    {
+      float f;
+      int r;
+      int g;
+      int b;
+      float k;
+      float min;
+      *((Rgb_2288 *) (&next)) = D_L14_00162178;
+      f = ((float) d->fade) * d->fade_rate;
+      r = func_001FA898(((((Rgb_2288 *) (&next))->r - 255.0f) * f) + 255.0f);
+      g = func_001FA898(((((Rgb_2288 *) (&next))->g - 0.0f) * f) + 0.0f);
+      b = func_001FA898(((((Rgb_2288 *) (&next))->b - 0.0f) * f) + 0.0f);
+      k = ((*(float *)&D_L14_00162164 - 1.0f) * D_0015EE60) + 1.0f;
+      min = *(float *)&D_L14_00162160 * D_0015EE6C;
+      m->unk90 = 0xFF000000;
+      m->unk90 = (((b << 16) | m->unk90) | (g << 8)) | r;
+      d->vel.w *= k;
+      if (d->vel.w < min)
+      {
+        d->vel.w = min;
+      }
+      func_L00_001FF4B0(&d->vel, &d->vel, d->vel.w);
+      func_001F9BD8(&m->pos, &m->pos, &d->vel);
+      break;
+    }
+
+    case 3:
+      func_L00_0025F4A8(m, &d->vel, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
+      func_0020D678(m);
+      return;
+
+  }
+
+  if (m->state < 2)
+  {
+    speed = func_001F9CE8(&d->vel);
+  }
+  else
+    if (m->state == 2)
+  {
+    speed = d->vel.w;
+  }
+  else
+  {
+    return;
+  }
+  lo = D_0015EE6C * 0.2f;
+  hi = D_0015EE6C * 6.0f;
+  if (speed < lo)
+  {
+    speed = lo;
+  }
+  if (hi < speed)
+  {
+    speed = hi;
+  }
+  speed -= lo;
+  m->rot.y = func_001FA748((((speed / (hi - lo)) * 7.0f) + 1.0f) * 0.017453292f, m->rot.y);
+}
 extern char *func_0020D348(int);
 extern float func_L00_001FF860(float, float);
 extern void func_L00_00251E30(void *);
