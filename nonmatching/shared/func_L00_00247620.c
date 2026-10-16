@@ -10,11 +10,11 @@
  *   Resumed through run 8/8: scans five active slots for the requested key. p8.c matches the joined loop body; onl
  *   Stopped at budget. Unblock by finding a plain-C declaration/address expression retaining the separate base loa
  */
-extern char D_L00_001842F0[];
+extern char D_L00_001842F0_47620[] __asm__("D_L00_001842F0");
 
 /* returns the first active key match, or -1 when none is found */
 int func_L00_00247620(int id) {
-    char *base = D_L00_001842F0;
+    char *base = D_L00_001842F0_47620;
     char *p = base + 0x28C;
     int index = 0;
     do {
