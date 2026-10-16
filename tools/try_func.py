@@ -141,7 +141,7 @@ def build(name, seg, src, first, last, candidate, work):
     extra = file_cflags.flags_for(src)
     with open(work / "log.txt", "w") as log:
         s = [work / f"{n}.s" for n in "abcd"]
-        if str(src) in EE29_SOURCES:
+        if Path(src).as_posix() in EE29_SOURCES:
             if not run(sn(CC29, *CFLAGS, *extra, EE29_INC, "-S", "-o", str(s[0]), str(c)), log):
                 return None
             shutil.copy(s[0], s[3])
