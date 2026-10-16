@@ -7181,7 +7181,215 @@ int func_00224040(char *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/text", func_002243E8);
 
-INCLUDE_ASM("asm/nonmatchings/text", func_00224728);
+typedef struct __attribute__((packed)) {
+    s64 v;
+} Unaligned64_pv;
+struct MenuScreen_pv;
+struct MenuPage_pv {
+    s32 moby_anims[14];
+    struct MenuPage_pv *back;
+    s32 state;
+    struct MenuScreen_pv *focus;
+    struct MenuScreen_pv *screens[14];
+    u8 pad_7C[0x4];
+    struct MenuScreen_pv *pending_focus;
+    s32 confirmed;
+};
+struct MenuSystem_pv {
+    s32 state;
+    struct MenuPage_pv *current;
+    struct MenuPage_pv *next;
+    u8 pad_C[0xC4];
+    struct MenuPage_pv *previous;
+    s32 unkD4;
+    u8 pad_D8[0x4C];
+    s32 close_locked;
+    s32 card_op_pending;
+    s32 card_op_text;
+    u8 pad_130[0x24];
+    s32 ticks;
+};
+struct MenuScreen_pv {
+    s32 (*update)(struct MenuScreen_pv *);
+    u8 pad_4[0x10];
+    s32 moby;
+    u8 pad_18[0x18];
+    s32 flags;
+    u8 pad_34[0xC];
+    s32 slot;
+    u8 pad_44[0x4];
+    s32 save_data;
+    s32 step;
+};
+struct MemoryCardState_pv {
+    u8 pad_0[8];
+    s32 type;
+    u8 pad_C[8];
+    s32 save_index;
+    u8 pad_18[4];
+    s32 sync_result;
+    u8 pad_20[0xBC];
+    s32 state;
+    u8 pad_E0[4];
+    s32 pending_state;
+    u8 pad_E8[4];
+    s32 err;
+    u8 pad_F0[0xC];
+    s32 unkFC;
+};
+struct PadState_pv {
+    u8 pad_0[0x1A4];
+    s32 pressed;
+    u8 pad_1A8[0xC];
+    s32 raw_pressed;
+    u8 pad_1B8[0xC];
+    u32 pressed_unmasked;
+};
+#define menu_system_pv (*(struct MenuSystem_pv *)D_001D5F70)
+#define memory_card_state_pv (*(struct MemoryCardState_pv *)D_0013D390)
+#define controller_state_pv (*(struct PadState_pv *)D_0013CA40)
+extern char D_001D51B8[];
+extern char D_001D5318[];
+extern short D_0013E15A[];
+extern void func_00227DB0(int);
+extern void func_00227D20(int, int);
+extern void func_0022F4A0(int);
+extern void func_00209DC0(void);
+s32 func_00224728(struct MenuScreen_pv *w) {
+    s32 old;
+    s32 pad;
+    s32 cursor;
+    s32 cur;
+    s32 f2;
+    s32 one;
+    struct MenuPage_pv *back;
+
+    if (menu_system_pv.current->focus != w) {
+        return 0;
+    }
+    old = w->slot;
+    if (w->step == 0 && menu_system_pv.previous == ((struct MenuPage_pv *)D_001D51B8) && menu_system_pv.previous->confirmed != 0) {
+        w->step = 1;
+    }
+    if (w->step == 0 && menu_system_pv.previous == ((struct MenuPage_pv *)D_001D5318) && menu_system_pv.previous->confirmed != 0) {
+        w->step = 1;
+    }
+    if (w->step == 1) {
+        if (w->flags & 0x2000) {
+            func_00227DB0(w->slot);
+        } else {
+            func_00227D20(w->save_data, w->slot);
+        }
+        menu_system_pv.card_op_pending = 1;
+        menu_system_pv.card_op_text = 0x4FB5;
+        D_0015FF4C = 0;
+    }
+    w->step = 2;
+
+    if (menu_system_pv.card_op_pending != 0) {
+        if (memory_card_state_pv.state >= 3 || memory_card_state_pv.pending_state >= 0 || menu_system_pv.ticks < 0xB) {
+            return 0;
+        }
+        menu_system_pv.card_op_pending = 0;
+        if (memory_card_state_pv.err != 0 || memory_card_state_pv.sync_result != 0 || D_0015FF4C != 0) {
+            if (D_0015F6CC != 0) {
+                D_0015EFB4_m |= 0x80;
+                func_001FBC80(8, menu_system_pv.current, memory_card_state_pv.unkFC);
+                memory_card_state_pv.unkFC = 0;
+                return 0;
+            } else {
+                D_0015EFB4_m |= 0x80;
+                memory_card_state_pv.unkFC = 0;
+                func_001FBC80(3, menu_system_pv.current, 0);
+                return 0;
+            }
+        }
+        memory_card_state_pv.unkFC = 1;
+        *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x24) = D_0015EE98;
+        *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x20) = D_0015EE84_mm;
+        *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x2C) = D_0015EF24;
+        *(SaveWord2 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x30) = D_0015EF98_s;
+        *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x28) = D_0015EF20;
+        func_0022F4A0(0);
+        D_0013E15A[0] = 1;
+        return 0;
+    }
+
+    if ((controller_state_pv.pressed_unmasked & 0xD00) && menu_system_pv.close_locked == 0) {
+        return 1;
+    }
+    if (controller_state_pv.pressed_unmasked & 0x10) {
+        back = menu_system_pv.current->back;
+        if (back != 0) {
+            menu_system_pv.next = back;
+            return 0;
+        } else if (menu_system_pv.close_locked == 0) {
+            return -1;
+        }
+    }
+    if (D_0015EFB0_m != 0x10 && D_0015EFB0_m != 1) {
+        menu_system_pv.next = menu_system_pv.current->back;
+        return 0;
+    }
+    if (memory_card_state_pv.state >= 3 || memory_card_state_pv.pending_state >= 0 || menu_system_pv.ticks < 0xB ||
+        memory_card_state_pv.type != 2) {
+        return 0;
+    }
+
+    if (w->flags & 1) {
+        pad = controller_state_pv.raw_pressed;
+    } else {
+        pad = controller_state_pv.pressed;
+    }
+    w->slot = D_0015EF34;
+    if ((pad & 0x1000) && D_0015EF34 != 0) {
+        w->slot = D_0015EF34 - 1;
+    }
+    if (pad & 0x4000) {
+        cur = w->slot;
+        if (cur < 4) {
+            w->slot = cur + 1;
+        }
+    }
+    cursor = w->slot;
+    D_0015EF34 = cursor;
+    if ((pad & 0x40) && memory_card_state_pv.type == 2) {
+        if (*(s32 *)((u8 *)&memory_card_state_pv + cursor * 0x1C + 0x20) != -1) {
+            menu_system_pv.next = (w->flags & 0x2000) ? ((struct MenuPage_pv *)D_001D5318) : ((struct MenuPage_pv *)D_001D51B8);
+            menu_system_pv.unkD4 = (w->flags & 0x2000) ? 2 : 1;
+            D_001D29C0 = w->slot;
+        } else {
+            w->step = 1;
+        }
+    } else if (pad & 0x20) {
+        if (w->flags & 0x2000) {
+            if (memory_card_state_pv.unkFC != 0) {
+                func_001FBC80(7, 0, 0);
+                goto moved;
+            }
+            memory_card_state_pv.unkFC = 0;
+            func_00227DB0(-1);
+        } else {
+            goto cont;
+        }
+done:
+        func_0022F4A0(0);
+        D_0013E15A[0] = 1;
+        return 0;
+cont:
+        memory_card_state_pv.unkFC = 0;
+        f2 = D_0015EFB4_m & ~2;
+        D_0015EFB4_m = f2 & ~4;
+        func_00209DC0();
+        goto done;
+    }
+moved:
+    if (w->slot != old) {
+        func_0022ED80(1, 0x11, w->moby);
+    }
+out:
+    return 0;
+}
 
 typedef struct {
     u8 pad_0[0x20];
