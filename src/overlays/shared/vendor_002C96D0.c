@@ -1342,7 +1342,78 @@ void func_L00_002CD660(char *m) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_002CD7B0);
+extern int D_L00_001ABD80[];
+extern float func_001F9D48(void *, void *);
+extern float func_001FA850(float, float);
+
+/* Finds the best-scoring target moby in the target list within range and angle limits. */
+char *func_L00_002CD7B0(float *pos, float *lim, int *skip, float maxy, float maxp, float maxd) {
+    char *best = 0;
+    float bestScore = 1e9f;
+    int i = 0;
+    char *m = (char *)D_L00_001ABD80[0];
+    while (m != 0) {
+        int n = i + 1;
+        if (*(short *)(m + 0x32) != 0) {
+            if (skip != 0) {
+                int found = 0;
+                int k;
+                for (k = 0; k < 7; k++) {
+                    if (skip[k] == (int)m) { found = 1; break; }
+                }
+                if (found) goto next;
+            } else if (*(unsigned char *)(m + 0x31) == 0) {
+                goto next;
+            }
+            {
+                float *r = (float *)func_L00_0025D390(m);
+                if (r != 0 && !(r[0] < 0.0f) && (*(unsigned short *)(m + 0x34) & 0x1000) && m != 0
+                    && *(int *)(m + 0x24) != 0 && *(short *)(*(int *)(m + 0x24) + 0x46) == 5) {
+                    float e;
+                    float *p = (float *)(m + 0x10);
+                    float d = func_001F9D48(pos, p);
+                    if (d < maxd) {
+                        float v[4];
+                        float a, b, g;
+                        int t, u;
+                        qcopy(v, p);
+                        v[2] = v[2] + (r[4] + 0.1f);
+                        a = func_L00_001FF860(v[0] - pos[0], v[1] - pos[1]);
+                        a = func_001FA850(lim[2], a);
+                        e = a * a;
+                        if (e < maxy * maxy) {
+                            b = func_L00_001FF860(d, v[2] - pos[2]);
+                            b = func_001FA850(lim[1], b);
+                            g = b * b;
+                            if (g < maxp * maxp) {
+                                if (d > 5.0f) { e = e * g * d; e = e + d; }
+                                else e = d / 5.0f;
+                                if (e < bestScore) {
+                                    if (func_L00_001EFFF0(pos, v, 2, (int)m, 0) != 0) {
+                                        t = D_L00_00173F40[6];
+                                        if (t == 0) goto next;
+                                        if ((u = *(int *)(t + 0x24)) != 0 && *(short *)(u + 0x46) == 5) goto accept;
+                                        if ((u = *(int *)(t + 0x24)) == 0 || *(short *)(u + 0x46) != 0xF) goto next;
+                                    }
+                                accept:
+                                    bestScore = e;
+                                    best = m;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    next:
+        {
+            int *pp = D_L00_001ABD80;
+            i = n;
+            m = (char *)pp[i];
+        }
+    }
+    return best;
+}
 typedef struct { float m[3][4]; } __attribute__((aligned(16))) Mat3_2CDAB8;
 typedef struct { float m[4][4]; } __attribute__((aligned(16))) Mat4_2CDAB8;
 typedef struct {
