@@ -1019,7 +1019,71 @@ void func_L00_00286128(void *a0, void *a1)
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_002862E0);
+extern char D_L00_001BA960[] NOT_SDA;
+extern unsigned char *D_L00_00160098 MACRO_ADDR;
+extern unsigned char *D_L00_0016009C MACRO_ADDR;
+extern void func_001F99B0(void *, int, int);
+extern void func_001F9978(void);
+extern void func_L00_002110C0(int, int, char *);
+extern void func_L00_00251E30(void *);
+extern void func_001FA1F8(void *, void *);
+extern void func_L00_001ED600(void);
+extern void func_00216270(void);
+
+/* loads the saved pause-menu state block into the game globals */
+void func_L00_002862E0(void) {
+    char *p = (char *)D_L00_001BB5C0;
+    unsigned char *g;
+    unsigned char *b;
+    char *e;
+    int k, s, i;
+    if (*(int *)D_L00_001BB5C0 == 0) {
+        func_001F99B0(D_L00_001BA960, 0, 0xC60);
+        return;
+    }
+    func_L00_001FF040((int)D_L00_001BA960, p, 0xC60);
+    qcopy(D_0013F450 + 0x80, p + 0x10);
+    qcopy(D_0013F450 + 0x90, p + 0x20);
+    g = (unsigned char *)D_0013F450;
+    *(int *)(*(char **)(g + 0x2080) + 0x38) = *(int *)(p + 0x30);
+    *(int *)(*(char **)(g + 0x2080) + 0x3C) = *(int *)(p + 0x34);
+    *(int *)(*(char **)(g + 0x2080) + 0x80) = *(int *)(p + 0x38);
+    b = (unsigned char *)D_0013E650;
+    *(int *)(b + 0x64) = *(int *)(p + 0x3C);
+    b[0x68] = p[0x40];
+    b[0x69] = p[0x41];
+    b[0x6A] = p[0x42];
+    *(unsigned short *)(&D_0014171B + 0x100ED) = *(unsigned short *)(p + 0xC54);
+    b[0x6B] |= 7;
+    k = *(int *)(p + 0x44);
+    if (k == 0 || k == 3) goto done;
+    s = 0;
+    switch (k) {
+    case 1:
+        s = 0x57;
+        break;
+    case 2:
+        s = 0x1A3;
+        break;
+    default:
+        func_001F9978();
+    }
+    for (i = 0; (e = (char *)D_L00_00160098 + (i << 8)) < (char *)D_L00_0016009C; i++) {
+        if (*(short *)(e + 0xA6) == s) {
+            int *q = (int *)D_L00_001BB5C0;
+            func_L00_002110C0(q[0x11], q[0x13], e);
+            break;
+        }
+    }
+done:
+    {
+        char *h = D_0013F450;
+        func_L00_00251E30(*(void **)(h + 0x2080));
+        func_001FA1F8(*(char **)(h + 0x2080) + 0xC0, h + 0x90);
+    }
+    func_L00_001ED600();
+    func_00216270();
+}
 extern unsigned char *D_L00_00160098 MACRO_ADDR;
 extern unsigned char *D_L00_0016009C MACRO_ADDR;
 int func_L00_00286498(int a, int id) {
