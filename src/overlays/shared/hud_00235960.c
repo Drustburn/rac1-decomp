@@ -531,7 +531,70 @@ void func_L00_00238148(HudElem *e) {
         e->unk7C = 0x1E;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_002381D0);
+/* func_L00_002381D0 -- src/overlays/shared/hud_00235960.c
+ * Draws a HUD gauge frame. EXACT: e->h is copied with __builtin_memcpy so
+ * the D_L00_0015F844 load is a scalar MEM (no anti-dep on the e->w/e->h
+ * stores), which moves it later in sched1 and gives it $a3 in local-alloc.
+ */
+extern short D_L00_0015F840;
+extern short D_L00_0015F844;
+extern void func_00201640(int, int, int, int, long, long);
+extern int func_00200198(int, int);
+extern void func_L00_00236468(HudElem *, int *, int *, int, int);
+extern void func_L00_0023C458(int, int, int, int, int, int);
+
+/* Draws a HUD gauge frame. */
+int func_L00_002381D0(HudElem *e) {
+    int pos[2];
+    int left, top, right, bottom, w, h, bh, step, i;
+    {
+        int ww = *(int *)&D_L00_0015F840;
+        pos[0] = e->unk50;
+        pos[1] = e->unk54;
+        e->w = ww;
+        {
+            int *src = (int *)&D_L00_0015F844;
+            int *dst = &e->h;
+            __builtin_memcpy(dst, src, 4);
+        }
+    }
+    func_L00_00236400(e, &pos[0], &pos[1]);
+    func_L00_00236468(e, &pos[0], &pos[1], e->unk6C, 0);
+    w = *(int *)&D_L00_0015F840 * 0xD0;
+    h = *(int *)&D_L00_0015F844 * 0xA0;
+    bh = *(int *)&D_L00_0015F840 * 0x260;
+    bottom = *(int *)&D_L00_0015F844 * 0xEA0;
+    left = (pos[0] + e->unk48) << 4;
+    top = (pos[1] + e->unk4A) << 4;
+    left += w / 64;
+    top += h / 256;
+    right = left + bh / 64;
+    bottom = top + bottom / 256;
+    func_00201640(left, top, right, bottom, 0x80000000, 1);
+    {
+        int st = *(int *)&D_L00_0015F844 * 0xEA0;
+        h = *(int *)&D_L00_0015F844;
+        top = (pos[1] + e->unk4A) << 4;
+        top += (h * 0xF40) / 256;
+        bh = (e->unk74 * st) / (e->unk08 << 8);
+        func_00201640(left, top, right, top - bh, 0x80829E00, 1);
+    }
+    i = 1;
+    if (i < e->unk74) do {
+        int hh = *(int *)&D_L00_0015F844;
+        top = (pos[1] + e->unk4A) << 4;
+        top += (hh * 0xF40) / 256;
+        step = *(int *)&D_L00_0015F844 * 0xEA0;
+        step = i * step / (e->unk08 << 8);
+        i++;
+        top -= step;
+        top -= 16;
+        func_00201640(left, top, right, top + 32, 0x80000000, 1);
+    } while (i < e->unk74);
+    w = func_00200198(*(int *)e, 0);
+    func_L00_0023C458(w, pos[0] + e->unk48, pos[1] + e->unk4A, *(int *)&D_L00_0015F840, *(int *)&D_L00_0015F844, 0x80);
+    return e->w;
+}
 typedef struct {
     char pad_00[0x48];
     short x48;
