@@ -633,9 +633,15 @@ impl Ee {
             8..=11 => lanes(&|i| vu::madd(acc[i], a[i], bc[i])),
             12..=15 => lanes(&|i| vu::msub(acc[i], a[i], bc[i])),
             0x18..=0x1b => lanes(&|i| vu::mul(a[i], bc[i])),
+            0x10..=0x13 => lanes(&|i| if a[i] > bc[i] { a[i] } else { bc[i] }), // vmax{x,y,z,w}
+            0x14..=0x17 => lanes(&|i| if a[i] < bc[i] { a[i] } else { bc[i] }), // vmini{x,y,z,w}
             0x1c => lanes(&|i| vu::mul(a[i], q)),
             0x20 => lanes(&|i| vu::add(a[i], q)),
+            0x21 => lanes(&|i| vu::madd(acc[i], a[i], q)),
             0x24 => lanes(&|i| vu::sub(a[i], q)),
+            0x25 => lanes(&|i| vu::msub(acc[i], a[i], q)),
+            0x2b => lanes(&|i| if a[i] > b[i] { a[i] } else { b[i] }), // vmax
+            0x2f => lanes(&|i| if a[i] < b[i] { a[i] } else { b[i] }), // vmini
             0x28 => lanes(&|i| vu::add(a[i], b[i])),
             0x29 => lanes(&|i| vu::madd(acc[i], a[i], b[i])),
             0x2a => lanes(&|i| vu::mul(a[i], b[i])),
@@ -658,6 +664,26 @@ impl Ee {
                     8..=11 => Some(lanes(&|i| vu::madd(acc[i], a[i], bc[i]))),
                     12..=15 => Some(lanes(&|i| vu::msub(acc[i], a[i], bc[i]))),
                     0x18..=0x1b => Some(lanes(&|i| vu::mul(a[i], bc[i]))),
+                    0x10..=0x17 => {
+                        // vitof0/4/12/15 and vftoi0/4/12/15: fixed point with 0, 4, 12 or 15 fraction bits
+                        let scale = [1.0f32, 16.0, 4096.0, 32768.0][(op & 3) as usize];
+                        let v = if op < 0x14 {
+                            lanes(&|i| a[i].to_bits() as i32 as f32 / scale)
+                        } else {
+                            lanes(&|i| f32::from_bits((a[i] * scale) as i32 as u32))
+                        };
+                        self.put_vf(ft, dest, v);
+                        None
+                    }
+                    0x1c => Some(lanes(&|i| vu::mul(a[i], q))),                  // vmulaq
+                    0x1d => {
+                        self.put_vf(ft, dest, lanes(&|i| a[i].abs()));           // vabs
+                        None
+                    }
+                    0x20 => Some(lanes(&|i| vu::add(a[i], q))),                  // vaddaq
+                    0x21 => Some(lanes(&|i| vu::madd(acc[i], a[i], q))),         // vmaddaq
+                    0x24 => Some(lanes(&|i| vu::sub(a[i], q))),                  // vsubaq
+                    0x25 => Some(lanes(&|i| vu::msub(acc[i], a[i], q))),         // vmsubaq
                     0x28 => Some(lanes(&|i| vu::add(a[i], b[i]))),
                     0x29 => Some(lanes(&|i| vu::madd(acc[i], a[i], b[i]))),
                     0x2a => Some(lanes(&|i| vu::mul(a[i], b[i]))),
@@ -747,9 +773,111 @@ impl Ee {
             (0x29, 0x0e) => q(self, (qs >> 64) | (qt >> 64) << 64),   // pcpyud
             (0x29, 0x12) => q(self, qs | qt),                         // por
             (0x29, 0x13) => q(self, !(qs | qt)),                      // pnor
+            // Lane arithmetic, packs, extends and shuffles (behave: hand-written VU0 code uses them).
+            (0x08, 0x00) => q(self, lanes(qs, qt, 32, |a, b| a.wrapping_add(b))),          // paddw
+            (0x08, 0x01) => q(self, lanes(qs, qt, 32, |a, b| a.wrapping_sub(b))),          // psubw
+            (0x08, 0x02) => q(self, lanes(qs, qt, 32, |a, b| mask(32, sxl(a, 32) > sxl(b, 32)))), // pcgtw
+            (0x08, 0x03) => q(self, lanes(qs, qt, 32, |a, b| if sxl(a, 32) > sxl(b, 32) { a } else { b })), // pmaxw
+            (0x08, 0x04) => q(self, lanes(qs, qt, 16, |a, b| a.wrapping_add(b))),          // paddh
+            (0x08, 0x05) => q(self, lanes(qs, qt, 16, |a, b| a.wrapping_sub(b))),          // psubh
+            (0x08, 0x06) => q(self, lanes(qs, qt, 16, |a, b| mask(16, sxl(a, 16) > sxl(b, 16)))), // pcgth
+            (0x08, 0x07) => q(self, lanes(qs, qt, 16, |a, b| if sxl(a, 16) > sxl(b, 16) { a } else { b })), // pmaxh
+            (0x08, 0x08) => q(self, lanes(qs, qt, 8, |a, b| a.wrapping_add(b))),           // paddb
+            (0x08, 0x09) => q(self, lanes(qs, qt, 8, |a, b| a.wrapping_sub(b))),           // psubb
+            (0x08, 0x0a) => q(self, lanes(qs, qt, 8, |a, b| mask(8, sxl(a, 8) > sxl(b, 8)))), // pcgtb
+            (0x08, 0x10) => q(self, lanes(qs, qt, 32, |a, b| sat(sxl(a, 32) + sxl(b, 32), 32))),   // paddsw
+            (0x08, 0x11) => q(self, lanes(qs, qt, 32, |a, b| sat(sxl(a, 32) - sxl(b, 32), 32))),   // psubsw
+            (0x08, 0x14) => q(self, lanes(qs, qt, 16, |a, b| sat(sxl(a, 16) + sxl(b, 16), 16))),   // paddsh
+            (0x08, 0x15) => q(self, lanes(qs, qt, 16, |a, b| sat(sxl(a, 16) - sxl(b, 16), 16))),   // psubsh
+            (0x08, 0x18) => q(self, lanes(qs, qt, 8, |a, b| sat(sxl(a, 8) + sxl(b, 8), 8))),       // paddsb
+            (0x08, 0x19) => q(self, lanes(qs, qt, 8, |a, b| sat(sxl(a, 8) - sxl(b, 8), 8))),       // psubsb
+            (0x28, 0x10) => q(self, lanes(qs, qt, 32, |a, b| (a + b).min(0xffff_ffff))),           // padduw
+            (0x28, 0x11) => q(self, lanes(qs, qt, 32, |a, b| a.saturating_sub(b))),                // psubuw
+            (0x28, 0x14) => q(self, lanes(qs, qt, 16, |a, b| (a + b).min(0xffff))),                // padduh
+            (0x28, 0x15) => q(self, lanes(qs, qt, 16, |a, b| a.saturating_sub(b))),                // psubuh
+            (0x28, 0x18) => q(self, lanes(qs, qt, 8, |a, b| (a + b).min(0xff))),                   // paddub
+            (0x28, 0x19) => q(self, lanes(qs, qt, 8, |a, b| a.saturating_sub(b))),                 // psubub
+            (0x08, 0x12) => q(self, interleave(qs, qt, 32, 0)),                             // pextlw
+            (0x08, 0x13) => q(self, pack(qs, qt, 32)),                                      // ppacw
+            (0x08, 0x16) => q(self, interleave(qs, qt, 16, 0)),                             // pextlh
+            (0x08, 0x17) => q(self, pack(qs, qt, 16)),                                      // ppach
+            (0x08, 0x1a) => q(self, interleave(qs, qt, 8, 0)),                              // pextlb
+            (0x08, 0x1b) => q(self, pack(qs, qt, 8)),                                       // ppacb
+            (0x28, 0x01) => q(self, lanes(0, qt, 32, |_, b| (sxl(b, 32).unsigned_abs() as u128).min(0x7fff_ffff))), // pabsw
+            (0x28, 0x02) => q(self, lanes(qs, qt, 32, |a, b| mask(32, a == b))),           // pceqw
+            (0x28, 0x03) => q(self, lanes(qs, qt, 32, |a, b| if sxl(a, 32) < sxl(b, 32) { a } else { b })), // pminw
+            (0x28, 0x05) => q(self, lanes(0, qt, 16, |_, b| (sxl(b, 16).unsigned_abs() as u128).min(0x7fff))), // pabsh
+            (0x28, 0x06) => q(self, lanes(qs, qt, 16, |a, b| mask(16, a == b))),           // pceqh
+            (0x28, 0x07) => q(self, lanes(qs, qt, 16, |a, b| if sxl(a, 16) < sxl(b, 16) { a } else { b })), // pminh
+            (0x28, 0x0a) => q(self, lanes(qs, qt, 8, |a, b| mask(8, a == b))),             // pceqb
+            (0x28, 0x12) => q(self, interleave(qs, qt, 32, 64)),                            // pextuw
+            (0x28, 0x16) => q(self, interleave(qs, qt, 16, 64)),                            // pextuh
+            (0x28, 0x1a) => q(self, interleave(qs, qt, 8, 64)),                             // pextub
+            (0x09, 0x1a) => q(self, shuffle(qt, 16, [2, 1, 0, 3, 6, 5, 4, 7])),            // pexeh
+            (0x09, 0x1b) => q(self, shuffle(qt, 16, [3, 2, 1, 0, 7, 6, 5, 4])),            // prevh
+            (0x09, 0x1e) => q(self, shuffle(qt, 32, [2, 1, 0, 3])),                         // pexew
+            (0x09, 0x1f) => q(self, shuffle(qt, 32, [1, 2, 0, 3])),                         // prot3w
+            (0x29, 0x0a) => q(self, (0..4).fold(0, |v, k| v | (qt >> (32 * k) & 0xffff) << (32 * k)
+                                                       | (qs >> (32 * k) & 0xffff) << (32 * k + 16))), // pinteh
+            (0x29, 0x1a) => q(self, shuffle(qt, 16, [0, 2, 1, 3, 4, 6, 5, 7])),            // pexch
+            (0x29, 0x1b) => q(self, (0..8).fold(0, |v, k| v | (qt >> if k < 4 { 0 } else { 64 } & 0xffff) << (16 * k))), // pcpyh
+            (0x29, 0x1e) => q(self, shuffle(qt, 32, [0, 2, 1, 3])),                         // pexcw
+            (0x34, _) | (0x36, _) | (0x37, _) => q(self, lanes(0, qt, 16, |_, b| match fun { // psllh, psrlh, psrah
+                0x34 => b << (sa & 15) & 0xffff,
+                0x36 => b >> (sa & 15),
+                _ => (sxl(b, 16) >> (sa & 15)) as u128 & 0xffff,
+            })),
+            (0x3c, _) | (0x3e, _) | (0x3f, _) => q(self, lanes(0, qt, 32, |_, b| match fun { // psllw, psrlw, psraw
+                0x3c => b << sa & 0xffff_ffff,
+                0x3e => b >> sa,
+                _ => (sxl(b, 32) >> sa) as u128 & 0xffff_ffff,
+            })),
             _ => self.unknown(w, here, "MMI op"),
         }
     }
+}
+
+/// A lane of `bits` bits, sign-extended.
+fn sxl(v: u128, bits: u32) -> i128 {
+    ((v << (128 - bits)) as i128) >> (128 - bits)
+}
+
+/// A signed sum clamped to a `bits`-bit lane.
+fn sat(v: i128, bits: u32) -> u128 {
+    let (lo, hi) = (-(1i128 << (bits - 1)), (1i128 << (bits - 1)) - 1);
+    v.clamp(lo, hi) as u128 & ((1u128 << bits) - 1)
+}
+
+/// All ones in a lane when `c` holds.
+fn mask(bits: u32, c: bool) -> u128 {
+    if c { (1u128 << bits) - 1 } else { 0 }
+}
+
+/// `f` on each pair of `bits`-bit lanes of `a` and `b`.
+fn lanes(a: u128, b: u128, bits: u32, f: impl Fn(u128, u128) -> u128) -> u128 {
+    let m = (1u128 << bits) - 1;
+    (0..128 / bits).fold(0, |v, k| v | (f(a >> (bits * k) & m, b >> (bits * k) & m) & m) << (bits * k))
+}
+
+/// pext{l,u}{w,h,b}: the low (or high, `from` 64) halves' lanes of `t` and `s`, alternately, `t`'s first.
+fn interleave(s: u128, t: u128, bits: u32, from: u32) -> u128 {
+    let m = (1u128 << bits) - 1;
+    (0..64 / bits).fold(0, |v, k| {
+        v | (t >> (from + bits * k) & m) << (2 * bits * k) | (s >> (from + bits * k) & m) << (2 * bits * k + bits)
+    })
+}
+
+/// ppac{w,h,b}: the even lanes of `t` in the low half, those of `s` in the high half.
+fn pack(s: u128, t: u128, bits: u32) -> u128 {
+    let m = (1u128 << bits) - 1;
+    let n = 64 / bits;
+    (0..n).fold(0, |v, k| v | (t >> (2 * bits * k) & m) << (bits * k) | (s >> (2 * bits * k) & m) << (64 + bits * k))
+}
+
+/// Lane `k` of the result is lane `order[k]` of `v`.
+fn shuffle<const N: usize>(v: u128, bits: u32, order: [u32; N]) -> u128 {
+    let m = (1u128 << bits) - 1;
+    order.iter().enumerate().fold(0, |r, (k, &o)| r | (v >> (bits * o) & m) << (bits * k as u32))
 }
 
 /// A one-line summary. Deliberately *not* derived: a derived `Debug` on this struct would print all of

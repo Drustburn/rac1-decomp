@@ -9,17 +9,21 @@
 //!   the caller's frame is compared by the 64 bytes it points at, not by its address);
 //! - the result, by the candidate's return type.
 //!
+//! `--data` makes the program's initialised data random as well (tables, lists and flags the function reads):
+//! more of the function is reached, from states the game may never have. `--tame` leaves raw random words out,
+//! `--uncovered` lists retail's instructions no trial reached.
+//!
 //! A call is anything that leaves the function's bytes. It is recorded and returns a value made from the call's
 //! position and target, the same in both runs. A float that differs only in its last bits (VU0 and the FPU round
 //! differently) counts as close, not different. A trial in which retail itself faults (a pointer the random
 //! state made up, a loop that does not end) is skipped.
 //!
 //! The manifest is written by `tools/equiv.py --behave`: the program (`elf`, `load`), the regions to
-//! randomise (`fill`), the function (`func ADDRESS RETAIL_SIZE`), the candidate's relocated bytes (`cand`), its
+//! randomise (`fill`), `$gp` (`gp`), the function (`func ADDRESS RETAIL_SIZE`), the candidate's relocated bytes (`cand`), its
 //! return type (`ret void|int|float|long`), its integer arguments (`params p i ...`: pointer or number) and the
 //! callees' arguments (`arity ADDRESS INTS FLOATS`).
 //!
-//!   behave MANIFEST [--trials N] [--seed S] [--show N]
+//!   behave MANIFEST [--trials N] [--seed S] [--show N] [--tame] [--data] [--uncovered]
 
 use std::cell::Cell;
 use std::collections::{BTreeMap, BTreeSet};
@@ -28,7 +32,8 @@ use std::path::PathBuf;
 
 use ps2_oracle::{DONE, Ee};
 
-const RAM: usize = 64 << 20;
+/// The console's 32 MB, and room above it for the arena and the stack.
+const RAM: usize = 34 << 20;
 /// Random structures live here, above the console's 32 MB, where no program address points.
 const ARENA: u32 = 0x0200_0000;
 const SLOTS: u32 = 256;
@@ -51,8 +56,11 @@ struct Job {
     elf: PathBuf,
     loads: Vec<(u32, PathBuf)>,
     fills: Vec<(u32, u32)>,
+    /// Initialised data, made random too with `--data`.
+    data: Vec<(u32, u32)>,
     func: u32,
     rsize: u32,
+    gp: u32,
     cand: PathBuf,
     ret: Ret,
     arity: BTreeMap<u32, (usize, usize)>,
@@ -72,8 +80,10 @@ fn read_job(path: &str) -> Job {
         elf: PathBuf::new(),
         loads: vec![],
         fills: vec![],
+        data: vec![],
         func: 0,
         rsize: 0,
+        gp: 0,
         cand: PathBuf::new(),
         ret: Ret::Void,
         arity: BTreeMap::new(),
@@ -87,8 +97,10 @@ fn read_job(path: &str) -> Job {
             ["elf", p] => job.elf = p.into(),
             ["load", a, p] => job.loads.push((num(a), p.into())),
             ["fill", a, n] => job.fills.push((num(a), num(n))),
+            ["data", a, n] => job.data.push((num(a), num(n))),
             ["func", a, n] => (job.func, job.rsize) = (num(a), num(n)),
             ["cand", p] => job.cand = p.into(),
+            ["gp", a] => job.gp = num(a),
             ["ret", r] => {
                 job.ret = match *r {
                     "void" => Ret::Void,
@@ -105,6 +117,42 @@ fn read_job(path: &str) -> Job {
         }
     }
     job
+}
+
+/// `--tame`: no words of random bits in the state, which make floats no game value has (1e30 as an angle).
+static TAME: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// Constants retail's code compares against and builds (`li`, `ori`, `andi`, `slti`, `lui`): some of the random
+/// state takes them, so a test for one value (a state of -2, a flag bit, a float limit) is reached.
+static POOL: std::sync::OnceLock<Vec<u32>> = std::sync::OnceLock::new();
+
+fn constants(code: &[u8]) -> Vec<u32> {
+    let mut out = BTreeSet::new();
+    for w in code.chunks_exact(4).map(|c| u32::from_le_bytes(c.try_into().unwrap())) {
+        let (op, rs, imm) = (w >> 26, w >> 21 & 31, w & 0xffff);
+        let simm = imm as i16 as i32 as u32;
+        match op {
+            0x09 | 0x19 if rs == 0 => {
+                out.insert(simm);
+            }
+            0x0d if rs == 0 => {
+                out.insert(imm);
+            }
+            0x0c => {
+                out.insert(imm);
+                out.insert(!imm);
+            }
+            0x0a | 0x0b => {
+                out.insert(simm);
+                out.insert(simm.wrapping_sub(1));
+            }
+            0x0f => {
+                out.insert(imm << 16);
+            }
+            _ => {}
+        }
+    }
+    out.into_iter().collect()
 }
 
 /// xorshift64*: the same stream for both runs of a trial.
@@ -135,9 +183,14 @@ impl Rng {
     fn word(&mut self) -> u32 {
         match self.below(20) {
             0..=6 => self.pointer(),
-            7..=11 => self.below(9) as u32,
+            7..=9 => (self.below(12) as i32 - 3) as u32,
+            10 | 11 => match POOL.get() {
+                Some(p) if !p.is_empty() => p[self.below(p.len() as u64) as usize],
+                _ => self.below(9) as u32,
+            },
             12 => u32::MAX,
             13..=17 => self.float().to_bits(),
+            _ if TAME.load(std::sync::atomic::Ordering::Relaxed) => self.float().to_bits(),
             _ => self.next() as u32,
         }
     }
@@ -193,6 +246,7 @@ fn run(ee: &mut Ee, job: &Job, size: u32, ints: &[u64], floats: &[f32]) -> Run {
         for (k, &v) in floats.iter().enumerate() {
             ee.fpr[12 + k] = v.to_bits();
         }
+        ee.set(28, job.gp as u64);
         ee.set(29, STACK as i32 as i64 as u64);
         ee.set(31, DONE as i32 as i64 as u64);
         ee.pc = job.func;
@@ -201,6 +255,9 @@ fn run(ee: &mut Ee, job: &Job, size: u32, ints: &[u64], floats: &[f32]) -> Run {
         while ee.pc != DONE {
             if steps.get() >= BUDGET {
                 panic!("still running after {BUDGET} instructions (pc {:#x})", ee.pc);
+            }
+            if steps.get() & 1023 == 0 && ee.written.len() > 1 << 20 {
+                panic!("wrote more than 1 MB (pc {:#x})", ee.pc);
             }
             if !body.contains(&ee.pc) {
                 let target = ee.pc;
@@ -218,6 +275,10 @@ fn run(ee: &mut Ee, job: &Job, size: u32, ints: &[u64], floats: &[f32]) -> Run {
                     args.push(Arg::Float(ee.fpr[12 + k]));
                 }
                 let mut c = calls.borrow_mut();
+                if c.len() >= 4096 {
+                    panic!("made more than 4096 calls (pc {:#x})", ee.pc);
+                }
+                steps.set(steps.get() + 1);
                 let (v0, f0) = reply(c.len(), target);
                 c.push(Call { target, args });
                 ee.set(2, v0);
@@ -327,7 +388,7 @@ fn compare(job: &Job, a: &Ee, ra: &Run, b: &Ee, rb: &Run) -> Diff {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 || args[1].starts_with("--") {
-        eprintln!("usage: behave MANIFEST [--trials N] [--seed S] [--show N]");
+        eprintln!("usage: behave MANIFEST [--trials N] [--seed S] [--show N] [--tame] [--data] [--uncovered]");
         std::process::exit(2);
     }
     let opt = |name: &str, default: u64| {
@@ -336,6 +397,7 @@ fn main() {
     let trials = opt("--trials", 3000);
     let seed = opt("--seed", 1);
     let show = opt("--show", 3) as usize;
+    TAME.store(args.iter().any(|a| a == "--tame"), std::sync::atomic::Ordering::Relaxed);
     let job = read_job(&args[1]);
 
     let elf = std::fs::read(&job.elf).unwrap_or_else(|e| panic!("{}: {e}", job.elf.display()));
@@ -345,6 +407,8 @@ fn main() {
     let refs: Vec<(u32, &[u8])> = loads.iter().map(|(a, b)| (*a, b.as_slice())).collect();
     let cand = std::fs::read(&job.cand).unwrap_or_else(|e| panic!("{}: {e}", job.cand.display()));
     let mut a = Ee::from_program(RAM, &elf, &refs).unwrap();
+    let retail_code: Vec<u8> = (0..job.rsize).map(|k| a.u8_at(job.func + k)).collect();
+    POOL.set(constants(&retail_code)).ok();
     let mut b = Ee::from_program(RAM, &elf, &refs).unwrap();
     // Only the console's 32 MB above the kernel, the arena and the stack; aligned accesses only.
     let valid = vec![(0x10_0000, 0x200_0000), (ARENA, ARENA_END), (STACK - FRAME, STACK + 0x4000)];
@@ -364,6 +428,9 @@ fn main() {
         if f(0) == 1 && f(20) > f(16) {
             fills.push((f(8) + f(16), f(20) - f(16)));
         }
+    }
+    if args.iter().any(|a| a == "--data") {
+        fills.extend(job.data.iter().copied());
     }
     fills.push((ARENA, ARENA_END - ARENA));
     fills.push((STACK, 0x4000));
@@ -445,6 +512,17 @@ fn main() {
     let ran = trials - skipped;
     let cover = 100.0 * covered.len() as f64 / (job.rsize / 4).max(1) as f64;
     println!("{ran} of {trials} trials ran ({skipped} skipped: retail faulted); retail's instructions reached: {cover:.0}%");
+    if args.iter().any(|a| a == "--uncovered") {
+        let mut runs: Vec<(u32, u32)> = Vec::new();
+        for pc in (job.func..job.func + job.rsize).step_by(4).filter(|pc| !covered.contains(pc)) {
+            match runs.last_mut() {
+                Some(r) if r.1 == pc => r.1 = pc + 4,
+                _ => runs.push((pc, pc + 4)),
+            }
+        }
+        let list: Vec<String> = runs.iter().map(|(s, e)| format!("{s:#x}..{e:#x}")).collect();
+        println!("    not reached: {}", if list.is_empty() { "nothing".into() } else { list.join(" ") });
+    }
     for (f, n) in faults.iter().rev().take(3) {
         println!("    skipped {n}: {f}");
     }

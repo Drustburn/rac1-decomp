@@ -392,12 +392,22 @@ def behave_manifest(name: str, candidate: Path, obj: Path, work: Path) -> Path:
     text = candidate.read_text(errors="replace")
     (work / "cand.bin").write_bytes(ours)
     root = oc.ROOT
-    lines = [f"elf {root / 'baserom/SCES_509.16'}"]
+    lines = [f"elf {root / 'baserom/SCES_509.16'}", f"gp {oc.GP:#x}"]
+    with open(root / "baserom/SCES_509.16", "rb") as f:
+        for s in ELFFile(f).iter_sections():     # core.bss, core.data, .bss, .data...
+            if not s["sh_addr"] or not s["sh_size"]:
+                continue
+            if s["sh_type"] == "SHT_NOBITS" or s.name.endswith(".bss"):
+                lines.append(f"fill {s['sh_addr']:#x} {s['sh_size']:#x}")
+            elif s.name.endswith("data") and not s.name.endswith("rdata"):
+                lines.append(f"data {s['sh_addr']:#x} {s['sh_size']:#x}")
     if level >= 0:
         for r in oc.level_manifest(level)["records"]:
             path = oc.DUMP / f"level_{level:02d}/{r['name']}.bin"
             lines.append(f"fill {r['address']:#x} {r['bytes']:#x}" if r["name"] == "bss"
                          else f"load {r['address']:#x} {path}")
+            if r["name"] in ("data", "lit"):
+                lines.append(f"data {r['address']:#x} {r['bytes']:#x}")
     lines.append(f"func {vram:#x} {len(retail):#x}")
     lines.append(f"cand {(work / 'cand.bin').resolve()}")
     d = re.search(rf"^([^\n;#]*?)\b{name}\s*\(", text, re.M)

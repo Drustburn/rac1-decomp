@@ -12,3 +12,8 @@
   quadword loads and stores too, which the console rounds down instead).
   behave makes up its state at random; this turns the states the game never
   has (a float used as a pointer) into faults that skip the trial.
+- `src/ee.rs`: the MMI lane instructions hand-written VU0 code uses (the
+  parallel adds, compares, min/max, extends, packs and shuffles, and the
+  parallel shifts, saturating adds), and the VU0 macro ops vmax, vmini,
+  vmaddq, vmsubq, vitof, vftoi, vabs and the q accumulator forms, which
+  ps2-oracle panics on.
