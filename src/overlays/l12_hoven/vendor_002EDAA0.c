@@ -2562,7 +2562,87 @@ void func_L12_00307730(struct Moby *moby, int slot) {
         *speed = D_0015EE70 * 13.0f;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L12_003078C8);
+extern void func_0020D678(void *);
+extern float func_001FA748(float, float);
+extern float func_L00_0025CCF0(void *, float, void *, int, float, float, float);
+extern void func_L00_00251E30(void *);
+extern int D_L12_001FB948[];
+extern int D_L12_00160058_m __asm__("D_L12_00160058") MACRO_ADDR;
+extern float D_L12_00161FC0 MACRO_ADDR;
+extern float D_L12_00161FD0 MACRO_ADDR;
+extern float D_L12_00161FE0 MACRO_ADDR;
+extern float D_L12_00161FF0 MACRO_ADDR;
+extern float D_0015EE6C MACRO_ADDR;
+
+// Level 12 vendor: updates each of the 18 slot objects for one frame.
+void func_L12_003078C8(char *moby) {
+    int i;
+    int off;
+    char *data = *(char **)(moby + 0x78);
+    int last = 17;
+    for (i = 0, off = 0; i < 18; i++, off += 4) {
+        int s = D_L12_001FB948[i];
+        char *obj;
+        float f1;
+        if (s == 0) {
+            continue;
+        }
+        if (i == last) {
+            obj = moby;
+        } else {
+            if (s == -1) {
+                continue;
+            }
+            obj = (char *)(D_L12_00160058_m + (s << 8));
+        }
+        if (i == last) {
+            f1 = D_L12_00161FC0;
+            if (f1 == -1.0f) {
+                qcopy((char *)&D_L12_00161FC0, obj + 0x10);
+                qcopy((char *)&D_L12_00161FD0, obj + 0x40);
+            }
+            qcopy((char *)&D_L12_00161FE0, obj + 0x10);
+            qcopy((char *)&D_L12_00161FF0, obj + 0x40);
+            qcopy(obj + 0x10, (char *)&D_L12_00161FC0);
+            qcopy(obj + 0x40, (char *)&D_L12_00161FD0);
+            f1 = *(float *)(obj + 0x18);
+        } else {
+            f1 = *(float *)(obj + 0x18);
+        }
+        if (f1 < 20.0f) {
+            if (i == last) {
+                return;
+            }
+            func_0020D678(obj);
+            D_L12_001FB948[i] = -1;
+        }
+        f1 = *(float *)(data + 0x338 + i * 16) - *(float *)(data + off + 0x570);
+        *(float *)(data + 0x338 + i * 16) = f1;
+        *(float *)(obj + 0x18) = *(float *)(obj + 0x18) + f1;
+        if (*(short *)(obj + 0xA6) == 0x500) {
+            *(float *)(obj + 0x40) = func_001FA748(*(float *)(obj + 0x40), D_0015EE6C * 0.34906584f);
+            func_L00_0025CCF0(obj + 0x44, 1.5707964f, data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
+        } else if (*(short *)(obj + 0xA6) == 0x4FD) {
+            *(float *)(obj + 0x40) = func_001FA748(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
+            func_L00_0025CCF0(obj + 0x44, -1.5707964f, (float *)(data + 0x450 + i * 16) + 1, 0, *(float *)(data + 0x45C + i * 16), 0.3f, 0.0f);
+        } else if (*(short *)(obj + 0xA6) == 0x4FA) {
+            float t;
+            *(float *)(obj + 0x40) = func_001FA748(*(float *)(obj + 0x40), D_0015EE6C * -0.87266463f);
+            t = func_001FA748(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
+            *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015EE6C * -4.0f;
+            *(float *)(obj + 0x44) = t;
+        } else {
+            *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015EE6C * -4.0f;
+            *(float *)(obj + 0x40) = func_001FA748(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
+            *(float *)(obj + 0x44) = func_001FA748(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
+        }
+        if (i == last) {
+            qcopy((char *)&D_L12_00161FC0, obj + 0x10);
+            qcopy((char *)&D_L12_00161FD0, obj + 0x40);
+        }
+        func_L00_00251E30(obj);
+    }
+}
 extern int D_L12_0015F6B0 MACRO_ADDR;
 extern int func_001FA898(float);
 extern float func_001FA888(int);
