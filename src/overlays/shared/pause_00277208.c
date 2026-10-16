@@ -4,7 +4,123 @@
 #include "vector.h"
 
 INCLUDE_ASM("asm/overlays", func_L00_00277208);
-INCLUDE_ASM("asm/overlays", func_L00_002777C0);
+extern char D_L00_001BA070[] NOT_SDA;
+extern int D_L00_0015F6BC MACRO_ADDR;
+extern unsigned char D_0014171B NOT_SDA;
+extern unsigned char D_0013E633 NOT_SDA;
+extern int D_0015EE98 MACRO_ADDR;
+extern short D_0015EF78;
+extern struct HEnt *D_L00_001BA220[];
+extern char *D_L00_00197680[] NOT_SDA;
+extern unsigned char D_L00_0017E5D8[];
+extern unsigned char D_L00_00173F40[];
+extern void func_00234AC8(int);
+extern void func_002348E8(void);
+extern void func_001FF958(int, int, int);
+extern void func_L00_00235CA0(int);
+extern struct HEnt *func_002267C0(struct HEnt *);
+extern int func_L00_00235790(void);
+extern int func_001F9850(int);
+extern int func_L00_002367A8(int, int);
+extern int func_001FFB38(int, int, void *, void *, void *, void *, int);
+extern void func_002349B8(void);
+extern void func_L00_0023A658(void);
+extern void func_L00_0023A690(void);
+extern void func_L00_0023A788(void);
+
+void func_L00_002777C0(void) {
+    int i;
+    int value;
+    int handle;
+    char *obj;
+    void (*callback)(char *, int);
+    unsigned char *table;
+    char *st = D_L00_001BA070;
+
+    if (*(int *)(st + 0x110) >= 10) {
+        func_00234AC8(1);
+        func_002348E8();
+        if (*(int *)(st + 4) != 0) {
+            {
+                for (i = 0; i < 14; i++) {
+                    char *s = D_L00_001BA070;
+                    obj = (*(struct { char p[0x44]; char *a[14]; } **)(s + 4))->a[i];
+                    if (obj != 0) {
+                        callback = *(void (**)(char *, int))(obj + 0xC);
+                        if (callback != 0) {
+                            callback(obj, 0);
+                        }
+                    }
+                }
+            }
+            {
+                char *s = D_L00_001BA070;
+                *(int *)(s + 4) = 0;
+            }
+        }
+        {
+            int i;
+            int value = 0x26;
+            for (i = 3; i >= 0; i--) {
+                char *s = D_L00_001BA070;
+                char *h = (char *)&D_0013E633 + 0xE1D;
+                if (((int *)(&D_0014171B + 0x45))[3 - i] != ((int *)s)[15 - i]) {
+                    ((int *)(h + 0x20B8))[3 - i] =
+                        ((int *)s)[15 - i] != 0
+                            ? ((int *)s)[15 - i]
+                            : value;
+                }
+            }
+        }
+        {
+            char *state = D_L00_001BA070;
+            int value;
+            table = D_L00_0017E5D8;
+            value = *(int *)(*(char **)(table + 0x18) + 0x74);
+            *(int *)&D_0015EF78 = *(int *)(state + 0x18);
+            func_001FF958(0, value, 0);
+        }
+        func_L00_00235CA0(2);
+        if (*(int *)(*(char **)(table + 0x18) + 0x80) != 0) {
+            func_L00_00235CA0(3);
+        }
+        if (*(int *)(*(char **)(table + 0x18) + 0x84) != 0) {
+            func_L00_00235CA0(4);
+        }
+        {
+            int k;
+            for (k = 0; k < 14; k++) {
+                D_L00_001BA220[k] = func_002267C0(D_L00_001BA220[k]);
+            }
+        }
+        handle = func_L00_00235790();
+        func_L00_002367A8(handle, func_001F9850(0xB4));
+        handle = func_001FFB38(2, 0x754E, func_L00_0023A658, func_L00_0023A690,
+                               func_L00_0023A788, &D_0015EE98, 9999999);
+        func_L00_002367A8(handle, func_001F9850(0xB4));
+        {
+            char *s = D_L00_001BA070;
+            *(int *)s = 0x14;
+            *(int *)(s + 0x14) = 2;
+            value = *(int *)(s + 0xCC);
+            while (value < ((unsigned char *)D_L00_00197680[0])[0xC]) {
+                ((struct { char p[0x48]; char *a[1]; } *)D_L00_00197680[0])->a[value] = 0;
+                value++;
+            }
+        }
+        {
+            char *s = D_L00_001BA070;
+            ((unsigned char *)D_L00_00197680[0])[0xC] = *(unsigned char *)(s + 0xCC);
+        }
+        D_L00_0015F6BC = 1;
+        {
+            int *tbl = (int *)D_L00_00173F40;
+            ((struct { int p[4]; int f; } *)tbl)->f &= 0x7FFFFFFF;
+        }
+        func_002349B8();
+        func_00234AC8(1);
+    }
+}
 typedef unsigned int PQ __attribute__((mode(TI), aligned(16)));
 
 typedef struct Mth Mth;
