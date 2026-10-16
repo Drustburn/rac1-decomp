@@ -1971,9 +1971,75 @@ int func_00129C78(void *arg0) {
     return r;
 }
 
-INCLUDE_ASM("asm/nonmatchings/core_text", func_00129CA0);
+long func_00129CA0(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4) {
+    char *s = arg0;
+    char *t = arg1;
+    long *o1 = arg2;
+    long v;
+    long packed;
 
-INCLUDE_ASM("asm/nonmatchings/core_text", func_00129E30);
+    if (*(int *)(s + 0x70) != 0) {
+        int base;
+        extern long func_0011EEC8(long, long);
+        v = *(long *)(t + 0x18);
+        if (v >= 0 || (base = *(int *)(s + 0x80)) < 0) {
+            *o1 = v;
+        } else {
+            int n = *(long *)(s + 0x88);
+            long r = func_0011EEC8(n & 1, *(long *)(s + 0x78) & 1);
+            int cnt = *(int *)(s + 0x90);
+            int a = func_0011EEC8(r, cnt & 1);
+            *o1 = base + ((int)(func_0011EEC8(*(long *)(s + 0x78), n) >> 1) + a);
+            if (func_0011EEC8(n & 1, *(long *)(s + 0x78) & 1)) {
+                *(int *)(s + 0x90) = cnt + 1;
+            }
+        }
+    } else {
+        *o1 = *(long *)(t + 0x18);
+    }
+    if (*(int *)(s + 0xF8) == 2 && (v = *(long *)(s + 0xF0)) >= 0) {
+        *o1 = v;
+        *(int *)(s + 0xF8) = 0;
+        *(long *)(s + 0xF0) = -1;
+    }
+    *(long *)arg3 = *(long *)(t + 0x20);
+    packed = ((long)*(int *)(t + 0x34) << 8) | ((long)*(int *)(t + 0x38) << 7)
+           | ((long)*(int *)(t + 0x3C) << 6) | ((long)*(int *)(t + 0x40) << 5)
+           | ((long)*(int *)(t + 0x30) << 3) | *(int *)(t + 0x2C);
+    *(long *)arg4 = packed;
+    return packed;
+}
+
+extern long func_00129CA0(void *s, void *t, void *o1, void *o3, void *o4);
+extern unsigned int D_00132F98[];
+extern void func_0012A7E8(void *arg0, void *arg1);
+void func_00129E30(char *s, char *t) {
+    char *base;
+    long x;
+
+    base = *(char **)(s + 0x858);
+    func_00129CA0(s, t, base + 0x10, base + 0x18, base + 0x20);
+    base = *(char **)(s + 0x858);
+    x = *(long *)(base + 0x20);
+    *(int *)(s + 0x80) = *(int *)(base + 0x10);
+    *(unsigned long *)(s + 0x88) = D_00132F98[(int)(x >> 5) & 0xF];
+    *(int *)(s + 0xCC) = *(int *)(t + 0x5C);
+    *(int *)(s + 0xD0) = *(int *)(t + 0x60);
+    *(int *)(s + 0xB4) = *(int *)(t + 0x44);
+    *(int *)(s + 0xB8) = *(int *)(t + 0x48);
+    *(int *)(s + 0xBC) = *(int *)(t + 0x4C);
+    *(int *)(s + 0xC0) = *(int *)(t + 0x50);
+    *(int *)(s + 0xC4) = *(int *)(t + 0x54);
+    *(int *)(s + 0xC8) = *(int *)(t + 0x58);
+    if (func_00129948(s, t) == 0) return;
+    if (*(int *)(t + 0x28) != 1) return;
+    if (*(int *)(s + 0xB0) != 0) {
+        func_0012A7E8(s, t);
+    } else {
+        func_001299E8((void *)s, (void *)t);
+    }
+    func_00129C78(s);
+}
 
 extern long func_00129CA0(void *s, void *t, void *o1, void *o3, void *o4);
 extern void func_0012A7E8(void *arg0, void *arg1);
