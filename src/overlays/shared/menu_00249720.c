@@ -191,7 +191,31 @@ INCLUDE_ASM("asm/overlays", func_L00_0024BB5C);
 INCLUDE_ASM("asm/overlays", func_L00_0024BB90);
 INCLUDE_ASM("asm/overlays", func_L00_0024BB98);
 INCLUDE_ASM("asm/overlays", func_L00_0024BBCC);
-INCLUDE_ASM("asm/overlays", func_L00_0024BBE8);
+extern int D_L00_0015F688 MACRO_ADDR;
+/* while D_0013D390[7] is set the menu state is 3; else flag 0x20 is taken down with state 24
+   (D_L00_0015F688 set) or 12, or flag 0x10 with state 14 */
+void func_L00_0024BBE8(void) {
+    int flags;
+
+    if (D_0013D390[7] != 0) {
+        D_0015EFB0 = 3;
+        return;
+    }
+    flags = D_0015EFB4;
+    if (flags & 0x20) {
+        D_0015EFB4 = flags ^ 0x20;
+        if (D_L00_0015F688 != 0) {
+            D_0015EFB0 = 24;
+            return;
+        }
+        D_0015EFB0 = 12;
+        return;
+    }
+    if (flags & 0x10) {
+        D_0015EFB4 = flags ^ 0x10;
+        D_0015EFB0 = 14;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L00_0024BC04);
 // Stores 12 into the word global D_0015EFB0.
 void func_L00_0024BC2C(void) {
