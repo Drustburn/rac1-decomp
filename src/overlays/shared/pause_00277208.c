@@ -838,7 +838,26 @@ int func_L00_00285698(int a0, int a1, int a2, int a3, int a4, int a5, int a6, in
     r->f[13] = s4;
     return 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00286068);
+typedef struct { short uid; short bolts; } BoltSource_286068;
+extern BoltSource_286068 D_0014D690[][64];
+
+/* the bolt tally slot of moby uid in level lvl: scanning down from slot 63, the first slot that
+   holds uid (stored as uid + 1) or is free, which it claims; -1 when there is none or uid < 0 */
+int func_L00_00286068(int lvl, int uid) {
+    int k = -1;
+
+    if (uid >= 0) {
+        uid++;
+        k = 63;
+        while (k >= 0 && D_0014D690[lvl][k].uid != uid && D_0014D690[lvl][k].uid != 0) {
+            k--;
+        }
+        if (k >= 0) {
+            D_0014D690[lvl][k].uid = uid;
+        }
+    }
+    return k;
+}
 extern void func_L00_001FF040(int, void *, unsigned short);
 
 /* level data, not declared anywhere else yet */
