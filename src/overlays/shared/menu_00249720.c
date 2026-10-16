@@ -113,8 +113,21 @@ int func_L00_0024A490(int a, float b, float c, float x) {
 }
 /* Joined to func_L00_0024A490. */
 INCLUDE_ASM("asm/overlays", func_L00_0024A4DC);
-INCLUDE_ASM("asm/overlays", func_L00_0024A510);
 extern unsigned char D_0013D4EA[];
+/* item < 351: the hero flag of func_L00_002497A0 while x >= 200.0f; else 233.0f <= x <= 235.0f
+   with D_0013D4EA set (the joined tail) */
+int func_L00_0024A510(int item, float a, float b, float x) {
+    int r = 0;
+
+    if (D_0013F450_2497A0.control_mode == 0x11 || D_0013F450_2497A0.control_mode == 0x12 ||
+        D_0013F450_2497A0.base_condition == 1) {
+        r = 1;
+    }
+    if (item < 351) {
+        return x >= 200.0f ? r : 0;
+    }
+    return x >= 233.0f && x <= 235.0f && D_0013D4EA[0] != 0;
+}
 int func_L00_0024A570(float a, float b, float x) {
     return x >= 233.0f && x <= 235.0f && D_0013D4EA[0] != 0;
 }
