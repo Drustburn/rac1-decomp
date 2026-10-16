@@ -3472,7 +3472,138 @@ void func_L14_00314A40(int value)
     }
 }
 LINKER_REMNANT("asm/overlays", func_L14_003162A0);
-INCLUDE_ASM("asm/overlays", func_L14_00316388);
+extern char *D_L14_0015F050 MACRO_ADDR;
+typedef struct { char pad0[0x184]; char *p184; } Cam_316388;
+extern Cam_316388 D_L14_00167480_c __asm__("D_L14_00167480");
+extern void func_L00_00217718(void *, void *, int, int);
+
+typedef struct { char pad0[0xB0]; float fB0; } View_316388;
+extern View_316388 D_L14_0016D240_v __asm__("D_L14_0016D240");
+typedef int u128_316388 __attribute__((mode(TI)));
+typedef struct {
+    int n;
+    int pad[3];
+    float pts[1][4];
+} Path_316388;
+typedef struct {
+    s32 seg;
+    f32 t;
+    f32 len_a;
+    f32 len_b;
+    f32 dist;
+    s16 started;
+    s16 timer;
+} Run_316388;
+typedef struct {
+    s16 seg[8];
+    f32 fov[8];
+    f32 fov_end;
+} Stops_316388;
+
+/* Activate function of camera 20 (level 14): clears the record, builds the path tables and copies the camera vectors. */
+void func_L14_00316388(char *cam) {
+    float v[4] __attribute__((aligned(16)));
+    char *obj;
+    char *data;
+    Run_316388 *q;
+    Stops_316388 *s;
+    Path_316388 *ent;
+    char *p;
+    char *p10, *p20, *p30;
+    int i, k, m;
+    float *row;
+    short *so;
+    float d, f0, f20, f21;
+
+    obj = *(char **)(D_L14_0015F050 + *(short *)(cam + 0x84) * 32 + 0x1C);
+    obj[0x38] = 3;
+    q = (Run_316388 *)(*(char **)(cam + 0x70) + 0x40);
+    q->seg = 0;
+    q->t = 0;
+    q->len_a = 0;
+    q->len_b = 0;
+    q->dist = 0;
+    q->started = 0;
+    q->timer = func_001F9850(*(short *)(obj + 0x3A));
+
+    s = (Stops_316388 *)(*(char **)(cam + 0x70) + 0x58);
+    for (k = 0; k < 8; k++) {
+        s->fov[k] = 0;
+        s->seg[k] = -1;
+    }
+
+    p30 = cam + 0x30;
+    p10 = cam + 0x10;
+    p20 = cam + 0x20;
+    s->fov_end = func_L00_001FF860(1.0f, D_L14_0016D240_v.fB0) * 2.0f;
+
+    if (*(int *)(obj + 0x20) >= 0) {
+        ent = (Path_316388 *)D_L14_001B0F30[*(int *)(obj + 0x20)];
+        k = 0;
+        for (i = 0; i < ent->n; i = m) {
+            {
+                row = (float *)((char *)ent + i * 16);
+                f0 = row[7];
+                if (0.0f < f0) {
+                    s->fov[k] = f0;
+                    s->seg[k] = i;
+                    k++;
+                }
+                m = i + 1;
+                d = func_001F9D10(ent->pts[i], ent->pts[m % ent->n]);
+                row[7] = d;
+                if (i < ent->n - 1) {
+                    q->len_a += d;
+                }
+            }
+        }
+    }
+
+    if (*(short *)(obj + 0x3A) > 0) {
+        f0 = func_001FA888(func_001F9850(*(short *)(obj + 0x3A)));
+        *(float *)(obj + 0x3C) = q->len_a / f0 * 60.0f;
+    }
+
+    if (*(int *)(obj + 0x24) >= 0) {
+        ent = (Path_316388 *)D_L14_001B0F30[*(int *)(obj + 0x24)];
+        for (i = 0; i < ent->n;) {
+            {
+                float *r;
+                int n;
+                n = i + 1;
+                d = func_001F9D10(ent->pts[i], ent->pts[n % ent->n]);
+                r = (float *)((char *)ent + i * 16);
+                r[7] = d;
+                if (i < ent->n - 1) {
+                    q->len_b += d;
+                }
+                i = n;
+            }
+        }
+    }
+
+    f20 = 0.03f;
+    f21 = 0.2f;
+    data = *(char **)(cam + 0x70);
+    *(float *)(data + 0) = f20;
+    *(float *)(data + 4) = f21;
+    func_001F9BC0(data + 0x10);
+    data = *(char **)(cam + 0x70);
+    *(float *)(data + 0x20) = f20;
+    *(float *)(data + 0x24) = f21;
+    func_001F9BC0(data + 0x30);
+
+    p = D_L14_00167480_c.p184;
+    qcopy(p30, p + 0x30);
+    qcopy(cam, p);
+    qcopy(p10, p + 0x10);
+    qcopy(p20, p + 0x20);
+
+    p = D_L14_001601AC_300468 + *(int *)(obj + 0x54) * 128 + 0x30;
+    *(u128_316388 *)v = 0;
+    v[3] = 1.0f;
+    func_L00_00217718(p, v, 0x72, 0);
+}
 typedef u32 u128 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     f32 x;
