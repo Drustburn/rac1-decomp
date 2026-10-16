@@ -298,6 +298,18 @@ void func_L00_0024BD18(void) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024BD84);
 INCLUDE_ASM("asm/overlays", func_L00_0024BDB8);
-INCLUDE_ASM("asm/overlays", func_L00_0024BF30);
+/* while D_0013D390[55] < 3 and D_0013D390[57] < 0: with D_0013D390[59] set, D_0013D390[63] is
+   cleared, the state becomes 21 and flags 0x40 and 0x400 go up; else the state becomes 1 */
+void func_L00_0024BF30(void) {
+    if (D_0013D390[55] < 3 && D_0013D390[57] < 0) {
+        if (D_0013D390[59] != 0) {
+            D_0013D390[63] = 0;
+            D_0015EFB0 = 21;
+            D_0015EFB4 |= 0x440;
+        } else {
+            D_0015EFB0 = 1;
+        }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L00_0024BFB8);
 INCLUDE_ASM("asm/overlays", func_L00_0024BFFC);
