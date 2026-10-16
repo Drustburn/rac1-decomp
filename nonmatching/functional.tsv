@@ -202,7 +202,6 @@ func_L03_002ED138	nonmatching/functional/func_L03_002ED138.c
 func_L18_002EAB58	nonmatching/l18_veldin2/func_L18_002EAB58.c
 func_L07_0030C3E0	nonmatching/functional/func_L07_0030C3E0.c
 func_L01_002E1FE0	nonmatching/functional/func_L01_002E1FE0.c
-func_L12_002E8640	nonmatching/functional/func_L12_002E8640.c
 func_L00_002A5158	nonmatching/functional/func_L00_002A5158.c
 func_L12_002EB2E8	nonmatching/functional/func_L12_002EB2E8.c
 func_L01_002F0040	nonmatching/functional/func_L01_002F0040.c
@@ -358,19 +357,6 @@ func_L12_00306890	nonmatching/l12_hoven/func_L12_00306890.c
 func_L00_002D8898	nonmatching/shared/func_L00_002D8898.c
 # Joined pieces (config/overlays/joined.tsv): the owner's file is one C function over them, checked with
 # tools/behave.sh against the owner's and the pieces' retail bytes together.
-func_L00_001FF4F0	nonmatching/functional/func_L00_001FF4B0.c
-func_L00_001FFB78	nonmatching/functional/func_L00_001FFA40.c
-func_L00_00247650	nonmatching/shared/func_L00_00247620.c
-func_L00_002477D0	nonmatching/shared/func_L00_002477A0.c
-func_L00_00249F40	nonmatching/functional/func_L00_00249EE0.c
-func_L00_0024B2A4	nonmatching/game/func_L00_0024B200.c
-func_L00_0024B980	nonmatching/functional/func_L00_0024B960.c
-func_L00_0024B9B4	nonmatching/functional/func_L00_0024B960.c
-func_L00_002513C8	nonmatching/game/func_L00_00251388.c
-func_L00_00251438	nonmatching/functional/func_L00_002513F8.c
-func_L00_00257FB4	nonmatching/game/func_L00_00257F4C.c
-func_L00_0025804C	nonmatching/game/func_L00_00257F4C.c
-func_L08_00211A68	nonmatching/functional/func_L08_00211A38.c
 # Written with tools/behave.sh as the check.
 func_001F9850	nonmatching/functional/func_001F9850.c
 func_001F9888	nonmatching/functional/func_001F9888.c
@@ -378,4 +364,3 @@ func_001F9BA0	nonmatching/functional/func_001F9BA0.c
 func_001F9C08	nonmatching/functional/func_001F9C08.c
 func_001F9F18	nonmatching/functional/func_001F9F18.c
 func_L00_001FF500	nonmatching/functional/func_L00_001FF500.c
-func_L00_001FF538	nonmatching/functional/func_L00_001FF500.c
