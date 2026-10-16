@@ -207,7 +207,6 @@ func_L00_002D4EC0	nonmatching/functional/func_L00_002D4EC0.c
 func_L00_0025A8E8	nonmatching/functional/func_L00_0025A8E8.c
 func_001F9BB0	nonmatching/functional/func_001F9BB0.c
 func_001F9E58	nonmatching/functional/func_001F9E58.c
-func_L00_00286068	nonmatching/shared/func_L00_00286068.c
 func_L03_002ED138	nonmatching/functional/func_L03_002ED138.c
 func_L18_002EAB58	nonmatching/l18_veldin2/func_L18_002EAB58.c
 func_L07_0030C3E0	nonmatching/functional/func_L07_0030C3E0.c
