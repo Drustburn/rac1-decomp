@@ -451,3 +451,11 @@ func_L00_00251438	nonmatching/functional/func_L00_002513F8.c
 func_L00_00257FB4	nonmatching/game/func_L00_00257F4C.c
 func_L00_0025804C	nonmatching/game/func_L00_00257F4C.c
 func_L08_00211A68	nonmatching/functional/func_L08_00211A38.c
+# Written with tools/behave.sh as the check.
+func_001F9850	nonmatching/functional/func_001F9850.c
+func_001F9888	nonmatching/functional/func_001F9888.c
+func_001F9BA0	nonmatching/functional/func_001F9BA0.c
+func_001F9C08	nonmatching/functional/func_001F9C08.c
+func_001F9F18	nonmatching/functional/func_001F9F18.c
+func_L00_001FF500	nonmatching/functional/func_L00_001FF500.c
+func_L00_001FF538	nonmatching/functional/func_L00_001FF500.c
