@@ -3655,7 +3655,36 @@ void func_L18_002F0F78(char *moby) {
     }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L18_002F1420);
+/* Hands pos to every class 0x54B moby of the group that waits in state 1 and points it at moby: 0 if one took it, 1 if none.
+   Adapted from Lombyte (MIT) for PAL: src/overlays/l18/gameplay/vendor/002efb88.c, FUN_L18_002f0030. */
+int func_L18_002F1420(char *moby, int group, float *pos) {
+    short *p = (short *)D_L18_001AC540[group];
+    int idle;
+    int i;
+    if (p == 0)
+        return 1;
+    idle = 1;
+    while (1) {
+        unsigned char *m = (unsigned char *)(((*p & 0x7FFF) << 8) + (int)D_L18_00160058_m);
+        if (*(short *)(m + 0xA6) == 0x54B && m[0x20] == 1) {
+            unsigned char *d = *(unsigned char **)(m + 0x78);
+            idle = 0;
+            qcopy(m + 0x10, pos);
+            i = 0;
+            do {
+                qcopy(d + 0x10 + i * 16, m + 0x10);
+                i++;
+            } while ((float)i < 4.0f);
+            *(char **)(d + 0x16C) = moby;
+            m[0x31] = 1;
+            *(unsigned short *)(m + 0x34) &= 0xFFFE;
+            *(int *)(m + 0x94) = *(int *)(*(char **)(m + 0x24) + 0x10);
+            m[0x20] = 2;
+        }
+        if (*p++ < 0)
+            return idle;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L18_002F1444);
 extern float func_L00_0025CE58(float *, float *, float, float, float, float);
 extern short D_L18_001622BC;

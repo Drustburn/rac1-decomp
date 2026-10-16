@@ -1,12 +1,13 @@
 /* NON_MATCHING func_L00_001F3AF0 -- src/overlays/shared/draw_001F3A78.c
- * Best so far: SIZE ours 620 / retail 624, checked 2026-10-03.
+ * Best so far: SIZE ours 620 / retail 624, checked 2026-10-15.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
- * No longer builds in its file (COMPILE failed, 2026-10-09): match its declarations to the file's first.
  * What the last attempts found:
  *   func_L00_001F3AF0: appends a line of font glyph quads (x, y, color, string) to the packet buffer D_L00_0016128
  *   p8.c (620 vs 624) has the same instruction sequence as retail: loop body, constants, stores all match in order
  *   Tried: one variable for packet pointer in prologue and loop (gives retail's `daddu $9,$2,$0`), `qw = 5` just b
+ *   2026-10-15: compiles again. The file declares it with an s32 fourth argument, so the candidate takes int
+ *   text and casts it to the unsigned char * it walks.
  */
 extern void func_00234C98(int, long);
 extern int *D_L00_00161280 __attribute__((section(".sdata")));
@@ -16,7 +17,8 @@ extern int D_L00_00169C00[];
 extern int D_0013E600[];
 
 /* Appends a line of font glyph quads at (x, y) in COLOR to the packet buffer and patches the packet tags. */
-void func_L00_001F3AF0(int x, int y, int color, unsigned char *str) {
+void func_L00_001F3AF0(int x, int y, int color, int text) {
+    unsigned char *str = (unsigned char *)text;
     int n = 0;
     int qw;
     int *base;
