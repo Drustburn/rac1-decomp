@@ -771,7 +771,45 @@ int func_L00_0027D3D8(char *entry) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0027D454);
 INCLUDE_ASM("asm/overlays", func_L00_0027D464);
-INCLUDE_ASM("asm/overlays", func_L00_00280708);
+struct MenuPage_280708 {
+    unsigned char pad0[0x38];
+    struct MenuPage_280708 *back;
+    unsigned char pad3C[0x84 - 0x3C];
+    int unk84;
+};
+struct MenuSystem_280708 {
+    unsigned char pad0[4];
+    struct MenuPage_280708 *current;
+    struct MenuPage_280708 *next;
+    unsigned char pad0C[0xD4 - 0xC];
+    int unkD4;
+};
+struct Pad_280708 { unsigned char pad[0x1A4]; unsigned int pressed; };
+extern struct MenuSystem_280708 D_L00_001BA070_280708 __asm__("D_L00_001BA070");
+extern struct Pad_280708 D_0013CA40_280708 __asm__("D_0013CA40");
+extern int D_0015EFB0_280708 __asm__("D_0015EFB0") MACRO_ADDR;
+
+/* goes back a page, but in menu state 0x10 or 1 only on button 0x20 (setting the page flag at
+   +0x84 and clearing +0xD4) or 0x10 (clearing the page flag) */
+int func_L00_00280708(void) {
+    int state = D_0015EFB0_280708;
+    unsigned int pressed;
+
+    if (state != 0x10 && state != 1) {
+        D_L00_001BA070_280708.next = D_L00_001BA070_280708.current->back;
+        return 0;
+    }
+    pressed = D_0013CA40_280708.pressed;
+    if (pressed & 0x20) {
+        D_L00_001BA070_280708.unkD4 = 0;
+        D_L00_001BA070_280708.next = D_L00_001BA070_280708.current->back;
+        D_L00_001BA070_280708.current->unk84 = 1;
+    } else if (pressed & 0x10) {
+        D_L00_001BA070_280708.next = D_L00_001BA070_280708.current->back;
+        D_L00_001BA070_280708.current->unk84 = 0;
+    }
+    return 0;
+}
 extern unsigned char D_0013A5E0[] NOT_SDA;
 extern char D_L00_001BA070[] NOT_SDA;
 int func_L00_00280740(void) {
@@ -924,7 +962,17 @@ int func_L00_00284E70(int id) {
     return 1;
 }
 INCLUDE_ASM("asm/overlays", func_L00_00284EA0);
-INCLUDE_ASM("asm/overlays", func_L00_00284EB8);
+/* Looks for id in the five {id, flags} pairs at D_L00_001BA548; if found clears flag 4 and returns 0, else returns 1. Joined with the copy of func_L00_00284EA0 after it. */
+int func_L00_00284EB8(int id) {
+    int i;
+    for (i = 0; i < 5; i++) {
+        if (D_L00_001BA548_84E70[i * 2] == id) {
+            D_L00_001BA548_84E70[i * 2 + 1] &= ~4;
+            return 0;
+        }
+    }
+    return 1;
+}
 typedef struct { int f[14]; } Rec;
 extern int D_L00_001604D0 MACRO_ADDR;
 extern Rec D_L00_001BA350[];
@@ -954,7 +1002,26 @@ int func_L00_00285698(int a0, int a1, int a2, int a3, int a4, int a5, int a6, in
     r->f[13] = s4;
     return 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00286068);
+typedef struct { short uid; short bolts; } BoltSource_286068;
+extern BoltSource_286068 D_0014D690[][64];
+
+/* the bolt tally slot of moby uid in level lvl: scanning down from slot 63, the first slot that
+   holds uid (stored as uid + 1) or is free, which it claims; -1 when there is none or uid < 0 */
+int func_L00_00286068(int lvl, int uid) {
+    int k = -1;
+
+    if (uid >= 0) {
+        uid++;
+        k = 63;
+        while (k >= 0 && D_0014D690[lvl][k].uid != uid && D_0014D690[lvl][k].uid != 0) {
+            k--;
+        }
+        if (k >= 0) {
+            D_0014D690[lvl][k].uid = uid;
+        }
+    }
+    return k;
+}
 extern void func_L00_001FF040(int, void *, unsigned short);
 
 /* level data, not declared anywhere else yet */
