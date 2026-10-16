@@ -754,7 +754,47 @@ void func_L00_001F9248(void) {
     }
 }
 void func_L00_001F92C0(void) { if (D_L00_0015F6BC == 0) func_L00_002781D8(0); }
-INCLUDE_ASM("asm/overlays", func_L00_001F92E8);
+typedef struct {
+    int key;
+    int pad[3];
+} DbgRec_1F92E8;
+extern int D_L00_0015F700[4] MACRO_ADDR;
+extern float D_L00_0015F4FC MACRO_ADDR;
+extern DbgRec_1F92E8 D_L00_00173180[];
+extern void func_001F7680(int);
+extern int func_001FA898(float);
+extern void func_001F55C0(int, int, int, int);
+extern void func_001F3C10(void);
+extern void func_001F4630(int);
+extern void func_L00_001FCC50(void *, int);
+extern void func_001F4748(void);
+
+void func_L00_001F92E8(void) {
+    DbgRec_1F92E8 *p;
+    DbgRec_1F92E8 *q;
+
+    if (D_L00_0015F6BC == 0) {
+        func_001F7680(D_L00_0015F700[2]);
+        if (0.0f < D_L00_0015F4FC) {
+            if (1.0f < D_L00_0015F4FC) {
+                D_L00_0015F4FC = 1.0f;
+            }
+            func_001F55C0(0, 0, 0, func_001FA898(D_L00_0015F4FC * 128.0f));
+        }
+        func_001F3C10();
+        ((int (*)(int))func_001F4630)(0);
+        p = D_L00_00173180;
+        if (p->key >= 0) {
+            q = p;
+            do {
+                func_L00_001FCC50(q, ((short *)D_L00_0015F700)[3]);
+                p++;
+                q++;
+            } while (p->key >= 0);
+        }
+        func_001F4748();
+    }
+}
 extern int D_L00_0015F4F8 MACRO_ADDR;
 extern int D_0015EF84 MACRO_ADDR;
 extern void func_00234AC8(int);
