@@ -223,7 +223,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_00244AE0`](shared/func_L00_00244AE0.c) | shared | 4264 | SIZE ours 4268 / retail 4264 | - |
 | [`func_L00_002477A0`](shared/func_L00_002477A0.c) | shared | 48 | SIZE ours 80 / retail 84 | - |
 | [`func_L00_00248EF8`](shared/func_L00_00248EF8.c) | shared | 1808 | SIZE ours 1804 / retail 1808 | - |
-| [`func_L00_00249720`](functional/func_L00_00249720.c) | functional | 48 | ? | - |
 | [`func_L00_002497A0`](functional/func_L00_002497A0.c) | functional | 64 | ? | - |
 | [`func_L00_00249EE0`](functional/func_L00_00249EE0.c) | functional | 88 | ? | - |
 | [`func_L00_0024A510`](functional/func_L00_0024A510.c) | functional | 96 | ? | - |
