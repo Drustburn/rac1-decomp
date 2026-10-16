@@ -1,16 +1,20 @@
 /* NON_MATCHING func_L08_002EB770 -- src/overlays/l08_batalia/vendor_002EAF48.c
- * Best so far: SIZE ours 508 / retail 524, checked 2026-10-08.
+ * Best so far: SIZE ours 508 / retail 524, checked 2026-10-15.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
- * No longer builds in its file (COMPILE failed, 2026-10-09): match its declarations to the file's first.
  * What the last attempts found:
- *   Controller moby (UpdateMoby_467/472): when D_0013D355+0x13B flag set and data+8<0 it deletes mobys in a list; 
+ *   Controller moby (UpdateMoby_467/472): when D_0013D355+0x13B flag set and data+8<0 it deletes mobys in a list;
  *   Left: retail loops with `b L7DC; lhu` entry and hoists the 0x1D8 constant into $s2 (loop shaped as while-style
  *   w06 round: p6.c (pointer walk `*p++ >= -1`) and p7.c (`for (;;) { ...; if (*p++ < -1) break; }`) both give 508
+ *   2026-10-15: compiles again. The file no longer declares D_L08_00160058 or the _m alias before the function
+ *   and now declares func_00214D28 with a void * argument, so the candidate declares the two globals itself
+ *   and calls the helper through an alias.
  */
+extern char *D_L08_00160058_m __asm__("D_L08_00160058") MACRO_ADDR;
+extern char *D_L08_00160058 MACRO_ADDR;
 extern void func_0020D678(void *);
 extern int func_0022ED80(int, int, int);
-extern float func_00214D28(float *p, float target, float maxstep);
+extern float func_00214D28_2EB770(float *p, float target, float maxstep) __asm__("func_00214D28");
 extern char D_0013D355[];
 extern char *D_L08_001AC340[];
 extern float D_0015EE6C MACRO_ADDR;
@@ -56,13 +60,13 @@ void func_L08_002EB770(unsigned char *moby) {
                 moby[0x20] = 2;
             } else {
                 float f = *(float *)(data + 4);
-                func_00214D28((float *)(moby + 0x18), (*(float *)data - f) * **(float **)(m + 0x78) + f, D_0015EE6C * 10.0f);
+                func_00214D28_2EB770((float *)(moby + 0x18), (*(float *)data - f) * **(float **)(m + 0x78) + f, D_0015EE6C * 10.0f);
             }
         }
         break;
     }
     case 2:
-        func_00214D28((float *)(moby + 0x18), *(float *)data, D_0015EE6C * 10.0f);
+        func_00214D28_2EB770((float *)(moby + 0x18), *(float *)data, D_0015EE6C * 10.0f);
         break;
     }
 }

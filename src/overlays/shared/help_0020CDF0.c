@@ -320,7 +320,15 @@ void func_L00_0020D9C8(void) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_0020DAF8);
+/* the moby of item slot i while the slot is ready (state 2), else 0 */
+char *func_L00_0020DAF8(int i) {
+    char *e = (D_0013E633 + 0xE1D) + i * 0x50;
+
+    if (*(int *)(e + 0x10B4) == 2) {
+        return *(char **)(e + 0x1090);
+    }
+    return 0;
+}
 // Returns field from argument at offset 0x1090
 int func_L00_0020DB1C(char *arg) {
     return *(int *)(arg + 0x1090);
