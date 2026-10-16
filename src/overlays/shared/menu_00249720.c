@@ -166,7 +166,16 @@ void func_L00_0024BA10(void) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024BA60);
-INCLUDE_ASM("asm/overlays", func_L00_0024BA70);
+/* sets the menu state to 3 while D_0013D390[7] is set, else to 10 when flag 2 or 4 is up */
+void func_L00_0024BA70(void) {
+    if (D_0013D390[7] != 0) {
+        D_0015EFB0 = 3;
+        return;
+    }
+    if (D_0015EFB4 & 6) {
+        D_0015EFB0 = 10;
+    }
+}
 extern int D_0015EFB0;
 
 INCLUDE_ASM("asm/overlays", func_L00_0024BA8C);
