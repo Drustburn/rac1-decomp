@@ -6,7 +6,36 @@
 #include "hero.h"
 #include "moby.h"
 
-INCLUDE_ASM("asm/overlays", func_L00_00203E98);
+extern char D_L00_00179510[] NOT_SDA;
+typedef struct { int state; int f4; int pad[7]; int f24; } G179510;
+#define G (*(G179510 *)D_L00_00179510)
+void func_L00_00203E98(void) {
+    switch (G.state) {
+    case 0:
+        G.f24 = -1;
+        break;
+    case 1:
+    case 2:
+        G.state = 7;
+        G.f4 = 0;
+        break;
+    case 3:
+        G.state = 7;
+        G.f4 = 0;
+        break;
+    case 4:
+        G.state = 6;
+        G.f4 = 4 - G.f4;
+        break;
+    case 5:
+        G.state = 6;
+        G.f4 = 0;
+        break;
+    case 6:
+    case 7:
+        break;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L00_00203ED8);
 INCLUDE_ASM("asm/overlays", func_L00_00203F08);
 extern char D_L00_00179510[] NOT_SDA;
