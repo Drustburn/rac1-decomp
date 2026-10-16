@@ -2,7 +2,26 @@
 #include "common.h"
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/overlays", func_L00_00249720);
+extern int D_001414DC;
+extern unsigned char D_0013D49E[];
+static inline unsigned char is_set_249720(unsigned char v) {
+    if (v != 0) return 1;
+    return 0;
+}
+
+/* item < 256: whether D_0013D49E is set; else 58 <= x <= 86 while the hero's control mode
+   (D_001414DC) is not 16 (the joined tail) */
+int func_L00_00249720(int item, float a, float b, float x) {
+    int locked = D_001414DC == 16;
+
+    if (item < 256) {
+        return is_set_249720(D_0013D49E[0]);
+    }
+    if (x >= 58.0f && x <= 86.0f) {
+        if (locked == 0) return 1;
+    }
+    return 0;
+}
 /* Menu hit test: x in [58, 86] and a flag clear. */
 int func_L00_00249750(float a, float b, float x) {
     int flag;
