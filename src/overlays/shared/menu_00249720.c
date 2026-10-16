@@ -25,7 +25,11 @@ int func_L00_0024A110(int unused, int value) {
     return D_0013D4C5 != 0;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024A12C);
-INCLUDE_ASM("asm/overlays", func_L00_0024A140);
+/* a < 224: x >= 47.75f; else x < 29.0f (the joined tail). */
+int func_L00_0024A140(int a, float b, float c, float x) {
+    if (a < 224) return x >= 47.75f;
+    return x < 29.0f;
+}
 int func_L00_0024A170(float a, float b, float x) { return x < 29.0f; }
 /* tests the vertical menu range according to the integer selection */
 int func_L00_0024A198(int a, float b, float c, float x) {
@@ -53,8 +57,12 @@ int func_L00_0024A3B0(int a, float b, float c, float x) {
     return x <= 180.0f;
 }
 int func_L00_0024A404(float a, float b, float x) { return x <= 180.0f; }
-INCLUDE_ASM("asm/overlays", func_L00_0024A430);
 extern unsigned char D_0013D4E7[];
+/* a < 221: x >= 242.0f; else x <= 180.0f and D_0013D4E7 != 0 (the joined tail). */
+int func_L00_0024A430(int a, float b, float c, float x) {
+    if (a < 221) return x >= 242.0f;
+    return x <= 180.0f && D_0013D4E7[0] != 0;
+}
 int func_L00_0024A460(float a, float b, float x) {
     return x <= 180.0f && D_0013D4E7[0] != 0;
 }
