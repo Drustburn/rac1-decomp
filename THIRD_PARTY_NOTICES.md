@@ -825,6 +825,12 @@ compiler, and each passed this project's own check. In parentheses, Lombyte's na
 - `src/overlays/l10_orxon/vendor_00296BD8.c`: `func_L10_002DB688` (`FUN_L10_002da2c8`)
 - `src/overlays/l01_novalis/vendor_002FABE8.c`: `func_L01_002FABE8` (`FUN_L01_002f9810`)
 
+Three more were adapted by hand on 2026-10-15 in the same way. In parentheses, Lombyte's name.
+
+- `src/overlays/l18_veldin2/vendor_002A8400.c`: `func_L18_002DCE10` (`FUN_L18_002dba20`)
+- `src/overlays/l18_veldin2/vendor_002A8400.c`: `func_L18_002DD8A8` (`FUN_L18_002dc4b8`)
+- `src/overlays/l12_hoven/vendor_002EDAA0.c`: `func_L12_002EE180` (`FUN_L12_002ece00`)
+
 `include/hero.h` (the hero and the records inside it) and `include/vector.h` (the 16-byte vector) are
 adapted from Lombyte's `include/rnc/gameplay/hero.h` and `include/rnc/math/vector.h` at 42adb529, while
 Lombyte was MIT licensed. `include/pad.h` (the controller state) is adapted from its
