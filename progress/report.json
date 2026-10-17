@@ -1,12 +1,12 @@
 {
  "measures": {
-  "fuzzy_match_percent": 93.00363000726135,
+  "fuzzy_match_percent": 93.10414692060564,
   "total_code": "3712808",
-  "matched_code": "3427760",
-  "matched_code_percent": 92.3225763357545,
+  "matched_code": "3431492",
+  "matched_code_percent": 92.4230932490988,
   "total_functions": 5109,
-  "matched_functions": 4725,
-  "matched_functions_percent": 92.48385202583675,
+  "matched_functions": 4726,
+  "matched_functions_percent": 92.50342532785281,
   "complete_code": "758280",
   "complete_code_percent": 20.4233561229129,
   "total_units": 141,
@@ -43666,13 +43666,13 @@
   {
    "name": "Level 12: Hoven",
    "measures": {
-    "fuzzy_match_percent": 96.32569814872922,
+    "fuzzy_match_percent": 99.25321619077502,
     "total_code": "127480",
-    "matched_code": "122796",
-    "matched_code_percent": 96.32569814872922,
+    "matched_code": "126528",
+    "matched_code_percent": 99.25321619077502,
     "total_functions": 75,
-    "matched_functions": 72,
-    "matched_functions_percent": 96.0,
+    "matched_functions": 73,
+    "matched_functions_percent": 97.33333333333333,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -44024,7 +44024,7 @@
     {
      "name": "func_L12_002EB2E8",
      "size": "3732",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "773824",
      "metadata": {
       "virtual_address": "3060456"
@@ -49711,13 +49711,13 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 93.92549355303244,
+    "fuzzy_match_percent": 94.04042659498853,
     "total_code": "3247108",
-    "matched_code": "3024660",
-    "matched_code_percent": 93.14935012940747,
+    "matched_code": "3028392",
+    "matched_code_percent": 93.26428317136356,
     "total_functions": 3429,
-    "matched_functions": 3181,
-    "matched_functions_percent": 92.76757072032663,
+    "matched_functions": 3182,
+    "matched_functions_percent": 92.79673374161563,
     "complete_code": "548116",
     "complete_code_percent": 16.880128409649448
    }
@@ -49771,13 +49771,13 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 98.7447085141316,
+    "fuzzy_match_percent": 98.92707042336112,
     "total_code": "2046480",
-    "matched_code": "2011352",
-    "matched_code_percent": 98.28349165396193,
+    "matched_code": "2015084",
+    "matched_code_percent": 98.46585356319143,
     "total_functions": 1449,
-    "matched_functions": 1421,
-    "matched_functions_percent": 98.06763285024155,
+    "matched_functions": 1422,
+    "matched_functions_percent": 98.13664596273291,
     "complete_code": "548116",
     "complete_code_percent": 26.783354833665612
    }
@@ -49966,13 +49966,13 @@
    "id": "level_12",
    "name": "Level 12: Hoven",
    "measures": {
-    "fuzzy_match_percent": 96.32569814872922,
+    "fuzzy_match_percent": 99.25321619077502,
     "total_code": "127480",
-    "matched_code": "122796",
-    "matched_code_percent": 96.32569814872922,
+    "matched_code": "126528",
+    "matched_code_percent": 99.25321619077502,
     "total_functions": 75,
-    "matched_functions": 72,
-    "matched_functions_percent": 96.0,
+    "matched_functions": 73,
+    "matched_functions_percent": 97.33333333333333,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
