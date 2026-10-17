@@ -628,7 +628,283 @@ void func_L02_002DA728(char *moby) {
     p = D_0013E633 + 0xE1D;
     *(float *)(p + 0x98) = FastAddRots(f, *(float *)(p + 0x98));
 }
-INCLUDE_ASM("asm/overlays", func_L02_002DA820);
+extern void func_L02_002DB810(int, u32, float, float, float, float);
+extern int func_001F4868(int);
+extern void func_L02_002DBAF8(int, int, int, float, float);
+extern void func_L02_002DBD70(void *, f32, f32, f32, s32);
+extern void func_00234C98(int, u64);
+extern int func_001FA8A8(int, int, float);
+extern short D_L02_00161BC0;
+extern short D_L02_00161BC4;
+extern short D_L02_00161BC8;
+extern short D_L02_00161BCC;
+extern short D_L02_00161BD0;
+extern short D_L02_00161BD4;
+extern short D_L02_00161BD8;
+extern short D_L02_00161BDC;
+extern short D_L02_00161BE0;
+extern short D_L02_00161BE4;
+extern short D_L02_00161BE8;
+extern short D_L02_00161BEC;
+extern short D_L02_00161C30;
+extern short D_L02_00161C34;
+extern short D_L02_00161C38;
+extern short D_L02_00161C3C;
+extern short D_L02_00161C40;
+extern short D_L02_00161C44;
+extern short D_L02_00161C4C;
+extern short D_L02_00161C50;
+extern short D_L02_00161C54;
+extern void func_L02_002DC2C0(void);
+extern s32 D_L02_0015F6B0 MACRO_ADDR;
+
+#define func_001F4868 ((u64 (*)(int))func_001F4868)
+#define func_L02_002DB810 ((void (*)(u64, float, float, float, float, u32))func_L02_002DB810)
+#define func_L02_002DBAF8 ((void (*)(u64, int, int, float, float))func_L02_002DBAF8)
+#define func_L02_002DBD70 ((void (*)(u64, f32, f32, f32, s32))func_L02_002DBD70)
+typedef struct { int v[12]; } Ring12;
+void func_L02_002DA820(char *moby) {
+    struct { char unk0[0x78]; u64 texture; char unk80[0x10]; } ctx;
+    int st0, st1;
+    char *data = *(char **)(moby + 0x78);
+    Ring12 *markers = (Ring12 *)(data + 0xb0);
+    Ring12 *first, *second, *third;
+
+    int i, state, st2;
+    float phase;
+
+    func_00234C98(0x47, 0x5380b);
+    ctx.texture = func_001F4868(0x10);
+    func_L02_002DC2C0();
+    {
+        int n, *q;
+        for (n = 11, q = markers->v; n >= 0; --n, ++q) {
+            if (*q != 0) *q = 1;
+        }
+    }
+    st0 = 0; st1 = 0; st2 = 0;
+    if (*(float *)(data + 0xe4) > 0.31415927f) {
+        state = *(int *)(data + 0xe0);
+        if (state == 1) st0 = 1;
+        else if (state == 2) st1 = 1;
+        else st2 = 1;
+    } else if (*(float *)(data + 0xe4) < -0.31415927f) {
+        state = *(int *)(data + 0xe0);
+        if (state == 1) st0 = -1;
+        else if (state == 2) st1 = -1;
+        else st2 = -1;
+    }
+
+    i = 0;
+    first = (Ring12 *)(data + 0x20);
+    second = (Ring12 *)(data + 0x50);
+    third = (Ring12 *)(data + 0x80);
+    {
+        int index, other, slot, draw_second, color;
+        float angle, distance, phase;
+    for (; i < 12; ++i) {
+        draw_second = 1;
+        phase = -0.31415927f;
+        if (*(int *)(data + 0xe0) == 1) phase = func_001FA748(phase, *(float *)(data + 0xe4));
+        angle = func_001FA748(phase, (float)(i * 30) * 0.017453292f);
+        index = i + *(int *)(data + 0x14);
+        slot = index % 12;
+        if (first->v[slot] == 2) {
+            other = i + *(int *)(data + 0x18) + st0 - st1;
+            color = (*(int *)&D_L02_00161C3C);
+            if (second->v[other % 12] != 0) distance = (float)(*(int *)&D_L02_00161BD4);
+            else {
+                int t = i + *(int *)(data + 0x1c) + st0 - st2;
+                if (third->v[t % 12] != 0) distance = (float)(*(int *)&D_L02_00161BC8);
+                else if (third->v[(t + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BC8);
+                else if (second->v[(other + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BD4);
+                else if (first->v[(index + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BE0);
+                else {
+                    int k;
+                    distance = (float)-(*(int *)&D_L02_00161BEC);
+                    draw_second = 0;
+                    k = st0 + 6;
+                    if (markers->v[(i + k) % 12] != 0) {
+                        int m = (i + k) % 12;
+                        first->v[slot] = 3;
+                        markers->v[m] = 2;
+                        color = (*(int *)&D_L02_00161C40);
+                    }
+                }
+            }
+            func_L02_002DBD70(ctx.texture, func_001FA748(angle, 0.31415927f), (float)(*(int *)&D_L02_00161BE0), distance, color);
+            if (draw_second) {
+                func_L02_002DBD70(ctx.texture, func_001FA748(angle, 0.31415927f), distance, (float)(*(int *)&D_L02_00161BE0), (*(int *)&D_L02_00161C44));
+            }
+        }
+    }
+    }
+    {
+        int i, index, other, slot, draw_second, color;
+        float angle, distance, phase;
+    for (i = 0; i < 12; ++i) {
+        draw_second = 1;
+        phase = -0.31415927f;
+        color = (*(int *)&D_L02_00161C3C);
+        if (*(int *)(data + 0xe0) == 2) phase = func_001FA748(phase, *(float *)(data + 0xe4));
+        angle = func_001FA748(phase, (float)(i * 30) * 0.017453292f);
+        index = i + *(int *)(data + 0x18);
+        slot = index % 12;
+        if (second->v[slot] == 2) {
+            other = i + *(int *)(data + 0x1c) + st1 - st2;
+            if (third->v[other % 12] != 0) distance = (float)(*(int *)&D_L02_00161BC8);
+            else if (third->v[(other + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BC8);
+            else if (second->v[(index + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BD4);
+            else if (first->v[(i + *(int *)(data + 0x14) + st1 - st0 + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BE0);
+            else {
+                int k;
+                distance = (float)-(*(int *)&D_L02_00161BEC);
+                draw_second = 0;
+                k = st1 + 6;
+                if (markers->v[(i + k) % 12] != 0) {
+                    int m = (i + k) % 12;
+                    second->v[slot] = 3;
+                    markers->v[m] = 2;
+                    color = (*(int *)&D_L02_00161C40);
+                }
+            }
+            func_L02_002DBD70(ctx.texture, func_001FA748(angle, 0.31415927f), (float)(*(int *)&D_L02_00161BD4), distance, color);
+            if (draw_second) {
+                func_L02_002DBD70(ctx.texture, func_001FA748(angle, 0.31415927f), distance, (float)(*(int *)&D_L02_00161BD4), (*(int *)&D_L02_00161C44));
+            }
+        }
+    }
+    }
+    {
+        int i, index, other, slot, draw_second, color;
+        float angle, distance, phase;
+    for (i = 0; i < 12; ++i) {
+        draw_second = 1;
+        phase = -0.31415927f;
+        color = (*(int *)&D_L02_00161C3C);
+        if (*(int *)(data + 0xe0) == 3) phase = func_001FA748(phase, *(float *)(data + 0xe4));
+        angle = func_001FA748(phase, (float)(i * 30) * 0.017453292f);
+        index = i + *(int *)(data + 0x1c);
+        slot = index % 12;
+        if (third->v[slot] == 2) {
+            if (third->v[(index + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BC8);
+            else if (second->v[(i + *(int *)(data + 0x18) + st2 - st1 + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BD4);
+            else if (first->v[(i + *(int *)(data + 0x14) + st2 - st0 + 6) % 12] != 0) distance = (float)-(*(int *)&D_L02_00161BE0);
+            else {
+                int k;
+                distance = (float)-(*(int *)&D_L02_00161BEC);
+                draw_second = 0;
+                k = st2 + 6;
+                if (markers->v[(i + k) % 12] != 0) {
+                    int m = (i + k) % 12;
+                    third->v[slot] = 3;
+                    markers->v[m] = 2;
+                    color = (*(int *)&D_L02_00161C40);
+                }
+            }
+            func_L02_002DBD70(ctx.texture, func_001FA748(angle, 0.31415927f), (float)(*(int *)&D_L02_00161BC8), distance, color);
+            if (draw_second) {
+                func_L02_002DBD70(ctx.texture, func_001FA748(angle, 0.31415927f), distance, (float)(*(int *)&D_L02_00161BC8), (*(int *)&D_L02_00161C44));
+            }
+        }
+    }
+    }
+    {
+        int i, color;
+        float angle;
+    for (i = 0; i < 12; ++i) {
+        angle = -0.2617994f;
+        if (*(int *)(data + 0xe0) == 1) {
+            color = func_001FA8A8((*(int *)&D_L02_00161C30), (*(int *)&D_L02_00161C30) & 0xffffff,
+                                  func_001F9FA8((float)((D_L02_0015F6B0 % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
+            if (*(float *)(data + 0xe4) != 0.0f) angle = func_001FA748(angle, *(float *)(data + 0xe4));
+        } else color = (*(int *)&D_L02_00161C34);
+        angle = func_001FA748(angle, (float)(i * 30) * 0.017453292f);
+        phase = func_001FA748(angle, 0.5235988f);
+        func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BDC), (float)(*(int *)&D_L02_00161BD8), color);
+        if (first->v[(i + *(int *)(data + 0x14)) % 12] != 0) {
+            if (first->v[(i + *(int *)(data + 0x14)) % 12] >= 3) {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 0, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
+                first->v[(i + *(int *)(data + 0x14)) % 12] = 2;
+            } else if (first->v[(i + *(int *)(data + 0x14)) % 12] == 2) {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 1, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
+            } else {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 2, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
+            }
+        }
+    }
+    }
+    {
+        int i, color;
+        float angle;
+    for (i = 0; i < 12; ++i) {
+        angle = -0.2617994f;
+        if (*(int *)(data + 0xe0) == 2) {
+            color = func_001FA8A8((*(int *)&D_L02_00161C30), (*(int *)&D_L02_00161C30) & 0xffffff,
+                                  func_001F9FA8((float)((D_L02_0015F6B0 % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
+            if (*(float *)(data + 0xe4) != 0.0f) angle = func_001FA748(angle, *(float *)(data + 0xe4));
+        } else color = (*(int *)&D_L02_00161C34);
+        angle = func_001FA748(angle, (float)(i * 30) * 0.017453292f);
+        phase = func_001FA748(angle, 0.5235988f);
+        func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BD0), (float)(*(int *)&D_L02_00161BCC), color);
+        if (second->v[(i + *(int *)(data + 0x18)) % 12] != 0) {
+            if (second->v[(i + *(int *)(data + 0x18)) % 12] >= 3) {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 0, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
+                second->v[(i + *(int *)(data + 0x18)) % 12] = 2;
+            } else if (second->v[(i + *(int *)(data + 0x18)) % 12] == 2) {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 1, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
+            } else {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 2, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
+            }
+        }
+    }
+    }
+    {
+        int i, color;
+        float angle;
+    for (i = 0; i < 12; ++i) {
+        angle = -0.2617994f;
+        if (*(int *)(data + 0xe0) == 3) {
+            color = func_001FA8A8((*(int *)&D_L02_00161C30), (*(int *)&D_L02_00161C30) & 0xffffff,
+                                  func_001F9FA8((float)((D_L02_0015F6B0 % 60) * 6) * 0.017453292f) * 0.5f + 0.5f);
+            if (*(float *)(data + 0xe4) != 0.0f) angle = func_001FA748(angle, *(float *)(data + 0xe4));
+        } else color = (*(int *)&D_L02_00161C34);
+        angle = func_001FA748(angle, (float)(i * 30) * 0.017453292f);
+        phase = func_001FA748(angle, 0.5235988f);
+        func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BC4), (float)(*(int *)&D_L02_00161BC0), color);
+        if (third->v[(i + *(int *)(data + 0x1c)) % 12] != 0) {
+            if (third->v[(i + *(int *)(data + 0x1c)) % 12] >= 3) {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 0, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
+                third->v[(i + *(int *)(data + 0x1c)) % 12] = 2;
+            } else if (third->v[(i + *(int *)(data + 0x1c)) % 12] == 2) {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 1, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
+            } else {
+                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 2, func_001FA748(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
+            }
+        }
+    }
+    }
+    {
+        int value, color;
+        float angle;
+    for (i = 0; i < 12; ++i) {
+        angle = func_001FA748(-0.08726646f, (float)(i * 30) * 0.017453292f);
+        phase = func_001FA748(angle, 0.17453292f);
+        value = markers->v[i];
+        if (value != 0) {
+            if (value == 2) color = (*(int *)&D_L02_00161C54);
+            else if (D_L02_0015F6B0 & 0x20) color = (*(int *)&D_L02_00161C50);
+            else color = (*(int *)&D_L02_00161C4C);
+            func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BE8), (float)(*(int *)&D_L02_00161BE4), color);
+        }
+    }
+    }
+    func_00234C98(0x47, 0x5360b);
+}
+#undef func_001F4868
+#undef func_L02_002DB810
+#undef func_L02_002DBAF8
+#undef func_L02_002DBD70
 extern short D_L02_00161B9C, D_L02_00161BA0, D_L02_00161BA4, D_L02_00161BA8;
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
