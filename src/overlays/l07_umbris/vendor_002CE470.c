@@ -578,7 +578,164 @@ void func_L07_0030C320(struct Moby *m) {
     if (t != 0)
         t->frames = t->length;
 }
-INCLUDE_ASM("asm/overlays", func_L07_0030C3E0);
+extern char *func_L00_0025B478(void *, int, int);
+extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
+extern void func_L01_0026F090(int list, int state);
+extern void func_001F9BC0(float *);
+extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void func_0020D678(void *);
+extern void func_L00_0025E4B0(void *, short *);
+extern void func_L00_0025E590(void *, void *);
+extern int func_L00_0025A208(int *, int, int, int);
+extern int func_001E9730();
+extern int func_L01_0028C2D8(void *, void *, float);
+extern int func_L00_0025A2F0(int *, int, int, int);
+extern int func_L00_0025E860(void *, void *, int *, float *, float, int);
+extern void func_L00_0025B040(unsigned char *, float);
+extern int func_001F9908(int *arg0);
+extern float func_001F9D10(void *, void *);
+extern char D_L07_00211840[];
+extern char D_L07_00211870[];
+extern char D_L07_002118C0[];
+
+void func_L07_0030C3E0(char *m) {
+    char *data;
+    char *path;
+    float *remaining;
+    int count;
+    int current;
+    int child;
+    int i;
+    int first;
+    int next;
+    float distance;
+    float position[4];
+    char *limit;
+    int result;
+
+    if (!m) return;
+    data = *(char **)(m + 0x78);
+    if (!data) return;
+    remaining = (float *)(data + 0x20);
+    if (*(unsigned char *)(data + 0x94)) {
+        limit = func_L00_0025B478(m, 0x230000, 0);
+        result = func_L00_0025B4D0(m, limit, remaining, 0, &count, 0, 0, 4);
+        switch ((unsigned)result) {
+        case 0:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+            break;
+        case 1:
+        case 2:
+            *remaining = 0.0f;
+            break;
+        }
+        if (count > 1) {
+            float step = *(float *)(limit + 0x2c);
+            if (*remaining <= step) {
+                *remaining = 0.0f;
+                func_L01_0026F090(*(int *)(data + 0x74), 3);
+                func_001F9BC0(position);
+                func_L00_0025F4A8(m, position, (void *)0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                func_0020D678(m);
+                return;
+            }
+            *remaining -= step;
+            *(unsigned char *)(data + 0x67) = 0xfa;
+            *(short *)(data + 0x26) = func_001F9850(0x3c);
+            func_L00_0025E4B0(m, (short *)(data + 0x60));
+        }
+        *(unsigned char *)(m + 0xA4) = 0xff;
+    }
+    func_L00_0025E590(m, data + 0x60);
+    if (*(int *)(data + 0x70) == -1) return;
+    path = D_L07_001B0830[*(int *)(data + 0x70)];
+    switch (*(unsigned char *)(m + 0x20)) {
+    case 0: {
+        int j;
+        int i0, ch;
+        current = 0;
+        next = 0;
+        qcopy(position, path + 0x10);
+        for (j = 0; j < *(int *)path; j++) {
+            int offset = j * 16;
+            *(float *)(path + offset + 0x1c) =
+                func_001F9D10(path + 0x10 + j * 16,
+                              path + 0x10 + ((j + 1) % *(int *)path) * 16);
+        }
+        if (func_L00_0025A208(&current, *(int *)(data + 0x74), 1, 0)) {
+            func_001E9730(D_L07_00211840, *(int *)(data + 0x74));
+            return;
+        }
+        first = *(int *)(data + 0x90) = func_L01_0028C2D8(m + 0x10, path, 0.0f);
+        i0 = 0;
+        if (0 < ((struct { char pad[0x78]; int n; } *)data)->n) do {
+            ch = *(int *)(current + 0x78);
+            *(int *)(ch + 0xa0) = (int)m;
+            qcopy((void *)(current + 0x10), position);
+            qcopy((void *)(ch + 0x80), position);
+            qcopy((void *)(ch + 0x70), position);
+            ((struct { char pad[0x90]; int a; int b; } *)ch)->a = first;
+            ((struct { char pad[0x94]; int b; } *)ch)->b = first + 1;
+            if (func_L00_0025A2F0(&current, current, 1, 0)) {
+                int child_count = *(int *)(data + 0x78);
+                if (i0 < child_count - 1) {
+                    func_001E9730(D_L07_00211870, i0 + 1, *(int *)(data + 0x74), child_count);
+                } else if (i0 == child_count - 1) {
+                    func_001E9730(D_L07_002118C0, *(int *)(data + 0x74), child_count);
+                }
+                *(int *)(data + 0x78) = i0 + 1;
+                break;
+            }
+            func_L00_0025E860(path, position, &first, (float *)&next, *(float *)(data + 0x80), 1);
+            i0++;
+        } while (i0 < *(int *)(data + 0x78));
+        if (!*(unsigned char *)(data + 0x94)) {
+            *(int *)(m + 0x94) = 0;
+            *(unsigned short *)(m + 0x34) &= 0xefff;
+        }
+        if (!*(unsigned char *)(data + 0x95)) *(unsigned short *)(m + 0x34) |= 1;
+        *(unsigned char *)(m + 0x20) = 1;
+        break;
+    }
+    case 1: {
+        int cursor = 0;
+        func_L00_0025A208(&cursor, ((struct { char pad[0x74]; int id; } *)data)->id, 1, 0);
+        for (i = 0; i < *(int *)(data + 0x78); i++) {
+            child = *(int *)(cursor + 0x78);
+            {
+                float segment_distance = func_001F9D10((char *)child + 0x80,
+                              path + 0x10 + *(int *)(child + 0x90) * 16);
+                float step = *(float *)(data + 0x7c) * D_0015EE6C;
+                distance = segment_distance;
+                func_L00_0025E860(path, (char *)child + 0x80, (int *)((char *)child + 0x90), &distance, step, 1);
+            }
+            *(int *)(child + 0x94) = *(int *)(child + 0x90) + 1;
+            if (cursor == 0 || *(unsigned char *)(cursor + 0x20) == 0xfe ||
+                *(unsigned char *)(cursor + 0x20) == 0xfd) {
+                if (*(int *)(data + 0x84) != -1) {
+                    func_001F9BF0((char *)child + 0x60, (char *)child + 0x80,
+                                  (char *)cursor + 0x10);
+                    qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
+                    if (func_001F9908((int *)(child + 0x98)) &&
+                        *(int *)(child + 0x90) == *(int *)(data + 0x90))
+                        func_L07_0030C320((void *)cursor);
+                }
+            }
+            func_L00_0025A2F0(&cursor, cursor, 1, 0);
+        }
+        break;
+    }
+    }
+    func_L00_0025B040(m, 1.5f);
+}
 extern void *func_0020D348(int);
 extern float func_001F9CE8(void *);
 extern float func_L00_001FF860(float, float);

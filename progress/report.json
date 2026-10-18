@@ -1,12 +1,12 @@
 {
  "measures": {
-  "fuzzy_match_percent": 94.40451041906826,
+  "fuzzy_match_percent": 94.44049396575313,
   "total_code": "3712808",
-  "matched_code": "3479772",
-  "matched_code_percent": 93.72345674756141,
+  "matched_code": "3481108",
+  "matched_code_percent": 93.75944029424629,
   "total_functions": 5109,
-  "matched_functions": 4782,
-  "matched_functions_percent": 93.59953024075162,
+  "matched_functions": 4783,
+  "matched_functions_percent": 93.61910354276766,
   "complete_code": "1022400",
   "complete_code_percent": 27.537109379208406,
   "total_units": 141,
@@ -40228,13 +40228,13 @@
   {
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 96.40353174603175,
+    "fuzzy_match_percent": 98.244360670194,
     "total_code": "72576",
-    "matched_code": "66048",
-    "matched_code_percent": 91.005291005291,
+    "matched_code": "67384",
+    "matched_code_percent": 92.84611992945327,
     "total_functions": 80,
-    "matched_functions": 77,
-    "matched_functions_percent": 96.25,
+    "matched_functions": 78,
+    "matched_functions_percent": 97.5,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -40343,7 +40343,7 @@
     {
      "name": "func_L07_0030C3E0",
      "size": "1336",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "679792",
      "metadata": {
       "virtual_address": "3195872"
@@ -49711,13 +49711,13 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 95.22991582663713,
+    "fuzzy_match_percent": 95.27106013104586,
     "total_code": "3247108",
-    "matched_code": "3067016",
-    "matched_code_percent": 94.45377240301215,
+    "matched_code": "3068352",
+    "matched_code_percent": 94.49491670742088,
     "total_functions": 3429,
-    "matched_functions": 3202,
-    "matched_functions_percent": 93.37999416739574,
+    "matched_functions": 3203,
+    "matched_functions_percent": 93.40915718868474,
     "complete_code": "807576",
     "complete_code_percent": 24.870623336211793
    }
@@ -49771,13 +49771,13 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 99.14520106719833,
+    "fuzzy_match_percent": 99.21048389429657,
     "total_code": "2046480",
-    "matched_code": "2019548",
-    "matched_code_percent": 98.68398420702866,
+    "matched_code": "2020884",
+    "matched_code_percent": 98.74926703412689,
     "total_functions": 1449,
-    "matched_functions": 1425,
-    "matched_functions_percent": 98.34368530020704,
+    "matched_functions": 1426,
+    "matched_functions_percent": 98.41269841269842,
     "complete_code": "807576",
     "complete_code_percent": 39.46170986278879
    }
@@ -49891,13 +49891,13 @@
    "id": "level_07",
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 96.40353174603175,
+    "fuzzy_match_percent": 98.244360670194,
     "total_code": "72576",
-    "matched_code": "66048",
-    "matched_code_percent": 91.005291005291,
+    "matched_code": "67384",
+    "matched_code_percent": 92.84611992945327,
     "total_functions": 80,
-    "matched_functions": 77,
-    "matched_functions_percent": 96.25,
+    "matched_functions": 78,
+    "matched_functions_percent": 97.5,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
