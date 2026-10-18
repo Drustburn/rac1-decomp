@@ -152,7 +152,123 @@ void func_L06_002D9970(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L06_002D9B08);
+typedef struct { float corner[4][4]; int color[4]; float uv[4][2]; long unk70; long tex; long unk80; long unk88; } L06BackdropQuad;
+extern char D_L06_00167640[];
+extern char D_L06_00167500[];
+extern float D_L06_001D35E0[][4];
+extern float D_L06_001D4080[][4];
+extern float D_L06_001D4880[][4];
+extern float D_L06_001D46B0[][2];
+extern float D_L06_001D4410[][4];
+extern float D_L06_001D3DE0[][4];
+extern short D_L06_001D3970[][8];
+extern float D_L06_001D3C10[][2];
+extern short D_L06_00161900;
+extern short D_L06_00161904;
+extern short D_L06_00161908;
+extern short D_L06_0016190C;
+extern short D_L06_00161910;
+extern short D_L06_00161914;
+extern short D_L06_00161918;
+extern short D_L06_0016191C;
+extern float func_001F9B88(float);
+extern float func_001F9B50(float);
+extern void func_001F9EE8(void *, void *, void *);
+extern void func_001F9EC0(void *, void *, void *);
+extern void func_L00_001FF4B0(void *, void *, float);
+extern float func_001F9C78(void *, void *);
+extern void func_001F9C30(void *, void *, float);
+extern long func_001F4868(int);
+extern void func_L00_001FD1D8(void *, int, int);
+
+static inline void TransformPoint(float *dst, float *src, float (*m)[4]) {
+    func_001F9EE8(dst, src, m);
+}
+
+void func_L06_002D9B08(char *moby) {
+    L06BackdropQuad quad;
+    float matrix[3][4] __attribute__((aligned(16)));
+    float pos[4] __attribute__((aligned(16)));
+    float direction[4] __attribute__((aligned(16)));
+    float facePos[4] __attribute__((aligned(16)));
+    float normal[4] __attribute__((aligned(16)));
+    float projected[4] __attribute__((aligned(16)));
+    int near;
+    int i;
+    float scale;
+    float *g;
+    qcopy(matrix[0], moby + 0xc0);
+    qcopy(matrix[1], moby + 0xd0);
+    qcopy(matrix[2], moby + 0xe0);
+    pos[0] = *(float *)(moby + 0x10);
+    pos[1] = *(float *)(moby + 0x14);
+    pos[2] = *(float *)(moby + 0x18);
+    pos[3] = 1.0f;
+    near = 0;
+    g = (float *)D_L06_00167500;
+    if (func_001F9B88(g[0x140 / 4] - pos[0]) < 16.0f &&
+        func_001F9B88(g[0x144 / 4] - *(float *)(moby + 0x14)) < 16.0f) {
+        near = 1;
+    }
+    if (near) {
+        float *uv = &D_L06_001D46B0[0][0];
+        for (i = 0; i < 57; i++) {
+            func_001F9EE8(D_L06_001D4880[i], D_L06_001D35E0[i], matrix);
+            func_001F9BF0(direction, D_L06_001D4880[i], D_L06_00167640);
+            func_L00_001FF4B0(direction, direction, 1.0f);
+            func_001F9EE8(normal, D_L06_001D4080[i], matrix);
+            func_L00_001FF4B0(normal, normal, *(float *)&D_L06_0016191C);
+            scale = func_001F9C78(normal, direction);
+            func_001F9C30(projected, normal, scale + scale);
+            func_001F9BF0(projected, direction, projected);
+            func_L00_001FF4B0(projected, projected, 1.0f);
+            projected[2] += 1.0f;
+            scale = func_001F9B50(projected[2] + projected[2]);
+            uv[0] = projected[0] / (scale + scale) + 0.5f;
+            uv[1] = projected[1] / (scale + scale) + 0.5f;
+            uv += 2;
+        }
+    } else {
+        for (i = 0; i < 57; i++) {
+            func_001F9EE8(D_L06_001D4880[i], D_L06_001D35E0[i], matrix);
+        }
+    }
+    quad.tex = func_001F4868(*(int *)&D_L06_00161914);
+    quad.unk80 = 0xff9000000260L;
+    quad.unk88 = (long)*(int *)&D_L06_00161900 | (long)*(int *)&D_L06_00161904 << 2 |
+                 (long)*(int *)&D_L06_00161908 << 4 | (long)*(int *)&D_L06_0016190C << 6 |
+                 (long)*(int *)&D_L06_00161910 << 32;
+    quad.unk70 = 0;
+    quad.color[3] = *(int *)&D_L06_00161918;
+    quad.color[2] = *(int *)&D_L06_00161918;
+    quad.color[1] = *(int *)&D_L06_00161918;
+    quad.color[0] = *(int *)&D_L06_00161918;
+    i = 0;
+    do {
+        float *center = facePos;
+        TransformPoint(center, D_L06_001D4410[i], matrix);
+        func_001F9BF0(direction, center, D_L06_00167640);
+        func_L00_001FF4B0(direction, direction, 1.0f);
+        func_001F9EC0(center, D_L06_001D3DE0[i], matrix);
+        if (!(0.0f < func_001F9C78(direction, center))) {
+            short *idx = D_L06_001D3970[i];
+            int j;
+            for (j = 0; j < 4; j++, idx += 2) {
+                short v = idx[0];
+                qcopy(quad.corner[j], D_L06_001D4880[v]);
+                if (near) {
+                    quad.uv[j][0] = D_L06_001D46B0[v][0];
+                    quad.uv[j][1] = D_L06_001D46B0[v][1];
+                } else {
+                    quad.uv[j][0] = D_L06_001D3C10[idx[1]][0];
+                    quad.uv[j][1] = D_L06_001D3C10[idx[1]][1];
+                }
+            }
+            func_L00_001FD1D8(&quad, 0, 0);
+        }
+        i++;
+    } while (i < 42);
+}
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
 char *func_L06_002D9F68(char *owner) {
     char *moby = func_0020D348_m(0x12F);
