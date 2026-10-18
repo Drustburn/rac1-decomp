@@ -1297,7 +1297,126 @@ void func_L00_00205CC0(void) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_00205FF0);
+/* hero + 0xEF0: four more manipulators after manipulators[7]; 0xFFC/0xFFE: random-delay timer */
+struct HeroManip4_5FF0 { u8 pad[0xEF0]; struct HeroManipulator m[4]; u8 pad2[0xC]; s16 delay; s16 timer; };
+#define HV ((struct HeroManip4_5FF0 *)&D_0013F450_05CC0)
+#define HM (HV->m)
+extern float func_00214D28(float *, float, float);
+extern f32 func_001FA888(s32);
+extern s32 func_001FA898(f32);
+extern f32 func_001F9FA8(f32);
+extern s32 func_001F9938(void *);
+extern void func_001F9C30(void *, void *, float);
+extern unsigned char D_0015EEB0[] MACRO_ADDR;
+extern int D_0015EEF0 MACRO_ADDR;
+extern short D_L00_0015F7D8;
+extern Quad_56a8 D_L00_0017C2E0[];
+extern Quad_56a8 D_L00_0017C320[];
+extern Quad_56a8 D_L00_0017C360[];
+extern f32 D_L00_0017C3A0[];
+
+void func_L00_00205FF0(void) {
+    u8 *g, *g2;
+    u8 *h0;
+    u8 *moby;
+    s32 alpha, t3, k, r, b, gc, r12, g24, b12, period, low, a;
+    f32 fp, fa, s, s24;
+
+    if (D_0015EEB0[3] != 0)
+        func_00214D28((float *)((char *)&D_0015EEF0 + 0x28), 1.8f, 0.05f);
+    else
+        func_00214D28((float *)((char *)&D_0015EEF0 + 0x28), 1.0f, 0.05f);
+
+    h0 = (u8 *)&D_0013F450_05CC0;
+    if ((u8)(h0[0x20A4] - 1) < 2)
+        moby = *(u8 **)(h0 + 0x2080);
+    else {
+        if (*(s16 *)(h0 + 0x22D8) != 0)
+            return;
+        moby = *(u8 **)(h0 + 0x1184);
+    }
+    if (moby == 0)
+        return;
+    g = (u8 *)&D_0013F450_05CC0;
+    *(u16 *)(moby + 0x34) |= 0x10;
+    alpha = 0x80;
+    gc = 0x88;
+    r = 0x38;
+    if (*(s32 *)(g + 0x22A8) == 1)
+        r = gc;
+    period = func_001F9850(0x6E);
+    fp = func_001FA888(period);
+    fa = (f32)(D_L00_0015F6B0 % period) / fp;
+    fa = fa + fa;
+    fa = fa * 3.1415927f;
+    s = func_001F9FA8(fa + -3.1415927f);
+    s24 = s * 24.0f;
+    r12 = func_001FA898(s24) + 0xC;
+    r = r + r12;
+    k = func_001FA898(s * 48.0f);
+    g24 = k + 0x18;
+    t3 = func_001FA898(s24);
+    gc = k + 0xA0;
+    b12 = t3 + 0xC;
+    b = t3 + 0x4C;
+    if (*(s16 *)(g + 0x1EE) != 0) {
+        f32 kk = 1.0f;
+        s32 t5 = func_001F9850(5);
+        s32 t20 = func_001F9850(20);
+        s32 h = *(s16 *)(g + 0x1EE);
+
+        if (func_001F9850(45) - t5 < h) {
+            kk = func_001FA888(func_001F9850(45) - *(s16 *)(g + 0x1EE));
+            kk = kk / func_001FA888(t5);
+        }
+        if (*(s16 *)(g + 0x1EE) < t20) {
+            kk = func_001FA888(*(s16 *)(g + 0x1EE));
+            kk = kk / func_001FA888(t20);
+        }
+        r = r - func_001FA898((f32)r12 * kk);
+        gc = gc - func_001FA898((f32)g24 * kk);
+        b = b - func_001FA898((f32)b12 * kk);
+        r = r + func_001FA898(kk * 112.0f);
+        gc = gc - func_001FA898(kk * 72.0f);
+    }
+    *(int *)(moby + 0x90) = (alpha << 24) | (b << 16) | (gc << 8) | r;
+    g2 = (u8 *)&D_0013F450_05CC0;
+    if (g2[0x20A4] != 0)
+        return;
+    if (func_001F9938(g2 + 0xFFC) && moby[0x53] == 1) {
+        low = func_001F9850(50);
+        a = func_L00_00258BC8(low, func_001F9850(200));
+        *(s16 *)(g2 + 0xFFC) = a;
+        *(s16 *)(g2 + 0xFFE) = 1;
+    }
+    if (HV->timer == 0)
+        return;
+    HV->timer++;
+    if (HV->timer > 21)
+        HV->timer = 0;
+    if (HV->timer == 0) {
+        s32 i;
+        for (i = 0; i < 4; i++) {
+            if (HM[i].attached != 0)
+                DetachManipulator((s32)moby, &HM[i]);
+        }
+    } else {
+        s32 i;
+        s32 j;
+        for (i = 0; i < 4; i++) {
+            if (HM[i].attached == 0) {
+                func_0020D960_05CC0((s32)moby, ((s32 *)&D_L00_0015F7D8)[i], &HM[i]);
+                HM[i].unk3 = 1;
+                qcopy(&HM[i].quat, &D_L00_0017C2E0[i]);
+                qcopy(&HM[i].scale3, &D_L00_0017C320[i]);
+                qcopy(&HM[i].translation, &D_L00_0017C360[i]);
+                func_001F9C30(&HM[i].translation, &HM[i].translation, *(f32 *)(moby + 0x2C));
+            }
+        }
+        for (j = 0; j < 4; j++)
+            HM[j].unkC = D_L00_0017C3A0[HV->timer];
+    }
+}
 extern unsigned char D_0013D5DD[] NOT_SDA;
 extern unsigned char D_0013E633[] NOT_SDA;
 extern void func_L00_00236750(void);
