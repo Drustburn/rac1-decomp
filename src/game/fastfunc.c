@@ -46,7 +46,9 @@ extern void func_001F3140(void);
 extern int D_0018E840[];
 extern void func_001F7B40(void);
 
-INCLUDE_ASM("asm/nonmatchings/text", func_001F9810);
+LINKER_REMNANT("asm/remnants/text", func_001F9810);
+
+INCLUDE_ASM("asm/nonmatchings/text", func_001F9840);
 
 INCLUDE_ASM("asm/nonmatchings/text", func_001F9850);
 

@@ -89,7 +89,9 @@ int func_001F0FF8(int x, int y, int color, char *str) {
 
 __asm__(".section .text\n\tnop\n");
 
-INCLUDE_ASM("asm/nonmatchings/text", func_001F1088);
+LINKER_REMNANT("asm/remnants/text", func_001F1088);
+
+INCLUDE_ASM("asm/nonmatchings/text", func_001F10A0);
 
 LINKER_REMNANT("asm/remnants/text", func_001F2410);
 
@@ -1217,7 +1219,7 @@ extern int *D_0015F550 MACRO_ADDR;
 extern int D_0015EF74 MACRO_ADDR;
 extern int D_0015F55C MACRO_ADDR;
 extern int D_0015EF8C MACRO_ADDR;
-extern short D_0015F558;
+extern int D_0015F558 MACRO_ADDR;
 typedef struct {
     long unk0;
     long unk8;
@@ -1249,7 +1251,7 @@ void func_001F4630(int arg0) {
     p += 4;
     D_00161000 = p;
     D_0015EF74 = D_0015EF78;
-    *(int *)&D_0015F558 = 0;
+    D_0015F558 = 0;
     {
         int k;
 
@@ -1336,7 +1338,85 @@ typedef struct TexUpload {
     unsigned char th;
     short tbp;
 } TexUpload;
-INCLUDE_ASM("asm/nonmatchings/text", func_001F4868); /* GetEffectTex(int, int) */
+struct EffectTextureDefinition_et {
+    u64 tex0;
+    u16 texel_offset_quadwords;
+    u16 palette_offset_quadwords;
+    s16 width_log2;
+    s16 height_log2;
+};
+struct TextureUpload_et {
+    s32 clut_data;
+    s16 unk4;
+    s16 cbp;
+    s32 image_data;
+    u8 tw;
+    u8 th;
+    s16 tbp;
+};
+
+extern struct EffectTextureDefinition_et effect_texture_definitions_et[] __asm__("D_0018D540");
+extern struct TextureUpload_et pending_texture_uploads_et[0x40] __asm__("D_0018D140");
+extern s32 pending_texture_upload_count_et __asm__("D_0015F558") MACRO_ADDR;
+extern s32 level_texture_payload_address_et __asm__("D_0015F560") MACRO_ADDR;
+extern s32 gs_texture_allocation_cursor_et __asm__("D_0015EF74") MACRO_ADDR;
+
+/* GetEffectTex: the GS TEX0 word of effect texture slot index. The first
+   call for a slot allocates its CLUT and texels from the GS texture cursor,
+   builds and caches the word, and, while fewer than 64 uploads are
+   pending, queues the slot's CLUT and pixels for upload.
+   Adapted from Lombyte (MIT): src/rendering/effects/get_effect_texture.c, get_effect_texture. */
+u64 func_001F4868_r(s32 index) __asm__("func_001F4868");
+
+u64 func_001F4868_r(s32 index) {
+    struct EffectTextureDefinition_et *texture;
+    struct TextureUpload_et *upload;
+    s32 width_log2;
+    s32 buffer_width_shift;
+    s32 palette_block_offset;
+    s32 texel_address;
+    s32 texel_block_offset;
+    u64 tex0_word;
+    s64 width_bits;
+    s64 palette_bits;
+    s32 pending_texture_upload_count_snapshot;
+
+    if (effect_texture_definitions_et[index].tex0 == 0) {
+        texture = &effect_texture_definitions_et[index];
+        width_log2 = texture->width_log2;
+        buffer_width_shift = width_log2 - 6;
+        palette_block_offset = gs_texture_allocation_cursor_et >> 8;
+        texel_address = gs_texture_allocation_cursor_et + 0x400;
+        texel_block_offset = texel_address >> 8;
+        pending_texture_upload_count_snapshot = pending_texture_upload_count_et;
+        tex0_word = ((u64)(1 << ((buffer_width_shift <= -1) ? 0 : buffer_width_shift)) << 14);
+        tex0_word |= texel_block_offset;
+        width_bits = ((s64)((u64)(u16)texture->width_log2 << 48) >> 22) | 0x1300000;
+        tex0_word |= width_bits;
+        tex0_word |= (s64)((u64)(u16)texture->height_log2 << 48) >> 18;
+        palette_bits = (u64)palette_block_offset << 37;
+        palette_bits |= (u64)1 << 34;
+        width_log2 += texture->height_log2;
+        tex0_word |= palette_bits;
+        tex0_word |= (u64)1 << 63;
+        gs_texture_allocation_cursor_et = texel_address + (1 << width_log2);
+        texture->tex0 = tex0_word;
+        if (pending_texture_upload_count_snapshot < 0x40) {
+            upload = &pending_texture_uploads_et[pending_texture_upload_count_snapshot];
+            upload->clut_data =
+                level_texture_payload_address_et + texture->palette_offset_quadwords * 0x10;
+            upload->cbp = palette_block_offset;
+            upload->unk4 = 0;
+            *(s32 *)((u8 *)pending_texture_uploads_et + pending_texture_upload_count_snapshot * 0x10 +
+                     8) = level_texture_payload_address_et + texture->texel_offset_quadwords * 0x10;
+            upload->tw = (u8)texture->width_log2;
+            upload->th = (u8)texture->height_log2;
+            upload->tbp = texel_block_offset;
+            pending_texture_upload_count_et = pending_texture_upload_count_snapshot + 1;
+        }
+    }
+    return effect_texture_definitions_et[index].tex0;
+}
 
 /*
  * Four parallel callback lists, each a (function, argument) pair of

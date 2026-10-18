@@ -496,7 +496,9 @@ void func_00214550(char *m) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_00214770);
+LINKER_REMNANT("asm/remnants/text", func_00214770);
+
+INCLUDE_ASM("asm/nonmatchings/text", func_00214778);
 
 LINKER_REMNANT("asm/remnants/text", func_00214CF8);
 

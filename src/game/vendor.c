@@ -1081,7 +1081,26 @@ s32 func_0023B210(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
 }
 __asm__(".section .text\n\tnop\n\tnop\n\tnop\n");
 
-INCLUDE_ASM("asm/nonmatchings/text", func_0023B510);
+LINKER_REMNANT("asm/remnants/text", func_0023B510);
+
+/* If flag 0x2 at +0x70 is set, sets +0x54 to 1.0 (0.0 once +0x58 is
+   positive) and clears +0x58; then calls func_0023B5D0. The 0x68 bytes of
+   linker remnant in front of it were split off. */
+extern void func_0023B5D0(char *arg0);
+
+void func_0023B578(char *arg0) {
+    if (*(unsigned char *)(arg0 + 0x70) & 0x2) {
+        float f0 = *(float *)(arg0 + 0x58);
+        float f1 = 0.0f;
+        float f2 = 1.0f;
+        if (f1 < f0) {
+            f2 = f1;
+        }
+        *(float *)(arg0 + 0x54) = f2;
+        *(float *)(arg0 + 0x58) = f1;
+    }
+    func_0023B5D0(arg0);
+}
 
 typedef struct {
     char b[0x10];
