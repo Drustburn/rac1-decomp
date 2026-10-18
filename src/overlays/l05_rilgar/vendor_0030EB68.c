@@ -45,7 +45,7 @@ void FindGridNeighbors(int arg) {
 extern void func_001F49B0(void *, void *);
 extern float func_001F9D10(void *, void *);
 extern int func_0022ED80_i(int, int, void *) __asm__("func_0022ED80");
-extern void func_L05_0030F358(void);
+extern void func_L05_0030F358(char *);
 extern char D_L05_001672C0[];
 extern char D_0013E633[];
 extern short D_L05_00161DF8;
@@ -113,7 +113,107 @@ void func_L05_0030F130(char *m) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L05_0030F358);
+typedef int qw128 __attribute__((mode(TI)));
+extern short *D_L05_001AC040[];
+extern char D_L05_0020BAE0[];
+extern char D_L05_0020BAA0[];
+extern char D_L05_0020BA80[];
+extern short D_L05_00161DFC;
+extern short D_L05_00161E00;
+extern short D_L05_00161E04;
+extern short D_L05_00161E08;
+extern short D_L05_00161E30;
+extern short D_L05_00161E34;
+extern short D_L05_00161E38;
+extern short D_L05_00161E3C;
+extern short D_L05_00161E58;
+extern float func_001FA888(int);
+extern float func_001F9FA8(float);
+extern int func_001FA8A8(int, int, float);
+extern float func_001FA748(float, float);
+extern int func_001F4868(int);
+extern void func_001FA460(void *, void *);
+extern void func_L00_001FD1D8(void *, void *, int);
+
+typedef struct {
+    qw128 v[4];
+    int c[4];
+    float uv[4][2];
+    s64 a70;
+    s64 a78;
+    s64 a80;
+    s64 a88;
+} Quad;
+
+/* Fills ten 0x90-byte entries from the float tables, then runs the id list at a[0x21] against them. */
+void func_L05_0030F358(char *a) {
+    Quad arr[2][5];
+    char tmp[0x40];
+    int tex, i, j, k, n, nx, nj, r1, r2, off;
+    float ang, t;
+    unsigned short *p;
+    unsigned short *nxt;
+    short cur;
+
+    ang = func_001FA888(D_L05_0015F6B0 & 0x3F) / 63.0f * 6.28318f;
+    i = 0;
+    do {
+        nx = i + 1;
+        t = (func_001F9FA8(ang) + 1.0f) * 0.5f;
+        r1 = func_001FA8A8(*(int *)&D_L05_00161DFC, *(int *)&D_L05_00161E00, t);
+        r2 = func_001FA8A8(*(int *)&D_L05_00161E04, *(int *)&D_L05_00161E08, t);
+        ang = func_001FA748(ang, 1.2566371f);
+        j = 0;
+        do {
+            tex = func_001F4868(*(int *)&D_L05_00161E58);
+            nj = j + 1;
+            arr[j][i].a88 = (s64)*(int *)&D_L05_00161E30 | ((s64)*(int *)&D_L05_00161E34 << 2) | ((s64)*(int *)&D_L05_00161E38 << 4) | ((s64)*(int *)&D_L05_00161E3C << 6) | 0x8000000000LL;
+            arr[j][i].a78 = tex;
+            arr[j][i].a80 = 0xFF9000000260LL;
+            arr[j][i].a70 = 0;
+            for (n = 0; n < 4; n++) {
+                arr[j][i].uv[n][0] = ((float (*)[2])D_L05_0020BA80)[n][0];
+                arr[j][i].uv[n][1] = ((float (*)[2])D_L05_0020BA80)[n][1];
+                if (j != 0) {
+                    arr[j][i].c[n] = r1;
+                    {
+                        qw128 *src = &((qw128 *)D_L05_0020BAA0)[n];
+                        qcopy(&arr[j][i].v[n], src);
+                    }
+                    ((float *)&arr[j][i].v[n])[2] += (float)(i + 1);
+                } else {
+                    arr[0][i].c[n] = r2;
+                    {
+                        qw128 *src = &((qw128 *)D_L05_0020BAE0)[n];
+                        qcopy(&arr[0][i].v[n], src);
+                    }
+                    ((float *)&arr[0][i].v[n])[2] += (float)(i + 1);
+                }
+            }
+            j = nj;
+        } while (j < 2);
+        i = nx;
+    } while (i < 5);
+
+    p = (unsigned short *)D_L05_001AC040[*(unsigned char *)(a + 0x21)];
+    do {
+        char *base;
+        off = (*p & 0x7FFF) << 8;
+        base = (char *)(off + (int)D_L05_00160098_0F130);
+        nxt = p + 1;
+        if (*(short *)(base + 0xA6) == 0x346 && *(unsigned char *)(base + 0x20) == 1) {
+            func_001FA460(tmp, base + 0xC0);
+            qcopy(tmp + 0x30, (char *)(off + (int)D_L05_00160098_0F130) + 0x10);
+            *(float *)(tmp + 0x3C) = 1.0f;
+            for (k = 0; k < 5; k++) {
+                func_L00_001FD1D8(&arr[0][k], tmp, 0);
+                func_L00_001FD1D8(&arr[1][k], tmp, 0);
+            }
+        }
+        cur = *(short *)p;
+        p = nxt;
+    } while (cur >= 0);
+}
 extern unsigned char D_L05_0015F544[] MACRO_ADDR;
 extern unsigned char D_L05_0015F545[] MACRO_ADDR;
 extern unsigned char D_L05_0015F546[] MACRO_ADDR;

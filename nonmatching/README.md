@@ -256,7 +256,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L05_00266D10`](functional/func_L05_00266D10.c) | functional | 908 | ? | - |
 | [`func_L05_002D28D0`](functional/func_L05_002D28D0.c) | functional | 1960 | ? | - |
 | [`func_L05_0030D678`](functional/func_L05_0030D678.c) | functional | 908 | ? | - |
-| [`func_L05_0030F358`](l05_rilgar/func_L05_0030F358.c) | l05_rilgar | 868 | SIZE ours 860 / retail 868 | - |
 | [`func_L05_00317B68`](functional/func_L05_00317B68.c) | functional | 368 | ? | - |
 | [`func_L06_00216B38`](functional/func_L06_00216B38.c) | functional | 940 | ? | - |
 | [`func_L06_002172B0`](functional/func_L06_002172B0.c) | functional | 8 | ? | - |
