@@ -3,6 +3,7 @@
 #include "callees.h"
 #include "records.h"
 #include "structs.h"
+#include "camera.h"
 
 /*
  * camera.cpp in the original source; text 0x1EC038-0x1EDFF8.

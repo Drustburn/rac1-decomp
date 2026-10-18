@@ -4,6 +4,7 @@
  * (docs/BUILD_FIDELITY.md, "Flags"). */
 #include "common.h"
 #include "include_asm.h"
+#include "camera.h"
 
 typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
 extern S D_L00_00166D80;
