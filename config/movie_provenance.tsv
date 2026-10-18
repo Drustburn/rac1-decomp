@@ -79,3 +79,5 @@ func_0023D540	asm only	2026-10-15	viBufStopDMA waits for IPU idle and saves DMA/
 func_0023D650	asm only	2026-10-15	viBufRestartDMA restores DMA/IPU registers and restarts the ring
 func_0023D018	asm only	2026-10-15	viBufCreate sets up the ring buffer, tags and semaphore
 func_0023D340	asm only	2026-10-18	ring-buffer read step: advances the read position and tags the next DMA chunk
+func_0023DA88	asm only	2026-10-18	ring-buffer search: finds the timestamp entry covering a read position
+func_0023DCF0	asm only	2026-10-18	ring-buffer timestamp lookup for the current decode position

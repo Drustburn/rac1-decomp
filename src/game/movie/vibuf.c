@@ -386,7 +386,45 @@ void viBufFlush(ViBuf *vb) {
     vb->f14 = ((vb->f14 + 0x7FF) / 0x800) * 0x800;
     func_00118C90(vb->sema);
 }
-INCLUDE_ASM("asm/nonmatchings/text", func_0023DA88); /* viBufModifyPts(ViBuf *, TimeStamp *) */
+/* a % b as a helper: once inlined, its zero-divisor check is tested against $0 */
+static inline int ring_mod(int a, int b) { return a % b; }
+
+/* viBufModifyPts(ViBuf *, TimeStamp *): walks the 0x18-byte entries of the table at
+ * 0x50 from the oldest one (index (f5C - f58) mod ntbl) while they lie within ts's
+ * byte range (pos/len, modulo the 0x800 * count ring), trims the overlapped bytes off
+ * each entry, clears an entry that becomes empty and lowers f58 (not below 0). */
+int func_0023DA88(ViBuf *vb, TimeStamp *ts) {
+    int i = (vb->f5C - vb->f58 + vb->ntbl) % vb->ntbl;
+    int size = vb->count << 11;
+    int go = 1;
+    TimeStamp *e;
+
+    if (vb->f58 > 0) {
+    while (go && (e = &((TimeStamp *)vb->tbl)[i])->len != 0 && ts->len != 0) {
+        if (ring_mod(e->pos + size - ts->pos, size) < ts->len) {
+            int n = ts->pos + ts->len - e->pos;
+            if (e->len < n) {
+                n = e->len;
+            }
+            e->pos = (e->pos + n) % size;
+            e->len -= n;
+            if (e->len == 0) {
+                if (e->pts >= 0) {
+                    e->pts = -1;
+                    e->dts = -1;
+                    e->pos = 0;
+                    e->len = 0;
+                }
+                vb->f58 = (vb->f58 - 1 < 0) ? 0 : vb->f58 - 1;
+            }
+        } else {
+            go = 0;
+        }
+        i = (i + 1) % vb->ntbl;
+    }
+    }
+    return 0;
+}
 extern int func_0023DA88(ViBuf *, TimeStamp *);
 
 /* viBufPutTs(ViBuf *, TimeStamp *) */
@@ -408,4 +446,47 @@ int viBufPutTs(ViBuf *vb, TimeStamp *ts) {
     func_00118C90(vb->sema);
     return ret;
 }
-INCLUDE_ASM("asm/nonmatchings/text", func_0023DCF0); /* viBufGetTs(ViBuf *, TimeStamp *) */
+/* viBufGetTs(ViBuf *, TimeStamp *): works out the ring position the IPU is decoding
+ * (channel-4 MADR, less the qwords held in the IPU FIFO per IPU_TOP, plus the saved bit
+ * position at 0x38 in bytes), then searches the f58 pending entries of the table at 0x50
+ * from the oldest for one whose pos/len range covers it. On a hit copies its pts/dts to
+ * *ts, marks them -1 and lowers f58 (not below 0); otherwise *ts gets -1/-1. Returns 1. */
+static inline int ts_dist(int a, int size) {
+    return a % size;
+}
+
+/* viBufGetTs(ViBuf *, TimeStamp *) */
+int func_0023DCF0(ViBuf *vb, TimeStamp *ts) {
+    unsigned int madr = *(volatile unsigned int *)0x1000B410;
+    unsigned int top = *(volatile unsigned int *)0x10002020;
+    int bp = *(unsigned int *)((char *)vb + 0x38) & 0x7F;
+    int size = vb->count << 11;
+    int found = 0;
+    int pos;
+    int n;
+    int end;
+    int j;
+
+    madr -= (((top >> 16) & 3) + ((top >> 8) & 0xF)) << 4;
+    func_00118CB0(vb->sema);
+    ts->pts = -1;
+    ts->dts = -1;
+    madr += bp >> 3;
+    madr += size;
+    pos = (madr - vb->base) % size;
+    n = vb->f58;
+    end = vb->f5C;
+    for (j = 0; j < n && !found; j++) {
+        int k = (end - n + vb->ntbl + j) % vb->ntbl;
+        if (ts_dist(pos + size - ((TimeStamp *)vb->tbl)[k].pos, size) < ((TimeStamp *)vb->tbl)[k].len) {
+            found = 1;
+            ts->pts = ((TimeStamp *)vb->tbl)[k].pts;
+            ts->dts = ((TimeStamp *)vb->tbl)[k].dts;
+            ((TimeStamp *)vb->tbl)[k].pts = -1;
+            ((TimeStamp *)vb->tbl)[k].dts = -1;
+            vb->f58 -= (vb->f58 < 2) ? vb->f58 : 1;
+        }
+    }
+    func_00118C90(vb->sema);
+    return 1;
+}

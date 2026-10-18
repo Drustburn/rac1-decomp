@@ -1,16 +1,16 @@
 {
  "measures": {
-  "fuzzy_match_percent": 95.03430922232769,
+  "fuzzy_match_percent": 95.05477910305294,
   "total_code": "3712772",
-  "matched_code": "3503996",
-  "matched_code_percent": 94.37681602856303,
+  "matched_code": "3504756",
+  "matched_code_percent": 94.39728590928826,
   "total_functions": 5118,
-  "matched_functions": 4831,
-  "matched_functions_percent": 94.39234075810863,
-  "complete_code": "1045844",
-  "complete_code_percent": 28.16881833842746,
+  "matched_functions": 4833,
+  "matched_functions_percent": 94.4314185228605,
+  "complete_code": "1049848",
+  "complete_code_percent": 28.276662288985158,
   "total_units": 141,
-  "complete_units": 102,
+  "complete_units": 103,
   "total_data": "699072",
   "matched_data": "3060",
   "matched_data_percent": 0.43772315297995057,
@@ -17858,17 +17858,17 @@
   {
    "name": "game/movie/vibuf",
    "measures": {
-    "fuzzy_match_percent": 81.01898101898102,
+    "fuzzy_match_percent": 100.0,
     "total_code": "4004",
-    "matched_code": "3244",
-    "matched_code_percent": 81.01898101898102,
+    "matched_code": "4004",
+    "matched_code_percent": 100.0,
     "total_functions": 17,
-    "matched_functions": 15,
-    "matched_functions_percent": 88.23529411764706,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 17,
+    "matched_functions_percent": 100.0,
+    "complete_code": "4004",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -18000,7 +18000,7 @@
     {
      "name": "func_0023DA88",
      "size": "340",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "3008",
      "metadata": {
       "virtual_address": "2349704"
@@ -18018,7 +18018,7 @@
     {
      "name": "func_0023DCF0",
      "size": "420",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "3624",
      "metadata": {
       "virtual_address": "2350320"
@@ -18026,7 +18026,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/game/movie/vibuf.c",
     "progress_categories": [
      "executable",
@@ -49772,15 +49772,15 @@
    "id": "executable",
    "name": "Executable",
    "measures": {
-    "fuzzy_match_percent": 91.41441039032435,
+    "fuzzy_match_percent": 91.57761819681143,
     "total_code": "465664",
-    "matched_code": "425684",
-    "matched_code_percent": 91.41441039032435,
+    "matched_code": "426444",
+    "matched_code_percent": 91.57761819681143,
     "total_functions": 1689,
-    "matched_functions": 1615,
-    "matched_functions_percent": 95.61870929544109,
-    "complete_code": "238268",
-    "complete_code_percent": 51.16736531061022,
+    "matched_functions": 1617,
+    "matched_functions_percent": 95.73712255772647,
+    "complete_code": "242272",
+    "complete_code_percent": 52.02721275426058,
     "total_data": "699072",
     "matched_data": "3060",
     "matched_data_percent": 0.43772315297995057,
@@ -49807,15 +49807,15 @@
    "id": "game",
    "name": "Executable game code",
    "measures": {
-    "fuzzy_match_percent": 91.21959361520824,
+    "fuzzy_match_percent": 91.38650479210774,
     "total_code": "455332",
-    "matched_code": "415352",
-    "matched_code_percent": 91.21959361520824,
+    "matched_code": "416112",
+    "matched_code_percent": 91.38650479210774,
     "total_functions": 1655,
-    "matched_functions": 1581,
-    "matched_functions_percent": 95.52870090634441,
-    "complete_code": "227936",
-    "complete_code_percent": 50.059297391793244
+    "matched_functions": 1583,
+    "matched_functions_percent": 95.64954682779457,
+    "complete_code": "231940",
+    "complete_code_percent": 50.93865575009004
    }
   },
   {
