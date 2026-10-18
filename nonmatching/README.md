@@ -30,7 +30,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_00116948`](core/func_00116948.c) | core | 0 | ? | - |
 | [`func_00116B00`](core/func_00116B00.c) | core | 0 | ? | - |
 | [`func_00119EA8`](functional/func_00119EA8.c) | functional | 0 | ? | - |
-| [`func_0011CB40`](functional/func_0011CB40.c) | functional | 0 | ? | - |
 | [`func_00121750`](core/func_00121750.c) | core | 0 | ? | - |
 | [`func_00121DC8`](core/func_00121DC8.c) | core | 0 | ? | - |
 | [`func_00125358`](core/func_00125358.c) | core | 0 | ? | - |
@@ -175,8 +174,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_00237B90`](functional/func_L00_00237B90.c) | functional | 1300 | ? | - |
 | [`func_L00_00244AE0`](shared/func_L00_00244AE0.c) | shared | 4264 | SIZE ours 4268 / retail 4264 | - |
 | [`func_L00_00248EF8`](shared/func_L00_00248EF8.c) | shared | 1808 | SIZE ours 1804 / retail 1808 | - |
-| [`func_L00_00249EE0`](functional/func_L00_00249EE0.c) | functional | 88 | ? | - |
-| [`func_L00_0024B200`](game/func_L00_0024B200.c) | game | 164 | ? | - |
 | [`func_L00_0024B960`](functional/func_L00_0024B960.c) | functional | 32 | ? | - |
 | [`func_L00_0024E798`](game/func_L00_0024E798.c) | game | 352 | ? | - |
 | [`func_L00_0024EBF8`](game/func_L00_0024EBF8.c) | game | 40 | ? | - |
@@ -235,7 +232,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L03_00251AC8`](shared/func_L03_00251AC8.c) | shared | 716 | SIZE ours 704 / retail 716 | - |
 | [`func_L03_002ED138`](functional/func_L03_002ED138.c) | functional | 56 | ? | - |
 | [`func_L04_002E2B48`](functional/func_L04_002E2B48.c) | functional | 72 | ? | - |
-| [`func_L05_0023BA18`](functional/func_L05_0023BA18.c) | functional | 76 | ? | - |
 | [`func_L05_00266D10`](functional/func_L05_00266D10.c) | functional | 908 | ? | - |
 | [`func_L05_002D28D0`](functional/func_L05_002D28D0.c) | functional | 1960 | ? | - |
 | [`func_L05_0030D678`](functional/func_L05_0030D678.c) | functional | 908 | ? | - |

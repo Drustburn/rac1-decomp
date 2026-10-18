@@ -51,7 +51,17 @@ int func_L00_002497A0(int item, float a, float b, float x) {
     return x >= 95.0f;
 }
 int func_L00_002497E0(float a, float b, float x) { return x >= 95.0f; }
-INCLUDE_ASM("asm/overlays", func_L00_00249EE0);
+extern int D_L00_001845C0;
+extern int D_L00_001845B8;
+
+int func_L00_00249EE0(float c, float d, float x, int a, int b) {
+    if (b < 0x9D) {
+        if (x < 73.5f || 80.0f < x || D_L00_001845C0 == 0) return 0;
+        return 1;
+    }
+    if (x < 51.5f || 54.0f < x || D_L00_001845B8 == 0) return 0;
+    return 1;
+}
 INCLUDE_ASM("asm/overlays", func_L00_00249F40);
 extern unsigned char D_0013D4C5 NOT_SDA;
 extern int D_001414DC;
@@ -150,7 +160,38 @@ void SetPlanetTableEntry(int a, int b) {
         D_L00_001792B8[b] = a;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_0024B200);
+typedef struct {
+    float x0;
+    float xs;
+    float y0;
+    float ys;
+} MapScale_182B70;
+extern MapScale_182B70 D_L00_00182B70[];
+
+void func_L00_0024B200(float *p1, float *p2, int k, float t, float u) {
+    int seven = 0;
+
+    if (k >= 100) {
+        k -= 100;
+        seven = 1;
+    }
+    if (k == -1) {
+        k = D_0015EE84_m;
+    }
+    if (k < 0) {
+        k = 0;
+    }
+    if (k >= 19) {
+        k = 0;
+    }
+    if (k == 6 && seven) {
+        *p1 = (D_L00_00182B70[6].ys * u + 1053.0f) * 0.001953125f;
+        *p2 = (740.0f - D_L00_00182B70[6].xs * t) * 0.001953125f;
+    } else {
+        *p1 = (D_L00_00182B70[k].x0 + D_L00_00182B70[k].xs * t) * 0.001953125f;
+        *p2 = (D_L00_00182B70[k].y0 + D_L00_00182B70[k].ys * u) * 0.001953125f;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L00_0024B2A4);
 extern int D_0015EFB4 MACRO_ADDR;
 extern int D_0015EFB0 MACRO_ADDR;

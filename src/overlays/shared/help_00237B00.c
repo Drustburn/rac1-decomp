@@ -23,7 +23,28 @@ void Hero_SmoothStickInput(float *out, float *p, float step) {
     if (p[1] < -1.0f) p[1] = -1.0f;
     out[1] = p[1];
 }
-INCLUDE_ASM("asm/overlays", func_L05_0023BA18);
+/* Pose/tilt lookup for an animation id: *out = 0, returns 1 for the ids that apply. */
+int func_L05_0023BA18(int id, float *out) {
+    char *g;
+    *out = 0.0f;
+    g = (char *)D_0013E633 + 0xE1D;
+    if (*(int *)(g + 0x208C) == 0x16 && *(unsigned char *)(g + 0x8CE) != 0
+        && (unsigned int)(*(unsigned char *)(*(char **)(g + 0x2080) + 0x53) - 0x69) < 4)
+        return 1;
+    switch (id) {
+    case 0x37:
+        *out = -0.9599310755729675f;
+        return 1;
+    case 0x1C: case 0x1D: case 0x1F: {
+        char *h = (char *)D_0013E633 + 0xE1D;
+        if (*(float *)(h + 0xAA8) > 25.0f) *out = -1.3089969158172607f;
+        return 1;
+    }
+    case 0x31: case 0x32: case 0x4A: case 0x4B: case 0x50: case 0x60: case 0x6D: case 0x6E:
+        return 1;
+    }
+    return 0;
+}
 INCLUDE_ASM("asm/overlays", func_L05_0023BA64);
 INCLUDE_ASM("asm/overlays", func_L05_0023BAA0);
 extern char D_0013A5E0[];

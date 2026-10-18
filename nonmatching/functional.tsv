@@ -50,7 +50,6 @@ func_00211548	nonmatching/game/func_00211548.c
 func_L00_001EFF50	nonmatching/game/func_L00_001EFF50.c
 func_L00_001FF548	nonmatching/game/func_L00_001FF548.c
 func_L00_001FFED8	nonmatching/game/func_L00_001FFED8.c
-func_L00_0024B200	nonmatching/game/func_L00_0024B200.c
 func_L00_00251A78	nonmatching/game/func_L00_00251A78.c
 func_L00_002D6610	nonmatching/game/func_L00_002D6610.c
 func_L00_001FF860	nonmatching/game/func_L00_001FF860.c
@@ -119,7 +118,6 @@ func_L00_0020E3B8	nonmatching/functional/func_L00_0020E3B8.c
 func_00115248	nonmatching/functional/func_00115248.c
 func_00116810	nonmatching/functional/func_00116810.c
 func_00119EA8	nonmatching/functional/func_00119EA8.c
-func_0011CB40	nonmatching/functional/func_0011CB40.c
 func_0012DA28	nonmatching/functional/func_0012DA28.c
 func_001F7E98	nonmatching/functional/func_001F7E98.c
 func_001F9BC8	nonmatching/functional/func_001F9BC8.c
@@ -244,14 +242,12 @@ func_L15_0029B1D8	nonmatching/functional/func_L15_0029B1D8.c
 func_L00_001FF718	nonmatching/functional/func_L00_001FF718.c
 func_L00_002513F8	nonmatching/functional/func_L00_002513F8.c
 func_L00_0024B960	nonmatching/functional/func_L00_0024B960.c
-func_L05_0023BA18	nonmatching/functional/func_L05_0023BA18.c
 func_L12_002677B4	nonmatching/functional/func_L12_002677B4.c
 func_L00_001FFA40	nonmatching/functional/func_L00_001FFA40.c
 func_L00_002003C8	nonmatching/functional/func_L00_002003C8.c
 func_L01_002635C8	nonmatching/functional/func_L01_002635C8.c
 func_L00_00268760	nonmatching/functional/func_L00_00268760.c
 func_L05_00317B68	nonmatching/functional/func_L05_00317B68.c
-func_L00_00249EE0	nonmatching/functional/func_L00_00249EE0.c
 func_L15_002C6950	nonmatching/functional/func_L15_002C6950.c
 func_L07_00319230	nonmatching/l07_umbris/func_L07_00319230.c
 func_L00_002D8898	nonmatching/shared/func_L00_002D8898.c
