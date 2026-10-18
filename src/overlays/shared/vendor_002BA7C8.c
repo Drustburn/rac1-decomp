@@ -1048,6 +1048,8 @@ void MorphorayUpdate(Moby *m) {
         D_L00_00161890_2BDAF0 = -1;
     }
 }
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_t;
+extern V_t D_L00_001DC260;
 INCLUDE_ASM("asm/overlays", func_L00_002BE2A0);
 typedef struct {
     Vec4A pos;
@@ -1582,7 +1584,6 @@ void DrawScrollingRibbonColored(P_2BF380 *m, int a, int b, float sx, float sy, f
     }
     VU1_addGSregister(0x47, 0x5360B);
 }
-typedef struct { float f[4]; } __attribute__((aligned(16))) V_t;
 extern V_t D_L00_001DC220[];
 typedef struct {
     float v[4][4];
@@ -1654,7 +1655,6 @@ typedef struct {
     float unk68, unk6C;
     long unk70, tex, unk80, unk88;
 } Q_t;
-extern V_t D_L00_001DC260;
 
 // Draws a textured quad twice (first tinted, then white) from a moby's orientation. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002b94d0.c, FUN_L00_002be890.
 void DrawMobyQuadTintedWhite(void *mv) {
