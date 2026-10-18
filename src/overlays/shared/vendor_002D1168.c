@@ -5,7 +5,235 @@
 #include "hero.h"
 #include "moby.h"
 
-INCLUDE_ASM("asm/overlays", func_L00_002D1168);
+typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) Vec_D1168;
+extern int func_002140B0(int);
+#define func_002140B0_D1168 ((int (*)(int))func_002140B0)
+extern float func_001FA748(float, float);
+#define func_001FA748_D1168 ((f32 (*)(f32, f32))func_001FA748)
+extern void func_0020D678(void);
+#define func_0020D678_D1168 ((void (*)(u8 *))func_0020D678)
+extern int func_L00_001EFFF0(void *, void *, int, int, int);
+#define func_L00_001EFFF0_D1168 ((s32 (*)(void *, void *, s32, void *, s32))func_L00_001EFFF0)
+extern int func_L00_0025F410(void *);
+#define func_L00_0025F410_D1168 ((s32 (*)(void *))func_L00_0025F410)
+extern int func_L00_0025D390(char *);
+#define func_L00_0025D390_D1168 ((s32 (*)(void *))func_L00_0025D390)
+extern void func_L00_002616E0(void *, void *, void *, void *, void *, void *);
+#define func_L00_002616E0_D1168 func_L00_002616E0
+extern void func_001F9BD8(void *, void *, void *);
+#define func_001F9BD8_D1168 ((void (*)(void *, void *, void *))func_001F9BD8)
+extern void func_001F9978(void);
+#define func_001F9978_D1168 func_001F9978
+extern float func_001F9D10(void *, void *);
+#define func_001F9D10_D1168 ((void (*)(void *, void *))func_001F9D10)
+extern int func_L00_0025A208(u8 **, s32, s32, s32);
+#define func_L00_0025A208_D1168 func_L00_0025A208
+extern int func_L00_0025A2F0(u8 **, u8 *, s32, s32);
+#define func_L00_0025A2F0_D1168 func_L00_0025A2F0
+extern char D_L00_00173F40[] ;
+typedef struct { u8 pad0[0x18]; u8 *moby; u8 pad1C[0xC]; f32 f28; } Hit_D1168;
+#define HIT_D1168 ((Hit_D1168 *)D_L00_00173F40)
+#define D_L00_00173F40_D1168 D_L00_00173F40
+extern char D_0014171B[] ;
+#define D_0014171B_D1168 D_0014171B
+#define D_0014EE90_D1168 ((s32 *)(D_0014171B_D1168 + 0xD875))
+typedef struct {
+    u8 pad0[0xA0];
+    Moby *link;
+    Moby *other;
+    u8 padA8[4];
+    u32 flags;
+    f32 height;
+    u8 padB4[0xC];
+    s32 path;
+    u16 cls;
+    s16 unkC6;
+    u8 padC8[4];
+    s32 unkCC;
+    Vec4f unkD0;
+    Vec4f unkE0;
+    Moby *carrier;
+    f32 depth;
+    s32 unkF8;
+} Vars_D1168;
+typedef struct { s32 count; s32 pad4[3]; struct { f32 x, y, z; s32 w; } pts[1]; } Path_D1168;
+#define MV_D1168(m) ((Vars_D1168 *)(m)->pvars)
+#define MA8_D1168(m) (*(u16 *)((u8 *)(m) + 0xA8))
+void func_L00_002D1168(Moby *first) {
+    extern Path_D1168 *D_L00_001B0830[];
+    Moby *moby = first, *second, *next;
+    Vars_D1168 *vars = MV_D1168(moby);
+    Vars_D1168 *other_vars;
+    Moby *other;
+    Path_D1168 *row;
+    Vec_D1168 probe, start, second_probe, second_start;
+    s32 group = moby->group;
+    s32 i, state, flags;
+
+    vars->flags |= 4;
+    if (group == 0xFF) {
+        if (moby->oclass == 0x1F4 && func_002140B0_D1168(2) &&
+            first->rot.x == 0.0f && first->rot.y == 0.0f)
+            first->rot.z = func_001FA748_D1168(first->rot.z, 1.57079637f);
+        if (first->oclass == 0x1F5 && first->unkB0 != 0xFF &&
+            D_0014EE90_D1168[first->unkB0] < vars->unkF8) {
+            func_0020D678_D1168((u8 *)first);
+            return;
+        }
+        flags = vars->flags;
+        vars->cls = MA8_D1168(first);
+        vars->height = 1.0f;
+        vars->flags = flags | 1;
+        qcopy_nc(&probe, &first->pos);
+        qcopy(&start, &first->pos);
+        probe.z += 0.5f;
+        start.z = 0.1f;
+        if (!func_L00_001EFFF0_D1168(&probe, &start, 2, 0, 0)) {
+            vars->other = 0;
+            return;
+        }
+        if (!HIT_D1168->moby) {
+            first->pos.z = HIT_D1168->f28;
+            vars->other = 0;
+            return;
+        }
+        if (func_L00_0025F410_D1168(HIT_D1168->moby)) return;
+        vars->other = 0;
+        vars->flags |= 8;
+        if (func_L00_0025D390_D1168(HIT_D1168->moby)) {
+            if (first) first->unk36 = 0x7F80;
+            func_L00_002616E0_D1168(second, HIT_D1168->moby,
+                &first->pos, &first->rot, &vars->unkD0, &vars->unkE0);
+            vars->depth = 0;
+            vars->carrier = (Moby *)HIT_D1168->moby;
+        }
+        return;
+    }
+
+    for (func_L00_0025A208_D1168((u8 **)&first, group, 0, 0); first;
+         func_L00_0025A2F0_D1168((u8 **)&first, (u8 *)first, 0, 0)) {
+        vars = MV_D1168(first);
+        if (func_L00_0025F410_D1168(first)) {
+            if (first->oclass == 0x1F4 && func_002140B0_D1168(2) &&
+                first->rot.x == 0.0f && first->rot.y == 0.0f)
+                first->rot.z = func_001FA748_D1168(first->rot.z, 1.57079637f);
+            if (first->oclass == 0x1F5 && first->unkB0 != 0xFF &&
+                D_0014EE90_D1168[first->unkB0] < vars->unkF8) {
+                func_0020D678_D1168((u8 *)first);
+            } else {
+                vars->cls = MA8_D1168(first);
+                vars->height = 1.0f;
+                vars->flags |= 1;
+                qcopy_nc(&probe, &first->pos);
+                qcopy(&start, &first->pos);
+                probe.z += 0.5f;
+                start.z = 0.1f;
+                if (!func_L00_001EFFF0_D1168(&probe, &start, 2, 0, 0)) {
+                    vars->other = 0;
+                } else if (!HIT_D1168->moby) {
+                    first->pos.z = HIT_D1168->f28;
+                    vars->other = 0;
+                } else if (!func_L00_0025F410_D1168(HIT_D1168->moby) &&
+                    (u32)((u16)((Moby *)HIT_D1168->moby)->oclass - 0x128) >= 2) {
+                    vars->other = 0;
+                    first->unk30 = 0xFF;
+                    vars->flags |= 8;
+                } else if (!((Moby *)HIT_D1168->moby)->pvars) {
+                    vars->other = 0;
+                } else if (((Moby *)HIT_D1168->moby)->group != first->group) {
+                    vars->other = 0;
+                } else if (func_L00_0025F410_D1168(HIT_D1168->moby)) {
+                    vars->other = (Moby *)HIT_D1168->moby;
+                    qcopy_nc(&first->pos, &((Moby *)HIT_D1168->moby)->pos);
+                    func_001F9BD8_D1168(&first->pos, &first->pos, &((Moby *)HIT_D1168->moby)->unkE0);
+                    vars = MV_D1168((Moby *)HIT_D1168->moby);
+                    if (func_L00_0025F410_D1168(first)) {
+                        vars->link = first;
+                    } else {
+                        func_001F9978_D1168();
+                        vars->link = 0;
+                    }
+                } else {
+                    vars->other = 0;
+                    vars->unkCC = 0;
+                    first->pos.z = HIT_D1168->f28;
+                }
+            }
+        }
+    }
+
+    func_L00_0025A208_D1168((u8 **)&second, group, 0, 0);
+    while (second) {
+        vars = MV_D1168(second);
+        if (func_L00_0025F410_D1168(second) && !vars->other) {
+            qcopy_nc(&second_probe, &second->pos);
+            qcopy(&second_start, &second->pos);
+            second_probe.z += vars->height * 0.5f;
+            second_start.z = 0.1f;
+            if (func_L00_001EFFF0_D1168(&second_probe, &second_start, 2, first, 0) &&
+                HIT_D1168->moby && func_L00_0025D390_D1168(HIT_D1168->moby)) {
+                if (first) first->unk36 = 0x7F80;
+                func_L00_002616E0_D1168(second, HIT_D1168->moby,
+                    &second->pos, &second->rot, &vars->unkD0, &vars->unkE0);
+                vars->depth = 0;
+                vars->carrier = (Moby *)HIT_D1168->moby;
+                vars->flags |= 8;
+            }
+            first = second;
+            while (first) {
+                vars = MV_D1168(first);
+                other = vars->other;
+                other_vars = other ? MV_D1168(other) : 0;
+                if (other_vars) {
+                    vars->unkCC = other_vars->unkCC;
+                    if (other_vars->carrier) {
+                        first->unk30 = 0xFF;
+                        vars->flags |= 8;
+                        qcopy(&vars->unkD0, &other_vars->unkD0);
+                        qcopy(&vars->unkE0, &other_vars->unkE0);
+                        vars->carrier = other_vars->carrier;
+                        vars->depth = other_vars->depth + 1.0f;
+                    }
+                }
+                if ((vars->unkC6 != 0 || first->oclass == 0x1F5) && vars->link) {
+                    if (vars->path != -1) {
+                        row = D_L00_001B0830[vars->path];
+                        if (row->count == 0) {
+                            vars->path = -1;
+                        } else if ((state = row->pts[0].w) == 1) {
+                            vars->path = -1;
+                        } else if (state == 3) {
+                            vars->path = -1;
+                        } else if (state == 0x111) {
+                            vars->path = -1;
+                        } else if ((u32)(state - 0x11) <= 0xFF) {
+                            if (state - 0x10 >= row->count) vars->path = -1;
+                            else row->pts[0].w = state + 1;
+                        } else {
+                            row->pts[0].w = 0x11;
+                            for (i = 0; i < D_L00_001B0830[vars->path]->count; i++)
+                                D_L00_001B0830[vars->path]->pts[i].w = 0;
+                        }
+                    }
+                }
+                first = vars->link;
+            }
+        }
+        func_L00_0025A2F0_D1168((u8 **)&second, (u8 *)second, 0, 0);
+    }
+    func_L00_0025A208_D1168((u8 **)&first, group, 0, 0);
+    while (first) {
+        if (func_L00_0025F410_D1168(first)) {
+            func_L00_0025A2F0_D1168((u8 **)&next, (u8 *)first, 0, 0);
+            while (next) {
+                if (func_L00_0025F410_D1168(next))
+                    func_001F9D10_D1168(&first->pos, &next->pos);
+                func_L00_0025A2F0_D1168((u8 **)&next, (u8 *)next, 0, 0);
+            }
+        }
+        func_L00_0025A2F0_D1168((u8 **)&first, (u8 *)first, 0, 0);
+    }
+}
 typedef struct {
     s32 v[7];
 } T_2D19E8;

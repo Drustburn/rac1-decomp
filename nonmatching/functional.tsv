@@ -3,7 +3,6 @@
 # Files under nonmatching/functional/ are C written for the port only (no matching attempt behind them).
 # name	file
 func_001F3890	nonmatching/game/func_001F3890.c
-func_001FAB40	nonmatching/game/func_001FAB40.c
 func_00125358	nonmatching/core/func_00125358.c
 func_001F4868	nonmatching/game/func_001F4868.c
 func_001F9878	nonmatching/game/func_001F9878.c
@@ -51,7 +50,6 @@ func_0020ED48	nonmatching/game/func_0020ED48.c
 func_00226D50	nonmatching/game/func_00226D50.c
 func_00238D90	nonmatching/game/func_00238D90.c
 func_0023A220	nonmatching/game/func_0023A220.c
-func_001E9EC8	nonmatching/game/func_001E9EC8.c
 func_00121DC8	nonmatching/core/func_00121DC8.c
 func_00203F68	nonmatching/game/func_00203F68.c
 func_00204918	nonmatching/game/func_00204918.c
@@ -103,7 +101,6 @@ func_00218930	nonmatching/game/func_00218930.c
 func_00218928	nonmatching/game/func_00218928.c
 func_00213A78	nonmatching/game/func_00213A78.c
 func_002116A0	nonmatching/game/func_002116A0.c
-func_L00_002D1168	nonmatching/game/func_L00_002D1168.c
 func_001F9B98	nonmatching/game/func_001F9B98.c
 func_001F9C60	nonmatching/game/func_001F9C60.c
 func_001FA1C0	nonmatching/game/func_001FA1C0.c
@@ -232,7 +229,6 @@ func_L00_002BA7C8	nonmatching/shared/func_L00_002BA7C8.c
 func_L00_002C9DC8	nonmatching/shared/func_L00_002C9DC8.c
 func_L00_002CF808	nonmatching/shared/func_L00_002CF808.c
 func_L00_002DF410	nonmatching/shared/func_L00_002DF410.c
-func_L03_002C5AE0	nonmatching/shared/func_L03_002C5AE0.c
 func_L05_00254838	nonmatching/shared/func_L05_00254838.c
 func_L06_002F3680	nonmatching/shared/func_L06_002F3680.c
 func_L08_00303998	nonmatching/shared/func_L08_00303998.c

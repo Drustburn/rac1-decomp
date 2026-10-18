@@ -42,7 +42,471 @@ void func_001E9E70(void) {
     VU1_addGSregister(0x4E, 0x1000000 | (D_0015EF88 >> 13));
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_001E9EC8);
+/* Level init from the level header hdr: loads the frame and fog constants, uploads the VU0
+   program, unpacks the shrub and tie records (class lists, rotations, scales, colour
+   averages) into the level arena, clears the ent tables and returns the next free address. */
+
+typedef struct { int x0; int x4; unsigned char pad08[0x2C]; int x34; unsigned char pad38[4]; int x3C; } LevelHeaderE9EC8;
+typedef struct { float v[3]; float w; } __attribute__((aligned(16))) FRowE9EC8;
+typedef struct { float v[3]; int w; } __attribute__((aligned(16))) IRowE9EC8;
+typedef struct { FRowE9EC8 m[4]; unsigned char pad40[0x100]; unsigned char x140[0x80]; } ShrubDataE9EC8;
+typedef struct { IRowE9EC8 m[3]; FRowE9EC8 m3; } TieDataE9EC8;
+typedef struct {
+    float v[3]; float scale; void *data; float x14; short x18; unsigned char cls; unsigned char x1B;
+    unsigned short x1C; unsigned short x1E;
+} ShrubE9EC8;
+typedef struct {
+    float v[3]; float scale; float radius; unsigned char pad14[3]; unsigned char x17; short x18;
+    unsigned char cls; unsigned char x1B; unsigned short x1C; unsigned short x1E;
+} TieE9EC8;
+typedef struct {
+    unsigned char pad00[0x26]; unsigned short count; ShrubE9EC8 *first; unsigned char pad2C[4];
+    float x30[3]; float scale; float x40;
+} ShrubClassE9EC8;
+typedef struct {
+    unsigned char pad00[0xC]; float scale; unsigned char pad10[6]; unsigned short count;
+    TieE9EC8 *first; float *x1C; float x20;
+} TieClassE9EC8;
+typedef struct { unsigned char pad00[0x36]; unsigned short x36; unsigned char pad38[2]; short x3A; unsigned char pad3C[4]; } Ent40E9EC8;
+typedef struct { unsigned char pad00[0x20]; unsigned char x20; unsigned char pad21[0x15]; short x36; unsigned char pad38[0xC8]; } Ent100E9EC8;
+typedef struct { unsigned char pad00[0x23C]; int x23C; int x240; int x244; } DisplayE9EC8;
+typedef struct { int x0; unsigned char *x4; unsigned char *x8; int xC; int x10; int x14; } BufE9EC8;
+typedef struct { int x0; unsigned char *x4; } S160E9EC8;
+
+extern int func_001F99B0();
+extern void func_001F99D8(void *, int);
+extern void func_001F9A00(void *, void *, int);
+extern void func_001E9730(char *);
+extern void func_002157C0(int);
+extern int func_001F2930();
+extern void func_001FB448(int, int, int);
+extern int func_002347F0();
+extern int func_002362B0();
+extern int func_0022B8F8();
+extern int func_00238688();
+extern float func_001F9CB8(void *);
+extern float func_001F9B90(float, float);
+extern void func_001F9EC0(void *, void *, void *);
+extern void func_001F9C48(void *, void *, float);
+extern void func_001F9BD8(void *, void *, void *);
+extern int func_001FA898(float);
+extern float func_001FA888(int);
+extern void func_001F3B90(void);
+extern void func_00217EC0(void);
+extern void func_001F6598(void);
+
+extern int D_0015EE80 MACRO_ADDR;
+extern float D_0015EE60 MACRO_ADDR;
+extern int D_0016044C MACRO_ADDR;
+extern unsigned char *D_001941D8;
+extern unsigned char D_0013F450[];
+extern unsigned char D_00187040[];
+extern unsigned char D_001AADC0[];
+extern BufE9EC8 D_00194200;
+extern unsigned char D_001942C0[];
+extern unsigned char D_00194280[];
+extern unsigned char D_001B7A60[];
+extern unsigned char D_001C7A60[];
+extern DisplayE9EC8 D_0018CE00;
+extern int D_0015F584 MACRO_ADDR;
+extern int D_0015F585 MACRO_ADDR;
+extern int D_0015F586 MACRO_ADDR;
+extern float D_0015F588 MACRO_ADDR;
+extern float D_0015F58C MACRO_ADDR;
+extern float D_0015F590 MACRO_ADDR;
+extern float D_0015F594 MACRO_ADDR;
+extern float D_00160FC0 MACRO_ADDR;
+extern float D_00161070 MACRO_ADDR;
+extern float D_001604E4 MACRO_ADDR;
+extern int D_00160030 MACRO_ADDR;
+extern int D_001601BC MACRO_ADDR;
+extern unsigned char D_00100AE0[];
+extern unsigned char D_0019C2C0[];
+extern unsigned char D_0019C4C0[];
+extern unsigned char D_0019BEC0[];
+extern char D_001E79D8[];
+extern int D_00160F90 MACRO_ADDR;
+extern Ent40E9EC8 *D_00160F8C MACRO_ADDR;
+extern int D_0016105C MACRO_ADDR;
+extern ShrubE9EC8 *D_00161050 MACRO_ADDR;
+extern ShrubE9EC8 *D_00161054 MACRO_ADDR;
+extern ShrubDataE9EC8 *D_00161058 MACRO_ADDR;
+extern unsigned char D_001E1D00[];
+extern ShrubClassE9EC8 *D_001E1A00[];
+extern unsigned char D_001D8440[];
+extern TieClassE9EC8 *D_001D82C0[];
+extern int D_001604D0 MACRO_ADDR;
+extern TieE9EC8 *D_001604D4 MACRO_ADDR;
+extern TieE9EC8 *D_001604D8 MACRO_ADDR;
+extern TieDataE9EC8 *D_001604DC MACRO_ADDR;
+extern unsigned char *D_001604E0 MACRO_ADDR;
+extern S160E9EC8 D_00160BB0;
+extern Ent100E9EC8 *D_00160018 MACRO_ADDR;
+extern Ent100E9EC8 *D_0016001C MACRO_ADDR;
+extern Ent100E9EC8 *D_00160020 MACRO_ADDR;
+extern unsigned char *D_00160028 MACRO_ADDR;
+extern unsigned char *D_001601AC MACRO_ADDR;
+extern int D_001601B0 MACRO_ADDR;
+extern int D_001601B4 MACRO_ADDR;
+extern int D_001601B8 MACRO_ADDR;
+extern unsigned char D_001CDB00[];
+extern unsigned char D_0018C418[];
+extern int D_0015F6F0 MACRO_ADDR;
+extern float D_0015F53C MACRO_ADDR;
+
+unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
+{
+    unsigned char *p;
+    unsigned char *c;
+    unsigned char *lc;
+    unsigned char *sc;
+    unsigned char *tc;
+    unsigned short *sp;
+    unsigned short *spa;
+    unsigned short *spb;
+    int n;
+    int i;
+    int i0;
+    int i1;
+    int i2;
+    int i3;
+    int i5;
+    int i6;
+    int j;
+    int k;
+    int id;
+    int cls;
+    int last;
+    int lastTie;
+    int size0;
+    int size1;
+    int size2;
+    int size3;
+    int size4;
+    int r;
+    int g;
+    int bl;
+    int x;
+    int y;
+    float s;
+    float a;
+    float b;
+    float len0;
+    float len1;
+    float len2;
+    float rad;
+    ShrubE9EC8 *sh;
+    ShrubDataE9EC8 *sd;
+    TieE9EC8 *tie;
+    TieDataE9EC8 *td;
+    Ent100E9EC8 *e;
+    ShrubE9EC8 *o;
+    FRowE9EC8 *r1;
+    FRowE9EC8 *r2;
+    FRowE9EC8 *r3;
+    IRowE9EC8 *t1;
+    IRowE9EC8 *t2;
+    FRowE9EC8 *t3;
+
+    p = D_001941D8;
+    ((void (*)(void *, int, int))func_001F99B0)(D_0013F450, 0, 0x2310);
+    ((void (*)(void *, int, int))func_001F99B0)(D_00187040, 0, 0x3A0);
+    ((void (*)(void *, int, int))func_001F99B0)(D_001AADC0, 0, 0x180);
+    if (D_0015EE80 != 0) {
+        if (D_0015EE60 == 1.0f) {
+            func_002157C0(1);
+        }
+    } else if (D_0015EE60 != 1.0f) {
+        func_002157C0(0);
+    }
+    *(unsigned char *)&D_0016044C = *(unsigned char *)&D_0015EE80;
+    D_00194200.x4 = D_001942C0;
+    D_00194200.x8 = D_00194280;
+    D_00194200.xC = 0;
+    D_00194200.x10 = 0;
+    D_00194200.x14 = 0;
+    func_001F99D8(D_001B7A60, 0x10000);
+    func_001F99D8(D_001C7A60, 0x60);
+
+    c = (unsigned char *)hdr + hdr->x0;
+    D_0018CE00.x23C = *(int *)c;
+    c += 4;
+    D_0018CE00.x240 = *(int *)c;
+    c += 4;
+    D_0018CE00.x244 = *(int *)c;
+    c += 4;
+    *(unsigned char *)&D_0015F584 = *c;
+    c += 4;
+    *(unsigned char *)&D_0015F585 = *c;
+    c += 4;
+    *(unsigned char *)&D_0015F586 = *c;
+    c += 4;
+    D_0015F588 = *(float *)c;
+    D_0015F58C = *(float *)(c + 4);
+    D_0015F590 = *(float *)(c + 8);
+    D_0015F594 = *(float *)(c + 12);
+    ((void (*)(void))func_001F2930)();
+    D_00160FC0 = 512000.0f;
+    D_00161070 = 720.0f;
+    D_001604E4 = 500.0f;
+    D_00160030 = 500;
+    D_001601BC = 0x1F4000;
+    func_001FB448(D_0018CE00.x23C, D_0018CE00.x240, D_0018CE00.x244);
+    ((void (*)(void *))func_002347F0)(D_00100AE0);
+    func_001F99D8(D_0019C2C0, 0x100);
+    func_001F99D8(D_0019C4C0, 0x180);
+    func_001F99D8(D_0019BEC0, 0x400);
+
+    lc = (unsigned char *)hdr + hdr->x4;
+    n = *(int *)lc;
+    lc += 0x10;
+    if (n >= 12) {
+        func_001E9730(D_001E79D8);
+        n = 12;
+    }
+    if (n != 0) {
+        func_001F9A00(D_0019BEC0, lc, n << 6);
+    }
+
+    for (i0 = 0; i0 < D_00160F90; i0++) {
+        D_00160F8C[i0].x36 = 0xFFFF;
+    }
+    i1 = 0;
+    while (i1 < D_00160F90) {
+        sp = (unsigned short *)0x70003000;
+        for (j = 0; j < 0x3FF && i1 < D_00160F90; j++, i1++) {
+            *sp++ = (unsigned short)i1;
+        }
+        *sp = 0xFFFF;
+        ((void (*)(void *))func_002362B0)((void *)0x70003000);
+    }
+
+    sc = (unsigned char *)hdr + hdr->x34;
+    D_0016105C = *(int *)sc;
+    sc += 0x10;
+    D_00161050 = (ShrubE9EC8 *)p;
+    size0 = D_0016105C << 5;
+    p += size0;
+    if (D_0016105C != 0) {
+        ((void (*)(void *, int, int))func_001F99B0)(D_00161050, 0, size0);
+    }
+    size1 = D_0016105C * 0x1C0;
+    p = (unsigned char *)(((unsigned int)p + 0x3F) & ~0x3FU);
+    D_00161058 = (ShrubDataE9EC8 *)p;
+    p += size1;
+    if (D_0016105C != 0) {
+        ((void (*)(void *, int, int))func_001F99B0)(D_00161058, 0, size1);
+    }
+    last = -1;
+    D_00161054 = &D_00161050[D_0016105C];
+    for (i2 = 0; i2 < D_0016105C; i2++) {
+        sh = &D_00161050[i2];
+        sd = &D_00161058[i2];
+        sh->cls = D_001E1D00[*(int *)sc];
+        if (sh->cls != last) {
+            D_001E1A00[sh->cls]->first = sh;
+            D_001E1A00[sh->cls]->count = 0;
+            last = sh->cls;
+        }
+        D_001E1A00[sh->cls]->count++;
+        sh->data = sd;
+        sh->x14 = (float)*(int *)(sc + 4);
+        sh->x1E = 0xFFFF;
+        sh->x1B = 0;
+        sh->x1C = 0;
+        id = *(int *)(sc + 0xC);
+        qcopy(sd, sc + 0x10);
+        r1 = &sd->m[1];
+        qcopy(r1, sc + 0x20);
+        r2 = &sd->m[2];
+        qcopy(r2, sc + 0x30);
+        r3 = &sd->m[3];
+        qcopy(r3, sc + 0x40);
+        sh->x18 = (short)id;
+        sc += 0x50;
+        sd->m[3].w = D_001E1A00[sh->cls]->x40;
+        func_001F9EC0(sh, D_001E1A00[sh->cls]->x30, sd);
+        s = func_001F9CB8(sd);
+        len1 = func_001F9CB8(r1);
+        s = func_001F9B90(s, len1);
+        len2 = func_001F9CB8(r2);
+        s = func_001F9B90(s, len2);
+        sh->scale = D_001E1A00[sh->cls]->scale * s;
+        func_001F9C48(sh, sh, sd->m[3].w);
+        func_001F9BD8(sh, sh, r3);
+        D_00161058[i2].m[0].w = 1.0f / func_001F9CB8(&D_00161058[i2].m[0]);
+        D_00161058[i2].m[1].w = 1.0f / func_001F9CB8(&D_00161058[i2].m[1]);
+        D_00161058[i2].m[2].w = 1.0f / func_001F9CB8(&D_00161058[i2].m[2]);
+        func_001F9A00(sd->x140, sc, 0x80);
+        sc += 0x80;
+        sh->x1C = *(unsigned short *)sc;
+        sc += 0x10;
+    }
+    spa = (unsigned short *)0x70000000;
+    for (i3 = 0; i3 < D_0016105C; i3++) {
+        *spa++ = (unsigned short)i3;
+    }
+    *spa = 0xFFFF;
+    ((void (*)(void *))func_00238688)((void *)0x70000000);
+
+    tc = (unsigned char *)hdr + hdr->x3C;
+    D_001604D0 = *(int *)tc;
+    tc += 0x10;
+    D_001604D4 = (TieE9EC8 *)p;
+    size2 = D_001604D0 << 5;
+    p += size2;
+    if (D_001604D0 != 0) {
+        ((void (*)(void *, int, int))func_001F99B0)(D_001604D4, 0, size2);
+    }
+    p = (unsigned char *)(((unsigned int)p + 0x3F) & ~0x3FU);
+    D_001604DC = (TieDataE9EC8 *)p;
+    size3 = D_001604D0 << 6;
+    p += size3;
+    if (D_001604D0 != 0) {
+        ((void (*)(void *, int, int))func_001F99B0)(D_001604DC, 0, size3);
+    }
+    D_001604E0 = p;
+    size4 = D_001604D0 * 0x60;
+    p += size4;
+    p = (unsigned char *)(((unsigned int)p + 0x3F) & ~0x3FU);
+    if (D_001604D0 != 0) {
+        ((void (*)(void *, int, int))func_001F99B0)(D_001604E0, 0, size4);
+    }
+    lastTie = -1;
+    D_00160BB0.x4 = D_001604E0;
+    D_001604D8 = D_001604D4 + D_001604D0;
+
+    for (i = 0; i < D_001604D0; i++) {
+        tie = &D_001604D4[i];
+        td = &D_001604DC[i];
+        cls = D_001D8440[*(int *)tc];
+        tie->cls = (unsigned char)cls;
+        if (cls != lastTie) {
+            lastTie = cls;
+            D_001D82C0[cls]->first = tie;
+            D_001D82C0[cls]->count = 0;
+        }
+        D_001D82C0[cls]->count++;
+        tie->x18 = (short)i;
+        tie->radius = *(float *)(tc + 4);
+        if (tie->radius < 16.0f) {
+            tie->radius = 16.0f;
+        }
+        tie->x1B = 0;
+        tie->x1E = 0xFFFF;
+        if (D_001D82C0[cls]->x1C != 0) {
+            tie->x17 = (unsigned char)func_001FA898(*D_001D82C0[cls]->x1C);
+            rad = func_001FA888(tie->x17) + 24.0f;
+            if (tie->radius < rad) {
+                tie->radius = rad;
+            }
+        }
+        qcopy(td, tc + 0x10);
+        t1 = &td->m[1];
+        qcopy(t1, tc + 0x20);
+        t2 = &td->m[2];
+        qcopy(t2, tc + 0x30);
+        t3 = &td->m3;
+        qcopy(t3, tc + 0x40);
+        tc += 0x50;
+        td->m3.w = D_001D82C0[cls]->x20;
+        len0 = func_001F9CB8(td);
+        len1 = func_001F9CB8(t1);
+        a = (len0 + len1) * 0.5f;
+        b = func_001F9CB8(t2);
+        x = func_001FA898(a * 4096.0f);
+        y = func_001FA898(b * 4096.0f);
+        if (x > 0x10000) {
+            x = 0x10000;
+        }
+        if (y > 0x10000) {
+            y = 0x10000;
+        }
+        td->m[2].w = (int)((unsigned int)x | ((unsigned int)y << 16));
+        r = *(int *)tc;
+        tc += 4;
+        g = *(int *)tc;
+        tc += 4;
+        bl = *(int *)tc;
+        tc += 8;
+        g = (int)(((unsigned int)g << 8) | 0x80000000U);
+        td->m[0].w = (int)(((unsigned int)bl << 16) | (unsigned int)g | (unsigned int)r);
+        tie->x1C = *(unsigned short *)tc;
+        tc += 0x10;
+        func_001F9EC0(tie, D_001D82C0[cls], td);
+        s = func_001F9CB8(td);
+        len1 = func_001F9CB8(t1);
+        s = func_001F9B90(s, len1);
+        len2 = func_001F9CB8(t2);
+        s = func_001F9B90(s, len2);
+        tie->scale = D_001D82C0[cls]->scale * s;
+        func_001F9C48(tie, tie, td->m3.w);
+        func_001F9BD8(tie, tie, t3);
+    }
+    spb = (unsigned short *)0x70000000;
+    for (i5 = 0; i5 < D_001604D0; i5++) {
+        *spb++ = (unsigned short)i5;
+    }
+    *spb = 0xFFFF;
+    ((void (*)(void *))func_0022B8F8)((void *)0x70000000);
+
+    for (i6 = 0; i6 < D_001604D0; i6++) {
+        unsigned char *cp;
+        int cr;
+        int cg;
+        int cb;
+
+        cp = D_001604E0 + i6 * 0x60;
+        cr = 0;
+        cg = 0;
+        cb = 0;
+        for (k = 0; k < 24; k++) {
+            cr += cp[0];
+            cg += cp[1];
+            cb += cp[2];
+            cp += 4;
+        }
+        cr /= 24;
+        cg /= 24;
+        cb /= 24;
+        *(int *)((unsigned char *)&D_001604DC[i6] + 0x1C) = (cb << 16) | (cg << 8) | cr;
+    }
+
+    D_00160018 = (Ent100E9EC8 *)p;
+    ((void (*)(void *, int, int))func_001F99B0)(p, 0, 0x4000);
+    p += 0x4000;
+    D_0016001C = D_00160018;
+    *((unsigned char *)D_00160018 + 0x20) = 0xFF;
+    D_00160028 = p;
+    p += 0x2000;
+    D_001601AC = p;
+    D_00160020 = (Ent100E9EC8 *)((unsigned char *)D_00160018 + 0x3F00);
+    p += 0x20000;
+    D_001601B4 = -1;
+    D_001601B0 = 0;
+    D_001601B8 = 0;
+    func_001F99D8(D_001CDB00, 0x200);
+    for (e = D_00160018; e != D_00160020; e++) {
+        e->x36 = 0x7F80;
+    }
+    for (o = D_00161050; o != D_00161054; o++) {
+        o->x18 = 0x7F80;
+    }
+    for (i0 = 0; i0 < D_00160F90; i0++) {
+        D_00160F8C[i0].x3A = 0x7F80;
+    }
+    {
+        char *st = (char *)D_0018C418;
+
+        *(int *)(st + 0x1C) = 0;
+    }
+    func_001F3B90();
+    func_00217EC0();
+    func_001F6598();
+    D_0015F6F0 = 0;
+    D_0015F53C = 1.0f;
+    return p;
+}
 
 struct DiscFile_EABE8 {
     s32 sector;
