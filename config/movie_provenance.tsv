@@ -82,3 +82,4 @@ func_0023D340	asm only	2026-10-18	ring-buffer read step: advances the read posit
 func_0023DA88	asm only	2026-10-18	ring-buffer search: finds the timestamp entry covering a read position
 func_0023DCF0	asm only	2026-10-18	ring-buffer timestamp lookup for the current decode position
 func_0023CAF8	asm only	2026-10-18	PCM ring-buffer put: copies decoded audio into the ring and advances the write offset
+func_0023BB90	asm only	2026-10-19	movie init: sets up the read stream, decoder and DMA channel state
