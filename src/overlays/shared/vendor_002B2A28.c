@@ -2830,7 +2830,47 @@ void InitRopeStripMoby(char *m) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L14_00303270);
+extern int func_001FA8A8(int, int, float);
+extern short D_L14_00162194;
+extern short D_L14_00162198;
+extern short D_L14_001621C4;
+extern short D_L14_001621C0;
+extern short D_L14_001621C8;
+
+// advances a timed chain of vectors and picks an interpolation value
+void func_L14_00303270(char *moby) {
+    D_02C80 *d = *(D_02C80 **)(moby + 0x78);
+    if (d->s12 != 0) {
+        int i;
+        int j;
+        int k;
+        int br;
+        d->s12--;
+        for (i = 4; i < 27; i++) {
+            func_001F9BD8(&d->pts[i], &d->pts[i], &d->off[i]);
+        }
+        for (j = 0; j < 4.0f; j++) {
+            for (k = 1; k < 4; k++) {
+                func_001F9BD8(&d->a[k][j], &d->a[k][j], &d->b[k][j]);
+            }
+        }
+        for (br = 0; br < 4; br++) {
+            qcopy_nc(&d->a[0][br], &d->pts[d->cnt[br]]);
+        }
+    }
+    {
+        int h = d->s12;
+        if (*(int *)&D_L14_00162194 < h) {
+            float f = func_001FA888(h - *(int *)&D_L14_00162194) / func_001FA888(d->r620 - *(int *)&D_L14_00162194);
+            *(int *)((char *)d + 0x14) = func_001FA8A8(*(int *)&D_L14_001621C4, *(int *)&D_L14_001621C0, f);
+        } else if (*(int *)&D_L14_00162198 < h) {
+            float f = func_001FA888(h - *(int *)&D_L14_00162198) / func_001FA888(*(int *)&D_L14_00162194 - *(int *)&D_L14_00162198);
+            *(int *)((char *)d + 0x14) = func_001FA8A8(*(int *)&D_L14_001621C8, *(int *)&D_L14_001621C4, f);
+        } else {
+            *(int *)((char *)d + 0x14) = 0;
+        }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L14_00303430);
 typedef struct { f32 x; f32 y; f32 z; } Vec3_3039C0;
 typedef struct {
