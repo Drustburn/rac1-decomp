@@ -304,6 +304,7 @@ void func_L06_002D9FF0(char *moby) {
 }
 extern void func_L00_002D80A0(char *);
 
+/* Sets the moby to state 2, clears flag bits 0x41 in +0x34 and calls func_L00_002D80A0. */
 void func_L06_002E7578(char *moby)
 {
     moby[0x20] = 2;

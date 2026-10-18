@@ -35,6 +35,10 @@ extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2DDC");
 
 typedef struct { float v[4]; } __attribute__((aligned(16))) QVa840;
 
+/* Moby update for a projectile created by func_L18_002A87D0: spins, steers toward the heading
+   vector stored in its data, and sweeps a collision test each frame. On a hit or when its timer
+   (data+0x10) expires it spawns an impact effect and deletes itself; otherwise it sheds spark
+   particles. */
 void func_L18_002A8400(char *moby) {
     float a[4];
     char c[0x30];
@@ -96,6 +100,9 @@ void func_L18_002A8400(char *moby) {
 }
 extern int func_001F9850(int);
 
+/* Spawns a projectile moby (class 0x29) at pos travelling along vec, inheriting owner's field at
+   +0x38; stores a 240-tick lifetime (time-scaled), arg3 and the owner in its data, and faces it
+   along vec. */
 char *func_L18_002A87D0(char *owner, float *pos, float *vec, int arg3) {
     char *moby = CreateMoby(0x29);
     if (moby != 0) {
@@ -143,6 +150,11 @@ typedef struct {
     int flags;
 } L18D;
 
+/* Moby update for a homing projectile created by func_L18_002D6738: flies from its start toward
+   the target point in its data over a fixed number of frames along a curved (rotated-offset)
+   path, spinning and leaving a spark trail. On arrival or on collision it spawns the impact
+   effect (func_L18_002D6A00) and deletes itself; also deleted if the hero is in state 0x72 or
+   mode 2 is active. */
 void func_L18_002D6440(char *moby) {
     L18D *d = *(L18D **)(moby + 0x78);
     float v0[4];
@@ -242,6 +254,8 @@ char *func_L18_002D6738(float *pos, float *dir, float *target, float a, float b,
 }
 extern unsigned char *D_L18_001B2DDC;
 
+/* Spawns the trail effect for a projectile: one randomly placed spark particle and one glow
+   along the movement vector vec, offset from the moby's position. */
 void func_L18_002D6878(void *mobyp, void *vec) {
     char *moby = mobyp;
     float a0[4];
@@ -266,6 +280,9 @@ extern short D_L18_001619FC;
 extern void func_L00_0025A8E8(int, float, void *, int, float, float, int, int, int);
 extern void func_L00_0025F4A8_x(void *, void *, void *, float, float, int, int, int, int, int, float, float, float, float, float, int, int, int) __asm__("func_L00_0025F4A8");
 
+/* Impact effect for a projectile: triggers the explosion effect at the moby's position with a
+   size set by the projectile kind (bit 0 of data+0x38 enlarges it, bit 2 suppresses the main
+   blast) and, in one hero mode, adds a shock-ring effect. */
 void func_L18_002D6A00(void *m, void *src) {
     char *moby = m;
     float q[4];
@@ -367,6 +384,10 @@ extern short D_L18_00161A24;
 extern short D_L18_00161A18;
 extern int D_001414D0 NOT_SDA;
 
+/* Moby update for a launchable object (class 0x238) that is fired by func_L18_002D70E8: state 0
+   goes dormant (5); state 1 flies along a ballistic arc until it reaches the ground; state 2
+   slides to a stop and plays an animation; state 3 rests and is pushed around by nearby bodies;
+   state 4 waits for an interaction to finish. */
 void func_L18_002D6D08(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float v[4];
@@ -472,6 +493,9 @@ extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_0022ED80(int, int, int);
+/* Launches a dormant (state 5) class 0x238 moby from list idx: moves it to p6, computes the arc
+   velocity toward p7 at speed f (stored at data+0x180/0x188), sets state 1 and records the a0/a8
+   parameters. Returns the moby or 0 if none was available. */
 char *func_L18_002D70E8(float f, int a0, int idx, float *p6, float *p7, int a8) {
     float v[4];
     float r;
@@ -631,6 +655,8 @@ int func_L18_002D7580(Level18VendorMoby *moby, void *arg) {
 }
 extern int func_001F9850(int);
 
+/* Puts a moby into the dormant state (5): resets its animation, clears its collision byte at
+   +0x31 and the active flag bits, and zeroes the field at +0x94. */
 void func_L18_002D7670(unsigned char *arg) {
     unsigned short flags;
     arg[0x20] = 5;
@@ -777,6 +803,9 @@ typedef struct {
     L18E *data;
 } L18M;
 
+/* Moby update for an energy-field emitter: in state 0 it spawns three child mobys (0x6EB and two
+   0x6F0) at its position and goes to state 1; in state 1 it eases scale and offset values toward
+   targets, repositions the children around itself, and deletes them if the level event ends. */
 void func_L18_002D79F0(char *moby) {
     L18E *d = *(L18E **)(moby + 0x78);
     *(float *)(moby + 0x2C) = (*(L18Cls **)(moby + 0x24))->f24 * *(float *)&D_L18_00161A28;
@@ -895,6 +924,8 @@ extern float func_001FA850(float, float);
 
 typedef struct { char pad0[0x10]; float x; float y; } L18Pos;
 
+/* Of the class 0x247 mobys in list idx, returns the one whose bearing from a differs most from
+   the bearing of b (largest angular difference), or 0 if there are none. */
 void *func_L18_002D7F48(float *a, float *b, int idx) {
     short *p = (short *)D_L18_001AC540[idx];
     char *best = 0;
@@ -1079,6 +1110,8 @@ void func_L18_002D8F10(struct Moby *moby) {
 extern int func_L00_0028EB98(void *, int);
 extern int func_0022EEB8(int, int, void *);
 
+/* Activates a moby: switches it to state 2 (storing value at data+0x6C) and, if its sound/effect
+   slot at data+0x70 is not playing, starts effect 0x12 on it. */
 void func_L18_002D9358(unsigned char *arg, int value) {
     char *data = *(char **)(arg + 0x78);
     if (arg[0x20] != 2) {
@@ -1091,6 +1124,8 @@ void func_L18_002D9358(unsigned char *arg, int value) {
 }
 extern void func_L00_0028EBF0(int);
 
+/* Deactivates a moby in state 2: moves it to state 3 and stops its sound/effect slot (data+0x70)
+   if that slot still belongs to this moby. */
 void func_L18_002D93C0(unsigned char *arg) {
     int *data = *(int **)(arg + 0x78);
     if (arg[0x20] == 2) {
@@ -1408,6 +1443,8 @@ extern short D_L18_00161B34;
 extern short D_L18_00161B38;
 extern short D_L18_00161B44;
 
+/* Emits a burst of 5 to 9 sparks from a random point near the moby, each with random direction,
+   speed, colours and lifetimes derived from the moby's orientation matrix. */
 void func_L18_002D9CA8(char *moby) {
     float v[4];
     float m[4];
@@ -1471,6 +1508,10 @@ extern short D_L18_00161CCC;
 extern short D_L18_00161CD0;
 extern short D_L18_00161CD4;
 
+/* Moby update for a falling fireball (class 0x270, created by func_L18_002DCD28): in state 0 it
+   sheds sparks and pulses its colour while falling under gravity; when it reaches the ground it
+   waits in state 1, then in state 2 expands a damaging ring (func_L18_002DD270) until the radius
+   limit, and state 3 deletes it. */
 void func_L18_002DC850(char *moby) {
     float v[4];
     float a[4];
@@ -1725,6 +1766,9 @@ extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_L18_002DD4B8(char *moby, void *a1, void *a2);
 
+/* Damage ring for the class 0x270 moby: tests 64 segments of a circle of radius data+0x24 around
+   the moby against the hero (pushing outward), and spawns edge sparks via func_L18_002DD4B8
+   while the radius is under 3. */
 void func_L18_002DD270(char *moby) {
     char hit[0x30];
     float v[4];
@@ -1773,6 +1817,8 @@ extern short D_L18_00161D1C;
 extern short D_L18_00161D18;
 extern short D_L18_00161D20;
 
+/* Spawns sparks along the segment a1-a2 of the damage ring: skipped if the segment's bounding
+   sphere is off screen, otherwise randomly emits two sparks that fly away from the moby. */
 void func_L18_002DD4B8(char *moby, void *a1, void *a2) {
     float buf[4];
     float v[4];
@@ -1836,6 +1882,7 @@ void func_L18_002DD650(char *moby) {
     }
     AddDrawCallback(func_L18_002DD8A8, moby);
 }
+/* Spawns a class 0x274 moby at vector, storing value, a count of 3 and the owner in its data. */
 char *func_L18_002DD7D0(void *owner, void *vector, float value) {
     char *moby = CreateMoby(0x274);
     if (moby != 0) {
@@ -2134,6 +2181,8 @@ int func_L18_002E0F90(u8 *p) {
 }
 extern void func_001F9BC0(void *);
 
+/* Spawns a class 0x326 moby at vector in dormant state 0 with an identity rotation and links it
+   to itself through its data; used for the path junction nodes. */
 char *func_L18_002E36B0(void *vector) {
     char *moby = CreateMoby(0x326);
     if (moby != 0) {
@@ -2272,6 +2321,7 @@ void func_L18_002EAB58(char *moby) {
     }
 }
 extern void func_L01_0026F090(char *arg, int val);
+/* Sets the state of every moby in the list index arg to 2. */
 void func_L18_002EB240(char *arg) {
     func_L01_0026F090(arg, 0x2);
 }
@@ -2286,6 +2336,9 @@ extern void func_L18_002EC290(void *);
 extern void func_L18_002EB5E8(char *);
 extern void func_L00_0025A8E8_2EB260(int, void *, float, int, float, float, int, int, int) __asm__("func_L00_0025A8E8");
 
+/* Moby update for a homing spark (class 0x3D7): spins its two angles, and in state 1 moves
+   toward the target point in its data at a fixed speed, jittering a trail emitter and drawing
+   it, then fades out and deletes itself on arrival or when its timer runs out. */
 void func_L18_002EB260(char *moby) {
     float *d = *(float **)(moby + 0x78);
     float t = FastAddRots(d[0xB], *(float *)&D_L18_00161F60 * 0.017453292f * D_0015EE6C);
@@ -2337,6 +2390,8 @@ void func_L18_002EB260(char *moby) {
     }
     AddDrawCallback(func_L18_002EB5E8, moby);
 }
+/* Spawns a class 0x3D7 homing spark at vector with the given owner, a lifetime of 5 and value
+   stored in its data. */
 char *func_L18_002EB4E0(void *owner, void *vector, int value) {
     char *moby = CreateMoby(0x3D7);
     if (moby != 0) {
@@ -2352,6 +2407,8 @@ char *func_L18_002EB4E0(void *owner, void *vector, int value) {
     return moby;
 }
 
+/* Updates a homing spark: moves it to src, resets its timer, stores speed, and when active and
+   still idle starts it (state 1) toward position. */
 void func_L18_002EB558(unsigned char *arg, void *src, void *position, int active, float speed) {
     char *data = *(char **)(arg + 0x78);
     qcopy(arg + 0x10, src);
@@ -2384,6 +2441,8 @@ typedef struct {
     long d;
 } Pkt;
 
+/* Draw callback for the homing spark: builds four rotated, scaled, textured quads facing the
+   camera position and submits them. */
 void func_L18_002EB5E8(char *moby) {
     Pkt pkt[4];
     float rot[4];
@@ -2461,6 +2520,8 @@ extern short D_L18_00161FF0;
 extern short D_L18_00161FF4;
 extern short D_L18_00161FF8;
 
+/* Trail emitter for the homing spark: spawns three particles along the vector from the moby to
+   its target, with random velocity, colours and lifetimes. */
 void func_L18_002EB988(char *moby) {
     float v10[4];
     float v20[4];
@@ -2878,6 +2939,8 @@ extern short D_L18_00162138;
 extern short D_L18_001620E4;
 extern short D_L18_0016213C;
 
+/* Draws two additive glow quads billboarded toward the camera at pos[1], one scaled by
+   D_L18_00162138 and one by D_L18_0016213C, each with a little random flicker. */
 void func_L18_002ED520(V_2bb0b0 *pos) {
     Q_2bb0b0 quad;
     V_2bb0b0 mat[4];
@@ -3068,6 +3131,9 @@ INCLUDE_ASM("asm/overlays", func_L18_002F1444);
 extern float func_L00_0025CE58(float *, float *, float, float, float, float);
 extern short D_L18_001622BC;
 
+/* Steering step for a class 0x54B moby: turns toward the target vec and moves forward, eases its
+   height toward vec[2], and tilts it. Returns 1 when it is within 2 units or its timer ran out,
+   else 0 (nudging the target away from its parent when too close). */
 int func_L18_002F1510(char *moby, float *vec) {
     float buf[4];
     float v[4];
@@ -3145,6 +3211,9 @@ extern short D_L18_001622E4;
 extern void func_001153FC(void *, int, int);
 extern float D_L18_001DA5C0[4][2];
 extern char *D_L18_00160058 MACRO_ADDR;
+/* Draw callback that renders the trails of the class 0x54B mobys in the moby's group: for each,
+   up to 16 textured quads are built from its stored position history ring and submitted, unless
+   drawing is disabled by a flag. */
 void func_L18_002F1780(struct Moby *moby) {
     struct GeometryQuad_1780 quads[16];
     float extra[8];

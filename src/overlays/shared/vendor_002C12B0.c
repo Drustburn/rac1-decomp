@@ -11,6 +11,7 @@ INCLUDE_ASM("asm/overlays", func_L00_002C12B0);
 extern unsigned char D_0013A5E0[] NOT_SDA;
 extern unsigned char D_0013E633[] NOT_SDA;
 extern void func_L00_002C2A80(void *);
+/* Moby update: if the data word at +4 is set runs func_L00_002C2A80, otherwise sets byte +0xBC to 1 when the pad input mask matches the hero mask, else 0. */
 void func_L00_002C2A20(char *m) {
     if (*(int *)(*(char **)(m + 0x78) + 4) != 0) {
         func_L00_002C2A80(m);
@@ -1802,6 +1803,7 @@ extern void func_L00_002C7128_2C74B8(char *) __asm__("func_L00_002C7128");
 /* Swingshot (class 208) update: keeps the hook at the glove, shows the targets, fires the hook to the swing target
    or the grind target, swings the hero, and reels the hook back. */
 void func_L00_002C74B8_r(Moby *m) __asm__("func_L00_002C74B8");
+/* Swingshot update body: keeps the hook at the glove, marks swing and grind targets, fires and reels the hook and swings the hero. */
 void func_L00_002C74B8_r(Moby *m) {
     V_2C74B8 v0;
     V_2C74B8 v10;

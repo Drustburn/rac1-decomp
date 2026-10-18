@@ -268,12 +268,14 @@ void func_L02_002A58C0(void) {
 }
 extern unsigned int D_L02_0016005C MACRO_ADDR;
 
+/* If the moby pointer is below the moby pool limit D_L02_0016005C, clears the field at +0x58 and sets flag 0x40 in +0x34. */
 void func_L02_002CCD18(char *moby) {
     if ((unsigned int)moby < D_L02_0016005C) {
         *(int *)(moby + 0x58) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x40;
     }
 }
+/* Calls func_L00_002DCDA8(a); if that returns 0 resets state 9 to 1, otherwise sets the state to 9. Returns the call's result. */
 int func_L02_002D75F8(char *a) {
     int r = func_L00_002DCDA8(a);
     if (r == 0) {
@@ -1182,6 +1184,8 @@ extern float D_0015EE70 MACRO_ADDR;
 extern short D_L02_00161CA8;
 extern short D_L02_00161CAC;
 extern short D_L02_00161CA4;
+/* Moby update for a pusher that slides back and forth along its heading: state 0 starts the delay, state 1 accelerates it one way, state 2 the other, state 3
+   holds it at the top speed; velocity is applied every frame. */
 void func_L02_002DDAE8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float limit;

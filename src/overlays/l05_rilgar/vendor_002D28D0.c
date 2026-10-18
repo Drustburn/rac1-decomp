@@ -391,6 +391,8 @@ extern short *D_L05_001AC040[];
 extern int D_L05_00160098 MACRO_ADDR;
 extern float D_L05_001CE070[][2];
 
+/* Draw hook for glowing ribbon trails: builds 16 effect-texture packets, then for each class 0x4F moby in state 1 in the moby's group draws up to three
+   ribbon strips from its 16-entry trail-point history (skipped while D_L05_001614B0 is set). */
 void func_L05_002D8B68(char *moby) {
     L05GlowPacket packet[16];
     float matrix[8];
@@ -642,6 +644,7 @@ void func_L05_002DC4C8(void *m, void *dir) {
 extern char *func_0020D348(int);
 extern void func_L00_00251E30(void *);
 
+/* Spawns a moby of class 0x1B7 at the owner's position, copying the owner's position, rotation vector and +0x38 field, and returns it (0 if the pool is full). */
 char *func_L05_002F9B10(char *owner) {
     char *moby = CreateMoby(0x1B7);
     if (moby != 0) {
@@ -2106,6 +2109,7 @@ void func_L05_003087B0(char *moby) {
         }
     }
 }
+/* Maps the value 5 to 6 and returns every other value unchanged. */
 int func_L05_003088C8(int arg) {
     return arg == 5 ? 6 : arg;
 }
@@ -2965,6 +2969,7 @@ void func_L05_0030EA88(char *moby) {
 }
 extern void func_L01_002BA380(char *, int);
 extern char D_L05_001D6BC0[];
+/* Draws the level's ripple patches by calling RippleDraw with D_L05_001D6BC0 and 0x30. */
 void func_L05_0030EB40(void) {
     func_L01_002BA380(D_L05_001D6BC0, 0x30);
 }

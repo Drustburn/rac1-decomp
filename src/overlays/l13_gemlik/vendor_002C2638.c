@@ -944,6 +944,8 @@ int func_L13_002C4D50(char *pt, int *tbl, int start, float ref);
 extern int func_001F9938(short *);
 int func_L13_002C4F10(char *m, char *d, int aim);
 
+/* Speed/direction control for a path-following vehicle moby: picks a target point (the hero's ship or linked moby), finds the path point to head for and
+   direction (step +-1), eases the speed at vars+0xCC toward it (capped) or reverses, then calls func_L13_002C4F10 with aim. */
 int func_L13_002C5248(char *moby, char *vars, int aim) {
     char *path = D_L13_001B0AB0[*(int *)(vars + 0xA0)];
     char *linked;
@@ -1649,6 +1651,8 @@ typedef struct HitAttack2CFF90 {
     float position[4]; char pad10[0x10]; HitMoby2CFF90 *owner;
     char pad24[8]; float damage; char pad30[8]; int kind;
 } HitAttack2CFF90;
+/* Hit handler for a damageable moby: reads the incoming hit (mask 0x330000), subtracts its damage from *hp, and on death sets state 2 with the particle
+   burst and sound cleanup (otherwise plays the flinch and resets the hit slot). */
 void func_L13_002CFF90(char *m, char *d, float *hp) {
     HitMoby2CFF90 *mob = (HitMoby2CFF90 *)m;
     if (mob->state != 2) {
@@ -2048,6 +2052,8 @@ extern s32 D_L13_0015F6B0 MACRO_ADDR;
 extern f32 D_0015EE6C MACRO_ADDR;
 #define frame_time_p D_0015EE6C
 
+/* Moby update for a drifting blob: state 0 records its home position and direction, then it moves along a random direction while the hero's ship (class 0x45)
+   is near, resets its timer and collides with a sphere test (skipping its owner). */
 void func_L13_002E2980(struct MobyP *moby) {
     struct BlobVarsP *vars = (struct BlobVarsP *)moby->pvars;
     f32 distance = distance_p(&moby->pos, hero_base_p + 0xE9D);
@@ -2397,6 +2403,8 @@ void func_L13_002E5810(char *moby) {
     }
 }
 
+/* Spawns a child moby of class 0x160 at the owner's position, stores the owner in its data block, sets flag 0x200 and the radius at +0x2C from its class, and
+   returns it. */
 char *func_L13_002E9870(char *owner) {
     char *moby = CreateMoby(0x160);
     if (moby != 0) {

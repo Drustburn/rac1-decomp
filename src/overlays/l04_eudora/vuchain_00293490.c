@@ -19,6 +19,7 @@ float func_L04_00293490(float *pos) {
     if (func_L00_001EFFF0(b, a, 2, 0, 0) != 0) return D_L04_00174068;
     return 0.0f;
 }
+/* Writes the four joint angle limits of a leg-rig block: -pi/16 and +pi/2 at +0x10C/+0x110, -pi/2 and +pi/16 at +0x1BC/+0x1C0. */
 void func_L04_00293530(void *unused, char *arg) {
     *(float *)(arg + 0x10C) = -0.19634955f;
     *(float *)(arg + 0x110) = 1.5707964f;
@@ -104,6 +105,8 @@ extern void func_0020DB98(struct Moby *m, int count, int *joints, void *out);
 extern void func_0020DAF8(struct Moby *m, int joint, float *mtx);
 extern float func_L00_001FF860(float, float);
 extern void func_0020D960(struct Moby *m, int slot, void *manip);
+/* Sets up a two-legged rig on a moby: resolves the 13 rig animations' start, length, per-phase spans and playback rate, registers six joints, and
+   initialises the per-leg state and manipulators. */
 void func_L04_00293578(struct Moby *moby, LegRig_p *rig) {
     int joints[6];
     float matrix[4][4];

@@ -1553,6 +1553,8 @@ extern void func_0022EE28();
 #define update_hoverboard_girl_boobs_animation ((void(*)(HGMoby *, HGState *))(func_L05_00317CD8))
 #define func_0022EE28_x ((void(*)(int, int, int))(func_0022EE28))
 
+/* Moby update for the hoverboard race girl NPC: runs her cutscene instances, idles on the ground, handles the race dialogue and its camera, and turns
+   her head to look at the hero while the dialogue is active. */
 void func_L05_00317F80(HGMoby *moby) {
     HGState *state = moby->data;
     HGVec target_position;
@@ -2473,6 +2475,8 @@ extern L05Fields_0013D388 D_0013D490[];
 #define l05_0013D388_a D_0013D490
 extern L05Fields_0013D4C0 D_0013D5C8[];
 #define l05_0013D4C0_a D_0013D5C8
+/* Moby update that polls the level's challenge conditions every frame: checks whether the hero is inside the level's clip volumes and compares elapsed times
+   with the stored bests, raising Help_Request messages and recording new bests when a condition is met. */
 void func_L05_0031D450(unsigned char *moby) {
     int *data = *(int **)(moby + 0x78);
     int value, elapsed, limit;

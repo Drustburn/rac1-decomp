@@ -355,6 +355,7 @@ void func_L06_002FEE60(char *m) {
     }
 }
 extern char *D_L06_00160058 MACRO_ADDR;
+/* For every moby in group idx whose state is below 0x7F: sets state 0x11, sets flag bit 0 and clears bit 12 of its flags (+0x34), and zeroes the word at +0x94. */
 void func_L06_00301068(int idx)
 {
     short *p = D_L06_001AC340[idx];
@@ -438,6 +439,7 @@ extern float D_0015EE70 MACRO_ADDR;
 #define D_L06_001620E0_ff (*(float *)&D_L06_001620E0)
 #define frame_time_ff D_0015EE6C
 #define frame_time_sq_ff D_0015EE70
+/* Moby update for a camera-takeover trigger: when the hero comes within 32 units it waits 30 ticks, hands the camera to a scripted path (blending position and look target toward the hero over time with a fade timer), then releases control back to the hero at state 5. Also queues one of four draw callbacks depending on data[0] and data[1]. */
 void func_L06_003010E0(char *moby) {
     int *data = *(int **)(moby + 0x78);
     float pos[4], rot[4], from[4], target[4], offset[4];
@@ -786,6 +788,7 @@ void func_L06_00302248(char *moby) {
         break;
     }
 }
+/* Sets state 2 and copies the vectors a and b into the moby's data block (offsets 0 and 0x10). */
 void func_L06_003023C8(char *arg, void *a, void *b) {
     char *dst = *(char **)(arg + 0x78);
     arg[0x20] = 2;
@@ -1974,6 +1977,7 @@ void func_L06_00304FA8(struct Moby *moby) {
 extern char *D_L06_00160058 MACRO_ADDR;
 extern void func_0020D678(void *);
 
+/* Deletes every moby in the group stored at data+0xCC. */
 void func_L06_00305468(char *moby)
 {
     char *data = *(char **)(moby + 0x78);
@@ -2176,6 +2180,7 @@ void func_L06_003054D8(Moby *m) {
 }
 extern void func_0022ED80(int, int, void *);
 
+/* If the moby is in state 1, advances it to state 2 and calls func_0022ED80(0, 0, moby). */
 void func_L06_00305BF8(char *arg) {
     if ((unsigned char)arg[0x20] == 1) {
         arg[0x20] = 2;
@@ -2864,6 +2869,7 @@ void func_L06_0030B248(char *self) {
     }
     }
 }
+/* Moby update for a breakable object: state 0 arms it, state 1 waits until a collision query (flag 0x10000) hits something with a positive value, state 2 spawns two class 0x682 effects and a class 0x681 moby at its position and rotation, then deletes the moby. */
 void func_L06_0030B3E8(char *self) {
     int flag = 0;
     char *o = func_L00_0025B478(self, 0x10000, 0);

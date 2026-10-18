@@ -29,6 +29,8 @@ extern void func_L00_0023A658(void);
 extern void func_L00_0023A690(void);
 extern void func_L00_0023A788(void);
 
+/* PageMenuClose: closes the pause menu. Runs each open page object's close callback,
+   restores the HUD state and button bindings, frees the menu mobys and resets the menu state. */
 void func_L00_002777C0(void) {
     int i;
     int value;
@@ -677,6 +679,8 @@ extern char D_L00_001BA070[] NOT_SDA;
 extern char D_0013CA40[];
 #define menu_system_p (*(struct MenuSystemP *)D_L00_001BA070)
 #define controller_state_p (*(struct CtrlP *)D_0013CA40)
+/* Menu input check for the page `screen`: returns 0 unless it is the focused page; 1 on a
+   confirm button when closing is allowed; on the back button goes to the page's back link (0) or returns -1 to close. */
 int func_L00_002788E0(void *screen) {
     if (menu_system_p.current->focus != screen) {
         return 0;
@@ -812,6 +816,8 @@ int func_L00_00280708(void) {
 }
 extern unsigned char D_0013A5E0[] NOT_SDA;
 extern char D_L00_001BA070[] NOT_SDA;
+/* Menu left/right handler: on the 0x20 button clears D_L00_001BA070+0xD4 and sets the page's
+   flag at +0x84 to 1; on 0x10 sets it to 0. Either way the next page becomes the page's link at +0x38. Returns 0. */
 int func_L00_00280740(void) {
     int f = *(int *)(D_0013A5E0 + 0x2604);
     if (f & 0x20) {
@@ -839,6 +845,9 @@ extern char D_0013D5EB[];
 extern unsigned char D_0013D50F[];
 extern char D_0013D355[];
 
+/* Cheat-code entry: while on this screen it records each D-pad/shoulder press as a direction
+   (0-5) in a 20-entry buffer; once full it decodes the buffer against D_L00_001B9F20 and, on a match,
+   unlocks the matching item, option or message, otherwise discards it. Resets the buffer when the screen is left. */
 void func_L00_00284410(void) {
     char *pad = (char *)D_0013A5E0 + 0x2460;
     int lim0, lim;
@@ -951,6 +960,7 @@ int func_L00_00284E20(int id) {
 INCLUDE_ASM("asm/overlays", func_L00_00284E5C);
 /* Looks for id in the five {id, flags} pairs at D_L00_001BA548; if found sets flags |= 4 and returns 0, else returns 1. Joined with func_L00_00284EA0 loop tail. */
 extern int D_L00_001BA548_84E70[] __asm__("D_L00_001BA548");
+/* Sets flag 4 on the entry with the given id in the five-entry table, returning 0, or 1 if not found. */
 int func_L00_00284E70(int id) {
     int i;
     for (i = 0; i < 5; i++) {
@@ -1153,6 +1163,8 @@ done:
 }
 extern unsigned char *D_L00_00160098 MACRO_ADDR;
 extern unsigned char *D_L00_0016009C MACRO_ADDR;
+/* Finds the 0x100-byte record in the range D_L00_00160098..D_L00_0016009C whose short at
+   +0xB2 equals id; returns it, or 0 if none. */
 int func_L00_00286498(int a, int id) {
     unsigned char *p;
     for (p = D_L00_00160098; p != D_L00_0016009C; p += 0x100) {
@@ -1165,6 +1177,8 @@ INCLUDE_ASM("asm/overlays", func_L00_002864CC);
 typedef struct { int off; int pad; unsigned short len; short kind; short a; short b; } Ent;
 extern int func_L00_00286498(int, int);
 
+/* Applies a patch table: for each of the *h entries, finds the record matching its ids via
+   func_L00_00286498 and copies the entry's data into it (at its offset, or at the record's pointer +0x78). */
 void func_L00_002864E0(int *h) {
     int i;
 

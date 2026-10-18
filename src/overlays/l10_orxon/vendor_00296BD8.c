@@ -389,6 +389,8 @@ extern void func_L00_002E9AF8(void);
 extern void func_L00_002E9A18(int);
 #define func_L00_002E9A18_2BFBB8 func_L00_002E9A18
 
+/* Moby update: while the hero state byte is 1 and the hero is within 0.5 units of the target moby, emits a burst of ten random-colour spinning sparkles around
+   it, plays a sound and starts a timed effect on the target. */
 void func_L10_002BFBB8(char *m)
 {
     int *data = *(int **)(m + 0x78);
@@ -1575,6 +1577,8 @@ extern short D_L10_00161D18;
 extern float func_001F9B50(float);
 extern int func_L00_00200290(void *, float);
 extern void func_001F49B0(void *, void *);
+/* Moby update for a sound-emitting prop: state 0 builds a randomly shuffled order of up to data[1] entries from a 10-entry table; states 1/2 register a draw callback
+   when within 80 units of D_L10_001672C0 and keep an ambient sound voice running. */
 void func_L10_002DB688(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
@@ -1947,6 +1951,7 @@ void func_L10_002DEA10(char *m) {
 }
 extern char *func_0020D348(int);
 
+/* Spawns a moby of class 0x462 at the owner's position (z set to 59.0), copying the owner's heading at +0x48 and +0x38 field, and returns it. */
 char *func_L10_002DEC08(char *owner) {
     char *moby = CreateMoby(0x462);
     if (moby != 0) {
@@ -2202,6 +2207,8 @@ typedef struct MobyData_2E0FF8 { char pad0[0x20]; float f20; char pad24[2]; shor
 typedef struct Anim_2E0FF8 { char pad0[0x30]; float f30[4], f40[4]; char pad50[0x30]; } Anim_2E0FF8;
 typedef struct Path_2E0FF8 { int count; char pad4[0xC]; float pts[4]; } Path_2E0FF8;
 
+/* Moby update for a damageable enemy: collects hits (mask 0x330000), subtracts damage from its health at data+0x20 or enters state 11 (anim 5, sound, flag
+   unlock) when it runs out, then steers along its path and flags itself (f104 = 2) when too far from its target or off screen. */
 void func_L10_002E0FF8(struct Moby *moby) {
     extern unsigned char D_0013D50F[];
     extern void func_00213DE0(void *, int, int, int);

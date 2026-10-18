@@ -253,6 +253,7 @@ extern void func_L00_00260108(void *, void *, int, float, float);
 /* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l12/gameplay/entities/002ec720.c, FUN_L12_002ece00. */
 extern int D_0015EE84_e __asm__("D_0015EE84") MACRO_ADDR;
+/* Update of the level 12 shot: state 1 flies it along its velocity with a smoke trail and tests for hits (other than its owner), state 2 pops it. */
 void func_L12_002EE180(struct Moby *moby) {
     ShotVars_ece00 *vars = (ShotVars_ece00 *)moby->pvars;
     float old_pos[4];
@@ -537,6 +538,8 @@ extern int D_L12_00161E84 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 extern char D_L12_001672C0[];
 
+/* Moby update for an animated electric-arc effect: advances a shared 0..1 cycle and, for each of four strips whose timer has expired, regenerates its
+   jittered point list and the intermediate points between them. */
 void func_L12_00304038(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float cycle = (*(float *)&D_L12_00161E78) + (*(float *)&D_L12_00161E7C) * D_0015EE6C;
@@ -1939,6 +1942,8 @@ extern int D_L12_0015F6B0 MACRO_ADDR;
 extern int func_001FA898(float);
 extern float func_001FA888(int);
 
+/* Moby update that pulses a glow tint on 18 mobys (17 linked ones plus itself, skipping class 0x4FE): a sine on a 0xAA-frame period is packed into the
+   colour word at +0x90 and bit 0x10 of the flags at +0x34 is set. */
 void func_L12_00307C08(char *moby) {
     int i;
     int alpha = 0x80000000;
@@ -2452,6 +2457,7 @@ extern void func_0022ED80(int, int, int);
 extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
 extern void func_L01_00279E10(void *, int);
+/* Moby update for a breakable: state 0 arms it, state 1 waits for a hit with damage (mask 0x10000), state 2 plays its sound and break effects, then deletes it. */
 void func_L12_0030CAA8(char *m) {
     int hit = 0;
     char *r = func_L00_0025B478(m, 0x10000, 0);

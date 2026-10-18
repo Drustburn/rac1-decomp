@@ -1292,6 +1292,7 @@ void func_L09_002EF460(char *m) {
 extern char *func_0020D348(int);
 extern void func_L00_00251E30(void *);
 
+/* Spawns a moby of class 0x11C at the given position, copying the owner's +0x30 byte, rotation vector and +0x38 field and setting the angle at +0x48 to angle. */
 char *func_L09_002EF6D0(char *owner, void *position, float angle) {
     unsigned long long pos;
     void *copy = &pos;
@@ -1584,6 +1585,8 @@ extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_0020D678(void *);
 
+/* Moby update for a drifting particle-like moby: adds its velocity (data block) to the position, damps the velocity by 2% per frame and deletes the moby
+   once bit 2 of byte +0x70 is set. */
 void func_L09_002F1390(char *moby)
 {
     char *data = *(char **)(moby + 0x78);
@@ -2452,6 +2455,8 @@ extern void func_L00_001EE2E0(void *, int, int, int, int, int, float, float, flo
 #define a_2F10F8 ((void (*)(struct Moby *, Vec4 *))func_L09_002F10F8)
 #define a_222B80 ((int (*)(int, int))func_L00_00222B80)
 #define a_26EBC0 ((void (*)(void *, void *, int, int, float))func_L00_0026EBC0)
+/* Moby update for a mountable turret: while idle the hero can mount at the seat joint (command 1), the turret then follows the hero's stick input,
+   fires beams from the muzzle and handles dismount on the button press. */
 void func_L09_00306030(struct Moby *moby) {
     Vec4 seat;
     Vec4 offset;
@@ -3087,6 +3092,8 @@ extern int func_L09_0030B648(struct Moby *);
 #define fast_add_rotations ((f32 (*)(f32, f32))func_001FA748)
 #define vector_distance ((f32 (*)(void *, void *))func_001F9D48)
 #define FUN_L09_0030a298 func_L09_0030B648
+/* Moby update for a flyer that follows a node path (D_L09_001B0930[vars->path]): state 0 snaps it to the first or last node by direction, then it
+   steers along the nodes with yaw lag and wobble. */
 void func_L09_0030AFB8(struct Moby *moby) {
     PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
     PathNodes_00309c08 *path = (PathNodes_00309c08 *)D_L09_001B0930[vars->path];

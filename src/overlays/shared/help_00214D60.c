@@ -531,6 +531,7 @@ extern void func_001FA4A0(void *, void *);
 extern void func_001F9EE8(void *, void *, void *);
 extern float func_L00_001FF860(float, float);
 
+/* Transforms the vector in by the inverse of the hero moby's rotation and writes out[0] = elevation and out[1] = -azimuth (Atan2-based) of the result. */
 void func_L00_002167C8(Vx *in, float *out) {
     Mx m0;
     Mx n0;
@@ -906,6 +907,7 @@ int func_L00_00217570(int a, int b) {
 typedef struct { char pad[0x2218]; int a[8]; int b[8]; } G;
 extern G D_0013F450 NOT_SDA;
 
+/* Per-slot sound start: if D_0013F450.a[idx] is -1 stores PlayClassSound(b, 4, a) there, then records a in b[idx]. */
 void func_L00_002175D0(int idx, int a, int b) {
     G *g = &D_0013F450;
     if (g->a[idx] == -1) {

@@ -48,6 +48,8 @@ extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9EE8(void *, void *, void *);
 extern char D_L14_001675C0[];
 
+/* Draws a two-layer textured ribbon (effect textures 0x2D and 0x2C) along the points in path with outer/inner alpha and n segments, scrolling the outer
+   layer by the value at data+0x1EC. */
 void func_L14_002E0910(void *m, void *path, int outer_alpha, int inner_alpha, int n) {
     V_E0910 *pts = (V_E0910 *)path;
     Q_E0910 q[2];
@@ -296,6 +298,8 @@ extern float func_001F9CB8(void *);
 #define COLL(m) (*(s32 *)(MB(m) + 0x94))
 #define FLAGS(m) (*(u16 *)(MB(m) + 0x34))
 
+/* Moby update for a lift that follows the path D_L14_001B0F30[path] with an optional rider moby: disables collision of both while the hero is inside the clip
+   volume, restores it otherwise, and moves the lift by state each frame. */
 void func_L14_002E9038(struct Moby *m) {
     L14LiftVars *d;
     Vec4 old, rot, delta, base, off;
@@ -2358,6 +2362,7 @@ void func_L14_002F25C8(char *moby)
 }
 extern int D_L14_001600B4 MACRO_ADDR;
 extern unsigned short *D_L14_001AC2C0[];
+/* Searches the moby's group list and returns the moby whose data word at +0xB4 equals tag, or 0 if none. */
 Moby *func_L14_002F2778(char *moby, int tag) {
     unsigned short *p;
     char *pool;

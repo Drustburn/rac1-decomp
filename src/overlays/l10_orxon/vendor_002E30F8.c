@@ -1811,6 +1811,8 @@ extern int func_L09_00308F58(void *, void *, void *, int);
 #define GPT ((char *)D_L10_00160058)
 
 #define LIVE(o) ((o) != 0 && *(unsigned char *)((o) + 0x20) != 0xFE && *(unsigned char *)((o) + 0x20) != 0xFD)
+/* Moby update for a turret-like object: goes to state 3 once its save flag is collected, otherwise in state 2 picks the first live target among up to three linked
+   mobys, turns toward it and fires a shot when aimed within 2.5 degrees. */
 void func_L10_002E9E70(char *m) {
     int *d = *(int **)(m + 0x78);
     int *bits;
@@ -2414,6 +2416,7 @@ void func_L10_002ECBA0(char *moby) {
         break;
     }
 }
+/* Spawns a moby of class 0x781 at the owner's position (z set to 59.0), copying the owner's heading at +0x48 and +0x38 field, and returns it. */
 char *func_L10_002ECC80(char *owner) {
     char *moby = CreateMoby(0x781);
     if (moby != 0) {

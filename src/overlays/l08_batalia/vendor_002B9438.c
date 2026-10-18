@@ -1916,6 +1916,8 @@ void func_L08_002DD4F8(char *m) {
 extern float func_001FA748(float, float);
 extern float D_0015EE6C MACRO_ADDR;
 extern float func_001F9FA8(float);
+/* Moby update for a drifting object: copies its position/rotation from the data block, bobs it up and down (+-0.25) with a sine and sways its two tilt angles
+   (clamped to +-10 degrees) using three phase accumulators. */
 void func_L08_002DD818(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float s, t, w;
@@ -1969,6 +1971,8 @@ int func_L08_002DD9C0(char *m) {
 extern void func_00215F80(int, int);
 extern int D_L08_001B0FB0[];
 
+/* Moby update that shows a help message through try_set_help_message(0xA, ..): 0x1F4D when the value at data+0x104 exceeds 0.9, otherwise 0x1F50, 0x1F4F or
+   0x1F4E depending on which table entry the value at data+0x120 matches. */
 void func_L08_002DDB68(char *moby) {
     char *data = *(char **)(moby + 0x78);
     if (*(float *)(data + 0x104) > 0.9f) {
@@ -2462,6 +2466,8 @@ Moby *func_L08_002DF758(void *pos, Moby *target, void *velocity, float pitch, fl
 }
 // Spawns n effect mobys around the moby plus one particle burst; flag picks the variant.
 void func_L08_002DF8A0_r(char *moby, int a, int n, int flag) __asm__("func_L08_002DF8A0");
+/* Burst effect: starts a particle burst at the moby, then spawns n debris mobys (classes 0x30E-0x311 chosen by flag and random) at random offsets
+   in the matrix selected by a, each flung outward with random speed. */
 void func_L08_002DF8A0_r(char *moby, int a, int n, int flag) {
     float vec[4];
     float vec2[4];

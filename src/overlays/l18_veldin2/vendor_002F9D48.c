@@ -329,6 +329,9 @@ extern volatile float D_L18_001625E4 MACRO_ADDR;
 extern volatile float D_L18_001625E8 MACRO_ADDR;
 extern float D_L18_001625EC MACRO_ADDR;
 extern float D_L18_001625B0 MACRO_ADDR;
+/* Draws the cutscene flare: three nested additive billboard quads (scale 1.0, 0.75 and 0.5) at
+   the point D_L18_001625E0 in front of the camera, tilted left or right by 0.15 depending on the
+   cutscene state; resets the flare position when the cutscene counter reaches its trigger value. */
 void func_L18_002FABE0(void) {
     extern ML_9780 D_L18_0016D2E0;
     extern int func_001F9850(int);
@@ -637,6 +640,9 @@ extern int func_002140B0(int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int) __asm__("func_L00_0026DEA0");
 
+/* Emits spark streaks for a beam effect: two particles (type 23, colour 0x7F204080, 15-tick
+   life) at a and three white ones (4-tick life) at b, all along direction c with random segment
+   ids and speeds f0 and f1. */
 void func_L18_002FB6B0(void *a, void *b, void *c, float f0, float f1) {
     char v0[16];
     char v1[16];
@@ -748,6 +754,7 @@ void func_L18_002FBB88(char *moby) {
 extern unsigned short *D_L18_001AC540[];
 extern unsigned char *D_L18_00160058_m __asm__("D_L18_00160058") MACRO_ADDR;
 
+/* Sets the byte at +0xBC to value on every class 0x630 moby in the moby list idx. */
 void func_L18_002FBCE8(int idx, int value)
 {
     unsigned short *table = D_L18_001AC540[idx];
@@ -800,6 +807,9 @@ typedef struct {
 extern ML D_L18_0016D2E0;
 typedef struct { char pad[0x20]; unsigned char state; char pad2[0xF]; unsigned char v; } M2;
 
+/* Cutscene moby update: state 0 initialises, then in state 1 while the level script is in mode 2
+   and the cutscene counter is below 4 it takes joints 8 and 9 of one of the stored cutscene
+   mobys and emits a glow effect along the vector between them. */
 void func_L18_002FC188(M2 *m) {
     char buf[16];
     char buf2[16];
@@ -853,6 +863,11 @@ extern char D_L18_00162680;
 extern short D_L18_00162690;
 extern char D_L18_00162698;
 
+/* Moby update for the class 0x772 enemy (launched by func_L18_002FDB28): runs the shared handler
+   func_L18_002FD5C0, then state 0 sets it up and parks it (8); state 1 falls until it hits the
+   ground; states 2 and 3 idle and chase its target; state 4 attacks when close; states 5 and 6
+   explode and go inactive (8); state 7 plays a scripted animation. Updates its rotation matrix
+   and squash animation each frame. */
 void func_L18_002FD058(unsigned char *m) {
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
@@ -1036,6 +1051,10 @@ extern int func_L00_00260FB0(float, void *, void *, int, int, int *, int);
 #include "hero.h"
 #define hero (*(Hero *)(D_0013E633 + 0xE1D))
 
+/* Shared per-frame handler of the class 0x772 enemy: pulses its colour, applies damage from hits
+   to its health (on death it either explodes or is knocked away), sets it inactive when the hero
+   dies or the level script is in mode 2, and refreshes its steering target from the path table
+   or from the hero. */
 void func_L18_002FD5C0(void *m_) {
     struct Moby *m = m_;
     SentryVars_5C0 *d = (SentryVars_5C0 *)m->pvars;
@@ -1140,6 +1159,9 @@ extern float func_001F9F90(float);
 extern void func_L00_00259868(int, int, float, float, float, int);
 extern void func_L00_00262DF0(float, void *, void *, void *);
 
+/* Steers a class 0x772 enemy toward the point src: turns its heading toward it, eases its
+   forward speed with the distance, moves it with a small downward pull and returns the distance
+   to src. */
 float func_L18_002FD9A0(char *self, float *src) {
     QVec a;
     float v[4];
@@ -1209,6 +1231,7 @@ int func_L18_002FDB28(int group, void *from, void *to, float speed) {
             return 0;
     }
 }
+/* Counts the class 0x772 mobys of the moby list idx that are not inactive (state 8). */
 short func_L18_002FDCA0(int idx) {
     unsigned short *p = D_L18_001AC540[idx];
     short n = 0;
@@ -1323,6 +1346,8 @@ void func_L18_002FDF58(unsigned char *moby) {
         }
     }
 }
+/* Runs func_L00_002DCDA8 on the moby: when it reports a result the moby goes to state 7; when it
+   reports none, a moby in state 7 returns to state 2. Returns the result. */
 int func_L18_002FE070(char *a) {
     int r = func_L00_002DCDA8(a);
     if (r == 0) {
@@ -1332,6 +1357,8 @@ int func_L18_002FE070(char *a) {
     }
     return r;
 }
+/* Puts a moby into the inactive state (8): resets its animation, clears its collision byte at
+   +0x31, sets flag bit 0 and clears bit 12, and zeroes the field at +0x94. */
 void func_L18_002FE1C0(unsigned char *arg) {
     unsigned short flags;
     arg[0x20] = 8;

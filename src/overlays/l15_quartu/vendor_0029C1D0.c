@@ -46,6 +46,7 @@ extern unsigned char D_0014171B[] NOT_SDA;
 #define D_0013E550 ((char *)D_0013E633 + 0x1D)
 #define D_0014C190 ((char *)D_0014171B + 0xAB75)
 
+/* Moby update for a sliding door/platform: state 1 waits for the hero to enter the open volume (or for its trigger moby, class 0x4B9/0x596 in state 4, or its saved lock flag), state 2 slides it back along its rotation by d->duration/0.6 per second with a sound, state 3/4 hold and close it again once nobody is in the close volume, and state 5 stays open and records the save bit. */
 void func_L15_0029C1D0(struct Moby *m)
 {
     MovingVars_ZZ *d = (MovingVars_ZZ *)m->pvars;
@@ -490,6 +491,7 @@ extern void *func_L00_0026CD70(void *, void *, int, int, float, int, int);
 
 extern void func_L00_002584A8_A8AA8(void *, int, long) __asm__("func_L00_002584A8");
 extern void func_L00_0025F4A8_A8AA8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("func_L00_0025F4A8");
+/* Hit-reaction effect for a destructible moby: finds the entry in the 64-slot hit table that targets it, then spawns bursts of coloured particles and debris (a palette of four colours, extra white sparks when the class is 0x94) around the hit point, and calls func_L00_0025F4A8 to emit the debris. */
 void func_L15_002A8AA8(struct Moby *moby)
 {
     char *slot = 0;
@@ -666,6 +668,7 @@ extern void func_L00_002584A8(void *, int, int);
 extern void func_0020D678(void *);
 extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, unsigned char);
 
+/* Hit-reaction effect, a variant of func_L15_002A8AA8 with its own palette: finds the hit-table entry targeting the moby and spawns particle sparks, puffs and debris around the hit point (or above the moby if there is no point). */
 void func_L15_002AB4A8(struct Moby *moby) {
     char *hit = 0;
     Vec4 velocity, hit_direction, push, offset, center;
@@ -991,6 +994,7 @@ extern float func_L00_001FF860(float, float);
 extern float func_001FA790(float, float);
 extern float func_L00_00259148(float *vel, float cur, float target, float k, float d, float max);
 extern void func_L15_00248E58(float, float, struct Moby *, void *, int);
+/* Steers a flying moby toward goal while facing look: accelerates up to a speed cap and brakes within the stopping distance (v^2 / 2a), smooths its movement with a damped delta vector, then eases yaw towards the look target and pitch/roll from the movement direction using func_L00_00259148. */
 void func_L15_002C62A8(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) {
     SteeringVec_4f88 target;
     SteeringVec_4f88 look_copy;
@@ -2003,6 +2007,7 @@ extern char *func_0020D348(int);
 extern void func_001F9BC0(void *);
 extern void func_L00_00251E30(void *, void *);
 
+/* Creates a class 0x4E9 moby at vector in state 0 with its data block cleared, taking its +0x94 field from the class record, and returns it (or 0 if no moby is free). */
 char *func_L15_002E92C8(void *unused, void *vector) {
     char *moby = CreateMoby(0x4E9);
     if (moby != 0) {
@@ -2563,6 +2568,7 @@ void func_L15_002ED318(int idx, int show) {
     }
 }
 extern int D_L15_00160058 MACRO_ADDR;
+/* Counts the mobys in group idx that are dead or missing (state 0xFE or 0xFD). Returns 0 for an empty group. */
 int func_L15_002ED3A0(int idx) {
     unsigned short *p = (unsigned short *)D_L15_001AC140[idx];
     int n = 0;

@@ -674,6 +674,7 @@ void func_L08_002E16A0(Moby *m) {
 }
 extern void func_L08_00231228(int, int);
 
+/* Sets byte +0xBC of the moby to 1 and calls func_L08_00231228(0x32, 1). */
 void func_L08_002E2A10(char *arg) {
     arg[0xBC] = 1;
     func_L08_00231228(0x32, 1);

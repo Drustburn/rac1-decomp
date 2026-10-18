@@ -12,6 +12,7 @@ extern void func_001E9768();
 extern void func_L00_002E6CE0(void *);
 extern void func_L00_002EB060(void *);
 extern void func_L00_002E72E8(void *);
+/* Per-frame update for the camera moby: loads the current camera parameter float from a table indexed by D_0015EED0[5], then runs the camera sub-updates in order. */
 void func_L00_002EB0D8(char *m) {
     char *p = *(char **)(m + 0x70) + 0x1D0;
     *(float *)&D_L00_0015F044 = ((float *)&D_L00_00161E80)[D_0015EED0[5]];
@@ -362,6 +363,7 @@ void func_L00_002EBE88(char *src) {
         p = g;
     qcopy(*(char **)(p + 0x70) + 0x80, src);
 }
+/* Copies the vector at src into offset 0x90 of the camera record's state block (using the global camera record if its descriptor is 5, else looking up camera 5). */
 void func_L00_002EBEE0(char *src) {
     char *g = D_L00_00166F00;
     char *p;
@@ -454,6 +456,7 @@ void func_L00_002EC0C8(int mode) {
 LINKER_REMNANT("asm/overlays", func_L00_002EC208);
 extern void func_001F9BC0(void *);
 
+/* Camera-state init: sets mode 4, fills the two parameter blocks with default values (0.05/0.3/1.0 and 0.3/0.3/1.0), and builds the moby's matrix from its rotation. */
 void func_L00_002EC210(char *m) {
     float v[16];
     char *q;
@@ -555,6 +558,7 @@ void func_L00_002EC2D0(void *arg) {
 }
 extern void func_L00_002EC2D0(void *);
 extern void func_L00_001EDA28(void *, float);
+/* Update wrapper: runs the base camera update, then if the flag at +0x120 is set clears the moby's byte 0x89 and calls func_L00_001EDA28 on its position with 0.5. */
 void func_L00_002EC6C8(char *a) {
     char *p = *(char **)(a + 0x70) + 0xE0;
     func_L00_002EC2D0(a);
@@ -564,6 +568,7 @@ void func_L00_002EC6C8(char *a) {
     }
 }
 extern float func_001FA748(float, float);
+/* Orients the moby from its position and the stored target: adds the stored yaw offset, derives pitch/yaw angles with FastAddRots and rebuilds the matrix with euler_to_matrix and matrix_copy_rows. */
 void func_L00_002EC728(void *arg) {
     char *a = arg;
     float m[16];
@@ -582,6 +587,7 @@ extern void func_L00_001EB448(void *, void *, float);
 extern void func_L00_001EB430(void *);
 extern void func_L00_001FF200(void *);
 extern void func_L00_002EC728(void *);
+/* Sets up a camera moby: copies the vector c into its state block (positions at +0xB0 and +0x80), stores f at +0xC8, seeds the two func_L00_001EB448 smoothers from b, then runs func_L00_002EC728. */
 void func_L00_002EC7D0(char *a, void *b, void *c, float f) {
     char *p = *(char **)(a + 0x70);
     char *q = p + 0xB0;
@@ -775,6 +781,7 @@ void func_L00_002ECEC8(char *m) {
     m[0x7D] = 0;
 }
 extern char D_0013F450[];
+/* Camera setup from the global block at D_0013F450+0x80: copies its two vectors (raising the first Z by 2.0), seeds the position smoothers, and runs func_L00_002EC860. */
 void func_L00_002ECFB0(void *arg) {
     char *a = arg;
     char *g = D_0013F450 + 0x80;
@@ -946,6 +953,7 @@ done:
     *(int *)(*(char **)(m + 0x70) + 0x80) = 0;
 }
 extern char D_0013F450[];
+/* Update check: if the global value at +0x2284 no longer matches the moby's halfword 0x86 (and the +0x2084 value is not 6), clears byte 0x7D and sets state 3 in halfword 0x7E. */
 void func_L00_002EDC60(char *a) {
     char *g = D_0013F450;
     if (*(int *)(g + 0x2284) != *(short *)(a + 0x86) && *(int *)(g + 0x2084) != 6) {
@@ -1074,6 +1082,7 @@ extern void func_L00_002E99F0(f32);
 extern void func_L00_002E9A18(int);
 extern void func_L00_002E9A40(f32, f32);
 
+/* Camera-swing script update: tracks a camera descriptor's params (timer, done flag, type 1-11), and blends the follow-camera's yaw/pitch swing, distance, height, offset and lateral stiffness/damping toward the targets over ~200 ticks. Stops (marks params done and resets the timer) when the trigger is left, the yaw check fails, or L-buttons end it. */
 void func_L00_002EDE38(char *arg) {
     struct UpdateCam *cam = (struct UpdateCam *)arg;
     CameraVec dir;
@@ -1373,6 +1382,7 @@ typedef struct {
 #define FOLLOW_CAM_STATE_ee(cam) ((FollowCamState_ee *)(cam)->saved_state)
 typedef struct { unsigned char pad0[0x80]; struct { float pos[4]; } motion; unsigned char pad90[0x200]; float gravity_dir[4]; } HeroLike_ee;
 
+/* Aim-camera update: while the aim descriptor is active, takes its position (and the hero's motion/gravity vectors) and drives the follow-camera rig toward it; clears the params timer and calls func_L00_002E9838 when the trigger ends or buttons 1/4 are held. */
 void func_L00_002EE948(void *cam_) {
     struct UpdateCam_ee *cam = cam_;
     CameraVec_ee pos;
@@ -1489,6 +1499,7 @@ extern char *D_L00_0015F050 MACRO_ADDR;
 extern int D_L00_0015F6A8 MACRO_ADDR;
 extern int func_L00_002EE7F8(void *);
 extern void func_L00_002EE948(void *);
+/* Aim-camera moby update: does nothing once the params' flag at +0x26 is set; otherwise, if D_L00_0015F6A8 is set and func_L00_002EE7F8 reports the trigger gone, clears the params timer fields, else runs func_L00_002EE948. Always returns 0. */
 int func_L00_002EED60(char *a) {
     char *p = *(char **)(D_L00_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
     if (*(short *)(p + 0x26) != 0) return 0;
