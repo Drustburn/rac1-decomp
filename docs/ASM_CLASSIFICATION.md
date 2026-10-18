@@ -76,3 +76,9 @@ in the wrong place: of the eight 4-byte level entries that fail, three
 follow code that has not returned, one is the delay slot of the return
 before it, two are already joined pieces, and two are off the 8-byte
 boundary. A trap block that its function branches to fails the last test.
+
+On 2026-10-19, 23 more were listed: the remaining fastfunc.o scalar helpers
+(`$at` scratch, `max.s`/`min.s`/`mul.s` in `jr` delay slots, hand-placed nops,
+`adda.s` 0.25+0.25 rounding), func_0020C210/func_0020C230 in miscproc (`$at`
+address, mid-function jump), func_0023C910 (labelled hand-written: `ei` and a
+mid-function `.align`) and memcmp func_001151B4 (MMI `pxor`/`pcpyud`).

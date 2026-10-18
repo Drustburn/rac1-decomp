@@ -522,7 +522,7 @@ int func_00115098(void *r, int *pwc, const char *s, unsigned int n, int *state) 
 
 ASM_FUNC("asm/handwritten/core_text", func_001150D4);
 
-INCLUDE_ASM("asm/nonmatchings/core_text", func_001151B4);
+ASM_FUNC("asm/handwritten/core_text", func_001151B4);
 
 INCLUDE_ASM("asm/nonmatchings/core_text", func_00115248);
 
