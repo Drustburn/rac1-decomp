@@ -398,7 +398,9 @@ void func_0022F4A0(int arg0) {
     D_0015F6FC_m = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_0022F4C0);
+LINKER_REMNANT("asm/remnants/text", func_0022F4C0);
+
+INCLUDE_ASM("asm/nonmatchings/text", func_0022F4C8);
 
 INCLUDE_ASM("asm/nonmatchings/text", func_0022F738);
 

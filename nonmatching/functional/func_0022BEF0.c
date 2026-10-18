@@ -9,7 +9,7 @@ extern void func_001FA238_2BEB0(void *, void *) __asm__("func_001FA238");
 extern void func_001F9C48_2BEB0(void *, void *, f32) __asm__("func_001F9C48");
 extern void func_0022C9A8_2BEB0(s32) __asm__("func_0022C9A8");
 
-void func_0022BEB0(void) {
+void func_0022BEF0(void) {
     f32 rot[4];
     f32 scale;
     f32 *p;

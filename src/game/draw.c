@@ -89,7 +89,9 @@ int func_001F0FF8(int x, int y, int color, char *str) {
 
 __asm__(".section .text\n\tnop\n");
 
-INCLUDE_ASM("asm/nonmatchings/text", func_001F1088);
+LINKER_REMNANT("asm/remnants/text", func_001F1088);
+
+INCLUDE_ASM("asm/nonmatchings/text", func_001F10A0);
 
 LINKER_REMNANT("asm/remnants/text", func_001F2410);
 

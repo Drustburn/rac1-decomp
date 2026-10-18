@@ -18,7 +18,7 @@ extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F7EF8(void *, int, int);
 
-void func_0022F4C0(char *a0) {
+void func_0022F4C8(char *a0) {
     char sp[0xB0];
     char *t30;
     float *src;

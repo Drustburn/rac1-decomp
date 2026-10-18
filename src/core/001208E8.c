@@ -263,7 +263,20 @@ void func_00120BC0(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/core_text", func_00120C58);
+LINKER_REMNANT("asm/remnants/core_text", func_00120C58);
+
+/* Interrupt handler registered by func_00120CA0. If a handler is set
+   (D_00159844) and the flag D_001313E4 is clear, calls it with D_00159848
+   as its argument. The linker remnant in front of it was split off. */
+extern int D_00159844;
+extern int D_00159848;
+extern int D_001313E4;
+
+void func_00120C60(void) {
+    if (D_00159844 != 0 && D_001313E4 == 0) {
+        ((void (*)(int))D_00159844)(D_00159848);
+    }
+}
 
 extern int D_001313E4;
 extern int D_001313FC;

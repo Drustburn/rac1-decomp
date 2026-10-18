@@ -244,7 +244,9 @@ extern int D_001D6860[];
 extern int D_001D74C0[];
 extern int D_001D6760[];
 
-INCLUDE_ASM("asm/nonmatchings/text", func_0022BEB0);
+LINKER_REMNANT("asm/remnants/text", func_0022BEB0);
+
+INCLUDE_ASM("asm/nonmatchings/text", func_0022BEF0);
 
 struct LevelSkyEffectData {
     u8 pad_0[4];
