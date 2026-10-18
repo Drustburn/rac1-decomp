@@ -1,21 +1,21 @@
 {
  "measures": {
-  "fuzzy_match_percent": 93.02554035636985,
+  "fuzzy_match_percent": 93.0433168317365,
   "total_code": "3712772",
-  "matched_code": "3428540",
-  "matched_code_percent": 92.34448008119001,
+  "matched_code": "3429200",
+  "matched_code_percent": 92.36225655655666,
   "total_functions": 5118,
-  "matched_functions": 4738,
-  "matched_functions_percent": 92.57522469714732,
-  "complete_code": "758280",
-  "complete_code_percent": 20.423554153069457,
+  "matched_functions": 4739,
+  "matched_functions_percent": 92.59476357952325,
+  "complete_code": "762352",
+  "complete_code_percent": 20.53322961927099,
   "total_units": 141,
-  "complete_units": 95,
+  "complete_units": 96,
   "total_data": "699072",
-  "matched_data": "3064",
-  "matched_data_percent": 0.43829534010802895,
-  "complete_data": "2452",
-  "complete_data_percent": 0.3507507095120388
+  "matched_data": "3084",
+  "matched_data_percent": 0.44115627574842076,
+  "complete_data": "2496",
+  "complete_data_percent": 0.35704476792090084
  },
  "units": [
   {
@@ -15869,17 +15869,17 @@
   {
    "name": "game/skyfunc",
    "measures": {
-    "fuzzy_match_percent": 83.7917485265226,
+    "fuzzy_match_percent": 100.0,
     "total_code": "4072",
-    "matched_code": "3412",
-    "matched_code_percent": 83.7917485265226,
+    "matched_code": "4072",
+    "matched_code_percent": 100.0,
     "total_functions": 10,
-    "matched_functions": 9,
-    "matched_functions_percent": 90.0,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 10,
+    "matched_functions_percent": 100.0,
+    "complete_code": "4072",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -15894,7 +15894,7 @@
     {
      "name": "func_0022BEF0",
      "size": "660",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "64",
      "metadata": {
       "virtual_address": "2277104"
@@ -15974,7 +15974,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/game/skyfunc.c",
     "progress_categories": [
      "executable",
@@ -49772,20 +49772,20 @@
    "id": "executable",
    "name": "Executable",
    "measures": {
-    "fuzzy_match_percent": 86.75010307861463,
+    "fuzzy_match_percent": 86.89183617372183,
     "total_code": "465664",
-    "matched_code": "403880",
-    "matched_code_percent": 86.73206432105553,
+    "matched_code": "404540",
+    "matched_code_percent": 86.87379741616273,
     "total_functions": 1689,
-    "matched_functions": 1557,
-    "matched_functions_percent": 92.1847246891652,
-    "complete_code": "210164",
-    "complete_code_percent": 45.132112424409016,
+    "matched_functions": 1558,
+    "matched_functions_percent": 92.24393132030788,
+    "complete_code": "214236",
+    "complete_code_percent": 46.00656267179769,
     "total_data": "699072",
-    "matched_data": "3064",
-    "matched_data_percent": 0.43829534010802895,
-    "complete_data": "2452",
-    "complete_data_percent": 0.3507507095120388
+    "matched_data": "3084",
+    "matched_data_percent": 0.44115627574842076,
+    "complete_data": "2496",
+    "complete_data_percent": 0.35704476792090084
    }
   },
   {
@@ -49807,15 +49807,15 @@
    "id": "game",
    "name": "Executable game code",
    "measures": {
-    "fuzzy_match_percent": 86.44944787539642,
+    "fuzzy_match_percent": 86.59439705533545,
     "total_code": "455332",
-    "matched_code": "393548",
-    "matched_code_percent": 86.43099979794962,
+    "matched_code": "394208",
+    "matched_code_percent": 86.57594897788866,
     "total_functions": 1655,
-    "matched_functions": 1523,
-    "matched_functions_percent": 92.02416918429003,
-    "complete_code": "199832",
-    "complete_code_percent": 43.88709776602567
+    "matched_functions": 1524,
+    "matched_functions_percent": 92.08459214501511,
+    "complete_code": "203904",
+    "complete_code_percent": 44.781390282255586
    }
   },
   {
