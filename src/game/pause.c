@@ -1297,7 +1297,270 @@ int func_0021B288(void *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_0021B298);
+extern char D_00160370[];
+extern char D_00160378[];
+extern char D_00160380[];
+extern char D_00160388[];
+extern int D_0013CBE0[];
+extern short D_001602B4;
+extern short D_001602B8;
+extern short D_001602BC;
+extern short D_00160358;
+extern short D_00160368;
+extern int D_0015EE80 MACRO_ADDR;
+extern char *D_001D5F74 NOT_SDA;
+extern void func_00234C98(int, int);
+extern int func_001F98C0(int);
+extern void func_001FF4F8(int, int, void *);
+extern int func_00116248(char *, const char *, ...);
+extern void func_001153FC(void *, int, int);
+extern int func_001FA8A8(int, int, float);
+extern int func_0021C6C0(int, int, int);
+#define TEXT(id) ((char *(*)(int))func_001FE540)(id)
+#define DRAW(c, t) ((void (*)(void *, long, char *, long, int, unsigned char *))func_001F7070)(&win, c, t, -1, tex, glyphs)
+#define ST (*(char **)(D_001D5F74 + 0x40))
+typedef struct { short s[12]; } Win;
+
+static inline void win_shift(Win *p) {
+    int x = (unsigned short)D_001602BC;
+    int y = (unsigned short)D_001602B8;
+    p->s[0] += x;
+    p->s[1] += x;
+    p->s[2] += y;
+    p->s[3] += y;
+    p->s[4] += y;
+    p->s[5] += x;
+}
+
+static inline void win_unshift(Win *p) {
+    int x = (unsigned short)D_001602BC;
+    int y = (unsigned short)D_001602B8;
+    p->s[0] -= x;
+    p->s[1] -= x;
+    p->s[2] -= y;
+    p->s[3] -= y;
+    p->s[4] -= y;
+    p->s[5] -= x;
+}
+
+int func_0021B298(unsigned char *w) {
+    extern void func_001F65A8(void);
+    extern void func_001F6598(void);
+    char buf[0x40];
+    int id;
+    Win win;
+    Win tmp;
+    char *text = D_00160370;
+    unsigned char *glyphs = D_001DF3D0;
+    int font = 1;
+    int f0, flags, g, f, content, variant = 0, a21, a23, colour, t, wflags, tex;
+
+    f0 = *(int *)(w + 0x30);
+    if (f0 & 8) {
+        font = 3;
+        glyphs = D_001DFB10;
+    }
+    if (f0 & 0x10) {
+        font = 2;
+        glyphs = D_001DF770;
+    }
+    func_00234C98(0x42, 0x44);
+    ((void (*)(int, long))func_00234C98)(0x47, 0x2004B);
+
+    flags = *(int *)(w + 0x30);
+    if (flags & 0x20) {
+        content = D_0015EE84 - 1;
+        if ((unsigned int)content >= 0x12) {
+            content = -1;
+        }
+    } else if (flags & 0x40) {
+        content = D_001A0414 - 1;
+    } else if (flags & 4) {
+        t = func_001F98C0(*(int *)&D_001602B4);
+        if (*(int *)(w + 0x44) < t) {
+            *(int *)(w + 0x44) = func_001F98C0(*(int *)&D_001602B4);
+        }
+        content = 0;
+        *(int *)(w + 0x48) = 0;
+        *(int *)(w + 0x4C) = 0;
+    } else if (flags & 0x80) {
+        content = *(int *)(ST + 0x40);
+        if (flags & 0x8000) {
+            variant = D_0015EE80 != 0;
+        }
+    } else if (flags & 0x100) {
+        char *cell;
+        unsigned char *tbl;
+        content = *(int *)(ST + 0x3C);
+        cell = *(char **)(ST + 0x48) + content * 10;
+        if (*(short *)(cell + 4) == 0) {
+            tbl = (unsigned char *)&D_0013D5C8;
+            id = tbl[*(short *)(cell + 6)];
+        } else {
+            tbl = D_0013D490;
+            id = tbl[*(short *)(cell + 6)];
+        }
+        if (id == 0) {
+            content = -1;
+            t = 0;
+        }
+    } else if (flags & 0x1000) {
+        char *st = ST;
+        content = *(int *)(st + 0x40);
+        id = *(short *)(*(char **)(st + 0x34) + content * 12);
+        *(int *)(w + 0x34) = 0xFFFF;
+        func_001FF4F8(id, 1, w + 0x34);
+    } else {
+        char *cell;
+        int k;
+        cell = (char *)(*(int *)(ST + 0x3C) * 10 + *(int *)(ST + 0x48));
+        k = *(short *)(cell + 6);
+        variant = D_0013E620[k] != 0;
+        content = k;
+    }
+
+    if (*(int *)(w + 0x44) == -1) {
+        *(int *)(w + 0x44) = func_001F98C0(*(int *)&D_001602B4);
+        *(int *)(w + 0x48) = content;
+        *(int *)(w + 0x4C) = variant;
+    }
+    if (content != *(int *)(w + 0x48)) {
+        t = func_001F98C0(*(int *)&D_001602B4);
+        if (t < *(int *)(w + 0x44)) {
+            *(int *)(w + 0x44) = func_001F98C0(*(int *)&D_001602B4);
+        }
+        t = *(int *)(w + 0x44);
+        t = t < 1 ? 0 : t - 1;
+        t = t < 1 ? 0 : t - 1;
+        t = t < 1 ? 0 : t - 1;
+        *(int *)(w + 0x44) = t;
+        if (t != 0) {
+            content = *(int *)(w + 0x48);
+            variant = *(int *)(w + 0x4C);
+        } else {
+            *(int *)(w + 0x48) = content;
+            *(int *)(w + 0x4C) = variant;
+            *(int *)(w + 0x30) &= ~0x400;
+            *(int *)(w + 0x3C) = 0;
+        }
+    } else {
+        *(int *)(w + 0x44) += 3;
+    }
+
+    g = *(int *)(w + 0x30);
+    if (g & 4) {
+        if (*(int *)(w + 0x34) == 0) {
+            return 1;
+        }
+        text = TEXT(*(int *)(w + 0x34));
+    } else if (g & 0x1000) {
+        if (*(int *)(w + 0x34) == 0xFFFF) {
+            return 1;
+        }
+        text = TEXT(*(int *)(w + 0x34));
+    } else if ((g & 0x100) && content == -1) {
+        text = D_00160378;
+    } else if (*(int *)(w + 0x34) != 0) {
+        unsigned int at = (unsigned int)(content * *(int *)(w + 0x38)) >> 2 << 2;
+        char *table = *(char **)(w + 0x34);
+        text = TEXT(*(int *)(at + (unsigned int)(table + variant * 4)));
+    }
+    if ((*(int *)(w + 0x30) & 0x11E4) == 0 && ((unsigned char *)&D_0013D5C8)[content] == 0) {
+        text = D_00160378;
+    }
+    if (*(int *)(w + 0x30) & 0x200) {
+        unsigned int at = (unsigned int)(content * *(int *)(w + 0x38)) >> 2 << 2;
+        char *table = *(char **)(w + 0x34);
+        int id = *(int *)(at + (unsigned int)table);
+        if (id != 0x4ED2 && id != 0x4ED9 && id != 0x4EDD) {
+            func_00116248(buf, D_00160380, TEXT(0x4ECC), text);
+            text = buf;
+        }
+    }
+    f = *(int *)(w + 0x30);
+    a23 = 4;
+    a21 = 4;
+    if ((f & 0x4004) == 0x4004 && *(int *)(w + 0x34) == 0x5243) {
+        f |= 1;
+        a21 = 0xC;
+    }
+    if ((*(int *)(w + 0x30) & 0x800) && D_0013D510[content] == 0) {
+        text = TEXT(0x4F54);
+        f |= 3;
+    }
+    if (text == 0) {
+        text = D_00160388;
+    }
+    wflags = 8;
+    if (f & 1) {
+        wflags = 9;
+        a23 = *(int *)(w + 0x20) / 2;
+    }
+    if (f & 2) {
+        wflags |= 2;
+        a21 = *(int *)(w + 0x24) / 2;
+    }
+
+    func_001F4630(0);
+    tex = func_001F4868(font);
+    ((void *(*)(void *, int, int))func_001153FC)(&tmp, 0, 0x18);
+    tmp.s[0] = D_00160358;
+    tmp.s[1] = *(unsigned short *)(w + 0x24) - D_00160358;
+    tmp.s[2] = 1;
+    tmp.s[3] = *(unsigned short *)(w + 0x20) - 4;
+    tmp.s[4] = a23;
+    tmp.s[5] = a21 - (*(int *)(w + 0x3C) >> 4);
+    tmp.s[8] = *(int *)&D_00160368;
+    tmp.s[9] = wflags;
+    tmp.s[11] = -(*(unsigned short *)(w + 0x3C) & 0xF);
+    win = tmp;
+    if (*(int *)(w + 0x30) & 0x10000) {
+        win.s[1] = *(unsigned short *)(w + 0x24) - 1;
+    }
+    colour = func_0021C6C0(*(int *)(w + 0x44), func_001FA8A8(*(int *)&D_001602B0, 0x80FFA888, 0.5f), 0x80FFA888);
+    win.s[9] |= 4;
+    DRAW(colour, text);
+    win.s[9] ^= 4;
+    if (!(*(int *)(w + 0x30) & 0x2000) && !(win.s[7] + 4 < win.s[1] - win.s[0])) {
+        if (!(*(int *)(w + 0x30) & 0x400)) {
+            *(int *)(w + 0x30) |= 0x400;
+            *(int *)(w + 0x3C) = -(*(int *)(w + 0x24) << 3);
+        }
+    } else if (*(int *)(w + 0x30) & 0x400) {
+        *(int *)(w + 0x3C) = 0;
+        *(int *)(w + 0x30) ^= 0x400;
+    }
+
+    win.s[5] = a21 - (*(int *)(w + 0x3C) >> 4);
+    win_shift(&win);
+    func_001F65A8();
+    DRAW(0x80000000L, text);
+    func_001F6598();
+    win_unshift(&win);
+    if (*(int *)(w + 0x30) & 0x20000) {
+        func_001F65A8();
+    }
+    DRAW(colour, text);
+    if (*(int *)(w + 0x30) & 0x20000) {
+        func_001F6598();
+    }
+    if (*(int *)(w + 0x30) & 0x400) {
+        win.s[5] = win.s[5] + (win.s[7] + *(int *)&D_00160368 * 3);
+        win_shift(&win);
+        func_001F65A8();
+        DRAW(0x80000000L, text);
+        func_001F6598();
+        win_unshift(&win);
+        DRAW(colour, text);
+        if (*(int *)(w + 0x30) & 0x400) {
+            int span = (win.s[7] + *(int *)&D_00160368 * 3) << 4;
+            *(int *)(w + 0x3C) += (D_0013CBE0[0] & 1) ? 10 : 3;
+            *(int *)(w + 0x3C) %= span;
+        }
+    }
+    func_001F4748();
+    return 2;
+}
 
 
 struct MenuTextItem_1BB90 {
