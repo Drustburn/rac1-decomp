@@ -1669,7 +1669,6 @@ void func_L00_00208650(void *vec, int a, float f0, float f1) {
     d->n++;
 }
 typedef int u128_2086C8 __attribute__((mode(TI)));
-typedef union { u128_2086C8 q; float f[4]; } Vec4_2086C8 __attribute__((aligned(16)));
 extern void func_L00_00250800_2086C8(void *, int, void *) __asm__("func_L00_00250800");
 extern void func_L00_00208650_2086C8(void *vec, int a, float f0, float f1) __asm__("func_L00_00208650");
 extern float func_001FA748_2086C8(float, float) __asm__("func_001FA748");
@@ -1688,7 +1687,7 @@ extern char D_0013F450_2086C8[] __asm__("D_0013F450");
 // Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
 // queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
 void func_L00_002086C8(void) {
-    Vec4_2086C8 v;
+    Vec4 v;
     Moby *m;
     int i;
     int c, g;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "vector.h"
 #include "callees.h"
 #include "records.h"
 #include "structs.h"
@@ -2063,12 +2064,6 @@ union PacketCursor {
     s32 addr;
 };
 extern union PacketCursor D_00161000_F5E60 __asm__("D_00161000") MACRO_ADDR;
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4f;
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9C30(void *, void *, f32);

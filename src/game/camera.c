@@ -1,4 +1,5 @@
 #include "common.h"
+#include "vector.h"
 #include "callees.h"
 #include "records.h"
 #include "structs.h"
@@ -143,12 +144,6 @@ typedef struct {
     f32 y;
     f32 z;
 } Vec3;
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4f;
 struct UpdateCam {
     u128 m0;
     u128 m1;
@@ -962,11 +957,6 @@ void func_001ED708(char *arg0, int arg1) {
 }
 __asm__(".section .text\n\tnop\n");
 
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4;
 struct MobyClass;
 struct Manip;
 struct Moby {

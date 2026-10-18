@@ -923,13 +923,10 @@ unsigned char func_001EB338(void) {
     return flag;
 }
 
-typedef struct {
-    f32 x, y, z, w;
-} Vec4_EB458 __attribute__((aligned(16)));
 
 typedef struct {
     u8 pad0[0x10];
-    Vec4_EB458 position;
+    Vec4A position;
     u8 pad20[0x30];
     u8 current_frame;
     u8 next_frame;
@@ -945,7 +942,7 @@ typedef struct {
 
 typedef struct {
     u8 pad0[0x78];
-    Vec4_EB458 *animation_positions;
+    Vec4A *animation_positions;
 } RenderSequenceSidecar_EB458;
 
 typedef struct {
@@ -972,8 +969,8 @@ extern void func_001E97A8_EB458(void) __asm__("func_001E97A8");
 extern void func_001E97B0_EB458(void) __asm__("func_001E97B0");
 extern void func_001EB338_EB458(void) __asm__("func_001EB338");
 extern s32 func_001F98C0_EB458(s32) __asm__("func_001F98C0");
-extern void func_001F9BD8_EB458(Vec4_EB458 *, Vec4_EB458 *, Vec4_EB458 *) __asm__("func_001F9BD8");
-extern void func_001F9C30_EB458(Vec4_EB458 *, Vec4_EB458 *, f32) __asm__("func_001F9C30");
+extern void func_001F9BD8_EB458(Vec4A *, Vec4A *, Vec4A *) __asm__("func_001F9BD8");
+extern void func_001F9C30_EB458(Vec4A *, Vec4A *, f32) __asm__("func_001F9C30");
 extern f32 func_001F9F90_EB458(f32) __asm__("func_001F9F90");
 extern f32 func_001FA888_EB458(s32) __asm__("func_001FA888");
 extern void func_001FD3E8_EB458(void) __asm__("func_001FD3E8");
@@ -988,10 +985,10 @@ extern void func_0022DD68_EB458(void) __asm__("func_0022DD68");
    then the intro overlay fades and the mode's own update (pause menu, freeze) and sound.
    Adapted from Lombyte (MIT) for PAL: src/textbin/fun_001eb0a8.c, update_gameplay_frame. */
 void func_001EB458(void) {
-    Vec4_EB458 first_position;
-    Vec4_EB458 next_position;
+    Vec4A first_position;
+    Vec4A next_position;
     RenderSequenceActor_EB458 *actor;
-    Vec4_EB458 *animation_positions;
+    Vec4A *animation_positions;
     s32 actor_index;
     f32 fade;
 
