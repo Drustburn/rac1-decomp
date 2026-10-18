@@ -1,4 +1,5 @@
 #include "common.h"
+#include "hero.h"
 #include "callees.h"
 #include "records.h"
 #include "structs.h"
@@ -451,12 +452,8 @@ struct MapState_0CDE0 {
     s32 pan_x[20];               /* 0x104 */
     s32 pan_y[20];               /* 0x154 */
 };
-struct HeroPos_0CDE0 {
-    u8 pad0[0x80];
-    f32 pos[4];                  /* 0x80: world position */
-};
 extern struct MapState_0CDE0 D_001A01F0_0CDE0 __asm__("D_001A01F0");
-extern struct HeroPos_0CDE0 D_0013F450_0CDE0 __asm__("D_0013F450");
+extern struct Hero D_0013F450_0CDE0 __asm__("D_0013F450");
 extern s32 D_0015EE84_0CDE0 __asm__("D_0015EE84") MACRO_ADDR;
 extern u8 D_0013DE60_0CDE0[] __asm__("D_0013DE60");
 extern struct MapIcon_0CDE0 *D_001A2F40_0CDE0[] __asm__("D_001A2F40");
@@ -493,9 +490,9 @@ void func_0020CDE0(s32 level, s32 flag) {
         D_001A01F0_0CDE0.icons = 0;
     }
 
-    if (D_0013F450_0CDE0.pos[2] != 0.0f && level == D_0015EE84_0CDE0 && flag) {
-        func_00208C38_0CDE0(&map_x, &map_y, D_0015FE20_0CDE0 ? level + 100 : level, D_0013F450_0CDE0.pos[0],
-                            D_0013F450_0CDE0.pos[1]);
+    if (D_0013F450_0CDE0.motion.pos.f[2] != 0.0f && level == D_0015EE84_0CDE0 && flag) {
+        func_00208C38_0CDE0(&map_x, &map_y, D_0015FE20_0CDE0 ? level + 100 : level, D_0013F450_0CDE0.motion.pos.f[0],
+                            D_0013F450_0CDE0.motion.pos.f[1]);
         D_001A01F0_0CDE0.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
         D_001A01F0_0CDE0.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
     } else {

@@ -304,11 +304,7 @@ struct CannonData52_2E16A0 {
     Moby *guns[2]; float range; int platform_index, lock_timer;
     Moby *visual; float visual_angle;
 };
-typedef struct Hero52_2E16A0 {
-    char pad0[0x80]; float pos[4], rot[4]; char padA0[0x156F]; unsigned char interact;
-    char pad1610[0x710]; float input[2]; char pad1D28[0x358]; Moby *moby;
-} Hero52_2E16A0;
-extern Hero52_2E16A0 hero52 __asm__("D_0013F450");
+extern Hero hero52 __asm__("D_0013F450");
 extern char D_0013E633_2E16A0[] __asm__("D_0013E633");
 extern char D_0013A5E0_2E16A0[] __asm__("D_0013A5E0");
 extern unsigned char visited52[][16] __asm__("D_0014C150");
@@ -385,13 +381,13 @@ void func_L08_002E16A0(Moby *m) {
     qcopy(position, (*(float (*)[4])&m->pos));
     position[2] += 0.4f;
     if (tick52(&d->exit_timer) && m->command == 1) {
-        qcopy(hero52.pos, position);
-        qcopy(hero52.rot, (*(float (*)[4])&m->rot));
-        offset[0] = func_001F9F90_2E16A0(hero52.rot[2]) * -0.7f;
-        offset[1] = func_001F9FA8_2E16A0(hero52.rot[2]) * -0.7f;
+        qcopy(hero52.motion.pos.f, position);
+        qcopy(hero52.motion.rot.f, (*(float (*)[4])&m->rot));
+        offset[0] = func_001F9F90_2E16A0(hero52.motion.rot.f[2]) * -0.7f;
+        offset[1] = func_001F9FA8_2E16A0(hero52.motion.rot.f[2]) * -0.7f;
         offset[2] = 0.0f;
-        func_001F9BD8_2E16A0(hero52.pos, hero52.pos, offset);
-        func_001F99D8_2E16A0((char *)hero52.pos + 0x60, 0x90);
+        func_001F9BD8_2E16A0(hero52.motion.pos.f, hero52.motion.pos.f, offset);
+        func_001F99D8_2E16A0((char *)hero52.motion.pos.f + 0x60, 0x90);
         if (d->health == 0) {
             Moby *node;
             (*(float (*)[4])&m->rot)[1] = 0.0f; m->command = 2;
@@ -405,9 +401,9 @@ void func_L08_002E16A0(Moby *m) {
             func_L08_00307FF0_2E16A0((char *)node, 0);
             return;
         }
-        if (visited52[D_0015EE84_2E16A0][m->mission] != 0xFF && (hero52.interact & 1)) func_L00_00211908_2E16A0();
+        if (visited52[D_0015EE84_2E16A0][m->mission] != 0xFF && (hero52.ship_flags & 1)) func_L00_00211908_2E16A0();
         if (((*(int *)(D_0013A5E0_2E16A0 + 0x2604) & 0x10) || (*(unsigned char *)(D_0013E633_2E16A0 + 0x242C) & 1)) && visited52[D_0015EE84_2E16A0][m->mission] == 0xFF) {
-            hero52.interact = 0;
+            hero52.ship_flags = 0;
             hero_state52(0, 1);
             m->command = 2; (*(float (*)[4])&m->rot)[1] = 0.0f;
             func_001FA1F8_2E16A0((*(float (*)[16])&m->rot_row0), (*(float (*)[4])&m->rot));
@@ -416,7 +412,7 @@ void func_L08_002E16A0(Moby *m) {
             func_001F9BD8_2E16A0(work, work, (*(float (*)[4])&m->pos));
             func_L00_00217718_2E16A0(work, direction, 0, 1);
             func_L00_002EC0C8_2E16A0(0);
-            hero52.rot[2] = func_001FA748_2E16A0(hero52.rot[2], 3.1415927f);
+            hero52.motion.rot.f[2] = func_001FA748_2E16A0(hero52.motion.rot.f[2], 3.1415927f);
             m->state = 4;
         } else {
             int *indices; int count;
@@ -441,7 +437,7 @@ void func_L08_002E16A0(Moby *m) {
             d->exit_timer = func_001F9850_2E16A0(60);
         }
     } else if (visited52[D_0015EE84_2E16A0][m->mission] == 0xFF) {
-        if (func_001F9D48_2E16A0(position, (*(float (*)[4])&hero52.moby->pos)) < 1.0f && hero52.pos[2] - (*(float (*)[4])&m->pos)[2] < 7.0f && d->exit_timer == 0 && d->health > 0) {
+        if (func_001F9D48_2E16A0(position, (*(float (*)[4])&hero52.moby->pos)) < 1.0f && hero52.motion.pos.f[2] - (*(float (*)[4])&m->pos)[2] < 7.0f && d->exit_timer == 0 && d->health > 0) {
             m->command = 1;
             hero_state52(50, 1);
         }
@@ -467,8 +463,8 @@ void func_L08_002E16A0(Moby *m) {
     }
     case 5:
         if (d->health < 0) d->health = 0;
-        work[0] = hero52.input[0];
-        work[1] = invert52 ? hero52.input[1] : -hero52.input[1];
+        work[0] = hero52.stick_x;
+        work[1] = invert52 ? hero52.stick_y : -hero52.stick_y;
         magnitude = func_001F9CE8_2E16A0(work);
         if (magnitude > 1.0f) func_L00_001FF328_2E16A0(work, work, magnitude);
         yaw = D_L08_00161B78_2E16A0 * 0.017453292f * D_0015EE6C_2E16A0 * -work[0];
@@ -601,9 +597,9 @@ void func_L08_002E16A0(Moby *m) {
                     for (i=0; i<4; i++) {
                         Moby *node;
                         node = (Moby *)(D_L08_00160058_2E0258 + (indices[i] << 8));
-                        if (func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]) < best_angle && node->state < 0x7F) {
+                        if (func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.motion.pos.f[0], (*(float (*)[4])&node->pos)[1]-hero52.motion.pos.f[1]), hero52.motion.rot.f[2]) < best_angle && node->state < 0x7F) {
                             best = i;
-                            best_angle = func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]);
+                            best_angle = func_001FA850_2E16A0(func_L00_001FF860_2E16A0((*(float (*)[4])&node->pos)[0]-hero52.motion.pos.f[0], (*(float (*)[4])&node->pos)[1]-hero52.motion.pos.f[1]), hero52.motion.rot.f[2]);
                         }
                     }
                     d->target_index = best;
