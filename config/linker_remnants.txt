@@ -148,3 +148,4 @@ text/func_00239180
 text/func_00239610
 text/func_0023B008
 text/func_0023B1E8
+text/func_00226808

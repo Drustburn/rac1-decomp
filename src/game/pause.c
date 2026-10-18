@@ -8686,7 +8686,46 @@ int func_002267C0(int arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_00226808);
+LINKER_REMNANT("asm/remnants/text", func_00226808);
+
+void func_00226D48(void);
+
+/* Sets up the pause-menu helper moby h: spawns class 0x7A5
+   (func_00226720), places it at D_00187040's +0x140 position plus
+   (2.2, 0.0, -1.6), sets its update hook to func_00226D48 and +0x48 to pi,
+   and points its vars block back at h. Then asks func_00226EA8(1) for a
+   buffer; h+0x34 becomes 3 when either the spawn or the buffer fails.
+   The hook store before the pi store and the vars stores in field order
+   give retail's schedule. */
+int func_00226818(char *h) {
+    char *m;
+    int *v;
+    int r;
+
+    m = (char *)func_00226720(0x7A5);
+    *(int *)(h + 0x34) = 0;
+    if (m != 0) {
+        *(char **)(h + 0x44) = m;
+        *(short *)(m + 0x34) = 0;
+        v = *(int **)(m + 0x78);
+        *(f32 *)(m + 0x10) = D_00187040_19C08.f140 + 2.2f;
+        *(f32 *)(m + 0x14) = D_00187040_19C08.f144 + 0.0f;
+        *(f32 *)(m + 0x18) = D_00187040_19C08.f148 + -1.6f;
+        *(void **)(m + 0x74) = (void *)func_00226D48;
+        *(f32 *)(m + 0x48) = 3.1415927f;
+        v[0] = (int)h;
+        v[1] = 0;
+        v[2] = 0;
+    } else {
+        *(int *)(h + 0x34) = 3;
+    }
+    r = func_00226EA8(1);
+    *(int *)(h + 0x3C) = r;
+    if (r == 0) {
+        *(int *)(h + 0x34) = 3;
+    }
+    return 0;
+}
 
 /*
  * Exact once the short-loop padding retail's assembler adds is reproduced
