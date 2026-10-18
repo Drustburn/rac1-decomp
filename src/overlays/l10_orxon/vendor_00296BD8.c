@@ -1745,7 +1745,7 @@ void func_L10_002DB278(char *moby) {
         DeleteMoby(moby);
     }
 }
-extern char D_L10_001DD4D0[]; extern char D_L10_001DD510[]; extern char D_L10_00161D28[]; extern void func_L10_002DBA50(void);
+extern char D_L10_001DD4D0[]; extern char D_L10_001DD510[]; extern char D_L10_00161D28[]; extern void func_L10_002DBA50(unsigned char *);
 extern short D_L10_00161D18;
 extern float func_001F9B50(float);
 extern int func_L00_00200290(void *, float);
@@ -1832,7 +1832,177 @@ void func_L10_002DB688(struct Moby *moby) {
     }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L10_002DBA50);
+typedef struct Pkt_DBA50 {
+    f32 uv1[8];
+    u64 hdr1[4];
+    f32 pos[16];
+    u32 col[4];
+    f32 uv2[8];
+    u64 hdr2[4];
+} Pkt_DBA50;
+
+#define D_L10_00160058_DBA50 ((u8 *)D_L10_00160058_00299818)
+#define D_L10_001672C0_DBA50 ((u8 *)&D_L10_001672C0)
+extern f32 D_L10_00161DE0 MACRO_ADDR;
+#define D_L10_00161DE0_DBA50 D_L10_00161DE0
+extern s32 D_L10_00161DE4 MACRO_ADDR;
+#define D_L10_00161DE4_DBA50 D_L10_00161DE4
+extern s32 D_L10_00161DE8 MACRO_ADDR;
+#define D_L10_00161DE8_DBA50 D_L10_00161DE8
+extern f32 D_L10_001DA2C0[] ;
+#define D_L10_001DA2C0_DBA50 D_L10_001DA2C0
+extern f32 D_L10_001DA2E0[] ;
+#define D_L10_001DA2E0_DBA50 D_L10_001DA2E0
+extern short D_L10_00161CF0;
+#define D_L10_00161CF0_DBA50 (*(s32 *)&D_L10_00161CF0)
+extern short D_L10_00161CF4;
+#define D_L10_00161CF4_DBA50 (*(s32 *)&D_L10_00161CF4)
+extern short D_L10_00161CF8;
+#define D_L10_00161CF8_DBA50 (*(s32 *)&D_L10_00161CF8)
+extern short D_L10_00161CFC;
+#define D_L10_00161CFC_DBA50 (*(s32 *)&D_L10_00161CFC)
+extern short D_L10_00161D10;
+#define D_L10_00161D10_DBA50 (*(s32 *)&D_L10_00161D10)
+extern short D_L10_00161D14;
+#define D_L10_00161D14_DBA50 (*(s32 *)&D_L10_00161D14)
+#define D_L10_00161D18_DBA50 (*(f32 *)&D_L10_00161D18)
+#define func_001F9D10_DBA50 ((f32 (*)(void *, void *))func_001F9D10)
+extern void func_001FA1C0(void *, f32);
+#define func_001FA1C0_DBA50 func_001FA1C0
+#define func_001FA218_DBA50 ((void (*)(void *, void *))func_001FA218)
+#define func_001FA540_DBA50 ((void (*)(void *, void *, void *))func_001FA540)
+#define func_001FA888_DBA50 ((f32 (*)(s32))func_001FA888)
+#define func_001FA898_DBA50 ((s32 (*)(f32))func_001FA898)
+
+#define func_001FA8A8_DBA50 func_001FA8A8
+#define func_001F9878_DBA50 ((f32 (*)(f32))func_001F9878)
+extern u64 func_001F4868(s32);
+#define func_001F4868_DBA50 func_001F4868
+#define func_001F9BD8_DBA50 ((void (*)(void *, void *, void *))func_001F9BD8)
+extern void func_L00_001FD1D8(void *, void *, s32);
+#define func_L00_001FD1D8_DBA50 func_L00_001FD1D8
+
+void func_L10_002DBA50(u8 *moby) {
+    char *data = *(char **)(moby + 0x78);
+    char *base = *(char **)((*(int *)(data + 0xc) << 8) + (int)D_L10_00160058_DBA50 + 0x78);
+    char scratch[(unsigned int)*(int *)(data + 4) * 0x40];
+    struct {
+        unsigned char vertices[0x50];
+        float matrix1[16];
+        union {
+            unsigned char quad[0x90];
+            struct { unsigned char vertices[0x50]; float matrix2[16]; } fields;
+        } packet;
+        float rotation[16];
+    } buffers __attribute__((aligned(16)));
+    int i, j, group, row, vertex;
+    float fade, phase;
+    unsigned char *order;
+    int group_age;
+    char *age_base;
+    char *ages;
+    int group_vertices;
+    float *matrix1;
+    int next_group, next_row;
+    float *matrix2, *uv1, *uv2;
+
+    {
+        float distance = func_001F9D10_DBA50(moby + 0x10, D_L10_001672C0_DBA50);
+        if (distance > 48.0f) fade = (80.0f - distance) * 0.03125f;
+        else fade = 1.0f;
+    }
+    func_001FA1C0_DBA50(buffers.rotation, *(float *)data * 0.5f);
+    matrix1 = buffers.matrix1;
+    matrix2 = buffers.packet.fields.matrix2;
+    uv1 = matrix1 + 1;
+    uv2 = matrix2 + 1;
+    {
+        int n;
+        for (n = 0; n < *(int *)(data + 4); n++) {
+            func_001FA218_DBA50(scratch + n * 0x40, moby + 0x40);
+            func_001FA540_DBA50(scratch + n * 0x40, scratch + n * 0x40, buffers.rotation);
+            *(u128 *)(scratch + n * 0x40 + 0x30) = *(u128 *)(moby + 0x10);
+            *(float *)(scratch + n * 0x40 + 0x38) += func_001FA888_DBA50(n + 1) * *(float *)(data + 8);
+        }
+    }
+    {
+        u64 texture = func_001F4868_DBA50(14);
+        u64 packet_flags = ((u64)D_L10_00161CF0_DBA50) | ((u64)D_L10_00161CF4_DBA50 << 2) |
+                ((u64)D_L10_00161CF8_DBA50 << 4) | ((u64)D_L10_00161CFC_DBA50 << 6) | 0x8000000000ULL;
+        ((u64 *)buffers.packet.fields.matrix2)[5] = texture;
+        ((u64 *)buffers.matrix1)[5] = texture;
+        ((u64 *)buffers.packet.fields.matrix2)[6] = 0xff9000000260ULL;
+        ((u64 *)buffers.matrix1)[6] = 0xff9000000260ULL;
+        ((u64 *)buffers.packet.fields.matrix2)[4] = 0;
+        ((u64 *)buffers.matrix1)[4] = 0;
+        ((u64 *)buffers.packet.fields.matrix2)[7] = packet_flags;
+        ((u64 *)buffers.matrix1)[7] = packet_flags;
+    }
+    {
+        int k;
+        for (k = 0; k < 4; k++) {
+            uv1[k * 2] = uv2[k * 2] = D_L10_001DA2C0_DBA50[k * 2 + 1];
+        }
+    }
+    group = 0;
+    do {
+        next_group = group + 1;
+        phase = 0.0f;
+        row = 0;
+        do {
+            int next;
+            phase += D_L10_00161DE0_DBA50;
+            if (phase > 1.0f) phase -= 1.0f;
+            next_row = row + 1;
+            for (j = 0; j < 4; j++) {
+                matrix1[j * 2] = matrix2[j * 2] =
+                    D_L10_001DA2C0_DBA50[j * 2] + phase + *(float *)(base + 0x12de0);
+            }
+            for (i = 0; i < *(int *)(data + 4); i = next) {
+                int offset;
+                int age;
+                float progress;
+                unsigned int color;
+                order = (unsigned char *)(data + 0x10);
+                group_age = group * 0x78;
+                age_base = base + 0x10000;
+                ages = age_base + 0x2c00;
+                age = *(int *)(ages + (order[i] * 4 + group_age));
+                group_vertices = group * 0x2580;
+                if (age > D_L10_00161DE8_DBA50) {
+                    progress = func_001FA888_DBA50(age - D_L10_00161DE8_DBA50) /
+                               func_001FA888_DBA50(D_L10_00161DE4_DBA50 - D_L10_00161DE8_DBA50);
+                } else {
+                    progress = 1.0f - func_001FA888_DBA50(age) /
+                               func_001FA888_DBA50(D_L10_00161DE8_DBA50);
+                }
+                color = func_001FA8A8(D_L10_00161D10_DBA50, D_L10_00161D14_DBA50, progress);
+                color = (color & 0xffffff) +
+                        (func_001FA898_DBA50(fade * fade *
+                         func_001FA888_DBA50((int)color >> 24)) << 24);
+                if (moby[0x20] == 2) {
+                    float alpha = func_001FA888_DBA50(*(int *)(data + 0x34));
+                    float duration = func_001F9878_DBA50(D_L10_00161D18_DBA50 * 60.0f);
+                    color = (func_001FA898_DBA50(alpha * 255.0f / duration) << 24) | 0xffffff;
+                }
+                vertex = 0;
+                offset = i * 0x40;
+                next = i + 1;
+                *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
+                *(unsigned int *)(buffers.packet.quad + 0x48) = color;
+                *(unsigned int *)(buffers.packet.quad + 0x44) = color;
+                *(unsigned int *)(buffers.packet.quad + 0x40) = color;
+                for (; vertex < 4; vertex++) {
+                    func_001F9BD8_DBA50(buffers.packet.quad + vertex * 0x10, (char *)D_L10_001DA2E0_DBA50 + vertex * 0x10,
+                        base + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
+                }
+                func_L00_001FD1D8_DBA50(buffers.packet.quad, scratch + offset, 0);
+            }
+            row = next_row;
+        } while (row < 19);
+        group = next_group;
+    } while (group < 4);
+}
 INCLUDE_ASM("asm/overlays", func_L10_002DE018);
 typedef int OvlQuad_2DE630 __attribute__((mode(TI)));
 typedef struct {
