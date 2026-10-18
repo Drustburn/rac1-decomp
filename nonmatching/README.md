@@ -29,7 +29,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_00116810`](functional/func_00116810.c) | functional | 0 | ? | - |
 | [`func_00116948`](core/func_00116948.c) | core | 0 | ? | - |
 | [`func_00116B00`](core/func_00116B00.c) | core | 0 | ? | - |
-| [`func_00119EA8`](functional/func_00119EA8.c) | functional | 0 | ? | - |
 | [`func_00121DC8`](core/func_00121DC8.c) | core | 0 | ? | - |
 | [`func_00125358`](core/func_00125358.c) | core | 0 | ? | - |
 | [`func_00125F88`](functional/func_00125F88.c) | functional | 0 | ? | - |

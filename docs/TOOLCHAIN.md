@@ -20,6 +20,7 @@ the README). They are third-party mirrors of commercial software.
 | `bin/ee-ld.exe` | same | links everything at retail addresses |
 | `bin/make.exe` (GNU make 3.77) | same | runs `Makefile.sn` (on native Linux, host `make` is used directly) |
 | `bin/ee-size.exe` | same | prints object sizes at the end of `make` |
+| `ee/bin/as.bin`: GNU as **2.9-ee-991111**, DTL-S13010 build, with its own `ld-2.3.6.so`/`libc-2.3.6.so` | decompme/compilers `ee-gcc2.9-991111-01-dtls13010.tar.gz` → `toolchain/ee-as-dtls13010/` | assembles `00119D88.o` (the `dtls29-real` profile), through `tools/dtls29_as.py` |
 
 The other SN sub-builds in the mirrors, v1.36 (`ee-gcc2953.exe` in
 `sn-prodg-3.01`) and v2.74 (`ee-gcc295.exe` in `sn-prodg-24`), are not
@@ -427,3 +428,31 @@ the `gas210` assembler profile recorded as the fifth column in
 `config/core_text.objects`; the ordinary build remains portable through
 its documented assembler model. See BUILD_FIDELITY.md for the six exact
 function comparisons and the scope of the load-slot rule.
+
+### Original DTL-S13010 assembler (`dtls29-real`)
+
+`00119D88.o` (the C library's printf family) is assembled by the
+DTL-S13010 build of GNU as 2.9-ee-991111, run unmodified through
+`tools/dtls29_as.py`: the float printer's mantissa helper
+(`func_00119EA8`) only comes out exact with this assembler's slot
+filling. The launcher checks the SHA-256 of `as.bin` and both runtime
+libraries, and the version line, before running it.
+
+It comes from the decompme/compilers release archive
+`ee-gcc2.9-991111-01-dtls13010.tar.gz` (SHA-256
+`3ab52a7ea962100f2a7df3e04d3e7a758aad669eb365251682e769b755d9d586`).
+Extract it into `toolchain/` (gitignored, never committed):
+
+```sh
+mkdir -p toolchain/ee-as-dtls13010/lib && cd /tmp
+tar xzf ee-gcc2.9-991111-01-dtls13010.tar.gz ./ee/bin/as.bin ./lib/
+cp ee/bin/as.bin "$OLDPWD/toolchain/ee-as-dtls13010/"
+cp -L lib/ld-2.3.6.so lib/libc-2.3.6.so lib/libc.so.6 "$OLDPWD/toolchain/ee-as-dtls13010/lib/"
+```
+
+It is a 32-bit x86 Linux binary: on an x86-64 Linux host it runs
+directly with its bundled loader; elsewhere, install a QEMU user-mode
+runner at `toolchain/host-runners/qemu/usr/bin/qemu-i386-static` or set
+`EE_DTLS29_AS` to a command that runs the same binary.
+`tools/tests/verify_formatter_assembler.py` assembles the compiler's raw
+output for the object with it and checks every C function against retail.

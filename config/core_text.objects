@@ -48,7 +48,7 @@ build-sn/core/001188C8.o 0x001188C8 ee29
 build-sn/core/00118A40.o 0x00118A40 ee29
 build-sn/core/00119328.o 0x00119328 ee29
 build-sn/core/00119868.o 0x00119868 ee29
-build-sn/core/00119D88.o 0x00119D88 ee29
+build-sn/core/00119D88.o 0x00119D88 ee29 - dtls29-real
 build-sn/core/0011CCE0.o 0x0011CCE0 ee29
 build-sn/core/0011D0D0.o 0x0011D0D0 ee29
 build-sn/core/0011D700.o 0x0011D700 ee29
