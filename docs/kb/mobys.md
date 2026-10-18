@@ -1,139 +1,107 @@
 # Mobys
 
-A **moby** is the game's object instance: Ratchet's model, enemies,
-bolts, crates, gadgets and their projectiles, platforms, effects and
-invisible level logic are all mobys. This page covers what the engine
-does with them. Field tables for `Moby` and `MobyClass` are in
-[data-structures.md](data-structures.md#moby-includemobyh).
+A moby is any game object: Ratchet's model, enemies, bolts, crates,
+gadgets, projectiles, platforms, effects, invisible level logic. Field
+tables: [data-structures.md](data-structures.md#moby-includemobyh) (use
+`include/moby.h`, not `MobyInstance`/`PVARS.md` offsets). Slot reuse
+delay, update order and the pre/post-pass flag tests are observable
+in-game and must be kept.
 
-**This is a byte-exact decompilation of the PAL release.** Everything
-here describes what retail code does. A native port has to keep it 1:1:
-the slot reuse delay, the update order (list order) and the
-pre-pass/post-pass flag tests are all observable in-game, and speedrun
-tricks depend on them.
+## Identity
 
-## The record
-
-- **Instance:** `struct Moby`, 0x100 bytes (`include/moby.h`). Key
-  fields: `pos` 0x10, `state` 0x20, `pclass` 0x24, `next` 0x28,
-  `update_dist`/`visible`/`draw_dist` 0x30-0x33, `flags` 0x34,
-  `occlusion` 0x36, `spawn_frame` 0x38, `rot` 0x40, animation 0x50-0x70,
-  `update` 0x74, `pvars` 0x78, `oclass` 0xA6, `mission` 0xB0, `save_id`
-  0xB2, `parent` 0xB8.
-- **Class header:** `struct MobyClass`, reached through `pclass`. It is
-  the class's data record from the level's class table (`D_001B3580[slot]`)
-  and holds the model, collision, default scale/flags, animation
-  sequences (`seqs[]` at +0x48) and the 6-word `callbacks` table at +0x2C.
-- **Class id:** `oclass` (s16 at 0xA6) is RaC1's own object-class number,
-  the one in debug strings ("Moby 28(Footsoldier)") and in the
-  `UpdateMoby_<oClass>` roles. `class_slot` (byte 0x22) is the per-level
-  slot that class was registered in. Code maps between the two with
-  `D_001B3E40[oClass]` (slot, 0xFF = class not loaded) and
-  `D_001B3C80[slot]` (oClass).
-- **Do not take offsets from `MobyInstance` in `include/structs.h` or
-  from `docs/PVARS.md`.** They put update/pVar/oClass at 0xA8/0xAC/0xBC,
-  which the matched code contradicts (0x74/0x78/0xA6). The *pvars class
-  layouts* in `include/moby_pvars.h` are a separate matter. They come from
-  outside tooling and are unverified per class, so check each one against
-  the asm before you rely on it.
+- `pclass` -> `struct MobyClass`, the class record (`D_001B3580[slot]`):
+  model, collision, default scale/flags, `seqs[]` (+0x48), `callbacks`
+  (+0x2C).
+- `oclass` (s16, 0xA6): RaC1's class number, as in debug strings ("Moby
+  28(Footsoldier)") and `UpdateMoby_<oClass>` roles.
+- `class_slot` (u8, 0x22): per-level registration slot.
+  `D_001B3E40[oClass]` -> slot (0xFF = not loaded); `D_001B3C80[slot]` ->
+  oClass.
+- Per-class pvars layouts in `include/moby_pvars.h` come from outside
+  tooling and are unverified; check each against the asm.
 
 ## Memory: the moby array and pvars
 
 (`src/game/mobyfunc.c:141-200`)
 
-- All mobys live in one array of 0x100-byte slots. `CreateMoby`
-  searches `D_0016001C` .. `D_00160020`. `D_00160018` is the base used to
-  compute a moby's slot index (`InitMobyInstance` stores `idx << 16` at
-  0xA8 and `idx` at 0xAC). Slots below `D_0016001C` exist (`DeleteMoby`
-  treats them differently, see below). They are likely the
-  level-placed instances (inferred).
-- Each slot owns **0x80 bytes of pvars** at `D_00160028 + idx * 0x80`.
-  `CreateMoby` points `moby->pvars` there and zeroes it. pvars are the
-  class's private state (path pointers, timers, sub-state, ...). See
-  `docs/PVARS.md` for the per-class layout catalogue, with the offset
-  caveat above. Level code often reads pvars through a private struct
-  cast, e.g. `KillFlags`/`VoiceSlot` in
+- One array of 0x100-byte slots. `CreateMoby` searches `D_0016001C` ..
+  `D_00160020`; `D_00160018` is the slot-index base (`InitMobyInstance`
+  stores `idx << 16` at 0xA8, `idx` at 0xAC). Slots below `D_0016001C`
+  are handled differently by `DeleteMoby`; likely level-placed instances
+  (inferred).
+- Each slot owns **0x80 bytes of pvars** at `D_00160028 + idx * 0x80`,
+  zeroed by `CreateMoby`: the class's private state. Catalogue:
+  `docs/PVARS.md` (offset caveat above). Level code casts pvars to private
+  structs, e.g. `KillFlags`/`VoiceSlot` in
   `src/overlays/shared/vendor_00298BB8.c`.
 
 ## Lifecycle
 
 ### Registering a class (level load)
 
-`register_moby_class` (`func_00203E78`, `src/game/loaders.c:973`) takes
-the class data, two more arguments and the oClass. It:
+`register_moby_class` (`func_00203E78`, `src/game/loaders.c:973`; takes
+the class data, two more arguments and the oClass):
 
-1. Puts the class in the next slot `D_00160000`: oClass -> slot in
-   `D_001B3E40`, slot -> oClass in `D_001B3C80`, slot -> data in
-   `D_001B3580`.
-2. Calls `func_00213BB8` (`assign_moby_class_data`,
-   `src/game/mobyutil.c:175`), which looks the oClass up in the
-   `{key, a, b}` table `D_001E8F00` (key -1 ends it). It stores `a` (the
-   update function) in `D_001B3900[slot]` and `b` (the 6-word table) at
-   class data +0x2C (`MobyClass.callbacks`).
-3. Bumps the slot count. With non-null class data it also keeps its +0x2C
-   word in `D_001B6500[slot]` and calls `MobyClassRelocate`
-   (`func_00203B70`) to fix up the class's pointers.
+1. Next slot `D_00160000`: fills `D_001B3E40` (oClass -> slot),
+   `D_001B3C80` (slot -> oClass), `D_001B3580` (slot -> data).
+2. `func_00213BB8` (`assign_moby_class_data`, `src/game/mobyutil.c:175`)
+   looks oClass up in the `{key, a, b}` table `D_001E8F00` (key -1 ends):
+   `a` (update function) -> `D_001B3900[slot]`, `b` (6-word table) ->
+   `MobyClass.callbacks`.
+3. Bumps the slot count. With non-null data: keeps its +0x2C word in
+   `D_001B6500[slot]` and calls `MobyClassRelocate` (`func_00203B70`).
 
 ### Spawning
 
 `CreateMoby` (`func_0020D348(oClass)`, `src/game/mobyfunc.c:188`):
 
 - Takes the first slot with `state >= 0xFE` **and**
-  `D_0015F6F0 >= spawn_frame`. `D_0015F6F0` is the frame clock. A freed
-  slot is not reusable until its `spawn_frame`.
-- `0xFE` is a free slot. `0xFF` marks the free tail: taking the tail slot
-  writes `0xFF` into the next slot's state, so the mark moves up.
-- Calls `InitMobyInstance`, sets and zeroes `pvars`, and decrements
-  `D_0015FFFC` if it is nonzero. On failure it prints "... Time: %d,
-  oClass: %d" and returns 0.
+  `D_0015F6F0 >= spawn_frame` (`D_0015F6F0` = frame clock).
+- 0xFE = free; 0xFF = free tail (taking it writes 0xFF into the next
+  slot, moving the mark up).
+- Calls `InitMobyInstance`, sets and zeroes `pvars`, decrements
+  `D_0015FFFC` if nonzero. On failure prints "... Time: %d, oClass: %d"
+  and returns 0.
 
-`InitMobyInstance` (`func_0020D440(moby, oClass)`, `:295`) clears all
+`InitMobyInstance` (`func_0020D440(moby, oClass)`, `:295`) zeroes the
 0x100 bytes, then sets:
 
 - `alpha = 0x80`, `class_slot = D_001B3E40[oClass]`, `oclass = oClass`.
-- `group`, `hit_slot`, `unk71`, `unk72`, `unk7C` and `sound_slot` are all
-  0xFF ("none").
-- `occlusion = 0x7F80` and the 64-bit word at 0x38 = `0x0040404000000000`.
-- The bytes at 0xA0..0xA3 are 0x7F, 0x7F, 0x80, 0x80.
-- `update = D_001B3900[slot]`. When that is 0 it sets flag 0x2.
-- From the class header, if there is one: `pclass`, `unk72` (class +0x0E),
-  `flags |= class.flags`, `collision`, `scale`, `anim_time` 1.0 and
-  0x5C 1.0. A glow colour sets flag 0x10. A shadow (class +0x0F) sets
-  `shadow_range = 0x18` and flag 0x400. Class +0x06 sets `unk73 = 0x18`.
-  Then the sequence rules after `update_moby_animation_state`
-  (`func_0020D6D0`).
-- With no class header: `pclass = 0`, `flags |= 5`, `collision = 0`.
+- 0xFF ("none"): `group`, `hit_slot`, `unk71`, `unk72`, `unk7C`,
+  `sound_slot`.
+- `occlusion = 0x7F80`; the 64-bit word at 0x38 = `0x0040404000000000`;
+  bytes 0xA0..0xA3 = 0x7F, 0x7F, 0x80, 0x80.
+- `update = D_001B3900[slot]`; 0 sets flag 0x2.
+- With a class header: `pclass`, `unk72` (class +0x0E),
+  `flags |= class.flags`, `collision`, `scale`, `anim_time` = 1.0, 0x5C =
+  1.0; glow sets flag 0x10; shadow (class +0x0F) sets `shadow_range =
+  0x18` and flag 0x400; class +0x06 sets `unk73 = 0x18`; then the sequence
+  rules after `update_moby_animation_state` (`func_0020D6D0`).
+- Without: `pclass = 0`, `flags |= 5`, `collision = 0`.
 
-The 64-bit store at 0x38 suggests that 0x38 holds more than a single
-`u64 spawn_frame`: the 0x40 bytes land at 0x3D-0x3F. That is inference;
-`DeleteMoby` overwrites the whole 8 bytes.
+The 0x38 store puts 0x40 bytes at 0x3D-0x3F, so 0x38 may hold more than a
+`u64 spawn_frame` (inferred; `DeleteMoby` overwrites all 8 bytes).
 
-Spawner helpers then fill in the per-use fields. The canonical example
-is `func_00226720` (names.tsv: `spawn_hand_gadget_moby`;
-`src/game/pause.c:8919`). It returns 0 when `D_001B3E40[oClass] == 0xFF`
-(class not in this level). Otherwise it creates the moby and sets
-`update_dist = 0xFF`, `draw_dist = 0xFF`, `state = 0` and `visible = 1`.
-It then runs the post pass `func_0020ED48` once, tints the moby
-(`func_0020E340(o, 0x202020, ...)`), and sets byte 0x73 = 0x18 when class
-+0x06 is set. Spawners set `update_dist`/`draw_dist` to 0x7F for beams
-(moby.h).
+Spawners then fill per-use fields. Example: `func_00226720`
+(`spawn_hand_gadget_moby`, `src/game/pause.c:8919`) returns 0 if
+`D_001B3E40[oClass] == 0xFF`; else creates the moby, sets `update_dist =
+draw_dist = 0xFF`, `state = 0`, `visible = 1`, runs the post pass
+`func_0020ED48` once, tints it (`func_0020E340(o, 0x202020, ...)`), and
+sets byte 0x73 = 0x18 if class +0x06 is set. Beams use 0x7F distances.
 
 ### Deleting and respawning
 
-- `DeleteMoby` (`func_0020D678`, `:383`) sets `state = 0xFE`, or `0xFD`
-  for a slot below `D_0016001C`, sets `spawn_frame = D_0015F6F0 + 2` and
-  calls `func_0020EA70(m, 0x80807F7F)`. The two-frame delay means a just
-  freed slot cannot be handed out again in the same or the next frame.
-- `delete_moby` (`func_002267C0`) calls `DeleteMoby` and then sets
-  `spawn_frame = D_0015F6F0`, which makes the slot reusable at once.
-- State `>= 0xFE` is "dead, waiting to respawn" (moby.h). Level classes
-  that respawn (e.g. class 1885, "Moby 1885 UID:%d could not find a moby
-  to respawn at time %d!") build on `spawn_frame` and the slot states.
+- `DeleteMoby` (`func_0020D678`, `:383`): `state = 0xFE` (0xFD below
+  `D_0016001C`), `spawn_frame = D_0015F6F0 + 2`,
+  `func_0020EA70(m, 0x80807F7F)`. The slot cannot be reused this frame or
+  the next.
+- `delete_moby` (`func_002267C0`): `DeleteMoby`, then `spawn_frame =
+  D_0015F6F0` (reusable at once).
+- Respawning classes (e.g. 1885) build on `spawn_frame` and slot states.
 
 ### States
 
-`state` (byte 0x20) is the class's own state machine for values below
-0x80. The engine reserves the top values:
+`state` (0x20) below 0x80 is the class's own state machine. Reserved:
 
 | state | meaning |
 |---|---|
@@ -158,56 +126,47 @@ for (m = func_0020E6B8(); m != NULL; m = m->next) {   /* head also saved in a $g
 }
 ```
 
-- `func_0020E6B8` (handwritten asm) builds the frame's list and returns
-  its head. It walks the array up to the 0xFF tail, skips flag 0x2 (no
-  update function), and tests each moby's distance to the point at
-  `D_00187040 + 0x140` against `update_dist` (0xFF = always). It then
-  links survivors through `next`, using per-class-slot and per-group
-  buckets in scratchpad RAM (0x70000000). This is inferred from reading
-  `asm/handwritten/text/func_0020E6B8.s`. The exact ordering rules have
-  not been written up as C.
-- `func_0020E3D0` (pre) and `func_0020ED48` (post) are handwritten
-  animation/matrix passes. Both read `frame`/`prev_frame`/`seq`/`prev_seq`
-  at 0x50-0x53, and the post pass also reads `unk71` and 0xA8. Their
-  exact jobs are inferred, not documented.
-- The loop is also called from the pause code
-  (`src/overlays/shared/pause_00277208.c:436`, `src/game/pause.c`), so
-  some menus keep mobys ticking.
-- Order matters: a moby updates in list order, and anything it changes
-  in another moby is visible to mobys later in the list in the same
+- `func_0020E6B8` (handwritten asm) builds the list: walks the array to
+  the 0xFF tail, skips flag 0x2, tests distance to `D_00187040 + 0x140`
+  against `update_dist` (0xFF = always), and links survivors through
+  `next` via per-class-slot and per-group buckets in scratchpad
+  (0x70000000). Inferred from the asm; ordering rules not yet written as
+  C.
+- `func_0020E3D0` (pre) / `func_0020ED48` (post): handwritten
+  animation/matrix passes. Both read 0x50-0x53; post also reads `unk71`
+  and 0xA8. Exact jobs inferred.
+- Also called from pause code (`src/overlays/shared/pause_00277208.c:436`,
+  `src/game/pause.c`): some menus keep mobys ticking.
+- Changes a moby makes to another are seen by later mobys in the same
   frame.
 
 ### Distances and visibility
 
-- `update_dist` (0x30): the update radius. 0xFF means always update.
-  Spawners use 0xFF, or 0x7F for beams.
-- `draw_dist` (0x32, s16) and `visible` (0x31, "drawn last frame"; set
-  to 1 by spawners) drive drawing (`DrawMobys` `func_0020E2B0`,
-  `DrawMobyList` `func_0020E180`). `InitMobyClassDists` /
-  `StashMobyClassDists` / `RestoreMobyClassDists`
-  (`func_0020E040`/`068`/`098`) manage per-class distances.
-- `occlusion` (0x36): occlusion bits, 0x7F80 by default.
-- `shadow_range` (0x7F): in units of 1024.
+- `update_dist` (0x30): update radius, 0xFF = always.
+- `draw_dist` (0x32, s16) and `visible` (0x31) drive drawing (`DrawMobys`
+  `func_0020E2B0`, `DrawMobyList` `func_0020E180`). Per-class distances:
+  `InitMobyClassDists` / `StashMobyClassDists` / `RestoreMobyClassDists`
+  (`func_0020E040`/`068`/`098`).
+- `occlusion` (0x36) default 0x7F80; `shadow_range` (0x7F) in units of
+  1024.
 
 ### Save id, mission and the collected/killed tables
 
-- `save_id` (u16, 0xB2) indexes the level's `collected[]`/`killed[]` byte
-  tables and the save bits `D_0014C190[level][id >> 5]`. A class that
-  should not come back once collected checks `collected[save_id]` at
-  init, e.g. `D_L01_001BB9C0.collected[(short)moby->save_id] != 0` in
-  `src/overlays/shared/vendor_002B90A8.c:516`. The tables are in each
-  level's own BSS (different address per level). `killed[]` entries
-  store "spawn slot + 2" (`src/overlays/shared/vendor_00298BB8.c`).
+- `save_id` (u16, 0xB2) indexes the level's `collected[]`/`killed[]`
+  tables (per-level BSS) and save bits `D_0014C190[level][id >> 5]`.
+  Collect-once classes test it at init, e.g.
+  `D_L01_001BB9C0.collected[(short)moby->save_id] != 0`
+  (`src/overlays/shared/vendor_002B90A8.c:516`). `killed[]` stores "spawn
+  slot + 2" (`src/overlays/shared/vendor_00298BB8.c`).
 - `mission` (0xB0) indexes the level's `D_0014C050` row (0xFF = not
-  spawned). Level code also writes `collected[save_id] = mission + 2`
-  (`src/overlays/l01_novalis/vendor_002FABE8.c:849`).
-  `SetMissionDone` (`func_L00_002512D8`) and `SetDeathBits`
-  (`func_L00_002584A8`) are the shared helpers (candidate names).
-- `parent` (0xB8): the spawner. Its byte 0xB1 is a per-level id.
-- `command` (0xBC): an external command byte other mobys write.
-- `group` (0x21): index into the level moby-list table
-  `D_Lxx_001ABCC0` (0xFF = none). Linked groups such as class 871's mine
-  groups use it.
+  spawned). Level code writes `collected[save_id] = mission + 2`
+  (`src/overlays/l01_novalis/vendor_002FABE8.c:849`). Shared helpers
+  (candidate names): `SetMissionDone` (`func_L00_002512D8`),
+  `SetDeathBits` (`func_L00_002584A8`).
+- `parent` (0xB8): spawner; its byte 0xB1 is a per-level id.
+- `command` (0xBC): command byte other mobys write.
+- `group` (0x21): index into `D_Lxx_001ABCC0` (0xFF = none), e.g. class
+  871's mine groups.
 
 ### Animation fields
 
@@ -220,45 +179,35 @@ for (m = func_0020E6B8(); m != NULL; m = m->next) {   /* head also saved in a $g
 | `anim_flags`, `anim_trigger_count` | 0x70, 0x7E | |
 | `manips` | 0x64 | joint manipulators |
 
-Each `seqs[i]` points at an `AnimSeq` (`include/records.h`) whose u8
-`nframes` is at +0x10. `MobyClass.seq_count` (+0x0C) bounds `seq`. The
-main entry points are `set_moby_animation` (`func_00213D28`),
+`seqs[i]` -> `AnimSeq` (`include/records.h`, u8 `nframes` at +0x10);
+`MobyClass.seq_count` (+0x0C) bounds `seq`. Entry points (names.tsv,
+mixed tiers): `set_moby_animation` (`func_00213D28`),
 `blend_moby_animation[_ex]` (`func_00213DE0`/`func_00213F28`),
-`MobyAnimProc` (`func_00212578`) and the level helpers `MobyAnimAdvance`
-(`func_L00_002514B8`) and `MobyAnimEval` (`func_L00_00252018`). Names
-are from `config/names.tsv` (tiers vary).
+`MobyAnimProc` (`func_00212578`), level helpers `MobyAnimAdvance`
+(`func_L00_002514B8`) and `MobyAnimEval` (`func_L00_00252018`).
 
 ## Binding classes to update functions
 
-Each level overlay carries a `vtbl` record (`docs/OVERLAYS.md`, "Roles"):
-12-byte entries `{oClass, update function, pointer to a 6-word table}`,
-one per moby class the level has, ended by oClass -1, with the 6-word
-tables after it. Registration (above) copies the update function into
-`D_001B3900[slot]` and the table pointer into `MobyClass.callbacks`.
-`InitMobyInstance` then puts `D_001B3900[slot]` in `moby->update`.
-Update functions are called with the moby in `$a0`.
-
-`func_00213BB8` addresses the table as `D_001E8F00` in the executable,
-while the baserom manifests put each level's `vtbl` record at its own
-address (0x1EA680 in level 0, 0x20BE00 in level 1). How the two connect
-(copy or relocation at load) has not been verified.
-
-`python3 tools/overlays.py names` decodes all levels' tables into
-`config/overlays/names.tsv`. The second column lists roles as
-`UpdateMoby_<oClass>:<levels>` (levels `00`..`18`, slash-separated).
-One function can serve several classes; a function with many roles is
-usually a generic one. `tools/extract/moby_classes.tsv` has class names
-for editor labels (from outside tooling, not verified against the game).
+- Each level's `vtbl` record (`docs/OVERLAYS.md`, "Roles"): 12-byte
+  entries `{oClass, update function, 6-word table pointer}`, ended by
+  oClass -1, tables after it. Registration copies them to
+  `D_001B3900[slot]` / `MobyClass.callbacks`; `InitMobyInstance` sets
+  `moby->update`. Called with the moby in `$a0`.
+- `func_00213BB8` reads the table as `D_001E8F00`; manifests put each
+  level's `vtbl` elsewhere (0x1EA680 level 0, 0x20BE00 level 1). Copy vs
+  relocation: unverified.
+- `python3 tools/overlays.py names` decodes all tables into
+  `config/overlays/names.tsv` (roles `UpdateMoby_<oClass>:<levels>`,
+  levels slash-separated). Many roles = likely a generic function.
+- `tools/extract/moby_classes.tsv`: editor-label class names from outside
+  tooling, unverified.
 
 ### The most widespread classes
 
-1167 classes have an update function in at least one level. 916 appear
-in one level only, and **79 are in all 19 levels** (00..18), so the
-"top 25 by level count" is all ties. The table lists the 25
-lowest-numbered of the 79. All their update functions are in the shared
-level code (`src/overlays/shared/`). Descriptions are quoted or condensed
-from the comment above the function's definition and left blank where
-there is none. "Shared" counts how many classes use the same function.
+1167 classes have an update function somewhere; 916 in one level only;
+**79 in all 19 levels**. Below: the 25 lowest-numbered of the 79 (all in
+`src/overlays/shared/`). Descriptions condensed from the source comment.
+"Shared" = classes using the same function.
 
 | oClass | Update function | Shared | File (`src/overlays/shared/`) | Description (from the source comment) |
 |---|---|---|---|---|
@@ -289,17 +238,15 @@ The remaining 54 all-level classes: 188 190 192 203 204 208 209 213 214
 222 223 225 226 229 230 270 305 348 349 354 355 356 357 358 359 428 433
 454 457 479 500 501 511 562 585 607 618 639 775 804 806 849 1006 1007
 1138 1143 1192 1251 1289 1290 1438 1447 1449 1900. `func_L00_002C6720`
-alone serves 11 of them (204 213 214 222 223 225 226 1006 1438 1447
-1449). To regenerate: count, per oClass, the union of levels over all
-`UpdateMoby_<oClass>` roles in `config/overlays/names.tsv`.
+serves 11 (204 213 214 222 223 225 226 1006 1438 1447 1449). Regenerate:
+per oClass, union the levels of all `UpdateMoby_<oClass>` roles in
+`config/overlays/names.tsv`.
 
 ## Classes named by retail debug strings
 
-The level overlays' `data` records keep the developers' debug and error
-strings. They name some classes directly. Strings below are verbatim
-(`strings baserom/overlays/level_NN/data.bin`). "Update levels" is
-where `config/overlays/names.tsv` gives the class an `UpdateMoby_<id>`
-role. In every case it matches the levels whose data holds the string.
+Verbatim from `strings baserom/overlays/level_NN/data.bin`. In every case
+the update-function levels (names.tsv) match the levels holding the
+string.
 
 | oClass | What the string says | String in levels | Update function (levels) |
 |---|---|---|---|
@@ -327,56 +274,40 @@ role. In every case it matches the levels whose data holds the string.
 | 671 | `M671 texture w count = 0.0, correcting to 1.0`, `... greater than max texture tile count (8)` (texture tiling) | 08 | `func_L08_002F8560` (08) |
 | 186 | `Hey, M186 init should be earlier!` (an init-order check) | all 19 | `func_L00_002C12B0` (all 19) |
 
-Notes:
+- "UID" = per-level instance id; "maya instance" = level-editor instance
+  number. Neither is the slot index.
+- "Mystery 774" is in the literal pool (`lit.bin`) of levels 01 and 08, not in `data.bin`; `M774_ShipChallengeDone` is in both levels' strings.
+  No name for 774 is established.
+- Without an oClass in the string: "Hovertank" (level 14; bomb/bound/
+  exit/intro paths), "Kamikaze" and "Bigship moby" (level 09).
+- Generic init-code strings: `Moby Class %d Instance %d has no pVars!  May
+  be in the art file.` (10), `cleaned up moby:%d (oclass:%d)` (00),
+  `internal moby sound mismatch on moby %d` (00).
 
-- "UID" in these strings is the per-level instance id and "maya instance"
-  the instance number from the level editor. Neither is the slot index.
-- "Mystery 774" does not appear in any level's data. Only the
-  `M774_ShipChallengeDone` string does, so no name for 774 is
-  established.
-- Level 14 also prints errors for a "Hovertank" (bomb/bound/exit/intro
-  paths) and level 09 for a "Kamikaze" and a "Bigship moby", without an
-  oClass number in the string.
-- Generic strings worth knowing when you read init code: `Moby Class %d
-  Instance %d has no pVars!  May be in the art file.` (10),
-  `cleaned up moby:%d (oclass:%d)` (00), `internal moby sound mismatch on
-  moby %d` (00).
+More retail strings per level: [datamining.md](datamining.md#5-per-level-strings-and-npc-names).
 
 ## Tips for decompiling and porting moby code
 
-- **Start from the role.** `config/overlays/names.tsv` tells you which
-  class a level function updates and on which levels. A function shared
-  by many classes is generic, so don't specialise it to one class.
-- **Include `moby.h`, `hero.h`, `pad.h`, `vector.h`** instead of private
-  struct copies. The recent refactors replaced dozens of private copies
-  (commits d19de34f, d8808743). Private casts are still needed for
-  **pvars**: declare a local struct for the class's 0x80 bytes and cast
-  `moby->pvars` (u8 *) to it.
-- **Watch the signedness and width of the byte fields.** `state` is read
-  signed by the update loop (`lb`, `bltz`) but compared unsigned
-  (`>= 0xFE`) elsewhere. `save_id` is u16 but used as `(short)` index.
-  `draw_dist` is s16, while `update_dist` is u8. The wrong type changes
-  `lb`/`lbu`/`lh`/`lhu` and breaks the match, and in a port it changes
-  behaviour at 0x80/0x8000.
-- **Use the state/flag conventions** rather than inventing new ones:
-  delete with `DeleteMoby` (two-frame reuse delay), not by poking
-  `state`. Test `D_001B3E40[oClass] != 0xFF` before spawning a class
-  the level may not have.
-- **Update order and timing are behaviour.** The list is rebuilt every
-  frame by `func_0020E6B8` and walked in order. Mobys out of
-  `update_dist` don't tick at all, so their timers freeze. Frame counts
-  in level code often go through `scale_game_frames()` (`func_001F98C0`),
-  and a port must keep the same scaling.
-- **Handwritten asm stays asm.** `func_0020E6B8`, `func_0020E3D0`,
-  `func_0020ED48`, `func_0020EA70` and others are in
-  `config/handwritten_asm.txt` (they use VU0 macro instructions and
-  scratchpad RAM). A port needs a C reimplementation of them that
-  reproduces the results exactly (list order, float results). Rewrites
-  are planned after matching, and they keep the functions marked as asm.
-- **Debug strings are free documentation.** Grep the level's `data.bin`
-  strings for the oClass number before naming a class or a pvar.
-- **Check callees against their asm.** C that matches can still declare
-  a callee wrong (argument count, return type). Compare each `extern`
-  prototype with the callee's own asm: which argument registers it
-  reads, whether it sets `$v0`/`$f0`. Update functions take exactly one
-  argument, the moby.
+- **Start from the role** in `config/overlays/names.tsv`. Don't
+  specialise a function shared by many classes.
+- **Include `moby.h`, `hero.h`, `pad.h`, `vector.h`**, not private copies
+  (see commits d19de34f, d8808743). pvars still need a local struct for
+  the 0x80 bytes, cast from `moby->pvars` (u8 *).
+- **Get signedness/width right.** `state` is read signed by the loop
+  (`lb`, `bltz`) but compared `>= 0xFE` elsewhere; `save_id` is u16 used
+  as `(short)`; `draw_dist` s16, `update_dist` u8. A wrong type changes
+  `lb`/`lbu`/`lh`/`lhu` and, in a port, behaviour at 0x80/0x8000.
+- **Use the conventions:** delete with `DeleteMoby`, not by poking
+  `state`; test `D_001B3E40[oClass] != 0xFF` before spawning.
+- **Order and timing are behaviour.** Out-of-range mobys don't tick
+  (timers freeze). Level frame counts often go through
+  `scale_game_frames()` (`func_001F98C0`); keep the scaling.
+- **Handwritten asm stays asm** (`func_0020E6B8`, `func_0020E3D0`,
+  `func_0020ED48`, `func_0020EA70`, ...; `config/handwritten_asm.txt`;
+  VU0 macro ops, scratchpad). A port needs exact C reimplementations
+  (list order, float results). Post-matching rewrites keep them marked
+  as asm.
+- **Grep the level's `data.bin` strings** for the oClass before naming a
+  class or pvar.
+- **Check callees against their asm** (argument registers read,
+  `$v0`/`$f0` set). Update functions take exactly one argument.

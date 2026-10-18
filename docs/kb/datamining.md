@@ -1,111 +1,65 @@
 # Datamined findings
 
-What the retail data of Ratchet & Clank (PAL, SCES-50916) says about how the
-game was built, and what it contains that players never see. Everything here is
-documentation: this repository is a byte-exact decompilation, its behaviour is
-1:1 with retail (speedrun tricks depend on that), and nothing below is meant to
-change any code.
+What the retail data (PAL, SCES-50916) reveals about how the game was built.
+Documentation only; nothing here proposes a code change.
 
-Earlier, broader notes (source file list, `CardState` enum, save chunk ids, hub
-functions) are in [`docs/DATAMINED_REVERSE_ENGINEERING.md`](../DATAMINED_REVERSE_ENGINEERING.md).
-This page does not repeat them; [section 12](#12-corrections-to-datamined_reverse_engineeringmd)
-lists corrections to that page.
+## Top findings
 
-**Evidence labels** used on every finding:
+- **Hidden 20-button code system** (verified code, untested in game): hold R2+L1 in the pause menu; 91 codes give items, planets, special items, skill points ([§1](#1-hidden-button-code-system)).
+- **"I-5" debug menu** in every level, game mode -1; no retail code found that enters it (inferred) ([§2](#2-the-i-5-debug-menu-game-mode--1)).
+- **`printf` is an empty stub** (verified); all diagnostics, incl. a per-level `*** MEMORY MAP ***`, are formatted and discarded ([§3](#3-debug-leftovers), [§7](#7-memory-budget-the-memory-map-report)).
+- **Dev environment** (inferred from verified strings): project code `I5`, Maya-authored levels, header `walk.h`, spelling `Ratchett` ([§4](#4-development-environment)).
+- **SDK 2.5.x libraries**, libpad2 + libdbc, 989snd ([§8](#8-libraries-and-versions)).
+- **Region and save folder come from `SYSTEM.CNF`** at boot: `BESCES-50916RATCHET` (verified) ([§9](#9-file-system-region-and-language)).
+- **Designer errors name ~25 moby class ids** (Footsoldier 28, MineBot 923/1401, ...) ([mobys.md](mobys.md#classes-named-by-retail-debug-strings)).
+- **Corrections** to `DATAMINED_REVERSE_ENGINEERING.md` ([§12](#12-corrections-to-datamined_reverse_engineeringmd)).
 
-- **verified**: read directly from retail bytes (`baserom/`) or from matched C
-  that compiles to those bytes.
-- **inferred**: a reasonable reading of verified facts, not proven.
-- **untested in game**: derived statically; nobody has tried it on hardware or
-  an emulator.
+Labels: **verified** = read from `baserom/` bytes or matched C; **inferred**
+= reasonable reading, not proven; **untested in game** = static only.
 
-Addresses: `func_L00_*` / `D_L00_*` are level-00 addresses. Shared overlay code
-sits at a different address in each level; `config/overlays/functions.tsv`
-gives every level's address. Strings from `config/strings.tsv` in the ranges
-0x15F000-0x161FFF and 0x165580-0x1E8FFF are addresses in the **executable's own
-copy** of the main segment. Each level overlay has its own layout, so the same
-string is somewhere else at run time (for example the debug-menu strings are
-0x40 lower in every level's `lit.bin`, and the memory-map strings are at
-0x1E8B50 in level 00 against 0x1E8080 in the ELF). The xref/sample-function
-columns of `strings.tsv` for those ranges are unreliable for the same reason.
+Addresses: `func_L00_*` / `D_L00_*` are level-00; other levels' addresses
+are in `config/overlays/functions.tsv`. `config/strings.tsv` addresses in
+0x15F000-0x161FFF and 0x165580-0x1E8FFF are the ELF's copy; each level lays
+them out differently (debug-menu strings 0x40 lower in every `lit.bin`;
+memory map 0x1E8B50 in level 00 vs 0x1E8080 in the ELF), so the xref
+columns there are unreliable.
 
-## Summary
-
-1. **Hidden 20-button input code system** (verified code, untested in game).
-   While the pause/page menu runs with exactly R2+L1 held, the game records 20
-   presses of D-pad/Square/Circle and checks them against 145 codes generated
-   from one 256-byte table. 91 of them do something: they give any of 37 items,
-   unlock any of the 18 planets, set 6 special-item flags, or award any of the
-   30 skill points. All 91 sequences are decoded in [section 1](#1-hidden-button-code-system).
-2. **The "I-5" debug menu is still in every level** (verified). Game mode -1 of
-   the main loop runs `func_L00_001F4918` / `func_L00_001F5C60`, which draw a menu
-   titled `I-5` with UPDATE / MODE / DRAW / AMMO / FOG / MISC pages (Invinc,
-   Drawdist, profiler bars, collision views, fog editor, occlusion sampling). A
-   static scan found no retail code that stores -1 into the game-mode word
-   (inferred: it can only be reached by poking memory).
-3. **`printf` is an empty stub in retail** (verified): `STUB_printf`
-   (`func_001E9730`, `src/game/stub.c`) has no body. All diagnostics,
-   including a full `*** MEMORY MAP ***` report printed after every level load,
-   are still formatted by the code and then thrown away.
-4. **Development environment**: the project code `I5`/`I-5` (menu title,
-   `cdrom0:\CODE\I5\PARAM.TXT`, `host0:z:/i5/levels/...`), levels authored in
-   Maya ("maya instance" in designer errors), original header `walk.h`, the
-   developer spelling `Ratchett`, and SDK release 2.5.x libraries (inferred
-   readings of verified strings).
-5. **Region and save-folder name come from `SYSTEM.CNF`** at boot (verified):
-   `InitOnce` reads LBA 0x121 (`SYSTEM.CNF`), takes PAL/NTSC from the `VMODE`
-   line and builds the memory-card folder `BESCES-50916RATCHET` from the boot
-   file name.
-6. **Designer error strings name about 25 moby class ids** with their in-house
-   names (Footsoldier 28, hoverboat 557, wind-control 610, MineBot 923/1401,
-   Flying Car 1417, Equilizer Ammo Spawner 1142, ...), see [section 6](#6-moby-class-ids-named-by-strings).
+Older notes (source files, `CardState`, save chunk ids, hub functions):
+[`docs/DATAMINED_REVERSE_ENGINEERING.md`](../DATAMINED_REVERSE_ENGINEERING.md).
 
 ---
 
 ## 1. Hidden button-code system
 
-**Where:** `func_L00_00284410` in `src/overlays/shared/pause_00277208.c`
-(matched C, 512 bytes, identical in all 19 levels). It is called once per
-frame from the page-menu update `func_L00_00277A88` (same file, call at line
-356). The page menu is case 3 of the main loop's game-mode switch in
-`func_L00_002465F8` (`src/overlays/shared/map_002465F8.c`), the pause / map /
-planet-select screens. **verified**
+`func_L00_00284410` (`src/overlays/shared/pause_00277208.c`, matched, 512
+bytes, identical in all 19 levels), called each frame from the page-menu
+update `func_L00_00277A88` (line 356). The page menu is case 3 of the
+game-mode switch in `func_L00_002465F8` (`map_002465F8.c`): pause / map /
+planet select. **verified**
 
 ### 1.1 Input
 
-The function reads the controller state `D_0013CA40` (`D_0013A5E0 + 0x2460`,
-`struct PadState` in `include/pad.h`):
+Reads `D_0013CA40` (`PadState`; bits: [data-structures.md](data-structures.md#button-bits)):
 
-- `held_unmasked` (0x1C0) `& 0xF` must equal `6`. With the DualShock 2 button
-  word that `func_002181F0_r` in `src/game/pad.c` builds
-  (`((buf[0] << 8) | buf[1]) ^ 0xFFFF`), the low nibble is L2 0x1, R2 0x2,
-  L1 0x4, R1 0x8, so `6` means **R2 and L1 held, L2 and R1 released**.
-  The bit meanings come from the standard SCE pad data layout (**inferred**);
-  the directions are confirmed by `pad.c`, which ORs the left stick into
-  0x8000/0x2000 (x) and 0x1000/0x4000 (y).
-- each frame, `pressed_unmasked` (0x1C4) `& 0xF0A0` is mapped to a symbol:
-  Up 0x1000 → 0, Down 0x4000 → 1, Left 0x8000 → 2, Right 0x2000 → 3,
-  Square 0x80 → 4, otherwise (Circle 0x20) → 5. If several are pressed in the
-  same frame, the first in that order wins. Triangle and Cross are ignored.
-- `pressed` includes left-stick directions (pad.c ORs them into `held`), so a
-  stick flick also counts as a D-pad press. The `_unmasked` copies have the
-  mirror-mode left/right swap undone, so the code is always entered with the
-  physical buttons, mirrored levels or not. **verified (code)**
-- symbols go into the 20-entry buffer `D_L00_001BA838` (`short[20]`); the
-  count `D_L00_001604B8` is reset to 0 **only when the R2+L1 chord is not
-  held**. After 20 presses no further input is taken, so each chord hold gets
-  exactly one attempt. **verified**
+- `held_unmasked & 0xF == 6`: **R2 and L1 held, L2 and R1 not**
+  (shoulder-bit names **inferred** from the standard layout).
+- Each frame `pressed_unmasked & 0xF0A0` -> symbol: Up 0, Down 1, Left 2,
+  Right 3, Square 4, else (Circle) 5. First in that order wins; Triangle
+  and Cross ignored.
+- Stick flicks count as D-pad presses; `_unmasked` undoes the mirror swap,
+  so physical buttons always apply. **verified (code)**
+- Symbols go into `D_L00_001BA838` (`short[20]`). The count
+  `D_L00_001604B8` resets **only when the chord is released**; after 20
+  presses input stops, so one attempt per chord hold. **verified**
 
 ### 1.2 Matching
 
-When the 20th symbol arrives, the function tries `index = 2 .. 0x92`. Code
-`index` matches if `buf[j] == T[((j + 1) * index) & 0xFF]` for all 20 `j`,
-where `T` is the 256-byte table `D_L00_001B9F20` (values 0-5). The first match
-wins and `code = index - 2`. The table is byte-identical in all 19 level
-overlays (at 0x1B9F20 in levels 00/07, 0x1BA320 in 01/10/12/16, and so on).
-Of the 145 generated sequences, four (codes 0x7D, 0x7F, 0x88, 0x8C) repeat a
-lower code and can never match, but all of them are in the range that does
-nothing. **verified**
+On the 20th symbol, try `index = 2 .. 0x92`: match if
+`buf[j] == T[((j + 1) * index) & 0xFF]` for all 20 `j`, `T` = 256-byte
+table `D_L00_001B9F20` (values 0-5). First match wins; `code = index - 2`.
+`T` is identical in all levels (0x1B9F20 in 00/07, 0x1BA320 in
+01/10/12/16, ...). Codes 0x7D, 0x7F, 0x88, 0x8C duplicate lower codes and
+never match; all four are in the no-effect range. **verified**
 
 ### 1.3 Effects
 
@@ -117,36 +71,30 @@ nothing. **verified**
 | 0x3D-0x5A | if `gSkillPoints[c - 0x3D] == 0`: set it, `func_0022EE28(1,0,0)`, `ShowBanner(0x53DB, -1)` | 30 skill-point flags (`D_0013D510`) | the same three steps the game uses for every real skill-point award (e.g. `l08_batalia/vendor_002EAF48.c:1338`, `shared/help_00237B00.c:1469`) (**verified**) |
 | 0x5B-0x90 | nothing | | |
 
-Notes:
-
-- The item codes write the raw flags only. `GiveItem` also shows the pick-up
-  banner, sets starting ammo (`D_0013D530`), adds weapons to the quick-select
-  list (`D_00141FA0`) and equips the item. The codes do none of that.
-  **verified (code comparison)**
-- Item names, by id. † marks ids pinned by `config/names.tsv` memory-map
-  anchors (`gHaveHeliPack` 0x13D5CA = id 2, `gHaveMorphORay` id 0x15,
-  `gHaveMagneboots` id 0x1C, `gHaveHologuise` id 0x1F, `gHaveMapOMatic` id
-  0x21, `gHavePersuader` id 0x23). The other names follow the usual RaC1
-  item-id order (**inferred**). Two tables in level 00 data support that order:
-  the item-type field of `D_L00_00179BC0` (stride 0x4C: ids 2-4 type 3 =
-  back, 5-7 type 2 = head, 0x1C-0x1E type 1 = feet, 8-0x20 type 0 = hand)
-  and the ammo table `D_L00_001C43B0`, where exactly the 11 ammo weapons
-  (0xA, 0xB, 0xD, 0xF, 0x10, 0x11, 0x13, 0x14, 0x17, 0x18, 0x19) have
-  nonzero entries. The pick-up banner text ids `D_L00_001B06C0[id]` look like
-  `level × 1000 + n` (3015 Heli-Pack → Kerwan, 11012 Thruster-Pack → Pokitaru,
-  12006 Hydro-Pack → Hoven, 10011 Magneboots → Orxon, 5014 R.Y.N.O. → Rilgar),
-  which fits where those items are found (**inferred**).
-- This is probably a QA/debug unlock system that was left in, not a
-  player-facing cheat. It shares nothing with the real cheat flags `gCheats`
-  (`D_0015EEB0`) or the save's cheat blocks (**inferred**). It has **not been
-  tried in game**. Entering one of these codes would also change save data
-  (the flags are saved), so try it on a throwaway save.
+- Item codes set the raw flags only: no banner, starting ammo
+  (`D_0013D530`), quick-select entry (`D_00141FA0`) or equip, unlike
+  `GiveItem`. **verified (code comparison)**
+- Item names: † = pinned by names.tsv anchors (`gHaveHeliPack` 0x13D5CA =
+  id 2, `gHaveMorphORay` 0x15, `gHaveMagneboots` 0x1C, `gHaveHologuise`
+  0x1F, `gHaveMapOMatic` 0x21, `gHavePersuader` 0x23). Others follow the
+  usual RaC1 order (**inferred**), supported by level-00 data:
+  - `D_L00_00179BC0` item type (stride 0x4C): ids 2-4 back, 5-7 head,
+    0x1C-0x1E feet, 8-0x20 hand.
+  - Ammo table `D_L00_001C43B0`: nonzero for exactly the 11 ammo weapons
+    (0xA, 0xB, 0xD, 0xF, 0x10, 0x11, 0x13, 0x14, 0x17, 0x18, 0x19).
+  - Banner text ids `D_L00_001B06C0[id]` look like `level × 1000 + n`
+    (3015 Heli-Pack → Kerwan, 11012 Thruster-Pack → Pokitaru, 12006
+    Hydro-Pack → Hoven, 10011 Magneboots → Orxon, 5014 R.Y.N.O. → Rilgar),
+    matching where they are found (**inferred**).
+- Likely a leftover QA unlock system, unrelated to `gCheats`
+  (`D_0015EEB0`) or the save's cheat blocks (**inferred**). The flags are
+  saved: test on a throwaway save.
 
 ### 1.4 All 91 working codes
 
-Hold **R2 + L1** (and not L2/R1) in the pause menu, then press the 20 buttons
-in order. ↑↓←→ = D-pad (or left stick), □ = Square, ○ = Circle. Derived by
-static analysis, **untested in game**.
+Hold **R2 + L1** (not L2/R1) in the pause menu, press the 20 buttons in
+order. ↑↓←→ = D-pad (or left stick), □ = Square, ○ = Circle. Static
+derivation, **untested in game**.
 
 | Code | Index | Buttons (hold R2+L1, then press) | Effect |
 |---|---|---|---|
@@ -259,21 +207,19 @@ for index in range(2, 0x93):
 
 **verified:**
 
-- The main loop `func_L00_002465F8` switches on the game-mode word
-  `D_L00_0015F6A8` (`gGameMode`). `case -1` calls `func_00216270`,
-  `func_L00_001F4918` (4932 bytes) and `func_L00_001F5C60` (4884 bytes). Both
-  functions are in all 19 levels. Their names in `config/names.tsv`,
-  `DebugCameraUpdate` / `DebugCameraRender`, are candidates.
-- `func_L00_001F5C60` (matched C, `src/overlays/shared/draw_001F3A78.c:523`)
-  draws the menu. It has 71 lui/addiu references into the level `lit` strings
-  0x15F108-0x15F3B8 and `func_L00_001F4918` has 3 more. Nothing in the
-  executable references these strings, which is why `strings.tsv` lists them
-  with 0 xrefs. The title, centred at (0x100, 0x10), is `I-5`.
-- Menu state: `debug_menu60` = `D_L00_0016C158`, initialised by the main loop
-  on every level start (`map_002465F8.c`: fields 0x8 = 15, 0x38 = -1, ...).
+- `func_L00_002465F8` switches on `D_L00_0015F6A8` (`gGameMode`);
+  `case -1` calls `func_00216270`, `func_L00_001F4918` (4932 bytes) and
+  `func_L00_001F5C60` (4884 bytes), present in all 19 levels (candidate
+  names `DebugCameraUpdate` / `DebugCameraRender`).
+- `func_L00_001F5C60` (matched, `src/overlays/shared/draw_001F3A78.c:523`)
+  draws the menu: 71 lui/addiu refs into level `lit` strings
+  0x15F108-0x15F3B8 (+3 from `func_L00_001F4918`). The ELF never
+  references them (hence 0 xrefs in `strings.tsv`). Title at (0x100,
+  0x10): `I-5`.
+- State `debug_menu60` = `D_L00_0016C158`, initialised on every level start
+  (`map_002465F8.c`: 0x8 = 15, 0x38 = -1, ...).
 
-The pages and their rows, from the draw code and the value tables in level 00
-data (row → value strings):
+Pages (draw code + level-00 value tables):
 
 | Page | Rows (value strings) |
 |---|---|
@@ -288,28 +234,22 @@ Value tables: `D_L00_00160CD8` (off/on), `D_L00_00160D00` (control modes),
 `D_L00_00160D68`, `D_L00_00160D80`, `D_L00_00160DA0`, `D_L00_00160DB0`,
 `D_L00_00160DC8`, `D_L00_001C4128` (profiler modes).
 
-Observations:
-
-- The AMMO page uses development weapon names: `Morpha-Ray` (retail
-  Morph-o-Ray), `Inflato R`, `D. Droids` (Drone Device, **inferred**),
-  `Agents` (Decoy Glove? **inferred**). **verified** strings.
+- AMMO uses development weapon names (**verified** strings): `Morpha-Ray`
+  (Morph-o-Ray), `Inflato R`, `D. Droids` (Drone Device, **inferred**),
+  `Agents` (Decoy Glove?, **inferred**).
 - `AddSample` / `AddStart` and `occ_samp.dat` / `occ_sample_deltas.dat`
-  (referenced from `func_L00_001F4918`, two and one code references in every
-  level) point to an in-game tool that recorded occlusion sample points
-  (**inferred**). `TJB - No env sample point found!` (`func_L00_002510F0`) is
-  the run-time lookup into those samples (**inferred**).
-- A five-entry pointer table at level-00 data `0x16C140` lists the sound
-  groups `    sfx`, `  music`, ` dialog`, `ambient`, `  shell` (padded to
-  seven characters, which looks like a volume-mixer column header,
-  **inferred**). No lui/addiu reference to that table was found.
-- **Reachability (inferred):** a scan of all 19 level texts for stores to
-  `0x15F6A8` found constants 0, 1, 3, 4, 5, 6, 7 and values restored from a
-  saved-mode field (`func_001FD3E8`'s level copy at L00 0x202E48, and
-  `func_L00_00299B68`). No store of the constant -1 turned up. The ELF's own
-  main segment has no store either. `config/names.tsv` cites a TCRF page for
-  "0xFFFFFFFF: Debug Menu", which fits entering it by poking memory. The menu
-  code is live and kept up to date (it reads the current state structures),
-  but no button path to it was found. **untested in game**
+  (refs from `func_L00_001F4918` in every level): an in-game occlusion
+  sample recorder (**inferred**); `TJB - No env sample point found!`
+  (`func_L00_002510F0`) is the run-time lookup (**inferred**).
+- Unreferenced pointer table at level-00 data `0x16C140`: `    sfx`,
+  `  music`, ` dialog`, `ambient`, `  shell`, padded to 7 chars like a
+  mixer header (**inferred**).
+- **Reachability (inferred):** stores to `0x15F6A8` across all level texts
+  use constants 0, 1, 3-7 or a restored saved mode (`func_001FD3E8`'s copy
+  at L00 0x202E48, `func_L00_00299B68`); none store -1, nor does the ELF.
+  names.tsv cites TCRF for "0xFFFFFFFF: Debug Menu", consistent with
+  memory poking. The code is live, but no button path was found.
+  **untested in game**
 
 ---
 
@@ -317,17 +257,15 @@ Observations:
 
 ### 3.1 `printf` is a stub
 
-`func_001E9730` (`STUB_printf`) is `void f(int, ...) {}` in `src/game/stub.c`
-(matched). It has 22 callers in the ELF alone, and every level calls it from
-the memory-map report, `Transition to level %d` (`func_L00_00277A88`),
-`loaded irx modules`, `Unsupported language %d`, and others. In emulator
-terms, a breakpoint on `func_001E9730` shows every diagnostic the developers
-saw (**inferred**, untested).
+`func_001E9730` (`STUB_printf`, `src/game/stub.c`, matched) is
+`void f(int, ...) {}`: 22 callers in the ELF, plus every level (memory map,
+`Transition to level %d`, `loaded irx modules`, `Unsupported language %d`,
+...). An emulator breakpoint there would show all diagnostics
+(**inferred**, untested).
 
 ### 3.2 Diagnostics and where they are used
 
-Code references were counted in each level (lui/addiu pairs into that level's
-copy of the string) and in the ELF. "19/19" means referenced in every level.
+"19/19" = lui/addiu-referenced in every level's copy.
 
 | String (verbatim) | Referenced from | Status |
 |---|---|---|
@@ -350,63 +288,57 @@ copy of the string) and in the ELF. "19/19" means referenced in every level.
 
 ### 3.3 File/line literals
 
-No `__FILE__`/`__LINE__` pair from an assert survives. The only source-file
-literals still used by code are `hud.cpp`, `loaders.cpp` and `map.cpp` (each
-referenced in every level; level 14 has five `map.cpp` references). They are
-passed with line numbers to the heap allocator, see
-`DATAMINED_REVERSE_ENGINEERING.md` §1. `/usr/local/989snd/ee/989snd.c` comes
-from the sound library. **verified**
+No assert `__FILE__`/`__LINE__` pair survives. Only `hud.cpp`,
+`loaders.cpp` and `map.cpp` are still used (every level; five `map.cpp`
+refs in level 14), passed with line numbers to the heap allocator
+(`DATAMINED_REVERSE_ENGINEERING.md` §1). `/usr/local/989snd/ee/989snd.c` is
+the sound library. **verified**
 
 ---
 
 ## 4. Development environment
 
-- **Project code "I5"** (**inferred**): the debug-menu title `I-5`,
-  `cdrom0:\CODE\I5\PARAM.TXT;1` and `host0:z:/i5/levels/level%d/...`. A
-  `host0:` path is a file on the development PC served through the devkit, and
-  `z:` was a mapped drive on it. These paths are dead in retail (section 3.2).
-- **Maya** (**inferred**): designer errors say `maya instance` (e.g.
-  `Moby class %d maya instance %d needs a rocketPath!`, level 01;
-  `Moby Maya Index %d deleted.`, level 10), so placed instances were
-  identified by their Maya scene index.
-- **Original names** (**verified** strings): header `walk.h` and function
-  `walk_init2LegAnim` (`Invalid anim detected on pLD->anims[%d]->anim in
+- **Project code "I5"** (**inferred**): menu title `I-5`,
+  `cdrom0:\CODE\I5\PARAM.TXT;1`, `host0:z:/i5/levels/level%d/...` (`host0:`
+  = devkit host PC, `z:` a mapped drive). Dead in retail (§3.2).
+- **Maya** (**inferred**): `Moby class %d maya instance %d needs a
+  rocketPath!` (01), `Moby Maya Index %d deleted.` (10): instances were
+  identified by Maya scene index.
+- **Original names** (**verified** strings): `walk.h`, `walk_init2LegAnim`
+  (`Invalid anim detected on pLD->anims[%d]->anim in
   walk_init2LegAnim.\nSee walk.h and check your initialization function for
-  moby class %d`, all levels), struct `w_2legData`, state `SUCKSTATE_DEATH`,
-  function `M774_ShipChallengeDone`, `MB_Sucking`, `Camera_CollPrimTest`.
-- **"Ratchett"** with two t's is the in-house spelling: debug row `Ratchett`,
-  memory-map line `ratchett seqs:`. **verified**
-- Designer strings are signed with tags (`- RAR`, `TJB -`) and one asks the
-  reader to `Please tell Jason you saw this.` (levels 01 and 08). They are
-  quoted here verbatim, and this page makes no claim about who wrote them.
-- **VU microcode as DVP overlays** (**verified**): the ELF has 43
-  `.DVP.overlay..<vu addr>.<id>.<line>.<n>` sections, 12 groups of 1-8 chunks
-  of up to 0x800 bytes. `.DVP.ovlytab` gives each chunk's EE address in
-  `.vutext` (0x100080, 0x12290 bytes) and its VU address. That is the
-  `dvp-as` overlay mechanism for VU1 micro memory. The `<id>` and `<line>`
-  fields look like a source hash and a source line (**inferred**).
-- **ELF layout** (**verified**, `readelf -S`): resident sections are named
-  `core.text`, `core.data`, `core.rdata`, `core.bss` and `core.lit`. The
-  replaceable main segment is `.lit`, `.bss`, `.data`, `lvl.vtbl`,
-  `lvl.camvtbl`, `lvl.sndvtbl` and `.text`. The ELF's own `.text` is only
-  0x556B0 bytes and `lvl.vtbl` only 0xC bytes, against about 1.1 MB of text
-  and about 0x800 bytes of vtbl in each level, so the ELF carries a reduced
-  boot program (**inferred**). There is no `.mdebug` or other debug section.
+  moby class %d`, all levels), `w_2legData`, `SUCKSTATE_DEATH`,
+  `M774_ShipChallengeDone`, `MB_Sucking`, `Camera_CollPrimTest`.
+- **"Ratchett"** is the in-house spelling: debug row `Ratchett`, memory map
+  `ratchett seqs:`. **verified**
+- Some strings carry tags (`- RAR`, `TJB -`); no claim is made about who
+  wrote them.
+- **VU microcode as DVP overlays** (**verified**): 43
+  `.DVP.overlay..<vu addr>.<id>.<line>.<n>` sections (12 groups of 1-8
+  chunks, up to 0x800 bytes). `.DVP.ovlytab` maps each to its EE address
+  in `.vutext` (0x100080, 0x12290 bytes) and VU address: the `dvp-as` VU1
+  overlay mechanism. `<id>`/`<line>` look like source hash and line
+  (**inferred**).
+- **ELF layout** (**verified**, `readelf -S`): resident `core.text`,
+  `core.data`, `core.rdata`, `core.bss`, `core.lit`; replaceable main
+  segment `.lit`, `.bss`, `.data`, `lvl.vtbl`, `lvl.camvtbl`,
+  `lvl.sndvtbl`, `.text`. The ELF's `.text` is 0x556B0 bytes and
+  `lvl.vtbl` 0xC, vs ~1.1 MB text and ~0x800 vtbl per level: a reduced boot
+  program (**inferred**). No `.mdebug` or other debug section.
 
 ---
 
 ## 5. Per-level strings and NPC names
 
-Strings that appear in one or a few level overlays and not in the ELF.
-Leading stray bytes from the extraction (`?`, `@`, `=`, `A`) are dropped, and
-random-looking float data is left out. Presence in an overlay means the code
-is linked into that level, not necessarily that the NPC appears there.
-**verified** (strings), level names from `docs/OVERLAYS.md`.
+In one or a few levels, not the ELF. Stray leading bytes (`?`, `@`, `=`,
+`A`) and float noise dropped. Presence means the code is linked in, not
+that the NPC appears. **verified** strings; level names from
+`docs/OVERLAYS.md`. Class-id errors: [mobys.md](mobys.md#classes-named-by-retail-debug-strings).
 
 | Level | Names and notable strings |
 |---|---|
 | 00 Veldin | none of its own. The overlay has only 11 level-unique functions (8 KB), against 42-136 for the other levels |
-| 01 Novalis | `Big Turret Guy`, `Water Pump Worker`, `Mystery 774`, `?mouse already completed`, `WARNING! - Moby 774 wasn't expecting a M774_ShipChallengeDone call.  Please tell Jason you saw this.` |
+| 01 Novalis | `Big Turret Guy`, `Water Pump Worker`, `Mystery 774`, `?mouse already completed`, `WARNING! - Moby 774 wasn't expecting a M774_ShipChallengeDone call. ...` |
 | 02 Aridia | `Surfer Agent`, `McGuffin Surfer`, `Shark with no path. UID: %d`, `Ship with no path. UID: %d` |
 | 03 Kerwan | `Helga`, `train end path has no STOP NODE!!!\n  Bailing out of the end cutscene before the train goes out of control and kills us all!`, `train has no master!`, `train engine has no cars!` |
 | 04 Eudora | `Moby 1120 %d has no segment switch!`, `moby 427, instance %d requires both path fields to run!!! DELETING MOBY FROM LEVEL!!`, `sizeof(w_2legData)` (only referenced here) |
@@ -436,46 +368,21 @@ In every level: `Already got pilot helmet... deleting.`,
 
 ## 6. Moby class ids named by strings
 
-The designer error strings pair class ids with names (**verified** strings;
-the identification is the string's own wording). `docs/PVARS.md` already
-names 774 as the Plumber (Novalis).
+Moved to [mobys.md](mobys.md#classes-named-by-retail-debug-strings)
+(verbatim strings, levels, update functions). Extra notes:
 
-| oClass | Name in string | Level(s) |
-|---|---|---|
-| 6 | (trigger user) `No trigger for moby 6` | 13 |
-| 28 | Footsoldier (`bound/fly/intro path`, `hatch index`) | 14, 15 |
-| 111 | `no path for moby 111` | 13 |
-| 186 | `M186 init should be earlier` | all |
-| 427 | needs both path fields | 04 |
-| 557 | hoverboat | 14 |
-| 610 | wind-control (cuboids: wind pushing hero area, fxAct, fxArea) | 14 |
-| 671 | `M671`: tiled texture (max 8 tiles) | 08 |
-| 774 | `Mystery 774`, `M774_ShipChallengeDone` | 01, 08 |
-| 794 | needs an effect moby | 10 |
-| 871 | mine group controller | 07 |
-| 899 | path data | 03 |
-| 908, 921 | Enemy Fighter | 14 |
-| 923, 1401 | MineBot | 14, 16 |
-| 947 | needs a path (`Moron.`) | 10 |
-| 1059 | bounding path, hero-detect path, guard-point cuboid, water moby | 07 |
-| 1067 → 1073 | requires a link to `dataProcessor` class 1073 | 10 |
-| 1120, 1290 | need a segment switch (1290 also a cut scene) | 04 / all |
-| 1142 | Equilizer Ammo Spawner (sic) | 07 |
-| 1181 | doubly linked chain (`could not link next/prev`) | 09 |
-| 1417 | Flying Car | 14 |
-| 1885 | respawner (`could not find a moby to respawn`) | 09, 13 |
-
-Strings that name kinds without class ids: `Hovertank`, `Turret`,
-`Paratrooper`, `Kamikaze`, `Shark`, `Ship`, `Bigship`, `train`.
+- `docs/PVARS.md` names 774 the Plumber (Novalis).
+- 794 reads as needing an effect moby (10).
+- Kinds named without class ids: `Hovertank`, `Turret`, `Paratrooper`,
+  `Kamikaze`, `Shark`, `Ship`, `Bigship`, `train`.
 
 ---
 
 ## 7. Memory budget (the MEMORY MAP report)
 
-`func_L00_00244AE0` (loaders, all levels, still `INCLUDE_ASM`) is called by
-the main loop with `(1, 0)` right after each level load, and with `(0, full)`
-on quit. When the first argument is nonzero it prints, through the stub
-`printf` (**verified**):
+`func_L00_00244AE0` (loaders, all levels, still `INCLUDE_ASM`): called with
+`(1, 0)` after each level load and `(0, full)` on quit. Nonzero first
+argument prints, into the stub (**verified**):
 
 ```
 *** MEMORY MAP ***
@@ -487,12 +394,10 @@ end of mem: %.1fM
 estimated mem: %.1fM
 ```
 
-All lines but the last two are `%.1fK`. The order is how a level's memory is
-laid out after load (**inferred**). The labels name the engine's asset
-classes: tfrags (terrain fragments), ties, shrubs, mobys, the VU chain
-buffers, a dedicated gadget buffer and "ratchett seqs" (the hero's animation
-sequences). Hooking the stub would print the real numbers per level
-(**untested**).
+All but the last two lines are `%.1fK`. The order is likely the post-load
+memory layout (**inferred**). "ratchett seqs" = hero animation sequences;
+tfrag = terrain fragment. Hooking the stub would print real per-level
+numbers (**untested**).
 
 ---
 
@@ -508,98 +413,81 @@ sequences). Hooking the stub would print the real numbers per level
 | `/usr/local/989snd/ee/989snd.c` | 989 Studios sound library (EE side, RPC to the IOP) |
 | `cdrom0:\IOPRP243.IMG;1` | IOP replacement image loaded by `InitOnce` (IOP 2.4.3, **inferred** from the name) |
 
-The pad stack is libpad2 with libdbc (`scePad2CreateSocket`, see `pad.h`) and
-libvib, not the older libpad (**inferred** from the tags plus `pad.h`).
+Pad stack: libpad2 + libdbc (`scePad2CreateSocket`, `pad.h`) + libvib, not
+old libpad (**inferred**).
 
 ---
 
 ## 9. File system, region and language
 
 - **Boot reads `SYSTEM.CNF`** (**verified**): `InitOnce` (`func_00201E88`,
-  `src/game/initonce.c`) reads LBA 0x121 into a buffer. On this disc that
-  sector is `BOOT2 = cdrom0:\SCES_509.16;1\r\nVER = 2.00\r\nVMODE = PAL`.
-  Byte 0x33 (`P` of `VMODE = PAL`) sets the PAL flag
-  `D_0015EE80 = D_0015EF90 = (buf[0x33] != 'N')`. `func_00209A60`
-  (`src/game/memcard.c`) then fills the template `/BA****-*****RATCHET`: byte
-  0x12 (`E` of `SCES`) replaces the `A` (`P` gives `I`), and the product
-  letters and digits are copied in. The PAL save folder is therefore
-  `BESCES-50916RATCHET`, holding `icon.sys`, `static.ico` and `save%d.bin`.
-- **IRX loading quirk** (**verified**, matched C): `InitOnce` calls
-  `LoadIRXModule` on table entries 0x1C, 0x1E, 0x20, 0x22, 0x24, **0x26 twice**,
-  0x2A, 0x2C, then 0x28. One module is loaded twice and 0x28 is loaded last.
+  `src/game/initonce.c`) reads LBA 0x121:
+  `BOOT2 = cdrom0:\SCES_509.16;1\r\nVER = 2.00\r\nVMODE = PAL`.
+  PAL flag `D_0015EE80 = D_0015EF90 = (buf[0x33] != 'N')`. `func_00209A60`
+  (`src/game/memcard.c`) fills `/BA****-*****RATCHET` (byte 0x12 `E`
+  replaces `A`, `P` would give `I`; product letters/digits copied): save
+  folder `BESCES-50916RATCHET` with `icon.sys`, `static.ico`, `save%d.bin`.
+- **IRX order** (**verified**, matched): `LoadIRXModule` on entries 0x1C,
+  0x1E, 0x20, 0x22, 0x24, **0x26 twice**, 0x2A, 0x2C, then 0x28.
 - **Language** (**verified** code, **inferred** library identity):
-  `func_0012D380` reads the OSD config word (bits 16-20, or bit 4 when
-  bits 13-15 are zero), which is how libscf's `sceScfGetLanguage` behaves. `InitOnce` maps the
-  result into `D_0015EE88`: English 1 → 0, French 2 → 2, Spanish 3 → 4,
-  German 4 → 3, Italian 5 → 5. Anything else (Japanese, Dutch, Portuguese)
-  prints `Unsupported language %d\n` and falls back to English 0. Per-language
-  tables have six slots and are indexed with `language - 1` clamped to 0
-  (`src/game/space.c:1842`).
-- **Movies** (**verified** names; pointer references in every level's data):
-  `\DEMOLOGO.NTS`, `\INFOBOT2.PSS` to `\INFOBOT4.PSS`, `\REPORTER.PSS;1`,
-  `\INFOBOT7.PSS;1`, and the four PAL language variants
-  `\IBOT5_F/G/S/I.PSS;1` (French/German/Spanish/Italian, **inferred** from the
+  `func_0012D380` reads the OSD config word (bits 16-20, or bit 4 when bits
+  13-15 are zero), like libscf `sceScfGetLanguage`. `InitOnce` maps it to
+  `D_0015EE88`: English 1 → 0, French 2 → 2, Spanish 3 → 4, German 4 → 3,
+  Italian 5 → 5; anything else prints `Unsupported language %d\n` and uses
+  English 0. Six-slot per-language tables are indexed `language - 1`
+  clamped to 0 (`src/game/space.c:1842`).
+- **Movies** (**verified** names, referenced from every level's data):
+  `\DEMOLOGO.NTS`, `\INFOBOT2.PSS`..`\INFOBOT4.PSS`, `\REPORTER.PSS;1`,
+  `\INFOBOT7.PSS;1`, `\IBOT5_F/G/S/I.PSS;1` (languages **inferred** from the
   letters). See `docs/MOVIE.md`.
-- **Level data** is opened as `cdrom0:\DATA\LEVELS\LEVEL` + number (3 code
-  references per level).
+- **Level data**: `cdrom0:\DATA\LEVELS\LEVEL` + number (3 refs per level).
 
 ---
 
 ## 10. Unused code
 
-A rough scan (scratch script, not in the repo) marked every function in
-`config/overlays/functions.tsv` that has, in no level, a `jal`, a lui/addiu
-or lui/ori pair (400-instruction window), or a 32-bit word anywhere in that
-level's lit/data/vtbl/text or in the resident ELF code pointing at its
-address. **319 of 4180** functions (33 KB) came out unreferenced: 241 shared,
-51 level-only, 27 exe-kind. This is an **upper bound, not a list of dead
-code**:
+A rough scan (scratch script, not in the repo) found **319 of 4180**
+functions (33 KB; 241 shared, 51 level-only, 27 exe-kind) with no `jal`,
+lui/addiu or lui/ori pair (400-instruction window), or 32-bit word pointing
+at them in any level's lit/data/vtbl/text or the resident ELF code. An
+**upper bound, not a dead-code list**:
 
-- The level's entry point (`func_L00_002465F8`, the main loop, reached through
-  `manifest.json` `entry_point`) and `InitOnce` both show up as false
-  positives.
-- Moby update functions (e.g. the 5448-byte Batalia turret-bolt update
-  `func_L08_002E4BE8`) are probably bound through class tables that the level
-  loads from disc (**inferred**).
-- Odd-aligned entries such as `func_L00_001F080C` are catalogue boundary
-  fragments (see `nonmatching/shared/func_L00_001F8750.c` for one).
+- False positives: the level entry `func_L00_002465F8` (via `manifest.json`
+  `entry_point`) and `InitOnce`.
+- Moby updates (e.g. Batalia turret bolt `func_L08_002E4BE8`, 5448 bytes)
+  are probably bound through class tables loaded from disc (**inferred**).
+- Odd-aligned entries (e.g. `func_L00_001F080C`) are catalogue boundary
+  fragments (see `nonmatching/shared/func_L00_001F8750.c`).
 
-Real dead code needs a per-function check. Verified dead **data** is easier
-to show: see section 3.2 (`PARAM.TXT`, the assert format, `host0` paths, frame
-markers).
+Verified dead **data**: §3.2.
 
-Functions per level (`functions.tsv`, all kinds / level-unique / unique
-bytes): level 00 2336/11/8 KB is the smallest. The largest are 14 Oltanis
-2556/136/151 KB, 18 Veldin (return) 2489/127/156 KB and 08 Batalia
-2480/86/156 KB.
+Functions per level (all / level-unique / unique bytes): smallest 00
+2336/11/8 KB; largest 14 Oltanis 2556/136/151 KB, 18 Veldin (return)
+2489/127/156 KB, 08 Batalia 2480/86/156 KB.
 
 ---
 
 ## 11. Open questions
 
-- What sets `gGameMode` to -1 in development builds (a pad combo stripped
-  from retail?), and does anything in the current PAL build still do it
-  indirectly through the saved-mode field?
-- The names of item ids 1 and 0x24, special items 1-5 and skill points 1-29
-  (needs the help-text archive, which is not in the overlays).
-- Whether the code system works in game as derived (pad 0 only, while
-  `unk18C` is zero).
+- What set `gGameMode` to -1 in development builds, and can the saved-mode
+  field still do it?
+- Names of item ids 1 and 0x24, special items 1-5, skill points 1-29
+  (needs the help-text archive, not in the overlays).
+- Does the code system work in game as derived (pad 0 only, while `unk18C`
+  is zero)?
 
 ---
 
 ## 12. Corrections to `DATAMINED_REVERSE_ENGINEERING.md`
 
-- **"RaC1 Gadget Inventory Enum (`RaC1GadgetId`)"**: these 29 values do not
-  match the retail item ids. The ownership array `D_0013D5C8` and `GiveItem`
-  use ids 0-0x24 with Heli-Pack = 2, Morph-o-Ray = 0x15, Magneboots = 0x1C,
-  Hologuise = 0x1F, Persuader = 0x23 (section 1.3). The enum in
-  `include/structs.h` is used by no source file.
-- **"Recovered from unstripped debug types"**: the retail ELF has
-  no `.mdebug` or any other debug section (section 4), so the `MobyInstance`
-  layout there does not come from this executable's debug data. Treat its
-  field names as reconstructed. `include/moby.h` is the reference.
-- **`camera.c` (0x001E7A50)**: no string `camera.c` exists. That row is the
-  `Camera_CollPrimTest` warning, and the file name is inferred. `hud.cpp`,
-  `loaders.cpp` and `map.cpp` do exist as strings.
-- The string addresses there are ELF-image addresses. In a running level the
-  same strings are elsewhere (see the note at the top of this page).
+- **`RaC1GadgetId`**: its 29 values don't match retail ids (`D_0013D5C8` /
+  `GiveItem`: 0-0x24, Heli-Pack 2, Morph-o-Ray 0x15, Magneboots 0x1C,
+  Hologuise 0x1F, Persuader 0x23; §1.3). The enum in `include/structs.h` is
+  unused.
+- **"Recovered from unstripped debug types"**: the ELF has no debug
+  sections (§4), so that `MobyInstance` is reconstructed. Use
+  `include/moby.h`.
+- **`camera.c` (0x001E7A50)**: no such string; that row is the
+  `Camera_CollPrimTest` warning. `hud.cpp`, `loaders.cpp`, `map.cpp` do
+  exist.
+- Its string addresses are ELF-image addresses (see the top of this page).
