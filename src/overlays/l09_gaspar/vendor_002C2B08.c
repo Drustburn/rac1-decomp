@@ -2,6 +2,7 @@
 #include "common.h"
 #include "callees.h"
 #include "include_asm.h"
+#include "vector.h"
 #include "hero.h"
 #include "moby.h"
 
@@ -1137,11 +1138,6 @@ char *func_L09_002EEEB0(char *src, int cls) {
     return moby;
 }
 typedef u32 u128_EEF80 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_EEF80 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_EEF80;
 extern short D_0015EE84_EEF80 __asm__("D_0015EE84");
 char *func_L09_002EEEB0(char *src, int cls);
 extern u8 D_0014C150[];
@@ -1152,7 +1148,7 @@ extern void func_L00_002584A8_EEF80(struct Moby *, int, int) __asm__("func_L00_0
 extern void func_L00_00260958(void *, float);
 extern int func_0022ED80_EEF80(int, int, struct Moby *) __asm__("func_0022ED80");
 extern float func_001F9B88(float);
-extern struct Moby *func_L09_002F0BB8_EEF80(struct Moby *, Vec4_EEF80 *, Vec4_EEF80 *, s32, f32) __asm__("func_L09_002F0BB8");
+extern struct Moby *func_L09_002F0BB8_EEF80(struct Moby *, Vec4 *, Vec4 *, s32, f32) __asm__("func_L09_002F0BB8");
 extern void func_L00_00260108_EEF80(struct Moby *, void *, int, float, float) __asm__("func_L00_00260108");
 extern void func_L00_0025F4A8(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
 
@@ -1231,7 +1227,7 @@ void func_L09_002EEF80(struct Moby *moby) {
         func_L00_001FF4B0(vel, vel, falloff * (random_float_between(6.0f, 10.0f) * D_0015EE6C));
         FastVecAdd(pos, pos, push);
         if (moby->oclass == 0x514 || random_integer_below(4) == 0) {
-            func_L09_002F0BB8_EEF80(moby, (Vec4_EEF80 *)pos, (Vec4_EEF80 *)vel, i & 1, random_float_between(1.0f, 2.0f));
+            func_L09_002F0BB8_EEF80(moby, (Vec4 *)pos, (Vec4 *)vel, i & 1, random_float_between(1.0f, 2.0f));
         }
         if (i % 3 == 0) {
             func_L00_00260108_EEF80(moby, pos, -1, random_float_between(1.0f, 1.6f), 0.0f);

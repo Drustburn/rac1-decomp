@@ -355,11 +355,6 @@ typedef u32 u128_C39D0 __attribute__((mode(TI), aligned(16)));
 extern struct Hero D_0013F450_C39D0 __asm__("D_0013F450");
 extern s32 D_0015EE84 MACRO_ADDR;
 typedef int OvlQuad_C39D0 __attribute__((mode(TI)));
-typedef union {
-    OvlQuad_C39D0 q;
-    f32 f[4];
-    s32 i[4];
-} OvlVec4;
 typedef struct {
     u8 pad0[0x18];
     s32 moby; /* 0x18: passed to FUN_002141f8 (reads moby+0x34, moby+0x78); 0 when no moby was hit */
@@ -374,19 +369,14 @@ typedef struct {
     f32 normal_z; /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
 } CollisionHit_C39D0;
 int func_001F9850(int);
-typedef union {
-    OvlQuad_C39D0 q;
-    f32 f[4];
-    s32 i[4];
-} V2c2488;
 extern u8 D_0013E62A[];
 extern f32 func_001FA850(f32, f32);
 extern f32 func_001F9D48(void *, void *);
 extern f32 func_001FA888(s32);
-void func_L00_002C3790_C39D0(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("func_L00_002C3790");
+void func_L00_002C3790_C39D0(Vec4 *pos, Vec4 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("func_L00_002C3790");
 typedef struct {
     u8 pad0[0x40];
-    OvlVec4 grip;
+    Vec4 grip;
     struct Moby *held;
     s32 timer;
     s32 delay;
@@ -436,8 +426,8 @@ extern f32 D_0015EE70 MACRO_ADDR;
 extern s32 D_0015EFA4 MACRO_ADDR;
 extern u32 D_0013CBE4;
 extern CollisionHit_C39D0 D_L00_00173F40_C39D0 __asm__("D_L00_00173F40");
-extern OvlVec4 D_L00_00166EC0_C39D0 __asm__("D_L00_00166EC0");
-extern OvlVec4 D_L00_00166D80[3];
+extern Vec4 D_L00_00166EC0_C39D0 __asm__("D_L00_00166EC0");
+extern Vec4 D_L00_00166D80[3];
 extern void func_0020D678(void *);
 extern void func_0020DAF8(void *, int, void *);
 extern f32 func_001F9B50(f32);
@@ -465,11 +455,11 @@ extern void func_L00_00250800(void *, int, void *);
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002bffa8.c, FUN_L00_002c26c8. */
 void func_L00_002C39D0(struct Moby *moby) {
     CarrierVars_2c26c8 *vars;
-    OvlVec4 local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
-    OvlVec4 launch;
-    union { OvlVec4 arc; } temporary;
-    OvlVec4 direction;
-    OvlVec4 probe;
+    Vec4 local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
+    Vec4 launch;
+    union { Vec4 arc; } temporary;
+    Vec4 direction;
+    Vec4 probe;
     f32 angle, slope, distance, horizontal, vertical, radius, speed;
     f32 gravity, root;
     s32 hit = 0;
@@ -593,7 +583,7 @@ void func_L00_002C39D0(struct Moby *moby) {
         }
         gravity = D_0015EE70 * 11.0f;
         speed = (D_0013CA40.held & 5) ? func_001FA888(D_0013E62A[0]) * 2.5f + 8.5f : 8.5f;
-        func_L00_002C3790_C39D0((V2c2488 *)&pos, (V2c2488 *)&target, out, gravity, 0.00000999999975f, speed);
+        func_L00_002C3790_C39D0((Vec4 *)&pos, (Vec4 *)&target, out, gravity, 0.00000999999975f, speed);
     }
     switch (moby->state) {
     case 0:

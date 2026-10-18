@@ -2,6 +2,7 @@
 #include "common.h"
 #include "records.h"
 #include "include_asm.h"
+#include "vector.h"
 #include "hero.h"
 #include "moby.h"
 
@@ -883,11 +884,6 @@ void func_L05_0031C0F0(char *moby) {
     }
 }
 typedef u32 u128_1DDF0 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_1DDF0 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_1DDF0;
 extern f32 D_0015EE70 MACRO_ADDR;
 struct MineVars_c8e0 {
     u8 pad0[0x60];
@@ -944,10 +940,10 @@ void func_L05_0031E468(char *m);
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/0031abe0.c, FUN_L05_0031c8e0. */
 void func_L05_0031DDF0(struct Moby *moby) {
     struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
-    Vec4_1DDF0 tip;
-    Vec4_1DDF0 vel;
-    Vec4_1DDF0 dir;
-    Vec4_1DDF0 start;
+    Vec4 tip;
+    Vec4 vel;
+    Vec4 dir;
+    Vec4 start;
     f32 distance;
     f32 camera_distance;
     f32 size;

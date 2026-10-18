@@ -518,15 +518,10 @@ void func_L08_002F2A08(unsigned char *moby) {
 }
 extern f32 D_0015EE6C MACRO_ADDR;
 typedef u32 u128_F5980 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_F5980 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_F5980;
 typedef struct {
     s32 count;
     u8 pad4[0xC];
-    Vec4_F5980 points[1];
+    Vec4 points[1];
 } SwarmPath;
 typedef struct {
     s32 point;
@@ -556,9 +551,9 @@ extern short D_L08_00162000;
 void func_L08_002F5980(struct Moby *moby)
 {
     SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
-    Vec4_F5980 point;
-    Vec4_F5980 step;
-    Vec4_F5980 velocity; /* Effect scratch is separate from the waypoint movement step. */
+    Vec4 point;
+    Vec4 step;
+    Vec4 velocity; /* Effect scratch is separate from the waypoint movement step. */
     f32 fade;
     s32 waypoint;
     f32 distance;
@@ -631,7 +626,7 @@ void func_L08_002F5980(struct Moby *moby)
         return;
     }
     case 3: {
-        Vec4_F5980 timer;
+        Vec4 timer;
         timer.f[0] = (f32)moby->alpha;
         func_00214D28(&timer, 0.0f, 128.0f / (f32)func_001F9850(30));
         moby->alpha = (u8)(s32)timer.f[0];

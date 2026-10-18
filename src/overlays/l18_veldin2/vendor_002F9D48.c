@@ -2,6 +2,7 @@
 #include "common.h"
 #include "callees.h"
 #include "include_asm.h"
+#include "vector.h"
 #include "moby.h"
 
 typedef int u128_9D48 __attribute__((mode(TI)));
@@ -528,11 +529,6 @@ void func_L18_002FB080(struct Moby *m) {
     func_L00_001FD1D8(&pk, 0, 0);
 }
 typedef u32 u128 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_FB318;
 extern float D_L18_001625BC MACRO_ADDR;
 typedef unsigned int u128_9c20_FB318 __attribute__((mode(TI)));
 typedef struct {
@@ -552,7 +548,7 @@ void func_L18_002FB318(struct Moby *m) {
     Pk_9c20_FB318 pk;
     float mat[4][4];
     float up[4];
-    Vec4_FB318 vertices[4];
+    Vec4 vertices[4];
     int i = 0;
     int color;
 

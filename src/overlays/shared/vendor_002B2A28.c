@@ -1295,11 +1295,6 @@ unsigned char *func_L14_002DFE98(char *owner, char *pos) {
     return m;
 }
 typedef u32 u128_E1110 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_E1110 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_E1110;
 extern f32 D_0015EE60 MACRO_ADDR;
 extern f32 D_0015EE64 MACRO_ADDR;
 extern void func_L14_002E17B8_E1110(struct Moby *) __asm__("func_L14_002E17B8");
@@ -1342,7 +1337,7 @@ extern short D_L14_00161C18;
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b17d8.c, FUN_L14_002dfd10. */
 void func_L14_002E1110(struct Moby *moby) {
     Data_dfd10 *data = (Data_dfd10 *)moby->pvars;
-    Vec4_E1110 probe;
+    Vec4 probe;
     f32 vec[4];
     f32 *velocity;
     void *points;
@@ -1697,14 +1692,9 @@ void func_L14_00300130(unsigned char *m) {
     }
 }
 typedef u32 u128 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_00AC8;
 struct MobyTrail {
-    Vec4_00AC8 pos[8]; /* 0x00: ring of source positions */
-    Vec4_00AC8 rot[8]; /* 0x80: ring of source rotations */
+    Vec4 pos[8]; /* 0x00: ring of source positions */
+    Vec4 rot[8]; /* 0x80: ring of source rotations */
     s32 copy_fade[4]; /* 0x100: start of copy moby byte 0x23; all 0 ends the trail */
     s32 delay[4]; /* 0x110: frames each copy lags behind */
     struct Moby *copies[4]; /* 0x120 */
@@ -1721,23 +1711,23 @@ struct HeroManipulator {
     u8 unk3; /* 0x03 */
     u8 pad_4[0x8];
     f32 unkC; /* 0x0C */
-    Vec4_00AC8 quat; /* 0x10 */
-    Vec4_00AC8 scale3; /* 0x20 */
-    Vec4_00AC8 translation; /* 0x30 */
+    Vec4 quat; /* 0x10 */
+    Vec4 scale3; /* 0x20 */
+    Vec4 translation; /* 0x30 */
 };
 struct HeroEase {
     u8 unk0; /* 0x00 */
     u8 attached; /* 0x01: attached to its moby (FUN_0020cb10 / FUN_0020cb88) */
     u8 pad_2[0xE];
-    Vec4_00AC8 quat; /* 0x10: rotation built from rot (FUN_L00_00259f50) */
-    Vec4_00AC8 scale3; /* 0x20: x/y/z = scale */
-    Vec4_00AC8 translation; /* 0x30: copy of pos */
-    Vec4_00AC8 rot; /* 0x40: eased toward rot_target */
-    Vec4_00AC8 rot_vel; /* 0x50 */
-    Vec4_00AC8 rot_target; /* 0x60: cleared every frame */
-    Vec4_00AC8 pos; /* 0x70: eased toward pos_target */
-    Vec4_00AC8 pos_vel; /* 0x80 */
-    Vec4_00AC8 pos_target; /* 0x90: cleared every frame */
+    Vec4 quat; /* 0x10: rotation built from rot (FUN_L00_00259f50) */
+    Vec4 scale3; /* 0x20: x/y/z = scale */
+    Vec4 translation; /* 0x30: copy of pos */
+    Vec4 rot; /* 0x40: eased toward rot_target */
+    Vec4 rot_vel; /* 0x50 */
+    Vec4 rot_target; /* 0x60: cleared every frame */
+    Vec4 pos; /* 0x70: eased toward pos_target */
+    Vec4 pos_vel; /* 0x80 */
+    Vec4 pos_target; /* 0x90: cleared every frame */
     s16 unkA0; /* 0xA0: -1 = unused */
     s16 kind; /* 0xA2: picks the moby (FUN_L00_00205110) */
     f32 accel; /* 0xA4 */
@@ -1777,25 +1767,25 @@ struct HeroVelocityKey {
     s32 frames;
 };
 struct HeroMotion {
-    Vec4_00AC8 pos; /* 0x80: world position */
-    Vec4_00AC8 rot; /* 0x90: rotation; z is the yaw */
-    Vec4_00AC8 unkA0; /* 0xA0 */
-    Vec4_00AC8 unkB0; /* 0xB0 */
-    Vec4_00AC8 unkC0; /* 0xC0 */
-    Vec4_00AC8 unkD0; /* 0xD0 */
-    Vec4_00AC8 velocity; /* 0xE0: per-frame velocity */
-    Vec4_00AC8 platform_delta; /* 0xF0: platform movement this frame */
-    Vec4_00AC8 displacement; /* 0x100: total displacement this frame */
-    Vec4_00AC8 unk110; /* 0x110 */
-    Vec4_00AC8 unk120; /* 0x120 */
-    Vec4_00AC8 unk130; /* 0x130 */
-    Vec4_00AC8 platform_carry; /* 0x140 */
-    Vec4_00AC8 unk150; /* 0x150: copied from unk110/displacement on hero_set_state */
+    Vec4 pos; /* 0x80: world position */
+    Vec4 rot; /* 0x90: rotation; z is the yaw */
+    Vec4 unkA0; /* 0xA0 */
+    Vec4 unkB0; /* 0xB0 */
+    Vec4 unkC0; /* 0xC0 */
+    Vec4 unkD0; /* 0xD0 */
+    Vec4 velocity; /* 0xE0: per-frame velocity */
+    Vec4 platform_delta; /* 0xF0: platform movement this frame */
+    Vec4 displacement; /* 0x100: total displacement this frame */
+    Vec4 unk110; /* 0x110 */
+    Vec4 unk120; /* 0x120 */
+    Vec4 unk130; /* 0x130 */
+    Vec4 platform_carry; /* 0x140 */
+    Vec4 unk150; /* 0x150: copied from unk110/displacement on hero_set_state */
     f32 speed_xy; /* 0x160: current horizontal speed per frame; eases toward ground_speed, capped at frame_time * 52 */
     f32 unk164; /* 0x164 */
     f32 unk168; /* 0x168 */
     f32 unk16C; /* 0x16C */
-    Vec4_00AC8 unk170; /* 0x170 */
+    Vec4 unk170; /* 0x170 */
     f32 move_yaw; /* 0x180: angle, compared with rot.z */
     f32 unk184; /* 0x184 */
     f32 unk188; /* 0x188 */
@@ -1864,8 +1854,8 @@ struct Hero {
     s16 unk1F6; /* 0x1F6 */
     s16 unk1F8; /* 0x1F8 */
     u8 pad_1FA[0x6];
-    Vec4_00AC8 unk200; /* 0x200 */
-    Vec4_00AC8 unk210; /* 0x210 */
+    Vec4 unk200; /* 0x200 */
+    Vec4 unk210; /* 0x210 */
     f32 capsule_top; /* 0x220 */
     f32 unk224; /* 0x224 */
     f32 unk228; /* 0x228 */
@@ -1887,11 +1877,11 @@ struct Hero {
     f32 unk25C; /* 0x25C */
     s32 unk260; /* 0x260 */
     u8 pad_264[0xC];
-    Vec4_00AC8 unk270; /* 0x270 */
-    Vec4_00AC8 unk280; /* 0x280 */
-    Vec4_00AC8 gravity_dir; /* 0x290: gravity direction (0, 0, -1) */
-    Vec4_00AC8 ground_point; /* 0x2A0: ground probe hit point under the hero */
-    Vec4_00AC8 unk2B0; /* 0x2B0 */
+    Vec4 unk270; /* 0x270 */
+    Vec4 unk280; /* 0x280 */
+    Vec4 gravity_dir; /* 0x290: gravity direction (0, 0, -1) */
+    Vec4 ground_point; /* 0x2A0: ground probe hit point under the hero */
+    Vec4 unk2B0; /* 0x2B0 */
     union { f32 f[2]; s32 i[2]; } unk2C0; /* 0x2C0: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2C8; /* 0x2C8: written as floats and zeroed as ints */
     union { f32 f[2]; s32 i[2]; } unk2D0; /* 0x2D0: written as floats and zeroed as ints */
@@ -1911,11 +1901,11 @@ struct Hero {
     s16 unk30A; /* 0x30A */
     union { s16 s; u16 u; } frames_off_ground; /* 0x30C: read signed, incremented unsigned */
     union { s16 s; u16 u; } air_frames; /* 0x30E: frames off the ground, 0 on landing */
-    Vec4_00AC8 unk310; /* 0x310: attach anchor position (written by FUN_L00_00260668, read by FUN_L00_002604f0) */
-    Vec4_00AC8 unk320; /* 0x320: attach anchor rotation */
-    Vec4_00AC8 unk330; /* 0x330: attach anchor second position */
+    Vec4 unk310; /* 0x310: attach anchor position (written by FUN_L00_00260668, read by FUN_L00_002604f0) */
+    Vec4 unk320; /* 0x320: attach anchor rotation */
+    Vec4 unk330; /* 0x330: attach anchor second position */
     u8 pad_340[0x10];
-    Vec4_00AC8 unk350; /* 0x350: per-frame move of the moby the hero is attached to (FUN_L00_00233f80) */
+    Vec4 unk350; /* 0x350: per-frame move of the moby the hero is attached to (FUN_L00_00233f80) */
     s32 unk360; /* 0x360: attached moby (FUN_L00_00233f80) */
     s32 unk364; /* 0x364: attach flags, bits 0 and 1 */
     u8 pad_368[0x48];
@@ -1938,7 +1928,7 @@ struct Hero {
     f32 unk3F4; /* 0x3F4 */
     f32 unk3F8; /* 0x3F8 */
     u8 pad_3FC[0x4];
-    Vec4_00AC8 unk400; /* 0x400 */
+    Vec4 unk400; /* 0x400 */
     f32 unk410; /* 0x410 */
     f32 unk414; /* 0x414 */
     s32 unk418; /* 0x418: set when velocity.z clamps to unk500.z, counts up */
@@ -1960,8 +1950,8 @@ struct Hero {
     f32 unk454; /* 0x454 */
     f32 unk458; /* 0x458 */
     f32 unk45C; /* 0x45C */
-    Vec4_00AC8 unk460; /* 0x460 */
-    Vec4_00AC8 unk470; /* 0x470 */
+    Vec4 unk460; /* 0x460 */
+    Vec4 unk470; /* 0x470 */
     f32 unk480; /* 0x480 */
     f32 unk484; /* 0x484 */
     f32 unk488; /* 0x488 */
@@ -1987,7 +1977,7 @@ struct Hero {
     f32 unk4C0; /* 0x4C0 */
     s32 unk4C4; /* 0x4C4 */
     u8 pad_4C8[0x8];
-    Vec4_00AC8 unk4D0; /* 0x4D0 */
+    Vec4 unk4D0; /* 0x4D0 */
     f32 unk4E0; /* 0x4E0: ledge height (FUN_L00_0020bed0) */
     f32 unk4E4; /* 0x4E4 */
     s32 unk4E8; /* 0x4E8 */
@@ -1996,12 +1986,12 @@ struct Hero {
     u32 unk4F4; /* 0x4F4: ledge flags, bit 0: no headroom above the ledge (FUN_L00_0020bed0) */
     s32 unk4F8; /* 0x4F8: first argument of FUN_L00_00233f80 (FUN_L01_00233de0) */
     u8 pad_4FC[0x4];
-    Vec4_00AC8 unk500; /* 0x500 */
-    Vec4_00AC8 unk510; /* 0x510 */
-    Vec4_00AC8 unk520; /* 0x520 */
-    Vec4_00AC8 unk530; /* 0x530 */
-    Vec4_00AC8 unk540; /* 0x540 */
-    Vec4_00AC8 unk550; /* 0x550 */
+    Vec4 unk500; /* 0x500 */
+    Vec4 unk510; /* 0x510 */
+    Vec4 unk520; /* 0x520 */
+    Vec4 unk530; /* 0x530 */
+    Vec4 unk540; /* 0x540 */
+    Vec4 unk550; /* 0x550 */
     s32 unk560; /* 0x560 */
     s32 unk564; /* 0x564 */
     f32 unk568; /* 0x568 */
@@ -2035,7 +2025,7 @@ struct Hero {
     f32 unk5D4; /* 0x5D4 */
     struct Moby *unk5D8; /* 0x5D8 */
     f32 unk5DC; /* 0x5DC */
-    Vec4_00AC8 unk5E0; /* 0x5E0 */
+    Vec4 unk5E0; /* 0x5E0 */
     s32 *unk5F0; /* 0x5F0 */
     s32 unk5F4; /* 0x5F4 */
     f32 unk5F8; /* 0x5F8 */
@@ -2048,7 +2038,7 @@ struct Hero {
     f32 unk614; /* 0x614 */
     union { f32 f; s32 i; } unk618; /* 0x618: float distance clamp, zeroed as an int */
     u8 pad_61C[0x24];
-    Vec4_00AC8 basis[3]; /* 0x640: rotation rows (transform_vector_by_basis) */
+    Vec4 basis[3]; /* 0x640: rotation rows (transform_vector_by_basis) */
     f32 unk670; /* 0x670 */
     f32 unk674; /* 0x674 */
     u8 pad_678[0xC];
@@ -2066,21 +2056,21 @@ struct Hero {
     f32 unk6B0; /* 0x6B0 */
     f32 unk6B4; /* 0x6B4 */
     u8 pad_6B8[0x8];
-    Vec4_00AC8 unk6C0; /* 0x6C0: 0x60 bytes cleared by fill_transfer_words */
+    Vec4 unk6C0; /* 0x6C0: 0x60 bytes cleared by fill_transfer_words */
     f32 unk6D0; /* 0x6D0 */
     f32 unk6D4; /* 0x6D4 */
     u8 pad_6D8[0x8];
     s32 unk6E0[6]; /* 0x6E0: one flag per pose, indexed by unk88F */
     s32 unk6F8; /* 0x6F8: counts the flags set in unk6E0 */
     u8 pad_6FC[0x24];
-    Vec4_00AC8 unk720; /* 0x720 */
+    Vec4 unk720; /* 0x720 */
     u8 pad_730[0x10];
-    Vec4_00AC8 unk740; /* 0x740 */
-    Vec4_00AC8 unk750; /* 0x750 */
-    Vec4_00AC8 unk760; /* 0x760 */
-    Vec4_00AC8 unk770; /* 0x770 */
-    Vec4_00AC8 unk780; /* 0x780 */
-    Vec4_00AC8 unk790; /* 0x790 */
+    Vec4 unk740; /* 0x740 */
+    Vec4 unk750; /* 0x750 */
+    Vec4 unk760; /* 0x760 */
+    Vec4 unk770; /* 0x770 */
+    Vec4 unk780; /* 0x780 */
+    Vec4 unk790; /* 0x790 */
     s16 unk7A0[8]; /* 0x7A0 */
     s16 unk7B0[8]; /* 0x7B0 */
     s16 unk7C0[8]; /* 0x7C0 */
@@ -2131,7 +2121,7 @@ struct Hero {
     s16 unk8CC; /* 0x8CC */
     u8 unk8CE; /* 0x8CE */
     u8 unk8CF; /* 0x8CF */
-    Vec4_00AC8 unk8D0; /* 0x8D0 */
+    Vec4 unk8D0; /* 0x8D0 */
     s32 unk8E0; /* 0x8E0 */
     f32 unk8E4; /* 0x8E4 */
     f32 unk8E8; /* 0x8E8 */
@@ -2152,7 +2142,7 @@ struct Hero {
     s32 unk910; /* 0x910 */
     s32 unk914; /* 0x914 */
     u8 pad_918[0x8];
-    Vec4_00AC8 move_impulse; /* 0x920: one-frame displacement; the hero update adds it to motion.pos and clears it (some states; zero while running) */
+    Vec4 move_impulse; /* 0x920: one-frame displacement; the hero update adds it to motion.pos and clears it (some states; zero while running) */
     f32 unk930; /* 0x930 */
     f32 unk934; /* 0x934 */
     f32 unk938; /* 0x938 */
@@ -2304,7 +2294,7 @@ struct Hero {
     s16 unk1634; /* 0x1634 */
     s16 unk1636; /* 0x1636 */
     u8 pad_1638[0x8];
-    Vec4_00AC8 unk1640; /* 0x1640 */
+    Vec4 unk1640; /* 0x1640 */
     s32 unk1650; /* 0x1650 */
     u8 pad_1654[0xC];
     s32 unk1660; /* 0x1660 */
@@ -2312,7 +2302,7 @@ struct Hero {
     struct MobyTrail trail; /* 0x1670: trail of moby copies following hero.moby */
     u8 unk17B0[0x140]; /* 0x17B0: buffer handed to FUN_L00_00262500 / FUN_L00_00262528 */
     struct HeroEase unk18F0[3]; /* 0x18F0: eased records, kind 5 set when an item slot is ready (FUN_L00_00210748) */
-    Vec4_00AC8 unk1B00[32]; /* 0x1B00: ring of 32 quads indexed by unk21B0 */
+    Vec4 unk1B00[32]; /* 0x1B00: ring of 32 quads indexed by unk21B0 */
     u8 unk1D00[0x20]; /* 0x1D00 */
     f32 stick_x; /* 0x1D20: stick vector (d-pad when the stick is idle) */
     f32 stick_y; /* 0x1D24 */
@@ -2330,7 +2320,7 @@ struct Hero {
     u8 pad_1EE8[0x20];
     s32 unk1F08; /* 0x1F08 */
     u8 pad_1F0C[0x4];
-    Vec4_00AC8 unk1F10; /* 0x1F10 */
+    Vec4 unk1F10; /* 0x1F10 */
     f32 unk1F20; /* 0x1F20 */
     f32 unk1F24; /* 0x1F24 */
     f32 unk1F28; /* 0x1F28 */

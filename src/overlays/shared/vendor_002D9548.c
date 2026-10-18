@@ -647,11 +647,6 @@ void func_L06_002E9AA8(unsigned char *m) {
     }
 }
 typedef u32 u128_EA920 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_EA920 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_EA920;
 typedef struct {
     char _pad00[0x10];
     unsigned char nframes; /* 0x10 */
@@ -704,7 +699,7 @@ extern u8 D_001414F4[];
 extern int * D_L06_001B0FB0[];
 extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
 extern void func_L00_002584A8(void *, int, int);
-extern void func_L06_002EB5C8_EA920(struct Moby *, Vec4_EA920 *) __asm__("func_L06_002EB5C8");
+extern void func_L06_002EB5C8_EA920(struct Moby *, Vec4 *) __asm__("func_L06_002EB5C8");
 extern void func_L06_002EB360_EA920(struct Moby *) __asm__("func_L06_002EB360");
 extern void func_L06_002EB8C8(char *);
 extern float func_001FA748(float, float);
@@ -733,7 +728,7 @@ void func_L06_002EA920(struct Moby *moby) {
     if (vars->carried != 0) {
         hit = func_L00_0025B478_EA920(vars->carried, 0x330000, 0);
         if (hit != 0 && (hit->source == 0 || hit->source->oclass != 0xAF)) {
-            func_L06_002EB5C8_EA920(moby, (Vec4_EA920 *)D_L06_0015F660);
+            func_L06_002EB5C8_EA920(moby, (Vec4 *)D_L06_0015F660);
             func_L06_002EB360_EA920(moby);
             func_L00_002584A8(moby, 0, -1);
             goto remove;
@@ -751,7 +746,7 @@ void func_L06_002EA920(struct Moby *moby) {
         case 1:
         case 2:
             func_L00_002584A8(moby, 0, -1);
-            func_L06_002EB5C8_EA920(moby, (Vec4_EA920 *)&hit->pos);
+            func_L06_002EB5C8_EA920(moby, (Vec4 *)&hit->pos);
             if (vars->sparks_pending == 1) {
                 func_L06_002EB8C8((char *)moby);
                 vars->sparks_pending = 0;

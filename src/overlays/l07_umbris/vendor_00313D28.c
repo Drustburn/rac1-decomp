@@ -24,13 +24,8 @@ void func_L07_003141A8(char *moby)
 /* functional: high. The NTSC decomp's matched C for the same instructions (FUN_L07_00312e70), carried to PAL's
    names by OpenRAC's tools/port.py. Not a PAL match: its PAL file declares a symbol it uses with another type, so it was not built there. */
 typedef u32 u128 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128 q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_14250;
 struct GeometryQuad {
-    Vec4_14250 positions[4]; /* 0x00 */
+    Vec4 positions[4]; /* 0x00 */
     u32 colors[4]; /* 0x40 */
     f32 texture_coordinates[4][2]; /* 0x50 */
     union {

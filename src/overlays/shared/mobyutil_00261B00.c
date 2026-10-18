@@ -2,6 +2,7 @@
 #include "common.h"
 #include "callees.h"
 #include "include_asm.h"
+#include "vector.h"
 #include "hero.h"
 #include "moby.h"
 
@@ -196,34 +197,29 @@ int func_L00_00262BC0(int idx, void *a, void *b, void *c) {
 }
 LINKER_REMNANT("asm/overlays", func_L00_00262DE8);
 typedef int OvlQuad __attribute__((mode(TI)));
-typedef union {
-    OvlQuad q;
-    f32 f[4];
-    s32 i[4];
-} OvlVec4;
 typedef struct {
     s32 count;
     u8 pad[12];
-    OvlVec4 points[1];
+    Vec4 points[1];
 } SegmentPath_261d78;
 extern SegmentPath_261d78 * D_L00_001B0830[];
 extern f32 func_001F9B88(f32);
-extern void func_001F9BD8_62DF0(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("func_001F9BD8");
-extern void func_001F9BF0_62DF0(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("func_001F9BF0");
-extern f32 func_001F9C78(OvlVec4 *, OvlVec4 *);
-extern void func_001F9CA0_62DF0(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("func_001F9CA0");
-extern f32 func_001F9CB8_62DF0(OvlVec4 *) __asm__("func_001F9CB8");
-extern void func_L00_001FF4B0_62DF0(OvlVec4 *, OvlVec4 *, f32) __asm__("func_L00_001FF4B0");
+extern void func_001F9BD8_62DF0(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9BD8");
+extern void func_001F9BF0_62DF0(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9BF0");
+extern f32 func_001F9C78(Vec4 *, Vec4 *);
+extern void func_001F9CA0_62DF0(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9CA0");
+extern f32 func_001F9CB8_62DF0(Vec4 *) __asm__("func_001F9CB8");
+extern void func_L00_001FF4B0_62DF0(Vec4 *, Vec4 *, f32) __asm__("func_L00_001FF4B0");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/state/00261968.c, FUN_L00_00261d78. */
-s32 func_L00_00262DF0(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
-    OvlVec4 difference;
-    OvlVec4 scaled_difference;
-    OvlVec4 working;
-    OvlVec4 segment;
-    OvlVec4 scaled_segment;
-    OvlVec4 cross;
-    OvlVec4 scaled_cross;
+s32 func_L00_00262DF0(f32 distance, s32 path_index, Vec4 *point, Vec4 *out) {
+    Vec4 difference;
+    Vec4 scaled_difference;
+    Vec4 working;
+    Vec4 segment;
+    Vec4 scaled_segment;
+    Vec4 cross;
+    Vec4 scaled_cross;
     SegmentPath_261d78 **entry;
     s32 i;
     s32 found;
@@ -268,41 +264,36 @@ s32 func_L00_00262DF0(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out
     return found;
 }
 typedef int OvlQuad_630A8 __attribute__((mode(TI)));
-typedef union {
-    OvlQuad_630A8 q;
-    f32 f[4];
-    s32 i[4];
-} OvlVec4_630A8;
 typedef struct {
     s32 count;
     u8 pad[12];
-    OvlVec4_630A8 points[1];
+    Vec4 points[1];
 } SegmentPath_262030;
 extern SegmentPath_262030 * D_L00_001B0830_630A8[] __asm__("D_L00_001B0830");
-extern OvlVec4_630A8 D_0013F6E0;
-extern void func_001F9BD8_630A8(OvlVec4_630A8 *, OvlVec4_630A8 *, OvlVec4_630A8 *) __asm__("func_001F9BD8");
-extern void func_001F9BF0_630A8(OvlVec4_630A8 *, OvlVec4_630A8 *, OvlVec4_630A8 *) __asm__("func_001F9BF0");
-extern f32 func_001F9C78_630A8(OvlVec4_630A8 *, OvlVec4_630A8 *) __asm__("func_001F9C78");
-extern void func_001F9CA0_630A8(OvlVec4_630A8 *, OvlVec4_630A8 *, OvlVec4_630A8 *) __asm__("func_001F9CA0");
-extern f32 func_001F9CB8_630A8(OvlVec4_630A8 *) __asm__("func_001F9CB8");
-extern void func_L00_001FF4B0_630A8(f32, OvlVec4_630A8 *, OvlVec4_630A8 *) __asm__("func_L00_001FF4B0");
+extern Vec4 D_0013F6E0;
+extern void func_001F9BD8_630A8(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9BD8");
+extern void func_001F9BF0_630A8(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9BF0");
+extern f32 func_001F9C78_630A8(Vec4 *, Vec4 *) __asm__("func_001F9C78");
+extern void func_001F9CA0_630A8(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9CA0");
+extern f32 func_001F9CB8_630A8(Vec4 *) __asm__("func_001F9CB8");
+extern void func_L00_001FF4B0_630A8(f32, Vec4 *, Vec4 *) __asm__("func_L00_001FF4B0");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/state/00261968.c, FUN_L00_00262030. */
-s32 func_L00_002630A8(f32 distance, s32 path_index, OvlVec4_630A8 *point, OvlVec4_630A8 *out) {
-    OvlVec4_630A8 difference;
-    OvlVec4_630A8 scaled_difference;
-    OvlVec4_630A8 working;
-    OvlVec4_630A8 segment;
-    OvlVec4_630A8 scaled_segment;
-    OvlVec4_630A8 cross;
-    OvlVec4_630A8 scaled_cross;
+s32 func_L00_002630A8(f32 distance, s32 path_index, Vec4 *point, Vec4 *out) {
+    Vec4 difference;
+    Vec4 scaled_difference;
+    Vec4 working;
+    Vec4 segment;
+    Vec4 scaled_segment;
+    Vec4 cross;
+    Vec4 scaled_cross;
     SegmentPath_262030 *entry;
-    OvlVec4_630A8 *height_axis;
-    OvlVec4_630A8 *current;
+    Vec4 *height_axis;
+    Vec4 *current;
     s32 next;
     s32 i;
     s32 offset;
-    OvlVec4_630A8 *saved_out;
+    Vec4 *saved_out;
     s32 found;
     f32 original_height;
     f32 segment_length;
@@ -313,17 +304,17 @@ s32 func_L00_002630A8(f32 distance, s32 path_index, OvlVec4_630A8 *point, OvlVec
     qcopy(&working, point);
     entry = D_L00_001B0830_630A8[path_index];
     offset = (s32)&D_0013F6E0;
-    original_height = func_001F9C78_630A8(&working, (OvlVec4_630A8 *)offset);
+    original_height = func_001F9C78_630A8(&working, (Vec4 *)offset);
     i = 0;
     if (entry->count - 1 > found) {
-        height_axis = (OvlVec4_630A8 *)offset;
+        height_axis = (Vec4 *)offset;
         do {
             offset = i << 4;
             next = i + 1;
-            if (((OvlVec4_630A8 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f || entry->points[next].f[3] != 0.0f) {
-                current = (OvlVec4_630A8 *)((u8 *)entry + (offset + 0x10));
+            if (((Vec4 *)((u8 *)entry + offset + 0x10))->f[3] != 0.0f || entry->points[next].f[3] != 0.0f) {
+                current = (Vec4 *)((u8 *)entry + (offset + 0x10));
                 func_001F9BF0_630A8(&difference, &working, current);
-                func_001F9BF0_630A8(&segment, (OvlVec4_630A8 *)((u8 *)entry + (offset + 0x20)), current);
+                func_001F9BF0_630A8(&segment, (Vec4 *)((u8 *)entry + (offset + 0x20)), current);
                 projection = func_001F9C78_630A8(&difference, height_axis);
                 func_L00_001FF4B0_630A8(projection, &scaled_cross, height_axis);
                 func_001F9BF0_630A8(&difference, &difference, &scaled_cross);
@@ -792,10 +783,6 @@ void func_L00_00264690(float *p, int b, float s, float t) {
 }
 LINKER_REMNANT("asm/overlays", func_L00_00264860);
 typedef u32 u128_64870 __attribute__((mode(TI), aligned(16)));
-typedef union {
-    u128_64870 q;
-    float f[4];
-} Vec4_2634f8;
 typedef struct {
     u8 pad20[4];
     s32 w24;
@@ -820,9 +807,9 @@ extern u8 D_L00_0015F660_64870[] __asm__("D_L00_0015F660") MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002630b8.c, FUN_L00_002637f8. */
 void func_L00_00264870(u8 *m) {
-    Vec4_2634f8 vectors[4];
-    Vec4_2634f8 pos;
-    Vec4_2634f8 scaled;
+    Vec4 vectors[4];
+    Vec4 pos;
+    Vec4 scaled;
     f32 fraction, size, lifetime, scale;
     s32 count;
     s32 w24;
