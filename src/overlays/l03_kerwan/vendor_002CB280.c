@@ -2753,7 +2753,18 @@ void Camera14_RebuildAxes(void *arg) {
     func_L00_001FF4B0(m + 0x10, m + 0x10, 1.0f);
     FastVecCross(m + 0x20, m + 0x10, m);
 }
-INCLUDE_ASM("asm/overlays", func_L03_002ED138);
+int func_L03_002ED138(void) {
+    char *g = D_0013E633 + 0xE1D;
+
+    if (*(int *)(g + 0x2284) != 0x50 || *(int *)(g + 0x2084) == 0x11) {
+        if (*(int *)(g + 0x2084) != 6) {
+            goto none;
+        }
+    }
+    return -1;
+none:
+    return 0;
+}
 extern void func_L03_002ECEC8(void *);
 extern void func_001E9768(void *);
 extern void func_L03_002ED020(void *);

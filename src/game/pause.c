@@ -9254,7 +9254,171 @@ int HelperMobyMenu_Exit(void *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text", func_00226978);
+/* functional: medium. The NTSC decomp's pending C for the same instructions (a draft it has not matched
+   yet), carried to PAL's names by OpenRAC's tools/port.py. Never compared with retail's bytes here. */
+
+typedef struct {
+    u8 pad_0[0x20];
+    u8 moby_state;
+    u8 pad_21[0x52 - 0x21];
+    u8 primary_animation;
+    u8 secondary_animation;
+    u8 pad_54[0x70 - 0x54];
+    u8 transition_flags;
+    u8 pad_71[0xBC - 0x71];
+    u8 animation_frame_counter;
+} StreamedAnimationMoby_26978;
+typedef struct {
+    u8 pad_0[0x48];
+    u8 *animation_tables[4];
+} StreamedClassResource_26978;
+typedef struct {
+    s32 offset;
+    s32 reserved4;
+} AnimationTableHeader_26978;
+typedef struct {
+    u8 pad_0[0x34];
+    s32 state;
+    s32 pad_38;
+    u8 *buffer;
+    s32 read_offset;
+    StreamedAnimationMoby_26978 *moby;
+} MobyAnimationStream_26978;
+extern s32 D_001517EC[];
+extern s16 D_0015182A[];
+extern s32 D_0015EE88 MACRO_ADDR;
+extern s32 D_0015EF20 MACRO_ADDR;
+extern s32 func_001F98C0(s32);
+extern void func_00203B18(char *, int);
+extern void func_0020C468(int, int);
+extern void func_00213DE0(void *, s32, s32, s32);
+extern s32 func_00216960(void);
+extern int func_00217628(int, int, int);
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/assembly/textbin/fun_002256e8.c, update_streamed_moby_animation. */
+s32 func_00226978(MobyAnimationStream_26978 *stream) {
+    extern s16 D_001517D8[];
+    extern int func_00227068(int);
+    extern char *D_001B3580[];
+    StreamedAnimationMoby_26978 *moby;
+    AnimationTableHeader_26978 *header;
+    StreamedClassResource_26978 **class_resource;
+    StreamedClassResource_26978 **classes;
+    s32 table_index;
+    s32 k;
+    s32 dialogue_column;
+    u8 *animation_table;
+    s32 animation_index;
+    u16 class_slot;
+
+    switch (stream->state) {
+    case 0:
+        if (D_001517D8[0] != 0) {
+            break;
+        }
+        table_index = 0x4F000 - (D_00137C80[0x1614 / 4] << 11);
+        if (func_00217628((int)(stream->buffer + table_index), D_00137C80[0x1610 / 4],
+                                    D_00137C80[0x1614 / 4]) != 0) {
+            stream->read_offset = table_index;
+            stream->state = 1;
+            D_001D603B[0] = 1;
+            func_00227068((s32)stream->buffer);
+            return 0;
+        }
+        stream->state = 3;
+        break;
+    case 1:
+        /* Decompress the completed read and relocate three animation tables. */
+        if (D_001517D8[0] != 0) {
+            break;
+        }
+        D_001D603B[0] = 0;
+        func_0020C468((int)(stream->buffer + stream->read_offset), (int)stream->buffer);
+        class_slot = D_001B3E40[0x7A5];
+        classes = (StreamedClassResource_26978 **)D_001B3580;
+        header = (AnimationTableHeader_26978 *)stream->buffer;
+        class_resource = &classes[class_slot];
+        for (k = 0; k < 3; k++) {
+            animation_table = stream->buffer + ((AnimationTableHeader_26978 *)((u8 *)header + (k << 3)))->offset;
+            (*class_resource)->animation_tables[k + 1] = animation_table;
+            func_00203B18((char *)*class_resource, k + 1);
+        }
+        stream->state = 2;
+        if (D_0015EF20 == 0) {
+            stream->moby->moby_state = 0;
+        } else {
+            stream->moby->moby_state = 4;
+        }
+        stream->moby->animation_frame_counter = 0;
+        break;
+    case 2:
+        /* Even phases queue dialogue; odd phases wait for animation completion. */
+        moby = stream->moby;
+        switch (moby->moby_state) {
+        case 0:
+        case 2:
+        case 4:
+            dialogue_column = D_0015EE88 - 1;
+            if (dialogue_column < 0) {
+                dialogue_column = 0;
+            }
+            animation_index = moby->moby_state >> 1;
+            if (moby->animation_frame_counter == 0) {
+                D_001517EC[0] = animation_index * 6 + dialogue_column + 60000;
+            }
+            moby->animation_frame_counter++;
+            if (moby->animation_frame_counter > func_001F98C0(0x78)) {
+                moby->animation_frame_counter = func_001F98C0(0x78);
+            }
+            if (moby->animation_frame_counter < func_001F98C0(0x78)) {
+                return 0;
+            }
+            if (D_0015182A[0] != 3) {
+                return 0;
+            }
+            moby->animation_frame_counter = 0;
+            moby->moby_state++;
+            func_00213DE0(moby, animation_index + 1, 0, func_001F98C0(0x18));
+            break;
+        case 1:
+        case 3:
+        case 5:
+            if (moby->animation_frame_counter == 0 &&
+                moby->primary_animation == moby->secondary_animation) {
+                func_00216960();
+                moby->animation_frame_counter = 1;
+            }
+            if (moby->transition_flags & 2) {
+                if (moby->moby_state == 1) {
+                    moby->moby_state = moby->moby_state + 1;
+                } else {
+                    moby->moby_state = 6;
+                }
+                moby->animation_frame_counter = 0;
+                func_00213DE0(moby, 0, 0, func_001F98C0(0x18));
+                break;
+            }
+            break;
+        case 6:
+            moby->animation_frame_counter++;
+            if (moby->animation_frame_counter > func_001F98C0(0xF0)) {
+                moby->animation_frame_counter = func_001F98C0(0xF0);
+            }
+            if (moby->animation_frame_counter < func_001F98C0(0xF0)) {
+                return 0;
+            }
+            if (D_0015EF20 == 0) {
+                moby->moby_state = 0;
+            } else {
+                moby->moby_state = 4;
+            }
+            moby->animation_frame_counter = 0;
+            break;
+        }
+        break;
+    }
+    return 0;
+}
 
 extern void func_0020E180(int, int);
 

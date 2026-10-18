@@ -108,7 +108,26 @@ extern char D_L00_00179548[];
 void Moby_ClearGadgetControl(void) {
     *(short *)D_L00_00179548 = 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00205110);
+extern unsigned char D_L00_00179550[];
+
+int func_L00_00205110(short id, int a1, unsigned short *out) {
+    char *base = (char *)D_L00_00179550;
+    int off;
+    int i;
+    for (i = 0, off = 2; i < 150; off += 4, i++) {
+        int k = i * 4;
+        if (*(short *)(base + k + a1 * 2) == id) {
+            if (a1 != 0) {
+                off = k;
+            }
+            if (out != 0) {
+                *out = *(unsigned short *)(off + (int)base);
+            }
+            return i;
+        }
+    }
+    return -1;
+}
 INCLUDE_ASM("asm/overlays", func_L00_00205158);
 // returns -1
 int func_L00_0020516C(void) {

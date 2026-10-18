@@ -493,7 +493,18 @@ char *FindNearestListedObject(float a, float b, float c, float d) {
     }
     return best;
 }
-INCLUDE_ASM("asm/overlays", func_L00_0020E0A8);
+/* Maps a small id to a text/sound id: 1 -> 0x79, 2 -> 0x77, 3 -> 0x75, otherwise 0. */
+int func_L00_0020E0A8(int k) {
+    switch (k) {
+    case 1:
+        return 0x79;
+    case 2:
+        return 0x77;
+    case 3:
+        return 0x75;
+    }
+    return 0;
+}
 // Returns constant value
 int HeroAnimLookup_Part2(void) {
     return 0x77;

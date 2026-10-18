@@ -898,7 +898,27 @@ int Moby_FindVisible27BTarget(char *m) {
     }
     return best;
 }
-INCLUDE_ASM("asm/overlays", func_L15_0029B1D8);
+// Returns 0 when a listed class-0x2C moby that is alive and visible has a lower 0x13C rank than this moby's own.
+int func_L15_0029B1D8(void *mm) {
+    char *m = mm;
+    unsigned short *p;
+    if (((unsigned char *)m)[0x21] == 0xFF) return 1;
+    p = (unsigned short *)D_L15_001AC140[((unsigned char *)m)[0x21]];
+    m = *(char **)(m + 0x78);
+    if (p == 0) return 1;
+    do {
+        char *o = (char *)(((*p & 0x7FFF) << 8) + D_L15_00160058_m);
+        if (*(short *)(o + 0xA6) == 0x2C && o != 0
+            && ((unsigned char *)o)[0x20] != 0xFE && ((unsigned char *)o)[0x20] != 0xFD
+            && ((unsigned char *)o)[0xBC] == 0) {
+            char *d = *(char **)(o + 0x78);
+            if (*(int *)(d + 0x144) == 0 && *(int *)(d + 0x124) != -1
+                && *(int *)(d + 0x13C) >= *(int *)(m + 0x13C))
+                return 0;
+        }
+    } while (*(short *)p++ >= 0);
+    return 1;
+}
 INCLUDE_ASM("asm/overlays", func_L15_0029B210);
 typedef struct { char pad0[0x156]; short timer; char pad158[3]; char active; } SpawnResetData_29B2B0;
 extern void func_L15_0029B428(char *, char *);

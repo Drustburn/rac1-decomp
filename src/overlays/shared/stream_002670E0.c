@@ -35,8 +35,43 @@ void Stream_SetSlotValue(int value, long arg) {
 void func_L00_00267120(void *a0, unsigned char *a1) {
     *(volatile unsigned short *)(a1 + 0xA) = 0;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00267130);
-INCLUDE_ASM("asm/overlays", func_L00_00267188);
+void func_L00_00267130(int value, long arg) {
+    Slot_2670E0 *s = (Slot_2670E0 *)arg;
+
+    if (s == 0) {
+        return;
+    }
+    if (value < 0) {
+        s->value = value;
+    }
+    if (value != 0) {
+        if (s->state == 9) {
+            s->state = 4;
+            if (s->flag != 0) {
+                D_001517F0 = 1;
+            }
+        }
+    } else {
+        s->state = 0;
+    }
+}
+/* stores value in the slot passed as a 64-bit argument; a zero value resets the slot's state,
+   otherwise a slot in state 1 moves to 8 */
+void func_L00_00267188(int value, long arg) {
+    Slot_2670E0 *s = (Slot_2670E0 *)arg;
+
+    if (s == 0) {
+        return;
+    }
+    s->value = value;
+    if (value != 0) {
+        if (s->state == 1) {
+            s->state = 8;
+        }
+    } else {
+        s->state = 0;
+    }
+}
 extern int D_L00_0015F6A8 MACRO_ADDR;
 extern char D_L00_00179200[];
 extern char D_L00_001C43B0[];
