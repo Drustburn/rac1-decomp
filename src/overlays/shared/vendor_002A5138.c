@@ -7,7 +7,131 @@
 #include "moby.h"
 
 LINKER_REMNANT("asm/overlays", func_L00_002A5138);
-INCLUDE_ASM("asm/overlays", func_L00_002A5158);
+/* Pokes a round ripple into the level water height grids: each 0x1190-byte patch holds
+ * two 23x16 height buffers (current/previous frame, indices D_L00_001612D8 / D_L00_001612E0);
+ * rows 16-22 mirror the eight neighbours' edges, so border cells are copied out to them. */
+extern float func_001F9B50(float);
+extern float func_001F9B88(float);
+extern float D_L00_001CAB80[];
+extern short D_L00_001612D8;
+extern short D_L00_001612E0;
+#define WATER_CUR (*(int *)&D_L00_001612D8)
+#define WATER_OTH (*(int *)&D_L00_001612E0)
+
+typedef struct WaterPatch {
+    float x, y;
+    int pad8;
+    unsigned char nb[8];
+    char pad14[0x3C];
+    float h[2][23][16];
+    char rest[0x1190 - 0xBD0];
+} WaterPatch;
+
+void func_L00_002A5158(WaterPatch *g, int count, int mode, float x, float y, float radius, float amount) {
+    WaterPatch *buf = g;
+    int r;
+    int i;
+
+    for (i = 0; i < count; i++) {
+        float oy = g->y + D_L00_001CAB80[3];
+        float fy = (y - oy) / D_L00_001CAB80[5];
+        float fx = (x - (g->x + D_L00_001CAB80[2])) / D_L00_001CAB80[4];
+        int r0, r1, c0, c1;
+        float py;
+
+        r0 = (int)(fy - radius);
+        r1 = (int)(fy + radius);
+        if (r0 < 0) r0 = 0;
+        if (r1 >= 16) r1 = 15;
+        c0 = (int)(fx - radius);
+        c1 = (int)(fx + radius);
+        if (c1 >= 16) c1 = 15;
+        if (c0 < 0) c0 = 0;
+        py = oy + D_L00_001CAB80[5] * (float)r0;
+
+        for (r = r0; r <= r1; r++) {
+            float px = (g->x + D_L00_001CAB80[2]) + D_L00_001CAB80[4] * (float)c0;
+            int c;
+
+            for (c = c0; c <= c1; c++) {
+                float d2 = (x - px) * (x - px) + (y - py) * (y - py);
+                float v;
+
+                if (d2 < 1.0f) {
+                    v = amount;
+                } else {
+                    v = amount / func_001F9B50(d2);
+                }
+                if (mode == 0) {
+                    float a = func_001F9B88(v);
+                    if (a < func_001F9B88(g->h[WATER_CUR][r][c])) {
+                        v = g->h[WATER_CUR][r][c];
+                    }
+                } else {
+                    v += g->h[WATER_OTH][r][c];
+                }
+                {
+                int cur = WATER_CUR;
+                g->h[cur][r][c] = v;
+
+                if (r < 2 && g->nb[0] != 0xFF) {
+                    if (r == 0) {
+                        buf[g->nb[0]].h[cur][18][c] = g->h[cur][0][c];
+                    } else {
+                        buf[g->nb[0]].h[cur][20][c] = v;
+                    }
+                }
+                }
+                if (c < 2 && g->nb[1] != 0xFF) {
+                    if (c == 0) {
+                        buf[g->nb[1]].h[WATER_CUR][19][r] = g->h[WATER_CUR][r][0];
+                    } else {
+                        buf[g->nb[1]].h[WATER_CUR][21][r] = g->h[WATER_CUR][r][c];
+                    }
+                }
+                if (r == 15 && g->nb[2] != 0xFF) {
+                    int cur = WATER_CUR;
+                    buf[g->nb[2]].h[cur][16][c] = g->h[cur][r][c];
+                }
+                if (c == 15 && g->nb[3] != 0xFF) {
+                    int cur = WATER_CUR;
+                    buf[g->nb[3]].h[cur][17][r] = g->h[cur][r][c];
+                }
+                if (g->nb[4] != 0xFF) {
+                    if (c == 0 && r == 0) {
+                        int cur = WATER_CUR;
+                        buf[g->nb[4]].h[cur][22][3] = g->h[cur][r][c];
+                    }
+                    if (c == 1 && r == 0) {
+                        int cur = WATER_CUR;
+                        buf[g->nb[4]].h[cur][22][4] = g->h[cur][0][1];
+                    }
+                    if (c == 0 && r == 1) {
+                        int cur = WATER_CUR;
+                        buf[g->nb[4]].h[cur][22][5] = g->h[cur][1][0];
+                    }
+                }
+                if (g->nb[5] != 0xFF && c == 15 && r == 0) {
+                    int cur = WATER_CUR;
+                    buf[g->nb[5]].h[cur][22][2] = g->h[cur][0][15];
+                }
+                if (g->nb[6] != 0xFF && c == 0 && r == 15) {
+                    int cur = WATER_CUR;
+                    buf[g->nb[6]].h[cur][22][1] = g->h[cur][15][0];
+                }
+                if (g->nb[7] != 0xFF && c == 15 && r == 15) {
+                    int cur = WATER_CUR;
+                    buf[g->nb[7]].h[cur][22][0] = g->h[cur][15][15];
+                }
+                px += D_L00_001CAB80[4];
+            }
+            py += D_L00_001CAB80[5];
+        }
+        g++;
+    }
+}
+#undef WATER_CUR
+#undef WATER_OTH
 LINKER_REMNANT("asm/overlays", func_L00_002A5AC0);
 extern int func_001F9938(void *);
 extern float func_001FA888(int);
