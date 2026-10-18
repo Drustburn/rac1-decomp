@@ -746,7 +746,209 @@ void func_L00_0020ED30(void) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_0020EDC0);
-INCLUDE_ASM("asm/overlays", func_L00_0020F118);
+#include "moby.h"
+typedef struct {
+    unsigned char pad0[0x8];
+    int slot;
+    unsigned char padC[0x4];
+    int cls;
+    int cls2;
+    int unk18;
+    unsigned char pad1C[0x30];
+} ItemDef_F118;
+
+#define HERO ((struct Hero *)(D_0013E633 + 0xE1D))
+#define DEFS ((ItemDef_F118 *)D_L00_00179BC0)
+#define DEFA (((struct { ItemDef_F118 a[1]; } *)D_L00_00179BC0)->a)
+#define INVA (((struct { int a[6]; } *)(D_0014171B + 0x45))->a)
+#define INV(k) (((int *)(D_0014171B + 0x45))[k])
+extern char D_0014171B[] NOT_SDA;
+extern int D_L00_0015F4F8 MACRO_ADDR;
+extern int D_0015EE88[] MACRO_ADDR;
+extern unsigned char D_0013D5E9[] NOT_SDA;
+extern struct Moby *func_0020D348(int);
+extern void func_00205270(int, int);
+extern void func_001F99B0(void *, int, int);
+extern void func_L00_002B5428(int);
+extern void func_00213DE0(void *, int, int, int);
+
+void func_L00_0020F118(void) {
+    struct Moby *m;
+    int id;
+    int slot;
+    struct Hero *h;
+    int i;
+    struct Moby *m2;
+    struct Moby *m4;
+    struct Moby *m5;
+    struct Moby *m6;
+    int id3;
+    int t;
+
+    if (HERO->items[0].moby == 0 && D_L00_0015F4F8 > HERO->items[0].unk14 &&
+        (HERO->pending_item[0] == 0 || HERO->pending_item[0] == 0x24)) {
+        id = HERO->selected_item[0];
+        if (id == 0) {
+            if (D_0015EE88[2] != 0 || (t = INV(0)) == 0)
+                id = 8;
+            else
+                id = t;
+        }
+        func_00205270(DEFA[id].cls, -1);
+        for (i = 0; i < 3; i++) {
+            func_001F99B0(&HERO->unk18F0[i], 0, sizeof(struct HeroEase));
+            HERO->unk18F0[i].unkA0 = -1;
+        }
+        HERO->items[0].item_id = id;
+        slot = DEFA[id].slot;
+        h = (struct Hero *)((char *)HERO + slot * sizeof(struct HeroItemSlot));
+        m = func_0020D348(DEFS[h->items[0].item_id].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = HERO->moby->spawn_frame;
+            if (((unsigned char *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            h->items[0].moby = m;
+            h->items[0].state = 2;
+            if (id == 8) {
+                h->items[0].button_mask = 0x80;
+                func_00213DE0(m, 1, 0, 1);
+            } else {
+                h->items[0].button_mask = 0x20;
+            }
+            HERO->unk20AB = DEFA[((struct Hero *)((char *)HERO + slot * sizeof(struct HeroItemSlot)))->items[0].item_id].unk18;
+        }
+    }
+
+    if (HERO->items[3].moby == 0) {
+        id3 = HERO->selected_item[3];
+        if (id3 == 0) {
+            id3 = INV(3);
+            if (id3 == 0)
+                id3 = D_0015EE88[3] != 0 ? 3 : 2;
+        }
+        HERO->items[3].item_id = id3;
+        m = func_0020D348(DEFA[id3].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = HERO->moby->spawn_frame;
+            if (((unsigned char *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            HERO->items[3].state = 2;
+            HERO->items[3].moby = m;
+            if (HERO->unk22D8 != 0)
+                m->flags |= 0x41;
+            if (HERO->unk22D8 == 0 && HERO->items[3].item_id == 3) {
+                func_L00_002B5428(0);
+                func_L00_002B5428(1);
+            }
+        }
+    }
+
+    if (HERO->items[3].moby2 == 0) {
+        m = func_0020D348(DEFA[1].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = HERO->moby->spawn_frame;
+            if (((unsigned char *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            HERO->items[3].state = 2;
+            HERO->items[3].moby2 = m;
+            if (HERO->unk22D8 != 0)
+                m->flags |= 0x41;
+        }
+    }
+
+    if (HERO->items[2].moby == 0 && (INV(2) != 0 || HERO->selected_item[2] != 0)) {
+        if (HERO->selected_item[2] != 0)
+            HERO->items[2].item_id = HERO->selected_item[2];
+        else
+            HERO->items[2].item_id = INV(2);
+        m2 = func_0020D348(DEFA[HERO->items[2].item_id].cls);
+        if (m2 != 0) {
+            m2->unk32 = 0x20;
+            m2->unk31 = 1;
+            m2->spawn_frame = HERO->moby->spawn_frame;
+            m2->flags |= 2;
+            m2->update = 0;
+            if (((unsigned char *)m2->pclass)[6] != 0)
+                m2->unk73 = 0x18;
+            m2->flags |= 0x800;
+            HERO->items[2].moby = m2;
+            HERO->items[2].state = 2;
+        }
+    }
+
+    if (HERO->items[1].moby == 0 && INVA[1] != 0) {
+        HERO->items[1].item_id = INVA[1];
+        m = func_0020D348(DEFA[INVA[1]].cls);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = HERO->moby->spawn_frame;
+            if (((unsigned char *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            HERO->items[1].moby = m;
+            HERO->items[1].state = 2;
+        }
+        m = func_0020D348(DEFA[INVA[1]].cls2);
+        if (m != 0) {
+            m->unk32 = 0x20;
+            m->unk31 = 1;
+            m->spawn_frame = HERO->moby->spawn_frame;
+            if (((unsigned char *)m->pclass)[6] != 0)
+                m->unk73 = 0x18;
+            HERO->items[1].moby2 = m;
+            HERO->items[1].state = 2;
+        }
+    }
+
+    if (HERO->items[4].moby == 0 && D_0013D5E9[0] != 0) {
+        m4 = func_0020D348(DEFA[0x21].cls);
+        HERO->items[4].item_id = 0x21;
+        if (m4 != 0) {
+            m4->unk32 = 0x20;
+            m4->unk31 = 1;
+            m4->spawn_frame = HERO->moby->spawn_frame;
+            if (((unsigned char *)m4->pclass)[6] != 0)
+                m4->unk73 = 0x18;
+            HERO->items[4].moby = m4;
+            HERO->items[4].state = 2;
+        }
+    }
+
+    if (HERO->items[4].moby2 == 0 && D_0013D5E9[1] != 0) {
+        m5 = func_0020D348(DEFA[0x22].cls);
+        HERO->items[4].item_id = 0x22;
+        if (m5 != 0) {
+            m5->unk32 = 0x20;
+            m5->unk31 = 1;
+            m5->spawn_frame = HERO->moby->spawn_frame;
+            HERO->items[4].moby2 = m5;
+            HERO->items[4].state = 2;
+        }
+    }
+
+    if (HERO->items[5].moby == 0 && D_0013D5E9[2] != 0) {
+        m6 = func_0020D348(DEFA[0x23].cls);
+        HERO->items[5].item_id = 0x23;
+        if (m6 != 0) {
+            m6->unk32 = 0x20;
+            m6->unk31 = 1;
+            m6->spawn_frame = HERO->moby->spawn_frame;
+            HERO->items[5].moby = m6;
+            HERO->items[5].state = 2;
+        }
+    }
+}
+#undef HERO
+#undef DEFS
+#undef DEFA
+#undef INVA
+#undef INV
 extern float func_001F9B88(float);
 float func_L00_0020F750(float *a, float *b) {
     float s = 0.0f;
