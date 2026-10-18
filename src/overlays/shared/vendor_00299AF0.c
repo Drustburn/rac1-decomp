@@ -273,7 +273,7 @@ void func_L10_002E51A8(char *moby) {
 extern void func_001FA4A0(void *, void *);
 extern void func_001F9EE8(void *, void *, void *);
 extern void func_001F49B0(void (*)(void), void *);
-extern void func_L10_002EA578(void);
+extern void func_L10_002EA578(unsigned char *);
 extern unsigned char D_0014171B_q[] __asm__("D_0014171B") NOT_SDA;
 
 /* UpdateMoby_1378 (names.tsv role). State 0 sets flag bit 0 and goes to state 1. In state 1,
@@ -312,7 +312,123 @@ void func_L10_002EA3E8(unsigned char *m) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L10_002EA578);
+typedef struct {
+    float v[4];
+} V4_2EA578;
+typedef struct {
+    V4_2EA578 corner[4];
+    int col[4];
+    float uv[4][2];
+    long unk70, tex, unk80, unk88;
+} Quad_2EA578;
+extern short D_L10_00161FC0;
+extern short D_L10_00161FC8;
+extern short D_L10_00161FD0;
+extern short D_L10_00161FD8;
+extern short D_L10_00161FE0;
+extern int D_L10_0015F4F8 MACRO_ADDR;
+extern int D_L10_001DA520[];
+extern float D_L10_001DA540[][2];
+extern int D_L10_001DA580[][2];
+extern float D_L10_001DA5C0[][2];
+extern V4_2EA578 D_L10_001DA5E0[];
+extern V4_2EA578 D_L10_001DA620[];
+extern void func_001FA460(void *, void *);
+extern long func_001F4868(int);
+extern void func_L00_001FD1D8(void *, void *, int);
+
+#define ALPHA_2EA578(a, b, c, d, fix) \
+    ((unsigned long)(a) | ((unsigned long)(b) << 2) | ((unsigned long)(c) << 4) | \
+     ((unsigned long)(d) << 6) | ((unsigned long)(fix) << 32))
+
+void func_L10_002EA578(unsigned char *m) {
+    Quad_2EA578 first, second;
+    float transform[12] __attribute__((aligned(16)));
+    float position[4] __attribute__((aligned(16)));
+    float *scale;
+    int pass, axis, c, i;
+    float *pa, *pb, *qb;
+    V4_2EA578 *s1, *s2;
+    Quad_2EA578 *sv;
+
+    scale = *(float **)(m + 0x78);
+    func_001FA460(transform, m + 0xC0);
+    qcopy(position, m + 0x10);
+    position[3] = 1.0f;
+    first.tex = func_001F4868(0x2C);
+    first.unk80 = 0xFF9000000260L;
+    first.unk70 = 0;
+    second.tex = func_001F4868(0x2C);
+    second.unk80 = 0xFF9000000260L;
+    second.unk70 = 0;
+    second.col[3] = 0;
+    second.col[1] = 0;
+    sv = &second;
+    pb = (float *)sv;
+    qb = (float *)sv;
+    pa = (float *)&first;
+    s1 = D_L10_001DA620;
+    s2 = D_L10_001DA5E0;
+    for (i = 0; i < 4; i++) {
+        qcopy(pa, &s1[i]);
+        qcopy(qb, s2);
+        pa[0] = pa[0] * scale[0];
+        pb[0] = pb[0] * scale[0];
+        pa[2] = pa[2] * scale[1];
+        pb[2] = pb[2] * scale[1];
+        pa += 4;
+        pb += 4;
+        s2++;
+        qb += 4;
+    }
+    for (pass = 0; pass < *(int *)&D_L10_00161FC0; pass++) {
+        int parity = pass & 1;
+        int level;
+        first.unk88 = ALPHA_2EA578(((int *)&D_L10_00161FC8)[parity], ((int *)&D_L10_00161FD0)[parity],
+                                   ((int *)&D_L10_00161FD8)[parity], ((int *)&D_L10_00161FE0)[parity], 0x80);
+        second.unk88 = ALPHA_2EA578(((int *)&D_L10_00161FC8)[parity], ((int *)&D_L10_00161FD0)[parity],
+                                    ((int *)&D_L10_00161FD8)[parity], ((int *)&D_L10_00161FE0)[parity], 0x80);
+        level = D_L10_001DA520[pass];
+        second.col[2] = level;
+        second.col[0] = level;
+        first.col[3] = level;
+        first.col[2] = level;
+        first.col[1] = level;
+        first.col[0] = level;
+        for (i = 0; i < 4; i++) {
+            for (axis = 0; axis < 2; axis++) {
+                int limit = func_001FA898(D_L10_001DA540[pass][axis] * 360.0f);
+                float angle = func_001FA888(D_L10_0015F4F8 % limit) / D_L10_001DA540[pass][axis] - 180.0f;
+                float delta;
+                if (D_L10_001DA580[pass][axis] != 0) {
+                    delta = func_001F9F90(angle * 0.017453292f);
+                } else {
+                    delta = func_001F9FA8(angle * 0.017453292f);
+                }
+                first.uv[i][axis] = D_L10_001DA5C0[i][axis] + delta * 0.125f;
+            }
+        }
+        for (c = 0; c < 2; c++) {
+            float step = (float)c * 0.125f;
+            second.uv[0][c] = first.uv[1][c];
+            second.uv[1][c] = first.uv[1][c] + step;
+            second.uv[2][c] = first.uv[3][c];
+            second.uv[3][c] = first.uv[3][c] + step;
+        }
+        func_L00_001FD1D8(&first, transform, 0);
+        func_L00_001FD1D8(sv, transform, 0);
+        {
+            float *q = (float *)sv;
+            float *p = (float *)&first;
+            for (i = 0; i < 4; i++) {
+                p[1] += 0.1f;
+                q[1] += 0.1f;
+                p += 4;
+                q += 4;
+            }
+        }
+    }
+}
 extern char * D_L10_0015F050 MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002e3de8.c, FUN_L10_002f5a50. */
