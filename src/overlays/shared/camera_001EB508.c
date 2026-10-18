@@ -63,8 +63,7 @@ void Camera_SmoothAngle(float *p, float a, float b, float c, float d, float lim)
     }
     FastAddRots(a, *p);
 }
-typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1]; char c; char pad4[0x14]; float f0; char pad5[8]; float f1; } S;
-extern S D_L00_00166D80;
+extern CameraSystem D_L00_00166D80;
 
 /* resets the camera sub-object's short at 0x7E to 1 and byte at 0x7D to 0 */
 void Camera_ReleaseCurrent(void) {

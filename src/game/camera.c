@@ -1109,42 +1109,42 @@ void CameraPreUpdate(void) {
     }
 }
 
-extern char D_00187040[];
+extern CameraSystem D_00187040;
 extern char D_00194220[];
 extern int D_0015F6E8 MACRO_ADDR;
 extern int func_001EFE10(void *, void *, int, int, int);
 extern int func_001F0F00(void);
 extern float func_00214440(void *, int);
 
-/* Camera-inside-water test: cast a ray through the camera focus from
-   0.75 above to 0.75 below (up to six hits); on the first hit that is
-   not a water surface, flag D_00187040+0x394 when the focus is below the
-   surface height + 0.04. Off for camera mode 6 or while D_0015F6E8 is
-   set. */
+/* Camera-inside-water test: cast a ray through the eye position
+   (gCamera.pos) from 0.75 above to 0.75 below (up to six hits); on the
+   first hit that is not a water surface, set gCamera.underwater when the
+   eye is below the surface height + 0.04. Off for camera id 6 or while
+   D_0015F6E8 is set. */
 void Camera_UpdateUnderwaterFlag(void) {
-    char *cam = gCamera;
+    CameraSystem *cam = &gCamera;
     float a[4];
     float b[4];
     int i;
 
-    if (*(short *)(*(char **)(cam + 0x180) + 0x86) == 6 || D_0015F6E8 != 0) {
-        *(int *)(cam + 0x394) = 0;
+    if (cam->current->id == 6 || D_0015F6E8 != 0) {
+        cam->underwater = 0;
         return;
     }
-    qcopy(a, cam + 0x140);
-    qcopy(b, cam + 0x140);
+    qcopy(a, &cam->pos);
+    qcopy(b, &cam->pos);
     a[2] += 0.75f;
     b[2] -= 0.75f;
     i = 0;
     while (i < 6 && func_001EFE10(a, b, 0x12, 0, 0) != 0) {
         if (func_001F0F00() == 0) {
             float h = GetGroundHeight(D_00194220, 0) + 0.04f;
-            char *c2 = gCamera;
+            CameraSystem *c2 = &gCamera;
 
-            if (*(float *)(c2 + 0x148) < h) {
-                *(int *)(c2 + 0x394) = 1;
+            if (c2->pos.f[2] < h) {
+                c2->underwater = 1;
             } else {
-                *(int *)(c2 + 0x394) = 0;
+                c2->underwater = 0;
             }
             return;
         }
@@ -1209,20 +1209,20 @@ void Camera_PickCollisionMasks(void) {
     }
 }
 
-extern char D_00187040[];
 extern float D_0015F53C MACRO_ADDR;
 
-/* D_0015F53C is a MACRO_ADDR float: $gp-relative in the delay slots,
-   lui $1 in the body. */
+/* Takes gCamera.follow.fade_rate off gFade each frame; both stop at 0.
+   gFade (D_0015F53C) is a MACRO_ADDR float: $gp-relative in the delay
+   slots, lui $1 in the body. */
 void Camera_UpdateFade(void) {
-    char *c = gCamera;
-    float a = *(float *)(c + 0x258);
+    CameraSystem *c = &gCamera;
+    float a = c->follow.fade_rate;
 
     if (a != 0.0f) {
         float t = gFade - a;
         gFade = t;
         if (t <= 0.0f) {
-            *(float *)(c + 0x258) = 0.0f;
+            c->follow.fade_rate = 0.0f;
             gFade = 0.0f;
         }
     }
@@ -1240,45 +1240,50 @@ extern void func_002153E8(void *, void *);
 extern void func_001EE858(void *);
 
 /* Camera update, once per frame: count the frame, run the camera
-   steps, then (unless the D_0018C418 freeze flag is set) take the view
-   from the target object (mode 3 blends it through func_001ED658) and
-   refresh its Euler angles; run func_001ED708 on the two vectors at
-   D_001871A0, func_001EDB98 and func_001EE858, and, with
-   D_0015EEB4 set, the matrix's third row as a cross product. */
+   steps, then (unless the debug free camera is active) take the view
+   from the current camera (blend phase 3 blends it through
+   Camera_UpdateBlend) and refresh its Euler angles; run the two shake
+   channels, the underwater test and the environment update, and, with
+   D_0015EEB4 (mirrored levels) set, rebuild matrix[1] as a cross
+   product. The blend reset and the shake calls go through local
+   pointers to their sub-blocks, as retail keeps them in registers. */
 void UpdateCamera(void) {
-    char *c;
-    char *target;
-    char *v;
+    CameraSystem *c;
+    Camera *target;
+    CameraShake *v;
     float m[16];
 
     if (D_0015F6E8 == 5) {
         if (D_001E6700 != 0) {
             return;
         }
-        *(short *)D_001872B0 = 0;
-        D_001872B0[2] = 0;
+        {
+            CamBlend *b = &gCamera.blend;
+            b->phase = 0;
+            b->kind = 0;
+        }
     }
-    c = gCamera;
-    (*(int *)(c + 0x398))++;
+    c = &gCamera;
+    c->frames++;
     Camera_UpdateFade();
     Camera_PickCollisionMasks();
     CameraPreUpdate();
     UpdateAllCameras();
-    target = *(char **)(c + 0x180);
-    if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {
-        Camera_StartBlend(*(void **)(c + 0x184));
+    target = c->current;
+    if ((unsigned short)(c->blend.phase - 1) < 2) {
+        Camera_StartBlend(c->previous);
     }
-    if (*(short *)(c + 0x270) == 3) {
-        Camera_UpdateBlend(target);
+    if (c->blend.phase == 3) {
+        Camera_UpdateBlend((char *)target);
     } else {
         char *st = gDebugFreeCam;
         if (*(int *)(st + 0x14) != 0) {
             goto frozen;
         }
-        qcopy(c + 0x140, target + 0x30);
-        qcopy(c + 0x350, target);
-        qcopy(c + 0x360, target + 0x10);
-        qcopy(c + 0x370, target + 0x20);
+        qcopy(&c->pos, &target->pos);
+        qcopy(&c->matrix[0], &target->basis[0]);
+        qcopy(&c->matrix[1], &target->basis[1]);
+        qcopy(&c->matrix[2], &target->basis[2]);
     }
     {
         char *st = gDebugFreeCam;
@@ -1288,13 +1293,13 @@ void UpdateCamera(void) {
         }
     }
 frozen:
-    v = D_001871A0;
-    Camera_UpdateShake(v, 0);
-    Camera_UpdateShake(v + 0x10, 1);
+    v = gCamera.shake;
+    Camera_UpdateShake((char *)&v[0], 0);
+    Camera_UpdateShake((char *)&v[1], 1);
     Camera_UpdateUnderwaterFlag();
-    Camera_UpdateEnvironment(v - 0x20);
+    Camera_UpdateEnvironment((char *)v - 0x20);       /* &gCamera.pos */
     if (D_0015EEB4_m[0] != 0) {
-        FastVecCross(v + 0x200, v + 0x210, v + 0x1F0);
+        FastVecCross((char *)v + 0x200, (char *)v + 0x210, (char *)v + 0x1F0); /* matrix[1] = matrix[2] x matrix[0] */
     }
 }
 
