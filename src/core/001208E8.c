@@ -171,7 +171,38 @@ void func_001209D8(int *arg0) {
     D_00131414_v = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/core_text", func_00120A78);
+LINKER_REMNANT("asm/remnants/core_text", func_00120A78);
+
+/* libcdvd S-command completion callback: through the uncached view of the
+   receive block, copies n0 bytes of buf0 to dst0 and n1 bytes of buf1 to
+   dst1, then finishes like the N-command callback (func_001209D8 on
+   D_00131414). Each destination is loaded once inside its own `if`, which
+   gives retail's doubled count test. */
+extern int D_00131414;
+
+typedef struct {
+    int n0;
+    int n1;
+    char *dst0;
+    char *dst1;
+    char buf0[0x40];
+    char buf1[0x40];
+} CdRecv;
+
+void func_00120A88(int arg0) {
+    CdRecv *p = (CdRecv *)(arg0 | 0x20000000);
+    int i;
+
+    if (p->n0 > 0) {
+        char *d0 = p->dst0;
+        for (i = 0; i < p->n0; i++) d0[i] = p->buf0[i];
+    }
+    if (p->n1 > 0) {
+        char *d1 = p->dst1;
+        for (i = 0; i < p->n1; i++) d1[i] = p->buf1[i];
+    }
+    func_001209D8((int *)&D_00131414);
+}
 
 extern int D_001313E0;
 extern int D_001313E8;
