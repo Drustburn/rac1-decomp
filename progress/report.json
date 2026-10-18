@@ -1,16 +1,16 @@
 {
  "measures": {
-  "fuzzy_match_percent": 95.06555276758175,
+  "fuzzy_match_percent": 95.07255557841958,
   "total_code": "3712772",
-  "matched_code": "3505188",
-  "matched_code_percent": 94.40892142043734,
+  "matched_code": "3505416",
+  "matched_code_percent": 94.41506238465492,
   "total_functions": 5118,
-  "matched_functions": 4834,
-  "matched_functions_percent": 94.45095740523642,
-  "complete_code": "1049848",
-  "complete_code_percent": 28.276662288985158,
+  "matched_functions": 4835,
+  "matched_functions_percent": 94.47049628761235,
+  "complete_code": "1050692",
+  "complete_code_percent": 28.299394630211605,
   "total_units": 141,
-  "complete_units": 103,
+  "complete_units": 104,
   "total_data": "699072",
   "matched_data": "3060",
   "matched_data_percent": 0.43772315297995057,
@@ -17672,17 +17672,17 @@
   {
    "name": "game/movie/read",
    "measures": {
-    "fuzzy_match_percent": 72.98578199052133,
+    "fuzzy_match_percent": 100.0,
     "total_code": "844",
-    "matched_code": "616",
-    "matched_code_percent": 72.98578199052133,
+    "matched_code": "844",
+    "matched_code_percent": 100.0,
     "total_functions": 3,
-    "matched_functions": 2,
-    "matched_functions_percent": 66.66666666666667,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 3,
+    "matched_functions_percent": 100.0,
+    "complete_code": "844",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -17697,7 +17697,7 @@
     {
      "name": "func_0023CAF8",
      "size": "228",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "312",
      "metadata": {
       "virtual_address": "2345720"
@@ -17714,7 +17714,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/game/movie/read.c",
     "progress_categories": [
      "executable",
@@ -37591,7 +37591,7 @@
   {
    "name": "Level 03: Kerwan",
    "measures": {
-    "fuzzy_match_percent": 99.95313964386129,
+    "fuzzy_match_percent": 99.97991565135895,
     "total_code": "119504",
     "matched_code": "119448",
     "matched_code_percent": 99.95313964386129,
@@ -38201,7 +38201,7 @@
     {
      "name": "func_L03_002ED138",
      "size": "56",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 57.14,
      "address": "946960",
      "metadata": {
       "virtual_address": "3068216"
@@ -49772,15 +49772,15 @@
    "id": "executable",
    "name": "Executable",
    "measures": {
-    "fuzzy_match_percent": 91.57761819681143,
+    "fuzzy_match_percent": 91.62658053875757,
     "total_code": "465664",
-    "matched_code": "426444",
-    "matched_code_percent": 91.57761819681143,
+    "matched_code": "426672",
+    "matched_code_percent": 91.62658053875757,
     "total_functions": 1689,
-    "matched_functions": 1617,
-    "matched_functions_percent": 95.73712255772647,
-    "complete_code": "242272",
-    "complete_code_percent": 52.02721275426058,
+    "matched_functions": 1618,
+    "matched_functions_percent": 95.79632918886915,
+    "complete_code": "243116",
+    "complete_code_percent": 52.208459318306765,
     "total_data": "699072",
     "matched_data": "3060",
     "matched_data_percent": 0.43772315297995057,
@@ -49792,7 +49792,7 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 95.56575342735752,
+    "fuzzy_match_percent": 95.56673887040408,
     "total_code": "3247108",
     "matched_code": "3078744",
     "matched_code_percent": 94.81495533871987,
@@ -49807,15 +49807,15 @@
    "id": "game",
    "name": "Executable game code",
    "measures": {
-    "fuzzy_match_percent": 91.38650479210774,
+    "fuzzy_match_percent": 91.43657814517759,
     "total_code": "455332",
-    "matched_code": "416112",
-    "matched_code_percent": 91.38650479210774,
+    "matched_code": "416340",
+    "matched_code_percent": 91.43657814517759,
     "total_functions": 1655,
-    "matched_functions": 1583,
-    "matched_functions_percent": 95.64954682779457,
-    "complete_code": "231940",
-    "complete_code_percent": 50.93865575009004
+    "matched_functions": 1584,
+    "matched_functions_percent": 95.70996978851964,
+    "complete_code": "232784",
+    "complete_code_percent": 51.12401500443632
    }
   },
   {
@@ -49852,7 +49852,7 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 99.25133460380752,
+    "fuzzy_match_percent": 99.2528981861538,
     "total_code": "2046480",
     "matched_code": "2021752",
     "matched_code_percent": 98.79168132598413,
@@ -49912,7 +49912,7 @@
    "id": "level_03",
    "name": "Level 03: Kerwan",
    "measures": {
-    "fuzzy_match_percent": 99.95313964386129,
+    "fuzzy_match_percent": 99.97991565135895,
     "total_code": "119504",
     "matched_code": "119448",
     "matched_code_percent": 99.95313964386129,
