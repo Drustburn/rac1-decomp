@@ -296,7 +296,7 @@ extern HelpEntry *D_0015F780 MACRO_ADDR;
    or -1. `r = -1` and a `break` give retail's peeled first compare and
    rotated loop; the count goes through the struct so its +0x2C stays a
    displacement. */
-int func_001FE4D0(int id) {
+int Help_FindIndex(int id) {
     int r = -1;
     int i;
 
@@ -313,7 +313,7 @@ extern char D_00199A68[];
 
 /* msg_string(int). The table load sits in the bgezl slot, where the
    MACRO_ADDR access becomes $gp-relative. */
-void *func_001FE540(int id) {
+void *msg_string(int id) {
     int i = Help_FindIndex(id);
     if (i >= 0) {
         return D_0015F780[i].text;
@@ -441,7 +441,7 @@ extern PlayerHud D_001517D0;
     D_00141A68[HS.entry].flags = D_00141A68[HS.entry].flags | (1 << D_0015EE84) | 0x80000000
 
 /* Advances the help popup's state machine: delay, open, hold, close, record stats. Adapted from Lombyte (MIT) for PAL: ui/help/update_help_state.c, update_help_state. */
-void func_001FE6C0(void) {
+void Help_Update(void) {
     if (HS.started == 0) {
         if (HS.delay == 0 && (D_0013CBE0 & 0xF000)) {
             HS.delay = 1;
@@ -630,7 +630,7 @@ extern long func_001F4868_l(int) __asm__("func_001F4868");
    D_001997D0, as in the rest of this file. The texture handle is the
    draw call's 64-bit last argument, taken as `long` so retail's sd
    stores $v0 directly, ahead of the colour. */
-void func_001FF0C8(void) {
+void Help_DrawPrompt(void) {
     int alpha;
 
     ((HelpState *)D_001997D0)->pad[4] = 0x20;

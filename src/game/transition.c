@@ -34,7 +34,7 @@ extern int D_0015EF88 MACRO_ADDR;
 
 /* func_00234C98 is (int, long) and D_0015EF88 MACRO_ADDR; the older
    sq/sd note is obsolete. */
-void func_001E9E70(void) {
+void Transition_DrawSky(void) {
     SetupSkyGifPaging();
     SkyLevelGeneric___maybe();
     DoSkyGifPaging();
@@ -876,7 +876,7 @@ extern short D_0015F780;
    indexes into D_0015F060, past its 8-byte header, and keeps the
    header's first word in D_001997FC. Both table pointers are MACRO_ADDR
    (one register each), and the index goes first in the addition. */
-void func_001EB300(int arg0) {
+void Help_LoadMsgs(int arg0) {
     int *entry = (int *)(arg0 * 4 + D_0015F064);
     int off = *entry;
     char *p = (char *)(D_0015F060 + off);
@@ -894,7 +894,7 @@ extern void func_001F3140(void);
 /* Transition_UpdateMovieCamera: the current keyframe (0x20 bytes: position,
    a flag byte at +0xC, then X/Y/Z angles) sets the camera position and
    its orientation matrix (negated first two rows); returns the flag. */
-unsigned char func_001EB338(void) {
+unsigned char Transition_UpdateMovieCamera(void) {
     char *t = D_0018CC20;
     char *key = *(char **)(t + 0x54) + *(int *)(t + 0x38) * 32;
     unsigned char flag = key[0xC];
@@ -1126,7 +1126,7 @@ extern s32 func_00238688();
 void func_001EB7C0(s32 *arg0);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/gameplay/state/transition_default_draw.c, transition_default_draw. */
-void func_001EB7C0(s32 *arg0)
+void Transition_DefaultDraw(s32 *arg0)
 {
     s32 n;
 

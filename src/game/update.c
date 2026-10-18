@@ -308,7 +308,7 @@ LINKER_REMNANT("asm/remnants/text", func_00239180);
 extern char D_001E66C0[];
 extern char D_001E8DA0[];
 
-void func_002391A8(int arg0) {
+void set_scrolling_status_message(int arg0) {
     char *b = D_001E66C0;
     func_00116248(*(int *)(b + 0x2C), D_001E8DA0, arg0);
     *(int *)(b + 0x44) = 0;

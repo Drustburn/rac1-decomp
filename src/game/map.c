@@ -279,7 +279,7 @@ extern int D_001A01F0[];
    loses an instruction). `flags` is derived only after the call, as in
    retail: deriving it up front with the others swaps a*4 and b*4
    between $s1 and $s2. */
-void func_00205830(int a, int b) {
+void move_map_entry_slot(int a, int b) {
     int *base = D_001A01F0;
     int *dst = base + 0x9E;
     int *size = base + 0xA9;
@@ -295,7 +295,7 @@ void func_00205830(int a, int b) {
 
 extern int D_001A01F0[];
 
-int func_002058D0(int arg0) {
+int findMapSlot(int arg0) {
     int i;
     for (i = 0; i < 5; i++) {
         if (D_001A01F0[0x9E + i] != 0 && D_001A01F0[0xA3 + i] == arg0) {
@@ -354,7 +354,7 @@ extern int *D_001602E0;
 
 /* The global is read at both uses in the loop, giving retail's two
    pointers, and through a MACRO_ADDR alias. */
-int func_00205A50(int arg0) {
+int find_id_in_terminated_table(int arg0) {
     int i;
 
     for (i = 0; D_001602E0_m[i] != 0 && i < 20; i++) {
@@ -418,7 +418,7 @@ int func_00205AA8(void) {
     return bestIdx;
 }
 
-void func_00205C08(unsigned char *dst, unsigned char *a, unsigned char *b,
+void compose_bitmap_from_mask(unsigned char *dst, unsigned char *a, unsigned char *b,
                    unsigned char *mask) {
     int i;
     int j;

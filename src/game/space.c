@@ -1527,7 +1527,7 @@ extern void func_002305A0(void);
 
 /* A switch on D_0013E150, whose jump table is linked into the data
    segment at retail's jtbl_001E8C90 (see rac1.ld.sh). */
-void func_00232200(void) {
+void dispatch_game_state_update(void) {
     if (D_0015F6FC_m == 0) {
         switch (D_0013E150) {
         case 0:
@@ -2386,7 +2386,7 @@ extern int func_00204C60(void);
 extern void func_00234AC8(int);
 
 /* DoSpaceTransition: plays the level-to-level transition (dialogue screens, loading loop) and waits for the load. Adapted from Lombyte (MIT) for PAL: src/gameplay/state/do_space_transition.c, do_space_transition. */
-void func_00233308(void) {
+void DoSpaceTransition(void) {
     int lvl;
     int ok;
     int done;

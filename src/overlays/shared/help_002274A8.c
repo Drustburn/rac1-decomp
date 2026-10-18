@@ -214,7 +214,7 @@ extern void func_L01_002293D0(void);
 extern void func_L00_002091D8(void);
 
 /* Per-frame update of the help/menu state: validates the cursor, then runs the update chain. */
-void func_L01_00228E08(void) {
+void HeroUpdate(void) {
     char *g = (char *)D_0013E633 + 0xE1D;
     if (*(float *)(g + 0x80) < 2.0f || *(float *)(g + 0x84) < 2.0f || *(float *)(g + 0x80) > 1022.0f || *(float *)(g + 0x84) > 1022.0f) {
         char *q;

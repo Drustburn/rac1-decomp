@@ -118,7 +118,7 @@ extern void func_001FA190(void *);
 extern void func_0022C9A8(int);
 
 /* Draws each static sky shell in turn. */
-void func_L00_0028A5A8(void) {
+void UpdateSkyShellsStatic(void) {
     int i;
     func_001FA190(D_L00_001BDB70);
     for (i = 0; i < *(short *)(D_L00_001605DC + 6); i++) {
@@ -128,7 +128,7 @@ void func_L00_0028A5A8(void) {
 extern int D_L00_0015F6B0 MACRO_ADDR;
 void func_L00_001FFA40(void *,void *);
 /* rotates animated sky shells and draws each layer */
-void func_L00_0028A6F8(void) {
+void UpdateSkyShellsAnimated(void) {
  float v[4] __attribute__((aligned(16))); int i;
  *(short *)(D_L00_001605DC+4)=0;
  qzero(v);

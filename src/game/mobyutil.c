@@ -332,7 +332,7 @@ LINKER_REMNANT("asm/remnants/text", func_00214080);
 
 extern int func_001160D8(void);
 
-int func_002140B0(int arg0) {
+int random_integer_below(int arg0) {
     return ((func_001160D8() >> 16) & 0x7FFF) % arg0;
 }
 
@@ -340,7 +340,7 @@ LINKER_REMNANT("asm/remnants/text", func_002140F0);
 
 /* As func_00214158: the old note's C, with the mtc1 nop added by the
    pipeline. */
-float func_002140F8(float a, float b) {
+float random_float_between(float a, float b) {
     int v = func_001160D8();
     float delta = b - a;
     v = (v >> 16) & 0x7FFF;
@@ -349,7 +349,7 @@ float func_002140F8(float a, float b) {
 
 /* The C of the old revert note: the nop it lacked is ps2eeas's (after
    an mtc1), which tools/ps2eeas_nops.py now adds. */
-float func_00214158(void) {
+float random_angle_radians(void) {
     int v = ((func_001160D8() >> 16) & 0xFFF) - 0x800;
     return (float)v * 3.14159274f * 0.00048828125f;
 }
@@ -580,7 +580,7 @@ extern void func_001F9DC0_14F78(f32 *, f32 *, f32) __asm__("func_001F9DC0");
 void func_00214F78(f32 *arg0);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/math/vectors/normalize_vector_triplet.c, normalize_vector_triplet. */
-void func_00214F78(f32 *arg0) {
+void normalize_vector_triplet(f32 *arg0) {
     struct M2c_temp3 scratch;
     f32 *base;
     f32 *src;
@@ -730,7 +730,7 @@ extern float func_001F9F90(float);  /* cos of a half-angle */
    (done by func_001F9C30, which writes through arg0), and w at +0xC is
    cos(angle/2). Both trig calls take the same half-angle, which is why
    it lives in $f20 across all three calls. */
-void func_00215380(void *arg0, void *axis, float angle) {
+void build_quaternion_from_axis_angle(void *arg0, void *axis, float angle) {
     float half = angle * 0.5f;
 
     FastVecScale(arg0, axis, FastSin(half));
@@ -798,7 +798,7 @@ extern void func_001F9BF0(void *, void *, void *);
 /* Is point arg0 inside box arg1 of the table at D_00160134? The offset
    from the box's position, taken through its matrix, must lie in
    [-1, 1] on every axis. 0 for arg1 == -1. */
-int func_00215570(void *arg0, int arg1) {
+int is_point_inside_clip_volume(void *arg0, int arg1) {
     float d[4];
     float v[4];
     ViewBox *m;
@@ -843,7 +843,7 @@ extern void func_00215650(void *arg0, void *arg1, void *arg2);
    (dst = vec); otherwise the axis is normalised to unit length and turned
    into an axis-angle quaternion in a scratch buffer, which then rotates
    vec into dst. */
-void func_002156E0(void *dst, void *vec, void *axis, float angle) {
+void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) {
     float q[4];
 
     if (FastAbsF(angle) < 0.00001f) {
@@ -935,7 +935,7 @@ extern void func_001F9F18(float *, int);
    channels on 127 and scale by alpha/10000 into arg0. The 127 vector is
    a 16-byte aligned (sceVu0FVECTOR-style) local cleared by its
    initializer (one por/sq), then filled. */
-void func_00215A10(float *arg0, int *arg1) {
+void load_display_text_resource_entry(float *arg0, int *arg1) {
     float v[4];
     FVec4 mid = { 0 };
     float scale;
@@ -954,7 +954,7 @@ void func_00215A10(float *arg0, int *arg1) {
    arg1 is updated in place throughout, so it stays in $f12 as retail
    has it. The nops after the two mtc1s are ps2eeas's
    (tools/ps2eeas_nops.py). */
-float func_00215A98(int arg0, float arg1) {
+float round_float_to_decimal_places(int arg0, float arg1) {
     int p = 1;
     float scale;
 
@@ -1090,7 +1090,7 @@ extern int D_00161388 MACRO_ADDR;
    arg0: 2 if arg0 already holds the slot, 1 if the slot was free and
    arg0 takes it, 0 if someone else holds it. The failure return goes
    last, which lets the scheduler put `li $2,1` before the last store. */
-int func_00215F80(int arg0, int arg1) {
+int try_set_help_message(int arg0, int arg1) {
     int cur = D_0015F6B4;
 
     if (cur == arg0) {
@@ -1113,7 +1113,7 @@ int func_00215F80(int arg0, int arg1) {
     return 0;
 }
 
-int func_00216028(int arg0, int arg1) {
+int force_help_message(int arg0, int arg1) {
     int busy = try_set_help_message(arg0, arg1);
     if (busy != 0) {
         return busy;
@@ -1137,7 +1137,7 @@ int func_00216098(void) {
 
 extern unsigned char D_0014BFC0[];
 
-int func_002160E0(void) {
+int count_nonzero_entries_up_to_40(void) {
     int count = 0;
     int row;
     for (row = 0; row < 0x14; row++) {
@@ -1154,7 +1154,7 @@ int func_002160E0(void) {
 
 extern unsigned char D_0013E620[];
 
-int func_00216150(void) {
+int count_nonzero_entries_up_to_10(void) {
     int count = 0;
     int i;
     for (i = 0; i < 0x25; i++) {
@@ -1166,7 +1166,7 @@ int func_00216150(void) {
 
 extern unsigned char D_0013D510[];
 
-int func_00216198(void) {
+int count_nonzero_entries_up_to_30(void) {
     int count = 0;
     int i;
     for (i = 0; i < 0x20; i++) {

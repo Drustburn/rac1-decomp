@@ -288,7 +288,7 @@ typedef struct {
 /* ClearPadInput(PAD &). The stores are in the source order that gives
    retail's schedule. a and b are separate members, so each is its own
    loop giv; the second one (b) becomes the loop's base. */
-void func_00218188(PadClr *p) {
+void ClearPadInput(PadClr *p) {
     int i;
 
     p->f1B0 = 0;
@@ -494,6 +494,6 @@ void func_002181F0_r(PadState *p, u8 *buf, s32 len) {
 extern void func_00217F68(void *);
 
 /* UpdatePad(void) */
-void func_00218908(void) {
+void UpdatePad(void) {
     func_00217F68(D_0013CA40);
 }

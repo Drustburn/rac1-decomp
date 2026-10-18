@@ -503,7 +503,7 @@ void func_L00_00237B20(HudElem *e) {
     func_L00_00236610(e);
 }
 // Wrapper function (declaration provided by includes)
-void func_L00_00237B70(void *e) {
+void DefaultVtbl_DeleteMoby(void *e) {
     func_L00_00236830(e);
 }
 INCLUDE_ASM("asm/overlays", func_L00_00237B90);
@@ -1995,7 +1995,7 @@ void func_L00_0023B890(void) {
 extern char D_L00_0017E5D8[];
 
 // Places a HUD element: looks up its size, offsets x/y by the anchor flags and draws it.
-void func_L00_0023BAB8(char *e, int id, int x, int y, int flags, int alpha) {
+void HudFrame(char *e, int id, int x, int y, int flags, int alpha) {
     if (id >= 0) {
         char *g = D_L00_0017E5D8;
         char *a = *(char **)(g + 0x20);

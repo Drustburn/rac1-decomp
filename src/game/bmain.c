@@ -44,7 +44,7 @@ extern void func_00201348(int, int, int, int, int, int);
    table in D_00137C80 (the alternate set while D_0015EE80 is set), stop
    sound and wait for the loader (func_00209E68) to go idle, then load it
    (func_0023B670) and reset the display state. */
-void func_001E9808(int level) {
+void showDebugFont(int level) {
     int a;
     int b;
     int t;

@@ -4,8 +4,10 @@
  *
  * Each name is a macro for the address-named symbol the build and
  * every tool use (func_<ADDR>, func_LNN_<ADDR>, D_<ADDR>): code may
- * write either spelling and compiles to the same object. Declare and
- * define with the address name; use the readable one in bodies.
+ * write either spelling and compiles to the same object. Definitions
+ * and bodies use the readable name; declarations, __asm__ labels and
+ * _r definitions keep the address name (tools read definitions
+ * through tools/srcnames.py).
  * Tiers and sources: docs/NAMES.md.
  */
 #ifndef NAMES_H

@@ -966,7 +966,7 @@ extern int func_001FE540(int);
 extern void func_001166FC(void *, int);
 
 /* Shows message arg0 in the on-screen text box for arg1 ticks. */
-void func_L00_00264DB8(int arg0, int arg1) {
+void ShowBanner(int arg0, int arg1) {
     if (arg1 == -1) {
         arg1 = scale_ticks(0xB4);
     }

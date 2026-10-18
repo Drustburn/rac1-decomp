@@ -51,6 +51,7 @@ import overlay_check  # noqa: E402
 import rabbitizer as rz  # noqa: E402
 from elftools.elf.elffile import ELFFile  # noqa: E402
 from elftools.elf.relocation import RelocationSection  # noqa: E402
+import srcnames
 
 # Absolute: Windows' CreateProcess won't resolve a relative forward-slash
 # path to an .exe (tools/toolchain.py).
@@ -83,7 +84,7 @@ OVERLAY_DEF = re.compile(r"^(?!extern\b)[A-Za-z_].*?\b(func_L\d{2}_[0-9A-Fa-f]{8
 def find_overlay_stub(name):
     """Like find_stub, but over every src/overlays/**/*.c file."""
     for src in sorted(Path("src/overlays").rglob("*.c")):
-        lines = src.read_text(errors="replace").splitlines()
+        lines = srcnames.read_c(src, errors="replace").splitlines()
         for i, line in enumerate(lines):
             m = OVERLAY_STUB.match(line)
             if m and m.group(1) == name:
@@ -107,7 +108,7 @@ def find_stub(name):
         return find_overlay_stub(name)
     for seg, srcs in SEGMENT_SOURCES.items():
         for src in srcs:
-            lines = Path(src).read_text(errors="replace").splitlines()
+            lines = srcnames.read_c(src, errors="replace").splitlines()
             for i, line in enumerate(lines):
                 m = STUB.match(line)
                 if m and m.group(1) == name:

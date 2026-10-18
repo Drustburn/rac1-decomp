@@ -407,7 +407,7 @@ extern void func_001FBAB8(int, int, int, int, int, int, int);
 /* Two base locals, one before the join and one after, make gcse share
    only the %hi and rebuild the %lo base after the join; the first must
    be assigned after the first call. func_00116810 is strlen. */
-void func_00239838(void) {
+void update_scrolling_status_message(void) {
     char *v;
     char *w;
     func_001FBAB8(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
@@ -789,7 +789,7 @@ void func_0023A948(int a, int b, float f) {
 __asm__(".section .text\n\tnop\n");
 
 
-void func_0023AA08(void) {
+void setupViewContext(void) {
     PutDrawBufferLarge();
     InitViewContext();
     UpdateViewContext();

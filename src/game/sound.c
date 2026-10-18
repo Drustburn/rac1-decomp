@@ -293,7 +293,7 @@ extern int func_001FA898_i(float) __asm__("func_001FA898");
    chain setting one `r` with a single return; early returns let jump.c
    move the last arm's return block to the end. It returns int, and its
    one caller here uses a void alias. */
-int func_0022DA10(void *arg0, float x, float lo, float hi) {
+int sound_GetFade(void *arg0, float x, float lo, float hi) {
     char *s = (char *)arg0;
     int r;
     if (*(unsigned char *)(s + 0x19) & 1) {
@@ -419,7 +419,7 @@ extern void func_0012E2E8(void);
    *next* call. That callee, func_0012EE70 (snd_StreamSafeCheckCDIdle),
    returns int: a value call resets $v0's readers, which lets the
    capture sink into its slot. */
-int func_0022EA20(void *arg0) {
+int sound_loadBankByLocation(void *arg0) {
     char *base = D_0013E650;
     int r = 0;
 
@@ -438,7 +438,7 @@ int func_0022EA20(void *arg0) {
 /* 12 bytes of post-endlabel nop padding in retail -- see func_001F6668. */
 __asm__(".section .text\n\tnop\n\tnop\n\tnop\n");
 
-void func_0022EAB0(int idx) {
+void sound_KillChannel(int idx) {
     if (idx >= 0) {
         char *e = D_0013E650 + idx * 0x70;
         unsigned char st = *(unsigned char *)(e + 0x74);
@@ -751,7 +751,7 @@ extern s32 func_0012E4F8();
 extern s32 func_0012EC40_2EFE8() __asm__("func_0012EC40");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/audio/voices/sound_stop_all_sounds.c, sound_stop_all_sounds. */
-void func_0022EFE8(void) {
+void sound_StopAllSounds(void) {
     s32 i;
     SndState *s;
     u128 *q;

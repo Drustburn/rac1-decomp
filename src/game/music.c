@@ -202,7 +202,7 @@ void func_002161E0(void) {
 extern void func_0012F068(void *);
 extern void func_002177F0(int);
 
-void func_00216270(void) {
+void register_audio_stream_callback(void) {
     func_0012F068(func_002177F0);
 }
 
@@ -414,7 +414,7 @@ extern char D_0013A764[];
    the same music_Playing setup those siblings do, inline, with the sound
    handle read from D_0013A764[arg0][D_0015EE88] (stride 0x250) instead of
    a SndToc table. */
-void func_002167C0(int arg0, int arg1, int arg2) {
+void music_start_track_by_id(int arg0, int arg1, int arg2) {
     char *s;
     int handle;
 
@@ -481,7 +481,7 @@ int func_00216960(void) {
 extern void func_002178C0(int, long);
 
 /* music_PreseekTrack(int, int, int) */
-void func_002169B8(int arg0, int arg1, int arg2) {
+void music_PreseekTrack(int arg0, int arg1, int arg2) {
     char *s = (char *)D_001517D0;
     char *base;
     int *tbl;
@@ -511,7 +511,7 @@ void func_002169B8(int arg0, int arg1, int arg2) {
 extern void func_002179C8(int, long);
 
 /* music_StartTrack(int, int, int) */
-void func_00216A90(int arg0, int arg1, int arg2) {
+void music_StartTrack(int arg0, int arg1, int arg2) {
     char *s = (char *)D_001517D0;
     char *base;
     int *tbl;
@@ -549,7 +549,7 @@ extern void func_00217970(int, long);
    func_00216A90 (CSE merges the loads, and the address stays in a
    register as in retail), and the 0x24/0x20 choice comes before the
    stores, which keeps arg1 in $a1. */
-void func_00216B68(int arg0, int arg1, int arg2) {
+void music_StartTrackBody(int arg0, int arg1, int arg2) {
     char *s = (char *)D_001517D0;
     char *base;
     int *tbl;
@@ -591,7 +591,7 @@ extern void func_00217920(int, long);
 
 /* The success path ends in the call, so `return 1` does not break the
    block's trailing call run (the scheduler then keeps retail's order). */
-int func_00216C50(int arg0, int arg1, int arg2, int arg3) {
+int music_Transition(int arg0, int arg1, int arg2, int arg3) {
     char *s = (char *)D_001517D0;
     char *base;
     int *tbl;
@@ -656,7 +656,7 @@ extern void func_0012EE70(int);
    exit test in front of the loop then gets its own pseudo, and the loop
    keeps retail's copy in $s1. The stores are in the order that gives
    retail's schedule. */
-void func_00216D88(void) {
+void music_Stop(void) {
     {
         char *d;
         while (d = (char *)D_001517D0, *(unsigned int *)(d + 0x34) == 0xFFFFFFFF) {
@@ -702,7 +702,7 @@ void func_00216D88(void) {
 extern short D_001517D0[];
 
 /* music_Pause(int) */
-void func_00216EF0(int arg0) {
+void music_Pause(int arg0) {
     if (arg0 != 0) {
         D_001517D0[0x2F] = 0;
         D_001517D0[0x2E] = -0x8000;
@@ -714,7 +714,7 @@ void func_00216EF0(int arg0) {
 }
 
 /* music_Unpause(void) */
-void func_00216F28(void) {
+void music_Unpause(void) {
     short *p = D_001517D0;
     p[0x20] = 4;
     p[0x3C] = 4;
@@ -753,7 +753,7 @@ extern void func_00217830(int, long);
    0xFFFFFFFF with lui/ori), the special case is the else arm (retail
    places it last), and the dispatch reads p->state directly so the 2/3
    range test works on the loaded halfword as retail's does. */
-void func_00216F48(MusicPlaying *p) {
+void music_UpdateStream(MusicPlaying *p) {
     int h;
 
     if (p->state != 9 && p->handle != 0 && p->handle != 0xFFFFFFFF) {
@@ -862,7 +862,7 @@ extern void func_00216F48_17130(void *) __asm__("func_00216F48");
 extern s32 func_00217628(s32, s32, s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/audio/music/music_update.c, music_update. */
-void func_00217130(void) {
+void music_Update(void) {
     s8 requested_track;
     s32 fade_volume;
     s32 handle;

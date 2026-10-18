@@ -1132,7 +1132,7 @@ void func_00209040(void) {
    `srl $v0,$v0,31`; retail has `slti $v0,$v0,0`, which is what you get
    when the comparison feeds a branch rather than being the return value
    itself. That one instruction was this function's entire residual. */
-int func_00209048(int x1, int y1, int x0, int y0, int x2, int y2) {
+int menu_pointIsClockwise(int x1, int y1, int x0, int y0, int x2, int y2) {
     int cross;
 
     x2 -= x0;
@@ -1321,7 +1321,7 @@ void func_00209398(void) {
     }
 }
 
-void func_00209418(void) {
+void menu_post_preparePageOpen(void) {
     char *s = D_0013D390;
     *(int *)(s + 0x1C) = 0;
     if (*(int *)(s + 0xE4) < 0) {

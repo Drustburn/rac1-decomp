@@ -417,8 +417,10 @@ def render_header(keep) -> str:
         " *",
         " * Each name is a macro for the address-named symbol the build and",
         " * every tool use (func_<ADDR>, func_LNN_<ADDR>, D_<ADDR>): code may",
-        " * write either spelling and compiles to the same object. Declare and",
-        " * define with the address name; use the readable one in bodies.",
+        " * write either spelling and compiles to the same object. Definitions",
+        " * and bodies use the readable name; declarations, __asm__ labels and",
+        " * _r definitions keep the address name (tools read definitions",
+        " * through tools/srcnames.py).",
         " * Tiers and sources: docs/NAMES.md.",
         " */",
         "#ifndef NAMES_H",
@@ -536,6 +538,42 @@ def rewrite_bodies(text: str, token, name_of) -> tuple[str, int]:
     return "".join(out), n
 
 
+DEF_LINE = re.compile(r"^(?!extern\b)([A-Za-z_][^;\n]*?\b)(func_(?:L\d\d_)?[0-9A-Fa-f]{8})(\s*\()")
+
+
+def apply_defs() -> None:
+    """In every src/ C file, write a named function's definition with its
+    readable name: `void func_001F4E08(void) {` becomes `void FadeToBlack(void) {`.
+    names.h makes it the same symbol. `_r` definitions, lines with an
+    __asm__ label and prototypes keep the address name. Tools that find
+    definitions read source through tools/srcnames.py."""
+    keep, _ = header_rows()
+    name_of = {r["symbol"]: r["name"] for r in keep if r["symbol"].startswith("func_")}
+    changed_files = changed = 0
+    for p in sorted((ROOT / "src").rglob("*.c")):
+        lines = p.read_text().split("\n")
+        n = 0
+        for i, line in enumerate(lines):
+            m = DEF_LINE.match(line)
+            if not m or m.group(2) not in name_of or "__asm__" in line:
+                continue
+            rest = line[m.end():]
+            if line.rstrip().endswith(";") or DECL_LINE.match(line):
+                continue
+            # a definition: its body opens on this line or the next non-blank one
+            nxt = next((l for l in lines[i + 1:] if l.strip()), "")
+            if "{" not in rest and not nxt.lstrip().startswith("{") and not rest.rstrip().endswith(","):
+                if not re.search(r"\)\s*$", rest) or nxt.strip().endswith(";"):
+                    continue
+            lines[i] = m.group(1) + name_of[m.group(2)] + m.group(3) + rest
+            n += 1
+        if n:
+            p.write_text("\n".join(lines))
+            changed_files += 1
+            changed += n
+    print(f"{changed} definitions renamed in {changed_files} files")
+
+
 # ---------------------------------------------------------------- lookup
 
 def lookup(args) -> None:
@@ -553,7 +591,7 @@ def main() -> None:
     args = sys.argv[1:]
     if not args:
         sys.exit(__doc__)
-    cmd = {"build": build, "header": header, "apply": apply, "check": check}.get(args[0])
+    cmd = {"build": build, "header": header, "apply": apply, "apply-defs": apply_defs, "check": check}.get(args[0])
     if cmd:
         cmd()
     else:

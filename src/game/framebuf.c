@@ -131,7 +131,7 @@ extern int func_001222C8(void *, short, short, short, short, short);
 
 #define FA ((FsAa_FAB40 *)D_0015EFB8)
 
-void func_001FAB40(int display_width, int display_height, int storage_width, int storage_height,
+void SetupFS_AA_buffer(int display_width, int display_height, int storage_width, int storage_height,
                    int display_offset_x, int display_offset_y) {
     unsigned long *q;
 
@@ -297,7 +297,7 @@ void func_001FAB40(int display_width, int display_height, int storage_width, int
 
 extern long D_00152178 NOT_SDA;
 
-void func_001FB448(int arg0, int arg1, int arg2) {
+void SetBackgroundColor(int arg0, int arg1, int arg2) {
     D_00152178 = (long)arg0 | ((long)arg1 << 8) | ((long)arg2 << 16) | 0x80000000L;
 }
 
@@ -305,7 +305,7 @@ extern void *D_0015EFB8 MACRO_ADDR;
 extern void func_00122140(void *);
 
 /* PutDispBuffer(void) */
-void func_001FB470(void) {
+void PutDispBuffer(void) {
     func_00122140(D_0015EFB8);
 }
 
@@ -314,7 +314,7 @@ extern void func_001224B0(void *);
 
 /* PutDrawBufferLarge: queue the draw environment at D_0015EFB8+0x30 as a
    DMA ref tag when a packet buffer is open, else send it directly. */
-void func_001FB498(void) {
+void PutDrawBufferLarge(void) {
     if (D_00161000 != 0) {
         D_00161000[0] = 0x30000009;
         D_00161000[1] = ((int)D_0015EFB8 + 0x30) & 0xFFFFFFF;
@@ -330,7 +330,7 @@ extern char D_00152140[];
 
 /* Appends a DMA tag pair (0x30000015 / &D_00152140 / 0 / 0x50000015) to
    the packet buffer D_00161000 points at, if there is one. */
-void func_001FB530(void) {
+void framebuf_appendLargeSetup(void) {
     if (D_00161000 != 0) {
         D_00161000[0] = 0x30000015;
         D_00161000[1] = (int)D_00152140;
@@ -341,7 +341,7 @@ void func_001FB530(void) {
 }
 
 /* PutDrawBufferSmall(void) */
-void func_001FB598(void) {
+void PutDrawBufferSmall(void) {
     D_00161000[0] = 0x30000009;
     D_00161000[1] = ((int)D_0015EFB8 + 0xC0) & 0xFFFFFFF;
     D_00161000[2] = 0;
@@ -433,7 +433,7 @@ __asm__(".section .text\n\tnop\n");
 extern char D_00151A00[];
 
 /* AA_BlurPass(void) */
-void func_001FB848(void) {
+void AA_BlurPass(void) {
     D_00161000[0] = 0x30000026;
     D_00161000[1] = (int)D_00151A00;
     D_00161000[2] = 0;
@@ -443,7 +443,7 @@ void func_001FB848(void) {
 
 extern char D_00151C60[];
 
-void func_001FB8A8(void) {
+void framebuf_appendSmallSetup(void) {
     D_00161000[0] = 0x30000029;
     D_00161000[1] = (int)D_00151C60;
     D_00161000[2] = 0;

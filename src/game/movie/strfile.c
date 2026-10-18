@@ -21,7 +21,7 @@ int func_0023CE18(StrFile *f, int first, int second) {
     return 1;
 }
 /* No recovered name. Nothing to free, returns 1. */
-int func_0023CE28(StrFile *f) {
+int strFileDelete(StrFile *f) {
     return 1;
 }
 extern void func_00121750(int, int, int, void *);

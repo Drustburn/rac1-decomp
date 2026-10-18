@@ -76,7 +76,7 @@ extern int D_001941C0[];
  * and a value stored twice (d, into [5] and [6]) has its first store
  * emitted last. The allocation follows the schedule.
  */
-void func_00201E10(void) {
+void InitMemSlots(void) {
     int base = (int)D_0024272F & 0xFFFFC000;
     int size = D_0016100C;
     int a = base + size;
@@ -154,7 +154,7 @@ extern char D_001E7E40[]; /* "Unsupported language %d\n" */
  * palette/font image, and finally maps sceCdGetDiskType's result to the
  * current-language global.
  * Adapted from Lombyte (MIT) for PAL: runtime/startup/init_once.c, init_once. */
-void func_00201E88(void) {
+void InitOnce(void) {
     unsigned char buf[0x800];
     char *seg;
     int base;

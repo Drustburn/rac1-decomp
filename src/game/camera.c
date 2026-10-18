@@ -23,7 +23,7 @@ extern char D_001899D0[];
 extern void *D_001871C0 NOT_SDA;
 
 /* BackupCurrentCam */
-void func_001EC038(void) {
+void BackupCurrentCam(void) {
     FastMemCopy(D_00189310, D_001871C0, 0xA0);
     FastMemCopy(D_001899D0, D_001899D0 - 0x500, 0x280);
     *(void **)(D_00189310 + 0x70) = D_001899D0;
@@ -36,7 +36,7 @@ extern void (*D_001893B0[])(void);
    callbacks, then empties the queue. */
 /* D_0015F08C as MACRO_ADDR removes the hoisted address register (frame
    0x30); a plain indexed loop. */
-void func_001EC098(void) {
+void ExecuteCamPostUpdFuncs(void) {
     int i;
 
     for (i = 0; i < D_0015F08C; i++) {
@@ -57,7 +57,7 @@ extern float func_001F9B88(float);
    to +-e and to +-func_001F9B88(b - a), and returns a + *p. The nop
    between the first compare and its bc1f is ps2eeas's
    (tools/ps2eeas_nops.py). */
-float func_001EC120(float a, float b, float *p, float c, float d, float e) {
+float Cam_InterpValues(float a, float b, float *p, float c, float d, float e) {
     float diff = b - a;
     float v = *p;
 
@@ -89,7 +89,7 @@ extern void func_0020D678(void *); /* DeleteMoby */
    moby kept at D_001871D0+0xC4, depending on the flag at arg0+0x86. */
 /* A `char *c` base, the `== 0` arm first, and DeleteMoby takes the slot
    as its argument. */
-void func_001EC210(void *arg0) {
+void Camera_handleCollWithHero(void *arg0) {
     char *c = D_001871D0;
 
     if (*(short *)((char *)arg0 + 0x86) == 0) {
@@ -131,7 +131,7 @@ extern DispatchRec D_001E8F80[];
  * choice question. Kept per the same-size-tiny-diff precedent.
  */
 /* Camera_runSetupToNewCam(UpdateCam *) */
-void func_001EC270(void *arg0) {
+void Camera_runSetupToNewCam(void *arg0) {
     void (*fn)(void *) = D_001E8F80[*(short *)((char *)arg0 + 0x8C)].fn_08;
     if (fn != 0) {
         fn(arg0);
@@ -331,7 +331,7 @@ extern CamPrioHook D_001E8F80_prio[] __asm__("D_001E8F80");
    one shared `return 0;`, which is what lets cross-jumping and reorg give
    retail's branches; case 7's final test shares its `return 1` with the
    g < 0 exit so its `$v0 = 1` is not hoisted above the load. */
-int func_001EC5B8(void *cur, void *other) {
+int Camera_ActivationCheckPriority(void *cur, void *other) {
     char *c = (char *)cur;
     char *o = (char *)other;
     unsigned char *state = (unsigned char *)(c + 0x74);
@@ -415,7 +415,7 @@ __asm__(".section .text\n\tnop\n");
 /* Same vtable dispatch as func_001EC270, on the +0x10 slot instead of
    +8; identical 1/68 operand-order residual, same cause. */
 /* Camera_Exit(UpdateCam *) */
-void func_001EC780(void *arg0) {
+void Camera_Exit(void *arg0) {
     void (*fn)(void *) = D_001E8F80[*(short *)((char *)arg0 + 0x8C)].fn_10;
     if (fn != 0) {
         fn(arg0);
@@ -449,7 +449,7 @@ extern CamTypeHooks D_001E8F80_hooks[] __asm__("D_001E8F80");
    builds the two slot pointers in its order, and loop reversal makes the
    count run down 47..0. Indexing the table directly by a typed +0xC
    member puts the base first in the addu. */
-int func_001EC7C8(void) {
+int UpdateAllCameras(void) {
     void *cur = D_001871C0;
     int changed = 0;
     CamSlot *rec;
@@ -504,7 +504,7 @@ extern void func_002156E0(void *dst, void *vec, void *axis, float angle); /* dst
    (p0 - p1) off the axis, out[1] = signed pitch after rotating dir0 by
    that yaw, out[2] = |p0 - p1|. A zero length becomes 0.0001 before the
    acos. The two sign fixups are shaped differently, as in retail. */
-void func_001EC8D8(float *out, void *p0, void *p1, void *dir0, void *dir1,
+void Camera_Pos2Polar3d(float *out, void *p0, void *p1, void *dir0, void *dir1,
                     void *axis) {
     char diff[16];
     char proj[16];
@@ -589,7 +589,7 @@ extern char D_0013F590[];
 /* When the flag at +2 is clear, copies the 16-byte vector at +0x50 to
    +0xC0 with retail's qcopy, optionally runs func_001F9BD8 on +0x60,
    then copies +0x60 to +0xD0. Sibling of func_001ECC10 just above it. */
-void func_001ECB98(void) {
+void Camera_stagePendingTransform(void) {
     char *base = D_001872B0;
     if (*(unsigned char *)(base + 2) == 0) {
         qcopy(base + 0xC0, base + 0x50);
@@ -604,7 +604,7 @@ extern char D_001872B0[];
 
 /* When the flag at +2 is set, copies the 16-byte vectors at +0xC0 and
    +0xD0 back to +0x50 and +0x60 with retail's qcopy (see common.h). */
-void func_001ECC10(void) {
+void Camera_commitPendingTransform(void) {
     char *base = D_001872B0;
     if (*(unsigned char *)(base + 2) != 0) {
         qcopy(base + 0x50, base + 0xC0);
@@ -1244,7 +1244,7 @@ extern void func_001EE858(void *);
    refresh its Euler angles; run func_001ED708 on the two vectors at
    D_001871A0, func_001EDB98 and func_001EE858, and, with
    D_0015EEB4 set, the matrix's third row as a cross product. */
-void func_001EDE50(void) {
+void UpdateCamera(void) {
     char *c;
     char *target;
     char *v;

@@ -368,7 +368,7 @@ extern void func_00234C98_2C188(s32, u64) __asm__("func_00234C98");
 extern s32 func_001160D8();
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/rendering/sky/update_sky_effects.c, update_sky_effects. */
-void func_0022C188(void) {
+void SkyLevelGeneric___maybe(void) {
     f32 trig_product;
     f32 elevation;
     f32 azimuth;
@@ -595,7 +595,7 @@ extern SkyDef *D_0016055C MACRO_ADDR;
  * fixed_scalar_and_varying_struct_p), where a cast access would keep it
  * behind them.
  */
-void func_0022C7E0(void) {
+void SetupSkyGifPaging(void) {
     int p;
     SkyDef *s;
     int i;
@@ -627,7 +627,7 @@ extern void func_00234E80(void);
    D_0015EF74 from D_0015EF78. The first advance goes through a local
    advanced in place, which keeps the old and new pointer in one register
    as retail does. */
-void func_0022C870(void) {
+void DoSkyGifPaging(void) {
     int *p = D_00161000_p;
 
     D_00160574 = p;
@@ -662,7 +662,7 @@ extern void func_0022CA00(void *);
 extern void func_0022CC40(void *);
 
 /* SkyDrawShell(int) */
-void func_0022C9A8(int idx) {
+void SkyDrawShell(int idx) {
     SkyDef *def = D_0016055C;
 
     if (idx < def->count) {

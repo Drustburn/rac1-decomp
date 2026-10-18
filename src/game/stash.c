@@ -268,7 +268,7 @@ extern void func_0012E2E8(void);
 
 extern void func_0011AE20(int arg0);
 
-void func_00233FF8(void) {
+void initialize_sif_rpc(void) {
     func_0011AE20(0);
 }
 
@@ -337,7 +337,7 @@ extern int func_00118E20(void *, int);
    address (func_00118E20 takes a {src, dst, size, mode} record), reserve
    arg2 quadwords there, and return the slot. `h->block++` read into the
    slot index is what keeps retail's copy of the old count. */
-int func_00234158(int arg0, int arg1, int arg2, int arg3) {
+int Stash_SendData(int arg0, int arg1, int arg2, int arg3) {
     StashInfo *h = &D_001DD530;
     int dma[4];
     int n;

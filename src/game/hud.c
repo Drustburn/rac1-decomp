@@ -58,7 +58,7 @@ extern HudIconRec *D_0019A504;
 
 /* Finds arg0 in the table D_0019A504 points to (ended by id 0xFFFF).
    The older decode read D_0019A504 as the table itself. */
-int func_001FF668(int arg0) {
+int Hud_GetIconIndex(int arg0) {
     HudIconRec *tab = D_0019A504;
     int i = 0;
 
@@ -152,7 +152,7 @@ typedef struct {
 extern HudArena D_0019A4E8_arena __asm__("D_0019A4E8");
 
 /* LinkHudBank(int, char *) */
-void func_001FF7F0(int bank, int addr) {
+void LinkHudBank(int bank, int addr) {
     int *banks;
     int *slot;
     int start;
@@ -262,7 +262,7 @@ extern void func_00201348_FF958(u32 data, s32 dbp, s32 psm, s32 wlog, s32 hlog, 
 
 /* Uploads the image pages of one HUD bank to GS memory, from the depth buffer address up, and records each page's block offset. Bank 0's pages are linked first when the bank file is not linked yet.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/ui/hud/hud_send_resident_bank.c, hud_send_resident_bank. */
-void func_001FF958(s32 bank, s32 base, s32 immediate) {
+void Hud_SendResidentBank(s32 bank, s32 base, s32 immediate) {
     struct HudTexCounts *counts;
     s32 address;
     s32 bank_offset;
@@ -301,7 +301,7 @@ extern int D_001941CC NOT_SDA;
 extern int D_0019A4E8 NOT_SDA;
 
 /* Hud_HeapReset(void) */
-void func_001FFA90(void) {
+void Hud_HeapReset(void) {
     int *p = &D_0019A4E8;
     int v = D_001941CC;
     p[5] = v + 0x64000;
@@ -311,7 +311,7 @@ void func_001FFA90(void) {
 /* Bump allocator out of the D_0019A4E8 arena: p[4] is the cursor,
    p[5] the limit. Rounds the request up to 16 bytes. */
 /* Hud_HeapAlloc(unsigned int, char *, char *, int) */
-int func_001FFAB8(int size) {
+int Hud_HeapAlloc(int size) {
     int *p = &D_0019A4E8;
     int cur;
 
@@ -351,7 +351,7 @@ extern void func_001FFC48(void *arg0);
    func_001FFC48 to reload the bank when a bit of (arg0's high nibbles &
    the record's +0x04 flags) is set. Sibling of func_001FFCB0/func_001FFD30
    in this file, which use the same record layout. */
-int func_001FFB38(int arg0, int arg1, int arg2, int arg3, int arg4,
+int queue_animation_update(int arg0, int arg1, int arg2, int arg3, int arg4,
                  int arg5, int arg6) {
     int idx = arg0 & 0xF;
     char *p = D_00199C60_raw + idx * 0x90;
@@ -397,7 +397,7 @@ extern void func_001FFD30(void *, int);
    is one, and clears +0x68. The copies are in retail's store order, and
    the +0x10 copy is unconditional (retail stores it in the beqz's delay
    slot), which also makes the scheduler load +0x30 first. */
-void func_001FFC48(void *arg0) {
+void apply_pending_animation(void *arg0) {
     char *p = (char *)arg0;
 
     load_animation_definition(arg0, *(int *)(p + 0x20));
@@ -449,7 +449,7 @@ extern int func_001FF668(int);
 /* tbl[7] is volatile: retail re-loads that pointer field before each of
    the three record accesses rather than caching it, while keeping the
    r*8 offset in a register. */
-void func_001FFD30(void *arg0, int arg1) {
+void load_animation_definition(void *arg0, int arg1) {
     char *self = (char *)arg0;
     volatile int *tbl;
     int r;
@@ -501,7 +501,7 @@ extern void func_001166FC(Cfg13 *, void *);
 /* The struct copy is a plain assignment: at alignment 1 this compiler
    expands the 0x13 bytes as unaligned ldl/ldr + sdl/sdr pairs with the
    trailing three bytes done singly, which is exactly retail's shape. */
-void func_001FFE88(void *arg0) {
+void copy_text_to_shared_buffer(void *arg0) {
     if ((unsigned int)func_00116810() < 0x50) {
         D_0019A540 = D_001E7DD8;
     }
@@ -543,7 +543,7 @@ extern void func_00201A38(int, int, int, int);
    bank's +0x18 callback, then fade the D_0015F764 alpha (0..128) in
    while the D_0015F760 timer runs, or out once it stops, and draw
    the overlay text D_001994D8 (plus D_00199528 above 1000) with it. */
-void func_001FFFB8(void) {
+void HudDraw(void) {
     char *arena = D_0019A4E8_raw;
     int i;
     HudBankCb *p;
@@ -600,7 +600,7 @@ LINKER_REMNANT("asm/remnants/text", func_00200190);
    are int sums so their addu takes the index first. Both flag tests
    are `& 0x80000000`: the first becomes a bltz, but the constant it
    loaded is reused by the second test, as in retail. */
-int func_00200198(int iconId, int sub) {
+int GetIconFrame(int iconId, int sub) {
     int idx;
     char *arena;
     unsigned short *row;
@@ -776,7 +776,7 @@ extern long func_00200248(int);
    texture's TEX0 from func_00200248 and its full size (1 << the
    entry's +6/+7 log2 sizes) as the far UV. The entry is found through
    the arena's +0x20 index table into its +0x24 texture table. */
-void func_00200468(int tex, int x, int y, int w, int h, int alpha) {
+void HudSprite(int tex, int x, int y, int w, int h, int alpha) {
     char *arena = D_0019A4E8_raw;
     unsigned char *e = (unsigned char *)(*(char **)(arena + 0x24)
         + *(short *)(*(char **)(arena + 0x20) + tex * 4 + 2) * 8);
@@ -1106,7 +1106,7 @@ extern void func_00122958(void *, void *);
 
    p7 is set before the branch, as retail does in its delay slot, but
    truncated to short after it, with the other short arguments. */
-void func_00201348(char *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+void Hud_sendTexture(char *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     char buf[0x60];
     int nloop2;
     int levels;
@@ -1297,7 +1297,7 @@ extern void func_00200650(int, int, int, int, int, int);
 /* Draw a 3-part stretchable bar: left cap, stretched middle, right cap
  * (mirrored via func_00200650), all using the same GetIconFrame glyph
  * in its two variants. */
-void func_00201960(int a0, int a1, int a2, int a3, int a4) {
+void draw_stretchable_ui_frame(int a0, int a1, int a2, int a3, int a4) {
     int v0 = GetIconFrame(0x7580, 0);
     int v1 = GetIconFrame(0x7580, 1);
 
@@ -1343,7 +1343,7 @@ extern s32 D_0015EF84 MACRO_ADDR;
 void func_00201AF0(u32 image_address);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/draw_boot_image.c, draw_boot_image. */
-void func_00201AF0(u32 image_address) {
+void draw_bootImage(u32 image_address) {
     struct DmaTag *tag;
     struct DmaTag *next;
     u64 *register_words;

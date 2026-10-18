@@ -22,7 +22,7 @@ extern DispatchRec D_001E8F80[];
 extern int D_0018A3B0[];
 
 /* Resets the texture DMA state words to 1. */
-void func_001F0F30(void) {
+void draw_resetTextureDmaState(void) {
     int *p = D_0018A3B0;
     int val = 1;
     int i = 0x13;
@@ -119,7 +119,7 @@ typedef struct {
 /* Projects camera-space point a1 through the camera matrix, divides by
    depth (D_0018D010 / w) and scales to x16 screen units. func_002346C0
    in tfragfunc.c builds the same matrix. */
-void func_001F2418(Vec3f *a0, float *a1) {
+void projectWorldPoint(Vec3f *a0, float *a1) {
     float m[4][4];
     float m2[4][4];
     float v[4];
@@ -176,7 +176,7 @@ extern volatile int D_00160FE0_v __asm__("D_00160FE0") MACRO_ADDR;
    func_002350A8's delay slot, where the plain MACRO_ADDR store would go.
    The two stores that do sit in delay slots (D_00161000, D_0015EF78) are
    MACRO_ADDR and come out $gp-relative there. */
-void func_001F2568(void) {
+void ResetVideoPipeline(void) {
     int flag;
     int pal;
 
@@ -300,7 +300,7 @@ extern void func_001F3140(void);
    D_0015F598. The presets and the two words it writes are MACRO_ADDR:
    retail reads each field with the one-register macro, and the mode
    word's store fits the branch delay slot ($gp-relative there). */
-void func_001F2930(int arg0) {
+void UpdateFog(int arg0) {
     if (D_001873D4 != 0) {
         D_0018CE00[0x8C] = D_001611C4.r;
         D_0018CE00[0x8D] = D_001611C4.g;
@@ -337,7 +337,7 @@ extern char *D_0015F720 MACRO_ADDR;
    registers and the level pointer in $a3. The last level's bounds share
    one `if`, which is what leaves retail's shared failure return after
    level 2 and a separate one for the 0xFFFF test. */
-int func_001F2A38(int x, int y, int z) {
+int ParseOcclGrid(int x, int y, int z) {
     char *grid = D_0015F720;
     char *base = grid + *(int *)grid;
     unsigned short *l = (unsigned short *)(grid + 4);
@@ -364,7 +364,7 @@ __asm__(".section .text\n\tnop\n");
 extern int func_001F2A38(int, int, int);
 
 /* GetOcclGridFromPair(int, int, int, int, int, int, float) */
-int func_001F2B10(int a0, int a1, int a2, int a3, int a4, int a5, float t) {
+int GetOcclGridFromPair(int a0, int a1, int a2, int a3, int a4, int a5, float t) {
     int r;
     int b0;
     int b1;
@@ -404,7 +404,7 @@ extern float *D_0015F724 MACRO_ADDR;
 
 /* Build the occlusion visibility bitmap for the camera's grid cell.
    Adapted from Lombyte (MIT) for PAL: src/rendering/build_occlusion_visibility.c, build_occlusion_visibility. */
-void func_001F2BC8(void) {
+void BuildOcclVisibility(void) {
     float scale = 0.25f;
     int x, y, z;
     char *vis;
@@ -487,7 +487,7 @@ extern void func_001F2BC8(void);
 extern int D_0018C434 NOT_SDA;
 
 /* UpdateOcclusion(void) */
-void func_001F2FB8(void) {
+void UpdateOcclusion(void) {
     int state = D_0018C434;
     if (state == 0) {
         FastMemSet(D_001940C0, -1, 0x80);
@@ -510,7 +510,7 @@ extern float func_001FA888(int);
    +0x22C. The size is read into `short` locals (lhu, then sll/sra) through
    a base pointer that stays in $s1, and the height is read again from
    memory for the second conversion. */
-void func_001F3008(void) {
+void InitViewContext(void) {
     short *res = D_00151880;
     float *ctx = (float *)D_0018CE00;
     short w = res[0xA8];
@@ -602,7 +602,7 @@ extern void func_00234380(void);
    endpoints: the clip constants at D_0018D0C0, the fog multiplier and the
    fog packet registers, the projection matrices and the screen scale and
    bias vectors that the renderers copy into their packets. */
-void func_001F3140(void) {
+void UpdateViewContext(void) {
     struct ViewP *view;
     struct ViewP *packet_view;
     f32 depth_scale;
@@ -857,7 +857,7 @@ extern int D_00161298 MACRO_ADDR;
 extern int D_0016129C MACRO_ADDR;
 
 /* ResetDrawGlobals: clears the draw-callback counts and related draw counters. */
-void func_001F3B90(void) {
+void ResetDrawGlobals(void) {
     D_0015F564 = 0;
     D_0015F56C = 0;
     D_0015F570 = 0;
@@ -883,7 +883,7 @@ extern char D_0013D0C0[];
 extern char D_0013D010[];
 
 /* ResetGsRegisters(void) */
-void func_001F3C10(void) {
+void ResetGsRegisters(void) {
     D_00161000[0] = 0x30000013;
     D_00161000[1] = (int)D_0013D0C0;
     D_00161000[2] = 0;
@@ -904,7 +904,7 @@ extern long D_00151888[3];
    register block): CSR ack, PMODE, then SMODE2/DISPFB1/DISPFB2/DISPLAY1/
    DISPLAY2/BGCOLOR set from a 3-entry table. */
 /* ResetGsRegistersPr(void) */
-void func_001F3D00(void) {
+void ResetGsRegistersPr(void) {
     *(volatile long *)0x120000E0 = 0;
     *(volatile long *)0x12000000 = 0xFFA1;
     *(volatile long *)0x12000020 = D_00151888[0];
@@ -1002,7 +1002,7 @@ extern void func_00229D48(void);
 extern void func_0020DD48(void);
 
 /* Draws the whole frame: each world layer's DMA chain in order, then the fades and the per-layer profiler bars. Adapted from Lombyte (MIT) for PAL: rendering/draw_debug_profiler.c, draw_debug_profiler. */
-void func_001F3D78(void) {
+void DrawDebugProfiler(void) {
     float t;
     float div;
 
@@ -1209,7 +1209,7 @@ extern void func_001F3D78(void);
 
 /* D_0015F6FC is read through a MACRO_ADDR alias: retail's one-register
    lui $2 / lw $2 (an older note filed it as an allocator question). */
-void func_001F45F0(void) {
+void drawNormalFrame(void) {
     if (D_0015F6FC_m == 0) {
         framebuf_appendLargeSetup();
         *(int *)&D_0015F534 = 0x7F;
@@ -1248,7 +1248,7 @@ static inline char *PagingArena(void) {
    gives retail's copy for the loop) with the element offset first
    (`i * 8 + base`); the second through a block-local pointer, whose
    %hi retail keeps. */
-void func_001F4630(int arg0) {
+void SetupGifPaging(int arg0) {
     int *p = D_00161000;
     int i;
 
@@ -1299,7 +1299,7 @@ extern void func_00234E80(void);
    D_0018A3DC is set, func_0020C2F8 and func_00234E80 add their own.
    The first advance goes through a local advanced in place, which keeps
    the old and new pointer in one register as retail does. */
-void func_001F4748(void) {
+void DoGifPaging(void) {
     int *p = D_00161000;
 
     D_0015F554 = p;
@@ -1441,7 +1441,7 @@ extern DrawCallback D_0018E240[];
 extern void *D_0018E340[];
 
 /* AddDrawCallback: appends fn(arg) to the first draw-callback list. */
-void func_001F49B0(DrawCallback fn, void *arg) {
+void AddDrawCallback(DrawCallback fn, void *arg) {
     int count = D_0015F564;
     if (count < 0x40) {
         D_0018DC40[count] = fn;
@@ -1451,7 +1451,7 @@ void func_001F49B0(DrawCallback fn, void *arg) {
 }
 
 /* ExecuteDrawCallbacks: calls every callback in the first list. */
-void func_001F4A00(void) {
+void ExecuteDrawCallbacks(void) {
     int i;
     for (i = 0; i < D_0015F564; i++) {
         D_0018DC40[i](D_0018DD40[i]);
@@ -1459,7 +1459,7 @@ void func_001F4A00(void) {
 }
 
 /* Calls every callback in the second draw-callback list. */
-void func_001F4A78(void) {
+void ExecuteDrawCallbacks3(void) {
     int i;
     for (i = 0; i < D_0015F56C; i++) {
         D_0018E040[i](D_0018E140[i]);
@@ -1467,7 +1467,7 @@ void func_001F4A78(void) {
 }
 
 /* Calls every callback in the third draw-callback list. */
-void func_001F4AF0(void) {
+void ExecuteDrawCallbacks4(void) {
     int i;
     for (i = 0; i < D_0015F570; i++) {
         D_0018E240[i](D_0018E340[i]);
@@ -1475,7 +1475,7 @@ void func_001F4AF0(void) {
 }
 
 /* Appends fn(arg) to the fourth draw-callback list. */
-void func_001F4B68(DrawCallback fn, void *arg) {
+void enqueue_callback_list_4(DrawCallback fn, void *arg) {
     int count = D_0015F568;
     if (count < 0x40) {
         D_0018DE40[count] = fn;
@@ -1485,7 +1485,7 @@ void func_001F4B68(DrawCallback fn, void *arg) {
 }
 
 /* Calls every callback in the fourth draw-callback list. */
-void func_001F4BB8(void) {
+void ExecuteDrawCallbacks2(void) {
     int i;
     for (i = 0; i < D_0015F568; i++) {
         D_0018DE40[i](D_0018DF40[i]);
@@ -1571,7 +1571,7 @@ extern char D_0013CED0[];
    D_0015F538 bump. func_00122598 (sceGsSyncV) returns int: declared that
    way, the bump's temporary moves to $v1 as in retail. D_0015F538 is
    MACRO_ADDR so each bump reloads it in one register. */
-void func_001F4E08(int frames, unsigned int color) {
+void FadeToBlack(int frames, unsigned int color) {
     int n;
     int q;
 
@@ -1772,7 +1772,7 @@ extern void func_001F5650(int, int, int, int, unsigned long);
    first, then alternating stripes of widths step0/step1 in colours
    color0/color1, each with its own GS register 0x42 blend word when set.
    Adapted from Lombyte (MIT) for PAL. */
-void func_001F5368(void) {
+void DrawScreenEffect(void) {
     int i;
     short w;
     long mask;
@@ -1829,7 +1829,7 @@ extern int D_0015EF88 MACRO_ADDR;
    alpha byte, register 0x4E switched around a full-screen
    func_001F5650 draw. The 64-bit constants are ps2eeas's dli
    sequences (tools/ps2eeas_dli.py). */
-void func_001F54E8(char *arg0) {
+void draw_fogged_fullscreen_sprite(char *arg0) {
     long v = *(long *)(arg0 + 8);
 
     if (v != 0) {
@@ -1854,7 +1854,7 @@ extern int *D_00161000 MACRO_ADDR;
 extern char D_0013CD90[];
 
 /* Appends a GIF packet that sets GS register 1 from the four bytes a, b, c, d. */
-void func_001F55C0(int a, int b, int c, int d) {
+void emit_rgba_draw_packet(int a, int b, int c, int d) {
     VU1_addGSregister(1, (long)a | ((long)b << 8) | ((long)c << 16) | ((long)d << 24));
     D_00161000[0] = 0x30000014;
     D_00161000[1] = (int)D_0013CD90;
@@ -1870,7 +1870,7 @@ void func_001F55C0(int a, int b, int c, int d) {
    D_00160920 and D_00160930 register descriptors (ids 0x8001/0x8004),
    then four XYZ values at Z 0xFFFFF0. Each packet step has its own
    block-scoped base pointer, which gives retail's registers. */
-void func_001F5650(int y0, int y1, int x0, int x1, unsigned long rgba) {
+void DrawRectOverlay_FiiiiUl(int y0, int y1, int x0, int x1, unsigned long rgba) {
     D_00161000[0] = 0x10000005;
     D_00161000[1] = 0;
     D_00161000[2] = 0;
@@ -1923,7 +1923,7 @@ extern char D_00160940[];
 /* Append a textured sprite as a four-vertex strip (PRIM 0x154): screen
    corners in 12.4 fixed point relative to the viewport origin, UVs from
    (u, v) to (u + uw, v + vh) in 16ths. */
-void func_001F5800(int x, int y, int w, int h, int u, int v, int uw, int vh,
+void DrawTexturedQuad(int x, int y, int w, int h, int u, int v, int uw, int vh,
                    unsigned long rgba, unsigned long tex) {
     int x0 = x * 16 + D_0013E600[4] - 8;
     int x1 = (x + w) * 16 + D_0013E600[4] - 8;
@@ -2183,7 +2183,7 @@ LINKER_REMNANT("asm/remnants/text", func_001F62C0);
 
 /* Draws a bevelled frame: the box itself, then three shrinking bars
    above and three below it, all in grey 0x040404 with alpha a. */
-void func_001F62C8(int x0, int x1, int y0, int y1, int a) {
+void DrawUIFrame(int x0, int x1, int y0, int y1, int a) {
     int col = (a << 24) | 0x40404;
 
     DrawRectOverlay_FiiiiUl(x0, x1, y0, y1, col);
@@ -2260,7 +2260,7 @@ void func_001F65A8(void) {
    if: the body's `*p` then sits after the loop label, so CSE keeps it
    apart from the entry test's `*str`, and `i = 0` is not folded into the
    first `i++`, both as in retail. */
-int func_001F65B0(unsigned char *str, int count, void *table) {
+int measure_text_width(unsigned char *str, int count, void *table) {
     int width = 0;
     int i = 0;
     unsigned char *p;
@@ -2400,14 +2400,14 @@ extern void func_001F6668(void *, void *, void *, void *, void *, long,
    mode 1 vs 2, D_001DF3D0 vs D_001DF770. Seven arguments, so EABI puts
    the fifth through seventh in $8/$9/$10. */
 /* FontPrintLarge */
-void func_001F68E8(void *a, void *b, void *c, void *d, void *e) {
+void FontPrintLarge(void *a, void *b, void *c, void *d, void *e) {
     long mode = GetEffectTex64(1);
 
     FontPrint(a, b, c, d, e, mode, D_001DF3D0);
 }
 
 /* FontPrintSmall */
-void func_001F6968(void *a, void *b, void *c, void *d, void *e) {
+void FontPrintSmall(void *a, void *b, void *c, void *d, void *e) {
     long mode = GetEffectTex64(2);
 
     FontPrint(a, b, c, d, e, mode, D_001DF770);
@@ -2492,7 +2492,7 @@ extern int func_001F6620(unsigned char *, int);
    D_001DF3D0, D_001DF770, D_001DFB10), each paired with its own
    measuring helper, and the first argument stepped back by whatever that
    helper returns. */
-void func_001F6CF8(char *a, void *b, void *c, unsigned char *d, int e) {
+void font_print_right(char *a, void *b, void *c, unsigned char *d, int e) {
     char *p = a - func_001F6600(d, e);
     long mode = GetEffectTex64(1);
 
@@ -2500,7 +2500,7 @@ void func_001F6CF8(char *a, void *b, void *c, unsigned char *d, int e) {
 }
 
 /* Right-aligned FontPrint with the second font. */
-void func_001F6D88(char *a, void *b, void *c, unsigned char *d, int e) {
+void font_print_right_small(char *a, void *b, void *c, unsigned char *d, int e) {
     char *p = a - func_001F6620(d, e);
     long mode = GetEffectTex64(2);
 
@@ -2508,7 +2508,7 @@ void func_001F6D88(char *a, void *b, void *c, unsigned char *d, int e) {
 }
 
 /* Right-aligned FontPrint with the third font. */
-void func_001F6E18(char *a, void *b, void *c, unsigned char *d, int e) {
+void font_print_right_large(char *a, void *b, void *c, unsigned char *d, int e) {
     char *p = a - func_001F6640(d, e);
     long mode = GetEffectTex64(3);
 
@@ -2520,7 +2520,7 @@ void func_001F6E18(char *a, void *b, void *c, unsigned char *d, int e) {
    value, and the adjusted position is returned. Typed all-int to match
    the extern func_001F7288 already declares for func_001F6FD8. */
 /* FontPrintCenter */
-int func_001F6EA8(int a, int b, int c, int d, int e) {
+int FontPrintCenter(int a, int b, int c, int d, int e) {
     int p = a - (func_001F6600((unsigned char *)d, e) >> 1);
     long mode = GetEffectTex64(1);
 
@@ -2530,7 +2530,7 @@ int func_001F6EA8(int a, int b, int c, int d, int e) {
 }
 
 /* FontPrintCenterSmall */
-int func_001F6F40(int a, int b, int c, int d, int e) {
+int FontPrintCenterSmall(int a, int b, int c, int d, int e) {
     int p = a - (func_001F6620((unsigned char *)d, e) >> 1);
     long mode = GetEffectTex64(2);
 
@@ -2540,7 +2540,7 @@ int func_001F6F40(int a, int b, int c, int d, int e) {
 }
 
 /* FontPrintCenterLarge */
-int func_001F6FD8(int a, int b, int c, int d, int e) {
+int FontPrintCenterLarge(int a, int b, int c, int d, int e) {
     int p = a - (func_001F6640((unsigned char *)d, e) >> 1);
     long mode = GetEffectTex64(3);
 
@@ -2573,7 +2573,7 @@ void func_001F75D0(void *a, void *b, void *c, void *d) {
 LINKER_REMNANT("asm/remnants/text", func_001F7640);
 
 /* FontSetWindow */
-void func_001F7648(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8) {
+void FontSetWindow(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8) {
     short *s = (short *)arg0;
     s[0] = a1;
     s[1] = a2;
@@ -2778,7 +2778,7 @@ void func_001F7B70(void) {
 extern int D_0018E840[];
 
 /* buildBitSwapLut: fills the alpha lookup table D_0018E840. */
-void func_001F7BF8(void) {
+void buildBitSwapLut(void) {
     int i;
     for (i = 0; i < 0x100; i++) {
         int v = i & 0xE7;

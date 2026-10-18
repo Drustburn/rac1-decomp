@@ -230,7 +230,7 @@ extern void func_001F9A00(void *, void *, int);
 extern int func_001F9968(int);
 
 /* ParseParticleTexs */
-void func_00202F00(int *hdr, int base, int *list, int count) {
+void ParseParticleTexs(int *hdr, int base, int *list, int count) {
     int n = hdr[0];
     int off = hdr[2];
     int size = hdr[3];
@@ -435,7 +435,7 @@ extern char D_0015FCB0[];
 #define ALIGN64(x) (((x) + 0x3F) & 0xFFFFFFC0)
 
 /* Builds the runtime HUD-bank arena from the compressed HUD image. Adapted from Lombyte (MIT) for PAL: ui/hud/load_hud_banks.c, load_hud_banks. */
-void func_002032D0(void) {
+void LoadHudBanks(void) {
     SrcHdr *base;
     int *out;
     int *p;
@@ -528,7 +528,7 @@ extern void func_0020C468(int);
 /* LoadCompressedHudBank(int, char *). Each scaled index in its own local
    gives retail's base-first addu; written inline, the multiply goes
    first. */
-void func_00203548(int idx, int size) {
+void LoadCompressedHudBank(int idx, int size) {
     if (((size + 0xF) & 0xFFFFFFF0) != 0) {
         int *base = D_0015EF4C;
         int off = idx * 8;
@@ -645,7 +645,7 @@ extern long D_0019E7D8[];
    the second word), -1 a fixed constant and 0. The row is read before
    the sign test, as in retail. The OR operands are named locals so fold
    does not move the 0x20 to the end of the chain. */
-void func_00203808(long *out, int arg1, int arg2, int arg3, int arg4, int arg5) {
+void SetUpVisGifViewer(long *out, int arg1, int arg2, int arg3, int arg4, int arg5) {
     long f0 = D_0019E640[arg5 * 3];
     long f1 = D_0019E640[arg5 * 3 + 1];
     long f2 = D_0019E640[arg5 * 3 + 2];
@@ -758,7 +758,7 @@ void func_00203958(int base, int count, Chunk *list) {
     D_0015EF78 = D_0015EF74;
 }
 
-void func_00203B18(char *arg0, int idx) {
+void relocateObjectPointers(char *arg0, int idx) {
     char *obj;
     int *p;
     int i;

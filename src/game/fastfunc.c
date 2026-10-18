@@ -130,7 +130,7 @@ INCLUDE_ASM("asm/nonmatchings/text", func_001F9B50);
 
 ASM_FUNC("asm/handwritten/text", func_001F9B70);
 
-float func_001F9B88(float arg0) {
+float FastAbsF(float arg0) {
     return __builtin_fabsf(arg0);
 }
 

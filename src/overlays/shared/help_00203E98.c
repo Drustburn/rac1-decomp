@@ -43,7 +43,7 @@ extern char D_L00_00179510[] NOT_SDA;
 extern unsigned char D_0014171B[] NOT_SDA;
 extern void func_001FF560(int);
 /* Help_Request(msg, slot): queues help message msg; returns 1 on success, 0 if it cannot be queued. */
-int func_L00_00203F20(int a, int b) {
+int Help_Request(int a, int b) {
     int c;
     unsigned char *h;
     if (*(int *)D_L00_00179510 != 0) return 0;

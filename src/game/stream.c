@@ -175,7 +175,7 @@ extern int func_0012EFE8_i(void) __asm__("func_0012EFE8");
 
 /* func_0012EFE8 returns int (989snd.c): with the result in $v0, the
    constant goes to the register retail uses. */
-void func_00217588(void) {
+void request_audio_stream_break(void) {
     short *p = D_001517D0;
     if (p[4] != 0) {
         func_0012EFE8_i();
@@ -212,7 +212,7 @@ extern int func_0012EE98(int, int, int, void *);
    block at D_001517D0+0x30 and record it. Returns the length in the
    units the caller wants, arg2 << 11; on a rejected request it reports
    the failure and returns 0. */
-int func_00217628(int arg0, int arg1, int arg2) {
+int start_audio_stream_read(int arg0, int arg1, int arg2) {
     char *d = (char *)D_001517D0;
 
     if (*(short *)(d + 8) != 0) {
@@ -267,7 +267,7 @@ extern void func_0012EC30(void);
    its own temporary, and the loop's copy goes to $s1 with the result in
    $s0, as in retail. */
 /* Load */
-int func_002176C8(int arg0, int arg1, int arg2) {
+int Load(int arg0, int arg1, int arg2) {
     char *d;
     int r = start_audio_stream_read(arg0, arg1, arg2);
     if (r != 0) {
@@ -638,7 +638,7 @@ void func_00217AE8(void *arg0, Menu *menu, s32 arg2) {
 
 extern char D_0013CA40[];
 
-void func_00217EC0(void) {
+void pad_resetState(void) {
     char *p = D_0013CA40;
     *(short *)(p + 0x18E) = 0;
     *(int *)(p + 0x190) = 0;

@@ -251,7 +251,7 @@ extern int D_0015F6E8 MACRO_ADDR;
    func_0020C7A0 and func_00228160. Each group reads D_001D5F70 through
    its own `char *` local (retail's saved %hi); func_0012DDC0 and
    func_0020C7A0 return values, which moves the next temporary to $v1. */
-void func_00219C70(int arg0) {
+void PauseAllSounds(int arg0) {
     func_0012E528(0x1D);
     music_Pause(0);
     func_0012DDC0_i();
@@ -2405,7 +2405,7 @@ extern void func_0022ED80_1CE60() __asm__("func_0022ED80");
    level, previous/next visited level), then decodes the shown level's map into its textures
    when it changed and keeps the next map streaming into a free slot.
    Adapted from Lombyte (MIT) for PAL: src/ui/map/draw_map_screen.c, draw_map_screen. */
-s32 func_0021CE60(struct MenuScreen_1CE60 *screen) {
+s32 DrawMapScreen(struct MenuScreen_1CE60 *screen) {
     s32 prev;
     s32 idx;
     s32 t;
@@ -3047,7 +3047,7 @@ extern void func_00201640_1DE08(s32, s32, s32, s32, u64, s32) __asm__("func_0020
 /* Draws the sound options page: the sound and music volume rows, each a right-aligned label
    and a slider bar, then the playback mode row; the selected row's label is yellow.
    Adapted from Lombyte (MIT) for PAL: src/textbin/ui/menus/audio/draw_sound_menu.c, draw_sound_menu. */
-s32 func_0021DE08(SoundMenu_1DE08 *menu) {
+s32 DrawSoundMenu(SoundMenu_1DE08 *menu) {
     s32 center_x;
     s32 row_height;
     s32 label_right;
@@ -4345,7 +4345,7 @@ extern void func_001F68E8_c(int, int, long, void *, int) __asm__("func_001F68E8"
    positions are computed before the calls (retail keeps them in saved
    registers); the box's y halfword is stored last, after the other
    fields in order, which gives retail's store schedule. */
-int func_0021F898(char *arg0) {
+int DrawQuitGameMenu(char *arg0) {
     short box[12];
     int w = *(int *)(arg0 + 0x20);
     int h = *(int *)(arg0 + 0x24);
@@ -4471,7 +4471,7 @@ static inline int divide_coordinate(s32 a, int n) {
 }
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/ui/menus/inventory/draw_items_menu.c, draw_items_menu. */
-s32 func_0021FB28(ItemsMenu *menu) {
+s32 DrawItemsMenu(ItemsMenu *menu) {
     char text_buffer[0x80];
     char *hyphen;
     char *source_end;
@@ -4577,7 +4577,7 @@ extern void func_001F6CF8_c(int, int, long, char *, int) __asm__("func_001F6CF8"
    D_001A01F0's %hi once, straight into the register that is kept for the
    second read, as retail has it (a pointer set before the loop leaves a
    copy). */
-int func_0021FF80(char *arg0) {
+int DrawGBsShipMenu__maybe(char *arg0) {
     char buf[0x100];
     char *t = D_00187040;
     char *o = *(char **)(arg0 + 0x44);
@@ -4681,7 +4681,7 @@ int func_00220160(char *arg0) {
 extern void func_00234C98(int, int);
 extern void func_00205E70(void);
 
-int func_00220338(void) {
+int draw_map_screen_overlay(void) {
     VU1_addGSregister(0x42, 0x44);
     VU1_addGSregister(0x47, 0xB);
     func_00205E70();
@@ -4697,7 +4697,7 @@ extern void func_001F6968_c(int, int, long, void *, int) __asm__("func_001F6968"
    left-aligned so the widest (func_001F6620) is centred in arg0+0x20 but
    at least 2 in, and spaced arg0+0x24 / (6 or 7 lines) apart starting a
    line minus 6 down. */
-int func_00220370(char *arg0) {
+int DrawMissionsMenu(char *arg0) {
     int maxw, w;
     int x, y, step;
 
@@ -4847,7 +4847,7 @@ extern void func_00201640(int, int, int, int, long, long);
 extern int func_00200198(int, int);
 extern void func_00200468(int, int, int, int, int, int);
 
-void func_002208F8(int x, int y, int flag) {
+void draw_menu_selection_marker(int x, int y, int flag) {
     func_00201640(x - 5, y - 5, x + 5, y + 5, 0x80FFA888L, 0);
     func_00201640(x - 4, y - 4, x + 4, y + 4, *(int *)&D_001602B0, 0);
     if (flag != 0) {
@@ -5902,7 +5902,7 @@ extern long func_00205520(int);
 /* Sibling of func_00220C90 above: same 0x44 guard and the same
    func_001F5800 draw, twice, with the colour held in one local because
    retail keeps it in a callee-saved register across both calls. */
-int func_002217C8(void *arg0) {
+int draw_two_texture_panels(void *arg0) {
     long c;
 
     if (*(int *)((char *)arg0 + 0x44) < 4) {
@@ -6179,7 +6179,7 @@ extern void func_001F7560_22070(FontWindow *, u64, char *, s32) __asm__("func_00
 extern void func_001F68E8_22070(s32, s32, u64, char *, s32) __asm__("func_001F68E8");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/ui/menus/draw_cheats_menu.c, draw_cheats_menu. */
-s32 func_00222070(struct CheatsMenu *menu) {
+s32 DrawCheatsMenu(struct CheatsMenu *menu) {
     FontWindow text_window;
     s16 window_fields[12];
     struct CheatMenuEntry *entry;
@@ -7180,7 +7180,7 @@ typedef struct {
    one variable, 4 and then the bottom of the first text (buf.fE, written
    by func_001F7560) plus 0x10, with each icon at y + 8; it and x stay in
    callee-saved registers across the calls, as in retail. */
-int func_002239F0(char *arg0) {
+int ObtainAllGoldWeaponsMenu(char *arg0) {
     Box18 buf;
     Box18 tmp;
     int x, y;
@@ -7233,7 +7233,7 @@ extern void func_001F6668_23B40(s32, s32, u64, char *, s32, s64, u8 *) __asm__("
    lines to pick the regular or the narrow font, then a centred title and each line with its
    tick mark when complete.
    Adapted from Lombyte (MIT) for PAL: src/textbin/ui/menus/draw_localized_three_option_menu.c, draw_localized_three_option_menu. */
-s32 func_00223B40(struct ThreeOptionMenu_23B40 *menu) {
+s32 DrawEndScreenMenuMaybe(struct ThreeOptionMenu_23B40 *menu) {
     char text_buffer[0x50];
     s32 font_texture_index;
     u8 *glyphs;
@@ -8312,7 +8312,7 @@ extern void func_00226380();
 extern void func_00226410();
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/gameplay/gadgets/load_hand_gadget.c, load_hand_gadget. */
-s32 func_002255F8(HandGadgetState *hand) {
+s32 LoadHandGadget(HandGadgetState *hand) {
     Moby *moby;
     s32 previous_selected_class;
     s32 previous_animation_class;
@@ -9089,7 +9089,7 @@ int func_00226F68(int key) {
 
 extern int D_001D6448[];
 
-int func_00227018(int arg0) {
+int get_stream_buffer_size(int arg0) {
     int *e = D_001D6448;
     int i = 0;
     do {
@@ -9122,7 +9122,7 @@ int func_00227068(int arg0) {
    Written in exactly that function's shape -- the separate `base` local
    is what stops %lo+4 folding into one addiu, which is what an earlier
    round's revert was missing. */
-int func_002270B0(int arg0) {
+int clear_record_flag_by_key(int arg0) {
     int i = 0;
     int *base = D_001D6448;
     int *e = base + 1;

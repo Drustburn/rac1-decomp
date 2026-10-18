@@ -5,14 +5,14 @@
 #include "vector.h"
 
 extern int func_001160D8(void);
-int func_L00_00258BC8(int lo, int hi) {
+int rand_range(int lo, int hi) {
     return ((func_001160D8() >> 16) & 0x7FFF) % (hi - lo + 1) + lo;
 }
 
 /* Random float in [lo, hi], randomly negated: uses a 12-bit fraction
    (bits 16-27 of the RNG word) for the magnitude and bit 16 for the
    sign. */
-float func_L00_00258C80(float lo, float hi) {
+float randf_sym(float lo, float hi) {
     int v = func_001160D8() >> 16;
     float range = hi - lo;
     float r = lo + (float)(v & 0xFFF) * range * 0.000244140625f;
@@ -26,7 +26,7 @@ extern float func_002140F8(float, float);
 extern float func_00214158(void);
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
-void func_L00_00258DB0(float *o, float lo, float hi) {
+void rand_vec(float *o, float lo, float hi) {
     float a = random_float_between(lo, hi);
     float b = random_angle_radians();
     float c = random_angle_radians();
