@@ -571,7 +571,156 @@ void func_L00_002E3FA0(char *m) {
         func_L00_002E4138(a, b, &D_L00_001E7190[k1], 0x30, 0x10, i);
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_002E4138);
+typedef struct {
+    Vec4 corner[4];
+    int color[4];
+    struct { float u, v; } uv[4];
+    long unk70, tex, unk80, unk88;
+} Quad_2e4138;
+typedef struct { Vec4 m[4]; } Mat_2e4138;
+typedef struct { Vec4 a, b, c, d; } Tbl_2e4138;
+extern Tbl_2e4138 D_L00_001E7080[];
+extern long func_001F4868(int);
+extern void func_001F9C30(void *, void *, float);
+extern void func_001F9CA0(void *, void *, void *);
+extern void func_001F9EE8(void *, void *, void *);
+extern void func_L00_001FD1D8(void *, int, int);
+extern float func_L00_00258E58(float, float, float, float, float);
+
+/* Builds the two blend quads from the slot tables and draws them along the
+   19-step trail in a2. */
+void func_L00_002E4138(int a0, int a1, void *a2, int a3, int a4, int a5)
+{
+    Quad_2e4138 q[2];
+    Vec4 va, vb;
+    Mat_2e4138 m;
+    Mat_2e4138 n;
+    Vec4 t, p0, p1;
+    float z, s, d;
+    int c0, c1;
+    int i;
+
+    q[0].tex = func_001F4868(a0);
+    c0 = (a3 << 24) | 0x7F7F7F;
+    q[0].unk88 = 0x8000000048L;
+    q[0].unk80 = 0xFF9000000260L;
+    q[0].unk70 = 0;
+    q[0].color[0] = q[0].color[1] = q[0].color[2] = q[0].color[3] = c0;
+    q[1].tex = func_001F4868(a1);
+    *(int *)&q[1].uv[0].v = 0;
+    c1 = (a4 << 24) | 0x7F4040;
+    z = q[1].uv[0].v;
+    d = *(float *)&D_L00_00161D48[a5];
+    q[1].color[0] = q[1].color[1] = q[1].color[2] = q[1].color[3] = c1;
+    q[1].unk88 = q[0].unk88;
+    q[1].unk80 = q[0].unk80;
+    q[1].unk70 = q[0].unk70;
+    q[1].uv[0].u = 1.0f;
+    q[1].uv[1].u = 1.0f;
+    q[1].uv[1].v = 1.0f;
+    q[1].uv[2].u = 0.0f;
+    q[1].uv[2].v = 0.0f;
+    q[1].uv[3].u = 0.0f;
+    q[1].uv[3].v = 1.0f;
+    q[0].uv[1].u = q[0].uv[0].u = d + z;
+    q[0].uv[0].v = z;
+    q[0].uv[1].v = 1.0f;
+    q[0].uv[3].u = q[0].uv[2].u = d + 1.0f;
+    q[0].uv[2].v = z;
+    q[0].uv[3].v = 1.0f;
+    s = 0.6f;
+    if (*(short *)(D_L00_00161D58[a5] + 0xA6) == 0x1C) s = 0.3f;
+    va.q = 0;
+    vb.q = 0;
+    vb.f[2] = s + s;
+    va.f[3] = 1.0f;
+    va.f[2] = s;
+    vb.f[3] = 1.0f;
+
+    qcopy(&m.m[0], &D_L00_001E7080[a5].a);
+    func_001F9BF0((float *)&m.m[1], D_L00_00166EC0, (float *)&D_L00_001E7080[a5].c);
+    func_001F9C30(&m.m[1], &m.m[1], 1.0f);
+    func_001F9CA0(&m.m[2], &m.m[1], &m.m[0]);
+    func_L00_001FF4B0(&m.m[2], &m.m[2], 1.0f);
+    func_001F9CA0(&m.m[0], &m.m[2], &m.m[1]);
+    qcopy(&m.m[3], &D_L00_001E7080[a5].c);
+    qcopy(&n.m[3], &D_L00_001E7080[a5].c);
+    func_001F9BF0((float *)&t, (float *)&D_L00_001E7130[a5], (float *)&n.m[3]);
+    func_L00_001FF4B0(&n.m[0], &t, 1.0f);
+    func_001F9CA0(&n.m[1], &n.m[0], D_0013E633 + 0x10AD);
+    func_L00_001FF4B0(&n.m[1], &n.m[1], -1.0f);
+    func_001F9CA0(&n.m[2], &n.m[1], &n.m[0]);
+
+    qcopy(&q[0].corner[0], &va);
+    func_001F9C30(&q[0].corner[1], &q[0].corner[0], -1.0f);
+    qcopy(&q[1].corner[0], &vb);
+    func_001F9C30(&q[1].corner[1], &q[1].corner[0], -1.0f);
+    func_001F9EE8(&p0, &((Vec4 *)a2)[0], &n);
+    func_001F9EE8(&p1, &((Vec4 *)a2)[1], &n);
+    func_001F9BF0((float *)&m.m[0], (float *)&p1, (float *)&p0);
+    func_L00_001FF4B0(&m.m[0], &m.m[0], 1.0f);
+    func_001F9BF0((float *)&m.m[1], D_L00_00166EC0, (float *)&p0);
+    func_001F9CA0(&m.m[2], &m.m[1], &m.m[0]);
+    func_L00_001FF4B0(&m.m[2], &m.m[2], 1.0f);
+    func_001F9CA0(&m.m[1], &m.m[0], &m.m[2]);
+    qcopy(&m.m[3], &p0);
+    func_001F9EE8(&q[0].corner[0], &q[0].corner[0], &m);
+    func_001F9EE8(&q[0].corner[1], &q[0].corner[1], &m);
+    func_001F9EE8(&q[1].corner[0], &q[1].corner[0], &m);
+    func_001F9EE8(&q[1].corner[1], &q[1].corner[1], &m);
+
+    i = 1;
+    do {
+        float f, e;
+        qcopy(&q[0].corner[2], &va);
+        func_001F9C30(&q[0].corner[3], &q[0].corner[2], -1.0f);
+        qcopy(&q[1].corner[2], &vb);
+        func_001F9C30(&q[1].corner[3], &q[1].corner[2], -1.0f);
+        func_001F9EE8(&p0, &((Vec4 *)a2)[i], &n);
+        func_001F9EE8(&p1, &((Vec4 *)a2)[i + 1], &n);
+        func_001F9BF0((float *)&m.m[0], (float *)&p1, (float *)&p0);
+        func_L00_001FF4B0(&m.m[0], &m.m[0], 1.0f);
+        func_001F9BF0((float *)&m.m[1], D_L00_00166EC0, (float *)&p0);
+        func_001F9CA0(&m.m[2], &m.m[1], &m.m[0]);
+        func_L00_001FF4B0(&m.m[2], &m.m[2], 1.0f);
+        func_001F9CA0(&m.m[1], &m.m[0], &m.m[2]);
+        qcopy(&m.m[3], &p0);
+        func_001F9EE8(&q[0].corner[2], &q[0].corner[2], &m);
+        func_001F9EE8(&q[0].corner[3], &q[0].corner[3], &m);
+        func_001F9EE8(&q[1].corner[2], &q[1].corner[2], &m);
+        func_001F9EE8(&q[1].corner[3], &q[1].corner[3], &m);
+        if (i == 1) {
+            int k0 = q[0].color[0];
+            int k1 = q[1].color[0];
+            q[0].color[0] = q[0].color[1] = 0xFFFFFF;
+            q[1].color[0] = q[1].color[1] = 0x7F4040;
+            func_L00_001FD1D8(&q[0], 0, 0);
+            func_L00_001FD1D8(&q[1], 0, 0);
+            q[0].color[0] = q[0].color[1] = q[0].color[2] = q[0].color[3] = k0;
+            q[1].color[0] = q[1].color[1] = q[1].color[2] = q[1].color[3] = k1;
+        } else {
+            func_L00_001FD1D8(&q[0], 0, 0);
+            func_L00_001FD1D8(&q[1], 0, 0);
+        }
+        qcopy(&q[0].corner[0], &q[0].corner[2]);
+        qcopy(&q[0].corner[1], &q[0].corner[3]);
+        qcopy(&q[1].corner[0], &q[1].corner[2]);
+        qcopy(&q[1].corner[1], &q[1].corner[3]);
+        f = func_L00_00258E58(-1.0f, z, 1.0f, z, func_001FA888(i) / func_001FA888(20));
+        e = D_L00_00161D48_f[a5];
+        q[0].uv[0].u = e + z;
+        q[0].uv[0].v = z;
+        q[0].uv[1].u = e + z;
+        q[0].uv[1].v = 1.0f;
+        q[0].uv[2].u = e + 1.0f;
+        q[0].uv[2].v = z;
+        q[0].uv[3].u = e + 1.0f;
+        q[0].uv[3].v = 1.0f;
+        va.f[2] = s + (0.05f - s) * f;
+        vb.f[2] = va.f[2] + va.f[2];
+        i++;
+    } while (i < 19);
+}
 typedef struct {
     f32 v[4][4];
     s32 col[4];

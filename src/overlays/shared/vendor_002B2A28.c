@@ -2874,7 +2874,149 @@ void func_L14_00302A58(unsigned char *m) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L14_00302C80);
+/* functional: medium. Builds the arc strand for the electric-arc moby (data block d): 32 jittered points (P) and offsets (Q) along the table entry's span, smoothed with a 3-point average into d+0x20/d+0x220, then 4 branches (byte count at d+0x18+i, 3 segments each at d+0x420..) and, when the entry is at least 4.0 from the camera point, spawns 4+2 bursts of particles (func_00219780). Meanings of the gp-relative tuning values are unknown; the operations follow the assembly. */
+typedef struct Vq_02C80 { float x, y, z, w; } __attribute__((aligned(16))) Vq_02C80;
+
+extern float func_001FA888(int) ;
+extern int func_001F9850(int) ;
+extern int func_L00_00258BC8(int, int) ;
+extern float func_001F9CB8(void *) ;
+extern void func_001F9BC0(void *) ;
+extern void func_L00_00258DB0(void *, float, float) ;
+extern void func_001F9BD8(void *, void *, void *) ;
+extern void func_001F9C30(void *, void *, float) ;
+extern float func_002140F8(float, float) ;
+extern int func_001FA898(float) ;
+extern float func_001F9D48(void *, void *) ;
+extern void func_001FA218(void *, void *) ;
+extern void func_001F9EE8(void *, void *, void *) ;
+extern int func_002140B0(int) ;
+extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int) ;
+extern char *D_L14_001601AC MACRO_ADDR;
+extern float D_0015EE6C ;
+extern short D_L14_0016218C;
+extern short D_L14_00162190;
+extern short D_L14_001621CC;
+extern short D_L14_001621D0;
+extern short D_L14_001621D8;
+extern short D_L14_001621DC;
+extern short D_L14_001621E4;
+extern short D_L14_001621EC;
+extern short D_L14_001621F0;
+
+typedef struct {
+    int idx;
+    unsigned char pad4[0xE];
+    short s12;
+    unsigned char pad14[4];
+    unsigned char cnt[8];
+    Vq_02C80 pts[32];
+    Vq_02C80 off[32];
+    Vq_02C80 a[4][4];
+    Vq_02C80 b[4][4];
+    int r620;
+} D_02C80;
+
+void func_L14_00302C80(char *m);
+void func_L14_00302C80(char *m) {
+    D_02C80 *d = *(D_02C80 **)(m + 0x78);
+    Vq_02C80 P[32];
+    Vq_02C80 Q[32];
+    Vq_02C80 A, B;
+    Vq_02C80 M[4];
+    char *ent;
+    float f22;
+    int a, b, r;
+    int i, j, k, br;
+
+    ent = (char *)((d->idx << 7) + (int)D_L14_001601AC);
+    {
+        int t = (*(int *)&D_L14_0016218C);
+        *(float *)(ent + 0x3C) = 1.0f;
+        a = func_001F9850(t);
+    }
+    b = func_001F9850((*(int *)&D_L14_00162190));
+    r = func_L00_00258BC8(a, b);
+    d->s12 = (short)r;
+    d->r620 = (short)r;
+    f22 = func_001F9CB8(D_L14_001601AC + (d->idx << 7) + 0x10);
+    f22 = f22 + f22;
+
+    for (i = 0; i < 32; i++) {
+        float f20 = func_001FA888(i);
+        float t = func_001FA888(0x1F);
+        float y;
+        f20 = f20 / t;
+        f20 = (0.5f - f20) * f22;
+        if (i < 3 || i > 28) {
+            func_001F9BC0(&P[i]);
+            func_001F9BC0(&Q[i]);
+        } else {
+            func_L00_00258DB0(&P[i], 0.0f, *(float *)&D_L14_001621CC);
+            func_L00_00258DB0(&Q[i], 0.0f, *(float *)&D_L14_001621D0 * D_0015EE6C);
+        }
+        y = P[i].y;
+        P[i].w = 1.0f;
+        P[i].y = y + f20;
+    }
+
+    for (j = 0; j < 32; j++) {
+        if (j == 0 || j == 31) {
+            qcopy(&d->pts[j], &P[j]);
+            qcopy(&d->off[j], &Q[j]);
+        } else {
+            func_001F9BD8(&A, &P[j - 1], &P[j]);
+            func_001F9BD8(&A, &A, &P[j + 1]);
+            func_001F9C30(&d->pts[j], &A, 0.333f);
+            func_001F9BD8(&A, &Q[j - 1], &Q[j]);
+            func_001F9BD8(&A, &A, &Q[j + 1]);
+            func_001F9C30(&d->off[j], &A, 0.333f);
+        }
+    }
+
+    for (br = 0; br < 4; br++) {
+        int n;
+        float c = (*(float *)&D_L14_001621CC);
+        func_L00_00258DB0(&A, c, c);
+        n = func_001FA898(func_002140F8((float)br * 6.0f, (float)(br + 1) * 6.0f)) + 4;
+        d->cnt[br] = (unsigned char)n;
+        qcopy(&d->a[0][br], &d->pts[n]);
+        qcopy(&d->b[0][br], &d->off[n]);
+        for (k = 1; k < 4; k++) {
+            func_L00_00258DB0(&B, 0.1f, 0.1f);
+            func_L00_00258DB0(&d->b[k][br], 0.0f, (*(float *)&D_L14_001621D0) * D_0015EE6C);
+            func_001F9BD8(&d->a[k][br], &d->a[k - 1][br], &A);
+            func_001F9BD8(&d->a[k][br], &d->a[k][br], &B);
+        }
+    }
+
+    if (func_001F9D48(D_L14_001601AC + (d->idx << 7) + 0x30, D_L14_001675C0) >= 4.0f) {
+        int s17;
+        int l;
+        func_001FA218(M, D_L14_001601AC + (d->idx << 7) + 0x70);
+        qcopy(&M[3], (char *)((d->idx << 7) + (int)D_L14_001601AC) + 0x30);
+        for (l = 0; l < 32; l += 8) {
+            int n;
+            Vq_02C80 *p = &d->pts[l];
+            func_001F9EE8(&A, p, M);
+            qcopy(&B, &p[32]);
+            B.w = (*(float *)&D_L14_001621E4);
+            s17 = func_002140B0(2) ? (*(int *)&D_L14_001621EC) : (*(int *)&D_L14_001621F0);
+            n = func_001F9850(func_002140B0(10) + 20);
+            func_00219780(&A, &B, &B, (*(int *)&D_L14_001621D8), (*(int *)&D_L14_001621DC), l >> 1, 15, n, s17);
+        }
+        for (k = 0; k < 2; k++) {
+            int n, c;
+            func_001F9EE8(&A, &d->a[3][k], M);
+            qcopy(&B, &d->b[3][k]);
+            B.w = (*(float *)&D_L14_001621E4);
+            c = func_002140B0(2) ? (*(int *)&D_L14_001621EC) : (*(int *)&D_L14_001621F0);
+            n = func_001F9850(func_002140B0(10) + 20);
+            func_00219780(&A, &B, &B, (*(int *)&D_L14_001621D8), (*(int *)&D_L14_001621DC),
+                        d->cnt[k] >> 1, 15, n, (*(int *)&D_L14_001621F0));
+        }
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L14_00303270);
 INCLUDE_ASM("asm/overlays", func_L14_00303430);
 typedef struct { f32 x; f32 y; f32 z; } Vec3_3039C0;
