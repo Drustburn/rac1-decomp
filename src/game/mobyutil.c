@@ -386,7 +386,7 @@ extern char D_00194220[];
    Passes both to func_001EFE10 (a collision/line test elsewhere in the
    file's neighbours); returns D_00194220's float at +8 on success, else
    0.0f. */
-f32 func_00214358(void *arg0, s32 arg1, f32 arg2) {
+f32 ProbeGroundHeight(void *arg0, s32 arg1, f32 arg2) {
     char sp0[16];
     char sp1[16];
 
@@ -714,7 +714,7 @@ extern void func_001FA480(void *, void *);
 
 /* func_001FA460 takes two arguments: arg1 is passed on to it untouched,
    which gives arg1 three references and retail's $s0. */
-void func_00215328(void *arg0, void *arg1) {
+void Matrix_ToQuatCopyBack(void *arg0, void *arg1) {
     char buf[0x40];
     func_001FA460_2(buf, arg1);
     MatrixToQuaternion(arg0, buf);
@@ -1127,7 +1127,7 @@ int force_help_message(int arg0, int arg1) {
     return 3;
 }
 
-int func_00216098(void) {
+int GetUnspentGoldBolts(void) {
     int a = count_nonzero_entries_up_to_40();
     int b = count_nonzero_entries_up_to_10();
     int v = a - b * 4;

@@ -653,7 +653,7 @@ void Moby980Break(struct Moby *moby) {
             InitSpinningPiece(piece, moby, vel, spin_vel, scale_ticks(60));
             *(int *)(vars + 0xC) = 0x200;
         }
-        func_0022ED80(0, 0, piece);
+        Moby_PlaySound(0, 0, piece);
         angle = 0.0f;
         {
             int i;
@@ -759,7 +759,7 @@ void GateRiseUpdate(struct Moby *m) {
                                        (*(float *)&D_L05_00161F48) * D_0015EE6C, &m->pos.z, &d->riseSpeed);
             if (m->oclass == 0x355 && FastAbsF(m->pos.z - d->topZ) < 3.0f &&
                 3.0f < FastAbsF(d->topZ - m->pos.z + d->riseSpeed))
-                func_0022ED80(0, 0, m);
+                Moby_PlaySound(0, 0, m);
         }
         if (func_001F9908_16378(&d->swingTimer)) {
             SteerAngleWithVelocity(&m->rot.y, &d->swingSpeed, 0.0f, (*(float *)&D_L05_00161F4C) * 0.017453292f * D_0015EE70,
@@ -768,7 +768,7 @@ void GateRiseUpdate(struct Moby *m) {
             if (m->rot.y == 0.0f)
                 m->state = 3;
         } else if (d->swingTimer == 1 && m->oclass == 0x354) {
-            func_0022ED80(0, 0, m);
+            Moby_PlaySound(0, 0, m);
         }
         break;
     }
@@ -824,7 +824,7 @@ extern short D_L05_00161F78_165B8 SDATA(D_L05_00161F78);
 extern short D_L05_00161F7C_165B8 SDATA(D_L05_00161F7C);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l05/gameplay/entities/0030d6a0.c, FUN_L05_003150f0. */
-void func_L05_003165B8(struct Moby *m) {
+void EmitterL05_Update(struct Moby *m) {
     float v[4];
     float w[4];
     float u[4];
@@ -990,7 +990,7 @@ extern void func_L05_003173A8_16B98(void *, void *, void *) __asm__("func_L05_00
 extern void func_L05_00317438_16B98(void *) __asm__("func_L05_00317438");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l05/gameplay/entities/0030d6a0.c, FUN_L05_003156d0. */
-void func_L05_00316B98(struct Moby *moby) {
+void LiftL05_Update(struct Moby *moby) {
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 delta;
     Vec4 rot;
@@ -1025,7 +1025,7 @@ void func_L05_00316B98(struct Moby *moby) {
     case 2:
     case 3:
         if (!Sound_IsPlaying(moby, vars->sound)) {
-            vars->sound = func_0022ED80(0, 4, moby);
+            vars->sound = Moby_PlaySound(0, 4, moby);
         }
         if (moby->command) {
             D_0014172A = vars->marker;
@@ -1105,7 +1105,7 @@ void func_L05_00316B98(struct Moby *moby) {
         }
         moby->glow_color = 0x80000000 | (level << 16) | (level << 8) | level;
         if (D_0013F450.ground_moby == moby && D_0013F450.air_frames.s == 0 && func_001F9D48(&D_0013F450.motion.pos, &moby->pos) < 0.5f) {
-            func_0022ED80(1, 0, moby);
+            Moby_PlaySound(1, 0, moby);
             moby->glow_color = 0x80208020;
             if (moby->state == 7) {
                 moby->state = 2;
@@ -1125,7 +1125,7 @@ void func_L05_00316B98(struct Moby *moby) {
         }
         moby->glow_color = 0x80000000 | (level << 16) | (level << 8) | level;
         if (D_0013F450.ground_moby == moby && D_0013F450.air_frames.s == 0 && func_001F9D48(&D_0013F450.motion.pos, &moby->pos) < 0.5f) {
-            func_0022ED80(1, 0, moby);
+            Moby_PlaySound(1, 0, moby);
             if (vars->marker != -1) {
                 func_L05_00317438_16B98(moby);
             }
@@ -1163,7 +1163,7 @@ extern short D_L05_00161F80;
 extern short D_L05_00161F84;
 
 // Positions the camera-relative point and fills the output angles.
-void func_L05_003173A8(char *a, char *b, char *c) {
+void LiftL05_GetCameraView(char *a, char *b, char *c) {
     float t;
     func_L00_001FF4B0(b, a + 0xC0, *(float *)&D_L05_00161F88);
     FastVecAdd(b, b, a + 0x10);
@@ -1211,7 +1211,7 @@ void CheckHeroOutsideClipVolumes(char *moby) {
             break;
         }
     }
-    if (none) func_L03_00292AC0(D_L05_00211E60);
+    if (none) Moby_DrawVu1AndBackdrop(D_L05_00211E60);
 }
 extern void func_L02_002A52B0(void *, float);
 extern void func_L05_00317538_3175D8(void) __asm__("func_L05_00317538");
@@ -1223,7 +1223,7 @@ extern int D_L05_0015F6B0 MACRO_ADDR;
 void PulsingMarkerUpdate(char *moby) {
     switch ((unsigned char)moby[0x20]) {
     case 0:
-        func_L02_002A52B0(D_L05_00211E60_3175D8, 1.0f);
+        ScaleTableIntoBuffer128(D_L05_00211E60_3175D8, 1.0f);
         moby[0x20] = 1;
         ((unsigned char *)moby)[0x30] = 0xFF;
         break;
@@ -1288,7 +1288,7 @@ void func_L05_00317720(char *moby) {
             }
             if (*(u8 *)(moby + 0x20) != 1)
                 return;
-            func_0022ED80(0, 0, moby);
+            Moby_PlaySound(0, 0, moby);
             *(u8 *)(moby + 0x20) = 6;
             return;
         }
@@ -1344,7 +1344,7 @@ void func_L05_00317720(char *moby) {
         if (!(FastVecDist(moby + 0x10, target) < 0.0001f))
             return;
         if (*(u8 *)(moby + 0x20) == 3) {
-            func_0022ED80(1, 0, moby);
+            Moby_PlaySound(1, 0, moby);
             *(u8 *)(moby + 0x20) = 7;
             return;
         }
@@ -1831,12 +1831,12 @@ void BouncerUpdate(char *m)
         }
         *(char **)(d + 0x20) = D_L05_00161FB0;
         *(unsigned char *)(m + 0x20) = 1;
-        func_L00_002676E8(m, d);
+        DialogRequest_Init(m, d);
         *(float *)(d + 0xC) = 3.7f;
         SetMobyZBand(m);
         break;
     case 1:
-        if (func_L00_00267290(m, d))
+        if (Npc_TryStartDialog(m, d))
             PlaceMarkerAheadOfMoby(2.5f, m);
         if (*(short *)(d + 4) == 5) {
             UnlockPlanet(7);
@@ -1947,13 +1947,13 @@ void ShadySalesmanUpdate(char *m)
             return;
         }
         *(float *)(m + 0x18) += 0.5f;
-        *(float *)(m + 0x18) = func_00214358(m + 0x10, 0, 0.5f);
+        *(float *)(m + 0x18) = ProbeGroundHeight(m + 0x10, 0, 0.5f);
         *(char **)(d + 0x20) = D_L05_00161FB8;
         *(unsigned char *)(m + 0x20) = 1;
-        func_L00_002676E8(m, d);
+        DialogRequest_Init(m, d);
         break;
     case 1:
-        if (func_L00_00267290(m, d))
+        if (Npc_TryStartDialog(m, d))
             PlaceMarkerAheadOfMoby(2.0f, m);
         if (*(unsigned short *)(d + 4) >= 3 && *(unsigned short *)(d + 4) <= 4) {
             GiveItem(0x17, 1);
@@ -2066,7 +2066,7 @@ extern float D_0015EE6C MACRO_ADDR;
 extern short D_L05_00161FC8;
 
 // Per-frame update: spin a value in the data block and bob the moby's Y with it.
-void func_L05_0031A0A8(unsigned char *moby) {
+void BobbingMobyL05_Update(unsigned char *moby) {
     float v;
     char *data = *(char **)(moby + 0x78);
     int g;
@@ -2124,7 +2124,7 @@ extern char D_0013A5E0[];
 extern char D_0014171B[];
 
 /* Update the moving pickup, interpolate its path transitions, and manage its sound handle. */
-void func_L05_0031A188(char *moby) {
+void PickupL05_Update(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
     char *g;
@@ -2140,7 +2140,7 @@ void func_L05_0031A188(char *moby) {
     int s;
     qcopy(v00, moby + 0x10);
     qcopy(v10, moby + 0x40);
-    func_L00_002676A0(moby, (*(unsigned short *)(moby + 0x34) ^ 1) & 1);
+    LevelTable_SetSlotValue(moby, (*(unsigned short *)(moby + 0x34) ^ 1) & 1);
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0:
         *(short *)(d + 0xB0) = -1;
@@ -2210,7 +2210,7 @@ void func_L05_0031A188(char *moby) {
             *(int *)(d + 0xC0) = 0;
             *(int *)(d + 0xC4) = 0;
             moby[0x20] = 1;
-            func_L05_0031AA20(moby);
+            Taxi_SetTargetFromSpawn(moby);
         }
         break;
     case 6:

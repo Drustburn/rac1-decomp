@@ -198,7 +198,7 @@ void func_L11_00309DA0(struct Moby *moby) {
             }
             moby->rot.y = FastAddRots(moby->rot.y, pitch_off);
             BuildSphericalOffset(vars, speed, moby->rot.z, -moby->rot.y);
-            func_001E9768(&moby->pos, &vars->target->pos);
+            Profile_Mark(&moby->pos, &vars->target->pos);
         } else {
             vars->target = 0;
         }
@@ -977,7 +977,7 @@ extern u128_ad0 D_L11_00160970;
 extern int D_0013E600[];
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/0030e690.c, FUN_L11_00310ad0. */
-void func_L11_00311F98(short *pts, int n, float x0, float y0, unsigned int col, unsigned long prim, float scale) {
+void Hud_DrawPointList(short *pts, int n, float x0, float y0, unsigned int col, unsigned long prim, float scale) {
     int q = (n + 1) / 2 + 3;
     unsigned long *o;
     int x, y;
@@ -1131,7 +1131,7 @@ extern void func_L11_003121C0(float, float, float, float, float, int, int, long,
 extern float func_001FA748(float, float);
 
 /* Draws four quads with the angle advanced by a quarter turn each time. */
-void func_L11_00312510(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang) {
+void Hud_DrawFourRotatedQuads(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x, float y, float s, float ang) {
     int h;
     float w;
     h = GetEffectTex(0x42);
@@ -1369,7 +1369,7 @@ extern void func_001F9BF0_0031B8A8(void *, void *, void *) __asm__("func_001F9BF
 extern float D_0015EE70_0031B8A8 __asm__("D_0015EE70") MACRO_ADDR;
 
 /* Path follower: turns the moby to the blend of the headings of its current and next path segments, and eases its position toward the blended path point offset sideways around the path. */
-void func_L11_0031B8A8(Moby *moby) {
+void PathOrbitMobyUpdate(Moby *moby) {
     float mtx[4][4];
     float A[4];
     float B[4];

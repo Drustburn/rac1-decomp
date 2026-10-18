@@ -16,7 +16,7 @@ void func_00234238_234fd0(void *, void *, int, int, int) __asm__("func_00234238"
 void func_0020C468_234fd0(void *, int) __asm__("func_0020C468");
 void func_001FF7F0_234fd0(int, int) __asm__("func_001FF7F0");
 /* HUD update. Adapted from Lombyte (MIT) for PAL: overlays/shared/ui_hud_00234fd0.c, FUN_L00_00234fd0. */
-void func_L00_00235960(int mode) {
+void HudBanks_Upload(int mode) {
     G_234fd0 *g = &D_L00_0017E5D8_234fd0;
     int off = D_L00_001BA070_234fd0.off;
     void *h = D_L00_001BA070_234fd0.h;
@@ -54,7 +54,7 @@ typedef struct { int v; short s; short pad; } E_235310;
 typedef struct { char pad[0x18]; T_235310 *t; char pad2[8]; E_235310 *a; E_235310 *b; } G_235310;
 extern G_235310 D_L00_0017E5D8_235ca0  __asm__("D_L00_0017E5D8") __attribute__((section(".data")));
 /* HUD update. Adapted from Lombyte (MIT) for PAL: overlays/shared/ui_hud_00234fd0.c, FUN_L00_00235310. */
-void func_L00_00235CA0(int n) {
+void HudBank_Release(int n) {
     int d = D_L00_0017E5D8_235ca0.t->c[n];
     int i, j, s, end;
     if (n == 0) {
@@ -87,7 +87,7 @@ extern volatile int D_L00_001600A8 MACRO_ADDR;
 extern short D_L00_0015F808;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/hud/00234fd0.c, FUN_L00_00235668. */
-void func_L00_00235FF8(int state) {
+void MobyPool_Swap(int state) {
     int oldState = (*(volatile int *)&D_L00_0015F808);
     if (state != oldState) {
         int old70, old74, old78, old7C, oldDC, oldE0, oldE8;
@@ -515,7 +515,7 @@ extern void func_L00_00236830(HudElem *);
    flag D_0013E629, 5. In mode 9 (D_0013F450 + 0x10B8) with +0x20A4 clear
    it restarts the timer at 30 + func_001F9850(120); otherwise it caps it
    at 30. */
-void func_L00_00238148(HudElem *e) {
+void HudSuckCannon_Update(HudElem *e) {
     char *base;
 
     Hud_UpdateCounter(e);
@@ -2188,7 +2188,7 @@ extern void func_L00_00261848(int);
    D_0015EF24 by 180. */
 void InitLevelResidentState(void) {
     register_audio_stream_callback();
-    func_002348B8();
+    VuChain_SetLevelOffset();
     InitMemSlots();
     D_0015EF74 = D_0015EF8C;
     D_0015EF78 = D_0015EF8C;

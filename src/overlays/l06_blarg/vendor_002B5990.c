@@ -538,7 +538,7 @@ void Moby_EnterState4WithChildren(char *moby) {
     int i;
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 2) {
-        func_0022ED80(0, 0, (int)moby);
+        Moby_PlaySound(0, 0, (int)moby);
         moby[0x20] = 4;
         p = (char **)(data + 0x24);
         *(int *)(data + 0x14) = 0;
@@ -557,7 +557,7 @@ void Moby_EnterState8WithChildren(char *moby)
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 6) {
         unsigned short fl;
-        func_0022ED80(0, 0, (int)moby);
+        Moby_PlaySound(0, 0, (int)moby);
         fl = *(unsigned short *)(moby + 0x34);
         moby[0x31] = 1;
         fl &= 0xFFFE;
@@ -2730,7 +2730,7 @@ void Moby1054Update(char *moby) {
         } else {
             moby[0x20] = 3;
         }
-        func_0022ED80(0, 0, (int)*(char **)(data + 0x40));
+        Moby_PlaySound(0, 0, (int)*(char **)(data + 0x40));
         return;
     case 3:
         target_delta = FastVecDist(moby + 0x10, data + 0x10);
@@ -3026,7 +3026,7 @@ void CallableLiftUpdate(Moby *moby) {
             && func_001F9908(&d->f90) != 0
             && moby->pos.z + 0.29f < ((Hero *)(D_0013E633 + 0xE1D))->motion.pos.f[2]
             && func_001F9D48(&((Hero *)(D_0013E633 + 0xE1D))->motion.pos, &moby->pos) < 1.0f) {
-            func_0022ED80(0, 0, (int)moby);
+            Moby_PlaySound(0, 0, (int)moby);
             if (moby->state == 3) {
                 moby->state = 5;
                 Moby_EnterState8WithChildren(D_L06_00160058 + (d->f64 << 8));
@@ -3117,12 +3117,12 @@ void RegisterMobyDrawCallbacks(char *moby) {
     int *data = *(int **)(moby + 0x78);
     int *p;
     int i;
-    AddDrawCallback((void *)func_L06_002FE890, moby);
+    AddDrawCallback((void *)EffectQuad_DrawVariantB, moby);
     p = data;
     for (i = 0; i < 4; p++, i++) {
         if (*p < 0) continue;
         if (is_point_inside_clip_volume(D_L06_00167640, *p)) {
-            AddDrawCallback((void *)func_L06_002FE5D0, moby);
+            AddDrawCallback((void *)EffectQuad_DrawVariantA, moby);
             break;
         }
     }
@@ -3130,7 +3130,7 @@ void RegisterMobyDrawCallbacks(char *moby) {
     for (i = 0; i < 4; p++, i++) {
         char *g = (char *)D_0013E633 + 0xE1D;
         if (*(int *)(g + 0x208C) == 15 || (*p >= 0 && is_point_inside_clip_volume(D_L06_00167640, *p))) {
-            AddDrawCallback((void *)func_L06_002FEB78, moby);
+            AddDrawCallback((void *)EffectQuad_DrawVariantC, moby);
             return;
         }
     }

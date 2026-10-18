@@ -186,7 +186,7 @@ INCLUDE_ASM("asm/overlays", func_L00_0024B908);
 extern char D_0013D355[];
 
 // Sets the menu memory card state.
-void func_L00_0024B920(void) {
+void CardMenu_AdvanceOnCardStatus(void) {
     /* The card status word at 0x13D3AC, reached the way the assembly names it (D_0013D355 + 0x57). Its
        neighbours in this file read the same word as D_0013D390[7]; that spelling does not give retail's
        bytes here. Accepted as a last resort. */
@@ -222,7 +222,7 @@ void SetMenuStateFromCardStatus(void) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024BA60);
 /* sets the menu state to 3 while D_0013D390[7] is set, else to 10 when flag 2 or 4 is up */
-void func_L00_0024BA70(void) {
+void CardMenu_AdvanceOnSaveByte(void) {
     if (D_0013D390[7] != 0) {
         D_0015EFB0 = 3;
         return;
@@ -302,7 +302,7 @@ INCLUDE_ASM("asm/overlays", func_L00_0024BD84);
 INCLUDE_ASM("asm/overlays", func_L00_0024BDB8);
 /* while D_0013D390[55] < 3 and D_0013D390[57] < 0: with D_0013D390[59] set, D_0013D390[63] is
    cleared, the state becomes 21 and flags 0x40 and 0x400 go up; else the state becomes 1 */
-void func_L00_0024BF30(void) {
+void CardMenu_NextStateOnCounters(void) {
     if (D_0013D390[55] < 3 && D_0013D390[57] < 0) {
         if (D_0013D390[59] != 0) {
             D_0013D390[63] = 0;

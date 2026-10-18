@@ -1075,7 +1075,7 @@ char *LoadLevelGameplay(int arg0) {
                 h = *(float *)p;
                 p += 4;
                 if (a != 0) {
-                    float z = func_00214358(&m->pos.x, 0, 0.5f);
+                    float z = ProbeGroundHeight(&m->pos.x, 0, 0.5f);
 
                     if (0.0f < z) {
                         m->pos.z = z + h;
@@ -1664,7 +1664,7 @@ char *LoadLevelGameplay(int arg0) {
         }
         D_L00_0016C158[7] = 0;
     }
-    func_L00_001F8750();
+    Level_ResetGameplayGlobals();
     HeroInit();
     HeroResetTuning();
     Camera_InitSlots();

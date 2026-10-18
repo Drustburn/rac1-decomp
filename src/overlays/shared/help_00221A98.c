@@ -44,7 +44,7 @@ void Hero_UpdateCollisionProbes(void) {
     s32 hit;
 
     if (D_0013F450_21A98.unk20AD == 0) {
-        func_L00_00213F38();
+        Hero_ApplyMotionCollision();
     }
     if (D_L00_0015F6B0 % 3 == 0) {
         D_0013F450_21A98.wall_probe_distance = 4.0f;
@@ -623,7 +623,7 @@ int HeroEnterMoveState(int a, int b) {
         *(int *)(p + 0x208C) = 0;
         *(int *)(p + 0x2284) = 0;
         *(int *)(p + 0x1010) = rand_range(scale_ticks(0x32), scale_ticks(0x64));
-        func_L00_0020AB78();
+        Hero_ClearSlotPairs();
         if (*(unsigned char *)(p + 0x20A4) != 0) {
             Hero_SetStateFromMode();
             return 1;
@@ -1109,7 +1109,7 @@ int HeroEnterMoveState(int a, int b) {
             char *q = (char *)D_0013E633 + 0xE1D;
             float d = *(float *)(q + 0xAA8);
             int id = 6;
-            if (func_L00_002056D0(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f) id = 5;
+            if (Hero_ResolveAnimId(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f) id = 5;
             HeroStartAnim(id, 4, (float)scale_ticks(9));
         }
         break;
@@ -1124,7 +1124,7 @@ int HeroEnterMoveState(int a, int b) {
         if (b) {
             int id = 6;
             float d = *(float *)(p + 0xAA8);
-            if (func_L00_002056D0(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f) id = 5;
+            if (Hero_ResolveAnimId(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f) id = 5;
             HeroStartAnim(id, 4, (float)scale_ticks(9));
         }
         break;
@@ -1923,7 +1923,7 @@ int HeroEnterMoveState(int a, int b) {
                 } else if (s == 9) {
                     int id = 8;
                     int n = truncate_float_to_s32(*(float *)(q + 0xAA8));
-                    if (func_L00_002056D0(*(unsigned char *)(moby + 0x52)) == 4) id = D_L00_0017BED8[n];
+                    if (Hero_ResolveAnimId(*(unsigned char *)(moby + 0x52)) == 4) id = D_L00_0017BED8[n];
                     HeroStartAnim(id, 0, (float)scale_ticks(5));
                 } else if (s == 0x5E) {
                     HeroStartAnim(4, 0, (float)scale_ticks(8));
@@ -2309,7 +2309,7 @@ int HeroEnterMoveState(int a, int b) {
         *(float *)(p + 0x2F4) = *(float *)(p + 0x2D8);
         m = *(char **)(p + 0xA88);
         qcopy(m + 0x10, p + 0x80);
-        func_0022ED80(9, 0, (int)m);
+        Moby_PlaySound(9, 0, (int)m);
         if (b) HeroStartAnim(0x11, 0, (float)scale_ticks(8));
         break;
     }
@@ -2624,7 +2624,7 @@ int HeroEnterMoveState(int a, int b) {
         char *p = (char *)D_0013E633 + 0xE1D;
         *(int *)(p + 0x2284) = 0x51;
         *(int *)(p + 0x208C) = 0;
-        if (func_L00_002056D0(*(unsigned char *)(*(char **)(p + 0x2080) + 0x53)) != Hero_PickSituationId(1)) {
+        if (Hero_ResolveAnimId(*(unsigned char *)(*(char **)(p + 0x2080) + 0x53)) != Hero_PickSituationId(1)) {
             HeroStartAnim(Hero_PickSituationId(1), 0, (float)scale_ticks(5));
         }
         break;
@@ -3006,7 +3006,7 @@ extern int func_L00_0020DB30(int);
 extern int func_001F9908_228770(int *) __asm__("func_001F9908");
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
-int func_L00_00228770(void) {
+int Hero_TryLaunchGadget(void) {
     int out[3];
     int start;
     int mask;
@@ -3217,7 +3217,7 @@ int func_L00_00228770(void) {
             if (D_0013CA40_p228770.held & mask) {
                 if (!GetAmmo(-1)) {
                     if (!Sound_IsPlaying(D_0013F450_h228770.items[0].moby, pv->fC)) {
-                        pv->fC = func_0022ED80(0, 0, (int)D_0013F450_h228770.items[0].moby);
+                        pv->fC = Moby_PlaySound(0, 0, (int)D_0013F450_h228770.items[0].moby);
                     }
                 }
             }
@@ -3251,7 +3251,7 @@ int func_L00_00228770(void) {
                     break;
                 }
                 if (D_0013F450_h228770.items[0].moby != 0) {
-                    func_0022ED80(0, 0, (int)D_0013F450_h228770.items[0].moby);
+                    Moby_PlaySound(0, 0, (int)D_0013F450_h228770.items[0].moby);
                 }
             }
         }
@@ -3266,7 +3266,7 @@ int func_L00_00228770(void) {
                     if (D_0013F450_h228770.items[0].moby != 0) {
                         HeroEnterMoveState(0x20, 1);
                         if (D_0013F450_h228770.items[0].moby != 0) {
-                            func_0022ED80(0, 0, (int)D_0013F450_h228770.items[0].moby);
+                            Moby_PlaySound(0, 0, (int)D_0013F450_h228770.items[0].moby);
                         }
                     }
                 }

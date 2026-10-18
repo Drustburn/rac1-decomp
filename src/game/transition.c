@@ -1149,7 +1149,7 @@ void Transition_DefaultDraw(s32 *arg0)
     DrawShrubs();
     Vif1ChainCmd(0x02040000);
     if (D_0015F6E8 == 3) {
-        func_0021A610();
+        Menu_DrawPanels();
     } else {
         DrawMobys();
     }

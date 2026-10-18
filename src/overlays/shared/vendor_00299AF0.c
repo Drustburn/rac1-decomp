@@ -158,7 +158,7 @@ void Moby819Update(char *m) {
         if ((unsigned char)(g[0x20A4] - 1) < 2 && (tg = d->target) == *(char **)(g + 0x2080)) {
             speed = FastVecLength(d);
             qcopy(tp, tg + 0x10);
-            h = func_00214358(tp, 0, 0.5f) + 0.2f;
+            h = ProbeGroundHeight(tp, 0, 0.5f) + 0.2f;
             *(Q_cc2e8 *)hv = *(Q_cc2e8 *)(g + 0x100);
             hv[2] = 0.0f;
             tp[2] = h;
@@ -208,7 +208,7 @@ void Moby819Update(char *m) {
         dist = FastVecDist(p, gHeroPos);
         func_001F9BD8_CD6A8(p, p, d);
         if (d->warned == 0 && d->passed != 0 && d->dist < dist && dist < 5.0f) {
-            func_0022ED80(0, 0, m);
+            Moby_PlaySound(0, 0, m);
             d->warned = 1;
         }
         if (dist < d->dist)
@@ -658,8 +658,8 @@ void Camera19_Update(char *moby) {
             ia = 0;
             ib = 0.0f;
             Spline_AdvanceByDistance(h, v2, &ia, &ib, d, 0);
-            ((void (*)(void *, float))func_001E9768)(v2, 0.2f);
-            func_001E9768(h + 0x10, h + (*(int *)h << 4));
+            ((void (*)(void *, float))Profile_Mark)(v2, 0.2f);
+            Profile_Mark(h + 0x10, h + (*(int *)h << 4));
             FastVecSub(v1, v2, (moby + 0x30));
         }
         FastVecScale(v2, D_0013E633 + 0x10AD, -1.0f);

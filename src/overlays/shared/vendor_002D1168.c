@@ -593,7 +593,7 @@ extern int func_L00_001EFFF0_2D3608(void *, void *, int, int, int) __asm__("func
 extern void func_L00_002C8680_2D3608(float *pos, float *tgt, float *output, float speed, float unused, float range) __asm__("func_L00_002C8680");
 
 /* Same camera step as func_L00_002C88A8, writing the following vector in the target data. */
-void func_L00_002D3608(int collision_arg, Moby *carrier, float *position)
+void DecoyGlove_AimThrow(int collision_arg, Moby *carrier, float *position)
 {
     Vec_2D3608 anchor;
     Mat3_2D3608 rotation;
@@ -757,7 +757,7 @@ L3D10:
     moby[0x20] = 3;
 L3D34:
     *(u128_D3B20 *)&loc = *(u128_D3B20 *)(d + 0x40);
-    func_L00_002D3608((int)moby, (void *)d, (float *)&loc);
+    DecoyGlove_AimThrow((int)moby, (void *)d, (float *)&loc);
 
     switch (moby[0x20]) {
     case 0:
@@ -778,7 +778,7 @@ L3D34:
             ThrownObject_BounceOffHero((float *)(d + 0x40), *(char **)(d + 0x50), *(char **)(*(char **)(d + 0x50) + 0x78) + 0x10);
             *(int *)(d + 0x50) = 0;
         } else {
-            func_0022ED80(0, 0, (int)moby);
+            Moby_PlaySound(0, 0, (int)moby);
         }
         moby[0x20] = 4;
         *(int *)(d + 0x54) = scale_ticks(0x14);
@@ -1879,7 +1879,7 @@ void HornyToadUpdate(Moby *moby) {
         break;
     case 12:
         if (StepMobyPhysics(moby, data->f70) & 0x140) {
-            func_0022ED80(7, 0, (int)moby);
+            Moby_PlaySound(7, 0, (int)moby);
             SpawnExplosionFxSwapped(moby, (*(Vec_5AC0 *)&moby->pos), -1, 0.75f, 10.0f);
             func_0020D678_5AC0(moby);
             return;
@@ -1887,7 +1887,7 @@ void HornyToadUpdate(Moby *moby) {
         break;
     }
     if (moby->state != 11 && moby->state != 12 && moby->state != 9) {
-        func_00214D28_5AC0(func_00214358((*(Vec_5AC0 *)&moby->pos), 0, 0.5f), D_0015EE6C * 7.0f, &(*(Vec_5AC0 *)&moby->pos)[2]);
+        func_00214D28_5AC0(ProbeGroundHeight((*(Vec_5AC0 *)&moby->pos), 0, 0.5f), D_0015EE6C * 7.0f, &(*(Vec_5AC0 *)&moby->pos)[2]);
         if (moby->state != 4) {
             func_L00_00262DF0_5AC0(data->f1E0, 0.25f, (*(Vec_5AC0 *)&moby->pos), (*(Vec_5AC0 *)&moby->pos));
         }
@@ -1946,8 +1946,8 @@ float WalkTowardPoint(unsigned char *m, float *t, float vel) {
     return 37.0f;
 }
 /* Runs the func_L00_002DCDA8 check and switches the moby to or from state 9; returns its result. */
-int func_L00_002D6B90(char *a) {
-    int r = func_L00_002DCDA8(a);
+int CarriedMoby_UpdateState9(char *a) {
+    int r = CarriedMoby_StepGrab(a);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 9) a[0x20] = 5;
     } else {
@@ -1956,7 +1956,7 @@ int func_L00_002D6B90(char *a) {
     return r;
 }
 /* Runs func_L00_002DD2D0 and forces the moby into state 9; returns its result. */
-int func_L00_002D6C80(char *a) {
+int CarriedMoby_ReleaseToState9(char *a) {
     int r = ReleaseCarriedMobySlot(a);
     a[0x20] = 9;
     return r;
@@ -2322,7 +2322,7 @@ void InfobotUpdate(struct Moby *moby)
         moby->rot.x = ((f32 (*)(f32, f32, f32, f32, f32, f32 *))SpringTurn)(moby->rot.x, 0.0f, D_0015EE70 * 1.0471976f, D_0015EE70 * 2.0943952f, D_0015EE6C * 1.5707964f, &infobot->spin[0]);
         if (FastVecDist(&((Camera *)D_0013F450)->target, &moby->pos) < 8.0f) {
             moby->state = 4;
-            func_L00_002676A0(moby, 1);
+            LevelTable_SetSlotValue(moby, 1);
         }
         break;
     case 4:

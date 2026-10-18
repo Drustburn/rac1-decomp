@@ -147,11 +147,11 @@ void projectWorldPoint(Vec3f *a0, float *a1) {
 LINKER_REMNANT("asm/remnants/text", func_001F2550);
 
 /* Empty stub (returns immediately). */
-void func_001F2558(void) {
+void ProfileMarker_End(void) {
 }
 
 /* Empty stub (returns immediately). */
-void func_001F2560(void) {
+void ProfileMarker_Begin(void) {
 }
 
 extern int D_0015F6FC_m __asm__("D_0015F6FC") MACRO_ADDR;
@@ -1117,7 +1117,7 @@ void DrawDebugProfiler(void) {
     func_001F2560_a(D_0015F4F0, 0xF);
     Dma_AppendRefDirect3();
     if (D_0015F534_f & 0x10000) {
-        func_00238D88();
+        DebugProfiler_Hook();
     }
     if ((D_0015F534_f & 0x80) && D_0018A3B0[0x40 / 4] != 0) {
         HudDraw();

@@ -718,7 +718,7 @@ void DebugMenuRender(void) {
 }
 extern char D_L00_00169D80[];
 // Moves a word to its neighbour slot and clears two fields.
-void func_L00_001F70F0(void) {
+void Frame_RollCounter(void) {
     char *p = D_L00_00169D80;
     int t = *(int *)(p + 0x364);
     *(int *)(p + 0x364) = 0;
@@ -733,7 +733,7 @@ void func_L00_001F70F0(void) {
    (func_001E97C8, 8 bytes) are one C function (config/overlays/joined.tsv). */
 extern char *D_L00_0015F6E0 MACRO_ADDR;
 
-int func_L00_001F75F8(int x, int y, int z) {
+int OcclGrid_Lookup(int x, int y, int z) {
     char *grid = D_L00_0015F6E0;
     char *base = grid + *(int *)grid;
     unsigned short *l = (unsigned short *)(grid + 4);
@@ -774,7 +774,7 @@ extern int D_0015F40C_F8750 SDATA(D_L00_0015F40C);
 extern int D_0015F420_F8750 SDATA(D_L00_0015F420);
 extern int D_0015F430_F8750 SDATA(D_L00_0015F430);
 
-void func_L00_001F8750(void) {
+void Level_ResetGameplayGlobals(void) {
     D_L00_0015F524 = 0;
     D_L00_0015F52C = 0;
     D_L00_0015F530 = 0;
@@ -869,7 +869,7 @@ extern void func_00234AC8(int);
 extern int func_00122598(int);
 extern void func_002348E8(void);
 extern void func_L00_002A21A8(void *, int, int);
-void func_L00_001F9D40(void *a) {
+void FrameSnapshot_Grab(void *a) {
     VU1_syncChain(1);
     func_00122598(0);
     D_L00_0015F4F8 = D_L00_0015F4F8 + 1;

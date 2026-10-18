@@ -66,7 +66,7 @@ typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1];
 extern S D_L00_00166D80;
 
 /* resets the camera sub-object's short at 0x7E to 1 and byte at 0x7D to 0 */
-void func_L00_001EB7C8(void) {
+void CameraScript_ResetObject(void) {
     char *g = (char *)&D_L00_00166D80;
     *(short *)(*(char **)(g + 0x180) + 0x7E) = 1;
     *(*(char **)(g + 0x180) + 0x7D) = 0;
@@ -249,7 +249,7 @@ extern void func_L00_001EB890(char *);
 extern void func_L00_001EB508(void);
 
 /* UpdateAllCameras__Fi: iterates over camera slots and switches to best eligible camera */
-int func_L00_001EBDA0(void) {
+int Camera_SelectActive(void) {
     char *best = D_L00_00166F00;
     int i;
     int found = 0;
@@ -329,10 +329,10 @@ void Camera_CaptureTransform(void *arg) {
         sub = r[3];
         if (sub == 0) {
             qcopy(r + 0x50, arg0 + 0x30);
-            func_00215328(r + 0x60, arg0);
+            Matrix_ToQuatCopyBack(r + 0x60, arg0);
         } else if (sub == 2) {
             qcopy(r + 0xC0, arg0 + 0x30);
-            func_00215328(r + 0xD0, arg0);
+            Matrix_ToQuatCopyBack(r + 0xD0, arg0);
             Camera_CaptureHeroRelativeView();
         } else {
             char *g = D_0013E633 + 0xE1D;
@@ -342,7 +342,7 @@ void Camera_CaptureTransform(void *arg) {
             func_L00_001FF4B0(local2, *(char **)(g + 0x2080) + 0xE0, 1.0f);
             Camera_Pos2Polar3d((float *)(r + 0x70), arg0 + 0x30, *(char **)(r - 0xF0) + 0x30,
                           local0, local1, local2);
-            func_00215328(r + 0xB0, arg0);
+            Matrix_ToQuatCopyBack(r + 0xB0, arg0);
             qcopy(r + 0xD0, r + 0xB0);
         }
     } else {
@@ -389,7 +389,7 @@ extern int D_L00_0015F060 MACRO_ADDR;
 extern int D_L00_0015F05C_w __asm__("D_L00_0015F05C") MACRO_ADDR;
 extern int D_L00_0015F05C_g SDATA(D_L00_0015F05C);
 
-void func_L00_001ED2C0(void) {
+void Camera_UpdateModeFlags(void) {
     char *d = D_L00_00166F10;
 
     D_L00_0015F05C_g = 0x14;
@@ -481,10 +481,10 @@ void Camera_UpdateFrame(void) {
     }
     c = D_L00_00166D80_ED428;
     (*(int *)(c + 0x398))++;
-    func_001EDE08();
-    func_L00_001ED2C0();
+    Camera_StepFade();
+    Camera_UpdateModeFlags();
     CameraPreUpdate();
-    func_L00_001EBDA0();
+    Camera_SelectActive();
     target = *(char **)(c + 0x180);
     if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {
         Camera_CaptureTransform(*(void **)(c + 0x184));

@@ -197,7 +197,7 @@ void PlasmabotUpdate(char *m) {
             ((unsigned char *)m)[0x20] = 1;
             return;
         }
-        *(float *)(m + 0x18) = func_00214358(0.5f, m + 0x10, 0);
+        *(float *)(m + 0x18) = ProbeGroundHeight(0.5f, m + 0x10, 0);
         if (*(int *)(data + 0x240) == -1) {
             ((unsigned char *)m)[0x20] = 4;
         } else {
@@ -209,7 +209,7 @@ void PlasmabotUpdate(char *m) {
         float *p;
         if (*(int *)(data + 0x114) == 2) return;
         if (FastDecTimer(data + 0x248) == 0) return;
-        if (func_L14_002DAC00(*(int *)(data + 0x264)) == 0) return;
+        if (MobyL14_Activate(*(int *)(data + 0x264)) == 0) return;
         if (call_4BF0(m) == 0) return;
         *(short *)(data + 0x248) = scale_ticks(*(int *)&D_L14_001615B8);
         Moby_CopyLinkedWord(m);
@@ -280,7 +280,7 @@ void PlasmabotUpdate(char *m) {
         break;
     case 8:
         if (((unsigned char *)data)[0x24A] != 0) {
-            func_L14_002DAC00(*(int *)(data + 0x264));
+            MobyL14_Activate(*(int *)(data + 0x264));
         }
         if (SteerMobyAlongPath(m) != 0) {
             if (((unsigned char *)data)[0x24A] != 0) {
@@ -568,7 +568,7 @@ extern f32 D_L14_00161584_3B78 SDATA(D_L14_00161584);
 extern f32 D_L14_00161588_3B78 SDATA(D_L14_00161588);
 
 // Draws five GIF line packets from the moby's beam points at data+0x1E0..0x220.
-void func_L14_002B3B78(char *moby) {
+void BeamMoby_DrawLines(char *moby) {
     char *data = *(char **)(moby + 0x78);
     struct {
         Vec4 o[4];
@@ -1145,7 +1145,7 @@ void Moby250Update(char *moby) {
 extern void func_00213D28(void *, int, int);
 
 // Starts a moby in state 5 if idle, then stores a random value and returns whether it was in state 6.
-int func_L14_002DAC00(int i)
+int MobyL14_Activate(int i)
 {
     unsigned char *moby = (unsigned char *)(D_L14_00160098 + i * 256);
     int *data = *(int **)(moby + 0x78);
@@ -1498,7 +1498,7 @@ extern float D_0015EE60_2E17B8 __asm__("D_0015EE60") MACRO_ADDR;
 
 /* Engine exhaust of a level-14 moby: puffs particles behind it (as func_L14_002B3850 does for the ship), then
  * spawns a trail piece and a smoke puff at the nozzle, offset along the moby's heading. */
-void func_L14_002E17B8(Moby *m) {
+void MobyL14_EngineExhaust(Moby *m) {
     Vec4 pos;
     Vec4 dir;
     Vec4 vel;
@@ -2488,7 +2488,7 @@ void FloatingMineUpdate(struct Moby *moby) {
     case 0:
         vars->rest_z = -1.0f;
         if (vars->link == 0) {
-            moby->pos.z = func_00214358(0.5f, &moby->pos, 0) + 0.7f;
+            moby->pos.z = ProbeGroundHeight(0.5f, &moby->pos, 0) + 0.7f;
             vars->spin[0] = random_float_between(0.010471975f, 0.020943951f);
             vars->spin[1] = random_float_between(0.006981317f, 0.013962634f);
             vars->spin[2] = random_float_between(0.0034906585f, 0.006981317f);
@@ -2500,7 +2500,7 @@ void FloatingMineUpdate(struct Moby *moby) {
     case 1: {
         if (D_0015EE84 == 16) {
             if (vars->rest_z < 0.0f)
-                vars->rest_z = func_00214358(0.5f, &moby->pos, 0) + 0.7f;
+                vars->rest_z = ProbeGroundHeight(0.5f, &moby->pos, 0) + 0.7f;
             func_L00_0025C918_00AC8(&moby->pos.z, &vars->z_speed, vars->rest_z, D_0015EE64 * 0.03f, D_0015EE64 * 0.3f, 0.0f);
             if ((char *)moby > D_L14_0016009C && D_0013F450.state.control_mode != 15)
                 goto remove;
@@ -2515,7 +2515,7 @@ void FloatingMineUpdate(struct Moby *moby) {
         func_L00_0025B4D0_00AC8(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || D_0013F450.coll_hit_moby == (u8 *)moby) {
             clear_u64_value(vel);
-            func_0022ED80(0, 0, moby);
+            Moby_PlaySound(0, 0, moby);
             if (D_0013F450.coll_hit_moby == (u8 *)moby)
                 func_L00_0025F4A8(moby, vel, &moby->pos, 3.0f, 1.0f, 10, 20, 60, 3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             else

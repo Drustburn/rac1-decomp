@@ -681,7 +681,7 @@ extern int func_L00_0025D390(char *);
 extern void func_00215C00(void *, float, float, float);
 extern int func_L00_001EFFF0(Vec4f *, Vec4f *, int, void *, int);
 
-char *func_L00_002BD6B8(char *self, float *position, float *heading, float *pitch) {
+char *Aim_FindAssistTarget(char *self, float *position, float *heading, float *pitch) {
     float start[4] __attribute__((aligned(16)));
     float end[4] __attribute__((aligned(16)));
     float target[4] __attribute__((aligned(16)));
@@ -1655,7 +1655,7 @@ extern int func_L00_001F10E0(float, void *, int, void *);
 extern int D_L00_00173F40[];
 
 /* Nudge a position and ask the level helper about it, lowering a global on success. */
-int func_L00_002BFDB8(char *a, int b, Vx *c) {
+int Hero_ProbeSphereRaised(char *a, int b, Vx *c) {
     Vx v;
     float s;
     float t;
@@ -1715,7 +1715,7 @@ typedef struct { char pad[0x18]; TopS *o18; char pad2[0xC]; float f28; } S173F40
 extern S173F40 D_L00_00173F40_s __asm__("D_L00_00173F40") NOT_SDA;
 
 /* Probe below a point and return the ground height offset, or zero when nothing is hit. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002b94d0.c, FUN_L00_002bec80. */
-float func_L00_002BFF88(Vx *a, void *b) {
+float Ground_ProbeHeightBelow(Vx *a, void *b) {
     Vx v1;
     Vx v2;
     float z;
@@ -1756,7 +1756,7 @@ extern float func_001F9B88(float);
 extern int func_L00_001EFFF0_C0098(void *, void *, int, void *, int) __asm__("func_L00_001EFFF0");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b94d0.c, FUN_L00_002bed90. */
-char *func_L00_002C0098(char *self, float *position, float *angles, int unused, int mode) {
+char *Aim_PickBestTarget(char *self, float *position, float *angles, int unused, int mode) {
     char *candidate;
     char *best = 0;
     float target[4] __attribute__((aligned(16)));
@@ -1843,7 +1843,7 @@ extern f32 func_L00_002BFF88_C0358(void *, void *) __asm__("func_L00_002BFF88");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_002b94d0.c, FUN_L00_002bf050. */
 /* Exact match: tools/ps2eeas_nops.py keeps the hazard nop after the label the branch lands on. */
-f32 func_L00_002C0358(Mob *m, Vec4 *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 step, f32 h, f32 r2, f32 r1) {
+f32 Aim_SweepBestAngle(Mob *m, Vec4 *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 step, f32 h, f32 r2, f32 r1) {
     Vec4 v0;
     Vec4 v1;
     f32 da;
@@ -2210,7 +2210,7 @@ extern int func_L00_001F3958(void);
  * or a small dispatch table (keyed by func_L00_001F3958's result)
  * override the default return value (a0's byte at +0x20) with 11.
  */
-int func_L00_002C11D0(EffectSrc *a0) {
+int Moby_ProbeGroundState(EffectSrc *a0) {
     Vec4f v1, v2;
     int result;
 

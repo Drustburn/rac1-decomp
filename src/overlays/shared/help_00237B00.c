@@ -343,7 +343,7 @@ void HeroL05_UpdateItemSelection(int i) {
     if (changed) {
         Sel *g = (Sel *)(D_0013E633 + 0xE1D);
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
-        func_L00_0020AB78();
+        Hero_ClearSlotPairs();
         *(int *)((char *)g + 0x1010) = rand_range(scale_ticks(0x32), scale_ticks(0x5A));
         Hero_StartEventTimer(*((int *)(D_0013E633 + 0xE1D + 0x20D4) + i));
         Hero_StartEventAnim(*((int *)(D_0013E633 + 0xE1D + 0x20D4) + i));
@@ -839,7 +839,7 @@ int HeroL05_GadgetInput(void) {
             if (D_0013CA40_p2523C8.held & mask) {
                 if (!GetAmmo(-1)) {
                     if (!Sound_IsPlaying((Moby *)D_0013F450_h2523C8.items[0].moby, pv->fC)) {
-                        pv->fC = func_0022ED80(0, 0, (int)((Moby *)D_0013F450_h2523C8.items[0].moby));
+                        pv->fC = Moby_PlaySound(0, 0, (int)((Moby *)D_0013F450_h2523C8.items[0].moby));
                     }
                 }
             }
@@ -873,7 +873,7 @@ int HeroL05_GadgetInput(void) {
                     break;
                 }
                 if (((Moby *)D_0013F450_h2523C8.items[0].moby) != 0) {
-                    func_0022ED80(0, 0, (int)((Moby *)D_0013F450_h2523C8.items[0].moby));
+                    Moby_PlaySound(0, 0, (int)((Moby *)D_0013F450_h2523C8.items[0].moby));
                 }
             }
         }
@@ -888,7 +888,7 @@ int HeroL05_GadgetInput(void) {
                     if (((Moby *)D_0013F450_h2523C8.items[0].moby) != 0) {
                         func_L05_0024D680_2523C8(0x20, 1);
                         if (((Moby *)D_0013F450_h2523C8.items[0].moby) != 0) {
-                            func_0022ED80(0, 0, (int)((Moby *)D_0013F450_h2523C8.items[0].moby));
+                            Moby_PlaySound(0, 0, (int)((Moby *)D_0013F450_h2523C8.items[0].moby));
                         }
                     }
                 }
@@ -978,7 +978,7 @@ int HeroL05_GadgetInput(void) {
                 stats->hDA = scale_ticks(D_0015EFA4_2523C8) / 600;
             }
             stats->fDC = stats->fDC | (1 << D_0015EE84_2523C8) | 0x80000000;
-            func_0022ED80(0, 0, (int)m);
+            Moby_PlaySound(0, 0, (int)m);
             Moby_GetJointWorldPos(m, 0, v);
             Moby1475Spawn(m, v, best, D_0013F450_h2523C8.motion.rot.f[2], D_0013F450_h2523C8.motion.rot.f[1]);
         }
@@ -1017,7 +1017,7 @@ extern int func_L05_002559A0(void);
 void Hero_IdleUpdate(void) {
     char *g = (char *)D_0013E633 + 0xE1D;
     int pad;
-    *(short *)(g + 0x888) = truncate_float_to_s32(func_L00_00233410(60.0f, *(float *)(g + 0x860), -1.0f));
+    *(short *)(g + 0x888) = truncate_float_to_s32(Hero_PredictLandingTime(60.0f, *(float *)(g + 0x860), -1.0f));
     if (((unsigned char *)g)[0x88D] != 0 && ((pad = *(int *)(D_0013A5E0 + 0x2600)) & 0xF) != 0) {
         g[0x88F] = 0;
         if (pad & 8) g[0x88F] = 1;
@@ -1115,7 +1115,7 @@ void Hero_CheckLinkedPickupGroups(void) {
                         HERO->unk8C4 += **(int **)(first + 0x78);
                         first[0xBC] = scale_ticks(0x3C);
                         if (HERO->unk86C != 0)
-                            func_0022ED80(1, 0, (int)HERO->unk86C);
+                            Moby_PlaySound(1, 0, (int)HERO->unk86C);
                     }
                 }
                 GroupMobyIter_Next((void **)&first, first, 0, 0);
@@ -1150,7 +1150,7 @@ void Hero_CheckLinkedPickupGroups(void) {
                                 HERO->unk8C4 += **(int **)(second + 0x78);
                                 second[0xBC] = scale_ticks(0x3C);
                                 if (HERO->unk86C != 0)
-                                    func_0022ED80(1, 0, (int)HERO->unk86C);
+                                    Moby_PlaySound(1, 0, (int)HERO->unk86C);
                             }
                         }
                     }
@@ -1242,7 +1242,7 @@ void Hero_FindNearestPathNode(float *out, float *rot) {
     qcopy(out, path + best * 16 + 0x10);
     qcopy(tmp, out);
     tmp[2] += 2.0f;
-    out[2] = func_00214358(tmp, 0, 0.5f);
+    out[2] = ProbeGroundHeight(tmp, 0, 0.5f);
     clear_u64_value(rot);
     {
         float *a = (float *)(path + best * 16);

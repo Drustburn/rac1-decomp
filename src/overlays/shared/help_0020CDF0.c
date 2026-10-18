@@ -495,11 +495,11 @@ char *FindNearestListedObject(float a, float b, float c, float d) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0020E0A8);
 // Returns constant value
-int func_L00_0020E0E8(void) {
+int HeroAnimLookup_Part2(void) {
     return 0x77;
 }
 // Returns the constant 0x75.
-int func_L00_0020E0F0(void) {
+int HeroAnimLookup_Part3(void) {
     return 0x75;
 }
 extern unsigned char D_0013D5CA[] NOT_SDA;
@@ -1168,7 +1168,7 @@ extern int D_L00_0015F6A8 MACRO_ADDR;
 /* Returns 1 when nothing blocks the action, else 0. */
 int Hero_CanUseGadget(void) {
     char *g;
-    if (func_L00_002347B8() == 0 && D_L00_0015F6A8 == 0) {
+    if (Level_GetSpecialMode() == 0 && D_L00_0015F6A8 == 0) {
         g = D_0013F450;
         if (*(unsigned char *)(g + 0x20A4) == 0) {
             if (*(unsigned *)(g + 0x208C) < 3 || *(int *)(g + 0x2084) == 7 || *(int *)(g + 0x2084) == 9 || *(int *)(g + 0x2084) == 0xE) {
@@ -1481,7 +1481,7 @@ void Hero_UpdateItemSelection(int i) {
     if (changed) {
         Sel *g = (Sel *)(D_0013E633 + 0xE1D);
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
-        func_L00_0020AB78();
+        Hero_ClearSlotPairs();
         *(int *)((char *)g + 0x1010) = rand_range(scale_ticks(0x32), scale_ticks(0x5A));
         Hero_StartEventTimer(*((int *)(D_0013E633 + 0xE1D + 0x20D4) + i));
         Hero_StartEventAnim(*((int *)(D_0013E633 + 0xE1D + 0x20D4) + i));
@@ -2484,7 +2484,7 @@ void Hero_BuildProbeEndpoints(VecA16 *a, VecA16 *b, int mode, float fa, float fb
         func_L00_001FF4B0(&t[0], up, -fa);
         FastVecAdd(a, base, &t[0]);
         t[1] = *a;
-        func_L00_0025E290(&t[1], b);
+        Vec4_AdjustNegativeComponents(&t[1], b);
     } else {
         qcopy(&t[0], D_0013E633 + 0xE9D);
         qcopy(b, &t[0]);
@@ -2877,7 +2877,7 @@ int Hero_ResolveCollisionStep(int arg) {
     qcopy(v0, g + 0x80);
     clear_u64_value(v1);
     if (*(short *)(g + 0x22DA) != 0) {
-        func_L00_00235040();
+        Hero_ConstrainToPath();
         *(short *)(g + 0x22DA) = 0;
     }
     if (*(int *)(g + 0x208C) != 0x11) {
@@ -2990,7 +2990,7 @@ extern void func_L00_00234150(float *, float *);
 extern void func_L00_00234420(float *, float *, float);
 
 /* Integrate player motion, resolve contacts, and measure the resulting movement. */
-void func_L00_00213F38(void) {
+void Hero_ApplyMotionCollision(void) {
     Vec4 previous;
     Vec4 work;
     Vec4 plane;
