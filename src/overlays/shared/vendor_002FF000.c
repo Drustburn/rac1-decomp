@@ -619,7 +619,108 @@ void func_L06_00300530(char *m) {
     }
     *(float *)(d + 0x21C) = (float)scale_ticks(*(int *)&D_L06_00162068);
 }
-INCLUDE_ASM("asm/overlays", func_L06_003006F8);
+extern void func_001F9BF0(void *dst, void *a, void *b);
+extern float func_001F9C78(void *a, void *b);
+extern int func_L00_001EFFF0(void *, void *, int, void *, void *);
+extern float func_00214D28(float *, float, float);
+extern void func_001F49B0(void *, void *);
+extern void func_L06_00300AB0(char *moby);
+extern void func_L06_00300DA8(char *moby);
+extern short D_L06_00162060;
+
+typedef struct { float x, y, z, w; } FanPt;
+typedef struct {
+    char pad0[0x210];
+    FanPt base;   /* 0x210; w = timer */
+    FanPt dir;    /* 0x220 */
+    FanPt pts[16]; /* 0x230 */
+} FanData;
+
+/* Shared moby update: steps the timer at 0x21C, spaces 16 entries, and runs the pair checks. */
+void func_L06_003006F8(void *arg) {
+    char *moby = arg;
+    FanData *data = *(FanData **)(moby + 0x78);
+    int x;
+    float A[4];
+    float W[4];
+    ShotInfo rec;
+    float scale;
+    float t;
+    int i, j, k, m;
+    int n;
+
+    x = func_001FA898(data->base.w);
+    func_001F9908((s32 *)&x);
+    data->base.w = (float)x;
+    if (x == 0) {
+        return;
+    }
+    if (x == 20) {
+        char *p = (char *)data;
+        for (n = 15; n >= 0; n--) {
+            if (1.0f <= *(float *)(p + 0x23C)) {
+                *(float *)(p + 0x23C) = 0.98f;
+            }
+            p += 0x10;
+        }
+    }
+
+    for (i = 0; i < 16; i++) {
+        char *e;
+        if (D_0013F450.unk20A4 == 1) {
+            scale = (*(float *)&D_L06_00162060 * D_0015EE6C) * 0.5f;
+        } else {
+            scale = *(float *)&D_L06_00162060 * D_0015EE6C;
+        }
+        func_001F9BF0(A, &data->pts[i], &data->base);
+        A[2] = 0.0f;
+        func_L00_001FF4B0(A, A, scale);
+        func_001F9BD8(A, (float *)&data->pts[i], A);
+        func_001F9BF0(W, A, moby + 0x10);
+        t = func_001F9C78(W, &data->dir);
+        if (0.4f < t) {
+            A[2] = A[2] - (D_0015EE6C + D_0015EE6C);
+        } else if (t < 0.3f) {
+            A[2] = A[2] + (D_0015EE6C + D_0015EE6C);
+        }
+        e = (char *)data + i * 16;
+        if (1.0f <= *(float *)(e + 0x23C) && func_L00_001EFFF0(&data->pts[i], A, 2, 0, 0)) {
+            A[3] = 0.98f;
+        } else if (A[3] < 1.0f) {
+            func_00214D28(&A[3], 0.0f, D_0015EE6C + D_0015EE6C);
+        }
+        qcopy(&data->pts[i], A);
+    }
+
+    j = 0;
+    do {
+        char *e = (char *)data + j * 16;
+        char *f;
+        k = j + 1;
+        if (0.6f <= *(float *)(e + 0x23C)) {
+            f = (char *)data + k * 16;
+            if (0.6f <= *(float *)(f + 0x23C)) {
+                A[0] = func_001F9F90(*(float *)(moby + 0x48));
+                A[1] = func_001F9FA8(*(float *)(moby + 0x48));
+                A[2] = 1.0f;
+                A[3] = 5627.925f;
+                m = 0x10000;
+                if (1.0f <= *(float *)(e + 0x23C) && 1.0f <= *(float *)(f + 0x23C)) {
+                    m = 0x10001;
+                }
+                func_L00_0025A8C0(&rec, (struct Moby *)moby, m, A, 1.0f);
+                rec.oclass = *(s16 *)(moby + 0xA6);
+                rec.unk18 = 0;
+                rec.unk19 = 1;
+                func_L00_001EFFF0(&data->pts[j], &data->pts[j + 1], 0, moby, &rec);
+            }
+        }
+        j = k;
+    } while (j < 15);
+
+    func_001F49B0((void *)func_L06_00300AB0, moby);
+    func_L06_00300DA8(moby);
+}
 typedef struct {
     f32 pos[4][4];
     u32 col[4];
