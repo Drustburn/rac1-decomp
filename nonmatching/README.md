@@ -49,7 +49,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_001E9EC8`](game/func_001E9EC8.c) | game | 0 | ? | - |
 | [`func_001EBB48`](game/func_001EBB48.c) | game | 0 | ? | - |
 | [`func_001F3890`](game/func_001F3890.c) | game | 768 | ? | - |
-| [`func_001F4868`](game/func_001F4868.c) | game | 328 | ? | - |
 | [`func_001F7070`](game/func_001F7070.c) | game | 1264 | ? | - |
 | [`func_001F7E98`](functional/func_001F7E98.c) | functional | 96 | ? | - |
 | [`func_001F9840`](game/func_001F9840.c) | game | 0 | ? | - |
