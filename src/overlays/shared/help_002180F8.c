@@ -221,8 +221,8 @@ void Hero_UpdateStateMovement(void) {
 
                     *(u128 *)vec[0] = 0;
                     vec[0][0] = 1.0f;
-                    func_001F9EC0(D_0013F450.motion.unk170.f, vec[0], D_L00_00166D80.f350);
-                    D_0013F450.motion.move_yaw = D_L00_00166D80.f158;
+                    func_001F9EC0(D_0013F450.motion.unk170.f, vec[0], gCameraLvl.f350);
+                    D_0013F450.motion.move_yaw = gCameraLvl.f158;
                     Hero_TurnToHeading(0, D_0015EE64, D_0015EE64 * 0.0f, D_0015EE6C * 174.53293f);
                     if (*(int *)&D_L00_0015F768 > 0) {
                         if (func_001F9908((int *)&D_L00_0015F768)) {
@@ -1130,8 +1130,8 @@ void Hero_UpdateStateMovement(void) {
             if (D_0013F450.unk4B8 != 0.0f) {
                 if (D_0013F450.air_frames.s == 0) {
                     if (D_0013F450.unk4C4 == 0) {
-                        D_L00_00166D80.f160 = 0.2f;
-                        D_L00_00166D80.f168 = scale_ticks(0x28);
+                        gCameraLvl.f160 = 0.2f;
+                        gCameraLvl.f168 = scale_ticks(0x28);
                     }
                     D_0013F450.unk4C4++;
                 }
@@ -2018,9 +2018,9 @@ void Hero_UpdateStateMovement(void) {
                             float a;
 
                             Hero_SetHeadingFromStick(1.0f, 0);
-                            a = FastDiffRots(D_0013F450.motion.move_yaw, D_L00_00166D80.f158);
+                            a = FastDiffRots(D_0013F450.motion.move_yaw, gCameraLvl.f158);
                             if (FastDiffRots(a, 1.5707964f) < 1.2217305f || FastDiffRots(a, -1.5707964f) < 1.2217305f) {
-                                if (FastDiffRots(FastSubRots(D_0013F450.motion.move_yaw, D_L00_00166D80.f158), 1.5707964f) < 0.7853982f) {
+                                if (FastDiffRots(FastSubRots(D_0013F450.motion.move_yaw, gCameraLvl.f158), 1.5707964f) < 0.7853982f) {
                                     D_0013F450.unk5A8 = 2;
                                 } else {
                                     D_0013F450.unk5A8 = 3;
@@ -3058,8 +3058,8 @@ void Hero_UpdateStateMovement(void) {
                 MobySphereHitDirectional((int)D_0013F450.moby, 2.7f, vec[0], 0x30000, 40.0f, 1.0f, 0, 1, 0);
             }
             if (Hero_IsTimeInWindow(30.0f) || Hero_IsTimeInWindow(0.0f)) {
-                D_L00_00166D80.f160 = 0.1f;
-                D_L00_00166D80.f168 = scale_ticks(0x14);
+                gCameraLvl.f160 = 0.1f;
+                gCameraLvl.f168 = scale_ticks(0x14);
             }
             k = 1.0f;
             Hero_SetHeadingFromStick(D_0015EE6C * 6.0f, 0);

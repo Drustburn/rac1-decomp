@@ -455,7 +455,7 @@ float Target_ScoreCandidate(void *o_v, float yaw, float range, float ylim, float
     m = a;
     p = FastDiffRots(func_L00_001FF860(func_001F9D48(v, o + 0x10), *(float *)(o + 0x18) - v[2]), 0.0f);
     if (*(int *)(g + 0x2084) == 1 || *(int *)(g + 0x2084) == 0x1E) {
-        char *c = D_L00_00166D80;
+        char *c = gCameraLvl;
         float b = FastDiffRots(func_L00_001FF860(*(float *)(o + 0x10) - *(float *)(c + 0x140), *(float *)(o + 0x14) - *(float *)(c + 0x144)), *(float *)(c + 0x158));
         p = FastDiffRots(func_L00_001FF860(func_001F9D48(c + 0x140, o + 0x10), *(float *)(o + 0x18) - *(float *)(c + 0x148)), -*(float *)(c + 0x154));
         m = p;

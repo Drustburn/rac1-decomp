@@ -855,8 +855,8 @@ void MineUpdate(M910 *m) {
                 } else {
                     Moby_PlaySound(2, 0, (int)m);
                 }
-                D_L00_00166D80.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.050000012f;
-                D_L00_00166D80.i168 = scale_ticks(0x19);
+                gCameraLvl.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.050000012f;
+                gCameraLvl.i168 = scale_ticks(0x19);
                 FastVecDist(&m->pos, D_G910.pos);
                 if (D_E910.b11 != 0) {
                     Moby639Spawn((char *)&b, (char *)&m->pos, 0, 0);
@@ -1711,8 +1711,8 @@ void HeroBombUpdate(M_2aedd0 *m) {
                         }
                     }
                 }
-                D_L00_00166D80.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.4f - 20.0f * 0.0175f;
-                D_L00_00166D80.i168 = scale_ticks(0x19);
+                gCameraLvl.f160 = dist < 20.0f ? 0.4f - dist * 0.0175f : 0.4f - 20.0f * 0.0175f;
+                gCameraLvl.i168 = scale_ticks(0x19);
                 FastVecDist(&m->pos, D_G910.pos);
                 Moby639Spawn((char *)&rec, (char *)&m->pos, 0, 0);
                 if (m->state != 2) {
@@ -2521,8 +2521,8 @@ void MissileUpdate(M910 *m) {
         if(!reduced) func_L00_002ADBB0(m,(&m->pos),&blast_velocity,(size+size),scale_ticks(19),255,255,255,32);
         motion.f[0]=0.0f;
         m->bBC=0;
-        D_L00_00166D80.f160=distance<20.0f ? 0.4f-distance*0.0175f : 0.4f-20.0f*0.0175f;
-        D_L00_00166D80.i168=scale_ticks(25);
+        gCameraLvl.f160=distance<20.0f ? 0.4f-distance*0.0175f : 0.4f-20.0f*0.0175f;
+        gCameraLvl.i168=scale_ticks(25);
         Moby_PlaySound(0,0,(int)m);
         if(!reduced) {
             if(D_0013E620.bB) Moby639Spawn((char *)&gold_effect,(char *)(&m->pos),0,0);

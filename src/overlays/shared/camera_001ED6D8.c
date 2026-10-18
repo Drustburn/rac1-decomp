@@ -32,7 +32,7 @@ extern void func_001F9BC0(void *);
 
 /* Initialises the camera slot tables and the camera state from the hero's transform. */
 void Camera_InitSlots(void) {
-    char *g = (char *)&D_L00_00166D80;
+    char *g = (char *)&gCameraLvl;
     char *g1;
     char *q;
     char *p1;
@@ -43,12 +43,12 @@ void Camera_InitSlots(void) {
     *(int *)(g + 0x394) = 0;
     *(int *)(g + 0x398) = 0;
     *(float *)&D_L00_0015F040 = 0.75f;
-    D_L00_0015F04C = 0;
+    gCamPostUpdCountLvl = 0;
     for (k = 0; k < 48; k++) {
-        D_L00_00167250[k].s8E = 0;
-        D_L00_00169990[k] = 0;
+        gCameraSlotsLvl[k].s8E = 0;
+        gCameraSlotUsedLvl[k] = 0;
     }
-    g1 = (char *)&D_L00_00166D80;
+    g1 = (char *)&gCameraLvl;
     base = D_0013E633 + 0xE1D;
     q = g1 + 0x190;
     p1 = g1 + 0x1B0;
@@ -77,12 +77,12 @@ void Camera_InitSlots(void) {
         *(float *)(q + 0xD8) = f1;
     }
     i = 0;
-    if (D_L00_0015F054 > 0) {
+    if (gCameraDefCountLvl > 0) {
         do {
             int off = i * 32;
-            char *e = D_L00_0015F050 + off;
+            char *e = gCameraDefsLvl + off;
             char *r = *(char **)(e + 0x1C);
-            Elem *el = &D_L00_00167250[i];
+            Elem *el = &gCameraSlotsLvl[i];
             int h;
             el->s84 = i;
             *(Elem **)(r + 4) = el;
@@ -97,11 +97,11 @@ void Camera_InitSlots(void) {
             el->c7C = r[0x1C];
             el->i74 = (unsigned char)r[0x1F];
             h = *(unsigned short *)(e + 0xC);
-            D_L00_00169990[i] = 1;
+            gCameraSlotUsedLvl[i] = 1;
             el->s86 = h;
             el->s8C = Camera_FindTypeIndex((short)h);
             i++;
-        } while (i < D_L00_0015F054);
+        } while (i < gCameraDefCountLvl);
     }
     CameraResetBehindHero();
     *(short *)D_L00_00166FF0 = 0;

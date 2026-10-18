@@ -972,7 +972,7 @@ func_001E9EC8	Level_ParseObjectTables	body: 353 lines walking the level header, 
 func_001EBAF0	IsStateEntryActive	body: 0x70-byte record at index; true when id matches and state byte is 1 or 2	
 func_001EC2B8	Camera_SwitchActive	body: picks blend mode/rates by old camera transition state and new descriptor kind, copies pose, installs next camera	
 func_001ED818	CameraPreUpdate	body: smooths camera dir/pos toward hero, tracks history and ground moby; called before camera update with the draw-mode pick	
-func_001EDCE8	Camera_PickDrawModes	body: sets D_0015F09C/0A0/098 draw-mode words from hero state and mode flags	
+func_001EDCE8	Camera_PickCollisionMasks	body: sets the camera's probe masks gCamSphereMask (MoveCameraToward passes it to coll_sphere), gCamSphereMaskBase and gCamLineMask (a line-probe mask in vendor_002E1660.c) from hero state; was Camera_PickDrawModes, but nothing draws with them	override
 func_001EDFF8	LensFlareUpdate	body: projects the flare moby to screen and fills per-element alpha, texture, colour, distance, scale tables	
 func_001EE3B0	DrawFlareSprites	body: switch on mode draws a fan, four offset quads or one quad of the effect texture through func_001F5E60	
 func_001F6410	DrawOutlinedRect	body: 9 DrawRectOverlay calls offset +-1/3/5 around one rect, first in dark colour	
@@ -2890,7 +2890,6 @@ func_001E97A0	Profile_Checkpoint	empty in retail; called mid-frame in space.c st
 func_001E97A8	Profile_FrameEnd	empty in retail; called at end of space.c state-0 frame and end of transition render	
 func_001E97B0	Profile_FrameBegin	empty in retail; called first in space.c case 0/8 and 3 and at start of transition render	
 func_001E97C8	NullMobyUpdate	empty in retail; compared against moby class update fn pointer in Level 0 scan, takes 1 arg	
-func_001EDE08	Camera_StepFade	Per frame: D_0015F53C (fade level, set to 1.0 in transition) -= camera+0x258, clamped at 0; called from Camera_UpdateFrame	
 func_001F2558	ProfileMarker_End	Empty in retail; called with a profile slot and id after the 2560 call at the end of tie/shrub/moby draw sections	
 func_001F2560	ProfileMarker_Begin	Empty in retail; called with a profile slot and id at the start of tie/shrub/sky/moby draw sections	
 func_00204BE8	Level_StartDataRead	DoSpaceTransition: after setting the target level, picks top-of-RAM buffer from header sizes and submits the stream read	
@@ -3021,9 +3020,6 @@ func_002348B8	VuChain_SetLevelOffset	stores D_001DE338[level index, 0 if >=19] i
 func_00238D88	DebugProfiler_Hook	empty in retail; called by the draw loop when D_0015F534 bit 0x10000 set, after Dma_AppendRefDirect3	
 func_002391E8	VendorTalkUpdate	animation/state machine for the vendor's talking moby: blends sequences 2-5 with Music stream sync; VendorBuyDialogUpdate calls it	
 func_0023CE18	StrFile_Init	stores its two args into the StrFile and returns 1; sibling of strFileDelete (movie strfile.c)	
-func_L00_001EB7C8	CameraScript_ResetObject	called by CameraScript2; sets camera object short 0x7E to 1 and byte 0x7D to 0	
-func_L00_001EBDA0	Camera_SelectActive	called each frame; scans 0x30 camera slots by priority, switches camera, runs its handler	
-func_L00_001ED2C0	Camera_UpdateModeFlags	head of larger camera function (see comment in camera_001EB508.c); sets mode flags from hero state	
 func_L00_001F70F0	Frame_RollCounter	called from the main loop each iteration; moves counter 0x364 to 0x368 and clears it	
 func_L00_001F75F8	OcclGrid_Lookup	same grid lookup as ParseOcclGrid (comment in draw_001F3A78.c); name ParseOcclGrid taken	
 func_L00_001F8750	Level_ResetGameplayGlobals	zeroes a set of globals; called in level load just before HeroInit	
@@ -3318,3 +3314,37 @@ func_L18_002F8B00	FinalBoss_SpawnBurstParticles	called by FinalBossUpdate; spawn
 func_L18_002F8CE0	FinalBoss_DrawGlowBillboards	draw callback registered by FinalBossUpdate; billboards at joints with sine colour tween	
 func_L18_002FB080	Moby1563_DrawQuad	draw callback registered in Moby1563Update; textured billboard quad with colour fade	
 func_L18_002FB318	Moby1563_DrawQuadAlt	sibling draw callback of Moby1563_DrawQuad with a different basis; same pk setup	
+func_001EDE08	Camera_UpdateFade	body: takes gCamera.follow.fade_rate (+0x258) off gFade each frame and stops both at 0 (docs/kb/refactor-camera.md)	
+func_L00_001ED2C0	Camera_PickCollisionMasksLvl	body: level copy of Camera_PickCollisionMasks (func_001EDCE8); Lvl = level copy of the executable function	
+func_L00_001EBDA0	UpdateAllCamerasLvl	body: level copy of UpdateAllCameras (func_001EC7C8) over the level's 48 slots; Lvl = level copy of the executable function	
+func_L00_001EB7C8	Camera_ReleaseCurrent	body: sets the current camera's transition_state to 1 and handoff_state to 0, so any eligible camera may take over (Camera_ActivationCheckPriority)	
+D_00187040	gCamera	camera block, 0x3A0 bytes (transition.c clears it): CameraSystem in include/camera.h; draw.c reads its view matrix and eye position	
+D_00187510	gCameraSlots	48 0xA0-byte Camera records UpdateAllCameras scans (camera.c)	
+D_00189C50	gCameraSlotUsed	48 words, nonzero = slot in use (UpdateAllCameras, Camera_InitSlots)	
+D_00189310	gCameraBackup	BackupCurrentCam copies the current camera (0xA0 bytes) here	
+D_00189750	gCamPrevState	0x280-byte state buffer of the previous camera; the current camera's is the 0x280 bytes before it (Camera_SwitchActive)	
+D_001899D0	gCamBackupState	0x280-byte state buffer BackupCurrentCam fills for gCameraBackup	
+D_001893B0	gCamPostUpdFuncs	callbacks ExecuteCamPostUpdFuncs runs and clears	
+D_0015F08C	gCamPostUpdCount	number of gCamPostUpdFuncs entries (ExecuteCamPostUpdFuncs)	
+D_0015F090	gCameraDefs	the level's camera table, 0x20-byte CameraDef rows (Camera_SwitchActive, Camera_ActivationCheckPriority)	
+D_001E8F80	gCameraTypes	the camvtbl table of 0x14-byte CameraType rows {id, check, activate, update, exit} the camera hooks dispatch through	
+D_0018C418	gDebugFreeCam	debug free-camera state: +0x14 set stops the camera code writing the view (UpdateCamera); DebugFreeCameraUpdate reads the level copy	
+D_0015F09C	gCamSphereMask	collision mask of the camera's sphere probes (level copy passed to coll_sphere by MoveCameraToward); Camera_PickCollisionMasks sets it	
+D_0015F0A0	gCamSphereMaskBase	gCamSphereMask before bit 0x80 is added (Camera_PickCollisionMasks)	
+D_0015F098	gCamLineMask	collision mask of the camera's line probes (level copy passed to func_L00_001EFFF0 in vendor_002E1660.c); Camera_PickCollisionMasks sets it	
+D_0015F53C	gFade	fade level: 1.0 on a level load (transition.c), cut by Camera_UpdateFade, a cutscene steps it down by 0.34 (tieproc_00299108.c level copy)	
+D_L00_00166D80	gCameraLvl	level copy of gCamera (CameraSystem, include/camera.h); Lvl = the level build's copy of the executable symbol	
+D_L00_00167250	gCameraSlotsLvl	level copy of gCameraSlots (Camera_InitSlots, FindCameraById)	
+D_L00_00169990	gCameraSlotUsedLvl	level copy of gCameraSlotUsed (Camera_InitSlots)	
+D_L00_00169210	gCamCurStateLvl	state buffer of the current camera, level build (CameraResetBehindHero); 0x280 bytes before gCamPrevStateLvl	
+D_L00_00169490	gCamPrevStateLvl	level copy of gCamPrevState (SwitchCamera)	
+D_L00_001690F0	gCamPostUpdFuncsLvl	level copy of gCamPostUpdFuncs (Camera_RunQueuedCallbacks)	
+D_L00_0015F04C	gCamPostUpdCountLvl	level copy of gCamPostUpdCount (Camera_RunQueuedCallbacks, Camera_InitSlots)	
+D_L00_0015F050	gCameraDefsLvl	level copy of gCameraDefs (Camera_InitSlots, SwitchCamera)	
+D_L00_0015F054	gCameraDefCountLvl	rows in gCameraDefsLvl (Camera_InitSlots)	
+D_L00_001EAC00	gCameraTypesLvl	the level's camvtbl rows read by UpdateAllCamerasLvl and Camera_FindTypeIndex	
+D_L00_0016C158	gDebugFreeCamLvl	level copy of gDebugFreeCam (Camera_UpdateFrame, DebugFreeCameraUpdate)	
+D_L00_0015F05C	gCamSphereMaskLvl	level copy of gCamSphereMask (MoveCameraToward passes it to coll_sphere)	
+D_L00_0015F060	gCamSphereMaskBaseLvl	level copy of gCamSphereMaskBase (Camera_PickCollisionMasksLvl)	
+D_L00_0015F058	gCamLineMaskLvl	level copy of gCamLineMask (Camera_PickCollisionMasksLvl; vendor_002E1660.c line probes)	
+D_L00_0015F4FC	gFadeLvl	level copy of gFade (tieproc_00299108.c cutscene fade)	

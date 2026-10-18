@@ -25,9 +25,9 @@ extern void *D_001871C0 NOT_SDA;
 
 /* BackupCurrentCam */
 void BackupCurrentCam(void) {
-    FastMemCopy(D_00189310, D_001871C0, 0xA0);
-    FastMemCopy(D_001899D0, D_001899D0 - 0x500, 0x280);
-    *(void **)(D_00189310 + 0x70) = D_001899D0;
+    FastMemCopy(gCameraBackup, D_001871C0, 0xA0);
+    FastMemCopy(gCamBackupState, gCamBackupState - 0x500, 0x280);
+    *(void **)(gCameraBackup + 0x70) = gCamBackupState;
 }
 
 extern int D_0015F08C MACRO_ADDR;
@@ -40,10 +40,10 @@ extern void (*D_001893B0[])(void);
 void ExecuteCamPostUpdFuncs(void) {
     int i;
 
-    for (i = 0; i < D_0015F08C; i++) {
-        D_001893B0[i]();
+    for (i = 0; i < gCamPostUpdCount; i++) {
+        gCamPostUpdFuncs[i]();
     }
-    D_0015F08C = 0;
+    gCamPostUpdCount = 0;
 }
 
 /* Not a standalone function: no `jr $31` -- dead-value computation
@@ -133,7 +133,7 @@ extern DispatchRec D_001E8F80[];
  */
 /* Camera_runSetupToNewCam(UpdateCam *) */
 void Camera_runSetupToNewCam(void *arg0) {
-    void (*fn)(void *) = D_001E8F80[*(short *)((char *)arg0 + 0x8C)].fn_08;
+    void (*fn)(void *) = gCameraTypes[*(short *)((char *)arg0 + 0x8C)].fn_08;
     if (fn != 0) {
         fn(arg0);
     }
@@ -287,11 +287,11 @@ void Camera_SwitchActive(struct UpdateCam *next_camera) {
     previous_camera->handoff_state = 0;
     previous_camera->activation_blocked = 0;
     D_00187040_EC2B8.previous = previous_camera;
-    FastMemCopy(D_00189750, D_00189750 - 0x280,
+    FastMemCopy(gCamPrevState, gCamPrevState - 0x280,
                            0x280);
-    D_00187040_EC2B8.previous->saved_state = D_00189750;
+    D_00187040_EC2B8.previous->saved_state = gCamPrevState;
     D_00187040_EC2B8.current = next_camera;
-    next_camera->saved_state = D_00189750 - 0x280;
+    next_camera->saved_state = gCamPrevState - 0x280;
     D_00187040_EC2B8.snapshot_pending = 0;
     func_001EC270_EC2B8(next_camera);
     BackupCurrentCam();
@@ -370,7 +370,7 @@ int Camera_ActivationCheckPriority(void *cur, void *other) {
         }
         break;
     case 4: {
-        char *p = (char *)D_0015F090[*(short *)(c + 0x84)].unk1C;
+        char *p = (char *)gCameraDefs[*(short *)(c + 0x84)].unk1C;
 
         if (o != 0 && *(short *)(o + 0x7E) == 0 && !(state[8] > *(unsigned char *)(o + 0x7C))) {
             return 0;
@@ -394,7 +394,7 @@ int Camera_ActivationCheckPriority(void *cur, void *other) {
             return 1;
         }
         {
-            CamRec20 *rec = &D_0015F090[*(short *)(c + 0x84)];
+            CamRec20 *rec = &gCameraDefs[*(short *)(c + 0x84)];
             int g = *(int *)((char *)rec->unk1C + 0x24);
 
             if (g < 0 || (*(int *)(base + 0x560) == D_0015F040[g].unk10
@@ -417,7 +417,7 @@ __asm__(".section .text\n\tnop\n");
    +8; identical 1/68 operand-order residual, same cause. */
 /* Camera_Exit(UpdateCam *) */
 void Camera_Exit(void *arg0) {
-    void (*fn)(void *) = D_001E8F80[*(short *)((char *)arg0 + 0x8C)].fn_10;
+    void (*fn)(void *) = gCameraTypes[*(short *)((char *)arg0 + 0x8C)].fn_10;
     if (fn != 0) {
         fn(arg0);
     }
@@ -459,8 +459,8 @@ int UpdateAllCameras(void) {
     Camera_Exit(cur);
 
     for (i = 0; i < 0x30; i++) {
-        if (D_00189C50[i] != 0) {
-            rec = &D_00187510[i];
+        if (gCameraSlotUsed[i] != 0) {
+            rec = &gCameraSlots[i];
             if (rec != cur) {
                 if (Camera_ActivationCheckPriority(rec, cur)) {
                     cur = rec;
@@ -717,7 +717,7 @@ int Camera_StepBlend(void *arg0, void *arg1) {
     }
     t = CosineInterpolate(0.0f, 1.0f, cam[3]);
     FastVecAdd(cam + 12, D_0013F590, cam + 12);
-    st = D_0018C418;
+    st = gDebugFreeCam;
     cam[16] = cam[12] + (to[12] - cam[12]) * t;
     cam[17] = cam[13] + (to[13] - cam[13]) * t;
     cam[18] = cam[14] + (to[14] - cam[14]) * t;
@@ -1122,7 +1122,7 @@ extern float func_00214440(void *, int);
    surface height + 0.04. Off for camera mode 6 or while D_0015F6E8 is
    set. */
 void Camera_UpdateUnderwaterFlag(void) {
-    char *cam = D_00187040;
+    char *cam = gCamera;
     float a[4];
     float b[4];
     int i;
@@ -1139,7 +1139,7 @@ void Camera_UpdateUnderwaterFlag(void) {
     while (i < 6 && func_001EFE10(a, b, 0x12, 0, 0) != 0) {
         if (func_001F0F00() == 0) {
             float h = GetGroundHeight(D_00194220, 0) + 0.04f;
-            char *c2 = D_00187040;
+            char *c2 = gCamera;
 
             if (*(float *)(c2 + 0x148) < h) {
                 *(int *)(c2 + 0x394) = 1;
@@ -1166,45 +1166,45 @@ extern int D_0015F098 MACRO_ADDR;
    0x12E6, 0x12EC, 0x12E4 overrides. Each arm ORs the new mode in itself
    (the constants fold per arm, as in retail), and each block reads
    D_0013F450 through its own local (%hi kept, %lo rebuilt). */
-void Camera_PickDrawModes(void) {
+void Camera_PickCollisionMasks(void) {
     char *c = D_001871D0;
     char *g = D_0013F450;
     int st;
 
-    D_0015F09C = 0x14;
+    gCamSphereMask = 0x14;
     st = *(int *)(g + 0x208C);
     if (st == 0x11 || st == 0x12 || *(int *)(g + 0x2084) == 0x73) {
-        D_0015F09C = 0x34;
+        gCamSphereMask = 0x34;
     }
     {
         char *g2 = D_0013F450;
         if (*(int *)(g2 + 0x208C) != 0x11
             && *(float *)(g2 + 0x2F0) < *(float *)(D_00187180 + 8)) {
-            D_0015F09C = 0x14;
+            gCamSphereMask = 0x14;
         }
     }
     {
         unsigned char *g3 = (unsigned char *)D_0013F450;
-        D_0015F0A0 = D_0015F09C;
-        D_0015F09C |= 0x80;
-        D_0015F098 = 0xB4;
+        gCamSphereMaskBase = gCamSphereMask;
+        gCamSphereMask |= 0x80;
+        gCamLineMask = 0xB4;
         if (g3[0x12E5]) {
             *(int *)(c + 0xC0) = 0x100;
-            D_0015F098 |= *(int *)(c + 0xC0);
+            gCamLineMask |= *(int *)(c + 0xC0);
         } else if (g3[0x12EB]) {
             *(int *)(c + 0xC0) = 0xB00;
-            D_0015F098 |= *(int *)(c + 0xC0);
+            gCamLineMask |= *(int *)(c + 0xC0);
         } else if (g3[0x12E6]) {
             *(int *)(c + 0xC0) = 0x300;
-            D_0015F098 |= *(int *)(c + 0xC0);
+            gCamLineMask |= *(int *)(c + 0xC0);
         } else if (g3[0x12EC]) {
             *(int *)(c + 0xC0) = 0xD00;
-            D_0015F098 |= *(int *)(c + 0xC0);
+            gCamLineMask |= *(int *)(c + 0xC0);
         } else if (g3[0x12E4]) {
             *(int *)(c + 0xC0) = 0;
-            D_0015F098 |= *(int *)(c + 0xC0);
+            gCamLineMask |= *(int *)(c + 0xC0);
         } else {
-            D_0015F098 |= *(int *)(c + 0xC0);
+            gCamLineMask |= *(int *)(c + 0xC0);
         }
     }
 }
@@ -1214,16 +1214,16 @@ extern float D_0015F53C MACRO_ADDR;
 
 /* D_0015F53C is a MACRO_ADDR float: $gp-relative in the delay slots,
    lui $1 in the body. */
-void Camera_StepFade(void) {
-    char *c = D_00187040;
+void Camera_UpdateFade(void) {
+    char *c = gCamera;
     float a = *(float *)(c + 0x258);
 
     if (a != 0.0f) {
-        float t = D_0015F53C - a;
-        D_0015F53C = t;
+        float t = gFade - a;
+        gFade = t;
         if (t <= 0.0f) {
             *(float *)(c + 0x258) = 0.0f;
-            D_0015F53C = 0.0f;
+            gFade = 0.0f;
         }
     }
 }
@@ -1258,10 +1258,10 @@ void UpdateCamera(void) {
         *(short *)D_001872B0 = 0;
         D_001872B0[2] = 0;
     }
-    c = D_00187040;
+    c = gCamera;
     (*(int *)(c + 0x398))++;
-    Camera_StepFade();
-    Camera_PickDrawModes();
+    Camera_UpdateFade();
+    Camera_PickCollisionMasks();
     CameraPreUpdate();
     UpdateAllCameras();
     target = *(char **)(c + 0x180);
@@ -1271,7 +1271,7 @@ void UpdateCamera(void) {
     if (*(short *)(c + 0x270) == 3) {
         Camera_UpdateBlend(target);
     } else {
-        char *st = D_0018C418;
+        char *st = gDebugFreeCam;
         if (*(int *)(st + 0x14) != 0) {
             goto frozen;
         }
@@ -1281,7 +1281,7 @@ void UpdateCamera(void) {
         qcopy(c + 0x370, target + 0x20);
     }
     {
-        char *st = D_0018C418;
+        char *st = gDebugFreeCam;
         if (*(int *)(st + 0x14) == 0) {
             func_001FA460(m, D_00187390);
             MatrixToEuler(m, D_00187390 - 0x200);

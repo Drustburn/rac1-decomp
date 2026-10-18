@@ -1815,7 +1815,7 @@ func_001E94A8	ResetTextureAllocator	descriptive	config/names_local.tsv	body: cle
 func_001E99D8	GameBootSequence	descriptive	config/names_local.tsv	clears level bss, shows intro/loading images, plays movie, loads sound bank before first level	
 func_001E9EC8	Level_ParseObjectTables	descriptive	config/names_local.tsv	body: 353 lines walking the level header, building shrub/tie/class tables, returns end pointer; called from level load	
 func_001EC2B8	Camera_SwitchActive	descriptive	config/names_local.tsv	body: picks blend mode/rates by old camera transition state and new descriptor kind, copies pose, installs next camera	
-func_001EDCE8	Camera_PickDrawModes	descriptive	config/names_local.tsv	body: sets D_0015F09C/0A0/098 draw-mode words from hero state and mode flags	
+func_001EDCE8	Camera_PickCollisionMasks	descriptive	config/names_local.tsv	body: sets the camera's probe masks gCamSphereMask (MoveCameraToward passes it to coll_sphere), gCamSphereMaskBase and gCamLineMask (a line-probe mask in vendor_002E1660.c) from hero state; was Camera_PickDrawModes, but nothing draws with them	Camera_PickDrawModes
 func_001F6598	Font_EnableColorCodes	descriptive	config/names_local.tsv	body: sets D_0015F59C=1, which the string drawer tests before applying control-code colours	
 func_001F65A8	Font_DisableColorCodes	descriptive	config/names_local.tsv	body: clears D_0015F59C, the colour-code flag used by the string drawer	
 func_001F75D0	Font_PrintWindowAlt	descriptive	config/names_local.tsv	body: same as the regular version with effect tex 2 and second font table	
@@ -3455,7 +3455,6 @@ func_001E97A0	Profile_Checkpoint	descriptive	config/names_local.tsv	empty in ret
 func_001E97A8	Profile_FrameEnd	descriptive	config/names_local.tsv	empty in retail; called at end of space.c state-0 frame and end of transition render	
 func_001E97B0	Profile_FrameBegin	descriptive	config/names_local.tsv	empty in retail; called first in space.c case 0/8 and 3 and at start of transition render	
 func_001E97C8	NullMobyUpdate	descriptive	config/names_local.tsv	empty in retail; compared against moby class update fn pointer in Level 0 scan, takes 1 arg	
-func_001EDE08	Camera_StepFade	descriptive	config/names_local.tsv	Per frame: D_0015F53C (fade level, set to 1.0 in transition) -= camera+0x258, clamped at 0; called from Camera_UpdateFrame	
 func_001F2558	ProfileMarker_End	descriptive	config/names_local.tsv	Empty in retail; called with a profile slot and id after the 2560 call at the end of tie/shrub/moby draw sections	
 func_001F2560	ProfileMarker_Begin	descriptive	config/names_local.tsv	Empty in retail; called with a profile slot and id at the start of tie/shrub/sky/moby draw sections	
 func_00204BE8	Level_StartDataRead	descriptive	config/names_local.tsv	DoSpaceTransition: after setting the target level, picks top-of-RAM buffer from header sizes and submits the stream read	
@@ -3582,9 +3581,6 @@ func_002348B8	VuChain_SetLevelOffset	descriptive	config/names_local.tsv	stores D
 func_00238D88	DebugProfiler_Hook	descriptive	config/names_local.tsv	empty in retail; called by the draw loop when D_0015F534 bit 0x10000 set, after Dma_AppendRefDirect3	
 func_002391E8	VendorTalkUpdate	descriptive	config/names_local.tsv	animation/state machine for the vendor's talking moby: blends sequences 2-5 with Music stream sync; VendorBuyDialogUpdate calls it	
 func_0023CE18	StrFile_Init	descriptive	config/names_local.tsv	stores its two args into the StrFile and returns 1; sibling of strFileDelete (movie strfile.c)	
-func_L00_001EB7C8	CameraScript_ResetObject	descriptive	config/names_local.tsv	called by CameraScript2; sets camera object short 0x7E to 1 and byte 0x7D to 0	
-func_L00_001EBDA0	Camera_SelectActive	descriptive	config/names_local.tsv	called each frame; scans 0x30 camera slots by priority, switches camera, runs its handler	
-func_L00_001ED2C0	Camera_UpdateModeFlags	descriptive	config/names_local.tsv	head of larger camera function (see comment in camera_001EB508.c); sets mode flags from hero state	
 func_L00_001F70F0	Frame_RollCounter	descriptive	config/names_local.tsv	called from the main loop each iteration; moves counter 0x364 to 0x368 and clears it	
 func_L00_001F8750	Level_ResetGameplayGlobals	descriptive	config/names_local.tsv	zeroes a set of globals; called in level load just before HeroInit	
 func_L00_00204190	Moby_ClearGadgetControl	descriptive	config/names_local.tsv	called from FighterJetUpdate and Moby_EndGadgetControl; clears a short control flag	
@@ -3869,3 +3865,37 @@ func_L18_002F8B00	FinalBoss_SpawnBurstParticles	descriptive	config/names_local.t
 func_L18_002F8CE0	FinalBoss_DrawGlowBillboards	descriptive	config/names_local.tsv	draw callback registered by FinalBossUpdate; billboards at joints with sine colour tween	
 func_L18_002FB080	Moby1563_DrawQuad	descriptive	config/names_local.tsv	draw callback registered in Moby1563Update; textured billboard quad with colour fade	
 func_L18_002FB318	Moby1563_DrawQuadAlt	descriptive	config/names_local.tsv	sibling draw callback of Moby1563_DrawQuad with a different basis; same pk setup	
+func_001EDE08	Camera_UpdateFade	descriptive	config/names_local.tsv	body: takes gCamera.follow.fade_rate (+0x258) off gFade each frame and stops both at 0 (docs/kb/refactor-camera.md)	
+func_L00_001ED2C0	Camera_PickCollisionMasksLvl	descriptive	config/names_local.tsv	body: level copy of Camera_PickCollisionMasks (func_001EDCE8); Lvl = level copy of the executable function	
+func_L00_001EBDA0	UpdateAllCamerasLvl	descriptive	config/names_local.tsv	body: level copy of UpdateAllCameras (func_001EC7C8) over the level's 48 slots; Lvl = level copy of the executable function	
+func_L00_001EB7C8	Camera_ReleaseCurrent	descriptive	config/names_local.tsv	body: sets the current camera's transition_state to 1 and handoff_state to 0, so any eligible camera may take over (Camera_ActivationCheckPriority)	
+D_00187040	gCamera	descriptive	config/names_local.tsv	camera block, 0x3A0 bytes (transition.c clears it): CameraSystem in include/camera.h; draw.c reads its view matrix and eye position	
+D_00187510	gCameraSlots	descriptive	config/names_local.tsv	48 0xA0-byte Camera records UpdateAllCameras scans (camera.c)	
+D_00189C50	gCameraSlotUsed	descriptive	config/names_local.tsv	48 words, nonzero = slot in use (UpdateAllCameras, Camera_InitSlots)	
+D_00189310	gCameraBackup	descriptive	config/names_local.tsv	BackupCurrentCam copies the current camera (0xA0 bytes) here	
+D_00189750	gCamPrevState	descriptive	config/names_local.tsv	0x280-byte state buffer of the previous camera; the current camera's is the 0x280 bytes before it (Camera_SwitchActive)	
+D_001899D0	gCamBackupState	descriptive	config/names_local.tsv	0x280-byte state buffer BackupCurrentCam fills for gCameraBackup	
+D_001893B0	gCamPostUpdFuncs	descriptive	config/names_local.tsv	callbacks ExecuteCamPostUpdFuncs runs and clears	
+D_0015F08C	gCamPostUpdCount	descriptive	config/names_local.tsv	number of gCamPostUpdFuncs entries (ExecuteCamPostUpdFuncs)	
+D_0015F090	gCameraDefs	descriptive	config/names_local.tsv	the level's camera table, 0x20-byte CameraDef rows (Camera_SwitchActive, Camera_ActivationCheckPriority)	
+D_001E8F80	gCameraTypes	descriptive	config/names_local.tsv	the camvtbl table of 0x14-byte CameraType rows {id, check, activate, update, exit} the camera hooks dispatch through	
+D_0018C418	gDebugFreeCam	descriptive	config/names_local.tsv	debug free-camera state: +0x14 set stops the camera code writing the view (UpdateCamera); DebugFreeCameraUpdate reads the level copy	
+D_0015F09C	gCamSphereMask	descriptive	config/names_local.tsv	collision mask of the camera's sphere probes (level copy passed to coll_sphere by MoveCameraToward); Camera_PickCollisionMasks sets it	
+D_0015F0A0	gCamSphereMaskBase	descriptive	config/names_local.tsv	gCamSphereMask before bit 0x80 is added (Camera_PickCollisionMasks)	
+D_0015F098	gCamLineMask	descriptive	config/names_local.tsv	collision mask of the camera's line probes (level copy passed to func_L00_001EFFF0 in vendor_002E1660.c); Camera_PickCollisionMasks sets it	
+D_0015F53C	gFade	descriptive	config/names_local.tsv	fade level: 1.0 on a level load (transition.c), cut by Camera_UpdateFade, a cutscene steps it down by 0.34 (tieproc_00299108.c level copy)	
+D_L00_00166D80	gCameraLvl	descriptive	config/names_local.tsv	level copy of gCamera (CameraSystem, include/camera.h); Lvl = the level build's copy of the executable symbol	
+D_L00_00167250	gCameraSlotsLvl	descriptive	config/names_local.tsv	level copy of gCameraSlots (Camera_InitSlots, FindCameraById)	
+D_L00_00169990	gCameraSlotUsedLvl	descriptive	config/names_local.tsv	level copy of gCameraSlotUsed (Camera_InitSlots)	
+D_L00_00169210	gCamCurStateLvl	descriptive	config/names_local.tsv	state buffer of the current camera, level build (CameraResetBehindHero); 0x280 bytes before gCamPrevStateLvl	
+D_L00_00169490	gCamPrevStateLvl	descriptive	config/names_local.tsv	level copy of gCamPrevState (SwitchCamera)	
+D_L00_001690F0	gCamPostUpdFuncsLvl	descriptive	config/names_local.tsv	level copy of gCamPostUpdFuncs (Camera_RunQueuedCallbacks)	
+D_L00_0015F04C	gCamPostUpdCountLvl	descriptive	config/names_local.tsv	level copy of gCamPostUpdCount (Camera_RunQueuedCallbacks, Camera_InitSlots)	
+D_L00_0015F050	gCameraDefsLvl	descriptive	config/names_local.tsv	level copy of gCameraDefs (Camera_InitSlots, SwitchCamera)	
+D_L00_0015F054	gCameraDefCountLvl	descriptive	config/names_local.tsv	rows in gCameraDefsLvl (Camera_InitSlots)	
+D_L00_001EAC00	gCameraTypesLvl	descriptive	config/names_local.tsv	the level's camvtbl rows read by UpdateAllCamerasLvl and Camera_FindTypeIndex	
+D_L00_0016C158	gDebugFreeCamLvl	descriptive	config/names_local.tsv	level copy of gDebugFreeCam (Camera_UpdateFrame, DebugFreeCameraUpdate)	
+D_L00_0015F05C	gCamSphereMaskLvl	descriptive	config/names_local.tsv	level copy of gCamSphereMask (MoveCameraToward passes it to coll_sphere)	
+D_L00_0015F060	gCamSphereMaskBaseLvl	descriptive	config/names_local.tsv	level copy of gCamSphereMaskBase (Camera_PickCollisionMasksLvl)	
+D_L00_0015F058	gCamLineMaskLvl	descriptive	config/names_local.tsv	level copy of gCamLineMask (Camera_PickCollisionMasksLvl; vendor_002E1660.c line probes)	
+D_L00_0015F4FC	gFadeLvl	descriptive	config/names_local.tsv	level copy of gFade (tieproc_00299108.c cutscene fade)	

@@ -11,10 +11,10 @@ extern void (*D_L00_001690F0[])(void);
 
 void Camera_RunQueuedCallbacks(void) {
     int i;
-    for (i = 0; i < D_L00_0015F04C; i++) {
-        D_L00_001690F0[i]();
+    for (i = 0; i < gCamPostUpdCountLvl; i++) {
+        gCamPostUpdFuncsLvl[i]();
     }
-    D_L00_0015F04C = 0;
+    gCamPostUpdCountLvl = 0;
 }
 INCLUDE_ASM("asm/overlays", func_L00_001EB564);
 extern u8 D_L00_00167250_1EB578[] __asm__("D_L00_00167250");
@@ -67,8 +67,8 @@ typedef struct { char pad[0x254]; int p; char pad2[0x18]; short s; char pad3[1];
 extern S D_L00_00166D80;
 
 /* resets the camera sub-object's short at 0x7E to 1 and byte at 0x7D to 0 */
-void CameraScript_ResetObject(void) {
-    char *g = (char *)&D_L00_00166D80;
+void Camera_ReleaseCurrent(void) {
+    char *g = (char *)&gCameraLvl;
     *(short *)(*(char **)(g + 0x180) + 0x7E) = 1;
     *(*(char **)(g + 0x180) + 0x7D) = 0;
 }
@@ -250,7 +250,7 @@ extern void func_L00_001EB890(char *);
 extern void func_L00_001EB508(void);
 
 /* UpdateAllCameras__Fi: iterates over camera slots and switches to best eligible camera */
-int Camera_SelectActive(void) {
+int UpdateAllCamerasLvl(void) {
     char *best = D_L00_00166F00;
     int i;
     int found = 0;
@@ -260,7 +260,7 @@ int Camera_SelectActive(void) {
 
     Camera_runSetupToNewCam(best);
     for (i = 0; i < 0x30; i++) {
-        if (D_L00_00169990[i] != 0) {
+        if (gCameraSlotUsedLvl[i] != 0) {
             char *slot = D_L00_00167250_raw + i * 0xA0;
             if (slot != best && Camera_ActivationCheckPriority(slot, best) != 0) {
                 best = slot;
@@ -390,7 +390,7 @@ extern int D_L00_0015F060 MACRO_ADDR;
 extern int D_L00_0015F05C_w __asm__("D_L00_0015F05C") MACRO_ADDR;
 extern int D_L00_0015F05C_g SDATA(D_L00_0015F05C);
 
-void Camera_UpdateModeFlags(void) {
+void Camera_PickCollisionMasksLvl(void) {
     char *d = D_L00_00166F10;
 
     D_L00_0015F05C_g = 0x14;
@@ -410,38 +410,38 @@ void Camera_UpdateModeFlags(void) {
     }
     {
         int v = D_L00_0015F05C_w;
-        D_L00_0015F060 = v;
+        gCamSphereMaskBaseLvl = v;
         D_L00_0015F05C_w = v | 0x80;
     }
-    D_L00_0015F058 = 0xB4;
+    gCamLineMaskLvl = 0xB4;
     {
         unsigned char *g = (unsigned char *)(D_0013E633 + 0xE1D);
         if (g[0x12E5]) {
             *(int *)(d + 0xC0) = 0x100;
-            D_L00_0015F058 = 0x1B4;
+            gCamLineMaskLvl = 0x1B4;
             return;
         }
         if (g[0x12EB]) {
             *(int *)(d + 0xC0) = 0xB00;
-            D_L00_0015F058 = 0xBB4;
+            gCamLineMaskLvl = 0xBB4;
             return;
         }
         if (g[0x12E6]) {
             *(int *)(d + 0xC0) = 0x300;
-            D_L00_0015F058 = 0x3B4;
+            gCamLineMaskLvl = 0x3B4;
             return;
         }
         if (g[0x12EC]) {
             *(int *)(d + 0xC0) = 0xD00;
-            D_L00_0015F058 = 0xDB4;
+            gCamLineMaskLvl = 0xDB4;
             return;
         }
         if (g[0x12E4] != 0) {
             *(int *)(d + 0xC0) = 0;
-            D_L00_0015F058 = 0xB4;
+            gCamLineMaskLvl = 0xB4;
             return;
         }
-        D_L00_0015F058 = *(int *)(d + 0xC0) | 0xB4;
+        gCamLineMaskLvl = *(int *)(d + 0xC0) | 0xB4;
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_001ED380);
@@ -482,10 +482,10 @@ void Camera_UpdateFrame(void) {
     }
     c = D_L00_00166D80_ED428;
     (*(int *)(c + 0x398))++;
-    Camera_StepFade();
-    Camera_UpdateModeFlags();
+    Camera_UpdateFade();
+    Camera_PickCollisionMasksLvl();
     CameraPreUpdate();
-    Camera_SelectActive();
+    UpdateAllCamerasLvl();
     target = *(char **)(c + 0x180);
     if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {
         Camera_CaptureTransform(*(void **)(c + 0x184));
@@ -530,7 +530,7 @@ extern E D_L00_001EAC00[];
 /* Returns the index of the entry with the given key, or of the -1 terminator. */
 int Camera_FindTypeIndex(int key) {
     int i = 0;
-    while (D_L00_001EAC00[i].key != -1 && D_L00_001EAC00[i].key != key) {
+    while (gCameraTypesLvl[i].key != -1 && gCameraTypesLvl[i].key != key) {
         i++;
     }
     return i;
@@ -542,7 +542,7 @@ extern char D_L00_00169210[];
 
 /* resets the camera behind the hero */
 void CameraResetBehindHero(void) {
-    char *g = (char *)&D_L00_00166D80;
+    char *g = (char *)&gCameraLvl;
     float *s, *d, *t, *u;
     char *a;
     if (*(char **)(g + 0x180) != 0) {
@@ -552,7 +552,7 @@ void CameraResetBehindHero(void) {
     }
     *(char **)(g + 0x180) = FindCameraById(0);
     *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
-    *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169210;
+    *(char **)(*(char **)(g + 0x180) + 0x70) = gCamCurStateLvl;
     *(short *)(g + 0x270) = 0;
     CameraPreUpdate();
     Camera_runSetupToNewCam(*(char **)(g + 0x180));
@@ -657,7 +657,7 @@ void MoveCameraToward(float *pos, float r) {
         q = D_L00_00173F70;
         FastVecAdd(pos, pos, d);
         base = D_0013E633 + 0xE1D;
-        for (j = 0; j < 6 && func_L00_001F10E0_f(pos, *(int *)&D_L00_0015F05C, *(void **)(base + 0x2080), r); j++) {
+        for (j = 0; j < 6 && func_L00_001F10E0_f(pos, *(int *)&gCamSphereMaskLvl, *(void **)(base + 0x2080), r); j++) {
             qcopy(pos, q);
             {
                 char *t = D_cam_c.o;
@@ -667,7 +667,7 @@ void MoveCameraToward(float *pos, float r) {
             }
         }
     }
-    if (D_L00_0016C158[5] == 0) {
+    if (gDebugFreeCamLvl[5] == 0) {
         qcopy(&D_L00_00166EC0, pos);
     }
 }

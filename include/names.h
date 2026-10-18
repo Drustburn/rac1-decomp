@@ -1683,7 +1683,7 @@
 #define GameBootSequence                    func_001E99D8
 #define Level_ParseObjectTables             func_001E9EC8
 #define Camera_SwitchActive                 func_001EC2B8
-#define Camera_PickDrawModes                func_001EDCE8
+#define Camera_PickCollisionMasks           func_001EDCE8
 #define Font_EnableColorCodes               func_001F6598
 #define Font_DisableColorCodes              func_001F65A8
 #define Font_PrintWindowAlt                 func_001F75D0
@@ -3323,7 +3323,6 @@
 #define Profile_FrameEnd                    func_001E97A8
 #define Profile_FrameBegin                  func_001E97B0
 #define NullMobyUpdate                      func_001E97C8
-#define Camera_StepFade                     func_001EDE08
 #define ProfileMarker_End                   func_001F2558
 #define ProfileMarker_Begin                 func_001F2560
 #define Level_StartDataRead                 func_00204BE8
@@ -3450,9 +3449,6 @@
 #define DebugProfiler_Hook                  func_00238D88
 #define VendorTalkUpdate                    func_002391E8
 #define StrFile_Init                        func_0023CE18
-#define CameraScript_ResetObject            func_L00_001EB7C8
-#define Camera_SelectActive                 func_L00_001EBDA0
-#define Camera_UpdateModeFlags              func_L00_001ED2C0
 #define Frame_RollCounter                   func_L00_001F70F0
 #define Level_ResetGameplayGlobals          func_L00_001F8750
 #define Moby_ClearGadgetControl             func_L00_00204190
@@ -3737,5 +3733,39 @@
 #define FinalBoss_DrawGlowBillboards        func_L18_002F8CE0
 #define Moby1563_DrawQuad                   func_L18_002FB080
 #define Moby1563_DrawQuadAlt                func_L18_002FB318
+#define Camera_UpdateFade                   func_001EDE08
+#define Camera_PickCollisionMasksLvl        func_L00_001ED2C0
+#define UpdateAllCamerasLvl                 func_L00_001EBDA0
+#define Camera_ReleaseCurrent               func_L00_001EB7C8
+#define gCamera                             D_00187040
+#define gCameraSlots                        D_00187510
+#define gCameraSlotUsed                     D_00189C50
+#define gCameraBackup                       D_00189310
+#define gCamPrevState                       D_00189750
+#define gCamBackupState                     D_001899D0
+#define gCamPostUpdFuncs                    D_001893B0
+#define gCamPostUpdCount                    D_0015F08C
+#define gCameraDefs                         D_0015F090
+#define gCameraTypes                        D_001E8F80
+#define gDebugFreeCam                       D_0018C418
+#define gCamSphereMask                      D_0015F09C
+#define gCamSphereMaskBase                  D_0015F0A0
+#define gCamLineMask                        D_0015F098
+#define gFade                               D_0015F53C
+#define gCameraLvl                          D_L00_00166D80
+#define gCameraSlotsLvl                     D_L00_00167250
+#define gCameraSlotUsedLvl                  D_L00_00169990
+#define gCamCurStateLvl                     D_L00_00169210
+#define gCamPrevStateLvl                    D_L00_00169490
+#define gCamPostUpdFuncsLvl                 D_L00_001690F0
+#define gCamPostUpdCountLvl                 D_L00_0015F04C
+#define gCameraDefsLvl                      D_L00_0015F050
+#define gCameraDefCountLvl                  D_L00_0015F054
+#define gCameraTypesLvl                     D_L00_001EAC00
+#define gDebugFreeCamLvl                    D_L00_0016C158
+#define gCamSphereMaskLvl                   D_L00_0015F05C
+#define gCamSphereMaskBaseLvl               D_L00_0015F060
+#define gCamLineMaskLvl                     D_L00_0015F058
+#define gFadeLvl                            D_L00_0015F4FC
 
 #endif /* NAMES_H */
