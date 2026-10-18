@@ -919,4 +919,78 @@ void DrawShadowedLabel(int x, int y, int mode, unsigned char *p, float scale, fl
     func_001F68E8_c(l, y - 8, d, p, -1);
     Font_EnableColorCodes();
 }
-INCLUDE_ASM("asm/overlays", func_L00_001FCC50);
+typedef void (*LabelFn)(int, int, int, float, float, unsigned char *);
+extern unsigned char *func_001FE540(int);
+
+/* Draws a line-wrapped text entry with fade-in/out at its scroll edges (newline codes become " - " or start a new row). */
+void func_L00_001FCC50(void *rv, int t) {
+    char *r = rv;
+    int x8 = *(short *)(r + 8);
+    int end = x8 + *(short *)(r + 0xA);
+    float f21, f20;
+    unsigned char *p;
+    char buf[256];
+    char *d;
+    int y;
+    int k;
+
+    if (t < x8) return;
+    if (end < t) return;
+    f21 = 1.0f;
+    if (t < x8 + 0x10) f21 = (float)(t - x8) * 0.0625f;
+    if (end - 8 < t) f21 = (float)(end - t) * 0.125f;
+    f20 = 1.0f;
+    if (t < x8 + 0x20) {
+        k = t - 0x10;
+        f20 = (float)(k - x8) * 0.0625f;
+        if (f20 < 0.0f) f20 = 0.0f;
+    }
+    if (end - 0x10 < t) {
+        k = t + 8;
+        f20 = (float)(end - k) * 0.125f;
+        if (f20 < 0.0f) f20 = 0.0f;
+    }
+    p = func_001FE540(*(int *)r);
+    if (*(short *)(r + 0xE) == 1) {
+        d = buf;
+    again:
+        while (*p != 0) {
+            if (*p == 1) {
+                *d++ = 0x20;
+                *d++ = 0x2D;
+                *d++ = 0x20;
+                while (*p == 1) p++;
+                if (*p != 0) goto again;
+                d -= 3;
+            } else {
+                *d++ = *p++;
+            }
+        }
+        {
+            int x = *(short *)(r + 4);
+            int yy = *(short *)(r + 6);
+            int m = *(short *)(r + 0xC);
+            *d = 0;
+            ((LabelFn)DrawShadowedLabel)(x, yy, m, f21, f20, (unsigned char *)buf);
+        }
+    } else {
+        d = buf;
+        y = *(short *)(r + 6);
+        while (*p != 0) {
+            if (*p == 1) {
+                *d = 0;
+                ((LabelFn)DrawShadowedLabel)(*(short *)(r + 4), y, *(short *)(r + 0xC), f21, f20, (unsigned char *)buf);
+                y += 0x1A;
+                d = buf;
+                while (*p == 1) p++;
+                if (*p == 0) break;
+            } else {
+                *d++ = *p++;
+            }
+        }
+        if (d > buf) {
+            *d = 0;
+            ((LabelFn)DrawShadowedLabel)(*(short *)(r + 4), y, *(short *)(r + 0xC), f21, f20, (unsigned char *)buf);
+        }
+    }
+}
