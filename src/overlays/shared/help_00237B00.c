@@ -1006,7 +1006,6 @@ int func_L05_002523C8(void) {
     return D_0013F450_h2523C8.state_timer < start;
 }
 typedef struct { int bank; int seq; } SndPair_254030;
-typedef struct { char pad[0x6E0]; int flags[6]; } Hero6E0_254030;
 extern SndPair_254030 D_L05_00179CC0[];
 extern float func_L00_00233410(float a, float b, float c);
 extern void func_L00_00232C10(int, int, float);
@@ -1032,7 +1031,7 @@ void func_L05_00254030(void) {
                 func_L00_00232E60(D_L05_00179CC0[((unsigned char *)h)[0x88F]].bank,
                                   D_L05_00179CC0[((unsigned char *)h)[0x88F]].seq);
             } else if ((float)*(int *)(h + 0xAB0) - 2.0f < *(float *)(h + 0xAA8)) {
-                ((Hero6E0_254030 *)h)->flags[((unsigned char *)h)[0x88F]] = 1;
+                ((Hero *)h)->unk6E0[((unsigned char *)h)[0x88F]] = 1;
                 *(int *)(h + 0x6F8) += 1;
             }
         }

@@ -508,12 +508,6 @@ typedef struct {
     unsigned char pad0[0x454];
     unsigned char done[1];
 } LvlDone_DA08;
-typedef struct {
-    unsigned char pad0[0x2FC];
-    void *ground_moby;
-    unsigned char pad300[0xE];
-    short air;
-} Hero_DA08;
 extern LvlDone_DA08 D_L05_001BBA40;
 extern LvlDone_DA08 D_L05_001BADE0;
 extern unsigned char D_L05_0015FD48[] MACRO_ADDR;
@@ -575,8 +569,8 @@ void func_L05_0030DA08(struct Moby *moby) {
         shade = 0x80000000 | (color << 8);
         high = color << 16;
         moby->glow_color = high | shade | color;
-        if (((Hero_DA08 *)(D_0013E633 + 0xE1D))->ground_moby == moby &&
-            ((Hero_DA08 *)(D_0013E633 + 0xE1D))->air == 0) {
+        if (((void *)((Hero *)(D_0013E633 + 0xE1D))->ground_moby) == moby &&
+            ((Hero *)(D_0013E633 + 0xE1D))->air_frames.s == 0) {
             D_L05_001BADE0.done[(short)moby->save_id] = moby->mission + 2;
             if (moby->mission == 0xFF || (D_L05_0015FD48[(unsigned char)moby->mission] != 0xFF && D_0014C150[(unsigned char)moby->mission + (D_0015EE84 << 4)] == 0xFF)) {
                 D_L05_001BBA40.done[(short)moby->save_id] = moby->mission + 2;

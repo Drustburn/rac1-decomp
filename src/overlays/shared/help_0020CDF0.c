@@ -1923,9 +1923,8 @@ void func_L00_00211908(void) {
     FadeToBlack(scale_ticks(0x10));
     D_0013F450_11908.b20B1 = 1;
 }
-typedef struct { u8 pad[0xA6]; s16 oclass; } MobyClass_211A18;
 /* whether the moby is of class 0x47 (0 for none) */
-int func_L00_00211A18(MobyClass_211A18 *m) {
+int func_L00_00211A18(Moby *m) {
     if (m == 0) return 0;
     return m->oclass == 0x47;
 }
