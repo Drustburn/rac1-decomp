@@ -81,3 +81,4 @@ func_0023D018	asm only	2026-10-15	viBufCreate sets up the ring buffer, tags and 
 func_0023D340	asm only	2026-10-18	ring-buffer read step: advances the read position and tags the next DMA chunk
 func_0023DA88	asm only	2026-10-18	ring-buffer search: finds the timestamp entry covering a read position
 func_0023DCF0	asm only	2026-10-18	ring-buffer timestamp lookup for the current decode position
+func_0023CAF8	asm only	2026-10-18	PCM ring-buffer put: copies decoded audio into the ring and advances the write offset
