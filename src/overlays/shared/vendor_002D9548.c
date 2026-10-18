@@ -2004,7 +2004,202 @@ float func_L06_002F3578(char *a, char *b, int c) {
     }
     return r;
 }
-INCLUDE_ASM("asm/overlays", func_L06_002F3680);
+extern char *D_L06_001AC500[];
+extern float func_L06_002F3578(char *a, char *b, int c);
+extern unsigned char *func_L00_0025D390(int);
+
+#define V78(p) (*(char **)((p) + 0x78))
+#define S16(p, o) (*(short *)((p) + (o)))
+#define I32(p, o) (*(int *)((p) + (o)))
+#define F32(p, o) (*(float *)((p) + (o)))
+typedef struct {
+    char p0[0x174];
+    char *f174;
+    int f178;
+    float f17C;
+    char p180[0xC];
+    int f18C;
+    char p190[2];
+    short n192;
+    char p194[4];
+    short f198;
+    short f19A;
+    char p19C[4];
+    int tgt[8];
+    float dst[8];
+} GbSlots;
+#define TGT(d) (((GbSlots *)(d))->tgt)
+#define DST(d) (((GbSlots *)(d))->dst)
+
+/* Shared level-06/10 routine: gathers candidate mobies, scores them against the target list and writes the slot tables. */
+void func_L06_002F3680(void) {
+    char *outv[50];
+    char vD[16];
+    char vE[16];
+    int sel[50];
+    signed char fl[50];
+    char *ptrs[16];
+    int n;
+    int i;
+    int jc;
+    int kq;
+    int bi;
+
+    n = 0;
+    {
+        char *pp;
+        for (i = 0; (pp = D_L06_001AC500[i]) != 0; i++) {
+            if (*(short *)(pp + 0xA6) == 0x359 && ((unsigned char *)pp)[0x20] == 5 &&
+                ((unsigned char *)pp)[0xBC] != 2 && n != 0x32) {
+                char *o = *(char **)(V78(pp) + 0x174);
+                if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
+                    outv[n++] = pp;
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < n; i++) {
+        char *pi = outv[i];
+        char *d = V78(pi);
+        char *q;
+        int j;
+        S16(d, 0x192) = 0;
+        j = 0;
+        if ((q = D_L06_001AC500[j]) != 0) do {
+            int k;
+            float lim;
+            float dist;
+            int c;
+            c = 0;
+            if (*(char **)(q + 0x24) != 0) c = *(short *)(*(char **)(q + 0x24) + 0x46);
+            if (c != 5) continue;
+            lim = 12.0f;
+            if (S16(d, 0x198) != 0) lim = 5.0f;
+            if (lim < func_001F9D48(pi + 0x10, q + 0x10)) continue;
+            if (1.0f < func_001F9B88(F32(pi, 0x18) - F32(q, 0x18))) continue;
+            *(u128 *)vE = *(u128 *)(pi + 0x10);
+            *(u128 *)vD = *(u128 *)(q + 0x10);
+            *(float *)(vE + 8) += 0.25f;
+            *(float *)(vD + 8) += 0.25f;
+            if (func_L00_001EFFF0(vE, vD, 2, (int)pi, 0) != 0 &&
+                (char *)((GbHit *)(void *)&D_L06_001746C0)->f18 != q) continue;
+            dist = func_L06_002F3578(pi, q, 5);
+            for (k = 0; k < S16(d, 0x192); k++) {
+                if (dist < DST(d)[k]) {
+                    int t = S16(d, 0x192) - 1;
+                    int last = (t < 7) ? t : 6;
+                    int m;
+                    for (m = last; m >= k; m--) {
+                        TGT(d)[m + 1] = TGT(d)[m];
+                        DST(d)[m + 1] = DST(d)[m];
+                    }
+                    break;
+                }
+            }
+            if (k < 8) {
+                TGT(d)[k] = (int)q;
+                DST(d)[k] = dist;
+                S16(d, 0x192)++;
+                if (S16(d, 0x192) >= 9) S16(d, 0x192) = 8;
+            }
+        } while ((q = D_L06_001AC500[++j]) != 0);
+    }
+
+    jc = 0;
+    for (i = 0; i < n; i++) {
+        char *d = V78(outv[i]);
+        int k;
+        for (k = 0; k < S16(d, 0x192); k++) {
+            if (jc < 0x32) {
+                int dd = 8 - k;
+                int m;
+                for (m = 0; m < jc; m++) {
+                    if (sel[m] == TGT(d)[k]) {
+                        fl[m] += dd;
+                        break;
+                    }
+                }
+                if (m == jc) {
+                    sel[jc] = TGT(d)[k];
+                    fl[jc] = dd;
+                    jc++;
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < n; i++) {
+        I32(V78(outv[i]), 0x178) = 0;
+    }
+
+    for (kq = 0; kq < jc; kq++) {
+        float k1 = 0.5235988f;
+        float k2 = 1.7453293f;
+        int bestv = 0;
+        int m;
+        int found;
+        int cnt2;
+        int selv;
+        char *p;
+        bi = 0;
+        for (m = 0; m < jc; m++) {
+            if (bestv < fl[m]) {
+                bestv = fl[m];
+                bi = m;
+            }
+        }
+        fl[bi] = -1;
+        selv = sel[bi];
+        found = 0;
+        cnt2 = 1;
+        p = (char *)func_L00_0025D390(selv);
+        if (p != 0) cnt2 = S16(p, 4);
+        while (found < cnt2) {
+            float bd = 9999999.0f;
+            char *best = 0;
+            for (i = 0; i < n; i++) {
+                char *pi = outv[i];
+                char *d = V78(pi);
+                int k;
+                if (I32(d, 0x178) != 0) continue;
+                for (k = 0; k < S16(d, 0x192); k++) {
+                    if (TGT(d)[k] == selv && DST(d)[k] < bd) {
+                        bd = DST(d)[k];
+                        best = pi;
+                    }
+                }
+            }
+            if (best == 0) break;
+            I32(V78(best), 0x178) = selv;
+            ptrs[found] = best;
+            found++;
+        }
+        if (found != 0) {
+            float a0 = (float)(found - 1);
+            float sp = a0 * k1;
+            float st;
+            float base;
+            if (k2 < sp) sp = 1.7453293f;
+            st = 0.0f;
+            if (found >= 2) st = sp / a0;
+            base = sp * -0.5f;
+            for (i = 0; i < found; i++) {
+                char *d = V78(ptrs[i]);
+                F32(d, 0x17C) = func_001FA748(base, (float)i * st);
+            }
+        }
+    }
+
+    for (i = 0; i < n; i++) {
+        GbSlots *g = (GbSlots *)V78(outv[i]);
+        int v = g->f178;
+        g->f18C = D_L06_0015F6B0;
+        g->f174 = (char *)v;
+        g->f19A = 1;
+        if (v != 0) g->f198 = 1;
+    }
+}
 typedef struct GbMoby_3D40 {
     char p0[0x10];
     float pos[4] __attribute__((aligned(16)));

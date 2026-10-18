@@ -1745,7 +1745,7 @@ void func_L10_002DB278(char *moby) {
         DeleteMoby(moby);
     }
 }
-extern char D_L10_001DD4D0[]; extern char D_L10_001DD510[]; extern char D_L10_00161D28[]; extern void func_L10_002DBA50(void);
+extern char D_L10_001DD4D0[]; extern char D_L10_001DD510[]; extern char D_L10_00161D28[]; extern void func_L10_002DBA50(unsigned char *);
 extern short D_L10_00161D18;
 extern float func_001F9B50(float);
 extern int func_L00_00200290(void *, float);
