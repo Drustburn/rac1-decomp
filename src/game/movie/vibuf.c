@@ -177,7 +177,62 @@ void viBufEndPut(ViBuf *vb, int size) {
     *(long *)(vb->pad48) += size;
     func_00118C90(vb->sema);
 }
-INCLUDE_ASM("asm/nonmatchings/text", func_0023D340); /* viBufAddDMA(ViBuf *) */
+extern char D_001E8E50[];
+extern int func_0023CEC8(ViBuf *, unsigned int);
+
+/* viBufAddDMA(ViBuf *): under the buffer's semaphore, reads the channel-4 DMA position,
+ * advances fC/f10 past the consumed slots, turns whole 0x800-byte units of f14 into
+ * ref tags (0x80 qwords each) and restarts channel 4. Returns 0 when f44 is clear. */
+int func_0023D340(ViBuf *vb) {
+    int ok = 0;
+    unsigned int chcr;
+    int idx;
+    int done;
+    int n;
+    int i;
+    int rd;
+    int pos;
+
+    func_00118CB0(vb->sema);
+    if (vb->f44 == 0) {
+        ErrMessage(D_001E8E50);
+        return 0;
+    }
+    setD4_CHCR(5);
+    chcr = *(volatile unsigned int *)0x1000B400;
+    rd = func_0023CEC8(vb, *(volatile unsigned int *)0x1000B410);
+    done = (rd + vb->count - vb->fC) % vb->count;
+    vb->fC = (vb->fC + done) % vb->count;
+    vb->f10 -= done;
+    pos = (vb->fC + vb->f10) % vb->count;
+
+    n = vb->f14 / 0x800;
+    vb->f14 -= n << 11;
+    if (n > 0) {
+        int last = vb->count - 1;
+        int prev = (vb->fC + vb->f10 + last) % vb->count;
+        scTag2((unsigned long *)(vb->tags + prev * 16), vb->base + (prev << 11), 3, 0x80);
+        ok = 1;
+    }
+    idx = pos;
+    for (i = 0; i < n; i++) {
+        int t = 0;
+        if (i != n - 1) {
+            t = 3;
+        }
+        scTag2((unsigned long *)(vb->tags + idx * 16), vb->base + (idx << 11), t, 0x80);
+        idx = (idx + 1) % vb->count;
+    }
+    vb->f10 += n;
+    if (vb->f10 != 0) {
+        if (ok) {
+            chcr = (chcr & 0x0FFFFFFF) | 0x30000000;
+        }
+        setD4_CHCR(chcr | 0x100);
+    }
+    func_00118C90(vb->sema);
+    return 1;
+}
 extern void func_0023CF10(unsigned int);
 
 /* Saved DMA/IPU register words at 0x1C-0x3C of the buffer. */
