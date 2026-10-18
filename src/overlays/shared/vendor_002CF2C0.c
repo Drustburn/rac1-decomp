@@ -37,8 +37,7 @@ char *func_L05_002D53B0(int owner, char *pos, int arg, float f0, float f1) {
 }
 LINKER_REMNANT("asm/overlays", func_L05_002D54C0);
 extern char *D_L05_001601AC MACRO_ADDR;
-/* Applies a trigger's switches to the moby at pool index: depending on whether the hero is inside, shows/hides (flags at +0x34, byte +0x31) and enables/disables
-   collision of the moby according to the trigger's signed bytes at +0x7C, +0x7D and +0x7F. */
+/* Applies a trigger's switches to the moby at pool index. */
 void func_L05_002F62E8(int index, int trigger_arg, int inside) {
     int moby = *(int *)((char *)&D_L05_001601AC - 0x114) + index * 0x100;
     char *trigger = (char *)trigger_arg;
@@ -758,7 +757,7 @@ typedef struct {
     char pad2[0x84];
 } M_p;
 #define POOL (*(char **)&D_L05_00160098)
-/* Searches the moby's group list and returns the moby whose data word at +0xB4 equals id, or 0 if none. */
+/* Returns the moby in the group whose data word at +0xB4 equals id, or 0. */
 char *func_L05_0031AAA8(void *arg, int id) {
     unsigned short *p = (unsigned short *)D_L05_001AC040[*((unsigned char *)arg + 0x21)];
     char *pool;
@@ -1699,7 +1698,7 @@ extern char *D_L05_00167304;
 extern void func_00215328(void *, void *);
 extern void func_L05_0032ABF0(void *);
 
-/* Copies the 4x4 matrix at D_L05_00167304 into out (four quadwords), derives the 0x40 block from it with func_00215328 and finishes with func_L05_0032ABF0. */
+/* Copies the matrix at D_L05_00167304 into out and finishes with func_L05_0032ABF0. */
 void func_L05_0032BBF0(char *out)
 {
     char *src = D_L05_00167304;

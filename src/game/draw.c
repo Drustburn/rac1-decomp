@@ -21,7 +21,7 @@ extern DispatchRec D_001E8F80[];
 
 extern int D_0018A3B0[];
 
-/* Resets the texture DMA state: sets all 20 words of D_0018A3B0 to 1. */
+/* Resets the texture DMA state words to 1. */
 void func_001F0F30(void) {
     int *p = D_0018A3B0;
     int val = 1;
@@ -856,8 +856,7 @@ extern int D_00161294 MACRO_ADDR;
 extern int D_00161298 MACRO_ADDR;
 extern int D_0016129C MACRO_ADDR;
 
-/* ResetDrawGlobals: zeroes the draw-callback counts (D_0015F564/68/6C/70), the related
-   draw state words and the four counters at D_00161290..9C. */
+/* ResetDrawGlobals: clears the draw-callback counts and related draw counters. */
 void func_001F3B90(void) {
     D_0015F564 = 0;
     D_0015F56C = 0;
@@ -1374,8 +1373,7 @@ extern s32 gs_texture_allocation_cursor_et __asm__("D_0015EF74") MACRO_ADDR;
    Adapted from Lombyte (MIT): src/rendering/effects/get_effect_texture.c, get_effect_texture. */
 u64 func_001F4868_r(s32 index) __asm__("func_001F4868");
 
-/* GetEffectTex with its real 64-bit return: builds (on first use) and returns the GS TEX0 word for
-   effect texture `index`, allocating GS memory and queuing the texture upload. */
+/* GetEffectTex with its real 64-bit return: builds and returns the GS TEX0 word for an effect texture. */
 u64 func_001F4868_r(s32 index) {
     struct EffectTextureDefinition_et *texture;
     struct TextureUpload_et *upload;
@@ -1442,7 +1440,7 @@ extern void *D_0018E140[];
 extern DrawCallback D_0018E240[];
 extern void *D_0018E340[];
 
-/* AddDrawCallback: appends fn(arg) to the first draw-callback list (max 0x40 entries). */
+/* AddDrawCallback: appends fn(arg) to the first draw-callback list. */
 void func_001F49B0(DrawCallback fn, void *arg) {
     int count = D_0015F564;
     if (count < 0x40) {
@@ -1452,7 +1450,7 @@ void func_001F49B0(DrawCallback fn, void *arg) {
     }
 }
 
-/* ExecuteDrawCallbacks: calls every callback queued in the first list, in order, with its arg. */
+/* ExecuteDrawCallbacks: calls every callback in the first list. */
 void func_001F4A00(void) {
     int i;
     for (i = 0; i < D_0015F564; i++) {
@@ -1460,7 +1458,7 @@ void func_001F4A00(void) {
     }
 }
 
-/* Calls every callback queued in the second draw-callback list (D_0018E040, count D_0015F56C). */
+/* Calls every callback in the second draw-callback list. */
 void func_001F4A78(void) {
     int i;
     for (i = 0; i < D_0015F56C; i++) {
@@ -1468,7 +1466,7 @@ void func_001F4A78(void) {
     }
 }
 
-/* Calls every callback queued in the third draw-callback list (D_0018E240, count D_0015F570). */
+/* Calls every callback in the third draw-callback list. */
 void func_001F4AF0(void) {
     int i;
     for (i = 0; i < D_0015F570; i++) {
@@ -1476,7 +1474,7 @@ void func_001F4AF0(void) {
     }
 }
 
-/* Appends fn(arg) to the fourth draw-callback list (D_0018DE40, max 0x40 entries). */
+/* Appends fn(arg) to the fourth draw-callback list. */
 void func_001F4B68(DrawCallback fn, void *arg) {
     int count = D_0015F568;
     if (count < 0x40) {
@@ -1486,7 +1484,7 @@ void func_001F4B68(DrawCallback fn, void *arg) {
     }
 }
 
-/* Calls every callback queued in the fourth draw-callback list (D_0018DE40), in order. */
+/* Calls every callback in the fourth draw-callback list. */
 void func_001F4BB8(void) {
     int i;
     for (i = 0; i < D_0015F568; i++) {
@@ -1855,8 +1853,7 @@ void func_001F54E8(char *arg0) {
 extern int *D_00161000 MACRO_ADDR;
 extern char D_0013CD90[];
 
-/* Appends a GIF packet that sets GS register 1 to the four bytes a, b, c, d packed
-   little-endian (a in the low byte), followed by the D_0013CD90 register list. */
+/* Appends a GIF packet that sets GS register 1 from the four bytes a, b, c, d. */
 void func_001F55C0(int a, int b, int c, int d) {
     VU1_addGSregister(1, (long)a | ((long)b << 8) | ((long)c << 16) | ((long)d << 24));
     D_00161000[0] = 0x30000014;
@@ -2502,8 +2499,7 @@ void func_001F6CF8(char *a, void *b, void *c, unsigned char *d, int e) {
     FontPrint(p, b, c, d, (void *)e, mode, D_001DF3D0);
 }
 
-/* Right-aligned FontPrint with the second font: steps `a` back by the measured width of d
-   (func_001F6620), then prints with effect texture 2 and the D_001DF770 table. */
+/* Right-aligned FontPrint with the second font. */
 void func_001F6D88(char *a, void *b, void *c, unsigned char *d, int e) {
     char *p = a - func_001F6620(d, e);
     long mode = GetEffectTex64(2);
@@ -2511,8 +2507,7 @@ void func_001F6D88(char *a, void *b, void *c, unsigned char *d, int e) {
     FontPrint(p, b, c, d, (void *)e, mode, D_001DF770);
 }
 
-/* Right-aligned FontPrint with the third font: steps `a` back by the measured width of d
-   (func_001F6640), then prints with effect texture 3 and the D_001DFB10 table. */
+/* Right-aligned FontPrint with the third font. */
 void func_001F6E18(char *a, void *b, void *c, unsigned char *d, int e) {
     char *p = a - func_001F6640(d, e);
     long mode = GetEffectTex64(3);
@@ -2568,7 +2563,7 @@ void func_001F7560(void *a, void *b, void *c, void *d) {
     FontPrintWindow(a, b, c, d, mode, D_001DF3D0);
 }
 
-/* FontPrintWindow with the second font: effect texture 2 and the D_001DF770 table. */
+/* FontPrintWindow with the second font. */
 void func_001F75D0(void *a, void *b, void *c, void *d) {
     int mode = GetEffectTex(2);
 
@@ -2598,8 +2593,7 @@ extern int D_0015EF84 MACRO_ADDR;
 extern int D_0013E604[];
 #define PK ((unsigned char *)D_00161000)
 
-/* Uploads the block at `source` to the GS in DMA packets of up to 0x80 quadwords each
-   (total D_0013E604[0] quadwords), advancing the destination, then flushes the packet list. */
+/* Uploads a block to the GS in DMA packets. */
 void func_001F7680(unsigned int source) {
     int remaining = D_0013E604[0];
     int destination = D_0015EF84 >> 8;
@@ -2749,8 +2743,7 @@ __asm__(".section .text\n\tnop\n");
 
 extern void func_001F3008(void);
 
-/* Frame start for the large draw buffer: PutDrawBufferLarge, then InitViewContext and
-   UpdateViewContext. */
+/* Frame start for the large draw buffer. */
 void func_001F7B40(void) {
     PutDrawBufferLarge();
     InitViewContext();
@@ -2766,8 +2759,7 @@ extern void func_001F91B8(void);
 extern void func_001F7868(void);
 extern void func_001F8B6C(void);
 
-/* When D_0015F578 is set: programs a few GS registers (8, 0x14, 0x47, 0x4A), runs the
-   func_001F91B8/func_001F7868/func_001F8B6C passes with a -0.04 bias in D_0015F448, then resets register 0x4A. */
+/* Optional extra draw pass, enabled by D_0015F578. */
 void func_001F7B70(void) {
     if (D_0015F578 != 0) {
         VU1_addGSregister(8, 5);
@@ -2785,8 +2777,7 @@ void func_001F7B70(void) {
 
 extern int D_0018E840[];
 
-/* buildBitSwapLut: fills the 256-entry table D_0018E840 by swapping bits 3 and 4 of the
-   index and storing (i >> 1) << 24 there, the alpha lookup table. */
+/* buildBitSwapLut: fills the alpha lookup table D_0018E840. */
 void func_001F7BF8(void) {
     int i;
     for (i = 0; i < 0x100; i++) {

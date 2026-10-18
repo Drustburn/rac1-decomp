@@ -619,7 +619,7 @@ extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, in
 extern Rgb_2288 D_L14_00162178;
 extern float D_0015EE60 MACRO_ADDR;
 
-/* Moby update for a bouncing spark projectile: moves along its velocity with gravity (state 0/1), bounces off the collision hit, fades its colour towards red (state 2), spawns trail particles, and on a hit by another owner or when the fade expires goes to state 3, which emits a burst and deletes it. */
+/* Moby update for a bouncing spark projectile. */
 void func_L14_00302288(Moby *m)
 {
   Spark_2288 *d = (Spark_2288 *) m->pvars;
@@ -1258,7 +1258,7 @@ void func_L14_003071B0(Moby *moby) {
     }
 }
 
-/* Creates a class 0x574 moby at the owner's position and rotation (state 0, draw distance 0x40) and returns it, or 0 if none is free. */
+/* Creates a class 0x574 moby at the owner's position and returns it, or 0 if none is free. */
 char *func_L14_003075E0(char *owner)
 {
     char *moby = CreateMoby(0x574);
@@ -1776,13 +1776,13 @@ int func_L14_00308AA8(struct Moby *moby) {
 extern void func_L12_002BD3D0(void *, int, int, int);
 extern char D_L14_001F62C0[];
 extern int func_001F4868(int);
-/* Draw callback: renders the 0x13-entry effect at D_L14_001F62C0 with the effect textures 0x2E and 0x2F. */
+/* Draw callback for the 0x13-entry effect at D_L14_001F62C0. */
 void func_L14_00308EB0(void) {
     func_L12_002BD3D0(D_L14_001F62C0, 0x13, GetEffectTex(0x2E), GetEffectTex(0x2F));
 }
 extern void func_L14_00308EB0(void);
 
-/* Moby update: state 0 sets state 1 and full opacity, state 1 queues the draw callback func_L14_00308EB0 each frame. */
+/* Moby update that queues the draw callback func_L14_00308EB0. */
 void func_L14_00308F08(unsigned char *moby)
 {
     switch (moby[0x20]) {
@@ -1841,7 +1841,7 @@ void func_L14_00309C48(unsigned char *moby) {
 }
 extern char *D_L14_00167600;
 
-/* If the global camera record's descriptor is 7, sets its state block to flag 1 with value, a 2.0 factor and the 7.0 / 2.0 parameters at +0xA0 / +0xB0. */
+/* Sets the camera state block when the global camera record's descriptor is 7. */
 void func_L14_00314A40(int value)
 {
     char *moby = D_L14_00167600;

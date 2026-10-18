@@ -131,7 +131,7 @@ void func_L06_002DB1D8(int index)
         } while (*p++ >= 0);
     }
 }
-/* For each moby in group idx with class 0x16F, sets state 2 and clears its data word at +0x28. */
+/* Sets state 2 on every class 0x16F moby in group idx. */
 void func_L06_002DB248(int idx)
 {
     short *p = D_L06_001AC340[idx];
@@ -196,7 +196,7 @@ void func_L06_002EB260(int index) {
         }
     } while (*p++ >= 0);
 }
-/* Returns 1 if no class 0x33B moby in group index is in a live state, 0 as soon as one has a state other than 0xFE, 0xFD or 0x10. An empty group also returns 1. */
+/* Returns 1 if no class 0x33B moby in group index is alive, else 0. */
 int func_L06_002EB2D0(int index) {
     unsigned short *p = (unsigned short *)D_L06_001AC340[index];
     char *base;
@@ -1762,7 +1762,7 @@ void func_L06_002FA618(Moby *moby)
         data->f160 = *(int *)(D_0013E633_2F69D0 + 0x2E9D);
     }
 }
-/* Advances every moby in the group given by arg's byte 0x21 from state 1 to state 2. */
+/* Advances every moby in the arg's group from state 1 to state 2. */
 void func_L06_002FAAC8(char *arg)
 {
     short *table = D_L06_001AC340[(unsigned char)arg[0x21]];
@@ -1823,7 +1823,7 @@ float func_L06_002FAB28(char *self) {
     } while (*p++ >= 0);
     return FastAddRots(FastAddRots(lo, FastDiffRots(hi, lo) * 0.5f), ang);
 }
-/* For every moby in group idx: sets state 0x12, sets flag bit 0 and clears bit 12 of its flags (+0x34), and zeroes the word at +0x94. */
+/* Puts every moby in group idx into state 0x12 and clears its flags. */
 void func_L06_002FAD78(int idx)
 {
     short *p = D_L06_001AC340[idx];
@@ -2300,7 +2300,7 @@ extern void func_L00_00217718(void *, void *, int, int);
 extern void func_L06_002FC938(char *);
 extern void func_L06_002FCCF8(char *);
 
-/* Boss-style moby update: applies hit damage from the collision query (scaled by attacker class: x0.666 for 0x131, x1.5 for 0xB0/0x79/0x33B) to its health at data+0x20, handles a recovery phase at 10 health (restarts a 30-tick timer, then drops to state 3 or 5 and plays the matching animation), switches to state 14 on death, and updates the fade/colour and path-following effect each frame. */
+/* Boss-style moby update: applies hit damage, handles recovery and death states. */
 void func_L06_002FBDF0(void *moby_) {
     char *moby = moby_;
     char *data;
@@ -2537,7 +2537,7 @@ extern void func_L06_00235E08(int, int);
 extern void func_L00_002EC0C8(int);
 extern int *D_L06_001B0FB0[];
 
-/* Ends the moby's script: calls func_L06_00235E08(0, 0), writes the data word at +0x114 into the slot of D_L06_001B0FB0 chosen by data+0xEC, then calls func_L00_002EC0C8(2). */
+/* Ends the moby's script. */
 void func_L06_002FC8E0(char *arg) {
     char *data = *(char **)(arg + 0x78);
     func_L06_00235E08(0, 0);

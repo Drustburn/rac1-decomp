@@ -152,7 +152,7 @@ void func_L07_00314590(char *moby) {
         coll_sphere_mobys(0.5f, position, 0, moby, hit);
     }
 }
-/* Collects the linked-moby ids stored at data+0x170..0x184 into the out array, skipping -1 entries and the three optional ones masked off by the flag bits at data+0x19C. Returns the count. */
+/* Collects the linked-moby ids into the out array and returns the count. */
 void *func_L07_00314730(void *unused, void *dp, void *op) {
     char *data = dp;
     int *out = op;
@@ -246,7 +246,7 @@ extern char D_0013E650_314800[] __asm__("D_0013E650");
 
 /* Umbris moby think step: homes on its target, runs its timer and state changes. */
 void func_L07_00314800_r(Moby *moby, ThinkData_314800 *data, Vec_314800 *vec) __asm__("func_L07_00314800");
-/* Hit handling for a damageable enemy: runs the collision query, scales incoming damage by attacker class (0.2 for 0x131, 1.0 for 0xBA/0x79), subtracts it from health, and on a big enough hit plays a hurt animation, a sound and switches to state 11; also decays the hit-flash byte and the knockback value each frame. */
+/* Hit handling for a damageable enemy: scales and applies damage, plays hurt reactions. */
 void func_L07_00314800_r(Moby *moby, ThinkData_314800 *data, Vec_314800 *vec)
 {
     int st;
@@ -351,7 +351,7 @@ void func_L07_00314800_r(Moby *moby, ThinkData_314800 *data, Vec_314800 *vec)
 }
 extern float func_002140F8(float, float);
 
-/* Adds a random offset in [-value, value] to each of the first two floats (x and y) of out. */
+/* Adds a random offset in [-value, value] to the x and y of out. */
 void func_L07_00314D00(float *out, float value) {
     float neg = -value;
     out[0] += random_float_between(neg, value);
@@ -1908,7 +1908,7 @@ typedef struct {
 
 void func_L07_0031A410(struct Moby *moby);
 #define func_L07_0031A410_r func_L07_0031A410
-/* Moby update for a homing mine: accelerates toward the player's sight point up to a speed cap, bobs on a timer, explodes (effect, sound, delete) on a hit from a weapon, on contact with the world, or when the timeout runs out, and deletes itself if it strays more than 64 units from home. */
+/* Moby update for a homing mine. */
 void func_L07_0031A410_r(struct Moby *moby) {
     Mine_p *vars;
     float *health;
@@ -2061,7 +2061,7 @@ void func_L07_0031A410_r(struct Moby *moby) {
 extern int func_001F9850(int);
 extern void func_0020D678(void *);
 
-/* Deletes the moby; if other is non-null first stores other's field at +0x84, converted to ticks, in this moby's data at +0x98. */
+/* Deletes the moby, first copying other's timer into this moby's data if other is non-null. */
 void func_L07_0031AA68(char *arg, char *other) {
     char *dst = *(char **)(arg + 0x78);
     if (other != 0) {

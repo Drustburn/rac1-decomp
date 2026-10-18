@@ -2073,7 +2073,7 @@ void func_L11_003173C8(char *m, float *p) {
     }
 }
 extern char *D_L11_00160058 MACRO_ADDR;
-/* Counts the mobys of class 0x4DE in this moby's group whose state is in 13..17. Returns 0 if the group is unset (0xFF) or empty. */
+/* Counts the class 0x4DE mobys in this moby's group that are in states 13..17. */
 short func_L11_00317500(struct Moby *self_) {
     struct Moby *self = (struct Moby *)self_;
     unsigned short *p;
@@ -2129,7 +2129,7 @@ int func_L11_003175D0(struct Moby *moby) {
 }
 extern void *func_L00_002DCFD0(void *);
 
-/* Wrapper over func_L00_002DCFD0: when it finds something, saves the moby's state in byte 0xBC and forces state 0x14; when it finds nothing and the state is 0x14, restores the saved state. Returns the found pointer. */
+/* Wrapper over func_L00_002DCFD0 that forces state 0x14 while it finds something and restores the old state afterwards. */
 void *func_L11_00317680(unsigned char *arg) {
     void *found = func_L00_002DCFD0(arg);
     if (found != 0) {
@@ -2182,7 +2182,7 @@ extern void func_0022ED80(int, int, int);
 extern float func_00214D88(float *, float *, float, float, float, float);
 extern void func_L00_00251E30(void *);
 
-/* Moby update for a two-leaf gate (class 0x4DF children, left and right): state 0 spawns both leaves and doubles the scale, then states 2-4 ease them out, rotate them and swing them open (t from 0 to 1 each), state 5 holds open, and state 6 snaps the leaves to the fully open pose. */
+/* Moby update for a two-leaf gate that spawns and swings open its leaves. */
 void func_L11_00317790(struct PMoby *moby) {
     struct L11GateVars *d = (struct L11GateVars *)moby->pvars;
     float v[4];
@@ -2465,7 +2465,7 @@ typedef struct {
     ChainPath_8C90 *path;
 } ChainVars_8C90;
 
-/* Moves the linked mobys along a closed path of 16-byte points: for each of the d->count links it advances the segment index until the next point is within range, interpolates the position between two points, derives pitch and yaw from the neighbouring points, and (at path point flag 42.0) starts a linked moby's timer. */
+/* Moves the linked mobys along a closed path of points. */
 void func_L11_00318C90(void *mv) {
     char *moby = mv;
     ChainVars_8C90 *d = *(ChainVars_8C90 **)(moby + 0x78);
@@ -2634,7 +2634,7 @@ void func_L11_00319108(void *moby_v) {
         }
     }
 }
-/* Collects this moby and its count of linked mobys (data+0x70 array) into out[]; returns count + 1. */
+/* Collects this moby and its linked mobys into out[]; returns the count. */
 int func_L11_003194C0(char *moby, void **out) {
     char *data = *(char **)(moby + 0x78);
     int i;
@@ -2837,7 +2837,7 @@ char *func_L11_0031A180(char *src, void *pos, int ticks) {
     }
     return mob;
 }
-/* Copies the vector src into the moby's position and sets its data word at +0x28 to 5. */
+/* Copies the vector src into the moby's position and sets a data word to 5. */
 void func_L11_0031A2E8(char *arg, void *src) {
     char *dst = *(char **)(arg + 0x78);
     qcopy(arg + 0x10, src);
@@ -2846,7 +2846,7 @@ void func_L11_0031A2E8(char *arg, void *src) {
 
 extern int func_001F9850(int);
 
-/* Sets state 2: copies the vector src into the moby's data block and starts a 60-tick timer at +0x20. */
+/* Sets state 2, copies the vector src into the data block and starts a timer. */
 void func_L11_0031A308(char *arg, void *src) {
     char *dst;
     arg[0x20] = 2;
@@ -3219,7 +3219,7 @@ extern void func_0022EE28(int, int, int);
 extern void func_L00_00264DB8(int, int);
 extern unsigned char D_0013D50F[];
 
-/* Moby update: deletes itself if data[0] is -1; otherwise, when the func_L01_0026EFB8 check on data[1] fails, shows banner 0x53DB once (guarded by a flag byte). */
+/* Moby update that deletes itself or shows a banner depending on its data. */
 void func_L11_0031BEF0(char *moby) {
     int *data = *(int **)(moby + 0x78);
     if (data[0] == -1) {
@@ -3301,7 +3301,7 @@ void func_L11_0031BF78(char *m) {
     func_L00_001FF500(d, d, len);
 }
 
-/* Creates a class 0x5F4 moby at position with random rotation, state 1, scaled by the class scale times scale, and stores the owner pointer and the vector in its data block. Returns the moby or 0. */
+/* Creates a class 0x5F4 moby at position with random rotation and returns it, or 0. */
 char *func_L11_0031C210(void *position, void *vector, void *owner, float scale) {
     char *moby = CreateMoby(0x5F4);
     if (moby != 0) {
@@ -3393,7 +3393,7 @@ extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);
 extern void func_L01_00279E10(void *, int);
 extern void func_0020D678(void *);
-/* Moby update: state 0 arms it, state 1 waits until a collision query (flag 0x10000) hits something with a positive value, state 2 plays effects 0x744/0x745 and deletes the moby. */
+/* Moby update for a breakable object that plays effects when hit. */
 void func_L11_0031EC48(char *m) {
     int hit = 0;
     char *r = func_L00_0025B478(m, 0x10000, 0);

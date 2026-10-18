@@ -229,8 +229,7 @@ extern short D_L00_001611A0;
 extern u8 D_L00_001CA9E0[];
 extern s32 D_0015EE88 MACRO_ADDR;
 extern f32 D_0015EE60 MACRO_ADDR;
-/* Opens the vendor menu: clears the menu state, creates the vendor moby (class 0xB) if none is given, builds the item list and title/item text, pauses audio, and
-   sets the camera and animations. */
+/* Opens the vendor menu. */
 void func_L00_0029BA20(VendorMoby_pv *m) {
     extern s32 D_L00_00173F00[];
     s32 i;
@@ -2003,8 +2002,7 @@ extern void func_L00_0023B140();
 #define d_cb3 ((void(*)(void))(func_L00_0023B140))
 #define func_L00_0029D988_r func_L00_0029D988
 
-/* Per-frame update of the vendor menu state machine: states 0 and 2 run the regular world update steps (with timing), the other states drive the vendor cutscene,
-   camera keys and moby animations. */
+/* Updates the vendor menu state machine. */
 void func_L00_0029D988_r(void) {
     Vec4 a;
     Vec4 b;

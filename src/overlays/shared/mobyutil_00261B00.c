@@ -147,8 +147,7 @@ extern void func_001F9BC0(void *);
 extern void func_001F9EC0(void *, void *, void *);
 extern void func_001F9C08(void *, void *, void *, float);
 
-/* Tests whether the segment from a to b crosses the polyline D_L00_001B0830[idx] (in the XY
-   plane); returns 1 and writes the nearest crossing point to c, or returns 0 with c set to b. */
+/* Tests whether segment a-b crosses polyline D_L00_001B0830[idx]; writes the nearest crossing to c. */
 int func_L00_00262BC0(int idx, void *a, void *b, void *c) {
     float v[4], w[4], z[4], t[4], u[4];
     float best;
@@ -409,8 +408,7 @@ void func_L00_002634F8(char *a, float x, float y, float z) {
     sce_vu0_mul_matrix(u, u, t);
     func_002153E8(u, a + 0x40);
 }
-/* Starts a manipulator state in b if idle (b+0x13C == 0): stores source moby a at +0x134,
-   marks it active and clears the count at +0x138 and the counters at +0x130/+0x132. */
+/* Starts a manipulator state in b if it is idle. */
 void func_L00_00263578(int a, char *b) {
     if (*(int *)(b + 0x13C) == 0) {
         *(int *)(b + 0x134) = a;
@@ -516,7 +514,7 @@ void func_L00_00263680(S_263680 *s, int dec) {
 }
 extern void func_0020D678(int);
 
-/* Deletes every moby held in the owner's list (o+0x120, count at +0x138) and marks it inactive. */
+/* Deletes every moby in the owner's list and marks it inactive. */
 void func_L00_002638B8(char *o) {
     int i;
     if (*(int *)(o + 0x13C) != 0) {
@@ -574,8 +572,7 @@ void func_L00_00263950(int m, unsigned char *p, int c, float fa, float fb) {
     *(float *)(p + 0x70) = 1.0f;
 }
 extern float func_001FA748(float, float);
-/* Advances the phase *p by y, then bobs a's Z (+0x18): removes the previous offset *q and
-   adds the new sin(*p) * x offset, which is stored back in *q. */
+/* Bobs a's Z with a sine of phase *p, advancing the phase by y. */
 void func_L00_00263B78(float x, float y, char *a, float *p, float *q) {
     float t;
     *p = FastAddRots(*p, y);
@@ -585,8 +582,7 @@ void func_L00_00263B78(float x, float y, char *a, float *p, float *q) {
     *(float *)(a + 0x18) += t;
 }
 
-/* Writes o[0x10] and o[0x11] as r*sin(*a)*sin(*b) and r*sin(*a)*cos(*b), then advances the
-   angles *a and *b by l1 and l2 (a Lissajous-style offset). */
+/* Writes a Lissajous-style offset to o[0x10] and o[0x11] and advances the angles. */
 void func_L00_00263BF8(float *o, float *a, float *b, float r, float l1, float l2) {
     o[0x10] = r * FastSin(*a) * FastSin(*b);
     o[0x11] = r * FastSin(*a) * FastCos(*b);
@@ -594,7 +590,7 @@ void func_L00_00263BF8(float *o, float *a, float *b, float r, float l1, float l2
     *b = FastAddRots(*b, l2);
 }
 extern void func_00215C00(void *);
-/* Adds b to the vector produced by func_00215C00 and stores the sum in a. */
+/* Adds b to the vector from func_00215C00 and stores the sum in a. */
 void func_L00_00263D68(void *a, void *b) {
     typedef float W[4] __attribute__((aligned(16)));
     W v;
@@ -711,8 +707,7 @@ typedef struct { float f[4]; } V __attribute__((aligned(16)));
 extern int D_L00_0015FD58 MACRO_ADDR;
 extern unsigned char *D_L00_0015FD68 MACRO_ADDR;
 extern float D_L00_0015FD60 MACRO_ADDR, D_L00_0015FD64 MACRO_ADDR;
-/* Samples the height map at the XY of *p (byte grid D_L00_0015FD68, width D_L00_0015FD58)
-   and returns the height scaled between D_L00_0015FD60 and D_L00_0015FD64. */
+/* Samples the height map at the XY of *p and returns the scaled height. */
 float func_L00_002644E0(V *p) {
     V v = *p;
     int y = (int)v.f[1];
@@ -970,7 +965,7 @@ extern char D_L00_00179218[];
 extern int func_001FE540(int);
 extern void func_001166FC(void *, int);
 
-/* Shows message arg0 in the on-screen text box for arg1 ticks (-1 gives the default 0xB4 scaled ticks). */
+/* Shows message arg0 in the on-screen text box for arg1 ticks. */
 void func_L00_00264DB8(int arg0, int arg1) {
     if (arg1 == -1) {
         arg1 = scale_ticks(0xB4);
@@ -980,8 +975,7 @@ void func_L00_00264DB8(int arg0, int arg1) {
 }
 extern char D_L00_00179218[] NOT_SDA;
 extern void func_00116248(void *, int, int);
-/* Like func_L00_00264DB8, but draws message a with parameter b (func_00116248); c is the
-   duration in ticks (-1 gives the default). */
+/* Like func_L00_00264DB8, but draws message a with parameter b. */
 void func_L00_00264E28(int a, int b, int c) {
     if (c == -1) c = scale_ticks(0xB4);
     func_00116248(D_L00_00179218, msg_string(a), b);
@@ -1095,8 +1089,7 @@ extern void func_L00_002377E0(void);
 extern void func_L00_00237B70(void);
 extern void func_L00_00237B90(void);
 extern void func_L00_002367A8(int, int);
-/* Per-frame update for the countdown D_L00_0015F670: when it reaches zero clears
-   D_L00_0015F674. While that is set (and D_L00_00161F08 is non-zero) it creates or refreshes the animation handle in D_L00_00161F04, otherwise sets it to -1. */
+/* Per-frame update for the countdown D_L00_0015F670. */
 void func_L00_002653A0(void) {
     if (D_L00_0015F670 != 0) {
         D_L00_0015F670 = D_L00_0015F670 - 1;

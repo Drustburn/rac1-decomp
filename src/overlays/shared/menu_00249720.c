@@ -88,8 +88,7 @@ int func_L00_0024A320(int a, float b, float c, float x) {
 int func_L00_0024A338(float a, float b, float x) { return x >= 58.5f; }
 /* a < 221: 232.0f <= x <= 235.0f and D_0013D4E6 != 0; else x <= 180.0f (the joined tail). */
 extern unsigned char D_0013D4E6[];
-/* Same test as func_L00_0024A404 with a leading selector: for a < 221 true when 232.0f <= x <= 235.0f
-   and D_0013D4E6 is set, else x <= 180.0f. */
+/* Same test as func_L00_0024A404 with a leading selector. */
 int func_L00_0024A3B0(int a, float b, float c, float x) {
     if (a < 221) return x >= 232.0f && x <= 235.0f && D_0013D4E6[0] != 0;
     return x <= 180.0f;
@@ -105,7 +104,7 @@ int func_L00_0024A430(int a, float b, float c, float x) {
 int func_L00_0024A460(float a, float b, float x) {
     return x <= 180.0f && D_0013D4E7[0] != 0;
 }
-/* For a < 221 true when 238.0f <= x <= 241.0f; else x <= 180.0f and D_0013D4E7[1] is set. */
+/* Range test on x selected by a, with a D_0013D4E7[1] fallback. */
 int func_L00_0024A490(int a, float b, float c, float x) {
     if (a < 221) return x >= 238.0f && x <= 241.0f;
     return x <= 180.0f && D_0013D4E7[1] != 0;
@@ -131,7 +130,7 @@ int func_L00_0024A510(int item, float a, float b, float x) {
 int func_L00_0024A570(float a, float b, float x) {
     return x >= 233.0f && x <= 235.0f && D_0013D4EA[0] != 0;
 }
-/* For a < 351 true when 228.0f <= x <= 230.0f; else 233.0f <= x <= 235.0f and D_0013D4EA[1] is set. */
+/* Range test on x selected by a, with a D_0013D4EA[1] fallback. */
 int func_L00_0024A5C0(int a, float b, float c, float x) {
     if (a < 351) return x >= 228.0f && x <= 230.0f;
     return x >= 233.0f && x <= 235.0f && D_0013D4EA[1] != 0;
@@ -209,8 +208,7 @@ void func_L00_0024B9A8(void) {
     *(int *)&D_0015EFB0 = 5;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024B9B4);
-/* When the card record at D_0013D355 + 0x3B has status 2 and a negative result code, sets the menu
-   state to 17 (and flag 0x40) if its flag word is nonzero, else to 14. */
+/* Sets the menu state from the status of the card record at D_0013D355 + 0x3B. */
 void func_L00_0024BA10(void) {
     char *b = D_0013D355 + 0x3B;
     if (*(int *)(b + 0xDC) == 2 && *(int *)(b + 0xE4) < 0) {
@@ -236,8 +234,7 @@ void func_L00_0024BA70(void) {
 extern int D_0015EFB0;
 
 INCLUDE_ASM("asm/overlays", func_L00_0024BA8C);
-/* Marks the selected 192-byte card slot as 2 if it was 1, then picks the next menu state: 3 on a
-   card error, 19 or 12 for status -2 (by whether the sizes sum below 350), 16 for status >= -1. */
+/* Marks the selected card slot as 2 if it was 1, then picks the next menu state. */
 void func_L00_0024BAE8(void) {
  char *p=(char *)D_0013D390; int *item;
  if (*(int *)(p+0xDC)>=3 || *(int *)(p+0xE4)>=0) { int index=*(int *)(p+0xCC); char *r=p+0xB0; item=(int *)(index*192+r); if (*item==1) *item=2; }

@@ -1087,10 +1087,7 @@ extern void func_L05_0023E348(int);
 
 #define HERO ((struct Hero *)((char *)D_0013E633 + 0xE1D))
 
-/* Per-frame check of three groups of mobys linked from the hero's moby state (offsets 0x44, 0x48,
-   0x4C): hero overlap with class 0x473/0x474 mobys adds their value to the counter at +0x8C4 and
-   starts a cooldown, class 0x474 mobys are tinted with a pulsing sine color, and class 0x1D6 mobys
-   within 1.5f put the hero into state 0x24. */
+/* Per-frame check of the three moby groups linked from the hero's moby state. */
 void func_L05_00254328(void) {
     u8_a *state;
     u8_a *first;

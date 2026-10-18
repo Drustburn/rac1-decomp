@@ -792,7 +792,7 @@ int func_L15_0029AA60(unsigned char *moby, char *d, int a, int b, float angle) {
     return ret;
 }
 
-/* Computes the heading from the moby to the point (Atan2 of the x/y delta) and calls func_L15_0029AA60 with it. */
+/* Computes the heading from the moby to the point and calls func_L15_0029AA60 with it. */
 void func_L15_0029AC48(char *moby, void *a, float *point, void *b, void *c)
 {
     float angle = func_L00_001FF860(point[0] - *(float *)(moby + 0x10),
@@ -1042,8 +1042,7 @@ extern short D_L15_00161488;
 extern short D_L15_0016148C;
 extern short D_L15_00161490;
 extern short D_L15_00161494;
-/* Hit handler for a damageable moby: reads the hit (mask 0x330000), subtracts the impact from its health at data+0x20, and by hit code sets the knock-back
-   velocities and enters the fall states 0x15 / 0x17. */
+/* Hit handler for a damageable moby. */
 void func_L15_0029B750(void *object, int flag) {
     unsigned char *moby = object;
     unsigned char *data = *(unsigned char **)(moby + 0x78);

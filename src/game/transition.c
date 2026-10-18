@@ -154,9 +154,7 @@ extern unsigned char D_0018C418[];
 extern int D_0015F6F0 MACRO_ADDR;
 extern float D_0015F53C MACRO_ADDR;
 
-/* Level-load parser: resets the global object tables, then walks the level header's sections
-   (lighting/fog settings, shrub, tie and entity tables, colour rows) and builds the runtime
-   tables from them; returns the pointer just past the data it consumed. */
+/* Level-load parser: builds the runtime object tables from the level header and returns the end pointer. */
 unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
 {
     unsigned char *p;

@@ -22,8 +22,7 @@ extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern int func_001F9850(int);
 extern float func_001F9878(float);
 
-/* Hero idle-fidget picker: filters the five table entries in D_L00_00179990 by item, state and cooldown, then picks one at random weighted by its interval;
-   writes its index and returns 1 if one is chosen (low health forces index 4). */
+/* Hero idle-fidget picker; returns 1 and writes the chosen index if one is picked. */
 int func_L00_002297E0(int *index) {
     int choices[20];
     Vec4_r end;

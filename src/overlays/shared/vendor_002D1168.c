@@ -59,9 +59,7 @@ typedef struct {
 typedef struct { s32 count; s32 pad4[3]; struct { f32 x, y, z; s32 w; } pts[1]; } Path_D1168;
 #define MV_D1168(m) ((Vars_D1168 *)(m)->pvars)
 #define MA8_D1168(m) (*(u16 *)((u8 *)(m) + 0xA8))
-/* Update of a ground-attached object (first of a pair): on first run probes downward for ground
-   under it, snaps to the hit height and links to the hit moby (or detaches), and keeps its
-   position/rotation following that moby; may delete itself when its mission counter is stale. */
+/* Update of a ground-attached object (first of a pair). */
 void func_L00_002D1168(Moby *first) {
     extern Path_D1168 *D_L00_001B0830[];
     Moby *moby = first, *second, *next;
@@ -1234,7 +1232,7 @@ void func_L00_002D4398(struct Moby *moby) {
 extern char D_0013E633[] NOT_SDA;
 extern int func_001F9850(int);
 extern void func_00213DE0(void *, int, int, int);
-/* If the hero state at D_0013E633+0x2EA1 is 8 and the moby is not already playing animation 6, starts animation 6 with a 10-tick blend. */
+/* Starts animation 6 if the hero state is 8 and the moby is not already playing it. */
 void func_L00_002D4C80(char *a) {
     if (*(int *)(D_0013E633 + 0x2EA1) == 8) {
         if (*(unsigned char *)(a + 0x53) != 6) {
@@ -1947,7 +1945,7 @@ float func_L00_002D6978(unsigned char *m, float *t, float vel) {
         return d;
     return 37.0f;
 }
-/* Runs the func_L00_002DCDA8 check: on a hit puts the moby in state 9, otherwise leaves state 9 for state 5. Returns the check's result. */
+/* Runs the func_L00_002DCDA8 check and switches the moby to or from state 9; returns its result. */
 int func_L00_002D6B90(char *a) {
     int r = func_L00_002DCDA8(a);
     if (r == 0) {
@@ -1957,7 +1955,7 @@ int func_L00_002D6B90(char *a) {
     }
     return r;
 }
-/* Runs func_L00_002DD2D0 and forces the moby into state 9. Returns its result. */
+/* Runs func_L00_002DD2D0 and forces the moby into state 9; returns its result. */
 int func_L00_002D6C80(char *a) {
     int r = func_L00_002DD2D0(a);
     a[0x20] = 9;
@@ -2226,7 +2224,7 @@ static inline void measure_path(Path *path) {
         path->pts[j].v.w = func_001F9D10(&path->pts[j], &path->pts[j + 1]);
     }
 }
-/* Moby update for an Infobot: state 0 initialises it from its path slots, states 1 and 2 idle and ease its rotation toward the heading, state 3 flies to the hero, state 4 follows a path segment, state 5 hovers waiting for its carrier moby (class 0x336) to give command 6 and then attaches to a path, and state 6 rides the path with acceleration and braking near the end. Disappears when its planet's flag in D_0013DE48 is set. */
+/* Moby update for an Infobot. */
 void func_L00_002D7298(struct Moby *moby)
 {
     Vec offset;
@@ -2790,7 +2788,7 @@ void func_L00_002D9208(char *m, int idx) {
 typedef struct { int a[4]; } Vy __attribute__((aligned(16)));
 extern void func_L00_00251328(void *, int, int, int);
 extern float func_00214158(void);
-/* Creates a class 0x307 moby at src, scaled by f, with a random yaw and a 0x40 draw setup, and returns it (or 0). */
+/* Creates a class 0x307 moby at src, scaled by f, and returns it (or 0). */
 char *func_L00_002D9340(Vy *src, float f) {
     char *m = CreateMoby(0x307);
     if (m != 0) {
@@ -2806,7 +2804,7 @@ char *func_L00_002D9340(Vy *src, float f) {
     return m;
 }
 extern void func_0020D678(void);
-/* Fade-out update: grows the moby's scale by 2.5% per frame, lowers byte 0x23 by 3, and deletes the moby once it falls below 4. */
+/* Fade-out update: grows the moby, lowers its alpha and deletes it when faded. */
 void func_L00_002D93E8(char *a) {
     *(float *)(a + 0x2C) = *(float *)(a + 0x2C) * 1.025f;
     a[0x23] = a[0x23] - 3;

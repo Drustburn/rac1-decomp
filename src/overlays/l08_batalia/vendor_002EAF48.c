@@ -232,8 +232,7 @@ void func_L08_002EAF48(struct Moby *moby) {
         break;
     }
 }
-/* Moby update: when the hero flag is set and the data slot at +8 is negative it deletes itself and the class 0x24C-0x256 and 0x1D8 mobys of its group;
-   otherwise runs a small state machine on the byte at +0x20. */
+/* Moby update: deletes its group's mobys when triggered, else runs a small state machine. */
 void func_L08_002EB770(char *m)
 {
     extern unsigned char D_0013D355[];
@@ -1319,8 +1318,7 @@ extern int func_0022EE28(int, int, int);
 extern void func_L00_00264DB8(int, int);
 extern int func_L00_00203F20(int a, int b);
 extern float func_001F9C78(void *a, void *b);
-/* Moby update for a trigger-volume controller: states 0/1 check the hero against its clip volumes, set unlock flag 0xB and play a sound/message; every
-   frame it also tracks the best times in HR[48]/HR[49], raising Help_Request when a time condition is met. */
+/* Moby update for a trigger-volume controller; tracks best times and raises Help_Request. */
 void func_L08_00308A00(char *m) {
     VData *data = *(VData **)(m + 0x78);
     int elapsed;

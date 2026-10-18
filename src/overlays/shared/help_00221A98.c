@@ -330,7 +330,7 @@ void func_L00_002222F0(void) {
 }
 extern int func_001F9850(int);
 extern int func_L00_00222580(void);
-/* Returns a tick count for the stick tilt: scale_ticks(12) by default, 0 when HeroClassifyStick returns 2 and scale_ticks(12) when it returns 3. */
+/* Returns a tick count for the stick tilt. */
 int func_L00_00222520(void) {
     int r = scale_ticks(12);
     int t = func_L00_00222580();
@@ -2737,7 +2737,7 @@ int func_L00_00222B80(int a, int b) {
     }
     return 1;
 }
-/* Switches on the byte at D_0013E633+0x2EC1 and requests hero state 0, 0x43, 0x5A or 0x53 (via func_L00_00222B80) for values 0..3. */
+/* Requests a hero state based on a byte of the hero block. */
 void func_L00_00227E08(void) {
     switch (D_0013E633[0x2EC1]) {
     case 0: func_L00_00222B80(0, 1); break;
@@ -2747,8 +2747,7 @@ void func_L00_00227E08(void) {
     }
 }
 
-/* Tries to put the hero into state 0x23 when its current state is 0 or 2-3, flag +0x20A8 is set, the timer is under 6 ticks and the speed value is below 0.7;
-   returns 1 if it did. */
+/* Tries to put the hero into state 0x23; returns 1 if it did. */
 int func_L00_00227E90(void) {
     char *p = (char *)D_0013E633 + 0xE1D;
     int s = *(int *)(p + 0x2084);

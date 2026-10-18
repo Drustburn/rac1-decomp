@@ -9,9 +9,7 @@
 extern char D_L00_00179510[] NOT_SDA;
 typedef struct { int state; int f4; int pad[7]; int f24; } G179510;
 #define G (*(G179510 *)D_L00_00179510)
-/* Advances the help-popup state machine (state in D_L00_00179510) toward closing: states 1 to 3
-   go to 7, states 4 and 5 go to 6 (state 4 keeps the remaining count mirrored), and state 0
-   clears the pending message at +0x24 to -1. */
+/* Advances the help-popup state machine toward closing. */
 void func_L00_00203E98(void) {
     switch (G.state) {
     case 0:
@@ -44,9 +42,7 @@ INCLUDE_ASM("asm/overlays", func_L00_00203F08);
 extern char D_L00_00179510[] NOT_SDA;
 extern unsigned char D_0014171B[] NOT_SDA;
 extern void func_001FF560(int);
-/* Help_Request(msg, slot): queues the help message msg for table slot b. Fails (returns 0) while
-   a popup is active, one is already pending, the HUD slot is busy or table entry b is 0xFFFF;
-   otherwise stores b and msg, logs msg with push_help_history and returns 1. */
+/* Help_Request(msg, slot): queues help message msg; returns 1 on success, 0 if it cannot be queued. */
 int func_L00_00203F20(int a, int b) {
     int c;
     unsigned char *h;
@@ -64,9 +60,7 @@ int func_L00_00203F20(int a, int b) {
 }
 extern char D_L00_00179510[] NOT_SDA;
 extern char *D_L00_0015F740 MACRO_ADDR;
-/* Cancels the active help popup: if a message was shown and its record still matches the hero's
-   linked field, forces that field to 5 (unless already 6 or 7), then resets the popup state and
-   the current and pending message ids to idle (-1). */
+/* Cancels the active help popup and resets its state. */
 void func_L00_00203FB8(void) {
     if (*(int *)(D_L00_00179510) != 0) {
         int v = *(int *)((char *)(*(int *)(D_L00_00179510 + 0x20) << 4) + (int)D_L00_0015F740 + 8);
@@ -99,9 +93,7 @@ void func_L00_00204040(void) {
 extern char D_L00_00179510[] NOT_SDA;
 extern int func_001F9850(int);
 extern void func_L00_00203E98(void);
-/* Asks the help popup to dismiss: the first time only, sets the dismiss flag (+0x38), starts a
-   60-tick timer (+0x3C), steps the popup state machine (func_L00_00203E98) and moves an idle
-   popup to state 8. */
+/* Asks the help popup to dismiss. */
 void func_L00_00204130(void) {
     char *g = D_L00_00179510;
     if (*(short *)(g + 0x38) == 0) {
@@ -201,9 +193,7 @@ void func_L00_00205278(void) {
 extern unsigned char D_0013F450[] NOT_SDA;
 extern void func_L00_00232EA8(void);
 extern void func_L00_00222B80(int, int);
-/* Resets the hero's tuning values: collision-capsule floats at +0x220..+0x234 (0.8, 0.7, 0.45),
-   the speed scale at +0xA94 to 1.0, clears the vehicle-style flag byte at +0x22CB and the state
-   id at +0x2084, then reinitialises the hero via func_L00_00232EA8 and func_L00_00222B80(0, 1). */
+/* Resets the hero's tuning values and reinitialises the hero. */
 void func_L00_00205598(void) {
     char *g = D_0013F450;
     *(float *)(g + 0x220) = 0.8f;
@@ -222,10 +212,7 @@ typedef struct { char pad[0x24]; int v; char pad2[0x24]; } Rec;
 extern Rec D_L00_00179BC0[] NOT_SDA;
 extern int func_L00_0020DB30(int);
 
-/* Picks an id for the hero's current situation: 0 in vehicle modes 1 to 3, 0x54 when hit points
-   (+0x22A8) equal 1, 0x6E when the flag at +0x12E2 is set; otherwise 0 unless a is nonzero and
-   several hero flags are set, in which case the id is read from D_L00_00179BC0 for the current
-   Clank module. */
+/* Picks an id for the hero's current situation. */
 int func_L00_00205618(int a) {
     char *g = (char *)D_0013F450;
     int c = *(unsigned char *)(g + 0x20A4);
@@ -402,9 +389,7 @@ void func_L00_00205B50(void) {
 extern int D_L00_0015F6B0 MACRO_ADDR;
 extern int func_002140B0(int);
 
-/* Runs the hero's random-interval timer (rand_timer): while idle with no range it keeps the
-   deadline 30 ticks ahead; once the deadline passes it sets the fired flag and picks the next
-   deadline 20 ticks plus two random draws from the range ahead. */
+/* Runs the hero's random-interval timer (rand_timer). */
 void func_L00_00205C18(void) {
     char *g = D_0013F450;
     if (*(int *)(g + 0xFF0) == 0) {
@@ -508,9 +493,7 @@ extern Quad_56a8 D_L00_0017C320[];
 extern Quad_56a8 D_L00_0017C360[];
 extern f32 D_L00_0017C3A0[];
 
-/* Per-frame update of the helper/attached moby: eases a global value toward 1.8 or 1.0, pulses
-   the moby's tint colour with a sine wave (adjusted by a fade timer), and while a timer runs
-   attaches four manipulators to it and animates them from a lookup table until it expires. */
+/* Per-frame update of the helper/attached moby. */
 void func_L00_00205FF0(void) {
     u8 *g, *g2;
     u8 *h0;
@@ -620,10 +603,7 @@ extern void func_L00_0023ABB0(void);
 extern void func_L00_0023AC68(void);
 extern int func_001FFB38(int, int, int, int, int, int, int);
 
-/* Per-frame update of the nearby-item HUD alert: clears the flag when gHaveMorphORay[6] is
-   unset; otherwise raises the alert flag (hero+0x2048) if an item was registered this frame
-   within 20 units, resets the tracking fields (distance 100000, count 0) and queues HUD
-   animation update 7 while the alert shows. */
+/* Update of the nearby-item HUD alert. */
 void func_L00_002064C0(void) {
     char *g;
     if (gHaveMorphORay[6] == 0) {
@@ -733,9 +713,7 @@ extern void func_00213DE0(void *, int, int, int);
 extern void func_L00_002514B8(void *);
 extern void func_L00_00251E30(void *);
 
-/* Keeps the moby at hero+0xA88 in sync with the hero's own moby: while the hero moby is visible
-   it copies joint 5's pose into it, plays animation 0x81 and rebuilds its matrix; otherwise it
-   hides it by setting its flag bits 0x41. */
+/* Keeps the moby at hero+0xA88 in sync with the hero's own moby. */
 void func_L00_00206808(void) {
     long buf[8];
     char *g = (char *)D_0013F450;
@@ -1315,9 +1293,7 @@ void func_L00_002076E8(void) {
     func_L00_00207CC0();
     func_L00_002091D8();
 }
-/* Copies the 64-bit colour/tint word at moby+0x38 from the hero's moby to each of the seven item
-   slots' two attached mobys (hero+0x1090 and +0x1094, stride 0x50), so held items match the
-   hero's tint. */
+/* Copies the hero moby's tint word to the item slots' attached mobys. */
 void func_L00_002078E0(void) {
     int i, j;
     char *g = (char *)D_0013F450;
@@ -1522,9 +1498,7 @@ void func_L00_00207EC0(void) {
 extern unsigned char D_0013F450[] NOT_SDA;
 extern float D_0015EE6C MACRO_ADDR;
 extern void func_L00_00263BF8(int, char *, char *, float, float, float);
-/* While the hero is in state 0x7F, steps its two angle fields at +0x6B0 and +0x6B4 toward their
-   targets via func_L00_00263BF8 (limit 10 degrees, rates 90 and 120 degrees per second, time-
-   scaled). */
+/* Steps the hero's two angle fields toward their targets while in state 0x7F. */
 void func_L00_00208000(void) {
     char *g = D_0013F450;
     if (*(int *)(g + 0x2084) == 0x7F) {
@@ -1606,8 +1580,7 @@ void func_L00_00208260(void) {
 extern unsigned char D_0013F450[] NOT_SDA;
 extern void func_001F49B0(void *, int);
 extern void func_L00_00208358(void);
-/* Queues the hero draw callback func_L00_00208358 for the hero moby, at most once per frame
-   (guarded by the flag at hero+0x1EB2). */
+/* Queues the hero draw callback func_L00_00208358, at most once per frame. */
 void func_L00_00208318(void) {
     char *g = D_0013F450;
     if (*(short *)(g + 0x1EB2) == 0) {
@@ -2067,10 +2040,7 @@ extern u8 D_0013F450[] NOT_SDA;
 
 extern f32 func_00214D28(f32 *p, f32 target, f32 maxstep);
 
-/* Retimes the hero animation playback rate: from the frames remaining in the current animation
-   (relative to the position a and threshold hero+0xAA8), scaled by c and divided by b times the
-   hero speed factor, it stores the result at hero+0xA90 when d is -1 (returning -1) or eases
-   hero+0xA90 toward it by at most d. Returns 0 when b is not positive. */
+/* Retimes the hero animation playback rate. */
 f32 func_L00_00209598(f32 a, f32 b, f32 c, f32 d)
 {
     u8 *g = D_0013F450;
@@ -2126,9 +2096,7 @@ extern unsigned char D_0013E633[] NOT_SDA;
 extern int func_001FA898(float);
 extern float func_L00_002001D8(void *, float);
 
-/* Interpolates a per-frame table a[0..n-1] at the hero's current animation position (hero+0xAA8,
-   fraction weight from func_L00_002001D8): blends the entry for the current frame with the
-   previous one (wrapping, or the last when flag 2 is set in hero+0xA98). */
+/* Interpolates a per-frame table at the hero's current animation position. */
 float func_L00_00209690(float *a, int n) {
     char buf[16] __attribute__((aligned(16)));
     char *d = (char *)D_0013E633 + 0xE1D;
@@ -2187,9 +2155,7 @@ typedef struct { int w[9]; } T;
 extern T D_L00_001E7F90;
 extern unsigned char D_0013E633[] NOT_SDA;
 extern void func_L00_00250928(int, int, void *, void *);
-/* HeroComputeAttachMatrices: runs func_L00_00250928 on model a (default: the hero's model at
-   D_0013E633+0x2E9D) with a local copy of the 9-word table D_L00_001E7F90, writing the attach
-   matrices into the buffer at D_0013E633+0x18DD. */
+/* HeroComputeAttachMatrices: computes the hero attach matrices for model a. */
 void func_L00_002098B8(int a) {
     T t;
     if (a == 0) a = *(int *)(D_0013E633 + 0x2E9D);
@@ -2208,10 +2174,7 @@ typedef struct {
 #define SPR_JOINT_ROTATION 0x70000000
 #define SPR_JOINT_SCALE 0x70000010
 #define SPR_JOINT_TRANSLATION 0x70000020
-/* HeroItemPoseFromRatchet: packs a keyframe pose from the scratchpad joint data: root identity
-   rotation, one packed rotation per joint in the -1-terminated list (plus identity padding
-   entries), then only the scales that differ from unit and the translations that differ from the
-   model's rest pose, filling in the pose header counts, offsets and size. */
+/* HeroItemPoseFromRatchet: packs a keyframe pose from the scratchpad joint data. */
 void func_L00_00209940(int *joints, PackedPose *pose, unsigned char *model, int padding, int context) {
     unsigned long *out;
     int rotation_count;
@@ -2557,10 +2520,7 @@ extern void func_L00_00233E48(void *, float, float, float);
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern float func_001F9D48(void *, void *);
 
-/* Probes for an obstacle in front of the hero: builds two points via func_L00_00233E48 from the
-   hero's capsule size and distances a and b, tests the segment with func_L00_001EFFF0 and
-   returns 1 on a hit, storing the distance from the hero to the hit point in *outp if outp is
-   non-null. */
+/* Probes for an obstacle in front of the hero; returns 1 on a hit and stores its distance in *outp. */
 int func_L00_0020A8B8(int outp, float a, float b) {
     float *out = (float *)outp;
     char *g = (char *)D_0013E633 + 0xE1D;
@@ -3057,7 +3017,7 @@ void func_L00_0020BC30(void) {
     }
 }
 extern void func_L00_002111E8(void);
-/* Calls func_L00_002111E8 when the hero is in vehicle mode 3 (hero+0x20A4). */
+/* Calls func_L00_002111E8 when the hero is in vehicle mode 3. */
 void func_L00_0020BFA8(void) {
     if (*(unsigned char *)(D_0013F450 + 0x20A4) == 3) {
         func_L00_002111E8();

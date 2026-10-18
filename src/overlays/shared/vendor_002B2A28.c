@@ -999,7 +999,7 @@ int func_L14_002B4B70(int index) {
  return count;
 }
 INCLUDE_ASM("asm/overlays", func_L14_002B4B84);
-/* Scans the moby's group for a class 0x1C moby in state 2; returns 0 if one is found and 1 otherwise (or when the group is empty). */
+/* Returns 0 if the group holds a class 0x1C moby in state 2, else 1. */
 int func_L14_002B4BF0(unsigned char *m) {
     unsigned short *p;
     if (*(volatile unsigned char *)(m + 0x21) == 0xFF || (p = (unsigned short *)D_L14_001AC2C0[m[0x21]]) == 0)
@@ -1186,8 +1186,7 @@ extern void *func_L00_0026DEA0(void *, float, float, float, int, void *, float, 
 extern void func_0020D678(struct Moby *);
 extern float D_L14_0015F660[] MACRO_ADDR;
 
-/* Moby update for a falling debris particle: integrates its velocity with drag and gravity, spins it, deletes it outside the 2..1021 world bounds and bursts it
-   (particles and a sphere hit test on the hero) when its timer expires or it touches something. */
+/* Moby update for a falling debris particle. */
 void func_L14_002DFA70(struct MobyDf *moby) {
     float *velocity = (float *)moby->pvars;
     int i;
@@ -1405,8 +1404,7 @@ extern short D_L14_00161C04;
 extern short D_L14_00161C08;
 extern short D_L14_00161C0C;
 
-/* Spawns a moby of class 0x193 on owner: mode 0 sets up a spline-following mover with a 90-frame timer, any other mode a delayed projectile towards the hero
-   with randomised direction and speed. Returns it. */
+/* Spawns a class 0x193 moby on owner; mode 0 makes a spline mover, other modes a delayed projectile. */
 unsigned char *func_L14_002E1570(char *owner, float *scale, int mode) {
     unsigned char *m = func_0020D348(0x193);
     unsigned char *pos;
@@ -2616,8 +2614,7 @@ extern void func_L14_00303270(char *);
 extern void func_L14_00303430(void);
 extern void func_001F49B0(void (*)(void), void *);
 
-/* Moby update for a timed effect that cycles through states 0-3: skipped when the bounding sphere is off screen, it reloads its timer from the data block,
-   spawns its effect, registers a draw callback and triggers when the hero is within 10 units. */
+/* Moby update for a timed effect that triggers when the hero is near. */
 void func_L14_00302A58(unsigned char *m) {
     D1224 *d = *(D1224 **)(m + 0x78);
     float v[4] __attribute__((aligned(16)));
@@ -2733,9 +2730,7 @@ typedef struct {
 } D_02C80;
 
 void func_L14_00302C80(char *m);
-/* Init of a 32-point strip (rope/beam style) moby: sets its scale, picks a random value from two
-   range constants, then builds the point and offset arrays (P/Q) spaced along the moby's
-   height, with the ends pinned and the middle points randomly offset, and copies them to its vars. */
+/* Init of a 32-point strip (rope/beam style) moby. */
 void func_L14_00302C80(char *m) {
     D_02C80 *d = *(D_02C80 **)(m + 0x78);
     Vq_02C80 P[32];

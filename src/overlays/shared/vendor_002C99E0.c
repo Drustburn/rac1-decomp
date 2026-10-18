@@ -377,7 +377,7 @@ extern char D_L11_001748E0[];
 extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 
-/* Moby update for a missile: eases its scale towards the class scale, leaves a smoke and spark trail along its step vector, and homes on its target. */
+/* Moby update for a missile that homes on its target. */
 void func_L11_0030A8C8(struct PMoby *moby) {
     Missile *data = (Missile *)moby->pvars;
     Vec4f *pos;
