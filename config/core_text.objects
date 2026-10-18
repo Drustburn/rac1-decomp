@@ -21,6 +21,8 @@
 # A fifth column `gas210` selects GNU 2.10-ee call-slot behavior for the
 # whole object: a volatile word load may fill the following call slot.
 # Checked against the original assembler, not a per-function code patch.
+# `gas210-real` instead runs that assembler binary for the entire object;
+# it is needed for single-instruction 64-bit shift macros in return slots.
 #   build-sn/libgcc/l2_*.o     <- src/libgcc/libgcc2.c
 #   build-sn/libgcc/dp-bit.o, fp-bit.o <- src/libgcc/fp-bit.c
 #   build-sn/libgcc/asm_*.o    <- src/libgcc/nonmatching_*.c
@@ -82,7 +84,7 @@ build-sn/core/001236F0.o 0x001236F0 ee29
 build-sn/core/00125218.o 0x00125218 ee29
 build-sn/core/001252A0.o 0x001252A0 ee29
 build-sn/core/00125630.o 0x00125630 ee29
-build-sn/core/0012A2F0.o 0x0012A2F0 ee29
+build-sn/core/0012A2F0.o 0x0012A2F0 ee29 - gas210-real
 build-sn/core/0012AC80.o 0x0012AC80 ee29 991111-01
 build-sn/core/0012CC70.o 0x0012CC70 ee29
 build-sn/core/0012CC90.o 0x0012CC90 ee29
