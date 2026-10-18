@@ -12,6 +12,9 @@
  */
 
 /* Declarations in scope here before the split. */
+/* The camera block and the debug free camera (include/camera.h). */
+extern CameraSystem D_00187040;
+extern DebugFreeCam D_0018C418;
 extern char D_0013E650[];
 extern int D_0015F694;
 extern int func_001E97C8(void *arg0);
@@ -689,7 +692,6 @@ void Camera_StartBlend(void *arg) {
 }
 
 extern char D_00187180[];
-extern char D_0018C418[];
 extern char D_00187390[];
 extern float D_0015EE60 MACRO_ADDR;
 extern float func_00214220(float, float, float);
@@ -708,7 +710,7 @@ int Camera_StepBlend(void *arg0, void *arg1) {
     float *cam = arg1;
     float m[4];
     float q[16];
-    char *st;
+    DebugFreeCam *st;
     float t;
     float *rot;
 
@@ -717,11 +719,11 @@ int Camera_StepBlend(void *arg0, void *arg1) {
     }
     t = CosineInterpolate(0.0f, 1.0f, cam[3]);
     FastVecAdd(cam + 12, D_0013F590, cam + 12);
-    st = gDebugFreeCam;
+    st = &gDebugFreeCam;
     cam[16] = cam[12] + (to[12] - cam[12]) * t;
     cam[17] = cam[13] + (to[13] - cam[13]) * t;
     cam[18] = cam[14] + (to[14] - cam[14]) * t;
-    if (*(int *)(st + 0x14) == 0) {
+    if (st->active == 0) {
         qcopy(D_00187180, cam + 16);
     }
     Matrix_ToQuatCopyBack(m, to);
@@ -729,7 +731,7 @@ int Camera_StepBlend(void *arg0, void *arg1) {
     t = CosineInterpolate(0.0f, 1.0f, cam[0]);
     func_001FA5C8(rot, cam + 8, m, t);
     func_001FA6C0(rot, q);
-    if (*(int *)(st + 0x14) == 0) {
+    if (st->active == 0) {
         func_001FA480(D_00187390, q);
     }
     cam[3] += cam[4] * D_0015EE60;
@@ -1109,7 +1111,6 @@ void CameraPreUpdate(void) {
     }
 }
 
-extern CameraSystem D_00187040;
 extern char D_00194220[];
 extern int D_0015F6E8 MACRO_ADDR;
 extern int func_001EFE10(void *, void *, int, int, int);
@@ -1276,8 +1277,8 @@ void UpdateCamera(void) {
     if (c->blend.phase == 3) {
         Camera_UpdateBlend((char *)target);
     } else {
-        char *st = gDebugFreeCam;
-        if (*(int *)(st + 0x14) != 0) {
+        DebugFreeCam *st = &gDebugFreeCam;
+        if (st->active != 0) {
             goto frozen;
         }
         qcopy(&c->pos, &target->pos);
@@ -1286,8 +1287,8 @@ void UpdateCamera(void) {
         qcopy(&c->matrix[2], &target->basis[2]);
     }
     {
-        char *st = gDebugFreeCam;
-        if (*(int *)(st + 0x14) == 0) {
+        DebugFreeCam *st = &gDebugFreeCam;
+        if (st->active == 0) {
             func_001FA460(m, D_00187390);
             MatrixToEuler(m, D_00187390 - 0x200);
         }
