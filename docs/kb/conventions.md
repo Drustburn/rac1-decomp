@@ -15,9 +15,11 @@ decide which instructions GCC 2.95 emits for the byte-exact build
 | `D_<ADDR>` | executable or resident data (below 0x15F000, or the executable's own symbols) | `D_0013F450` |
 | `D_LNN_<ADDR>` | level data in the replaced `main` range (0x15F000 and up), canonical level `NN` | `D_L17_00162108` |
 
-**Never renamed**: the build and tools read address and level from the name
-([OVERLAYS.md](../OVERLAYS.md) "Names"). Declarations, definitions,
-`INCLUDE_ASM` lines and `__asm__` labels always use it.
+**The symbol never changes**: the build and tools read address and level from
+it ([OVERLAYS.md](../OVERLAYS.md) "Names"). Declarations, `INCLUDE_ASM`
+lines, `__asm__` labels and `_r` definitions always spell it; definitions
+may spell the readable macro (below), which tools map back through
+`tools/srcnames.py`.
 
 ### Readable names are macros on top
 
@@ -25,7 +27,8 @@ decide which instructions GCC 2.95 emits for the byte-exact build
 |---|---|
 | `config/names.tsv` | the table. Columns: `symbol`, `name`, `tier`, `source`, `evidence`, `alternatives` |
 | `include/names.h` | **generated** by `python3 tools/names.py header`; `#define UpdateAllCameras func_001EC7C8`. Never edit by hand |
-| `tools/names.py` | `build`, `header`, `apply` (rewrites bodies to use names), `check`, lookup (`python3 tools/names.py UpdateAllCameras`) |
+| `config/names_local.tsv` | names this project gives from reading the code (~2900 functions), with evidence; `override` fixes a wrong imported name |
+| `tools/names.py` | `build`, `local` (merge names_local.tsv), `header`, `apply-defs` (definitions use names), `apply` (bodies use names), `check`, lookup (`python3 tools/names.py UpdateAllCameras`) |
 
 Tiers ([NAMES.md](../NAMES.md#tiers)): `recovered` (original identifier, e.g.
 from mangled NTSC symbols) and `descriptive` (later name with evidence) go
@@ -34,9 +37,10 @@ are RaC1-only (the NTSC decomp, ReRAC, the PAL memory map), mapped to PAL by
 function size alignment or fingerprints. Core/SDK names (`memcpy`,
 `sceGsSync`) stay out of the header so they don't shadow library spellings.
 
-Call with the readable name inside function bodies (`UpdateAllCameras(0);`);
-declare with the address name everywhere else
-(`extern void func_001EC7C8(int);`). `common.h` includes `names.h`, so both
+Define and call with the readable name (`void UpdateAllCameras(int x) {`,
+`UpdateAllCameras(0);`); declare with the address name
+(`extern void func_001EC7C8(int);`). To add names: a row in
+`names_local.tsv`, then `names.py local`, `header`, `apply-defs`, `apply`. `common.h` includes `names.h`, so both
 give the same object. Names are hints and can be wrong (see
 [known inconsistencies](README.md#known-inconsistencies)).
 
