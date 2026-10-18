@@ -33,7 +33,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_00116948`](core/func_00116948.c) | core | 0 | ? | - |
 | [`func_00116B00`](core/func_00116B00.c) | core | 0 | ? | - |
 | [`func_00119EA8`](functional/func_00119EA8.c) | functional | 0 | ? | - |
-| [`func_0011B868`](functional/func_0011B868.c) | functional | 0 | ? | - |
 | [`func_0011BCB0`](core/func_0011BCB0.c) | core | 0 | ? | - |
 | [`func_0011CB40`](functional/func_0011CB40.c) | functional | 0 | ? | - |
 | [`func_00121750`](core/func_00121750.c) | core | 0 | ? | - |
