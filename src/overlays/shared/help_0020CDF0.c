@@ -389,6 +389,9 @@ int func_L00_0020DC50(char *a, int b) {
     }
     return b;
 }
+/* Looks up a per-id float for id: 0x37 gives -0.95993108 (-55 degrees in radians), ids 0x1C/0x1D/0x1F
+   give -1.30899692 (-75 degrees) when a hero float is above 25.0f, else 0. Returns 1 for the ids it
+   knows, 0 otherwise. */
 int func_L00_0020DC68(int id, float *out) {
     *out = 0.0f;
     switch (id) {
@@ -729,6 +732,9 @@ void func_L00_0020EB60(void) {
 }
 extern int func_L00_00205618(int);
 extern void func_L00_00232C10(int, int, float);
+/* If the pending flag at D_0013F450 + 0x20A8 is set, either marks +0xD14 (when +0xD08 is nonzero) or
+   calls func_L00_00232C10 with -2.0f when the current moby's byte 0x53 matches +0x2294; then clears
+   the flag. */
 void func_L00_0020ED30(void) {
     unsigned char *g = (unsigned char *)D_0013F450;
     if (g[0x20A8] != 0) {
@@ -772,6 +778,9 @@ extern void func_001F99B0(void *, int, int);
 extern void func_L00_002B5428(int);
 extern void func_00213DE0(void *, int, int, int);
 
+/* HeroItemsCreate: spawns the mobys for the hero's equipped item slots (0 to 3, plus the second
+   moby of slots 1 and 3) from the selected or inventory item ids, setting draw distance, visibility,
+   spawn frame and slot state 2, and the button mask for slot 0. */
 void func_L00_0020F118(void) {
     struct Moby *m;
     int id;
@@ -950,6 +959,7 @@ void func_L00_0020F118(void) {
 #undef INVA
 #undef INV
 extern float func_001F9B88(float);
+/* Sum of absolute differences of the first three floats of three 16-byte rows of A and B. */
 float func_L00_0020F750(float *a, float *b) {
     float s = 0.0f;
     int i, j;
@@ -1161,6 +1171,9 @@ void func_L00_00210478(int id) {
 }
 extern int func_L00_002347B8(void);
 extern int D_L00_0015F6A8 MACRO_ADDR;
+/* Returns 1 when nothing blocks the action (func_L00_002347B8 and D_L00_0015F6A8 are zero, byte
+   +0x20A4 is zero, the state at +0x2084 is 7, 9 or 0xE or +0x208C is under 3) and byte +0x12E4 is
+   zero; else 0. */
 int func_L00_002104C8(void) {
     char *g;
     if (func_L00_002347B8() == 0 && D_L00_0015F6A8 == 0) {
@@ -2213,6 +2226,8 @@ extern char D_0013E633[] NOT_SDA;
 extern void func_001FA218(void *, void *);
 extern void func_002153E8(void *, void *);
 typedef float W[4] __attribute__((aligned(16)));
+/* Rotates the matrix at D_0013E633 + 0xEAD by the Euler angles (x, y, z): builds a rotation matrix
+   with func_001FA218, multiplies it in with sce_vu0_mul_matrix and stores the result back. */
 void func_L00_002123B0(float x, float y, float z) {
     float in[3];
     float t[16], u[16];
@@ -2229,6 +2244,9 @@ extern void func_001F9EE8(void *, void *, void *);
 extern float func_L00_001FF860(float, float);
 extern float func_L00_0025CCF0(char *, char *, int, float, float, float, float);
 
+/* Takes the heading of the vector between the points at D_0013E633 + 0xF8D and 0x130 bytes before it,
+   steps the float at +0x18 with func_L00_0025CCF0 (mode m, targets x, y, z), then applies a z
+   rotation to the matrix via func_L00_002123B0. */
 void func_L00_00212430(int m, float x, float y, float z) {
     Vp v;
     Vp t;
@@ -2243,6 +2261,9 @@ void func_L00_00212430(int m, float x, float y, float z) {
 }
 extern char D_0013F450[] NOT_SDA;
 extern void func_L00_00212430(int, float, float, float);
+/* TurnTo: eases the heading at D_0013F450 + 0x184 toward the target with func_L00_0025CCF0 using
+   mode a and (x, y, z), storing the step at +0x188; when byte +0x20B3 is set uses func_L00_00212430
+   instead. */
 void func_L00_002124E8(int a, float x, float y, float z) {
     char *g = D_0013F450;
     if (*(unsigned char *)(g + 0x20B3) != 0) {
@@ -2253,6 +2274,8 @@ void func_L00_002124E8(int a, float x, float y, float z) {
 }
 extern float D_0015EE6C MACRO_ADDR;
 extern void func_L00_002124E8(int, float, float, float);
+/* Calls func_L00_002124E8 (mode 0) with three values scaled from D_0015EE64 and D_0015EE6C; the
+   scale factors are larger when func_L00_0020DB30(0) returns 16. */
 void func_L00_00212550(void) {
     float a, b, c;
     if (func_L00_0020DB30(0) == 16) {
@@ -2808,6 +2831,8 @@ void func_L00_002136A8(void) {
 }
 extern char D_0013E633[];
 extern void func_001F9BC0(void *);
+/* Builds a vector at D_0013E633 + 0x173D from the hero values 0x930 to 0x938 bytes ahead of it,
+   scales it by a, then shortens its length by b (zeroed when its length is at most b). */
 void func_L00_00213970(float a, float b) {
     char *p = D_0013E633 + 0x173D;
     char *q = p - 0x920;
@@ -2948,6 +2973,9 @@ typedef struct {
     int x, y, z, w;
 } Quad;
 
+/* Restores up to 16 saved entries from the 32-entry ring of quadwords at D_0013F450 + 0x1B00 into
+   D_0013F450 + 0x80, stepping the ring index back while more than one entry remains; stops early
+   when func_L00_00213A60(i) returns 1. */
 void func_L00_00213E60(void) {
     Quad *dst = (Quad *)(D_0013F450 + 0x80);
     Quad *table = (Quad *)((char *)dst + 0x1A80);
