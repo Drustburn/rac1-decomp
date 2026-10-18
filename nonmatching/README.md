@@ -119,7 +119,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_002116A0`](game/func_002116A0.c) | game | 356 | ? | - |
 | [`func_00213A78`](game/func_00213A78.c) | game | 0 | ? | - |
 | [`func_00213C78`](game/func_00213C78.c) | game | 148 | ? | - |
-| [`func_00214778`](functional/func_00214778.c) | functional | 0 | ? | - |
 | [`func_00218928`](game/func_00218928.c) | game | 8 | ? | - |
 | [`func_00218930`](game/func_00218930.c) | game | 0 | ? | - |
 | [`func_00218A80`](game/func_00218A80.c) | game | 140 | ? | - |
