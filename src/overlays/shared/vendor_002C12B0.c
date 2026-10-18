@@ -390,36 +390,7 @@ typedef struct {
 extern DeliveryStats_2c26c8 D_00141780;
 extern struct Moby * D_L00_001ABD80[];
 extern u8 *func_L00_0025D390_C39D0(struct Moby *) __asm__("func_L00_0025D390");
-struct PadState_C39D0 {
-    u8 pad_0[0x100] __attribute__((aligned(16)));
-    f32 analog[16]; /* 0x100: [0..3] stick axes (-1..1), [4..15] pressure (0..1) */
-    f32 analog_prev[16]; /* 0x140: copy of analog */
-    u8 pad_180[0x9];
-    u8 unk189; /* 0x189: copied by FUN_L00_002d2ee8 on spawn */
-    u8 pad_18A[0x4];
-    s16 unk18E; /* 0x18E: cleared with unk190 by reset_global_state_fields */
-    s32 unk190; /* 0x190 */
-    s32 socket; /* 0x194: scePad2CreateSocket(&param, &D_0013C940) result, init_pads */
-    s32 profile_state; /* 0x198: 0 query profile, 1 read pad, 2 profile too long */
-    s32 device_state; /* 0x19C: scePad2GetState result */
-    s32 held; /* 0x1A0: buttons down, plus stick directions */
-    s32 pressed; /* 0x1A4: newly down this frame (~prev_held & held) */
-    s32 released; /* 0x1A8: ~held & prev_held */
-    s32 prev_held; /* 0x1AC */
-    s32 raw_held; /* 0x1B0: buttons only, no stick directions */
-    s32 raw_pressed; /* 0x1B4: ~prev_held & raw_held; saving_data_menu pad_buttons source */
-    s32 raw_released; /* 0x1B8: ~held & prev_raw_held; weapon swap tests 0x10 */
-    s32 prev_raw_held; /* 0x1BC: raw_held of the previous poll */
-    u32 held_unmasked; /* 0x1C0 */
-    u32 pressed_unmasked; /* 0x1C4: menu handlers test 0xD00 (accept) and 0x10 each frame */
-    u32 released_unmasked; /* 0x1C8 */
-    s32 mode; /* 0x1CC: 1 masks off 0x5030 and the left stick, 2 keeps only 0x900; reset to 0 */
-    s32 no_buttons; /* 0x1D0: held == 0 */
-    s32 no_direction; /* 0x1D4: (held & 0xF000) == 0 */
-    s32 stick_moved; /* 0x1D8: analog[2] or analog[3] nonzero */
-    s32 unk1DC; /* 0x1DC: 0x79 if the button profile is all ones, else 0; l01 picks pressure input on 0x79 */
-};
-extern struct PadState_C39D0 D_0013CA40;
+extern struct PadState D_0013CA40;
 extern struct Moby *func_L00_002AE110(struct Moby *, void *);
 extern void func_L00_002AE278(void *, struct Moby *, void *);
 extern f32 D_0015EE70 MACRO_ADDR;
@@ -2472,7 +2443,6 @@ void func_L00_002C8DB8(struct Moby *moby) {
         vars->held = (struct Moby *)func_L00_002C9578_2C8DB8((int)moby, (void *)&vars->grip, (void *)&grip);
     }
 }
-typedef struct { float x, y, z, w; } Vec4_2C93D8 __attribute__((aligned(16)));
 extern float func_002140F8(float, float);
 extern int func_001160D8(void);
 extern void func_L00_0026AA10(void *, unsigned char, unsigned char, int, float, float, int);
@@ -2480,7 +2450,7 @@ extern void func_L00_0026AA10(void *, unsigned char, unsigned char, int, float, 
 /* On selected modes, spawn twenty random particles around the moby and set its state to 4. */
 void func_L00_002C93D8(void *mm) {
     char *m = mm;
-    Vec4_2C93D8 v;
+    Vec4A v;
     int n, i;
     char *pos;
     switch (CollType()) {

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pad.h"
 #include "structs.h"
 
 /*
@@ -93,10 +94,6 @@ void func_001E9808(int level) {
 }
 
 /* Pad state, as far as this function reads it. */
-struct PadState_E99D8 {
-    u8 pad_0[0x1A4];
-    s32 pressed;
-};
 
 extern s32 D_0015EE88_E99D8 __asm__("D_0015EE88") MACRO_ADDR;
 
@@ -137,7 +134,7 @@ extern s32 D_0015EFD8_E99D8 __asm__("D_0015EFD8") MACRO_ADDR;
 extern s32 D_0015EE80_E99D8 __asm__("D_0015EE80") MACRO_ADDR;
 extern s32 D_0015EE84_E99D8 __asm__("D_0015EE84") MACRO_ADDR;
 extern u8 D_0024272F_E99D8[] __asm__("D_0024272F");
-extern struct PadState_E99D8 D_0013CA40_E99D8 __asm__("D_0013CA40");
+extern struct PadState D_0013CA40_E99D8 __asm__("D_0013CA40");
 extern s32 D_00139478_E99D8[] __asm__("D_00139478");
 extern s32 D_00139480_E99D8[] __asm__("D_00139480");
 extern char D_001E79C0_E99D8[] __asm__("D_001E79C0");
