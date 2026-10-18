@@ -275,9 +275,9 @@ void func_L03_002C0330(Moby *moby) {
 
     if (moby == 0) return;
     d = (Data_2C0330 *)moby->pvars;
-    if (moby->unk31 != 0 && FastVecDist(&moby->pos, D_L03_00166F40) < 28.0f) {
+    if (moby->visible != 0 && FastVecDist(&moby->pos, D_L03_00166F40) < 28.0f) {
         func_L00_0025B178(moby);
-        moby->unk7F = 0x16;
+        moby->shadow_range = 0x16;
     }
     if (d == 0) return;
     ids = d->ids;
@@ -338,7 +338,7 @@ void func_L03_002C0330(Moby *moby) {
             func_L00_0025E4B0(moby, d->f60);
         }
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     switch (moby->state) {
     case 0: {
         int k;
@@ -727,10 +727,10 @@ void func_L03_002C5AE0(char *moby)
             if (func_001F9938(d + 0x14)) ((unsigned char *)moby)[0x20] = 2;
             ((Moby *)moby)->rot.x = func_L00_0025F368(*(float *)(d + 0x0));
             ((Moby *)moby)->rot.y = func_L00_0025F368(*(float *)(d + 0x4));
-            ((Moby *)moby)->unk98 = sv0;
-            (*(Moby **)(d + 0x10))->unk98 = sv1;
-            ((Moby *)moby)->unk94 = sv2;
-            (*(Moby **)(d + 0x10))->unk94 = sv3;
+            ((Moby *)moby)->collision_disable = sv0;
+            (*(Moby **)(d + 0x10))->collision_disable = sv1;
+            ((Moby *)moby)->collision = sv2;
+            (*(Moby **)(d + 0x10))->collision = sv3;
             ((Vec4f *)d)->z -= D_0015EE70 * 9.8f;
             ((Moby *)moby)->rot.x += D_0015EE60 * 0.01f;
             ((Moby *)moby)->rot.y += D_0015EE60 * 0.02f;

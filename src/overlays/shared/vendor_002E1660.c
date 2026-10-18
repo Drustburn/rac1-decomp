@@ -1773,9 +1773,9 @@ void func_L00_002E6CE0(char *m) {
         func_001F9BD8_2E6CE0(p + 0x80, f, g);
     }
     func_L00_002E6BE0_2E6CE0(m, f);
-    if (((Hero *)(D_0013E633_2E3700 + 0xE1D))->unk20A4 == 2) {
+    if (((Hero *)(D_0013E633_2E3700 + 0xE1D))->vehicle_mode == 2) {
         func_001F9C30_2E6CE0(f, gl + 0x20, 3.0f);
-    } else if (((Hero *)(D_0013E633_2E3700 + 0xE1D))->unk20A4 == 1) {
+    } else if (((Hero *)(D_0013E633_2E3700 + 0xE1D))->vehicle_mode == 1) {
         func_001F9C30_2E6CE0(f, gl + 0x20, 0.4f);
     } else {
         func_001F9C30_2E6CE0(f, gl + 0x20, 0.5f);
@@ -1996,7 +1996,7 @@ void func_L00_002E74B0(O_y *o) {
         flag = 1;
         {
             S40_y *q5 = (S40_y *)((u8 *)o->m + 0x40);
-            if (hero74.unk20A4 == 1) {
+            if (hero74.vehicle_mode == 1) {
                 q5->fB0 = 0.25f;
                 func_L00_002E9968(1.5f, 0.003f);
             } else {
@@ -2006,7 +2006,7 @@ void func_L00_002E74B0(O_y *o) {
         }
     }
     if (hero74.state.control_mode == 0x10) o->m->fF0 = 0.25f;
-    if (hero74.unk20A4 == 1) {
+    if (hero74.vehicle_mode == 1) {
         if (s->i0 == 0) {
             q = (S40_y *)((u8 *)o->m + 0x40);
             func_L00_002E9900(3.0f, 0.003f, 1);
@@ -2017,7 +2017,7 @@ void func_L00_002E74B0(O_y *o) {
         }
         *(f32 *)((u8 *)o->m + 0x20C) = 0.6f;
     }
-    if (hero74.unk20A4 == 2) {
+    if (hero74.vehicle_mode == 2) {
         if (s->i10 < 2) {
             func_L00_002E99A0(0, g68, 0.005f);
             func_L00_002E9900(g6C, 0.003f, 1);
@@ -2551,7 +2551,7 @@ void func_L00_002E8210(Moby_2E8210 *m) {
     if (m->b7D == 2) {
         func_L00_002E80A8_2E8210(m);
         qcopy(m->v40, m->v0);
-        if (D_L00_00166F04_2E8210->h86 == 7 && D_0013F450_2E8210.unk30C.s == 0) {
+        if (D_L00_00166F04_2E8210->h86 == 7 && D_0013F450_2E8210.frames_off_ground.s == 0) {
             e->e.h0 = 0;
         } else {
             f->h0 = func_001F9850_2E8210(D_L00_00161DF4_2E8210);

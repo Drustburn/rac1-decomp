@@ -1049,16 +1049,16 @@ char *func_L00_002422D8(int arg0) {
                 p += 4;
                 m->unkB1 = vis;
                 m->save_id = uid;
-                m->unkB0 = mission;
+                m->mission = mission;
                 m->unkB4 = b2;
                 m->unkB6 = b1;
                 if (m->pclass != 0) {
                     m->scale = m->pclass->scale * *(float *)p;
                 }
                 p += 4;
-                m->unk32 = *(unsigned short *)p;
+                m->draw_dist = *(unsigned short *)p;
                 p += 4;
-                m->unk30 = *(unsigned char *)p;
+                m->update_dist = *(unsigned char *)p;
                 p += 0xC;
                 m->pos.x = ((float *)p)[0];
                 m->pos.y = ((float *)p)[1];
@@ -1083,11 +1083,11 @@ char *func_L00_002422D8(int arg0) {
                 }
                 p += 4;
                 pv = *(int *)p;
-                m->unk36 = 0x7F80;
+                m->occlusion = 0x7F80;
                 p += 4;
                 (*(int *)&m->pvars) = pv;
                 if (*(int *)p == 0) {
-                    m->unk36 = 0;
+                    m->occlusion = 0;
                 }
                 p += 4;
                 if (m->pclass != 0) {
@@ -1506,9 +1506,9 @@ char *func_L00_002422D8(int arg0) {
             m->pos.z = ship[2];
             rot = ship[3];
             (*(void **)&m->update) = func_L00_0028F458;
-            m->unk32 = 0xFF;
+            m->draw_dist = 0xFF;
             m->rot.z = rot;
-            m->unk30 = 0x10;
+            m->update_dist = 0x10;
             m->flags &= ~2;
             func_00213D28(m, 1, 0);
             func_L00_00251E30(m);
@@ -1566,7 +1566,7 @@ char *func_L00_002422D8(int arg0) {
             int k = 0;
 
             for (m = D_L00_00160098; m->state != 0xFF; m++) {
-                if (m->unk36 != 0x7F80) {
+                if (m->occlusion != 0x7F80) {
                     int uid = (*(short *)&m->save_id);
                     int j;
 
@@ -1577,13 +1577,13 @@ char *func_L00_002422D8(int arg0) {
                         }
                     }
                     if (j == n3) {
-                        m->unk36 = 0x7F80;
+                        m->occlusion = 0x7F80;
                         flag = 1;
                         cnt++;
                     } else {
                         int w = q[j * 2];
 
-                        m->unk36 = ((w >> 3) << 8) | (1 << (w & 7));
+                        m->occlusion = ((w >> 3) << 8) | (1 << (w & 7));
                     }
                 }
             }
@@ -1654,7 +1654,7 @@ char *func_L00_002422D8(int arg0) {
 
         STUB_printf(D_L00_001E8AC0);
         for (m = D_L00_00160098; m != D_L00_001600A0; m++) {
-            m->unk36 = 0x7F80;
+            m->occlusion = 0x7F80;
         }
         for (t = D_L00_00161080; t != D_L00_00161084; t++) {
             t->f18 = 0x7F80;

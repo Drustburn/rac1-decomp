@@ -295,7 +295,7 @@ void func_L07_00314800_r(Moby *moby, ThinkData_314800 *data, Vec_314800 *vec)
                     if (data->f1F0 != -1) {
                         func_L00_002676A0_314800(moby, 1);
                         func_L00_002584A8_314800(moby, 0, -1);
-                        func_L00_002512D8_314800(moby->unkB0);
+                        func_L00_002512D8_314800(moby->mission);
                         func_L00_00286128_314800(D_L07_0016016C_314800[data->f1F0].f30, D_L07_0016016C_314800[data->f1F0].f70);
                     }
                     moby->state = 10;
@@ -330,7 +330,7 @@ void func_L07_00314800_r(Moby *moby, ThinkData_314800 *data, Vec_314800 *vec)
                         data->f1F8 = -1;
                         data->f1F8 = func_0022ED80_314800(0xF, 4, moby);
                         moby->state = 11;
-                        moby->unkBC++;
+                        moby->command++;
                     }
                     if ((f23 < v0 && vec->f0 <= f23) || (f24 < v0 && vec->f0 <= f24)) {
                         data->f1C7 = 1;
@@ -346,7 +346,7 @@ void func_L07_00314800_r(Moby *moby, ThinkData_314800 *data, Vec_314800 *vec)
         } else {
             data->f1C6 = 0;
         }
-        moby->unkA4 = 0xFF;
+        moby->hit_slot = 0xFF;
     }
     func_L00_0025E590_314800(moby, data->anim);
     data->f1FC = data->f1FC + 0.3f;
@@ -1931,9 +1931,9 @@ void func_L07_0031A410_r(struct Moby *moby) {
     if (vars == 0) return;
 
     sight_p(moby, sight, 8.0f);
-    if (moby->unk31 && dist_p(&moby->pos, &D_L07_00166EC0_p) < 27.0f) {
+    if (moby->visible && dist_p(&moby->pos, &D_L07_00166EC0_p) < 27.0f) {
         shadow_p(moby);
-        moby->unk7F = 0x15;
+        moby->shadow_range = 0x15;
     }
     health = &vars->health;
     hit = hit_lookup_p(moby, 0x230000, 0);
@@ -1951,7 +1951,7 @@ void func_L07_0031A410_r(struct Moby *moby) {
     case 0:
         moby->flags |= 0x1000;
         qcopy(&vars->home, &moby->pos);
-        moby->unk94 = moby->pclass->unk10;
+        moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
     case 1:
@@ -1965,7 +1965,7 @@ void func_L07_0031A410_r(struct Moby *moby) {
             (*(int *)(sight + 0x40) != 0 && dist_p(&moby->pos, sight) < 8.0f)) {
             vars->speed = 0.0f;
             vars->timeout = scale_ticks_p(600);
-            moby->unkBC = 1;
+            moby->command = 1;
             vars->bob_timer = scale_ticks_p(7);
             moby->state = 3;
             if (vars->sound != -1) voice_p(vars->sound, 2);
@@ -1976,7 +1976,7 @@ void func_L07_0031A410_r(struct Moby *moby) {
         if (moby->prev_seq != 1) anim_p(moby, 1, 0, 10);
         moby->state = 3;
     case 3:
-        if ((moby->unk70 & 2) && moby->seq == 1 && moby->prev_seq != 2) {
+        if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             anim_p(moby, 2, 0, 10);
         }
         speed = D_0015EE70_p;
@@ -1985,15 +1985,15 @@ void func_L07_0031A410_r(struct Moby *moby) {
         vars->speed = new_speed;
         if (max_speed < new_speed)
             vars->speed = max_speed;
-        if (moby->unkBC == 1) {
+        if (moby->command == 1) {
             moby->pos.z += D_0015EE60_p * 0.1f;
             if (tick_p(&vars->bob_timer)) {
                 vars->bob_timer = scale_ticks_p(7);
-                moby->unkBC = 2;
+                moby->command = 2;
             }
-        } else if (moby->unkBC == 2) {
+        } else if (moby->command == 2) {
             moby->pos.z -= D_0015EE60_p * 0.1f;
-            if (tick_p(&vars->bob_timer)) moby->unkBC = 0;
+            if (tick_p(&vars->bob_timer)) moby->command = 0;
         }
         sub_p(&dir, sight, &moby->pos);
         norm_p(&dir, &dir, vars->speed);
@@ -2168,9 +2168,9 @@ void func_L07_0031AAB0(struct Moby *moby) {
     collision = vars->collision;
     spawner_vars = (SwooperSpawnerVars_31AAB0 *)vars->spawner->pvars;
     see_31AAB0(moby, &sight, spawner_vars->view_range);
-    if (moby->unk31 && dist_31AAB0(&moby->pos, &D_L07_00166EC0_31AAB0) < 27.0f) {
+    if (moby->visible && dist_31AAB0(&moby->pos, &D_L07_00166EC0_31AAB0) < 27.0f) {
         func_L00_0025B178_31AAB0(moby);
-        moby->unk7F = 0x15;
+        moby->shadow_range = 0x15;
     }
     hit = hit_31AAB0(moby, 0x230000, 0);
     func_L00_0025B4D0_31AAB0(moby, hit, collision, 0, &touching, 0, 0, 4);
@@ -2192,7 +2192,7 @@ void func_L07_0031AAB0(struct Moby *moby) {
         moby->rot.z = atan2_31AAB0(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y);
         vars->unk29 = 0;
         moby->state = 1;
-        moby->unkBC = 0;
+        moby->command = 0;
         break;
     case 1:
         sub_31AAB0(&vars->velocity, &vars->goal, &moby->pos);
@@ -2212,25 +2212,25 @@ void func_L07_0031AAB0(struct Moby *moby) {
             }
             vars->dive_speed = spawner_vars->speed * D_0015EE6C_31AAB0;
             vars->life_timer = ticks_31AAB0(600);
-            moby->unkBC = 1;
+            moby->command = 1;
             vars->bob_timer = ticks_31AAB0(7);
             moby->state = 2;
         }
         break;
     case 2:
-        if ((moby->unk70 & 2) && moby->seq == 1 && moby->prev_seq != 2) {
+        if ((moby->anim_flags & 2) && moby->seq == 1 && moby->prev_seq != 2) {
             blend_31AAB0(moby, 2, 0, 10);
         }
-        if (moby->unkBC == 1) {
+        if (moby->command == 1) {
             moby->pos.z += D_0015EE60_315108 * 0.1f;
             if (tick_31AAB0(&vars->bob_timer)) {
                 vars->bob_timer = ticks_31AAB0(7);
-                moby->unkBC = 2;
+                moby->command = 2;
             }
-        } else if (moby->unkBC == 2) {
+        } else if (moby->command == 2) {
             moby->pos.z -= D_0015EE60_315108 * 0.1f;
             if (tick_31AAB0(&vars->bob_timer)) {
-                moby->unkBC = 0;
+                moby->command = 0;
             }
         }
         turn_31AAB0(moby, atan2_31AAB0(sight.pos.f[0] - moby->pos.x, sight.pos.f[1] - moby->pos.y),
@@ -2240,7 +2240,7 @@ void func_L07_0031AAB0(struct Moby *moby) {
         moby->rot.y = func_L00_00259148_31AAB0(&vars->pitch_speed, moby->rot.y, pitch,
                                        D_0015EE70_31AAB0 * 3.1415927f, D_0015EE6C_31AAB0 * 3.1415927f, D_0015EE6C_31AAB0 * 6.2831855f);
         sub_31AAB0(&dir, &sight.pos, &moby->pos);
-        if (moby->unkBC != 0) {
+        if (moby->command != 0) {
             dir.f[2] = 0.0f;
         }
         norm_31AAB0(&dir, &dir, D_0015EE70_31AAB0 * 30.0f);
@@ -2322,7 +2322,7 @@ void func_L07_0031B318(struct Moby *m) {
         ext.x = v->size.x;
         ext.y = v->size.y;
         ext.z = v->size.z;
-        break_rotate_31B318(&ext, &ext, &m->unkC0);
+        break_rotate_31B318(&ext, &ext, &m->rot_row0);
         for (i = 0; i < v->shards; i++) {
             p.x = rand_31B318(-ext.x, ext.x) * 0.5f;
             p.y = rand_31B318(-ext.y, ext.y) * 0.5f;
@@ -2342,7 +2342,7 @@ void func_L07_0031B318(struct Moby *m) {
         delete_31B318(m);
         return;
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
 }
 typedef struct Gun_31B620 {
     char p0[0x20];
@@ -2423,7 +2423,7 @@ void func_L07_0031B620(Moby *moby)
         }
         moby->state = 2;
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     func_L00_0025E590_31B620(moby, data->path);
 
     switch (moby->state) {
@@ -2457,7 +2457,7 @@ void func_L07_0031B620(Moby *moby)
         }
         data->height = moby->pos.z;
         data->b29 = 0;
-        moby->unkBC = 0;
+        moby->command = 0;
         data->shot = data->pause;
         if (moby->prev_seq != 1) {
             func_00213DE0_31B620(moby, 1, 0, 0);
@@ -2466,7 +2466,7 @@ void func_L07_0031B620(Moby *moby)
         break;
 
     case 1:
-        if (moby->seq != 1 && (moby->unk70 & 2) && moby->prev_seq != 1) {
+        if (moby->seq != 1 && (moby->anim_flags & 2) && moby->prev_seq != 1) {
             func_00213DE0_31B620(moby, 1, 0, 1);
         }
         if (data->back != 0) {
@@ -2488,7 +2488,7 @@ void func_L07_0031B620(Moby *moby)
         if (func_001F9938_31B620(&data->timer) == 0) {
             break;
         }
-        if (moby->unkBC == 0) {
+        if (moby->command == 0) {
             if (data->burst == 0 || (data->shot & 1) != 0) {
                 func_L00_00250800_31B620(moby, 0, pos);
                 vel[0] = func_001F9F90_31B620(moby->rot.z) * (D_0015EE6C_31B318 * 15.0f);
@@ -2499,20 +2499,20 @@ void func_L07_0031B620(Moby *moby)
             }
             if (data->burst != 0) {
                 if (func_001F9938_31B620(&data->shot)) {
-                    moby->unkBC = 1;
+                    moby->command = 1;
                     data->shot = data->burst;
                 }
             } else {
                 data->shot = data->shot ^ 1;
             }
         } else if (func_001F9938_31B620(&data->shot)) {
-            moby->unkBC = 0;
+            moby->command = 0;
             data->shot = data->pause;
         }
         data->timer = func_001F9850_31B620(6);
         {
             float dist = func_001F9D48_31B620(((float *)&moby->pos), D_0013F4D0_31B620);
-            if (55.0f < dist || (35.0f < dist && moby->unk31 == 0)) {
+            if (55.0f < dist || (35.0f < dist && moby->visible == 0)) {
             if (80.0f < dist) {
                 data->timer = data->timer * 3;
             } else if (120.0f < dist) {
@@ -2525,7 +2525,7 @@ void func_L07_0031B620(Moby *moby)
         break;
 
     case 2:
-        if (moby->seq != 4 && (moby->unk70 & 2) && moby->prev_seq != 4) {
+        if (moby->seq != 4 && (moby->anim_flags & 2) && moby->prev_seq != 4) {
             func_00213DE0_31B620(moby, 4, 0, 1);
         }
         moby->rot.z = func_001FA748_31B620(moby->rot.z, D_0015EE6C_31B318 * 12.566371f);
@@ -2537,7 +2537,7 @@ void func_L07_0031B620(Moby *moby)
         break;
 
     case 3:
-        if (moby->seq != 4 && (moby->unk70 & 2) && moby->prev_seq != 4) {
+        if (moby->seq != 4 && (moby->anim_flags & 2) && moby->prev_seq != 4) {
             func_00213DE0_31B620(moby, 4, 0, 0);
         }
         {

@@ -621,8 +621,8 @@ void func_L06_0022BB20(void) {
             func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
             func_L01_00234970(D_0015EE70 * 20.0f);
         }
-        if (13.0f <= D_0013F450_s.unkAA8 && D_0013F450_s.unkAA8 <= 30.0f) {
-            if (27.0f < D_0013F450_s.unkAA8) {
+        if (13.0f <= D_0013F450_s.anim_frame && D_0013F450_s.anim_frame <= 30.0f) {
+            if (27.0f < D_0013F450_s.anim_frame) {
                 func_00214D28(&D_0013F450_s.unk45C, 0.0f, D_0015EE70 * 8.0f);
             } else {
                 func_00214D28(&D_0013F450_s.unk45C, D_0015EE6C * 2.0f, D_0015EE70 * 8.0f);
@@ -631,8 +631,8 @@ void func_L06_0022BB20(void) {
         D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.motion.rot.f[2]) * D_0013F450_s.unk45C;
         D_0013F450_s.motion.velocity.f[1] = FastSin(D_0013F450_s.motion.rot.f[2]) * D_0013F450_s.unk45C;
     } else if (state == 0x4C) {
-        if (5.0f <= D_0013F450_s.unkAA8 && D_0013F450_s.unkAA8 <= 18.0f) {
-            if (15.0f < D_0013F450_s.unkAA8) {
+        if (5.0f <= D_0013F450_s.anim_frame && D_0013F450_s.anim_frame <= 18.0f) {
+            if (15.0f < D_0013F450_s.anim_frame) {
                 func_00214D28(&D_0013F450_s.unk45C, 0.0f, D_0015EE70 * 8.0f);
             } else {
                 func_00214D28(&D_0013F450_s.unk45C, D_0015EE6C * 1.25f, D_0015EE70 * 8.0f);
@@ -644,7 +644,7 @@ void func_L06_0022BB20(void) {
         if (D_0015EE84 != 0xE && func_L00_0020DB30(3) == 3 && D_0013F450_s.state_timer == scale_ticks(5)) {
             func_L00_00217570(1, 0);
         }
-        D_0013F450_s.motion.unk180 = D_0013F450_s.unk43C;
+        D_0013F450_s.motion.move_yaw = D_0013F450_s.unk43C;
         func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.981317f);
         if (D_0013F450_s.unk450 != 3) {
             D_0013F450_s.ground_speed = D_0013F450_s.unk454;
@@ -666,15 +666,15 @@ void func_L06_0022BB20(void) {
         func_L00_00213970(0.7f, D_0015EE6C * 0.0f);
         qcopy(&D_0013F450_s.motion.unk150, &D_0013F450_s.move_impulse);
     } else if (state == 0x11) {
-        D_0013F450_s.motion.unk180 = D_0013F450_s.unk470.f[3];
+        D_0013F450_s.motion.move_yaw = D_0013F450_s.unk470.f[3];
         qcopy(&D_0013F450_s.motion.unk170, &D_0013F450_s.unk470);
         if (scale_ticks(9) < D_0013F450_s.state_timer) {
             func_L00_002124E8(-1, D_0015EE64 * 0.042f, D_0015EE64 * 0.2f, D_0015EE6C * 11.868238f);
         }
         if (scale_ticks(9) <= D_0013F450_s.state_timer) {
             if (D_0013F450_s.unk308 == 0) {
-                D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.motion.unk180) * (D_0015EE6C * 4.9f);
-                D_0013F450_s.motion.velocity.f[1] = FastSin(D_0013F450_s.motion.unk180) * (D_0015EE6C * 4.9f);
+                D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.motion.move_yaw) * (D_0015EE6C * 4.9f);
+                D_0013F450_s.motion.velocity.f[1] = FastSin(D_0013F450_s.motion.move_yaw) * (D_0015EE6C * 4.9f);
             } else {
                 func_L00_00234420(D_0013F450_s.motion.velocity.f, D_0013F450_s.motion.velocity.f, 0.0f);
                 func_L00_001FF4B0(&tmp, &D_0013F450_s.motion.unk170, D_0015EE6C * 4.9f);
@@ -685,7 +685,7 @@ void func_L06_0022BB20(void) {
     } else {
         if (state == 0x2D) {
             x = D_0013F450_s.motion.rot.f[2];
-            D_0013F450_s.motion.unk188 = func_L00_0025CCF0(&x, D_0013F450_s.motion.unk180, &D_0013F450_s.motion.unk184, 0, D_0015EE64 * 0.018f, D_0015EE64 * 0.2f, D_0015EE6C * 7.330383f);
+            D_0013F450_s.motion.unk188 = func_L00_0025CCF0(&x, D_0013F450_s.motion.move_yaw, &D_0013F450_s.motion.unk184, 0, D_0015EE64 * 0.018f, D_0015EE64 * 0.2f, D_0015EE6C * 7.330383f);
             a = FastSubRots(x, D_0013F450_s.motion.rot.f[2]);
             func_L00_00209850(0.0f, 0.0f, a);
         } else {
@@ -855,7 +855,7 @@ void func_L06_0022E788(void) {
                     *(u128 *)vec[0] = 0;
                     vec[0][0] = 1.0f;
                     func_001F9EC0(((Hero *)&D_0013F450)->motion.unk170.f, vec[0], D_L06_00167500.f350);
-                    ((Hero *)&D_0013F450)->motion.unk180 = D_L06_00167500.f158;
+                    ((Hero *)&D_0013F450)->motion.move_yaw = D_L06_00167500.f158;
                     func_L00_002124E8(0, D_0015EE64, D_0015EE64 * 0.0f, D_0015EE6C * 174.53293f);
                     if (*(int *)&D_L06_0015F768 > 0) {
                         if (func_001F9908((int *)&D_L06_0015F768)) {
@@ -896,12 +896,12 @@ void func_L06_0022E788(void) {
                         if (((Hero *)&D_0013F450)->moby->prev_seq != anim) {
                             func_L00_00232C10(anim, 0, scale_ticks(5));
                         }
-                        ((Hero *)&D_0013F450)->unkA90 = FastAbsF(((Hero *)&D_0013F450)->motion.unk184) / (D_0015EE6C * 3.3161256f);
-                        if (((Hero *)&D_0013F450)->unkA90 < 0.55f) {
-                            ((Hero *)&D_0013F450)->unkA90 = 0.55f;
+                        ((Hero *)&D_0013F450)->anim_speed = FastAbsF(((Hero *)&D_0013F450)->motion.unk184) / (D_0015EE6C * 3.3161256f);
+                        if (((Hero *)&D_0013F450)->anim_speed < 0.55f) {
+                            ((Hero *)&D_0013F450)->anim_speed = 0.55f;
                         }
-                        if (((Hero *)&D_0013F450)->unkA90 > 2.5f) {
-                            ((Hero *)&D_0013F450)->unkA90 = 2.5f;
+                        if (((Hero *)&D_0013F450)->anim_speed > 2.5f) {
+                            ((Hero *)&D_0013F450)->anim_speed = 2.5f;
                         }
                     } else if (((Hero *)&D_0013F450)->motion.unk184 == 0.0f) {
                         int anim;
@@ -932,11 +932,11 @@ void func_L06_0022E788(void) {
                     r = ((Hero *)&D_0013F450)->motion.unk164 / speed;
                     if (scale_ticks(5) < r && ((Hero *)&D_0013F450)->moby->prev_frame < 5.5f) {
                         func_L00_00209598(13.0f, r, 0.5f, -1.0f);
-                        if (((Hero *)&D_0013F450)->unkA90 > 1.1f) {
-                            ((Hero *)&D_0013F450)->unkA90 = 1.1f;
+                        if (((Hero *)&D_0013F450)->anim_speed > 1.1f) {
+                            ((Hero *)&D_0013F450)->anim_speed = 1.1f;
                         }
                     } else if (((Hero *)&D_0013F450)->moby->prev_frame > 6.5f) {
-                        ((Hero *)&D_0013F450)->unkA90 = 1.0f;
+                        ((Hero *)&D_0013F450)->anim_speed = 1.0f;
                     }
                 }
             } else {
@@ -983,19 +983,19 @@ void func_L06_0022E788(void) {
             if (((Hero *)&D_0013F450)->unk6A4 != 0) {
                 qcopy(&m->pos, ((Hero *)&D_0013F450)->motion.pos.f);
                 qcopy(&m->rot, ((Hero *)&D_0013F450)->motion.rot.f);
-                m->unk32 = 0x40;
-                ((Hero *)&D_0013F450)->unk6A4->unk31 = 1;
-                ((Hero *)&D_0013F450)->unk6A4->unk30 = 0;
-                ((Hero *)&D_0013F450)->unk6A4->unk23 = 0;
+                m->draw_dist = 0x40;
+                ((Hero *)&D_0013F450)->unk6A4->visible = 1;
+                ((Hero *)&D_0013F450)->unk6A4->update_dist = 0;
+                ((Hero *)&D_0013F450)->unk6A4->alpha = 0;
                 ((Hero *)&D_0013F450)->unk6A4->flags |= 0x800;
                 func_L00_00251E30(((Hero *)&D_0013F450)->unk6A4);
                 func_0022ED80(0, 0, (int)((Hero *)&D_0013F450)->unk6A4);
             }
         }
         if (((Hero *)&D_0013F450)->unk6A4 != 0) {
-            ((Hero *)&D_0013F450)->unk6A4->unk23 += truncate_float_to_s32(D_0015EE60 * 5.0f);
-            if (((Hero *)&D_0013F450)->unk6A4->unk23 > 0x80) {
-                ((Hero *)&D_0013F450)->unk6A4->unk23 = 0x80;
+            ((Hero *)&D_0013F450)->unk6A4->alpha += truncate_float_to_s32(D_0015EE60 * 5.0f);
+            if (((Hero *)&D_0013F450)->unk6A4->alpha > 0x80) {
+                ((Hero *)&D_0013F450)->unk6A4->alpha = 0x80;
             }
             {
                 Moby *dst = ((Hero *)&D_0013F450)->unk6A4;
@@ -1033,14 +1033,14 @@ void func_L06_0022E788(void) {
             clear_u64_value(((Hero *)&D_0013F450)->motion.velocity.f);
             func_L00_00216E98(D_0015EE70 * 12.6f);
             if (((Hero *)&D_0013F450)->air_frames.s != 0) {
-                func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk100.f, D_0015EE70 * 25.0f);
+                func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.displacement.f, D_0015EE70 * 25.0f);
                 func_L00_00212878();
             } else {
                 func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_0015EE70 * 54.0f);
             }
             if (anim != -1 && ((Hero *)&D_0013F450)->moby->seq != 0x36) {
                 func_L00_00232C10(anim, 0, frames);
-            } else if ((((Hero *)&D_0013F450)->moby->unk70 & 2) && ((Hero *)&D_0013F450)->moby->seq == 0x36) {
+            } else if ((((Hero *)&D_0013F450)->moby->anim_flags & 2) && ((Hero *)&D_0013F450)->moby->seq == 0x36) {
                 func_L00_00232C10(func_L06_0021D6B8(0), 0, scale_ticks(5));
             }
         }
@@ -1059,7 +1059,7 @@ void func_L06_0022E788(void) {
             func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_0015EE70 * 54.0f);
         }
         if (((Hero *)&D_0013F450)->unk964 != 0) {
-            ((Hero *)&D_0013F450)->motion.unk180 = func_L00_001FF860(((Hero *)&D_0013F450)->unk964->pos.x - moby->pos.x, ((Hero *)&D_0013F450)->unk964->pos.y - moby->pos.y);
+            ((Hero *)&D_0013F450)->motion.move_yaw = func_L00_001FF860(((Hero *)&D_0013F450)->unk964->pos.x - moby->pos.x, ((Hero *)&D_0013F450)->unk964->pos.y - moby->pos.y);
             func_L00_002124E8(0, D_0015EE64 * 0.02f, D_0015EE64 * 0.15f, D_0015EE6C * 6.2831855f);
         }
         break;
@@ -1076,7 +1076,7 @@ void func_L06_0022E788(void) {
             }
             if (((Hero *)&D_0013F450)->state.step == 0) {
                 func_00214D28(&((Hero *)&D_0013F450)->unk960, D_0015EE6C * 27.0f, D_0015EE70 * 80.0f);
-                ((Hero *)&D_0013F450)->motion.unk180 = func_L00_001FF860(((Hero *)&D_0013F450)->unk964->pos.x - moby->pos.x, ((Hero *)&D_0013F450)->unk964->pos.y - moby->pos.y);
+                ((Hero *)&D_0013F450)->motion.move_yaw = func_L00_001FF860(((Hero *)&D_0013F450)->unk964->pos.x - moby->pos.x, ((Hero *)&D_0013F450)->unk964->pos.y - moby->pos.y);
                 func_L00_002124E8(0, D_0015EE64 * 0.03f, D_0015EE64 * 0.15f, D_0015EE6C * 7.330383f);
             } else if (((Hero *)&D_0013F450)->state.step == 1) {
                 func_00214D28(&((Hero *)&D_0013F450)->unk960, 0.0f, D_0015EE70 * 42.0f);
@@ -1114,7 +1114,7 @@ void func_L06_0022E788(void) {
         {
 
             func_00214D28(&((Hero *)&D_0013F450)->unk97C, ((Hero *)&D_0013F450)->unk980, D_0015EE6C * 10.0f);
-            qcopy(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk100.f);
+            qcopy(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.displacement.f);
             FastVecScale(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, 0.9f);
             ((Hero *)&D_0013F450)->motion.velocity.f[2] -= D_0015EE70 * 15.0f;
             qcopy(vec[0], &((Hero *)&D_0013F450)->unk964->pos);
@@ -1133,7 +1133,7 @@ void func_L06_0022E788(void) {
 
             if ((((Hero *)&D_0013F450)->unkA98 & 2) && moby->prev_seq == 0x34) {
                 func_L00_00232C10(0x35, 0xA, scale_ticks(0xC));
-                ((Hero *)&D_0013F450)->unkA90 = 0.3f;
+                ((Hero *)&D_0013F450)->anim_speed = 0.3f;
             }
             oldz = ((Hero *)&D_0013F450)->motion.velocity.f[2];
             if (((Hero *)&D_0013F450)->unk994 != 0 && ((Hero *)&D_0013F450)->unk994->pvars != 0 && *(int *)(((Hero *)&D_0013F450)->unk994->pvars + 0x34) != 0) {
@@ -1145,7 +1145,7 @@ void func_L06_0022E788(void) {
                 }
                 func_L00_0025CCF0(&((Hero *)&D_0013F450)->unk9AC, a, &((Hero *)&D_0013F450)->unk9B8, 0, D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, 0.0f);
             }
-            ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unk9AC;
+            ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unk9AC;
             func_L00_002124E8(0, D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.712389f);
             FastVecSub(vec[0], &((Hero *)&D_0013F450)->unk994->pos, ((Hero *)&D_0013F450)->motion.pos.f);
             func_L00_001FF4B0(vec[0], vec[0], 1.0f);
@@ -1174,8 +1174,8 @@ void func_L06_0022E788(void) {
                     if (s > D_0015EE6C * 5.0f) {
                         s = D_0015EE6C * 5.0f;
                     }
-                    vec[3][0] = FastCos(((Hero *)&D_0013F450)->motion.unk180) * s;
-                    vec[3][1] = FastSin(((Hero *)&D_0013F450)->motion.unk180) * s;
+                    vec[3][0] = FastCos(((Hero *)&D_0013F450)->motion.move_yaw) * s;
+                    vec[3][1] = FastSin(((Hero *)&D_0013F450)->motion.move_yaw) * s;
                     vec[3][2] = 0.0f;
                     FastVecAdd(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, vec[3]);
                 }
@@ -1184,7 +1184,7 @@ void func_L06_0022E788(void) {
                 float k;
 
                 if (func_001F9D48(((Hero *)&D_0013F450)->motion.pos.f, &((Hero *)&D_0013F450)->unk994->pos) < ((Hero *)&D_0013F450)->unk9A0 * 1.57f || ((Hero *)&D_0013F450)->ground_distance > 1.5f) {
-                    func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk100.f, D_0015EE70 * 40.0f);
+                    func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.displacement.f, D_0015EE70 * 40.0f);
                     if (((Hero *)&D_0013F450)->unk9BE != 0 && func_L00_002342F8(((Hero *)&D_0013F450)->motion.velocity.f) > 0.0f) {
                         FastVecSub(vec[3], ((Hero *)&D_0013F450)->motion.pos.f, &((Hero *)&D_0013F450)->unk994->pos);
                         func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_0015EE70 * 57.0f);
@@ -1261,7 +1261,7 @@ void func_L06_0022E788(void) {
                 if (((Hero *)&D_0013F450)->unk9BC != 0) {
                     up = ((Hero *)&D_0013F450)->unk9BC == 1;
                 } else {
-                    *(u128 *)vec[3] = *(u128 *)((Hero *)&D_0013F450)->motion.unk100.f;
+                    *(u128 *)vec[3] = *(u128 *)((Hero *)&D_0013F450)->motion.displacement.f;
                     up = func_L00_00213A08(vec[3]) > 0.0f;
                 }
                 if (up) {
@@ -1340,7 +1340,7 @@ void func_L06_0022E788(void) {
             float v;
             float acc;
 
-            if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->unkAA8 < D_L06_0017C4A8[((Hero *)&D_0013F450)->unkA60].f18) {
+            if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->anim_frame < D_L06_0017C4A8[((Hero *)&D_0013F450)->attack_record].f18) {
                 ((Hero *)&D_0013F450)->items[0].timer = 2;
             }
             ((Hero *)&D_0013F450)->target_speed = 0.0f;
@@ -1359,9 +1359,9 @@ void func_L06_0022E788(void) {
                 func_L00_00234420(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->ground_speed);
             }
             if (((Hero *)&D_0013F450)->unkA58 != 0 || ((Hero *)&D_0013F450)->unkA54 != 0) {
-                ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unkA5C;
+                ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unkA5C;
                 func_L00_002124E8(0, D_0015EE64 * 0.05f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
-            } else if (((Hero *)&D_0013F450)->unkAA8 < 25.0f) {
+            } else if (((Hero *)&D_0013F450)->anim_frame < 25.0f) {
                 func_L00_00215628(8.0f, 1.0471976f, 1.0471976f);
             }
             t0 = scale_ticks(9);
@@ -1373,7 +1373,7 @@ void func_L06_0022E788(void) {
             }
             acc = D_0015EE70 * 150.0f;
             t1 = scale_ticks(0xE);
-            if (((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->unkAA8 > 23.5f && ((Hero *)&D_0013F450)->motion.unk100.f[2] < 0.0f && ((Hero *)&D_0013F450)->air_frames.s != 0) {
+            if (((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->anim_frame > 23.5f && ((Hero *)&D_0013F450)->motion.displacement.f[2] < 0.0f && ((Hero *)&D_0013F450)->air_frames.s != 0) {
 
                 qcopy(vec[0], ((Hero *)&D_0013F450)->motion.pos.f);
                 func_L00_00233F68(vec[0], vec[0], -0.5f);
@@ -1410,7 +1410,7 @@ void func_L06_0022E788(void) {
             int skip;
 
             ((Hero *)&D_0013F450)->target_speed = 0.0f;
-            if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->unkAA8 < D_L06_0017C4A8[((Hero *)&D_0013F450)->unkA60].f18) {
+            if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->anim_frame < D_L06_0017C4A8[((Hero *)&D_0013F450)->attack_record].f18) {
                 ((Hero *)&D_0013F450)->items[0].timer = 2;
             }
             skip = 0;
@@ -1432,12 +1432,12 @@ void func_L06_0022E788(void) {
                             near = 0;
                         }
                         if (d > 0.0f) {
-                            ((Hero *)&D_0013F450)->unkA90 = 1.0f / (e + 1.0f);
+                            ((Hero *)&D_0013F450)->anim_speed = 1.0f / (e + 1.0f);
                         }
                     } else {
                         near = 0;
                     }
-                    ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unkA5C;
+                    ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unkA5C;
                     if (near) {
                         func_L00_002124E8(1, D_0015EE64 * 0.05f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
                     } else {
@@ -1447,7 +1447,7 @@ void func_L06_0022E788(void) {
                     int ok;
 
                     ok = 1;
-                    if (((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->unkAA8 > 6.0f) {
+                    if (((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->anim_frame > 6.0f) {
                         ok = 0;
                     }
                     if (ok) {
@@ -1473,11 +1473,11 @@ void func_L06_0022E788(void) {
         {
             Rec2C *r;
 
-            if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->unkAA8 < D_L06_0017C4A8[((Hero *)&D_0013F450)->unkA60].f20) {
+            if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->anim_frame < D_L06_0017C4A8[((Hero *)&D_0013F450)->attack_record].f20) {
                 ((Hero *)&D_0013F450)->items[0].timer = 2;
             }
             ((Hero *)&D_0013F450)->target_speed = 0.0f;
-            r = &D_L06_0017C4A8[((Hero *)&D_0013F450)->unkA60];
+            r = &D_L06_0017C4A8[((Hero *)&D_0013F450)->attack_record];
             if (((Hero *)&D_0013F450)->unkA54 != 0 && ((Hero *)&D_0013F450)->state_timer < scale_ticks(4)) {
                 float d;
                 float off;
@@ -1517,15 +1517,15 @@ void func_L06_0022E788(void) {
             }
             switch (r->f4) {
             case 0:
-                if (((Hero *)&D_0013F450)->unkAA8 < 18.0f) {
+                if (((Hero *)&D_0013F450)->anim_frame < 18.0f) {
                     ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 4.4f * ((Hero *)&D_0013F450)->speed_scale;
                 }
                 break;
             case 1:
-                if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->unkAA8 < 9.0f) {
-                    if (((Hero *)&D_0013F450)->unkAA8 > 8.0f) {
+                if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->anim_frame < 9.0f) {
+                    if (((Hero *)&D_0013F450)->anim_frame > 8.0f) {
                         ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 3.0f * ((Hero *)&D_0013F450)->speed_scale;
-                    } else if (((Hero *)&D_0013F450)->unkAA8 > 7.0f) {
+                    } else if (((Hero *)&D_0013F450)->anim_frame > 7.0f) {
                         ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 4.5f * ((Hero *)&D_0013F450)->speed_scale;
                     } else {
                         ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 5.7f * ((Hero *)&D_0013F450)->speed_scale;
@@ -1533,23 +1533,23 @@ void func_L06_0022E788(void) {
                 }
                 break;
             case 2:
-                if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->unkAA8 < 12.0f) {
+                if (((Hero *)&D_0013F450)->unkA9C != 0 || ((Hero *)&D_0013F450)->anim_frame < 12.0f) {
                     ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 3.7f * ((Hero *)&D_0013F450)->speed_scale;
                 }
                 break;
             }
-            func_00214D28(&((Hero *)&D_0013F450)->unkA90, 1.0f, 0.2f);
+            func_00214D28(&((Hero *)&D_0013F450)->anim_speed, 1.0f, 0.2f);
             if (((Hero *)&D_0013F450)->unkA58 != 0 || ((Hero *)&D_0013F450)->unkA54 != 0) {
                 if (r->f4 == 1 && FastSubRots(((Hero *)&D_0013F450)->unkA5C, ((Hero *)&D_0013F450)->motion.rot.f[2]) > 0.0f) {
-                    ((Hero *)&D_0013F450)->unkA90 = 1.0f / (FastDiffRots(((Hero *)&D_0013F450)->unkA5C, ((Hero *)&D_0013F450)->motion.rot.f[2]) + 1.0f);
+                    ((Hero *)&D_0013F450)->anim_speed = 1.0f / (FastDiffRots(((Hero *)&D_0013F450)->unkA5C, ((Hero *)&D_0013F450)->motion.rot.f[2]) + 1.0f);
                 }
-                ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unkA5C;
+                ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unkA5C;
                 func_L00_002124E8(0, D_0015EE64 * 0.05f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
             } else {
                 int ok;
 
                 ok = 1;
-                if (r->f4 == 1 && ((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->unkAA8 > 7.0f) {
+                if (r->f4 == 1 && ((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->anim_frame > 7.0f) {
                     ok = 0;
                 }
                 if (ok) {
@@ -1580,7 +1580,7 @@ void func_L06_0022E788(void) {
         } else {
             ((Hero *)&D_0013F450)->motion.velocity.f[2] = 0.0f;
         }
-        ((Hero *)&D_0013F450)->motion.unk180 = FastAddRots(((Hero *)&D_0013F450)->unkA68, 3.1415927f);
+        ((Hero *)&D_0013F450)->motion.move_yaw = FastAddRots(((Hero *)&D_0013F450)->unkA68, 3.1415927f);
         func_L00_002124E8(0, D_0015EE64 * 0.05f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
         break;
     case 0x20:
@@ -1590,7 +1590,7 @@ void func_L06_0022E788(void) {
             int n;
 
             if (((Hero *)&D_0013F450)->unkA58 != 0 || ((Hero *)&D_0013F450)->unkA54 != 0) {
-                ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unkA5C;
+                ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unkA5C;
                 func_L00_002124E8(0, D_0015EE64 * 0.05f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
             } else if (((Hero *)&D_0013F450)->state_timer < scale_ticks(4)) {
                 func_L00_00215628(11.0f, 0.87266463f, -1.0f);
@@ -1672,7 +1672,7 @@ void func_L06_0022E788(void) {
     case 0x23:
         ((Hero *)&D_0013F450)->target_speed = 0.0f;
         if (((Hero *)&D_0013F450)->unkA58 != 0) {
-            ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unkA5C;
+            ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unkA5C;
             func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
         } else {
             func_L00_00215628(11.0f, 0.87266463f, -1.0f);
@@ -1680,7 +1680,7 @@ void func_L06_0022E788(void) {
         func_L00_00212740(D_0015EE70 * 30.0f, D_0015EE70 * 35.0f);
         func_L00_00212790(99999.0f);
         if (((Hero *)&D_0013F450)->air_frames.s != 0) {
-            ((Hero *)&D_0013F450)->motion.velocity.f[2] = ((Hero *)&D_0013F450)->motion.unk100.f[2] - D_0015EE70 * 25.0f;
+            ((Hero *)&D_0013F450)->motion.velocity.f[2] = ((Hero *)&D_0013F450)->motion.displacement.f[2] - D_0015EE70 * 25.0f;
             func_L00_00212878();
         } else {
             ((Hero *)&D_0013F450)->motion.velocity.f[2] -= D_0015EE70 * 54.0f;
@@ -1762,7 +1762,7 @@ void func_L06_0022E788(void) {
             }
             func_L00_00212740(up, down);
             if (((Hero *)&D_0013F450)->unk3B8 != 0 && ((Hero *)&D_0013F450)->unk308 == 0) {
-                func_L00_00212790(((Hero *)&D_0013F450)->motion.unk180);
+                func_L00_00212790(((Hero *)&D_0013F450)->motion.move_yaw);
             } else {
                 func_L00_00212790(99999.0f);
             }
@@ -1890,7 +1890,7 @@ void func_L06_0022E788(void) {
                     }
                 }
                 if (((Hero *)&D_0013F450)->state.current != 0x29 && ((Hero *)&D_0013F450)->state.current != 0x42 && ((Hero *)&D_0013F450)->state.current != 0x2A) {
-                    D_L06_0017AF60[0] = func_L00_001FF860(func_001F9CE8(((Hero *)&D_0013F450)->motion.unk100.f), ((Hero *)&D_0013F450)->motion.unk100.f[2]);
+                    D_L06_0017AF60[0] = func_L00_001FF860(func_001F9CE8(((Hero *)&D_0013F450)->motion.displacement.f), ((Hero *)&D_0013F450)->motion.displacement.f[2]);
                 }
                 if (hasW) {
                     func_L00_0020A858(D_0015EE64 * 0.017f, D_0015EE64 * 0.3f);
@@ -1939,7 +1939,7 @@ void func_L06_0022E788(void) {
                         ((Hero *)&D_0013F450)->unk57C = func_L00_001FF860(vec[2][0], vec[2][1]);
                         ((Hero *)&D_0013F450)->unk580 = func_L00_001FF860(func_001F9CE8(vec[2]), vec[2][2]);
                     }
-                    ((Hero *)&D_0013F450)->motion.unk180 = FastAddRots(((Hero *)&D_0013F450)->unk57C, ((Hero *)&D_0013F450)->unk588);
+                    ((Hero *)&D_0013F450)->motion.move_yaw = FastAddRots(((Hero *)&D_0013F450)->unk57C, ((Hero *)&D_0013F450)->unk588);
                     func_L00_002124E8(0, D_0015EE64 * 0.015f, D_0015EE64 * 0.15f, D_0015EE6C * 6.2831855f);
                     if ((((Hero *)&D_0013F450)->state.current >= 0x29 && ((Hero *)&D_0013F450)->state.current <= 0x2A && ((Hero *)&D_0013F450)->unk418 == 0) || ((Hero *)&D_0013F450)->state.current == 0x42) {
                         if (((Hero *)&D_0013F450)->unk5C4 != 0) {
@@ -1947,7 +1947,7 @@ void func_L06_0022E788(void) {
 
                             a = func_L00_001FF860(((Hero *)&D_0013F450)->unk550.f[0] - ((Hero *)&D_0013F450)->motion.pos.f[0], ((Hero *)&D_0013F450)->unk550.f[1] - ((Hero *)&D_0013F450)->motion.pos.f[1]);
                             if (FastDiffRots(((Hero *)&D_0013F450)->motion.rot.f[2], a) < 1.5707964f) {
-                                ((Hero *)&D_0013F450)->motion.unk180 = a;
+                                ((Hero *)&D_0013F450)->motion.move_yaw = a;
                                 func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.2831855f);
                             }
                         }
@@ -2007,9 +2007,9 @@ void func_L06_0022E788(void) {
                             float a;
 
                             func_L00_00211F80(1.0f, 0);
-                            a = FastDiffRots(((Hero *)&D_0013F450)->motion.unk180, D_L06_00167500.f158);
+                            a = FastDiffRots(((Hero *)&D_0013F450)->motion.move_yaw, D_L06_00167500.f158);
                             if (FastDiffRots(a, 1.5707964f) < 1.2217305f || FastDiffRots(a, -1.5707964f) < 1.2217305f) {
-                                if (FastDiffRots(FastSubRots(((Hero *)&D_0013F450)->motion.unk180, D_L06_00167500.f158), 1.5707964f) < 0.7853982f) {
+                                if (FastDiffRots(FastSubRots(((Hero *)&D_0013F450)->motion.move_yaw, D_L06_00167500.f158), 1.5707964f) < 0.7853982f) {
                                     ((Hero *)&D_0013F450)->unk5A8 = 2;
                                 } else {
                                     ((Hero *)&D_0013F450)->unk5A8 = 3;
@@ -2019,7 +2019,7 @@ void func_L06_0022E788(void) {
                         tgt = 0.0f;
                         if (((Hero *)&D_0013F450)->unk229C > 0.2f && aim) {
                             func_L00_00211F80(1.0f, 0);
-                            tgt = FastSubRots(((Hero *)&D_0013F450)->motion.unk180, ((Hero *)&D_0013F450)->unk57C);
+                            tgt = FastSubRots(((Hero *)&D_0013F450)->motion.move_yaw, ((Hero *)&D_0013F450)->unk57C);
                             if (tgt > 0.7853982f) {
                                 tgt = 0.7853982f;
                             } else if (tgt < -0.7853982f) {
@@ -2112,7 +2112,7 @@ void func_L06_0022E788(void) {
         break;
     case 0x18:
     case 0x19:
-        ((Hero *)&D_0013F450)->motion.unk180 = FastAddRots(((Hero *)&D_0013F450)->unk4E4, 3.1415927f);
+        ((Hero *)&D_0013F450)->motion.move_yaw = FastAddRots(((Hero *)&D_0013F450)->unk4E4, 3.1415927f);
         func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.2831855f);
         func_L00_0025CC58(&((Hero *)&D_0013F450)->motion.rot.f[1], 0, 0.0f, D_0015EE6C * 4.712389f);
         FastVecSub(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->unk4D0.f, ((Hero *)&D_0013F450)->motion.pos.f);
@@ -2121,7 +2121,7 @@ void func_L06_0022E788(void) {
         break;
     case 0x4A:
     case 0x4B:
-        ((Hero *)&D_0013F450)->motion.unk180 = FastAddRots(((Hero *)&D_0013F450)->unk4E4, 3.1415927f);
+        ((Hero *)&D_0013F450)->motion.move_yaw = FastAddRots(((Hero *)&D_0013F450)->unk4E4, 3.1415927f);
         func_L00_002124E8(0, D_0015EE64 * 0.02f, D_0015EE64 * 0.2f, D_0015EE6C * 4.712389f);
         FastVecSub(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->unk4D0.f, ((Hero *)&D_0013F450)->motion.pos.f);
         func_L00_002607A8(((Hero *)&D_0013F450)->motion.velocity.f, D_0015EE6C * 1.7f);
@@ -2164,19 +2164,19 @@ void func_L06_0022E788(void) {
                         mid = FastAddRots(FastSubRots(a0, a1) * 0.5f, a0);
                         FastVecAdd(vec[5], vec[0], vec[1]);
                         FastVecScale(vec[5], vec[5], 0.5f);
-                        ((Hero *)&D_0013F450)->motion.unk180 = mid;
+                        ((Hero *)&D_0013F450)->motion.move_yaw = mid;
                         func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.2831855f);
                         spd = ((Hero *)&D_0013F450)->motion.unk164;
                         func_00214D28(&spd, ((Hero *)&D_0013F450)->target_speed * D_0015EE6C, D_0015EE70 * 5.0f);
                         FastVecSub(((Hero *)&D_0013F450)->motion.velocity.f, vec[5], ((Hero *)&D_0013F450)->motion.pos.f);
-                        func_L00_001FF500(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_L06_001C4730[truncate_float_to_s32(((Hero *)&D_0013F450)->unkAA8)] * 0.5f);
+                        func_L00_001FF500(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_L06_001C4730[truncate_float_to_s32(((Hero *)&D_0013F450)->anim_frame)] * 0.5f);
                     }
                 }
             }
         }
         break;
     case 0x79:
-        ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unk2EC;
+        ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->downhill_yaw;
         ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 5.5f;
         func_L01_00234970(D_0015EE70 * 25.0f);
         func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk120.f, D_0015EE70 * 18.0f);
@@ -2248,10 +2248,10 @@ void func_L06_0022E788(void) {
             if (D_0013CA40.held & 3) {
                 float keep;
 
-                keep = ((Hero *)&D_0013F450)->motion.unk180;
-                ((Hero *)&D_0013F450)->motion.unk180 = D_L06_00167658;
+                keep = ((Hero *)&D_0013F450)->motion.move_yaw;
+                ((Hero *)&D_0013F450)->motion.move_yaw = D_L06_00167658;
                 func_L00_002124E8(0, D_0015EE64 * 0.017f, D_0015EE64 * 0.3f, D_0015EE6C * 4.712389f);
-                ((Hero *)&D_0013F450)->motion.unk180 = keep;
+                ((Hero *)&D_0013F450)->motion.move_yaw = keep;
             }
             v = D_0015EE70 * 7.0f;
             if (((Hero *)&D_0013F450)->unk229C < 0.2f) {
@@ -2415,10 +2415,10 @@ void func_L06_0022E788(void) {
                 ((Hero *)&D_0013F450)->unk4A0 = ((Hero *)&D_0013F450)->unk3F8;
             }
         }
-        if (((Hero *)&D_0013F450)->unk20A4 == 0) {
+        if (((Hero *)&D_0013F450)->vehicle_mode == 0) {
             func_L00_00215A90();
         }
-        if (((Hero *)&D_0013F450)->unk20A4 == 1) {
+        if (((Hero *)&D_0013F450)->vehicle_mode == 1) {
             func_L00_002162B8();
         }
         if (((Hero *)&D_0013F450)->state.current == 0x10 || ((Hero *)&D_0013F450)->state.current == 0xD) {
@@ -2428,7 +2428,7 @@ void func_L06_0022E788(void) {
             func_L00_00263680(((Hero *)&D_0013F450)->trail.pos[0].f, late * 2);
         }
         if (((Hero *)&D_0013F450)->state.current == 0x10 && ((Hero *)&D_0013F450)->state_timer > scale_ticks(8)) {
-            if (((Hero *)&D_0013F450)->unkAA8 < 28.0f) {
+            if (((Hero *)&D_0013F450)->anim_frame < 28.0f) {
                 int n;
 
                 func_L00_00233EE0(vec[0], 0.8f, 0.0f, 0.3f);
@@ -2436,7 +2436,7 @@ void func_L06_0022E788(void) {
                 if (n != 0) {
                     int i;
 
-                    FastVecScale(vec[1], ((Hero *)&D_0013F450)->motion.unk100.f, 7.0f);
+                    FastVecScale(vec[1], ((Hero *)&D_0013F450)->motion.displacement.f, 7.0f);
                     for (i = 0; i < n; i++) {
                         if (func_L00_0025F410((int)D_L06_00178780[i])) {
                             func_L00_0025AC00(D_L06_00178780[i], (int)((Hero *)&D_0013F450)->moby, 0x10000, ((Hero *)&D_0013F450)->motion.pos.f, vec[1], 1.0f);
@@ -2478,49 +2478,49 @@ void func_L06_0022E788(void) {
             float k;
 
             FastVecSub(vec[0], ((Hero *)&D_0013F450)->unk1640.f, ((Hero *)&D_0013F450)->motion.pos.f);
-            ((Hero *)&D_0013F450)->motion.unk180 = func_L00_001FF860(vec[0][0], vec[0][1]);
+            ((Hero *)&D_0013F450)->motion.move_yaw = func_L00_001FF860(vec[0][0], vec[0][1]);
             len = func_001F9CE8(vec[0]);
             if (len > 0.2f) {
                 ((Hero *)&D_0013F450)->unk229C = 1.0f;
-                ((Hero *)&D_0013F450)->motion.unk180 = func_L00_001FF860(vec[0][0], vec[0][1]);
+                ((Hero *)&D_0013F450)->motion.move_yaw = func_L00_001FF860(vec[0][0], vec[0][1]);
                 ((Hero *)&D_0013F450)->target_speed = len;
                 if (len < D_L06_0017C638[3]) {
                     ((Hero *)&D_0013F450)->target_speed = D_L06_0017C638[2] * D_0015EE6C;
                 } else {
                     ((Hero *)&D_0013F450)->target_speed = D_L06_0017C638[6] * D_0015EE6C;
                 }
-                if (((Hero *)&D_0013F450)->unk20A4 == 3) {
+                if (((Hero *)&D_0013F450)->vehicle_mode == 3) {
                     ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 1.5f;
-                } else if (((Hero *)&D_0013F450)->unk20A4 == 1) {
+                } else if (((Hero *)&D_0013F450)->vehicle_mode == 1) {
                     ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 0.9f;
                 }
             } else {
                 ((Hero *)&D_0013F450)->unk229C = 0.5f;
-                ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unk1640.f[3];
+                ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unk1640.f[3];
                 ((Hero *)&D_0013F450)->target_speed = 0.0f;
             }
             k = 1.0f;
-            if (((Hero *)&D_0013F450)->unk20A4 == 3) {
+            if (((Hero *)&D_0013F450)->vehicle_mode == 3) {
                 func_L00_002124E8(0, D_0015EE64 * 0.03f, D_0015EE64 * 0.3f, D_0015EE6C * 5.5850534f);
-            } else if (((Hero *)&D_0013F450)->unk20A4 == 1) {
+            } else if (((Hero *)&D_0013F450)->vehicle_mode == 1) {
                 func_L00_002124E8(0, D_0015EE64 * 0.03f, D_0015EE64 * 0.3f, D_0015EE6C * 7.8539815f);
-            } else if (((Hero *)&D_0013F450)->unk20A4 == 0) {
+            } else if (((Hero *)&D_0013F450)->vehicle_mode == 0) {
                 if (((Hero *)&D_0013F450)->state.step == 1) {
                     func_L00_002124E8(0, D_0015EE64 * 0.016f, D_0015EE64 * 0.15f, D_0015EE6C * 9.948377f);
                 } else {
                     func_L00_002125F0();
                 }
             }
-            if (((Hero *)&D_0013F450)->unk20A4 == 0) {
+            if (((Hero *)&D_0013F450)->vehicle_mode == 0) {
                 func_L00_00215A90();
             }
             func_L00_00212740(D_0015EE70 * 7.5f * k, D_0015EE70 * 8.5f);
             func_L00_00212790(99999.0f);
-            if (((Hero *)&D_0013F450)->unk20A4 == 0) {
+            if (((Hero *)&D_0013F450)->vehicle_mode == 0) {
                 func_L06_00229868(1);
             }
             if (((Hero *)&D_0013F450)->air_frames.s != 0) {
-                func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk100.f, D_0015EE70 * 25.0f);
+                func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.displacement.f, D_0015EE70 * 25.0f);
                 func_L00_00212878();
             } else {
                 func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_0015EE70 * 54.0f);
@@ -2538,7 +2538,7 @@ void func_L06_0022E788(void) {
             func_L00_00216E98(D_0015EE70 * 12.0f);
             func_L06_00229868(0);
             if (((Hero *)&D_0013F450)->air_frames.s != 0) {
-                func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk100.f, D_0015EE70 * 25.0f);
+                func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.displacement.f, D_0015EE70 * 25.0f);
                 func_L00_00212878();
             } else {
                 func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_0015EE70 * 54.0f);
@@ -2578,20 +2578,20 @@ void func_L06_0022E788(void) {
             Rec2C *r;
 
             ((Hero *)&D_0013F450)->target_speed = 0.0f;
-            r = &D_L06_0017C4A8[((Hero *)&D_0013F450)->unkA60];
+            r = &D_L06_0017C4A8[((Hero *)&D_0013F450)->attack_record];
             switch (r->f4) {
             case 0:
-                if (((Hero *)&D_0013F450)->unkAA8 < 5.5f) {
+                if (((Hero *)&D_0013F450)->anim_frame < 5.5f) {
                     ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 3.5f;
                 }
                 break;
             case 1:
-                if (((Hero *)&D_0013F450)->unkAA8 < 5.5f) {
+                if (((Hero *)&D_0013F450)->anim_frame < 5.5f) {
                     ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 3.5f;
                 }
                 break;
             }
-            if (((Hero *)&D_0013F450)->unkA9C == 0 && r->f1C <= ((Hero *)&D_0013F450)->unkAA8 && ((Hero *)&D_0013F450)->unkAA8 <= r->f20) {
+            if (((Hero *)&D_0013F450)->unkA9C == 0 && r->f1C <= ((Hero *)&D_0013F450)->anim_frame && ((Hero *)&D_0013F450)->anim_frame <= r->f20) {
                 int j;
 
                 j = 2;
@@ -2604,18 +2604,18 @@ void func_L06_0022E788(void) {
                 FastVecScale(vec[0], vec[0], 0.5f);
                 func_L00_0025A8E8((int)((Hero *)&D_0013F450)->moby, 0.25f, vec[0], 0x10000, 1.0f, 1.0f, 0, 1, 0);
             }
-            func_00214D28(&((Hero *)&D_0013F450)->unkA90, 1.0f, 0.2f);
+            func_00214D28(&((Hero *)&D_0013F450)->anim_speed, 1.0f, 0.2f);
             if (((Hero *)&D_0013F450)->unkA58 != 0 || ((Hero *)&D_0013F450)->unkA54 != 0) {
                 if (r->f4 == 1 && FastSubRots(((Hero *)&D_0013F450)->unkA5C, ((Hero *)&D_0013F450)->motion.rot.f[2]) > 0.0f) {
-                    ((Hero *)&D_0013F450)->unkA90 = 1.0f / (FastDiffRots(((Hero *)&D_0013F450)->unkA5C, ((Hero *)&D_0013F450)->motion.rot.f[2]) + 1.0f);
+                    ((Hero *)&D_0013F450)->anim_speed = 1.0f / (FastDiffRots(((Hero *)&D_0013F450)->unkA5C, ((Hero *)&D_0013F450)->motion.rot.f[2]) + 1.0f);
                 }
-                ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unkA5C;
+                ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->unkA5C;
                 func_L00_002124E8(0, D_0015EE64 * 0.05f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
             } else {
                 int ok;
 
                 ok = 1;
-                if (r->f4 == 1 && ((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->unkAA8 > 7.0f) {
+                if (r->f4 == 1 && ((Hero *)&D_0013F450)->unkA9C == 0 && ((Hero *)&D_0013F450)->anim_frame > 7.0f) {
                     ok = 0;
                 }
                 if (ok) {
@@ -2629,7 +2629,7 @@ void func_L06_0022E788(void) {
                 func_L00_00212790(99999.0f);
             }
             if (((Hero *)&D_0013F450)->air_frames.s != 0) {
-                ((Hero *)&D_0013F450)->motion.velocity.f[2] = ((Hero *)&D_0013F450)->motion.unk100.f[2] - D_0015EE70 * 25.0f;
+                ((Hero *)&D_0013F450)->motion.velocity.f[2] = ((Hero *)&D_0013F450)->motion.displacement.f[2] - D_0015EE70 * 25.0f;
                 func_L00_00212878();
             } else {
                 ((Hero *)&D_0013F450)->motion.velocity.f[2] -= D_0015EE70 * 54.0f;
@@ -2651,7 +2651,7 @@ void func_L06_0022E788(void) {
         }
         break;
     case 0x52:
-        ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unk2EC;
+        ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->downhill_yaw;
         ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 5.5f;
         func_L01_00234970(D_0015EE70 * 25.0f);
         func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk120.f, D_0015EE70 * 18.0f);
@@ -2675,7 +2675,7 @@ void func_L06_0022E788(void) {
             float t;
 
             k = 1.0f;
-            d = FastDiffRots(((Hero *)&D_0013F450)->motion.rot.f[2], ((Hero *)&D_0013F450)->motion.unk180);
+            d = FastDiffRots(((Hero *)&D_0013F450)->motion.rot.f[2], ((Hero *)&D_0013F450)->motion.move_yaw);
             v = D_0015EE6C * 3.0f;
             func_L00_00211F80(v, 0);
             k -= d * 0.3f;
@@ -2690,7 +2690,7 @@ void func_L06_0022E788(void) {
             }
             func_L00_00212740(D_0015EE70 * 7.5f * k, D_0015EE70 * 8.5f);
             if (((Hero *)&D_0013F450)->unk3B8 != 0 && ((Hero *)&D_0013F450)->unk308 == 0) {
-                func_L00_00212790(((Hero *)&D_0013F450)->motion.unk180);
+                func_L00_00212790(((Hero *)&D_0013F450)->motion.move_yaw);
             } else {
                 func_L00_00212790(99999.0f);
             }
@@ -2725,7 +2725,7 @@ void func_L06_0022E788(void) {
             float a1;
 
             ((Hero *)&D_0013F450)->motion.velocity.f[0] = 0.0f;
-            ((Hero *)&D_0013F450)->unkA90 = 1.3f;
+            ((Hero *)&D_0013F450)->anim_speed = 1.3f;
             ((Hero *)&D_0013F450)->motion.velocity.f[1] = 0.0f;
             ((Hero *)&D_0013F450)->motion.velocity.f[2] = 0.0f;
             qcopy(vec[2], ((Hero *)&D_0013F450)->motion.pos.f);
@@ -2756,12 +2756,12 @@ void func_L06_0022E788(void) {
                         mid = FastAddRots(FastSubRots(a0, a1) * 0.5f, a0);
                         FastVecAdd(vec[5], vec[0], vec[1]);
                         FastVecScale(vec[5], vec[5], 0.5f);
-                        ((Hero *)&D_0013F450)->motion.unk180 = mid;
+                        ((Hero *)&D_0013F450)->motion.move_yaw = mid;
                         func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.2831855f);
                         spd = ((Hero *)&D_0013F450)->motion.unk164;
                         func_00214D28(&spd, ((Hero *)&D_0013F450)->target_speed * D_0015EE6C, D_0015EE70 * 5.0f);
                         FastVecSub(((Hero *)&D_0013F450)->motion.velocity.f, vec[5], ((Hero *)&D_0013F450)->motion.pos.f);
-                        func_L00_001FF4B0(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_L06_001C4770[truncate_float_to_s32(((Hero *)&D_0013F450)->unkAA8)] * 0.5f);
+                        func_L00_001FF4B0(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.velocity.f, D_L06_001C4770[truncate_float_to_s32(((Hero *)&D_0013F450)->anim_frame)] * 0.5f);
                     }
                 }
             }
@@ -2785,7 +2785,7 @@ void func_L06_0022E788(void) {
         }
         break;
     case 0x58:
-        ((Hero *)&D_0013F450)->motion.unk180 = ((Hero *)&D_0013F450)->unk2EC;
+        ((Hero *)&D_0013F450)->motion.move_yaw = ((Hero *)&D_0013F450)->downhill_yaw;
         ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 5.5f;
         func_L01_00234970(D_0015EE70 * 25.0f);
         func_L00_00233D50(((Hero *)&D_0013F450)->motion.velocity.f, ((Hero *)&D_0013F450)->motion.unk120.f, D_0015EE70 * 18.0f);
@@ -2806,7 +2806,7 @@ void func_L06_0022E788(void) {
             float k;
             float t;
 
-            d = FastDiffRots(((Hero *)&D_0013F450)->motion.rot.f[2], ((Hero *)&D_0013F450)->motion.unk180);
+            d = FastDiffRots(((Hero *)&D_0013F450)->motion.rot.f[2], ((Hero *)&D_0013F450)->motion.move_yaw);
             func_L00_00211F80(D_0015EE6C * 1.5f, 0);
             if (((Hero *)&D_0013F450)->target_speed < D_0015EE6C * 1.5f * 0.55f) {
                 ((Hero *)&D_0013F450)->target_speed = D_0015EE6C * 1.5f * 0.55f;
@@ -2820,7 +2820,7 @@ void func_L06_0022E788(void) {
             func_L00_002124E8(0, D_0015EE64 * 0.035f * t, D_0015EE64 * 0.1f, D_0015EE6C * 2.268928f * t);
             func_L00_00212740(D_0015EE70 * 7.5f * k, D_0015EE70 * 8.5f);
             if (((Hero *)&D_0013F450)->unk3B8 != 0 && ((Hero *)&D_0013F450)->unk308 == 0) {
-                func_L00_00212790(((Hero *)&D_0013F450)->motion.unk180);
+                func_L00_00212790(((Hero *)&D_0013F450)->motion.move_yaw);
             } else {
                 func_L00_00212790(99999.0f);
             }

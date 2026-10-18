@@ -406,7 +406,7 @@ void func_L15_002EE7E8(Moby *m) {
 
     switch (st) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         t->wait = func_001F9850_2EE7E8(0x4B0);
         m->state = 1;
         break;
@@ -458,7 +458,7 @@ void func_L15_002EE7E8(Moby *m) {
             D_L15_0015F684_2EE7E8 = 0;
         }
         if (func_00215570_2EE7E8(D_0013E633_2EE7E8 + 0xE9D, t->vol54) != 0
-            && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->unk20A4 == 3 && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->unk22E0 == 0
+            && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->vehicle_mode == 3 && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->unk22E0 == 0
             && D_L15_00161B48_2EE7E8 == 0 && *(unsigned short *)(D_0014171B_2EE7E8 + 0x78D) == 0) {
             func_L00_00203F20_2EE7E8(0x3A9E, 0x88);
         }
@@ -494,10 +494,10 @@ void func_L15_002EE7E8(Moby *m) {
                 t->hold3C = 0;
             }
         }
-        if (((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->moby->seq == 0xC && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->unk20A4 == 2) {
+        if (((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->moby->seq == 0xC && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->vehicle_mode == 2) {
             ((Items_2EE7E8 *)D_0013D490_2EE7E8)->f6F = 1;
         }
-        if (func_00215570_2EE7E8(D_0013E633_2EE7E8 + 0xE9D, t->vol1C) != 0 && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->unk20A4 == 2
+        if (func_00215570_2EE7E8(D_0013E633_2EE7E8 + 0xE9D, t->vol1C) != 0 && ((Hero *)(D_0013E633_2EE7E8 + 0xE1D))->vehicle_mode == 2
             && ((Items_2EE7E8 *)D_0013D490_2EE7E8)->f6F == 0 && ((Help_2EE7E8 *)D_L15_00179A90_2EE7E8)->busy == 0
             && ((Help_2EE7E8 *)D_L15_00179A90_2EE7E8)->cur == -1 && *(int *)(D_0014171B_2EE7E8 + 0x751) >= 0) {
             func_L00_00203F20_2EE7E8(0x3A9C, 0x80);
@@ -555,7 +555,7 @@ extern void func_L00_00264870(int);
 void func_L15_002EEF70(struct Moby *m) {
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:

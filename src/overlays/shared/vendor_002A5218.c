@@ -450,7 +450,7 @@ void func_L02_002D9F08(Moby *moby) {
         D_L02_001D3680_2D9F08[3][1] = -17.0f;
         D_L02_001D3680_2D9F08[0][0] = 17.0f;
         D_L02_00161BAC_2D9F08 = d->iEC;
-        if (moby->unkB0 != 0xFF) {
+        if (moby->mission != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0
                 || (((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] >> (moby->save_id & 0x1F)) & 1) {
                 moby->state = 4;
@@ -466,13 +466,13 @@ void func_L02_002D9F08(Moby *moby) {
                 func_0022ED80_2D9F08(3, 0, moby);
             }
             if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby != 0 && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id == 0x1A) {
-                moby->unk90 = D_L02_00161B30_2D9F08;
+                moby->glow_color = D_L02_00161B30_2D9F08;
                 on = 1;
             } else {
-                moby->unk90 = D_L02_00161B34_2D9F08;
+                moby->glow_color = D_L02_00161B34_2D9F08;
                 on = 0;
             }
-            if (on && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->unkBC != 0) {
+            if (on && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->command != 0) {
                 d->h10 = func_001F9850_2D9F08(0x12C);
                 d->h11C = 0;
                 d->h11E = 0;
@@ -487,7 +487,7 @@ void func_L02_002D9F08(Moby *moby) {
             }
         } else {
             d->h12 = 0;
-            moby->unk90 = D_L02_00161B38_2D9F08;
+            moby->glow_color = D_L02_00161B38_2D9F08;
         }
         break;
     case 2:
@@ -586,13 +586,13 @@ void func_L02_002D9F08(Moby *moby) {
         break;
     case 3:
         if (D_0013F450_2D9F08.unkA98 & 2) {
-            if (moby->unkB0 != 0xFF) {
+            if (moby->mission != 0xFF) {
                 ((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 D_L02_001BADE0_2D9F08[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             }
             func_L00_002EC0C8_2D9F08(1);
             func_L02_0022BE40_2D9F08(0, 1);
-            moby->unkBC = 1;
+            moby->command = 1;
             moby->state = 4;
         }
         break;

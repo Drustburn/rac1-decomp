@@ -2372,20 +2372,20 @@ extern void func_L00_0028EBF0(s32);
 void func_L15_002A47B8(int addr) {
     struct Moby *m = (struct Moby *)addr;
     s32 slot;
-    m->unk94 = 0;
-    D_L15_001BAEE0.killed[(s16)m->save_id] = m->unkB0 + 2;
-    if (m->unkB0 == 0xFF || (D_L15_0015FD08[m->unkB0] != 0xFF && D_0014C150[(*(s32 *)&D_0015EE84)][m->unkB0] == 0xFF)) {
-        D_L15_001BBB40.killed[(s16)m->save_id] = m->unkB0 + 2;
+    m->collision = 0;
+    D_L15_001BAEE0.killed[(s16)m->save_id] = m->mission + 2;
+    if (m->mission == 0xFF || (D_L15_0015FD08[m->mission] != 0xFF && D_0014C150[(*(s32 *)&D_0015EE84)][m->mission] == 0xFF)) {
+        D_L15_001BBB40.killed[(s16)m->save_id] = m->mission + 2;
     }
-    if (m->unkBC != 0xFF) {
+    if (m->command != 0xFF) {
         VoiceSlot *e;
-        slot = m->unkBC;
+        slot = m->command;
         e = (VoiceSlot *)(D_0013E650 + slot * 0x70);
         if (e->owner == m && e->active != 0) {
             func_L00_0028EBF0(slot);
         }
     }
-    m->unkBC = 0xFF;
+    m->command = 0xFF;
     m->state = 2;
 }
 typedef int u128_2A8090 __attribute__((mode(TI)));

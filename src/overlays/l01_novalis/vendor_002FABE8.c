@@ -703,25 +703,25 @@ void func_L01_002FC140(Moby *moby) {
     switch (moby->state) {
     case 0:
         fz = moby->pos.z - 0.75f;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         data->timer = 0;
         fd = data->f0;
         data->fC = fz;
-        moby->unk94 = 0;
+        moby->collision = 0;
         moby->flags = moby->flags | 0x41;
         moby->pos.z = moby->pos.z + fd;
         break;
     case 1:
-        r16 = *(unsigned char *)(moby->unkB0 + (D_0015EE84_2FBBD8 << 4) + (D_0014171B_2FBBD8 + 0xAA35));
+        r16 = *(unsigned char *)(moby->mission + (D_0015EE84_2FBBD8 << 4) + (D_0014171B_2FBBD8 + 0xAA35));
         if (r16 == 0xFF) {
             if (moby->prev_seq != 2) {
                 func_00213DE0_2FC140(moby, 2, 0, func_001F9850_2FC140(0x14));
             }
             moby->state = 10;
             moby->flags = moby->flags & 0xFFBE;
-            moby->unk32 = r16;
-            moby->unk94 = ((Class_2FC140 *)moby->pclass)->f10;
+            moby->draw_dist = r16;
+            moby->collision = ((Class_2FC140 *)moby->pclass)->f10;
         } else {
             if (D_L01_0015F6A8_2FC140 == 0) {
                 unsigned char *pp = D_0013D355_2FBBD8 + 0x13B;
@@ -733,11 +733,11 @@ void func_L01_002FC140(Moby *moby) {
             func_L00_0028FC68_2FC140();
             if (func_00215570_2FC140(D_0013E633_2FC140 + 0xE9D, data->f10) != 0) {
                 moby->flags = moby->flags & 0xFFBE;
-                moby->unk94 = ((Class_2FC140 *)moby->pclass)->f10;
+                moby->collision = ((Class_2FC140 *)moby->pclass)->f10;
                 if (data->link != -1) {
                     q = (void *)D_L01_00160058_2FC140[data->link].pvars;
                     q->timer = func_001F9850_2FC140(0x1A4);
-                    D_L01_00160058_2FC140[data->link].unkBC = 1;
+                    D_L01_00160058_2FC140[data->link].command = 1;
                     func_001F9BC0_2FC140(&D_L01_0016016C_2FC140[q->rec].b);
                     func_001F9BC0_2FC140(&q->v);
                     D_L01_0016016C_2FC140[q->rec].b.y = -func_L00_001FF860_2FC140(
@@ -776,7 +776,7 @@ void func_L01_002FC140(Moby *moby) {
         if (moby->seq != 1) {
             break;
         }
-        if ((moby->unk70 & 2) == 0) {
+        if ((moby->anim_flags & 2) == 0) {
             break;
         }
         if (moby->prev_seq != 2) {
@@ -819,7 +819,7 @@ void func_L01_002FC140(Moby *moby) {
         if (data->timer != 0) {
             break;
         }
-        data->fA = (*(unsigned short *)&moby->unk32);
+        data->fA = (*(unsigned short *)&moby->draw_dist);
         moby->flags = moby->flags | 0x41;
         func_L00_00299B68_2FC140(3);
         moby->state = 6;
@@ -846,25 +846,25 @@ void func_L01_002FC140(Moby *moby) {
         func_L00_00263DB0_2FC140(3);
         moby->flags = moby->flags & 0xFFBE;
         if (data->link != -1) {
-            ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[(*(short *)&D_L01_00160058_2FC140[data->link].save_id)] = D_L01_00160058_2FC140[data->link].unkB0 + 2;
-            if (D_L01_00160058_2FC140[data->link].unkB0 == 0xFF
-                || (D_L01_0015FD08_2FC140[D_L01_00160058_2FC140[data->link].unkB0] != 0xFF
-                    && (D_0014171B_2FBBD8 + 0xAA35)[D_L01_00160058_2FC140[data->link].unkB0 + (D_0015EE84_2FBBD8 << 4)] == 0xFF)) {
-                D_L01_001BB9C0_2FC140.collected[(*(short *)&D_L01_00160058_2FC140[data->link].save_id)] = D_L01_00160058_2FC140[data->link].unkB0 + 2;
+            ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[(*(short *)&D_L01_00160058_2FC140[data->link].save_id)] = D_L01_00160058_2FC140[data->link].mission + 2;
+            if (D_L01_00160058_2FC140[data->link].mission == 0xFF
+                || (D_L01_0015FD08_2FC140[D_L01_00160058_2FC140[data->link].mission] != 0xFF
+                    && (D_0014171B_2FBBD8 + 0xAA35)[D_L01_00160058_2FC140[data->link].mission + (D_0015EE84_2FBBD8 << 4)] == 0xFF)) {
+                D_L01_001BB9C0_2FC140.collected[(*(short *)&D_L01_00160058_2FC140[data->link].save_id)] = D_L01_00160058_2FC140[data->link].mission + 2;
             }
         }
         if (data->f3C != -1) {
             q = (void *)D_L01_00160058_2FC140[data->f3C].pvars;
             q->timer = func_001F9850_2FC140(0xB4);
-            D_L01_00160058_2FC140[data->f3C].unkBC = 1;
+            D_L01_00160058_2FC140[data->f3C].command = 1;
             if (data->f34 != -1 && data->f38 != -1) {
-                D_L01_00160058_2FC140[data->f34].unkBC = 2;
-                D_L01_00160058_2FC140[data->f38].unkBC = 2;
-                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f34].unkBC, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BADB0_2FC140);
-                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f38].unkBC, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BADB0_2FC140);
+                D_L01_00160058_2FC140[data->f34].command = 2;
+                D_L01_00160058_2FC140[data->f38].command = 2;
+                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f34].command, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BADB0_2FC140);
+                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f38].command, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BADB0_2FC140);
             }
         }
-        func_L00_002512D8_2FC140(moby->unkB0);
+        func_L00_002512D8_2FC140(moby->mission);
         if (data->rec != -1) {
             func_L00_00286128_2FC140(&D_L01_0016016C_2FC140[data->rec].a, &D_L01_0016016C_2FC140[data->rec].b);
         }
@@ -1700,7 +1700,7 @@ void func_L01_0030C090(Moby *moby) {
     switch (moby->state) {
     case 0:
         data[5] = 0;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         data[10] = 0;
         break;

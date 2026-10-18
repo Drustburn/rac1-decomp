@@ -2074,7 +2074,7 @@ void func_L01_002F44F8(Moby *self)
             path->pts[i].f[3] = FastVecDist(&path->pts[i], &path->pts[i + 1]);
         }
         path->pts[i].f[3] = FastVecDist(&path->pts[i], &path->pts[0]);
-        self->unk30 = 0xFF;
+        self->update_dist = 0xFF;
     }
 
     if ((u32)(D_0013F450.state.control_mode - 0x11) >= 2 && D_0013F450.state.prev_control_mode != 0x11
@@ -2102,7 +2102,7 @@ void func_L01_002F44F8(Moby *self)
             if (v->max_speed < FastVecLength(v)) {
                 func_L00_001FF4B0(v, v, v->max_speed);
             }
-            qcopy(&D_0013F450.motion.unkF0, v);
+            qcopy(&D_0013F450.motion.platform_delta, v);
             if (v->pull != 0) {
                 FastVecSub(&pull, &nearest, &D_0013F450.motion.pos);
                 pull.f[2] = 0.0f;
@@ -2110,13 +2110,13 @@ void func_L01_002F44F8(Moby *self)
                 if (limit < FastVecLength(&pull)) {
                     func_L00_001FF4B0(&pull, &pull, limit);
                 }
-                FastVecAdd(&D_0013F450.motion.unkF0, &D_0013F450.motion.unkF0, &pull);
+                FastVecAdd(&D_0013F450.motion.platform_delta, &D_0013F450.motion.platform_delta, &pull);
             }
         } else {
             /* past the end: slow down (factor 1 - 0.005 per frame unit) */
             len = FastVecLength(v);
             func_L00_001FF4B0(v, v, D_0015EE60 * -0.004999995231628418f * len + len);
-            qcopy(&D_0013F450.motion.unkF0, v);
+            qcopy(&D_0013F450.motion.platform_delta, v);
         }
         if (D_0013F450.state.control_mode == 0x12 && D_0013F450.state.prev == D_0013F450.state.control_mode) {
             if (D_0013F450.state_timer < scale_ticks(3)) {
@@ -2131,7 +2131,7 @@ void func_L01_002F44F8(Moby *self)
                && (u32)(D_0013F450.state.control_mode - 4) < 2) {
         len = FastVecLength(v);
         func_L00_001FF4B0(v, v, D_0015EE60 * -0.014999985694885254f * len + len);
-        qcopy(&D_0013F450.motion.unkF0, v);
+        qcopy(&D_0013F450.motion.platform_delta, v);
         if (D_0013F450.unk1D8 < scale_ticks(0x23)) {
             D_0013F450.unk1D8 = scale_ticks(0x23);
         }
@@ -2774,7 +2774,7 @@ void func_L01_002F8B00(Moby *m) {
         s = k * dist + (1.0f - k * x0);
     }
     hit = func_L00_0025B478(m, 0x800000, 0);
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     if (hit != 0) {
         if ((&D_0013D50F_k)[1] == 0) {
             (&D_0013D50F_k)[1] = 1;
@@ -2817,19 +2817,19 @@ void func_L01_002F8B00(Moby *m) {
             } else {
                 STUB_printf(D_L01_0020B790, m->oclass, func_001FA898_r((float)(((int)m - D_L01_00160058_F8B00) >> 8)));
             }
-            m->unk30 = 0xFF;
-            m->unk32 = 0xFF;
+            m->update_dist = 0xFF;
+            m->draw_dist = 0xFF;
         }
         if (1.0f < s) s = 1.0f;
         if (s < D_L01_00161C60) s = D_L01_00161C60;
         m->scale = d->scale178 * s;
         d->fFC = d->f17C * s;
         if (175.0f <= m->pos.z) {
-            m->unk23 = 0;
+            m->alpha = 0;
         } else if (125.0f < m->pos.z && m->pos.z < 175.0f) {
-            m->unk23 = func_001FA898_r((175.0f - m->pos.z) * 128.0f / 50.0f);
+            m->alpha = func_001FA898_r((175.0f - m->pos.z) * 128.0f / 50.0f);
         } else if (m->pos.z <= 125.0f) {
-            m->unk23 = 0x80;
+            m->alpha = 0x80;
         }
         if (d->flag170 != -1) {
             if (m->state == 0) {
@@ -2856,7 +2856,7 @@ void func_L01_002F8B00(Moby *m) {
                     func_L01_0023D688(0x72, 0);
                     func_L00_002EBF50(D_L01_0016016C + (d->cam174 << 7) + 0x30, D_L01_0016016C + (d->cam174 << 7) + 0x70, 0, 0, 0);
                     D_L01_0015F504 = 1;
-                    m->unk94 = 0;
+                    m->collision = 0;
                     m->flags &= 0xEFFF;
                     d->timer = scale_ticks(0x1FE);
                 }

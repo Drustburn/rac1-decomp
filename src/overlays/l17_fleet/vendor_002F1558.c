@@ -106,7 +106,7 @@ void func_L17_002F1558(Moby *moby, int arg) {
         d->b117 = 0xF0;
         func_L00_0025E4B0(moby, d->h110);
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     if (arg != 0) {
         return;
     }

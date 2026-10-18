@@ -391,7 +391,7 @@ void func_002391E8(Moby *m) {
         D_001E66C0_391E8.timer++;
         break;
     case 3:
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 0) {
                 func_00213DE0(m, 0, 0, func_001F98C0(0x12));
             }
@@ -404,7 +404,7 @@ void func_002391E8(Moby *m) {
             D_001611B4 = 0;
             func_00216960();
         }
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 2) {
                 func_00213DE0(m, 2, 0, func_001F98C0(0x12));
             }
@@ -418,7 +418,7 @@ void func_002391E8(Moby *m) {
             D_001611B4 = 0;
             func_00216960();
         }
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 2) {
                 func_00213DE0(m, 2, 0, func_001F98C0(0x12));
             }
@@ -432,7 +432,7 @@ void func_002391E8(Moby *m) {
             D_001611B4 = 0;
             func_00216960();
         }
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 2) {
                 func_00213DE0(m, 2, 0, func_001F98C0(0x12));
             }
@@ -445,7 +445,7 @@ void func_002391E8(Moby *m) {
             D_001611B0 = 0;
             D_001611B4 = 1;
         }
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             a = D_001E66FC * 3 + 4;
             if (m->prev_seq != a) {
                 func_00213DE0(m, a, 0, func_001F98C0(0xC));

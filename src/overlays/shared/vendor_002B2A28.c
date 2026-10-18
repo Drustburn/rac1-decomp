@@ -1610,7 +1610,7 @@ void func_L14_002E17B8(Moby *m) {
     float size;
 
     pv = *(Vars_2E17B8 **)&m->pvars;
-    func_L00_001FF4B0_2E17B8(&dir, &*(Vec4 *)&m->unkE0, 0.2f);
+    func_L00_001FF4B0_2E17B8(&dir, &*(Vec4 *)&m->rot_row2, 0.2f);
     func_001F9BD8_2E17B8(&pos, &*(Vec4 *)&m->pos, &dir);
     func_002141A8_2E17B8(&vel, 0.005f, 0.03f);
     p = func_L00_002757E8_2E17B8(&pos, &vel, 0x7F, m);
@@ -1642,9 +1642,9 @@ void func_L14_002E17B8(Moby *m) {
     vel.f[2] = 0.0f;
     vel.f[3] = 1.0f;
     if (m->state == 0) {
-        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4 *)&m->unkE0, 0.95f);
+        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4 *)&m->rot_row2, 0.95f);
     } else {
-        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4 *)&m->unkE0, 1.15f);
+        func_L00_001FF4B0_2E17B8(&dir, &*(Vec4 *)&m->rot_row2, 1.15f);
         vel.f[2] = D_0015EE60_2E17B8 * 0.03f;
     }
     func_001F9BD8_2E17B8(&pos, &*(Vec4 *)&m->pos, &dir);

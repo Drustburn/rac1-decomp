@@ -858,8 +858,8 @@ void func_L15_002AB4A8(struct Moby *moby) {
         *((u8 *)moby + 0xA4) = 0xff;
         if (moby->state != 0)
             return;
-        moby->unk32 = 0x80;
-        moby->unk30 = 0xff;
+        moby->draw_dist = 0x80;
+        moby->update_dist = 0xff;
         moby->state = 1;
         if (D_0013DE55[3] != 0) {
             u16 save_id = moby->save_id;
@@ -2166,14 +2166,14 @@ void func_L15_002E9358(Moby *moby) {
     func_001F9BC0_2E9358(&s30);
     if (func_L00_001F10E0_2E9358(0.5f, &moby->pos, 1, moby)) {
         if (D_L15_001744D8_2E9358 == 0 || func_L00_0025D390_2E9358(D_L15_001744D8_2E9358) == 0) {
-            moby->unkBC = 1;
+            moby->command = 1;
         }
     }
     r = func_L00_0025B478_2E9358(moby, 0x830000, 0);
     if (r != 0 && r->owner != 0 && r->owner->oclass != moby->oclass) {
-        moby->unkBC = 1;
+        moby->command = 1;
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
 
     state = moby->state;
     switch (state) {
@@ -2187,7 +2187,7 @@ void func_L15_002E9358(Moby *moby) {
                 data->f8 = 0.0f;
                 (*(u128 *)&moby->pos) = ((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20;
             } else if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015EE6C_2A48B0 * -9.8f) {
-                moby->unkBC = 1;
+                moby->command = 1;
                 qcopy(&moby->pos, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20);
                 func_L00_001FF610_2E9358(&s30, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
                 func_L00_001FF4B0_2E9358(&s30, &s30, D_0015EE6C_2A48B0 + D_0015EE6C_2A48B0);
@@ -2200,7 +2200,7 @@ void func_L15_002E9358(Moby *moby) {
             Moby *t = data->target;
 
             if (t->state == 0xFE || data->target->state == 0xFD) {
-                moby->unkBC = state;
+                moby->command = state;
                 data->target = 0;
             } else if (D_L15_001744D8_2E9358 != 0) {
                 p20 = func_L00_0025D390_2E9358(D_L15_001744D8_2E9358);
@@ -2219,7 +2219,7 @@ void func_L15_002E9358(Moby *moby) {
         break;
     }
 
-    if (moby->unkBC != 0) {
+    if (moby->command != 0) {
         func_L00_0025F4A8_2E9358(moby, data, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f, 0, 1, -1, 0);
         func_L00_0028EF68_2E9358(0, 0, moby, 0x79);
         ret = func_L00_001F2BE8_2E9358(&moby->pos, 0x10, moby, 0, 2.0f);

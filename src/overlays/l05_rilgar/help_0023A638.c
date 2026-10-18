@@ -641,7 +641,7 @@ void func_L05_00241AA0(void) {
     FastVecAdd(position, position, extra_step);
     clear_u64_value(extra_step);
     contact_player = (Hero *)((char *)position - 0x80);
-    contact_player->unk257 = 0;
+    contact_player->wall_hit = 0;
     contact_player->coll_hit_moby = 0;
     if (FastVecLength((char *)position + 0x70) <= 0.0001f) {
         func_L00_00213E60();
@@ -690,28 +690,28 @@ void func_L05_00241AA0(void) {
         float saved;
 
         FastVecAdd(new_position, new_position, contact);
-        saved = motion_player->motion.unkF0.f[3];
+        saved = motion_player->motion.platform_delta.f[3];
         clear_u64_value(contact);
-        motion_player->motion.unkF0.f[3] = saved;
+        motion_player->motion.platform_delta.f[3] = saved;
         func_L00_00213E60();
         func_L05_00240968();
         FastVecSub(external, new_position, previous.f);
         func_L00_002136A8();
     }
     FastVecSub((char *)delta + 0x30, new_position, work.f);
-    motion_player->motion.unk140.f[3] = motion_player->motion.unkF0.f[3];
-    motion_player->motion.unkF0.f[3] = 0.0f;
+    motion_player->motion.platform_carry.f[3] = motion_player->motion.platform_delta.f[3];
+    motion_player->motion.platform_delta.f[3] = 0.0f;
     FastVecSub(external, new_position, previous.f);
     motion_player->motion.unk16C = 0.0f;
     if (motion_player->motion.unk164 > 0.004f) {
-        motion_player->motion.unk16C = motion_player->motion.unk100.f[2] / motion_player->motion.unk164;
+        motion_player->motion.unk16C = motion_player->motion.displacement.f[2] / motion_player->motion.unk164;
         if (motion_player->motion.unk16C > 0.5f) motion_player->motion.unk16C = 0.5f;
         else if (motion_player->motion.unk16C < -0.5f) motion_player->motion.unk16C = -0.5f;
     }
     cap_player = (Hero *)(D_0013E633 + 0xE1D);
     magnitude = D_0015EE6C * 52.0f;
     if (magnitude < cap_player->motion.speed_xy) {
-        FastVecScale(cap_player->motion.unk100.f, cap_player->motion.unk100.f, magnitude / cap_player->motion.speed_xy);
+        FastVecScale(cap_player->motion.displacement.f, cap_player->motion.displacement.f, magnitude / cap_player->motion.speed_xy);
         cap_player->motion.speed_xy = D_0015EE6C * 52.0f;
     }
 }

@@ -1250,7 +1250,7 @@ void func_L05_003047E8(Moby *m) {
         }
         func_L00_0025E4B0_3047E8(m, d->f60);
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     func_L00_0025E590_3047E8(m, d->f60);
     if (d->f38 != 0) {
         d->f2B0 = func_001FA898_3047E8(func_001F9878_3047E8(func_002140F8_3047E8(180.0f, 240.0f)));
@@ -1280,7 +1280,7 @@ void func_L05_003047E8(Moby *m) {
         d->target = *(Moby **)(D_0013E633_3047E8 + 0x2E9D);
     }
     d->f2D8 = func_001FA748_3047E8(d->f2D8, D_0015EE6C_2D8388 * 9.424778f);
-    m->unk90 = func_001FA8A8_3047E8(D_L05_00161B34_3047E8, D_L05_00161B38_3047E8, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
+    m->glow_color = func_001FA8A8_3047E8(D_L05_00161B34_3047E8, D_L05_00161B38_3047E8, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
     k = m->state;
     if (k < 10) {
     if (k >= 4 && d->target == *(Moby **)(D_0013E633_3047E8 + 0x2E9D)) {
@@ -1837,17 +1837,6 @@ struct MobyTrail_065D0 {
     struct Moby_065D0 *source; /* 0x134 */
     s32 copy_count; /* 0x138: copies in use (max 4) */
     s32 active; /* 0x13C */
-};
-struct HeroManipulator {
-    u8 unk0; /* 0x00 */
-    u8 attached; /* 0x01 */
-    u8 unk2; /* 0x02 */
-    u8 unk3; /* 0x03 */
-    u8 pad_4[0x8];
-    f32 unkC; /* 0x0C */
-    Vec4_065D0 quat; /* 0x10 */
-    Vec4_065D0 scale3; /* 0x20 */
-    Vec4_065D0 translation; /* 0x30 */
 };
 struct HeroEase_065D0 {
     u8 unk0; /* 0x00 */
@@ -3141,15 +3130,15 @@ void func_L05_00308D68(Moby *moby) {
     float v3[4];
     Data_308D68 *d = (Data_308D68 *)*(void **)&moby->pvars;
 
-    if (moby->unk31 != 0 && FastVecDist(((float *)&moby->pos), D_L05_001672C0) < 29.0f) {
+    if (moby->visible != 0 && FastVecDist(((float *)&moby->pos), D_L05_001672C0) < 29.0f) {
         func_L00_0025B178(moby);
-        moby->unk7F = 0x17;
+        moby->shadow_range = 0x17;
     }
     switch (moby->state) {
     case 0: {
         Path_308D68 *p;
 
-        moby->unk30 = 0x18;
+        moby->update_dist = 0x18;
         moby->flags |= 0x41;
         p = (Path_308D68 *)D_L05_001B0CB0[d->f234];
         d->path = p;
@@ -3180,7 +3169,7 @@ void func_L05_00308D68(Moby *moby) {
     }
     case 1:
         if (*(int *)(D_0013E633 + 0x2EA9) == 0x16) {
-            moby->unk30 = 0xFF;
+            moby->update_dist = 0xFF;
             moby->flags &= ~0x41;
             d->f258 = 0;
             d->f25A = scale_ticks(0xB4);
@@ -3337,7 +3326,7 @@ void func_L05_00308D68(Moby *moby) {
                 qcopy(((float *)&c->pos), ((float *)&moby->pos));
                 qcopy(((float *)&c->rot), ((float *)&moby->rot));
                 if (d->f25A != 0) {
-                    c->unkBC = 1;
+                    c->command = 1;
                 }
             }
         }
@@ -3571,11 +3560,11 @@ void func_L05_0030DED8(Moby *moby) {
                 func_L05_0030EB68(j);
             }
         }
-        moby->unk32 = 0;
+        moby->draw_dist = 0;
         moby->flags |= 1;
         if (d->fC != 0) {
             if (d->f10 >= 0) {
-                moby->unk30 = 0xFF;
+                moby->update_dist = 0xFF;
                 if (D_L05_00161DDC >= 2) {
                     int k;
                     float s = (float)(D_L05_00161DDC - 1) * 0.014285714f + 1.0f;
@@ -3588,7 +3577,7 @@ void func_L05_0030DED8(Moby *moby) {
                     }
                 }
             }
-            if ((D_0014171B_0030DED8 + 0xAA35)[moby->unkB0 + (D_0015EE84 << 4)] == 0xFF) {
+            if ((D_0014171B_0030DED8 + 0xAA35)[moby->mission + (D_0015EE84 << 4)] == 0xFF) {
                 moby->state = 7;
                 moby->pos.z = 44.0f;
             } else {
@@ -3616,15 +3605,15 @@ void func_L05_0030DED8(Moby *moby) {
             }
         }
         if (d->f14 == 0x2F) {
-            *(int *)&moby->unk94 = 0;
+            *(int *)&moby->collision = 0;
         }
         break;
     case 2:
-        if (moby->unkBC & 4) {
+        if (moby->command & 4) {
             d->f24 = 1;
             func_L01_0026F090(moby->group, 1);
         } else if (d->f10 >= 0) {
-            if ((D_0014171B_0030DED8 + 0xAA35)[moby->unkB0 + (D_0015EE84 << 4)] == 0xFF) {
+            if ((D_0014171B_0030DED8 + 0xAA35)[moby->mission + (D_0015EE84 << 4)] == 0xFF) {
                 moby->state = 1;
                 moby->pos.z = d->f0;
             }
@@ -3633,7 +3622,7 @@ void func_L05_0030DED8(Moby *moby) {
             func_00214D88(&moby->pos.z, &d->f20, d->f4, D_L05_00161DF0 * D_0015EE70, D_L05_00161DF0 * D_0015EE70, D_L05_00161DF4 * D_0015EE6C);
             func_L05_0030EA88((char *)moby);
         }
-        moby->unkBC = 1;
+        moby->command = 1;
         if (random_integer_below(0xC8) == 0) {
             float x = D_L05_001D6BC0_0030DED8[d->f14].x + random_float_between(-4.0f, 4.0f);
             float r = random_float_between(-4.0f, 4.0f);
@@ -3642,19 +3631,19 @@ void func_L05_0030DED8(Moby *moby) {
         }
         break;
     case 1:
-        if (moby->unkBC & 8) {
+        if (moby->command & 8) {
             d->f24 = 1;
             func_L01_0026F090(moby->group, 2);
         } else {
-            moby->unkBC = 2;
+            moby->command = 2;
         }
         if (d->f24 != 0) {
             func_00214D88(&moby->pos.z, &d->f20, d->f0, D_L05_00161DF0 * D_0015EE70, D_L05_00161DF0 * D_0015EE70, D_L05_00161DF4 * D_0015EE6C);
             if (FastAbsF(moby->pos.z - d->f0) > 0.1f) {
                 Hero *h = (Hero *)(D_0013E633 + 0xE1D);
                 if (h->state.control_mode == 0x11 || h->state.control_mode == 0x12) {
-                    if (moby->pos.z > h->height_threshold) {
-                        h->height_threshold = moby->pos.z;
+                    if (moby->pos.z > h->water_surface_z) {
+                        h->water_surface_z = moby->pos.z;
                     }
                 }
             }
@@ -3672,8 +3661,8 @@ void func_L05_0030DED8(Moby *moby) {
             Hero *h = (Hero *)(D_0013E633 + 0xE1D);
             if (h->motion.pos.f[2] < moby->pos.z) {
                 if (h->state.control_mode == 0x11) {
-                    if (h->height_threshold < moby->pos.z) {
-                        h->height_threshold = moby->pos.z;
+                    if (h->water_surface_z < moby->pos.z) {
+                        h->water_surface_z = moby->pos.z;
                     }
                 }
             }

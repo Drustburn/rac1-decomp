@@ -666,7 +666,7 @@ struct Moby *func_L00_00264140(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *ya
             target.f[2] += b->height;
         else
             target.f[2] += 0.5f;
-        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->unk46 != 5)
+        if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->type != 5)
             continue;
         t_yaw = func_L00_001FF860(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
         t_pitch = func_L00_001FF860(func_001F9D48(pp, &target), target.f[2] - pp->f[2]);
@@ -682,7 +682,7 @@ struct Moby *func_L00_00264140(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *ya
         }
         if (best_dist < dist)
             continue;
-        func_00215C00_64140(&probe, dist, *yaw, *pitch + D_0013F450.unk2E4.f * 0.5f);
+        func_00215C00_64140(&probe, dist, *yaw, *pitch + D_0013F450.ground_pitch.f * 0.5f);
         FastVecAdd(&probe, &probe, pp);
         ang = FastArcSin(FastVecDist(&probe, &target) / (dist + dist));
         ang = ang + ang;

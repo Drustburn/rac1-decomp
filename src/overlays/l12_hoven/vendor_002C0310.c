@@ -904,7 +904,7 @@ void func_L12_002E4838(struct Moby *moby) {
     }
     if (vars->call_enabled != 0 && moby->state != 9) {
         s16 n = ++vars->call_timer;
-        if (scale_ticks(0x3C) * 15 < n && moby->unk31 == 0 && moby->group < 0xFF &&
+        if (scale_ticks(0x3C) * 15 < n && moby->visible == 0 && moby->group < 0xFF &&
             func_L01_0026EFB8(moby->group, -1) >= 4 && random_integer_below(0x45) == 0) {
             v.f[0] = FastCos(FastAddRots(moby->rot.z, 3.1415927f));
             v.f[1] = FastSin(FastAddRots(moby->rot.z, 3.1415927f));
@@ -955,7 +955,7 @@ void func_L12_002E4838(struct Moby *moby) {
             func_L12_002E43A8(moby);
         }
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     func_L00_0025E590_E4838(moby, vars->anim);
 }
 extern short D_L12_001619A0;
@@ -1137,7 +1137,7 @@ void func_L12_002E51E8(Moby *moby) {
     case 0:
         switch (d->kind) {
         case 0:
-            (*(int *)&moby->unk94) = (*(Class_2E51E8 **)&moby->pclass)->f10;
+            (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
             d->walk.path = D_L12_001B0C30_2E51E8[d->walk.pathIdx];
             d->walk.idx = 0;
             d->walk.dir = 1;
@@ -1148,7 +1148,7 @@ void func_L12_002E51E8(Moby *moby) {
             moby->state = 7;
             break;
         case 1:
-            (*(int *)&moby->unk94) = (*(Class_2E51E8 **)&moby->pclass)->f10;
+            (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
             d->walk.path = D_L12_001B0C30_2E51E8[d->walk.pathIdx];
             d->walk.idx = 0;
             d->walk.dir = 1;
@@ -1160,7 +1160,7 @@ void func_L12_002E51E8(Moby *moby) {
             moby->state = 2;
             break;
         case 2:
-            (*(int *)&moby->unk94) = (*(Class_2E51E8 **)&moby->pclass)->f10;
+            (*(int *)&moby->collision) = (*(Class_2E51E8 **)&moby->pclass)->f10;
             (*(float (*)[4])&moby->rot)[1] = -1.5707964f;
             (*(float (*)[4])&moby->rot)[2] = (*(float (*)[4])&moby->rot)[2] + 3.1415927f;
             d->walk.path = D_L12_001B0C30_2E51E8[d->walk.pathIdx];
@@ -1172,9 +1172,9 @@ void func_L12_002E51E8(Moby *moby) {
             moby->state = 4;
             break;
         case 3:
-            moby->unk32 = 0;
+            moby->draw_dist = 0;
             moby->state = 1;
-            (*(int *)&moby->unk94) = 0;
+            (*(int *)&moby->collision) = 0;
             break;
         case 4:
             moby->state = 9;
@@ -1289,7 +1289,7 @@ void func_L12_002E51E8(Moby *moby) {
             d->vel[2] = d->vel[2] + D_0015EE70 * 6.0f;
         }
         FastVecAdd((*(float (*)[4])&moby->pos), (*(float (*)[4])&moby->pos), d->vel);
-        if (moby->unk31 == 0) {
+        if (moby->visible == 0) {
             DeleteMoby(moby);
         }
         break;
@@ -1415,18 +1415,18 @@ void func_L12_002E7FC8(Moby *m) {
     case 1:
         if (((Flags_2E7FC8 *)((char *)&D_0013D355_2E7FC8 + 0x13B))->f1 == 0 && func_L00_00267290(m, d->activation)) {
             func_L01_00279398(2.5f, m);
-            m->unk58 = 0.0f;
+            m->anim_speed = 0.0f;
             m->state = 2;
         }
         break;
     case 2:
         if (*(int *)&D_L12_0015F6A8_2E7FC8 != 2) {
             Flags_2E7FC8 *flags = (Flags_2E7FC8 *)((char *)&D_0013D355_2E7FC8 + 0x13B);
-            m->unk58 = 1.0f;
+            m->anim_speed = 1.0f;
             flags->f1 = 1;
             ShowBanner(0x2EE7, scale_ticks(300));
             flags->f61 = 1;
-            func_L00_002512D8(m->unkB0);
+            func_L00_002512D8(m->mission);
             if (d->node != -1) {
                 char *t = D_L12_0016016C + (d->node << 7);
                 func_L00_00286128(t + 0x30, t + 0x70);
@@ -1490,8 +1490,8 @@ void func_L12_002E7FC8(Moby *m) {
         d->helper = func_0020D348_2E7FC8(0x11F);
         if (d->helper != 0) {
             Moby *h;
-            d->helper->unk32 = (*(unsigned short *)&m->unk32);
-            d->helper->unk31 = 1;
+            d->helper->draw_dist = (*(unsigned short *)&m->draw_dist);
+            d->helper->visible = 1;
             h = d->helper;
             qcopy(&h->pos, &m->pos);
             qcopy(&h->rot, &m->rot);

@@ -184,7 +184,7 @@ void func_L00_002C2DD8(struct Moby *moby) {
     func_001F9EE8(&rotatedOffset, &offset, local);
     func_001F9BD8(&vars->grip, &saved, &rotatedOffset);
     if (vars->held != 0)
-        vars->held->unk98 = 1;
+        vars->held->collision_disable = 1;
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
         vars->held = 0;
     if (D_0013F450_2DD8.state.current == 1)
@@ -204,7 +204,7 @@ void func_L00_002C2DD8(struct Moby *moby) {
         arc.q = 0;
         arc.f[0] = D_0015EE6C * (D_0013E620_2DD8.unk11 ? ((D_0013CA40_2DD8.held & 5) ? 12.0f : 4.0f) : ((D_0013CA40_2DD8.held & 5) ? 6.0f : 4.0f));
         launch = arc;
-        func_001F9EC0(&launch, &launch, D_0013F450_2DD8.unk640);
+        func_001F9EC0(&launch, &launch, D_0013F450_2DD8.basis);
         pos.f[0] = func_001F9F90(func_001FA748(-0.361968011f, func_L00_001FF860(D_0013F450_2DD8.unk670, D_0013F450_2DD8.unk674))) * 0.859039009f;
         pos.f[1] = func_001F9FA8(func_001FA748(-0.361968011f, func_L00_001FF860(D_0013F450_2DD8.unk670, D_0013F450_2DD8.unk674))) * 0.859039009f;
         pos.f[2] = 0.0f;
@@ -257,12 +257,12 @@ void func_L00_002C2DD8(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        if (!(moby->unk70 & 2))
+        if (!(moby->anim_flags & 2))
             moby->state = 1;
         else
             moby->state = 2;
     case 1:
-        if (moby->unk70 & 2)
+        if (moby->anim_flags & 2)
             moby->state = 2;
         break;
     case 3:
@@ -375,17 +375,6 @@ struct MobyTrail_C39D0 {
     struct Moby_C39D0 *source; /* 0x134 */
     s32 copy_count; /* 0x138: copies in use (max 4) */
     s32 active; /* 0x13C */
-};
-struct HeroManipulator {
-    u8 unk0; /* 0x00 */
-    u8 attached; /* 0x01 */
-    u8 unk2; /* 0x02 */
-    u8 unk3; /* 0x03 */
-    u8 pad_4[0x8];
-    f32 unkC; /* 0x0C */
-    Vec4_C39D0 quat; /* 0x10 */
-    Vec4_C39D0 scale3; /* 0x20 */
-    Vec4_C39D0 translation; /* 0x30 */
 };
 struct HeroEase_C39D0 {
     u8 unk0; /* 0x00 */
@@ -1758,9 +1747,9 @@ s32 func_L00_002C4E00(ThrowVars *v, struct Moby *m, s32 mode)
         d.f[2] += 0.39081999659538269043f;
         qcopy(&e, &v->vel);
         if (D_0013F450_C48C8.state.control_mode == 15)
-            FastVecAdd(&e, &e, &D_0013F450_C48C8.motion.unk100);
+            FastVecAdd(&e, &e, &D_0013F450_C48C8.motion.displacement);
         if (D_0013F450_C48C8.ground_moby && func_L00_0025D390((int)D_0013F450_C48C8.ground_moby) && mode)
-            FastVecAdd(&e, &e, &D_0013F450_C48C8.motion.unk100);
+            FastVecAdd(&e, &e, &D_0013F450_C48C8.motion.displacement);
         t = scale_ticks(300);
     } else {
         u8 *holder_vars = v->holder->pvars;
@@ -1953,7 +1942,7 @@ void func_L00_002C5688(char *moby) {
         return;
     } }
     {
-    if (D_0013F450_C48C8.unk20A4 != 0 && *(unsigned char *)(moby + 0x20) == 1) {
+    if (D_0013F450_C48C8.vehicle_mode != 0 && *(unsigned char *)(moby + 0x20) == 1) {
         func_L00_00260878(moby, D_L00_001B0BB0);
         func_0020D678(moby);
         return;
@@ -2038,7 +2027,7 @@ void func_L00_002C5688(char *moby) {
                 len = func_001F9CB8(vars + 0x10);
                 if (len < D_0015EE60 * 0.01f ||
                     (D_0013F450_C48C8.ground_moby != 0 && func_L00_0025D390((int)D_0013F450_C48C8.ground_moby) != 0 &&
-                     func_001F9CB8(vars + 0x10) < D_0015EE60 * 0.01f + func_001F9CB8(&D_0013F450_C48C8.motion.unk100))) {
+                     func_001F9CB8(vars + 0x10) < D_0015EE60 * 0.01f + func_001F9CB8(&D_0013F450_C48C8.motion.displacement))) {
                     angle = func_L00_001FF860(D_L00_00173F40_C4E00.normal_z, func_001F9CE8(&D_L00_00173F40_C4E00.normal_x));
                     if (angle < 0.61086524f) {
                         int t44 = *(unsigned short *)(vars + 0x44) + 1;
@@ -2371,10 +2360,10 @@ void func_L00_002C6720(Moby *m) {
         int random;
         int max_ammo;
         value_ptr = &value;
-        *value_ptr = (float)m->unk23;
+        *value_ptr = (float)m->alpha;
         duration = scale_ticks(30);
         func_00214D28(value_ptr, 128.0f, (float)(128 / duration));
-        m->unk23 = truncate_float_to_s32(*value_ptr);
+        m->alpha = truncate_float_to_s32(*value_ptr);
         if (p->timer > 0)
             return;
         if (FastVecLength(&p->velocity) != 0.0f)
@@ -2383,11 +2372,11 @@ void func_L00_002C6720(Moby *m) {
         eligible = 1;
         height_delta =
             FastAbsF(m->pos.z - player->motion.pos.f[2]);
-        if (player->unk228C < height_delta) {
+        if (player->reach_height < height_delta) {
             eligible = 0;
         } else {
             distance = func_001F9D48(&m->pos, &player->motion.pos);
-            if (player->unk2288 < distance)
+            if (player->reach_distance < distance)
                 eligible = 0;
         }
         idx = p->weapon;
@@ -2430,8 +2419,8 @@ void func_L00_002C6720(Moby *m) {
             return;
         }
     pickup_failed:
-        if (m->unk23 < 0xFF)
-            ++m->unk23;
+        if (m->alpha < 0xFF)
+            ++m->alpha;
         if (func_L00_00251468(m, ((Hero *)(D_0013E633 + 0xE1D))->moby) <= -0.2f) {
             m->state = 3;
             p->recovery_timer = scale_ticks(60);
@@ -2477,7 +2466,7 @@ void func_L00_002C6720(Moby *m) {
         int random;
         int idx;
         phase = D_L00_0015F6B0 % 60;
-        value = (float)m->unk23;
+        value = (float)m->alpha;
         angle = (float)phase / 60.0f;
         angle = angle * 6.28318f;
         angle = angle - 3.14159f;
@@ -2488,7 +2477,7 @@ void func_L00_002C6720(Moby *m) {
         value_ptr = &value;
         random = scale_ticks(30);
         func_00214D28(value_ptr, target, (float)(128 / random));
-        m->unk23 = truncate_float_to_s32(*value_ptr);
+        m->alpha = truncate_float_to_s32(*value_ptr);
         if (func_L00_00251468(m, ((Hero *)D_0013F450)->moby) >= 0.0f) {
             m->state = 1;
             return;
@@ -2511,7 +2500,7 @@ void func_L00_002C6720(Moby *m) {
         if (remaining < 0.01f) {
             m->scale = target;
             m->state = 1;
-            m->unk94 = m->pclass->unk10;
+            m->collision = m->pclass->collision;
         }
         break;
     }
@@ -2696,13 +2685,13 @@ void func_L00_002C74B8_r(Moby *m) {
     switch (m->state) {
     case 0:
     case 1:
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
             m->state = 1;
         }
         if (d->hook) {
             func_L00_00250800_2C74B8(m, 0, &d->hook->pos);
-            (*(M3_2C74B8 *)&d->hook->unkC0) = (*(M3_2C74B8 *)&m->unkC0);
+            (*(M3_2C74B8 *)&d->hook->rot_row0) = (*(M3_2C74B8 *)&m->rot_row0);
         }
         if (((Hero *)D_0013F450_2C74B8)->state.current == 0x24 ||
             (((Hero *)D_0013F450_2C74B8)->state.control_mode == 0xF && ((Hero *)D_0013F450_2C74B8)->unk5B4)) {
@@ -2731,7 +2720,7 @@ void func_L00_002C74B8_r(Moby *m) {
         break;
     case 2:
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F9BF0_2C74B8(&v0, &((Hero *)D_0013F450_2C74B8)->unk964->pos, &d->hook->pos);
@@ -2775,7 +2764,7 @@ void func_L00_002C74B8_r(Moby *m) {
             m->state = 6;
             break;
         }
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
@@ -2803,7 +2792,7 @@ void func_L00_002C74B8_r(Moby *m) {
         break;
     case 5:
         qcopy(&d->hook->pos, &((Hero *)D_0013F450_2C74B8)->unk964->pos);
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         d->size = d->size * (D_0015EE60_2C74B8 * -0.100000024f + 1.0f);
@@ -2833,7 +2822,7 @@ void func_L00_002C74B8_r(Moby *m) {
         break;
     case 9:
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F9BF0_2C74B8(&v0, &((Hero *)D_0013F450_2C74B8)->unk994->pos, &d->hook->pos);
@@ -2851,7 +2840,7 @@ void func_L00_002C74B8_r(Moby *m) {
         m->state = 11;
         break;
     case 11:
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
@@ -2865,7 +2854,7 @@ void func_L00_002C74B8_r(Moby *m) {
     case 12:
         if (((Hero *)D_0013F450_2C74B8)->unk994)
             qcopy(&d->hook->pos, &((Hero *)D_0013F450_2C74B8)->unk994->pos);
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         d->size = d->size * (D_0015EE60_2C74B8 * -0.600000024f + 1.0f);
@@ -2874,7 +2863,7 @@ void func_L00_002C74B8_r(Moby *m) {
         if (((Hero *)D_0013F450_2C74B8)->state.current != 0x2C) m->state = 13;
         break;
     case 13:
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
@@ -2882,7 +2871,7 @@ void func_L00_002C74B8_r(Moby *m) {
         m->state = 14;
         break;
     case 14:
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
         }
         func_L00_00250800_2C74B8(m, 0, &v10);
@@ -3250,7 +3239,7 @@ void func_L00_002C8DB8(struct Moby *moby) {
     func_001F9EE8_2C8DB8(&local, &offset, mat);
     func_001F9BD8_2C8DB8(&vars->grip, &pos, &local);
     if (vars->held != 0) {
-        vars->held->unk98 = 1;
+        vars->held->collision_disable = 1;
     }
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD) {
         vars->held = 0;
@@ -3272,13 +3261,13 @@ void func_L00_002C8DB8(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 2;
         } else {
             moby->state = 1;
         }
     case 1:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 2;
         }
         break;

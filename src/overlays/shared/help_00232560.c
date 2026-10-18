@@ -1318,7 +1318,7 @@ void func_L00_00234800(void) {
         qcopy((Vec_234800 *)(D_0013E633_234800 + 0x116D), &v20);
     }
     func_001F9BD8_234800(D_0013E633_234800 + 0xF0D, D_0013E633_234800 + 0xF0D, &v20);
-    ((Hero *)(D_0013E633_234800 + 0xE1D))->motion.unkF0.f[3] = func_001FA790_234800(((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot.f[2], ang);
+    ((Hero *)(D_0013E633_234800 + 0xE1D))->motion.platform_delta.f[3] = func_001FA790_234800(((Hero *)(D_0013E633_234800 + 0xE1D))->motion.rot.f[2], ang);
 }
 extern int func_L00_002630A8(int, void *, void *, float);
 

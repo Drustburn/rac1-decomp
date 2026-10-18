@@ -830,11 +830,11 @@ void func_L05_00316378(struct Moby *m) {
         break;
     case 1:
         t = (struct Moby *)((d->trigger << 8) + D_L05_00160098_16378);
-        if (t->unkBC == 1) {
+        if (t->command == 1) {
             m->state = 2;
             break;
         }
-        if (t->unkBC == 2) {
+        if (t->command == 2) {
             m->pos.z = d->topZ;
             m->state = 3;
             m->rot.y = 0.0f;
@@ -930,14 +930,14 @@ void func_L05_003165B8(struct Moby *m) {
     }
     switch (state = m->state) {
     case 0:
-        if (D_0014C150_165B8[(*(int *)&D_0015EE84_165B8)][m->unkB0] != 0xFF) {
+        if (D_0014C150_165B8[(*(int *)&D_0015EE84_165B8)][m->mission] != 0xFF) {
             m->state = 1;
         } else {
             m->state = 3;
         }
         break;
     case 1:
-        if (d->trigger >= 0 && (*(struct Moby * *)&D_L05_00160098_165B8)[d->trigger].unkBC != 0) {
+        if (d->trigger >= 0 && (*(struct Moby * *)&D_L05_00160098_165B8)[d->trigger].command != 0) {
             func_L01_0026F090_165B8(m->group, 2);
         }
         break;
@@ -949,14 +949,14 @@ void func_L05_003165B8(struct Moby *m) {
                 o->oclass == 0x357) {
                 if (o != m && (o->state != state || func_001F9D10_165B8(&m->pos, D_L05_001672C0_165B8) <
                                                          func_001F9D10_165B8(&o->pos, D_L05_001672C0_165B8))) {
-                    func_L00_001FF4B0_165B8(v, &m->unkC0, 2.5f);
+                    func_L00_001FF4B0_165B8(v, &m->rot_row0, 2.5f);
                     func_001F9BD8_165B8(&((struct VoiceSlot_165B8 *)(D_0013E650_165B8 + *d->voice * 0x70))->pos, v, &m->pos);
                     ((struct VoiceSlot_165B8 *)(D_0013E650_165B8 + *d->voice * 0x70))->owner = m;
                 }
             } else {
                 *d->voice = func_0022ED80_165B8(0, 0xD, m);
                 if (*d->voice >= 0) {
-                    func_L00_001FF4B0_165B8(v, &m->unkC0, 2.5f);
+                    func_L00_001FF4B0_165B8(v, &m->rot_row0, 2.5f);
                     func_001F9BD8_165B8(&((struct VoiceSlot_165B8 *)(D_0013E650_165B8 + *d->voice * 0x70))->pos, v, &m->pos);
                 }
             }
@@ -975,7 +975,7 @@ void func_L05_003165B8(struct Moby *m) {
                 lim = (*(float *)&D_L05_00161F70_165B8);
             }
             qcopy(v, &m->pos);
-            func_L00_001FF4B0_165B8(u, &m->unkD0, func_002140F8_165B8(-(*(float *)&D_L05_00161F74_165B8), (*(float *)&D_L05_00161F74_165B8)));
+            func_L00_001FF4B0_165B8(u, &m->rot_row1, func_002140F8_165B8(-(*(float *)&D_L05_00161F74_165B8), (*(float *)&D_L05_00161F74_165B8)));
             func_001F9BD8_165B8(v, v, u);
             a = func_002140F8_165B8(lim, (*(float *)&D_L05_00161F68_165B8));
             b = func_002140F8_165B8(lim, (*(float *)&D_L05_00161F68_165B8));
@@ -986,7 +986,7 @@ void func_L05_003165B8(struct Moby *m) {
             if (a < c) {
                 a = c;
             }
-            func_L00_001FF4B0_165B8(w, &m->unkC0, a * D_0015EE6C_30F9D0);
+            func_L00_001FF4B0_165B8(w, &m->rot_row0, a * D_0015EE6C_30F9D0);
             if (big) {
                 scale = (*(float *)&D_L05_00161F60_165B8);
                 kind = (*(int *)&D_L05_00161F58_165B8);
@@ -1005,7 +1005,7 @@ void func_L05_003165B8(struct Moby *m) {
                     float s = t * (D_0015EE6C_30F9D0 * 4.0f);
                     float ang = func_00214158_165B8();
                     float r = func_002140F8_165B8(0.0f, 1.25f);
-                    func_001F9C30_165B8(v, &m->unkC0, s);
+                    func_001F9C30_165B8(v, &m->rot_row0, s);
                     func_001F9BD8_165B8(v, v, &m->pos);
                     v[0] += func_001F9F90_165B8(ang) * r;
                     v[1] += func_001F9FA8_165B8(ang) * r;
@@ -1105,8 +1105,8 @@ void func_L05_00316B98(struct Moby *moby) {
         if (vars->fade == 1.0f) {
             func_L05_003173A8_16B98(moby, &eye, &look);
             func_L00_002EBF50(&eye, &look, 1, 0, 0);
-            moby->state = moby->unkBC;
-            moby->unkBC = 1;
+            moby->state = moby->command;
+            moby->command = 1;
         }
         break;
     case 2:
@@ -1114,7 +1114,7 @@ void func_L05_00316B98(struct Moby *moby) {
         if (!func_L00_0028EB98(moby, vars->sound)) {
             vars->sound = func_0022ED80(0, 4, moby);
         }
-        if (moby->unkBC) {
+        if (moby->command) {
             D_0014172A = vars->marker;
             func_00214D28(&vars->fade, 0.0f, 0.133f);
             D_L05_0015F4FC = vars->fade;
@@ -1122,8 +1122,8 @@ void func_L05_00316B98(struct Moby *moby) {
             func_L00_002EBE88(&eye);
             func_L00_002EBEE0(&look);
             scale = 1.0f / (vars->top - vars->bottom);
-            accel = D_0015EE6C * (moby->unkBC ? 6.0f : 16.0f) * scale;
-            max_speed = D_0015EE70 * (moby->unkBC ? 6.0f : 16.0f) * scale;
+            accel = D_0015EE6C * (moby->command ? 6.0f : 16.0f) * scale;
+            max_speed = D_0015EE70 * (moby->command ? 6.0f : 16.0f) * scale;
         } else {
             accel = D_0015EE6C;
             max_speed = D_0015EE70;
@@ -1147,7 +1147,7 @@ void func_L05_00316B98(struct Moby *moby) {
             } else if (vars->speed < -0.00125f) {
                 vars->speed = -0.00125f;
             }
-            if (moby->unkBC) {
+            if (moby->command) {
                 if (moby->state == 2) {
                     moby->state = 6;
                 } else {
@@ -1190,10 +1190,10 @@ void func_L05_00316B98(struct Moby *moby) {
         } else if (level < 0x20) {
             level = 0x20;
         }
-        moby->unk90 = 0x80000000 | (level << 16) | (level << 8) | level;
+        moby->glow_color = 0x80000000 | (level << 16) | (level << 8) | level;
         if (D_0013F450.ground_moby == moby && D_0013F450.air_frames.s == 0 && func_001F9D48(&D_0013F450.motion.pos, &moby->pos) < 0.5f) {
             func_0022ED80(1, 0, moby);
-            moby->unk90 = 0x80208020;
+            moby->glow_color = 0x80208020;
             if (moby->state == 7) {
                 moby->state = 2;
             } else {
@@ -1210,30 +1210,30 @@ void func_L05_00316B98(struct Moby *moby) {
         } else if (level < 0x20) {
             level = 0x20;
         }
-        moby->unk90 = 0x80000000 | (level << 16) | (level << 8) | level;
+        moby->glow_color = 0x80000000 | (level << 16) | (level << 8) | level;
         if (D_0013F450.ground_moby == moby && D_0013F450.air_frames.s == 0 && func_001F9D48(&D_0013F450.motion.pos, &moby->pos) < 0.5f) {
             func_0022ED80(1, 0, moby);
             if (vars->marker != -1) {
                 func_L05_00317438_16B98(moby);
             }
-            moby->unk90 = 0x80208020;
+            moby->glow_color = 0x80208020;
             if (moby->state == 5) {
-                moby->unkBC = 2;
+                moby->command = 2;
             } else {
-                moby->unkBC = 3;
+                moby->command = 3;
             }
             moby->state = 1;
             vars->fade = 0.0f;
         } else if (moby->state == 4) {
             f32 dist = func_001F9D48(&moby->pos, &D_0013F450.motion.pos);
             if (FastAbsF(D_0013F450.ground_z.f - vars->bottom) < 2.0f && dist < 32.0f && dist > 5.0f) {
-                moby->unkBC = 0;
+                moby->command = 0;
                 moby->state = 3;
             }
         } else if (moby->state == 5) {
             f32 dist = func_001F9D48(&moby->pos, &D_0013F450.motion.pos);
             if (FastAbsF(D_0013F450.ground_z.f - vars->top) < 2.0f && dist < 32.0f && dist > 5.0f) {
-                moby->unkBC = 0;
+                moby->command = 0;
                 moby->state = 2;
             }
         }

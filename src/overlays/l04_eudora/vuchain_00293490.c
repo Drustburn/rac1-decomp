@@ -117,8 +117,8 @@ void func_L04_00293578(struct Moby *moby, LegRig_p *rig) {
             func_001E9730(D_L04_001DB660, i, moby->oclass);
             func_001F9978();
         }
-        rig->anims[i]->start = func_L04_00242868(moby->unk22, rig->anims[i]->id);
-        rig->anims[i]->len = func_L04_002428C8(moby->unk22, rig->anims[i]->id) - rig->anims[i]->start;
+        rig->anims[i]->start = func_L04_00242868(moby->class_slot, rig->anims[i]->id);
+        rig->anims[i]->len = func_L04_002428C8(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
         if (rig->anims[i]->len != 0.0f) {
             for (j = 0; j < 2; j++) {
                 rig->anims[i]->phase[1].span[j] = rig->anims[i]->phase[1].from[j] <= rig->anims[i]->phase[1].to[j]
@@ -813,7 +813,7 @@ void func_L04_00296FA8(struct Moby *m, LegRig *rig) {
         t = func_0020D830(m);
     } else {
         t = func_001FA888(m->prev_frame);
-        t += func_L04_00242868(m->unk22, m->prev_seq);
+        t += func_L04_00242868(m->class_slot, m->prev_seq);
     }
     rig->mode = 5;
     rig->speed = 0.0f;
@@ -821,7 +821,7 @@ void func_L04_00296FA8(struct Moby *m, LegRig *rig) {
     e = rig->anims;
     for (j = 12; j >= 0; j--, e++) {
         if ((*e)->id == m->prev_seq) {
-            rig->speed = FastAbsF(m->unk58 * (*e)->rate);
+            rig->speed = FastAbsF(m->anim_speed * (*e)->rate);
             rig->unkB7 = D_L04_001CABB8[12 - j][0];
         }
     }

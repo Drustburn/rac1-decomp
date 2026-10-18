@@ -856,7 +856,7 @@ void func_L15_002EE458(char *m) {
         if (D_0013F450_2EE458.air_frames.s != 0) break;
         if (D_L15_0015F6A8 == st) break;
         if (D_0013F450_2EE458.state.current == 0x1D) break;
-        v = D_0013F450_2EE458.unk20A4;
+        v = D_0013F450_2EE458.vehicle_mode;
         if (v == 0) {
             func_00215F80(4, 0x3AA4);
         } else if (v == st) {
@@ -864,7 +864,7 @@ void func_L15_002EE458(char *m) {
         }
         if ((D_0013CA40_2EE458.pressed & 0x10) == 0) return;
         if (D_L15_0015F674 != 4) return;
-        if (D_0013F450_2EE458.unk20A4 == 2 && (gm = D_0015EE84) == 0xF) {
+        if (D_0013F450_2EE458.vehicle_mode == 2 && (gm = D_0015EE84) == 0xF) {
             other = D_L15_00160058_m;
             other += *(int *)(data + 0x60);
             other->unk34 = other->unk34 | 1;
@@ -878,7 +878,7 @@ void func_L15_002EE458(char *m) {
             }
             return;
         }
-        if (D_0013F450_2EE458.unk20A4 != 0) return;
+        if (D_0013F450_2EE458.vehicle_mode != 0) return;
 
         other = &D_L15_00160058_m[*(int *)(data + 0x60)];
         if (*(int *)(data + 0x70) != -1) {

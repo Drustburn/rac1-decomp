@@ -84,9 +84,9 @@ void func_L08_002D3DF8(Moby *moby) {
     float v40[4];
 
     sound_3DF8(3.6f, moby, 2, d->f230);
-    if (moby->unk31 != 0 && distance_3DF8(&moby->pos, hero_pos_3DF8) < 28.0f) {
+    if (moby->visible != 0 && distance_3DF8(&moby->pos, hero_pos_3DF8) < 28.0f) {
         wake_3DF8(moby);
-        moby->unk7F = 0x16;
+        moby->shadow_range = 0x16;
     }
     func_L08_002D49E8((char *)moby);
     d->f218 = d->f1B0;
@@ -130,7 +130,7 @@ void func_L08_002D3DF8(Moby *moby) {
                 animate_3DF8(moby, 2, 0, 6);
             }
             moby->state = 2;
-        } else if (moby->unk70 & 2) {
+        } else if (moby->anim_flags & 2) {
             float a = randangle_3DF8();
             float r = rangef_3DF8(0.0f, 3.0f);
 
@@ -273,7 +273,7 @@ void func_L08_002D3DF8(Moby *moby) {
         if (moby->state == 4 || moby->state == 6) {
             col = 0x7F2828A0;
         }
-        moby->unk90 = colorlerp_3DF8(moby->unk90, col, 0.1f);
+        moby->glow_color = colorlerp_3DF8(moby->glow_color, col, 0.1f);
         joint_3DF8(moby, 3, d->f220);
         draw_3DF8(body_3DF8, moby);
     }
@@ -1630,7 +1630,7 @@ void func_L08_003091B0(Moby *m) {
     switch (m->state) {
     case 0:
         m->state = 2;
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         func_L08_00309050_3091B0(flag);
         break;
     case 2:

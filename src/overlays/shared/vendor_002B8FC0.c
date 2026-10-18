@@ -387,14 +387,14 @@ void func_L13_002E8040(Moby *m) {
         }
         *(Q_2E8040 *)&dir = 0;
         dir.z = 0.02f;
-        func_001F9EC0_2E8040(&dir, &dir, &*(Vec4A *)&m->unkC0);
-        func_002156E0_2E8040(&dir, &dir, &*(Vec4A *)&m->unkC0, func_00214158_2E8040());
+        func_001F9EC0_2E8040(&dir, &dir, &*(Vec4A *)&m->rot_row0);
+        func_002156E0_2E8040(&dir, &dir, &*(Vec4A *)&m->rot_row0, func_00214158_2E8040());
         p = func_L00_0026DA50_2E8040(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
         if (p != 0) {
             p[3] = 0x48;
         }
     }
-    if (d->target != 0 && !(d->target->flags & 0x1000) && (d->target->flags & 1) && *(int *)&d->target->unk94 == 0) {
+    if (d->target != 0 && !(d->target->flags & 0x1000) && (d->target->flags & 1) && *(int *)&d->target->collision == 0) {
         d->target = 0;
     }
     if (d->target != 0 && d->target->oclass == d->target_uid && d->target->state != 0xFE && d->target->state != 0xFD

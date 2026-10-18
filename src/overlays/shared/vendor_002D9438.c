@@ -391,8 +391,8 @@ void func_L00_002D9EA0(Moby *m) {
         int i;
         m->state = 1;
         m->flags |= 0x41;
-        m->unk94 = 0;
-        m->unkBC = 0;
+        m->collision = 0;
+        m->command = 0;
         c = d->owner;
         qcopy(&m->pos, &c->pos);
         qcopy(&m->rot, &c->rot);
@@ -407,31 +407,31 @@ void func_L00_002D9EA0(Moby *m) {
         for (i = 0; i < 4; i++) d->h58[i] = func_001F9850_2D9EA0(D_L00_00161B28_2D9EA0);
         for (i = 7; i >= 0; i--) d->slots[i] = 0;
         if (D_L00_0015F71C_2D9EA0 == 0) {
-            func_001FA1F8_2D9EA0(&m->unkC0, &m->rot);
+            func_001FA1F8_2D9EA0(&m->rot_row0, &m->rot);
             D_L00_0015F71C_2D9EA0 = m;
-            m->unk30 = 0xFF;
+            m->update_dist = 0xFF;
             d->f7C = 0;
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[0], &m->unkC0, D_L00_00161AE4_2D9EA0);
-            qcopy(&D_L00_001E4070_2D9EA0[0], &m->unkE0);
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[1], &m->unkD0, D_L00_00161AE4_2D9EA0);
-            qcopy(&D_L00_001E4070_2D9EA0[1], &m->unkC0);
-            func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[2], &m->unkE0, D_L00_00161AE4_2D9EA0);
-            qcopy(&D_L00_001E4070_2D9EA0[2], &m->unkD0);
-            func_001F9BD8_2D9EA0(&D_L00_001E3FF0_2D9EA0[3], &m->unkC0, &m->unkE0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[0], &m->rot_row0, D_L00_00161AE4_2D9EA0);
+            qcopy(&D_L00_001E4070_2D9EA0[0], &m->rot_row2);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[1], &m->rot_row1, D_L00_00161AE4_2D9EA0);
+            qcopy(&D_L00_001E4070_2D9EA0[1], &m->rot_row0);
+            func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[2], &m->rot_row2, D_L00_00161AE4_2D9EA0);
+            qcopy(&D_L00_001E4070_2D9EA0[2], &m->rot_row1);
+            func_001F9BD8_2D9EA0(&D_L00_001E3FF0_2D9EA0[3], &m->rot_row0, &m->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[3], &D_L00_001E3FF0_2D9EA0[3], D_L00_00161AE4_2D9EA0);
-            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[3], &D_L00_001E3FF0_2D9EA0[3], &m->unkD0);
-            func_001F9BD8_2D9EA0(&D_L00_001E3FF0_2D9EA0[4], &m->unkC0, &m->unkD0);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[3], &D_L00_001E3FF0_2D9EA0[3], &m->rot_row1);
+            func_001F9BD8_2D9EA0(&D_L00_001E3FF0_2D9EA0[4], &m->rot_row0, &m->rot_row1);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[4], &D_L00_001E3FF0_2D9EA0[4], D_L00_00161AE4_2D9EA0);
-            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[4], &D_L00_001E3FF0_2D9EA0[4], &m->unkE0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3FF0_2D9EA0[5], &m->unkD0, &m->unkE0);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[4], &D_L00_001E3FF0_2D9EA0[4], &m->rot_row2);
+            func_001F9BF0_2D9EA0(&D_L00_001E3FF0_2D9EA0[5], &m->rot_row1, &m->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[5], &D_L00_001E3FF0_2D9EA0[5], D_L00_00161AE4_2D9EA0);
-            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[5], &D_L00_001E3FF0_2D9EA0[5], &m->unkC0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3FF0_2D9EA0[6], &m->unkC0, &m->unkE0);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[5], &D_L00_001E3FF0_2D9EA0[5], &m->rot_row0);
+            func_001F9BF0_2D9EA0(&D_L00_001E3FF0_2D9EA0[6], &m->rot_row0, &m->rot_row2);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[6], &D_L00_001E3FF0_2D9EA0[6], D_L00_00161AE4_2D9EA0);
-            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[6], &D_L00_001E3FF0_2D9EA0[6], &m->unkD0);
-            func_001F9BF0_2D9EA0(&D_L00_001E3FF0_2D9EA0[7], &m->unkC0, &m->unkD0);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[6], &D_L00_001E3FF0_2D9EA0[6], &m->rot_row1);
+            func_001F9BF0_2D9EA0(&D_L00_001E3FF0_2D9EA0[7], &m->rot_row0, &m->rot_row1);
             func_L00_001FF4B0_2D9EA0(&D_L00_001E3FF0_2D9EA0[7], &D_L00_001E3FF0_2D9EA0[7], D_L00_00161AE4_2D9EA0);
-            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[7], &D_L00_001E3FF0_2D9EA0[7], &m->unkE0);
+            func_001F9CA0_2D9EA0(&D_L00_001E4070_2D9EA0[7], &D_L00_001E3FF0_2D9EA0[7], &m->rot_row2);
         }
         {
             float a = func_002140F8_2D9EA0(0.0f, 6.2831855f);
@@ -466,19 +466,19 @@ void func_L00_002D9EA0(Moby *m) {
         {
             Hero *g = (Hero *)(D_0013E633_2D9EA0 + 0xE1D);
             int lim = D_0015EEA0_2D9EA0;
-            if (g->unk20A4 == 1) lim = 4;
+            if (g->vehicle_mode == 1) lim = 4;
             if (m->state != 1 && D_L00_0015F71C_2D9EA0 != 0 && ((D_2D9EA0 *)D_L00_0015F71C_2D9EA0->pvars) != 0 && g->health.hp != 0
-                && (g->health.hp + ((D_2D9EA0 *)D_L00_0015F71C_2D9EA0->pvars)->f7C < lim || (D_0015EEB4_2D9EA0[2] != 0 && g->unk1C0 == 0))
+                && (g->health.hp + ((D_2D9EA0 *)D_L00_0015F71C_2D9EA0->pvars)->f7C < lim || (D_0015EEB4_2D9EA0[2] != 0 && g->invulnerable_frames == 0))
                 && func_001F9D10_2D9EA0(&m->pos, &g->motion.pos) < 10.0f
                 && func_L00_002D9E30_2D9EA0(m)) {
                 int i;
                 m->state = 3;
                 ((D_2D9EA0 *)D_L00_0015F71C_2D9EA0->pvars)->f7C++;
-                if (D_0015EEB4_2D9EA0[2] != 0) g->unk1C0 = func_001F9850_2D9EA0(0x258);
+                if (D_0015EEB4_2D9EA0[2] != 0) g->invulnerable_frames = func_001F9850_2D9EA0(0x258);
                 d->h54 = func_001F9850_2D9EA0(D_L00_00161B0C_2D9EA0);
-                func_001F9C30_2D9EA0(&v30, &g->unk290, -D_L00_00161B24_2D9EA0);
+                func_001F9C30_2D9EA0(&v30, &g->gravity_dir, -D_L00_00161B24_2D9EA0);
                 func_001F9BD8_2D9EA0(&v30, &g->motion.pos, &v30);
-                func_001F9C30_2D9EA0(&v0, &g->unk290, -D_L00_00161B20_2D9EA0);
+                func_001F9C30_2D9EA0(&v0, &g->gravity_dir, -D_L00_00161B20_2D9EA0);
                 func_001F9BF0_2D9EA0(&v20, &v30, &m->pos);
                 v20.z -= 0.5f;
                 func_001F9CA0_2D9EA0(&v40, &v20, &v0);
@@ -564,8 +564,8 @@ void func_L00_002D9EA0(Moby *m) {
         {
             Hero *g = (Hero *)(D_0013E633_2D9EA0 + 0xE1D);
             int lim = D_0015EEA0_2D9EA0;
-            if (g->unk20A4 == 1) lim = 4;
-            if (g->health.hp == lim && g->unk1C0 != 0 && D_0015EEB4_2D9EA0[2] != 0) {
+            if (g->vehicle_mode == 1) lim = 4;
+            if (g->health.hp == lim && g->invulnerable_frames != 0 && D_0015EEB4_2D9EA0[2] != 0) {
                 int r = func_001F9850_2D9EA0(D_L00_00161B10_2D9EA0);
                 if (d->h54 < r) {
                     int i;
@@ -597,7 +597,7 @@ void func_L00_002D9EA0(Moby *m) {
                     if (d->h56 == 0) {
                         Hero *g = (Hero *)(D_0013E633_2D9EA0 + 0xE1D);
                         int lim = D_0015EEA0_2D9EA0;
-                        if (g->unk20A4 == 1) lim = 4;
+                        if (g->vehicle_mode == 1) lim = 4;
                         if (g->health.hp != 0) {
                             int t = g->health.hp + 1;
                             g->health.hp = (lim < t) ? lim : t;
@@ -1853,16 +1853,16 @@ int func_L00_002DDEA0(Moby *self, char *q) {
             break;
         }
         case 1:
-            self->unk58 = m->f6C + 1.0f;
+            self->anim_speed = m->f6C + 1.0f;
             m->f6C = m->f6C + 1.0f / func_001FA888_2DDEA0(func_001F9850_2DDEA0(1));
             if (1.0f < m->f6C) m->f6C = 1.0f;
             self->pos.z += m->f6C / 100.0f * D_0015EE60_2DDEA0;
-            func_00215328_2DDEA0(&m->q20, &self->unkC0);
+            func_00215328_2DDEA0(&m->q20, &self->rot_row0);
             func_001F9BC0_2DDEA0(&m->vel);
             break;
         case 2: {
             float one, f20, f21;
-            self->unk31 = 1;
+            self->visible = 1;
             self->flags &= 0xFFFE;
             one = 1.0f;
             if (m->f6C < one) {
@@ -1871,12 +1871,12 @@ int func_L00_002DDEA0(Moby *self, char *q) {
                 fr.v[0].x = -1.5707964f;
                 fr.v[0].z = -1.5707964f;
                 func_001FA218_2DDEA0(&fr.v[11], &fr.v[0]);
-                func_001FA460_2DDEA0(&fr.v[3], &m->owner->unkC0);
+                func_001FA460_2DDEA0(&fr.v[3], &m->owner->rot_row0);
                 func_001FA540_2DDEA0(&fr.v[7], &fr.v[3], &fr.v[11]);
                 func_002150B0_2DDEA0(&fr.v[1], &fr.v[7]);
                 func_001FA5C8_2DDEA0(&fr.v[2], &m->q20, &fr.v[1], m->f6C);
                 func_001FA6C0_2DDEA0(&fr.v[2], &fr.v[3]);
-                func_001FA480_2DDEA0(&self->unkC0, &fr.v[3]);
+                func_001FA480_2DDEA0(&self->rot_row0, &fr.v[3]);
                 self->flags = (self->flags | 4) & 0x7FFF;
             } else {
                 m->f6C = one;
@@ -1892,7 +1892,7 @@ int func_L00_002DDEA0(Moby *self, char *q) {
             }
             if (f20 < 3.0f) {
                 D_001404FC_2DDEA0[0] = 2;
-                self->unk94 = 0;
+                self->collision = 0;
             }
             if (f20 < m->f98) {
                 ((Hero *)D_0013F450_2DDEA0)->unk207C--;
@@ -1929,9 +1929,9 @@ int func_L00_002DDEA0(Moby *self, char *q) {
         }
         case 3:
             self->flags = (self->flags | 3) & 0xFFFB;
-            self->unk31 = 0;
-            self->unk94 = 0;
-            if (self->unk70 & 2) {
+            self->visible = 0;
+            self->collision = 0;
+            if (self->anim_flags & 2) {
                 if (self->prev_seq != m->anims[4]) {
                     unsigned char c = m->anims[4];
                     func_00213DE0_2DDEA0(self, c, 0, func_001F9850_2DDEA0(3));
@@ -1944,7 +1944,7 @@ int func_L00_002DDEA0(Moby *self, char *q) {
         case 5: {
             float f20, f21;
             int r30, r18;
-            self->unk31 = 1;
+            self->visible = 1;
             self->flags &= 0xFFFE;
             if (self->pos.z < 2.0f) {
                 func_L00_002DDDE8_2DDEA0(self, m, 0);
@@ -2008,14 +2008,14 @@ int func_L00_002DDEA0(Moby *self, char *q) {
             if (((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->hit->oclass == 0) r30 = 0;
             if (m->state == 6) {
                 self->flags &= 0x7FFF;
-                self->unk94 = ((Cls_2DDEA0 *)self->pclass)->i10;
+                self->collision = ((Cls_2DDEA0 *)self->pclass)->i10;
                 self->flags |= 4;
                 m->v50.z = f21;
                 m->v50.x = 0.0f;
                 m->v50.y = 0.0f;
                 m->v50.w = 0.01f;
                 f20 = func_001F9CB8_2DDEA0(&fr.v[0]) / m->f80;
-                func_00215328_2DDEA0(&fr.v[1], &self->unkC0);
+                func_00215328_2DDEA0(&fr.v[1], &self->rot_row0);
                 func_L00_001FF4B0_2DDEA0(&m->v50, &m->v50, f21);
                 func_L00_0025F368_2DDEA0(f20);
                 func_L00_001FF4B0_2DDEA0(&fr.v[4], &m->vel, -1.0f);
@@ -2024,9 +2024,9 @@ int func_L00_002DDEA0(Moby *self, char *q) {
                 func_00215380_2DDEA0(&fr.v[2], &fr.v[3], f20);
                 func_001FA588_2DDEA0(&fr.v[5], &fr.v[1], &fr.v[2]);
                 func_001FA6C0_2DDEA0(&fr.v[5], &fr.v[6]);
-                func_L00_001FF4B0_2DDEA0(&self->unkC0, &fr.v[6], f21);
-                func_L00_001FF4B0_2DDEA0(&self->unkD0, &fr.v[7], f21);
-                func_L00_001FF4B0_2DDEA0(&self->unkE0, &fr.v[8], f21);
+                func_L00_001FF4B0_2DDEA0(&self->rot_row0, &fr.v[6], f21);
+                func_L00_001FF4B0_2DDEA0(&self->rot_row1, &fr.v[7], f21);
+                func_L00_001FF4B0_2DDEA0(&self->rot_row2, &fr.v[8], f21);
             }
             if (r30 != 0) {
                 r18 = 0;
@@ -2038,7 +2038,7 @@ int func_L00_002DDEA0(Moby *self, char *q) {
                     unsigned char c = m->anims[6];
                     func_00213DE0_2DDEA0(self, c, 0, func_001F9850_2DDEA0(0x14));
                 }
-                self->unk98 = m->i88;
+                self->collision_disable = m->i88;
                 m->state = 6;
                 if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173F40_2DDEA0)->v40))) {
                     if (m->h9E >= 0) func_0022ED80_2DDEA0(m->h9E, 0, self);
@@ -2066,12 +2066,12 @@ int func_L00_002DDEA0(Moby *self, char *q) {
                 return 0;
             }
             m->vel.z = m->vel.z - D_0015EE64_2DDEA0 * 0.00925f;
-            func_L00_0026D270_2DDEA0(&self->pos, &self->unkC0);
+            func_L00_0026D270_2DDEA0(&self->pos, &self->rot_row0);
             break;
         }
         case 6: {
             int r18;
-            self->unk31 = 1;
+            self->visible = 1;
             self->flags &= 0xFFFE;
             m->vel.z = m->vel.z - D_0015EE64_2DDEA0 * 0.013f;
             if (self->pos.z < 2.0f) {
@@ -2084,11 +2084,11 @@ int func_L00_002DDEA0(Moby *self, char *q) {
             if (r18 != 0) {
                 self->rot.x = 0.0f;
                 self->rot.y = 0.0f;
-                self->unk58 = 1.0f;
+                self->anim_speed = 1.0f;
                 return 1;
             }
-            if (self->unk70 & 2) {
-                self->unk58 = m->f78;
+            if (self->anim_flags & 2) {
+                self->anim_speed = m->f78;
             }
             break;
         }
@@ -2245,9 +2245,9 @@ void func_L00_002DF168(char *a, char *b) {
             qcopy((char *)s + 0x20, a + 0xE0);
             v = (char *)s + 0x20;
         } else {
-            qcopy((char *)s, &hero_2DF168.unk640[0]);
-            qcopy((char *)s + 0x10, &hero_2DF168.unk640[1]);
-            qcopy((char *)s + 0x20, &hero_2DF168.unk640[2]);
+            qcopy((char *)s, &hero_2DF168.basis[0]);
+            qcopy((char *)s + 0x10, &hero_2DF168.basis[1]);
+            qcopy((char *)s + 0x20, &hero_2DF168.basis[2]);
             v = (char *)s + 0x20;
         }
     }
@@ -2600,7 +2600,7 @@ void func_L00_002E0E50(Moby *m) {
         m->state = 1;
         break;
     case 1:
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             m->state = 2;
         }
         break;
@@ -2651,7 +2651,7 @@ void func_L00_002E0E50(Moby *m) {
             func_0022ED80_2E0E50(0x15, 0, ((Hero *)(D_0013E633_2E0E50 + 0xE1D))->moby);
         }
         if ((*(int *)&e->pad_0[4]) != -1 && (*(int *)&e->pad_0[8]) != -1) {
-            m->unkBC = 0;
+            m->command = 0;
             m->state = 4;
             d->f10 = 0.0f;
             func_L00_002EBF50_2E0E50(D_L00_00166EC0_2E0E50, D_L00_00166EC0_2E0E50 + 0x10, 1, 0, 0);
@@ -2667,10 +2667,10 @@ void func_L00_002E0E50(Moby *m) {
         m->state = 5;
         d->i0 = func_001FA898_2E0E50(func_001F9878_2E0E50(D_L00_00161C84_2E0E50));
         if (((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk20B0 == 0) {
-            ((Moby *)q)->unkBC = 8;
+            ((Moby *)q)->command = 8;
             ((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk20B0 = 1;
         } else {
-            ((Moby *)q)->unkBC = 4;
+            ((Moby *)q)->command = 4;
             ((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk20B0 = 0;
         }
         break;
@@ -2680,7 +2680,7 @@ void func_L00_002E0E50(Moby *m) {
             func_L00_002E17F0_2E0E50(m);
             return;
         }
-        switch (m->unkBC) {
+        switch (m->command) {
         case 0: {
             char *q;
 
@@ -2689,15 +2689,15 @@ void func_L00_002E0E50(Moby *m) {
                 break;
             }
             q = D_L00_00160098_2E0E50 + ((*(int *)&((PadState *)((void *)((Hero *)(D_0013E633_2E0E50 + 0xE1D))->ground_moby->pvars))->pad_0) << 8);
-            m->unkBC = 1;
+            m->command = 1;
             func_L00_002EBE88_2E0E50(D_L00_001601AC_2E0E50 + (d->i8 << 7) + 0x30);
             func_L00_002EBEE0_2E0E50(D_L00_001601AC_2E0E50 + (d->i8 << 7) + 0x70);
             D_L00_0015F504_2E0E50 = 1;
             if (((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk20B0 == 0) {
-                ((Moby *)q)->unkBC = 8;
+                ((Moby *)q)->command = 8;
                 ((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk20B0 = 1;
             } else {
-                ((Moby *)q)->unkBC = 4;
+                ((Moby *)q)->command = 4;
                 ((Hero *)(D_0013E633_2E0E50 + 0xE1D))->unk20B0 = 0;
             }
             break;
@@ -2723,7 +2723,7 @@ void func_L00_002E0E50(Moby *m) {
                 func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
-            m->unkBC = 2;
+            m->command = 2;
             D_L00_0015F504_2E0E50 = 0;
             func_L00_002EC0C8_2E0E50(3);
             return;

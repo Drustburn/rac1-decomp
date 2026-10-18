@@ -198,7 +198,7 @@ void func_L13_0030CAE0(Moby *moby)
         break;
     case 13:
         if (data->f10 != -1) {
-            if (D_L13_0015FD08_30CAE0[D_L13_00160058_30CAE0[data->f10].unkB0] != 0xFF) break;
+            if (D_L13_0015FD08_30CAE0[D_L13_00160058_30CAE0[data->f10].mission] != 0xFF) break;
             if (data->f20 != -1) {
                 func_0020D678_30CAE0(&D_L13_00160058_30CAE0[data->f20]);
             }

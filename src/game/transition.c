@@ -859,7 +859,7 @@ void func_001EABE8(void)
   cnt = (new_var = D_001B3E40_EABE8[0x472]);
   if (cnt >= 0)
   {
-    D_001B3580_EABE8[cnt]->unk28 = (s32)D_001862E0_EABE8;
+    D_001B3580_EABE8[cnt]->sound_defs = (s32)D_001862E0_EABE8;
     (*(u8 *)&D_001B3580_EABE8[cnt]->pad_D) = 5;
   }
 }

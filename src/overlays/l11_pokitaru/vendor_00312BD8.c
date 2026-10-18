@@ -642,8 +642,8 @@ void func_L11_00313D00(void *a0, void *a1) {
     if (D_L11_00162094_313D00 < o->h68) {
         float h20, h21;
         int bits = ((PadState *)(D_0013A5E0_313D00 + 0x2460))->held;
-        float sx = ((Hero *)(D_0013E633_313D00 + 0xE1D))->unk1D20;
-        float sy = ((Hero *)(D_0013E633_313D00 + 0xE1D))->unk1D24;
+        float sx = ((Hero *)(D_0013E633_313D00 + 0xE1D))->stick_x;
+        float sy = ((Hero *)(D_0013E633_313D00 + 0xE1D))->stick_y;
         h20 = D_L11_00162134_313D00;
         h21 = D_L11_00162144_313D00;
         pv[0] = sx;
@@ -724,7 +724,7 @@ void func_L11_00313D00(void *a0, void *a1) {
     if (collide_313D00(2.0f, ((float *)&moby->pos), 0, moby)) {
         if (D_L11_001748C0_313D00.moby == 0) {
             burst_313D00(moby, D_L11_0015F660_313D00, 0, 8.0f, 100.0f, 30, 10, 24, 16.0f, 8.0f, 9.0f, -1, 1.0f, 50.0f, 1, 1, -1, 0);
-            moby->unk31 = 0;
+            moby->visible = 0;
             moby->state = 7;
             moby->flags |= 1;
             o->tF8 = ticks_313D00(90);
@@ -940,7 +940,7 @@ void func_L11_003146E0(Moby *moby) {
                 }
             }
         }
-        moby->unkA4 = 0xFF;
+        moby->hit_slot = 0xFF;
         {
             Glob_3146E0 *g = (Glob_3146E0 *)(D_0013E633 + 0xE1D);
             if (g->cur == (int)moby) {
@@ -973,11 +973,11 @@ void func_L11_003146E0(Moby *moby) {
             d->tF8 = 1;
             d->hE8 = 1;
             d->f130 = 0.0f;
-            if (moby->unkB0 != 0xFF && D_0014C150[D_0015EE84][moby->unkB0] == 0xFF) {
+            if (moby->mission != 0xFF && D_0014C150[D_0015EE84][moby->mission] == 0xFF) {
                 moby->state = 9;
-                *(int *)&moby->unk94 = 0;
+                *(int *)&moby->collision = 0;
                 moby->flags |= 1;
-                moby->unk31 = 0;
+                moby->visible = 0;
             }
             break;
         case 1: {
@@ -1055,8 +1055,8 @@ void func_L11_003146E0(Moby *moby) {
                     d->i80 = 0;
                     d->iD4 = 0;
                     d->iD8 = 0;
-                    moby->unk32 = 0xFF;
-                    moby->unk30 = 0xFF;
+                    moby->draw_dist = 0xFF;
+                    moby->update_dist = 0xFF;
                     d->fB4 = D_L11_001620B4 * D_L11_0016211C;
                     d->fBC = D_L11_001620B8 * D_L11_0016211C;
                     d->iB8 = 0;
@@ -1147,9 +1147,9 @@ void func_L11_003146E0(Moby *moby) {
                     func_L11_0024E240(0, 1);
                     func_L00_002EC0C8(0);
                     func_L00_002664B0(0, 8);
-                    moby->unk31 = 0;
+                    moby->visible = 0;
                     moby->flags |= 1;
-                    *(int *)&moby->unk94 = 0;
+                    *(int *)&moby->collision = 0;
                     i = d->i100;
                     if (i == -1) {
                         STUB_printf(D_L11_0021B900);
@@ -1168,8 +1168,8 @@ void func_L11_003146E0(Moby *moby) {
                         e = D_L11_0016016C + d->iFC * 128;
                         func_L00_00217718(e + 0x30, e + 0x70, 0, 1);
                     }
-                    if (moby->unkB0 != 0xFF) {
-                        func_L00_002512D8(moby->unkB0);
+                    if (moby->mission != 0xFF) {
+                        func_L00_002512D8(moby->mission);
                     }
                     moby->state = 9;
                 }
@@ -2009,14 +2009,14 @@ void func_L11_00316DD8(Moby *m) {
         }
     }
     if (m->state == 0xC && d->f254 != -1) {
-        if (func_L11_0030BC00_316DD8((char *)D_L11_00160058_316DD8 + (d->f254 << 8)) != 0 && m->unk31 == 0) {
+        if (func_L11_0030BC00_316DD8((char *)D_L11_00160058_316DD8 + (d->f254 << 8)) != 0 && m->visible == 0) {
             func_0020D678_316DD8(m);
             return;
         }
         if (D_L11_00160058_316DD8[d->f254].state >= 2) {
-            m->unk31 = 1;
+            m->visible = 1;
             m->flags &= 0xFFFE;
-            *(int *)&m->unk94 = ((Cls_316DD8 *)m->pclass)->bounds;
+            *(int *)&m->collision = ((Cls_316DD8 *)m->pclass)->bounds;
         }
     }
     dmg = 0.0f;
@@ -2093,10 +2093,10 @@ void func_L11_00316DD8(Moby *m) {
         }
         func_L00_0025E4B0_316DD8(m, d->fx);
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     func_L00_0025E590_316DD8(m, d->fx);
     if (d->f244 != 0) {
-        if (m->state == 2 || (m->state == 3 && (m->unk70 & 2))) {
+        if (m->state == 2 || (m->state == 3 && (m->anim_flags & 2))) {
             m->state = 0xA;
             if (m->prev_seq != 2) {
                 func_00213DE0_316DD8(m, 2, 0, func_001F9850_316DD8(0xA));
@@ -2204,14 +2204,14 @@ int func_L11_003175D0(struct Moby *moby) {
         if (moby->state == 2 || moby->state == 4 || moby->state == 5 || moby->state == 6 ||
             moby->state == 0xE || moby->state == 0xF || moby->state == 0x10 || moby->state == 0x14) {
             if (moby->state != 0x14) {
-                moby->unkBC = moby->state;
+                moby->command = moby->state;
                 moby->state = 0x14;
             }
         } else {
             r = 0;
         }
     } else if (moby->state == 0x14) {
-        moby->state = moby->unkBC;
+        moby->state = moby->command;
     }
     return r;
 }
@@ -2675,7 +2675,7 @@ void func_L11_00319108(void *moby_v) {
         if (hit != 0) {
             idx = i;
             total += hit->scale;
-            d->links[i]->unkA4 = 0xFF;
+            d->links[i]->hit_slot = 0xFF;
         }
     }
     func_00214D28_19108(&d->health, 0.0f, total);
@@ -2708,7 +2708,7 @@ void func_L11_00319108(void *moby_v) {
             char *p1 = (char *)&moby->pos;
             char *p2 = (char *)&moby->rot;
             float *dv = D_L11_0015F660_19108;
-            func_001F9C30_19108(vec, &moby->unkC0, D_L11_001623C0_19108 * D_0015EE60_19108);
+            func_001F9C30_19108(vec, &moby->rot_row0, D_L11_001623C0_19108 * D_0015EE60_19108);
             vec[2] += D_0015EE60_19108 * 0.08f;
             func_0022ED80_19108(2, 0, moby);
             func_L00_00260108_19108(moby, p1, -1, 3.0f, 13.0f);

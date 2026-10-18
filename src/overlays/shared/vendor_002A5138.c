@@ -614,10 +614,10 @@ void func_L00_002A7078(Moby *m) {
     float md[12];              /* sp+0x50 */
 
     if (D_L00_0015F6A8_A7078 == 2) {
-        m->unk31 = 0;
+        m->visible = 0;
         m->flags |= 1;
     } else {
-        m->unk31 = 1;
+        m->visible = 1;
         m->flags &= ~1;
     }
     switch (m->state) {
@@ -626,14 +626,14 @@ void func_L00_002A7078(Moby *m) {
         m->state = 3;
         m->unk73 = 0x14;
         m->flags |= 0x100;
-        m->unk30 = 0x20;
-        m->unk32 = 0x20;
+        m->update_dist = 0x20;
+        m->draw_dist = 0x20;
         if (func_002140B0_A7078(2) == 0) {
             d->f55 |= 1;
         }
-        func_L00_001FF4B0_A7078(u.s.a, ((float *)&m->unkE0), 0.2f);
+        func_L00_001FF4B0_A7078(u.s.a, ((float *)&m->rot_row2), 0.2f);
         func_001F9BD8_A7078(u.s.a, u.s.a, ((float *)&m->pos));
-        func_L00_001FF4B0_A7078(u.s.b, ((float *)&m->unkE0), -3.0f);
+        func_L00_001FF4B0_A7078(u.s.b, ((float *)&m->rot_row2), -3.0f);
         func_001F9BD8_A7078(u.s.b, u.s.b, ((float *)&m->pos));
         r = func_L00_001EFFF0_A7078(u.s.a, u.s.b, 0x22, 0, 0);
         if (d->f54 == 0 && r != 0) {
@@ -678,7 +678,7 @@ void func_L00_002A7078(Moby *m) {
         d->vel[2] -= D_0015EE70_A7078 * 10.8f;
         func_001F9BD8_A7078(((float *)&m->pos), ((float *)&m->pos), d->vel);
         func_001FA648_A7078(d->quat, u.s.m);
-        func_001FA4F0_A7078(((float *)&m->unkC0), u.s.m, ((float *)&m->unkC0));
+        func_001FA4F0_A7078(((float *)&m->rot_row0), u.s.m, ((float *)&m->rot_row0));
         switch (m->oclass) {
         case 13:
             r = 0.15f;
@@ -716,7 +716,7 @@ void func_L00_002A7078(Moby *m) {
         dist = func_001F9D48_A7078(((float *)&m->pos), D_0013E633_A7078 + 0xE9D);
         {
             Hero *h = (Hero *)(D_0013E633_A7078 + 0xE1D);
-            if (dist < h->unk2288 && func_001F9B88_A7078(m->pos.z - h->motion.pos.f[2]) < h->unk228C) {
+            if (dist < h->reach_distance && func_001F9B88_A7078(m->pos.z - h->motion.pos.f[2]) < h->reach_height) {
                 if (h->health.hp != 0) {
                     func_L00_001FF4B0_A7078(d->vel, d->vel, func_002140F8_A7078(3.0f, 7.0f) * D_0015EE6C_A7078);
                     func_L00_002A84B0_A7078(m, h->moby, 0.0f, 0.0f);
@@ -733,7 +733,7 @@ void func_L00_002A7078(Moby *m) {
                     d->held = c->moby;
                     func_L00_002616E0_A7078(m, d->held, d, d->ang, d, d->ang);
                 }
-                func_002153E8_A7078(((float *)&m->unkC0), u.s.b);
+                func_002153E8_A7078(((float *)&m->rot_row0), u.s.b);
                 func_L00_0025AFA8_A7078(d->quat, u.s.b);
             }
         }
@@ -744,14 +744,14 @@ void func_L00_002A7078(Moby *m) {
         float t;
         func_L00_002A8088_A7078(m, u.s.b, 0);
         u.s.b[2] += 0.25f;
-        func_002153E8_A7078(((float *)&m->unkC0), u.s.a);
+        func_002153E8_A7078(((float *)&m->rot_row0), u.s.a);
         func_L00_0025AFA8_A7078(u.s.m, u.s.a);
         s = 1.0f / func_001FA888_A7078(d->f57);
         t = func_001FA888_A7078(d->f57) / func_001FA888_A7078(d->f56);
         func_001FA5C8_A7078(d->quat, d->quat, u.s.m, s);
         func_001F9C08_A7078(((float *)&m->pos), ((float *)&m->pos), u.s.b, t);
         m->pos.z += -((t - 0.5f) * (t - 0.5f) - 0.25f) * ((float)d->f56 * 0.025f);
-        func_001FA648_A7078(d->quat, ((float *)&m->unkC0));
+        func_001FA648_A7078(d->quat, ((float *)&m->rot_row0));
         if (--d->f57 == 0) {
             m->state = 3;
             d->f56 = d->f57 = func_001FA898_A7078(func_001F9878_A7078(func_002140F8_A7078(10.0f, 20.0f)));
@@ -763,16 +763,16 @@ void func_L00_002A7078(Moby *m) {
         dist = func_001F9D48_A7078(((float *)&m->pos), D_0013E633_A7078 + 0xE9D);
         {
             Hero *h = (Hero *)(D_0013E633_A7078 + 0xE1D);
-            if (dist < h->unk2288 && func_001F9B88_A7078(m->pos.z - h->motion.pos.f[2]) < h->unk228C) {
+            if (dist < h->reach_distance && func_001F9B88_A7078(m->pos.z - h->motion.pos.f[2]) < h->reach_height) {
                 func_L00_002A84B0_A7078(m, h->moby, 0.0f, 0.0f);
                 break;
             }
         }
-        if (D_L00_0016009C_A7078 < m && D_L00_0016007C_A7078 < 200 && dist > 48.0f && m->unk31 == 0) {
+        if (D_L00_0016009C_A7078 < m && D_L00_0016007C_A7078 < 200 && dist > 48.0f && m->visible == 0) {
             func_0020D678_A7078(m);
             break;
         }
-        if (m->unk31 != 0 || d->held != 0) {
+        if (m->visible != 0 || d->held != 0) {
             func_L00_002A8088_A7078(m, 0, 0);
             if (d->f57 != 0) {
                 float t = func_001FA888_A7078(d->f57) / func_001FA888_A7078(d->f56);
@@ -780,7 +780,7 @@ void func_L00_002A7078(Moby *m) {
                 d->f57--;
             }
             if (d->h6C >= 0) {
-                func_001F9EC0_A7078(u.s.a, D_L00_001D76D0_A7078[m->oclass], ((float *)&m->unkC0));
+                func_001F9EC0_A7078(u.s.a, D_L00_001D76D0_A7078[m->oclass], ((float *)&m->rot_row0));
                 func_001F9BD8_A7078(D_L00_0016EB40_A7078[d->h6C].pos, u.s.a, ((float *)&m->pos));
                 if (D_L00_0016EB40_A7078[d->h6C].h14 != m - D_L00_00160098_A7078) {
                     d->h6C = -1;
@@ -789,7 +789,7 @@ void func_L00_002A7078(Moby *m) {
                 d->h6E--;
                 if (d->h6E <= 0) {
                     int lo;
-                    func_001F9EC0_A7078(u.s.a, D_L00_001D76D0_A7078[m->oclass], ((float *)&m->unkC0));
+                    func_001F9EC0_A7078(u.s.a, D_L00_001D76D0_A7078[m->oclass], ((float *)&m->rot_row0));
                     func_001F9BD8_A7078(u.s.a, u.s.a, ((float *)&m->pos));
                     d->h6C = func_L00_001FE940_A7078(u.s.a, m - D_L00_00160098_A7078, 1.4f);
                     lo = func_001F9850_A7078(0x12C);
@@ -827,13 +827,13 @@ void func_L00_002A7078(Moby *m) {
             {
                 Hero *h = (Hero *)(D_0013E633_A7078 + 0xE1D);
                 if (D_0015EE6C_A7078 * 8.0f < h->motion.speed_xy) {
-                    func_L00_001FF4B0_A7078(u.s.b, h->motion.unk100.f, (h->motion.speed_xy - D_0015EE6C_A7078 * 8.0f) * 0.5f);
+                    func_L00_001FF4B0_A7078(u.s.b, h->motion.displacement.f, (h->motion.speed_xy - D_0015EE6C_A7078 * 8.0f) * 0.5f);
                     func_001F9BD8_A7078(((float *)&m->pos), ((float *)&m->pos), u.s.b);
                 }
             }
         }
         func_001FA648_A7078(d->quat, u.t.m);
-        func_001FA4F0_A7078(((float *)&m->unkC0), u.t.m, ((float *)&m->unkC0));
+        func_001FA4F0_A7078(((float *)&m->rot_row0), u.t.m, ((float *)&m->rot_row0));
         func_001F9BD8_A7078(((float *)&m->pos), ((float *)&m->pos), d->vel);
         func_001F9BF0_A7078(u.t.e, D_0013E633_A7078 + 0xEED, ((float *)&m->pos));
         if (d->f64 < func_001F9CB8_A7078(u.t.e)) {
@@ -852,9 +852,9 @@ void func_L00_002A7078(Moby *m) {
         }
         func_L00_002A7E10_A7078(m);
         if (m < D_L00_0016009C_A7078) {
-            D_L00_001BA960_A7078.killed[(short)m->save_id] = m->unkB0 + 2;
-            if (m->unkB0 == 0xFF || (D_L00_0015FD48_A7078[m->unkB0] != 0xFF && D_0014C150_A7078[D_0015EE84_A7078][m->unkB0] == 0xFF)) {
-                D_L00_001BB5C0_A7078.killed[(short)m->save_id] = m->unkB0 + 2;
+            D_L00_001BA960_A7078.killed[(short)m->save_id] = m->mission + 2;
+            if (m->mission == 0xFF || (D_L00_0015FD48_A7078[m->mission] != 0xFF && D_0014C150_A7078[D_0015EE84_A7078][m->mission] == 0xFF)) {
+                D_L00_001BB5C0_A7078.killed[(short)m->save_id] = m->mission + 2;
             }
         }
         func_0020D678_A7078(m);
@@ -920,7 +920,7 @@ void func_L00_002A7E10(struct Moby *bolt)
         break;
     }
 
-    src = bolt->unkB8;
+    src = bolt->parent;
     if (src && !(src->id & 0x80))
         D_0014D690[D_0015EE84][src->id].bolts += value;
     gBolts += value;
@@ -1145,18 +1145,18 @@ struct Moby *func_L00_002A86D8(struct Moby *src, void *pos, void *vel, int flags
         /* the bolt source is the root of src's unkB8 chain */
         root = src;
         if (src != 0) {
-            while (root->unkB8 != 0)
-                root = root->unkB8;
+            while (root->parent != 0)
+                root = root->parent;
         }
-        m->unkB8 = root;
+        m->parent = root;
         m->unk73 = 20;
         m->flags |= 0x100;
-        m->unk30 = 0x40;
-        m->unk32 = 0x40;
-        m->unk31 = 1;
+        m->update_dist = 0x40;
+        m->draw_dist = 0x40;
+        m->visible = 1;
         m->state = 1;
         m->scale = m->pclass->scale * scale;
-        func_001FA1F8(&m->unkC0, &m->rot);
+        func_001FA1F8(&m->rot_row0, &m->rot);
         if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
             func_L00_00251328(m, color[4], color[5], color[6]);
         else

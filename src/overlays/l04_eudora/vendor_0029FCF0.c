@@ -2733,7 +2733,7 @@ struct Moby;
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l04/gameplay/entities/0029eb20.c, FUN_L04_002c6858. */
 void func_L04_002C7BD8(struct Moby *m) {
     SwitchFollowerVars_C7BD8 *v = (SwitchFollowerVars_C7BD8 *)m->pvars;
-    f32 last = m->unk54;
+    f32 last = m->anim_time;
     struct Moby *other;
     f32 *pos;
     f32 cur;
@@ -2746,17 +2746,17 @@ void func_L04_002C7BD8(struct Moby *m) {
     case 0:
         func_00213DE0_C7BD8(m, 1, 0, func_001F9850_C7BD8(300));
         m->state = 1;
-        m->unk58 = 0;
+        m->anim_speed = 0;
         v->voice = -1;
         if (m->oclass == 0x1B0) {
             m->oclass = 0x41C;
-            m->unk22 = D_L04_00198040_C7BD8[0x41C];
-            m->pclass = D_L04_00197780_C7BD8[m->unk22];
+            m->class_slot = D_L04_00198040_C7BD8[0x41C];
+            m->pclass = D_L04_00197780_C7BD8[m->class_slot];
             m->unk71 = 0xFF;
             m->scale = ((MobyClassHeader_C7BD8 *)m->pclass)->scale;
             func_0020D6D0_C7BD8(m);
             m->unk72 = ((MobyClassHeader_C7BD8 *)m->pclass)->unkE;
-            m->unk94 = ((MobyClassHeader_C7BD8 *)m->pclass)->unk10;
+            m->collision = ((MobyClassHeader_C7BD8 *)m->pclass)->unk10;
             func_0020EEE8_C7BD8(m);
         }
         break;
@@ -2768,7 +2768,7 @@ void func_L04_002C7BD8(struct Moby *m) {
             break;
         pos = (f32 *)other->pvars;
         cur = *pos;
-        m->unk54 = cur;
+        m->anim_time = cur;
         if (cur != last) {
             if (*pos == 1.0f || *pos == 0.0f) {
                 if (func_L00_0028EB98_C7BD8(m, v->voice)) {
@@ -2783,13 +2783,13 @@ void func_L04_002C7BD8(struct Moby *m) {
                 func_0022ED80_C7BD8(1, 0, m);
                 if (m->oclass == 0x41C && *pos == 1.0f) {
                     m->oclass = 0x1B0;
-                    m->unk22 = D_L04_00198040_C7BD8[0x1B0];
-                    m->pclass = D_L04_00197780_C7BD8[m->unk22];
+                    m->class_slot = D_L04_00198040_C7BD8[0x1B0];
+                    m->pclass = D_L04_00197780_C7BD8[m->class_slot];
                     m->unk71 = 0xFF;
                     m->scale = ((MobyClassHeader_C7BD8 *)m->pclass)->scale;
                     func_0020D6D0_C7BD8(m);
                     m->unk72 = ((MobyClassHeader_C7BD8 *)m->pclass)->unkE;
-                    m->unk94 = ((MobyClassHeader_C7BD8 *)m->pclass)->unk10;
+                    m->collision = ((MobyClassHeader_C7BD8 *)m->pclass)->unk10;
                     func_0020EEE8_C7BD8(m);
                     m->state = 2;
                 }
@@ -2857,7 +2857,7 @@ void func_L04_002C7F38(struct Moby *m) {
     LeverVars *lv;
     u8 *slot;
 
-    prev = m->unk54;
+    prev = m->anim_time;
     if (v == 0) {
         DeleteMoby(m);
         return;
@@ -2866,7 +2866,7 @@ void func_L04_002C7F38(struct Moby *m) {
     case 0:
         func_00213DE0_C7F38(m, 1, 0, scale_ticks(300));
         m->state = 1;
-        m->unk58 = 0;
+        m->anim_speed = 0;
         v->voice = -1;
         break;
     case 1:
@@ -2879,7 +2879,7 @@ void func_L04_002C7F38(struct Moby *m) {
         }
         lv = (LeverVars *)lever->pvars;
         if (lever->state == 3) {
-            m->unk54 = 1.0f - lv->travel;
+            m->anim_time = 1.0f - lv->travel;
         } else if (lv->travel != 1.0f ||
                    (v->target != -1 && v->locked == 0 &&
                     ((u32)D_0013F450.state.control_mode < 2 || D_0013F450.state.control_mode == 9 ||
@@ -2887,7 +2887,7 @@ void func_L04_002C7F38(struct Moby *m) {
                     D_0013F450.ground_moby == &D_L04_00160058_C7F38[v->target])) {
             m->state = 2;
         }
-        if (m->unk54 != prev) {
+        if (m->anim_time != prev) {
             if (lv->travel != 1.0f && lv->travel != 0.0f) {
                 if (func_L00_0028EB98(m, v->voice) == 0) {
                     v->voice = func_0022ED80_C7F38(0, 4, (int)m);
@@ -2918,9 +2918,9 @@ void func_L04_002C7F38(struct Moby *m) {
         struct Moby *link;
         LeverVars *link_vars;
 
-        m->unk54 = prev + (*(float *)&D_0015EE6C_C7F38) * 0.5f;
-        if (1.0f < m->unk54) {
-            m->unk54 = 1.0f;
+        m->anim_time = prev + (*(float *)&D_0015EE6C_C7F38) * 0.5f;
+        if (1.0f < m->anim_time) {
+            m->anim_time = 1.0f;
         }
         if (v->lever == -1) {
             break;
@@ -2931,13 +2931,13 @@ void func_L04_002C7F38(struct Moby *m) {
         }
         link_vars = (LeverVars *)link->pvars;
         if (link->state == 3) {
-            m->unk54 = 1.0f - link_vars->travel;
+            m->anim_time = 1.0f - link_vars->travel;
             m->state = 1;
         } else {
-            link_vars->travel = 1.0f - m->unk54;
+            link_vars->travel = 1.0f - m->anim_time;
             link_vars->spin = link_vars->travel * (link_vars->rate * 6.2831855f);
         }
-        if (m->unk54 != prev) {
+        if (m->anim_time != prev) {
             if (link_vars->travel == 1.0f || link_vars->travel == 0.0f) {
                 if (func_L00_0028EB98(m, v->voice) != 0) {
                     if (v->voice != -1) {

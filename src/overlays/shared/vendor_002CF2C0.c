@@ -125,7 +125,7 @@ void func_L05_002F6588(struct Moby *m) {
     s32 i;
     s32 *path;
 
-    m->unk30 = 0xFF;
+    m->update_dist = 0xFF;
     inside = 0;
     if (v->use_alt_target != 0) {
         qcopy(&target, &D_L05_001672C0_F6588);
@@ -147,13 +147,13 @@ void func_L05_002F6588(struct Moby *m) {
             }
         }
     }
-    if ((inside && m->unkBC == 0) || (!inside && m->unkBC != 0) || m->state == 0) {
+    if ((inside && m->command == 0) || (!inside && m->command != 0) || m->state == 0) {
         if (inside) {
-            m->unkBC = 1;
+            m->command = 1;
         } else {
-            m->unkBC = 0;
+            m->command = 0;
         }
-        m->state = m->unkBC + 1;
+        m->state = m->command + 1;
         for (i = 0; i < 12; i++) {
             if (v->on_lists[i] != -1) {
                 func_L05_002F6518_F6588(m, v, v->on_lists[i], inside);

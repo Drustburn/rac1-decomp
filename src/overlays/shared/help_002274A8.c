@@ -438,9 +438,9 @@ void func_L01_0022D688(void) {
     ((Hero *)D_0013F450_D688)->unk4E8 = 0;
     if (((Hero *)D_0013F450_D688)->unk1B0 != 0) return;
     go = 0;
-    if (((Hero *)D_0013F450_D688)->unk20A4 == 0) {
+    if (((Hero *)D_0013F450_D688)->vehicle_mode == 0) {
         if ((((Hero *)D_0013F450_D688)->state.control_mode == 4 && (((Hero *)D_0013F450_D688)->unk41E != 0 || ((Hero *)D_0013F450_D688)->motion.velocity.f[2] < D_0015EE6C_D688 * 3.5f)) || ((Hero *)D_0013F450_D688)->state.control_mode == 2 || ((Hero *)D_0013F450_D688)->state.current == 8 || ((Hero *)D_0013F450_D688)->state.current == 0x1A || ((Hero *)D_0013F450_D688)->state.current == 0x1B) go = 1;
-        if (((Hero *)D_0013F450_D688)->state.current == 0xE && ((Hero *)D_0013F450_D688)->unkAA8 < 37.0f) go = 0;
+        if (((Hero *)D_0013F450_D688)->state.current == 0xE && ((Hero *)D_0013F450_D688)->anim_frame < 37.0f) go = 0;
     }
     if (!go) return;
 
@@ -1597,7 +1597,7 @@ void func_L01_0023CE00(void) {
     D_0013F450_293D0.unk1A0++;
     D_0013F450_293D0.unk1A4++;
     func_001F9908(&D_0013F450_293D0.unk1C4);
-    func_001F9908(&D_0013F450_293D0.unk1C0);
+    func_001F9908(&D_0013F450_293D0.invulnerable_frames);
     FastDecTimer(&D_0013F450_293D0.unk1B2);
     func_001F9908(&D_0013F450_293D0.unk1B8);
     FastDecTimer(&D_0013F450_293D0.unk1D8);
@@ -1612,7 +1612,7 @@ void func_L01_0023CE00(void) {
     func_001F9908(&D_0013F450_293D0.unk1CC);
     func_001F9908(&D_0013F450_293D0.unk1D0);
     func_001F9908(&D_0013F450_293D0.unk1D4);
-    FastDecTimer(&D_0013F450_293D0.unk1E8);
+    FastDecTimer(&D_0013F450_293D0.fidget_cooldown);
     FastDecTimer(&D_0013F450_293D0.unk1E0);
     FastDecTimer(&D_0013F450_293D0.unk1EE);
     FastDecTimer(&D_0013F450_293D0.unk1EA);
@@ -1639,7 +1639,7 @@ void func_L01_0023CE00(void) {
     }
     if (D_0013F450_293D0.unk22DE != 0 && FastDecTimer(&D_0013F450_293D0.unk22DE) != 0 &&
         D_0013F450_293D0.health.hp != 0 && (*(s32 *)&D_L01_0015F6A8_3CE00) == 0) {
-        if (D_0013F450_293D0.unk20A4 == 3) {
+        if (D_0013F450_293D0.vehicle_mode == 3) {
             func_L01_00231A68();
             if (func_L00_00267BA8(0x80, scale_ticks(0x12), 0)) {
                 D_0013F450_293D0.unk20A6 = 1;
@@ -1650,9 +1650,9 @@ void func_L01_0023CE00(void) {
             if (m != 0) {
                 qcopy(&m->pos, &D_0013F450_293D0.motion.pos);
                 qcopy(&m->rot, &D_0013F450_293D0.motion.rot);
-                m->unk32 = 0x40;
-                ((struct Moby *)D_0013F450_293D0.unkA8C)->unk31 = 1;
-                ((struct Moby *)D_0013F450_293D0.unkA8C)->unk90 = 0;
+                m->draw_dist = 0x40;
+                ((struct Moby *)D_0013F450_293D0.unkA8C)->visible = 1;
+                ((struct Moby *)D_0013F450_293D0.unkA8C)->glow_color = 0;
                 ((struct Moby *)D_0013F450_293D0.unkA8C)->spawn_frame = D_0013F450_293D0.moby->spawn_frame;
                 func_L00_00251E30(D_0013F450_293D0.unkA8C);
                 func_L01_00231960_3CE00(3, 0x53, D_0013F450_293D0.unkA8C);
@@ -1687,11 +1687,11 @@ skip:
     func_L00_002222F0();
     func_L00_00233EE0(&D_0013F450_293D0.motion.unkD0, 0.0f, 0.0f, 0.7f);
     if (D_0013D5C8[0x22]) {
-        D_0013F450_293D0.unk2288 = 12.0f;
-        D_0013F450_293D0.unk228C = 4.5f;
+        D_0013F450_293D0.reach_distance = 12.0f;
+        D_0013F450_293D0.reach_height = 4.5f;
     } else {
-        D_0013F450_293D0.unk2288 = 3.0f;
-        D_0013F450_293D0.unk228C = 1.75f;
+        D_0013F450_293D0.reach_distance = 3.0f;
+        D_0013F450_293D0.reach_height = 1.75f;
     }
     {
         f32 z = D_0013F450_293D0.ground_z.f;

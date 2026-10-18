@@ -78,7 +78,7 @@ void func_L18_002F9D48(Moby *moby) {
         *(int *)&D_L18_00162554 = 0xBE;
         *(int *)&D_L18_0016252C = 0x16D;
         *(int *)&D_L18_00162558 = 0x16D;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         break;
     case 1:
@@ -268,12 +268,12 @@ void func_L18_002F9D48(Moby *moby) {
                 func_L00_00250800(m, 3, a);
                 func_L00_00250800(m, 10, b);
                 func_001F9BF0(c, b, a);
-                func_L00_001FF4B0(&moby->unkD0, c, 1.0f);
+                func_L00_001FF4B0(&moby->rot_row1, c, 1.0f);
                 qcopy(v->pos, b);
                 col0 = 0x207F7F;
                 col1 = 0x7F7F20;
-                v->f48 = func_L00_001FF860(moby->unkD0.x, moby->unkD0.y);
-                v->f4C = func_L00_001FF860(func_001F9CE8(&moby->unkD0), moby->unkD0.z);
+                v->f48 = func_L00_001FF860(moby->rot_row1.x, moby->rot_row1.y);
+                v->f4C = func_L00_001FF860(func_001F9CE8(&moby->rot_row1), moby->rot_row1.z);
                 save = D_L18_001617DC;
                 D_L18_001617DC = 24.0f;
                 func_L00_002BE3A8(moby);
@@ -488,7 +488,7 @@ void func_L18_002FB080(struct Moby *m) {
     pk.a = 0;
     VU1_addGSregister(0x4A, 0);
     VU1_addGSregister(0x47, 0x51001);
-    func_001F9EC0(mat[3], &D_L18_001625F0, &m->unkC0);
+    func_001F9EC0(mat[3], &D_L18_001625F0, &m->rot_row0);
     FastVecAdd(mat[3], mat[3], &m->pos);
     FastVecSub(mat[0], mat[3], D_L18_00167840);
     func_L00_001FF4B0(mat[0], mat[0], 1.0f);
@@ -1283,7 +1283,7 @@ int func_L18_002FDB28(int group, void *from, void *to, float speed) {
             if (moby->state == 8) {
                 LaunchedMobyVars *v = (LaunchedMobyVars *)moby->pvars;
                 moby->flags &= ~0x41;
-                moby->unk94 = moby->pclass->unk10;
+                moby->collision = moby->pclass->collision;
                 moby->flags |= 0x1000;
                 qcopy(&moby->pos, from);
                 moby->state = 1;

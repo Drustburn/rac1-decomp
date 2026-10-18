@@ -110,7 +110,7 @@ void func_L08_002EAF48(struct Moby *moby) {
     }
     switch (moby->state) {
     case 0:
-        if (D_0014C150_2EAF48[moby->unkB0 + D_0015EE84_2EAF48 * 16] == 0xFF) {
+        if (D_0014C150_2EAF48[moby->mission + D_0015EE84_2EAF48 * 16] == 0xFF) {
             func_0020D678_2EAF48(moby);
             return;
         }
@@ -142,10 +142,10 @@ void func_L08_002EAF48(struct Moby *moby) {
         func_001F9BD8_2EAF48(&moby->pos, &moby->pos, &step);
         func_L08_002EAB30_2EAF48(moby);
         func_L08_002EADF0_2EAF48(moby);
-        if (moby->unkBC == 0) {
+        if (moby->command == 0) {
             break;
         }
-        moby->unkBC = 0;
+        moby->command = 0;
         func_L00_00250800_2EAF48(vars->parts[3].moby, 1, &muzzle);
         pitch = func_002140F8_2EAF48(0.17453292f, 0.5235988f);
         yaw = func_001FA748_2EAF48(func_L00_001FF860_2EAF48(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
@@ -340,10 +340,10 @@ void func_L08_002EB980(struct Moby *moby) {
     off.q = 0;
     off.f[2] = 30.0f;
     if (D_L08_0015F6A8 == 2) {
-        moby->unk31 = 0;
+        moby->visible = 0;
         moby->flags |= 1;
     } else {
-        moby->unk31 = 1;
+        moby->visible = 1;
         moby->flags &= ~1;
     }
     if (moby->state == 0) {
@@ -844,7 +844,7 @@ void func_L08_002F8560(struct Moby *m) {
         m->state = 1;
     }
     m->scale = m->pclass->scale * (d->size_x > d->size_y ? d->size_x : d->size_y) * 0.25f;
-    view = func_001FA888_2F8560(m->unk32);
+    view = func_001FA888_2F8560(m->draw_dist);
     dist = func_001F9D10_2F8560(at, D_L08_00167640_2F8560);
     fade = view - d->fade_range;
     if (fade < 0.0f)
@@ -863,7 +863,7 @@ void func_L08_002F8560(struct Moby *m) {
     }
     pos.q = *(u128_2F8560 *)at;
     pos.f[3] = func_001FA888_2F8560(d->radius);
-    if ((m->unk31 != 0 || func_L00_00200290_2F8560((char *)&pos, 255.0f) != -1) && !hidden) {
+    if ((m->visible != 0 || func_L00_00200290_2F8560((char *)&pos, 255.0f) != -1) && !hidden) {
         func_001F49B0_2F8560(func_L08_002F7318_2F8560, m);
         if (d->flags & 4) {
             if (d->light == -1) {

@@ -494,9 +494,9 @@ void func_L13_002B5368(Moby *m) {
     gun = data->gun;
     if (gun != 0 && gun->oclass == 0x24 && (unsigned char)gun->state != 0xFE && (unsigned char)gun->state != 0xFD) {
         qcopy(&gun->rot, &m->rot);
-        (*(Vec4A *)&gun->unkC0) = (*(Vec4A *)&m->unkC0);
-        (*(Vec4A *)&gun->unkD0) = (*(Vec4A *)&m->unkD0);
-        (*(Vec4A *)&gun->unkE0) = (*(Vec4A *)&m->unkE0);
+        (*(Vec4A *)&gun->rot_row0) = (*(Vec4A *)&m->rot_row0);
+        (*(Vec4A *)&gun->rot_row1) = (*(Vec4A *)&m->rot_row1);
+        (*(Vec4A *)&gun->rot_row2) = (*(Vec4A *)&m->rot_row2);
     } else {
         data->gun = 0;
     }

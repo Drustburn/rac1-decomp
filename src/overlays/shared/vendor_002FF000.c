@@ -119,11 +119,11 @@ void func_L06_002FF000(struct Moby *moby) {
     func_L06_002FFF70();
     target = vars->target;
     func_L00_00264B40(moby, 1, vars->unk420, 2.5f);
-    if (moby->unk31 != 0 && FastVecDist(&moby->pos, &D_L06_00167640) < 27.0f) {
+    if (moby->visible != 0 && FastVecDist(&moby->pos, &D_L06_00167640) < 27.0f) {
         func_L00_0025B178(moby);
-        moby->unk7F = 0x15;
+        moby->shadow_range = 0x15;
     }
-    moby->unk58 = 1.0f;
+    moby->anim_speed = 1.0f;
     switch (moby->state) {
     case 0:
         vars->unk28 = 1;
@@ -213,7 +213,7 @@ void func_L06_002FF000(struct Moby *moby) {
         func_L00_0025CE58(&moby->rot.z, func_L00_001FF860(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, D_0015EE70 * 6.2831855f, D_0015EE70 * 6.2831855f,
                          D_0015EE6C * 3.1415927f);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             func_L06_00300530_FF000(moby);
             moby->state = 3;
             if (moby->prev_seq != 5) {
@@ -222,7 +222,7 @@ void func_L06_002FF000(struct Moby *moby) {
         }
         break;
     case 3:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             if (vars->unk164 != 2) {
                 moby->state = 4;
                 if (moby->prev_seq != 4) {
@@ -267,8 +267,8 @@ void func_L06_002FF000(struct Moby *moby) {
         qcopy(&b, &moby->pos);
         b.f[2] += 0.3f;
         cur_frame = func_0020D830(moby);
-        if (D_0013F450.unk20A4 == 1 && cur_frame < 9.0f) {
-            moby->unk58 = D_L06_0016205C_FF000;
+        if (D_0013F450.vehicle_mode == 1 && cur_frame < 9.0f) {
+            moby->anim_speed = D_L06_0016205C_FF000;
         }
         if (cur_frame >= 9.0f && cur_frame <= 15.0f) {
             c.f[0] = FastCos(moby->rot.z);
@@ -282,17 +282,17 @@ void func_L06_002FF000(struct Moby *moby) {
             func_L00_0025AD60(&a, &b, &vars->unk200, &b, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &a);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 6;
-            moby->unkBC = 1;
+            moby->command = 1;
             if (moby->prev_seq != 2) {
                 func_00213DE0(moby, 2, 0, scale_ticks(10));
             }
         }
         break;
     case 6:
-        if (moby->unk70 & 2) {
-            moby->state = moby->unkBC;
+        if (moby->anim_flags & 2) {
+            moby->state = moby->command;
             if (moby->prev_seq != 0) {
                 func_00213DE0(moby, 0, 0, scale_ticks(20));
             }
@@ -342,7 +342,7 @@ void func_L06_002FF000(struct Moby *moby) {
             func_L00_0025AD60(&a, &b, &vars->unk200, &b, moby, &shot, 5);
         }
         qcopy(&vars->unk200, &a);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
                 func_00213DE0(moby, 1, 0, scale_ticks(20));
@@ -667,7 +667,7 @@ void func_L06_003006F8(void *arg) {
 
     for (i = 0; i < 16; i++) {
         char *e;
-        if (D_0013F450.unk20A4 == 1) {
+        if (D_0013F450.vehicle_mode == 1) {
             scale = (*(float *)&D_L06_00162060 * D_0015EE6C) * 0.5f;
         } else {
             scale = *(float *)&D_L06_00162060 * D_0015EE6C;

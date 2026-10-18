@@ -2216,11 +2216,11 @@ void func_L10_002E0630(Moby *m) {
     func_L10_002E0FF8_2E0630(m);
     P = d->f100;
     func_L00_00264B40_2E0630(2.5f, m, 0, d->a270);
-    if (m->unk31 != 0 && func_001F9D10_2E0630(&m->pos, &D_L10_001672C0_2E0630) < 29.0f) {
+    if (m->visible != 0 && func_001F9D10_2E0630(&m->pos, &D_L10_001672C0_2E0630) < 29.0f) {
         func_L00_0025B178_2E0630(m);
-        m->unk7F = 0x17;
+        m->shadow_range = 0x17;
     }
-    m->unk58 = 1.0f;
+    m->anim_speed = 1.0f;
     switch (m->state) {
     case 0:
         d->f30 = 0.5f;
@@ -2243,7 +2243,7 @@ void func_L10_002E0630(Moby *m) {
         if (m->prev_seq != 1) func_00213DE0_2E0630(m, 1, 0, func_001F9850_2E0630(10));
         break;
     case 2:
-        if ((m->unk70 & 2) == 0) break;
+        if ((m->anim_flags & 2) == 0) break;
         m->state = 4;
         func_001F9BC0_2E0630(&d->v120);
         if (m->prev_seq != 4) func_00213DE0_2E0630(m, 4, 0, func_001F9850_2E0630(10));
@@ -2251,7 +2251,7 @@ void func_L10_002E0630(Moby *m) {
     case 3:
         break;
     case 4:
-        m->unk58 = 4.0f;
+        m->anim_speed = 4.0f;
         if (func_00214D88_2E0630(&m->pos.z, d->v130.z + 2.0f, &d->v120.z,
                 D_0015EE70_2D9988 * 18.0f, D_0015EE70_2D9988 * 18.0f, D_0015EE6C_x * 6.0f) == 0.0f) {
             m->state = 5;
@@ -2259,7 +2259,7 @@ void func_L10_002E0630(Moby *m) {
         break;
     case 5: {
         float dist;
-        m->unk58 = 4.0f;
+        m->anim_speed = 4.0f;
         qcopy(v, &D_L10_001B0C30_2E0630[d->f150]->nodes[d->f158]);
         v[5] = func_001F9CB8_2E0630(&d->v120);
         dist = func_001F9D10_2E0630(v, &m->pos);
@@ -2294,7 +2294,7 @@ void func_L10_002E0630(Moby *m) {
     case 6:
         func_L00_0025CE58_2E0630(&m->rot.z, func_L00_001FF860_2E0630(P->pos.x - m->pos.x, P->pos.y - m->pos.y), &d->f170,
             D_0015EE70_2D9988 * 25.132742f, D_0015EE70_2D9988 * 25.132742f, D_0015EE6C_x * 50.265484f);
-        if ((m->unk70 & 2) == 0) break;
+        if ((m->anim_flags & 2) == 0) break;
         {
             char *e = D_L10_00160058_00299818 + (d->f160[func_001FA898_2E0630(D_L10_001B0C30_2E0630[d->f150]->nodes[d->f158 - 1].w) - 1] << 8);
             if (e != 0) func_L10_002E14F8_2E0630(e);
@@ -2435,7 +2435,7 @@ void func_L10_002E0FF8(struct Moby *moby) {
                 data->f26 = func_001F9850(60);
                 func_L00_0025E4B0(moby, data->f110);
             }
-            moby->unkA4 = 0xFF;
+            moby->hit_slot = 0xFF;
         }
     }
     func_L00_0025E590(moby, data->f110);
@@ -2462,7 +2462,7 @@ void func_L10_002E0FF8(struct Moby *moby) {
     }
     if (r19 != 2) {
         if (data->f180 < func_001F9D48(data->f130, data->fC0)) data->f104 = 2;
-        else if (moby->unk31 == 0) data->f104 = 2;
+        else if (moby->visible == 0) data->f104 = 2;
     }
     if (data->f100 == 0) data->f100 = *(int *)(D_0013E633 + 0x2E9D);
 }
@@ -2553,11 +2553,11 @@ void func_L10_002E1568(Moby *m) {
     func_L10_002E2B80(m);
     P = d->f100;
     func_L00_00264B40_2E0630(2.5f, m, 1, d->a270);
-    if (m->unk31 != 0 && func_001F9D10_2E0630(&m->pos, &D_L10_001672C0_2E0630) < 29.0f) {
+    if (m->visible != 0 && func_001F9D10_2E0630(&m->pos, &D_L10_001672C0_2E0630) < 29.0f) {
         func_L00_0025B178_2E0630(m);
-        m->unk7F = 0x17;
+        m->shadow_range = 0x17;
     }
-    m->unk58 = 1.0f;
+    m->anim_speed = 1.0f;
     if (m->state != 0 && m->state != 13) {
         m->pos.z = m->pos.z - D_L10_00161E8C * func_001F9F90_2E0630(d->f19C);
     }
@@ -2600,7 +2600,7 @@ void func_L10_002E1568(Moby *m) {
     case 1:
         break;
     case 2:
-        m->unk58 = 4.0f;
+        m->anim_speed = 4.0f;
         if (func_00214D88_2E0630(&m->pos.z, d->v130.z + 2.0f, &d->v120.z,
                 D_0015EE70_2D9988 * 18.0f, D_0015EE70_2D9988 * 18.0f, D_0015EE6C_x * 6.0f) == 0.0f) {
             m->state = 3;
@@ -2611,7 +2611,7 @@ void func_L10_002E1568(Moby *m) {
         float cur;
         float spd;
         float zero;
-        m->unk58 = 4.0f;
+        m->anim_speed = 4.0f;
         spd = func_001F9CB8_2E0630(&d->v120);
         dist = func_001F9D10_2E0630(&d->v140, &m->pos);
         cur = 0.0f;
@@ -2639,15 +2639,15 @@ void func_L10_002E1568(Moby *m) {
         }
         if (d->f104 == 2) break;
         if (!(3.0f < func_001F9D48_2E0630(&m->pos, &P->pos))) break;
-        if (func_L00_001FEF78(&m->unkBC) == 0) break;
+        if (func_L00_001FEF78(&m->command) == 0) break;
         if (m->group != 0xFF) func_L10_002E3070((unsigned char *)m);
         m->state = 6;
         if (m->prev_seq != 1) func_00213DE0_2E0630(m, 1, 0, func_001F9850_2E0630(10));
         break;
     }
     case 4:
-        m->unk58 = 4.0f;
-        if (d->f104 != 2 && 3.0f < func_001F9D48_2E0630(&m->pos, &P->pos) && func_L00_001FEF78(&m->unkBC) != 0) {
+        m->anim_speed = 4.0f;
+        if (d->f104 != 2 && 3.0f < func_001F9D48_2E0630(&m->pos, &P->pos) && func_L00_001FEF78(&m->command) != 0) {
             if (m->group != 0xFF) func_L10_002E3070((unsigned char *)m);
             m->state = 6;
             if (m->prev_seq != 1) func_00213DE0_2E0630(m, 1, 0, func_001F9850_2E0630(10));
@@ -2668,7 +2668,7 @@ void func_L10_002E1568(Moby *m) {
     case 6:
         func_L00_002592B0_2E0630(m, func_L00_001FF860_2E0630(P->pos.x - m->pos.x, P->pos.y - m->pos.y), &d->f170,
             0.02f, 0.3f, D_0015EE6C_x * 6.2831855f);
-        if ((m->unk70 & 2) == 0) break;
+        if ((m->anim_flags & 2) == 0) break;
         m->state = 7;
         if (m->prev_seq != 3) func_00213DE0_2E0630(m, 3, 0, func_001F9850_2E0630(10));
         if (random_integer_below(0xFF) & 1) {
@@ -2733,7 +2733,7 @@ void func_L10_002E1568(Moby *m) {
             coll_sphere_mobys(0.4f, v, 0, m, &v[8]);
             func_L00_001EFFF0_2E1568(&m->pos, v, 9, m, &v[8]);
         }
-        if (d->f104 != 2 && (m->unk70 & 2) == 0) break;
+        if (d->f104 != 2 && (m->anim_flags & 2) == 0) break;
         if (m->prev_seq != 3) func_00213DE0_2E0630(m, 3, 0, func_001F9850_2E0630(0x14));
         m->state = 5;
         break;
@@ -2778,7 +2778,7 @@ void func_L10_002E1568(Moby *m) {
         d->v120.z = t;
         func_L00_00259B08_2E0630(m, &d->v120, 0.5f, 0x200, 0.0f, 0);
         if (d->f104 == 2) break;
-        if (func_L00_001FEF78(&m->unkBC) == 0) break;
+        if (func_L00_001FEF78(&m->command) == 0) break;
         if (!(D_L10_00161E7C < dist)) break;
         if (m->group != 0xFF) func_L10_002E3070((unsigned char *)m);
         m->state = 10;
@@ -2844,7 +2844,7 @@ void func_L10_002E1568(Moby *m) {
         coll_sphere_mobys(0.2f, v, 0, m, &v[4]);
         if (func_001F9D10_2E0630(&m->pos, &P->pos) < one
             || *(int *)(D_0013E633_2D9988 + 0x2EA9) == 7
-            || (m->unk70 & 2)) {
+            || (m->anim_flags & 2)) {
             m->state = 12;
             if (m->prev_seq != 3) func_00213DE0_2E0630(m, 3, 0, func_001F9850_2E0630(2));
             break;
@@ -2872,7 +2872,7 @@ void func_L10_002E1568(Moby *m) {
         func_L00_001FF240(v, &m->pos, &d->v120);
         if (func_001F9D48_2E0630(&m->pos, &d->v130) < 2.0f) {
             m->state = 9;
-            m->unkBC = func_001F9850_2E0630(0x78);
+            m->command = func_001F9850_2E0630(0x78);
             d->f1A0 = func_002140F8_2E0630(0.0f, D_L10_00161E94);
             d->f1A4 = func_001FA898_2E0630(func_001F9878(D_L10_00161E98 * 60.0f) * func_002140F8_2E0630(0.75f, 1.25f));
         }
@@ -3027,7 +3027,7 @@ void func_L10_002E2B80(Moby *moby)
                 func_L00_0025E4B0_2E2B80(moby, data->f110);
             }
         }
-        moby->unkA4 = 0xFF;
+        moby->hit_slot = 0xFF;
     }
     func_L00_0025E590_2E2B80(moby, data->f110);
     if (data->f174 == 2) {
@@ -3060,7 +3060,7 @@ void func_L10_002E2B80(Moby *moby)
     if (r19 != 2) {
         if (data->f180 < func_001F9D48_2E2B80(data->f130, data->fC0)) {
             data->f104 = 2;
-        } else if (moby->unk31 == 0) {
+        } else if (moby->visible == 0) {
             data->f104 = 2;
         }
     }

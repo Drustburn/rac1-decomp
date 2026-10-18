@@ -148,7 +148,7 @@ void func_L00_002B33E8_r(Moby *m) {
         }
     }
     if (hero_2B33E8.items[6].unk40) {
-        data->target = hero_2B33E8.items[6].unk48;
+        data->target = hero_2B33E8.items[6].lock_target;
         data->target_timer = func_001F9850_2B33E8(20);
         data->target_height = D_L00_00173F68_2B33E8 - data->target->pos.z;
     }
@@ -161,7 +161,7 @@ void func_L00_002B33E8_r(Moby *m) {
             func_001F9EE8_2B33E8(&velocity, &velocity, &inverse);
         } else {
             velocity.f.x = D_0015EE6C_2B33E8 * 10.0f;
-            func_001F9EC0_2B33E8(&velocity, &velocity, &hero_2B33E8.unk640);
+            func_001F9EC0_2B33E8(&velocity, &velocity, &hero_2B33E8.basis);
         }
         if (func_L00_00234638_2B33E8(-1, 1)) {
             best = 0;
@@ -206,7 +206,7 @@ void func_L00_002B33E8_r(Moby *m) {
                             }
                             if (!(limit < distance)) {
                                 spread = func_001FA888_2B33E8(order_2B33E8.level) * 0.6981317f;
-                                func_00215C00_2B33E8(&tmp, distance, yaw, pitch + hero_2B33E8.unk2E4.f * 0.5f);
+                                func_00215C00_2B33E8(&tmp, distance, yaw, pitch + hero_2B33E8.ground_pitch.f * 0.5f);
                                 func_001F9BD8_2B33E8(&tmp, &tmp, &launch);
                                 off = func_001F9FC0_2B33E8(func_001F9D10_2B33E8(&tmp, &point) / (distance + distance));
                                 off = off + off;
@@ -265,14 +265,14 @@ void func_L00_002B33E8_r(Moby *m) {
                         r = func_L00_0025D390_2B33E8(best);
                         if (r) point.f.z += r->height;
                         else point.f.z += 0.5f;
-                        pitch0 -= hero_2B33E8.unk2E4.f * 0.5f;
+                        pitch0 -= hero_2B33E8.ground_pitch.f * 0.5f;
                         func_00215C00_2B33E8(&tmp, limit, yaw0, pitch0);
                         func_001F9BD8_2B33E8(&tmp, &tmp, &launch);
                         yaw = func_L00_001FF860_2B33E8(point.f.x - tmp.f.x, point.f.y - tmp.f.y);
                         pitch = -func_L00_001FF860_2B33E8(func_001F9D48_2B33E8(&tmp, &point), point.f.z - tmp.f.z);
                     } else if (hero_2B33E8.state.current != 30) {
-                        pitch -= hero_2B33E8.unk2E4.f * 0.5f;
-                        pitch0 -= hero_2B33E8.unk2E4.f * 0.5f;
+                        pitch -= hero_2B33E8.ground_pitch.f * 0.5f;
+                        pitch0 -= hero_2B33E8.ground_pitch.f * 0.5f;
                     }
                 }
                 func_L00_002B0F58_2B33E8(m, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
@@ -557,9 +557,9 @@ void func_L00_002B4918(Moby *m) {
     mtx[1].w = 0.0f;
     qcopy(&mtx[3], &out[1]);
     mtx[3].w = 1.0f;
-    qcopy(&m->unkC0, &mtx[0]);
-    qcopy(&m->unkD0, &mtx[1]);
-    qcopy(&m->unkE0, &mtx[2]);
+    qcopy(&m->rot_row0, &mtx[0]);
+    qcopy(&m->rot_row1, &mtx[1]);
+    qcopy(&m->rot_row2, &mtx[2]);
     qcopy(&m->pos, &mtx[3]);
     func_001FA190_2B4918(idm);
     idm[3].w = 1.0f;
@@ -1078,7 +1078,7 @@ void func_L00_002B5C98_r(Moby *m) {
         }
     } else {
         velocity.f.x = D_0015EE6C_2B33E8 * 40.0f;
-        func_001F9EC0_2B5C98(&velocity, &velocity, &hero_2B33E8.unk640);
+        func_001F9EC0_2B5C98(&velocity, &velocity, &hero_2B33E8.basis);
         func_L00_00250800_2B5C98(m, 0, &launch);
     }
     if (hero_2B33E8.items[6].unk40) yaw = hero_2B33E8.items[6].unk4C;
@@ -1119,7 +1119,7 @@ void func_L00_002B5C98_r(Moby *m) {
                     if (r) tpoint.f.z += r->height;
                     else tpoint.f.z += 0.5f;
                     pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&launch, &tpoint), tpoint.f.z - launch.f.z);
-                    pitch0 -= hero_2B33E8.unk2E4.f * 0.5f;
+                    pitch0 -= hero_2B33E8.ground_pitch.f * 0.5f;
                     if (func_001FA850_2B5C98(pitch0, pitch) < 0.17453292f) {
                         pitch0 = pitch;
                     } else if (func_001FA748_2B5C98(pitch0, 0.17453292f) < pitch) {
@@ -1132,8 +1132,8 @@ void func_L00_002B5C98_r(Moby *m) {
                     yaw = func_L00_001FF860_2B5C98(tpoint.f.x - w.point.f.x, tpoint.f.y - w.point.f.y);
                     pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&w.point, &tpoint), tpoint.f.z - w.point.f.z);
                 } else if (hero_2B33E8.state.current != 30) {
-                    pitch -= hero_2B33E8.unk2E4.f * 0.5f;
-                    pitch0 -= hero_2B33E8.unk2E4.f * 0.5f;
+                    pitch -= hero_2B33E8.ground_pitch.f * 0.5f;
+                    pitch0 -= hero_2B33E8.ground_pitch.f * 0.5f;
                 }
                 w.spawn.flags = 0x10000;
                 w.spawn.owner = m;
@@ -1177,7 +1177,7 @@ void func_L00_002B5C98_r(Moby *m) {
     if (!(((((Input_2B5C98 *)D_0013CA40_2B5C98)->held & hero_2B33E8.items[0].button_mask) && func_L00_00234718_2B5C98(-1)) ||
           (!(func_001F9850_2B5C98(9) < hero_2B33E8.unk1BC) && hero_2B33E8.unk20A8)) ||
         hero_2B33E8.state.current == 0x72 || D_L00_0015F6A8_2B33E8 == 2) {
-        if ((m->prev_seq != 0 || (m->unk70 & 2)) && hero_2B33E8.state.current != 0x72 && D_L00_0015F6A8_2B33E8 != 2) {
+        if ((m->prev_seq != 0 || (m->anim_flags & 2)) && hero_2B33E8.state.current != 0x72 && D_L00_0015F6A8_2B33E8 != 2) {
             if (m->prev_seq != 1) func_00213DE0_2B5C98(m, 1, 0, func_001F9850_2B5C98(7));
         } else if (hero_2B33E8.state.current == 0x72 || D_L00_0015F6A8_2B33E8 == 2) {
             func_00213D28_2B5C98(m, 1, 0);
@@ -1619,7 +1619,7 @@ void func_L00_002B7430(Moby *m) {
         || ((Hero *)D_0013F450_2B7430)->state.control_mode == 5
         || ((Hero *)D_0013F450_2B7430)->state.current == 0x65
         || ((Hero *)D_0013F450_2B7430)->state.current == 0x32
-        || ((Hero *)D_0013F450_2B7430)->unk300 == 0
+        || ((Hero *)D_0013F450_2B7430)->grounded_frames == 0
         || (((Tgt_2B7430 *)((Hero *)D_0013F450_2B7430)->ground_moby) != 0
             && (((Tgt_2B7430 *)((Hero *)D_0013F450_2B7430)->ground_moby)->hA6 == 0x13E || ((Tgt_2B7430 *)((Hero *)D_0013F450_2B7430)->ground_moby)->hA6 == 0x46F))) {
         func_L00_002B6E10_2B7430(m, d);
@@ -1643,8 +1643,8 @@ void func_L00_002B7430(Moby *m) {
     if (d->f10 > 0) {
         if (d->f10 < func_001F9850_2B7430(0xBB8) - func_001F9850_2B7430(5)) {
             float ang;
-            float dx = ((Hero *)D_0013F450_2B7430)->unk1D20 - d->f18;
-            float dy = ((Hero *)D_0013F450_2B7430)->unk1D24 - d->f1C;
+            float dx = ((Hero *)D_0013F450_2B7430)->stick_x - d->f18;
+            float dy = ((Hero *)D_0013F450_2B7430)->stick_y - d->f1C;
             float ka = D_0015EE60_2B7430 * 0.1f;
             float kb = D_0015EE60_2B7430 * 0.06f;
             float kc = D_0015EE60_2B7430 * 0.0122718466f;
@@ -1703,7 +1703,7 @@ void func_L00_002B7430(Moby *m) {
             if (((Hit_2B7430 *)D_L00_00173F40_2B33E8)->f18 != 0) {
                 direct = 0;
                 if (((Hit_2B7430 *)D_L00_00173F40_2B33E8)->f18 == ((Hero *)D_0013F450_2B7430)->moby) direct = 1;
-                m->unkBC = 2;
+                m->command = 2;
                 qcopy(&m->pos, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v20);
                 func_001F9BF0_2B7430(&v60, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v50, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v60);
                 func_L00_001FF4B0_2B7430(&v60, &v60, 1.0f);
@@ -1718,7 +1718,7 @@ void func_L00_002B7430(Moby *m) {
                 }
                 d->f2C = -1;
             } else if (((Hit_2B7430 *)D_L00_00173F40_2B33E8)->f1C > 0) {
-                m->unkBC = 1;
+                m->command = 1;
                 qcopy(&m->pos, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v20);
                 func_001F9BF0_2B7430(&v60, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v50, &((Hit_2B7430 *)D_L00_00173F40_2B33E8)->v60);
                 func_L00_001FF4B0_2B7430(&v60, &v60, 1.0f);
@@ -1740,7 +1740,7 @@ void func_L00_002B7430(Moby *m) {
     }
     if (d->f10 < func_001F9850_2B7430(0xBB8) - func_001F9850_2B7430(0x3C)) {
         if (((PadState *)D_0013CA40_2B5C98)->pressed & 0x20) {
-            m->unkBC = 1;
+            m->command = 1;
             if (d->f2C != -1) {
                 Row_2B7430 *e = (Row_2B7430 *)(D_0013E650_2B7430 + d->f2C * 0x70);
                 if (e->f88 == m) {
@@ -1750,7 +1750,7 @@ void func_L00_002B7430(Moby *m) {
             d->f2C = -1;
         }
     }
-    if (m->unkBC != 0) {
+    if (m->command != 0) {
         int k;
         int rr;
         if (direct == 0) {
@@ -1775,7 +1775,7 @@ void func_L00_002B7430(Moby *m) {
             qcopy(&m->pos, &vA0);
         }
         v50.x = 0.0f;
-        m->unkBC = 0;
+        m->command = 0;
     }
     if (d->f14 != 0) func_L00_002ECAF8_2B7430(d->f14, m);
 }
@@ -1916,7 +1916,7 @@ void func_L00_002B8208(Moby *m)
     }
     v = m->state;
     if ((u8)v == 1) {
-        if (m->unk70 & 2) {
+        if (m->anim_flags & 2) {
             m->state = v + 1;
             o->retry = 0;
         }
@@ -2377,7 +2377,7 @@ void func_L00_002B9AD8_r(Moby *m) {
                     if (2.0943f < func_001FA850_2B9AD8(((Hero *)D_0013F450_2B7430)->motion.rot.f[2],
                             func_L00_001FF860_2B9AD8(s->target->pos.x - ((Hero *)D_0013F450_2B7430)->motion.pos.f[0],
                                                      s->target->pos.y - ((Hero *)D_0013F450_2B7430)->motion.pos.f[1])) ||
-                        !s->target->unk31 ||
+                        !s->target->visible ||
                         20.0f < func_001F9D10_2B9AD8(&s->target->pos, &((Hero *)D_0013F450_2B7430)->motion.pos)) {
                         s->target = 0;
                         s->lock = 0;
@@ -2387,7 +2387,7 @@ void func_L00_002B9AD8_r(Moby *m) {
                     if (2.0943f < func_001FA850_2B9AD8(((Hero *)D_0013F450_2B7430)->motion.rot.f[2],
                             func_L00_001FF860_2B9AD8(s->target2->pos.x - ((Hero *)D_0013F450_2B7430)->motion.pos.f[0],
                                                      s->target2->pos.y - ((Hero *)D_0013F450_2B7430)->motion.pos.f[1])) ||
-                        !s->target2->unk31 ||
+                        !s->target2->visible ||
                         20.0f < func_001F9D10_2B9AD8(&s->target2->pos, &((Hero *)D_0013F450_2B7430)->motion.pos)) {
                         s->target2 = 0;
                         s->lock2 = 0;
@@ -2445,7 +2445,7 @@ void func_L00_002B9AD8_r(Moby *m) {
                     t.f.x = 0.0f;
                     t.f.y = -s->reach;
                     t.f.z = 0.0f;
-                    func_001F9EC0_2B9AD8(&t, &t, &m->unkC0);
+                    func_001F9EC0_2B9AD8(&t, &t, &m->rot_row0);
                     func_001F9BD8_2B9AD8(&s->tip, &s->pos, &t);
                 } else {
                     func_L00_00250800_2B9AD8(m, 0, &s->pos);

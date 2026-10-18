@@ -648,7 +648,7 @@ void func_L06_00235038(void) {
     D_0013F450_35038.unk1A0++;
     D_0013F450_35038.unk1A4++;
     func_001F9908(&D_0013F450_35038.unk1C4);
-    func_001F9908(&D_0013F450_35038.unk1C0);
+    func_001F9908(&D_0013F450_35038.invulnerable_frames);
     FastDecTimer(&D_0013F450_35038.unk1B2);
     func_001F9908(&D_0013F450_35038.unk1B8);
     FastDecTimer(&D_0013F450_35038.unk1D8);
@@ -663,7 +663,7 @@ void func_L06_00235038(void) {
     func_001F9908(&D_0013F450_35038.unk1CC);
     func_001F9908(&D_0013F450_35038.unk1D0);
     func_001F9908(&D_0013F450_35038.unk1D4);
-    FastDecTimer(&D_0013F450_35038.unk1E8);
+    FastDecTimer(&D_0013F450_35038.fidget_cooldown);
     FastDecTimer(&D_0013F450_35038.unk1E0);
     FastDecTimer(&D_0013F450_35038.unk1EE);
     FastDecTimer(&D_0013F450_35038.unk1EA);
@@ -690,7 +690,7 @@ void func_L06_00235038(void) {
     }
     if (D_0013F450_35038.unk22DE != 0 && FastDecTimer(&D_0013F450_35038.unk22DE) != 0 &&
         D_0013F450_35038.health.hp != 0 && (*(s32 *)&D_L06_0015F6A8_35038) == 0) {
-        if (D_0013F450_35038.unk20A4 == 3) {
+        if (D_0013F450_35038.vehicle_mode == 3) {
             func_L06_00228390();
             if (func_L00_00267BA8(0x80, scale_ticks(0x12), 0)) {
                 D_0013F450_35038.unk20A6 = 1;
@@ -701,9 +701,9 @@ void func_L06_00235038(void) {
             if (m != 0) {
                 qcopy(&m->pos, &D_0013F450_35038.motion.pos);
                 qcopy(&m->rot, &D_0013F450_35038.motion.rot);
-                m->unk32 = 0x40;
-                ((struct Moby *)D_0013F450_35038.unkA8C)->unk31 = 1;
-                ((struct Moby *)D_0013F450_35038.unkA8C)->unk90 = 0;
+                m->draw_dist = 0x40;
+                ((struct Moby *)D_0013F450_35038.unkA8C)->visible = 1;
+                ((struct Moby *)D_0013F450_35038.unkA8C)->glow_color = 0;
                 ((struct Moby *)D_0013F450_35038.unkA8C)->spawn_frame = D_0013F450_35038.moby->spawn_frame;
                 func_L00_00251E30(D_0013F450_35038.unkA8C);
                 func_L01_00231960(3, 0x53, D_0013F450_35038.unkA8C);
@@ -736,18 +736,18 @@ void func_L06_00235038(void) {
     D_0013F450_35038.unk1E2 = 0;
 skip:
     func_L00_002222F0();
-    if (D_0013F450_35038.unk20A4 == 1) {
+    if (D_0013F450_35038.vehicle_mode == 1) {
         func_L00_00233EE0(&D_0013F450_35038.motion.unkD0, 0.0f, 0.0f, 0.4f);
-        D_0013F450_35038.unk2288 = 2.125f;
-        D_0013F450_35038.unk228C = 1.25f;
+        D_0013F450_35038.reach_distance = 2.125f;
+        D_0013F450_35038.reach_height = 1.25f;
     } else {
         func_L00_00233EE0(&D_0013F450_35038.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D5EA) {
-            D_0013F450_35038.unk2288 = 12.0f;
-            D_0013F450_35038.unk228C = 4.5f;
+            D_0013F450_35038.reach_distance = 12.0f;
+            D_0013F450_35038.reach_height = 4.5f;
         } else {
-            D_0013F450_35038.unk2288 = 3.0f;
-            D_0013F450_35038.unk228C = 1.75f;
+            D_0013F450_35038.reach_distance = 3.0f;
+            D_0013F450_35038.reach_height = 1.75f;
         }
     }
     {

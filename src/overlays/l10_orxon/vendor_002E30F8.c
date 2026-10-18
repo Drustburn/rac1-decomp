@@ -954,7 +954,7 @@ void func_L10_002E52B0(void *mv) {
             v21 = 11;
         }
         if ((unsigned int)(m->prev_seq - 6) < 2) {
-            if (((Hero *)(D_0013E633_2E52B0 + 0xE1D))->unk20A4 == 1
+            if (((Hero *)(D_0013E633_2E52B0 + 0xE1D))->vehicle_mode == 1
                 && r->f20 == ((Hero *)(D_0013E633_2E52B0 + 0xE1D))->moby) {
                 B = 0.0f;
                 v21 = 11;
@@ -1018,7 +1018,7 @@ void func_L10_002E52B0(void *mv) {
             m->state = 10;
             d->h26 = func_001F9850_2E52B0(60);
             d->f80 = D_L10_00161EAC_2E52B0 * D_0015EE70_2E52B0;
-            s = ((Hero *)(D_0013E633_2E52B0 + 0xE1D))->unk20A4 == 1 ? 1.0f : 3.0f;
+            s = ((Hero *)(D_0013E633_2E52B0 + 0xE1D))->vehicle_mode == 1 ? 1.0f : 3.0f;
             func_L03_00251A58_2E52B0(d->a70, s, 0.5f);
             d->fC0 = 3.5f;
             d->fC4 = 7.0f;
@@ -1039,7 +1039,7 @@ void func_L10_002E52B0(void *mv) {
             break;
         }
     }
-    m->unkA4 = 0xFF;
+    m->hit_slot = 0xFF;
     func_L00_0025E590_2E52B0(m, d->a60);
     if ((unsigned char)(m->state - 10) < 3) {
         d->f1D4 = 0;
@@ -1053,7 +1053,7 @@ void func_L10_002E52B0(void *mv) {
         } else {
             d->f1A0 = 0.0f;
         }
-        if (((Hero *)(D_0013E633_2E52B0 + 0xE1D))->unk20A4 == 1) func_L10_002E14F8_2E52B0(m);
+        if (((Hero *)(D_0013E633_2E52B0 + 0xE1D))->vehicle_mode == 1) func_L10_002E14F8_2E52B0(m);
     } else {
         d->f1A0 = D_L10_00161EC0_2E52B0;
     }
@@ -1075,7 +1075,7 @@ void func_L10_002E52B0(void *mv) {
             if (1.0f < func_001F9D10_2E52B0(&m->pos, &d->a170)) {
                 m->state = 8;
                 if (m->prev_seq != 4) func_00213DE0_2E52B0(m, 4, 0, func_001F9850_2E52B0(12));
-            } else if (((Hero *)(D_0013E633_2E52B0 + 0xE1D))->unk20A4 != 1) {
+            } else if (((Hero *)(D_0013E633_2E52B0 + 0xE1D))->vehicle_mode != 1) {
                 m->state = 1;
                 if (m->prev_seq != 0) func_00213DE0_2E52B0(m, 0, 0, func_001F9850_2E52B0(20));
             }
@@ -1325,12 +1325,12 @@ void func_L10_002E5E48(Ship_5E48 *m) {
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
-        if (((struct Hero *)(D_0013E633 + 0xE1D))->unk20A4 != 1) {
+        if (((struct Hero *)(D_0013E633 + 0xE1D))->vehicle_mode != 1) {
             *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->vF0;
             func_L00_001EFFF0(&m->pos, &A, 0, m, 0);
         } else {
             if ((Ship_5E48 *)((struct Hero *)(D_0013E633 + 0xE1D))->moby == tgt) {
-                func_001F9C30(&C, &((struct Hero *)(D_0013E633 + 0xE1D))->motion.unk100, (float)func_001F9850(20));
+                func_001F9C30(&C, &((struct Hero *)(D_0013E633 + 0xE1D))->motion.displacement, (float)func_001F9850(20));
                 *(u128_2E52B0 *)&B = *(u128_2E52B0 *)&C;
                 func_L00_001FF240(&C, &A, &B);
                 A.z = func_00214358(&A, 0, 0.5f);
@@ -1383,12 +1383,12 @@ void func_L10_002E5E48(Ship_5E48 *m) {
             break;
         }
         *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&tgt->pos;
-        if (((struct Hero *)(D_0013E633 + 0xE1D))->unk20A4 != 1) {
+        if (((struct Hero *)(D_0013E633 + 0xE1D))->vehicle_mode != 1) {
             *(u128_2E52B0 *)&A = *(u128_2E52B0 *)&d->vF0;
             func_L00_001EFFF0(&m->pos, &A, 0, m, 0);
         } else {
             if ((Ship_5E48 *)((struct Hero *)(D_0013E633 + 0xE1D))->moby == tgt) {
-                func_001F9C30(&C, &((struct Hero *)(D_0013E633 + 0xE1D))->motion.unk100, (float)func_001F9850(20));
+                func_001F9C30(&C, &((struct Hero *)(D_0013E633 + 0xE1D))->motion.displacement, (float)func_001F9850(20));
                 *(u128_2E52B0 *)&B = *(u128_2E52B0 *)&C;
                 func_L00_001FF240(&C, &A, &B);
                 A.z = func_00214358(&A, 0, 0.5f);
@@ -1722,7 +1722,7 @@ void func_L10_002E9978(Moby *m)
     }
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:
@@ -1983,17 +1983,6 @@ struct MobyTrail_EAA08 {
     struct Moby_EAA08 *source; /* 0x134 */
     s32 copy_count; /* 0x138: copies in use (max 4) */
     s32 active; /* 0x13C */
-};
-struct HeroManipulator {
-    u8 unk0; /* 0x00 */
-    u8 attached; /* 0x01 */
-    u8 unk2; /* 0x02 */
-    u8 unk3; /* 0x03 */
-    u8 pad_4[0x8];
-    f32 unkC; /* 0x0C */
-    Vec4_EAA08 quat; /* 0x10 */
-    Vec4_EAA08 scale3; /* 0x20 */
-    Vec4_EAA08 translation; /* 0x30 */
 };
 struct HeroEase_EAA08 {
     u8 unk0; /* 0x00 */

@@ -54,7 +54,7 @@ int func_L00_0020CDF0(Vec4 *pos, f32 *dir)
     up = 1.5f;
     reach = 1.15f;
     min_height = 1.8f;
-    if (D_0013F450_0CDF0.unk20A4 == 1) {
+    if (D_0013F450_0CDF0.vehicle_mode == 1) {
         min_height = 0.7f;
         drop = -0.4f;
         fwd = 0.25f;
@@ -804,8 +804,8 @@ void func_L00_0020F118(void) {
         h = (struct Hero *)((char *)HERO + slot * sizeof(struct HeroItemSlot));
         m = func_0020D348(DEFS[h->items[0].item_id].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = HERO->moby->spawn_frame;
             if (((unsigned char *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -831,8 +831,8 @@ void func_L00_0020F118(void) {
         HERO->items[3].item_id = id3;
         m = func_0020D348(DEFA[id3].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = HERO->moby->spawn_frame;
             if (((unsigned char *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -850,8 +850,8 @@ void func_L00_0020F118(void) {
     if (HERO->items[3].moby2 == 0) {
         m = func_0020D348(DEFA[1].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = HERO->moby->spawn_frame;
             if (((unsigned char *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -869,8 +869,8 @@ void func_L00_0020F118(void) {
             HERO->items[2].item_id = INV(2);
         m2 = func_0020D348(DEFA[HERO->items[2].item_id].cls);
         if (m2 != 0) {
-            m2->unk32 = 0x20;
-            m2->unk31 = 1;
+            m2->draw_dist = 0x20;
+            m2->visible = 1;
             m2->spawn_frame = HERO->moby->spawn_frame;
             m2->flags |= 2;
             m2->update = 0;
@@ -886,8 +886,8 @@ void func_L00_0020F118(void) {
         HERO->items[1].item_id = INVA[1];
         m = func_0020D348(DEFA[INVA[1]].cls);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = HERO->moby->spawn_frame;
             if (((unsigned char *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -896,8 +896,8 @@ void func_L00_0020F118(void) {
         }
         m = func_0020D348(DEFA[INVA[1]].cls2);
         if (m != 0) {
-            m->unk32 = 0x20;
-            m->unk31 = 1;
+            m->draw_dist = 0x20;
+            m->visible = 1;
             m->spawn_frame = HERO->moby->spawn_frame;
             if (((unsigned char *)m->pclass)[6] != 0)
                 m->unk73 = 0x18;
@@ -910,8 +910,8 @@ void func_L00_0020F118(void) {
         m4 = func_0020D348(DEFA[0x21].cls);
         HERO->items[4].item_id = 0x21;
         if (m4 != 0) {
-            m4->unk32 = 0x20;
-            m4->unk31 = 1;
+            m4->draw_dist = 0x20;
+            m4->visible = 1;
             m4->spawn_frame = HERO->moby->spawn_frame;
             if (((unsigned char *)m4->pclass)[6] != 0)
                 m4->unk73 = 0x18;
@@ -924,8 +924,8 @@ void func_L00_0020F118(void) {
         m5 = func_0020D348(DEFA[0x22].cls);
         HERO->items[4].item_id = 0x22;
         if (m5 != 0) {
-            m5->unk32 = 0x20;
-            m5->unk31 = 1;
+            m5->draw_dist = 0x20;
+            m5->visible = 1;
             m5->spawn_frame = HERO->moby->spawn_frame;
             HERO->items[4].moby2 = m5;
             HERO->items[4].state = 2;
@@ -936,8 +936,8 @@ void func_L00_0020F118(void) {
         m6 = func_0020D348(DEFA[0x23].cls);
         HERO->items[5].item_id = 0x23;
         if (m6 != 0) {
-            m6->unk32 = 0x20;
-            m6->unk31 = 1;
+            m6->draw_dist = 0x20;
+            m6->visible = 1;
             m6->spawn_frame = HERO->moby->spawn_frame;
             HERO->items[5].moby = m6;
             HERO->items[5].state = 2;
@@ -2034,18 +2034,18 @@ void func_L00_00211D28(void) {
     D_0013F450_211D28.unk20B3 = func_L00_00233CC0_a();
     D_0013F450_211D28.unk229C = func_L00_00211EE8_a();
     D_0013F450_211D28.unk240 = 0;
-    D_0013F450_211D28.unk1D20 = D_0013CA40_211D28.analog[2];
-    D_0013F450_211D28.unk1D24 = D_0013CA40_211D28.analog[3];
-    if (func_001F9CE8_a(&D_0013F450_211D28.unk1D20) < 0.25f) {
+    D_0013F450_211D28.stick_x = D_0013CA40_211D28.analog[2];
+    D_0013F450_211D28.stick_y = D_0013CA40_211D28.analog[3];
+    if (func_001F9CE8_a(&D_0013F450_211D28.stick_x) < 0.25f) {
         raw = D_0013CA40_211D28.raw_held;
         l = (raw >> 13) & 1;
         r = (raw >> 15) & 1;
         r = l - r;
-        D_0013F450_211D28.unk1D20 = (float)r;
+        D_0013F450_211D28.stick_x = (float)r;
         l2 = (raw >> 14) & 1;
         r2 = (raw >> 12) & 1;
         r2 = l2 - r2;
-        D_0013F450_211D28.unk1D24 = (float)r2;
+        D_0013F450_211D28.stick_y = (float)r2;
     }
     func_L00_002180F8_a();
     D_0013F450_211D28.unk2128[D_0013F450_211D28.unk21A8] = D_0013F450_211D28.motion.rot.f[2];
@@ -3048,7 +3048,7 @@ void func_L00_00213F38(void) {
     FastVecAdd(position, position, extra_step);
     clear_u64_value(extra_step);
     contact_player = (Hero *)((char *)position - 0x80);
-    contact_player->unk257 = 0;
+    contact_player->wall_hit = 0;
     contact_player->coll_hit_moby = 0;
     if (FastVecLength((char *)position + 0x70) <= 0.0001f) {
         func_L00_00213E60();
@@ -3098,28 +3098,28 @@ void func_L00_00213F38(void) {
         float saved;
 
         FastVecAdd(new_position, new_position, contact);
-        saved = motion_player->motion.unkF0.f[3];
+        saved = motion_player->motion.platform_delta.f[3];
         clear_u64_value(contact);
-        motion_player->motion.unkF0.f[3] = saved;
+        motion_player->motion.platform_delta.f[3] = saved;
         func_L00_00213E60();
         func_L00_00212E70();
         func_001F9BF0_12E70(external, new_position, previous.f);
         func_L00_002136A8();
     }
     func_001F9BF0_12E70((char *)position + 0x30, new_position, work.f);
-    motion_player->motion.unk140.f[3] = motion_player->motion.unkF0.f[3];
-    motion_player->motion.unkF0.f[3] = 0.0f;
+    motion_player->motion.platform_carry.f[3] = motion_player->motion.platform_delta.f[3];
+    motion_player->motion.platform_delta.f[3] = 0.0f;
     func_001F9BF0_12E70(external, new_position, previous.f);
     motion_player->motion.unk16C = 0.0f;
     if (motion_player->motion.unk164 > 0.004f) {
-        motion_player->motion.unk16C = motion_player->motion.unk100.f[2] / motion_player->motion.unk164;
+        motion_player->motion.unk16C = motion_player->motion.displacement.f[2] / motion_player->motion.unk164;
         if (motion_player->motion.unk16C > 0.5f) motion_player->motion.unk16C = 0.5f;
         else if (motion_player->motion.unk16C < -0.5f) motion_player->motion.unk16C = -0.5f;
     }
     cap_player = (Hero *)(D_0013E633 + 0xE1D);
     magnitude = D_0015EE6C * 52.0f;
     if (magnitude < cap_player->motion.speed_xy) {
-        FastVecScale(cap_player->motion.unk100.f, cap_player->motion.unk100.f, magnitude / cap_player->motion.speed_xy);
+        FastVecScale(cap_player->motion.displacement.f, cap_player->motion.displacement.f, magnitude / cap_player->motion.speed_xy);
         cap_player->motion.speed_xy = D_0015EE6C * 52.0f;
     }
 }

@@ -935,10 +935,10 @@ void func_L00_002BDAF0(Moby *m) {
             v0.z = 1.0f;
             func_001F9EE8_2BDAF0(&v0, &v0, mt);
         } else if (((Hero *)D_0013F450_2BDAF0)->unk22C8 == 1) {
-            func_001F9C30_2BDAF0(&v0, &m->unkD0, -1.0f);
+            func_001F9C30_2BDAF0(&v0, &m->rot_row1, -1.0f);
         } else {
             v0.x = 1.0f;
-            func_001F9EC0_2BDAF0(&v0, &v0, ((Hero *)D_0013F450_2BDAF0)->unk640[0].f);
+            func_001F9EC0_2BDAF0(&v0, &v0, ((Hero *)D_0013F450_2BDAF0)->basis[0].f);
         }
         p->yaw = func_L00_001FF860_2BDAF0(v0.x, v0.y);
         p->pitch = func_L00_001FF860_2BDAF0(func_001F9CE8_2BDAF0(&v0), v0.z);
@@ -994,7 +994,7 @@ void func_L00_002BDAF0(Moby *m) {
         }
         if (D_L00_00161890_2BDAF0 >= 0) {
             D_L00_00161894_2BDAF0 = func_001F9850_2BDAF0(20);
-            func_L00_001FF4B0_2BDAF0(&v[0], &m->unkD0, -0.5f);
+            func_L00_001FF4B0_2BDAF0(&v[0], &m->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&v[1], p, &v[0]);
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_00161890_2BDAF0].pos[0] = v[1].x;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_00161890_2BDAF0].pos[1] = v[1].y;
@@ -1015,7 +1015,7 @@ void func_L00_002BDAF0(Moby *m) {
         D_L00_0016188C_2BDAF0 = 1;
         if (D_L00_00161890_2BDAF0 >= 0) {
             float f;
-            func_L00_001FF4B0_2BDAF0(&v0, &m->unkD0, -0.5f);
+            func_L00_001FF4B0_2BDAF0(&v0, &m->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&v[0], p, &v0);
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_00161890_2BDAF0].pos[0] = v[0].x;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_00161890_2BDAF0].pos[1] = v[0].y;
@@ -1255,7 +1255,7 @@ void func_L00_002BE3A8(Moby *m) {
     func_001F9BF0_2BE3A8(&dir, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
     func_L00_001FF4B0_2BE3A8(&dir, &dir, D_L00_00161804_2BE3A8 * D_0015EE60_2BE3A8);
     if (func_002140B0_2BE3A8(2) == 0) {
-        func_L00_001FF4B0_2BE3A8(&side, &m->unkD0, D_L00_00161810_2BE3A8);
+        func_L00_001FF4B0_2BE3A8(&side, &m->rot_row1, D_L00_00161810_2BE3A8);
         func_001F9BD8_2BE3A8(&tmp, &D_L00_001DC260_2BE3A8[0], &side);
         {
             Tab_2BE3A8 cols;

@@ -593,7 +593,7 @@ int func_L18_002D74F8(struct Moby *m) {
         if ((unsigned)(s - 3) < 2) {
             r = 2;
             if (s != 4) {
-                m->unkBC = s;
+                m->command = s;
                 m->state = 4;
             }
         } else {
@@ -603,7 +603,7 @@ int func_L18_002D74F8(struct Moby *m) {
     } else {
         long t = m->state;
         if (t == 4) {
-            m->state = m->unkBC;
+            m->state = m->command;
         }
     }
     return r;
@@ -686,7 +686,7 @@ void func_L18_002D76D8(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         moby->state = 1;
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         n = 0;
         do {
             for (i = 0; i < D_L18_0015F7F0; i++) {
@@ -1044,7 +1044,7 @@ void func_L18_002D8F10(struct Moby *moby) {
     case 4:
         if (D_0013F450_D8F10.air_frames.s == 0 && D_0013F450_D8F10.ground_moby == moby && D_0013F450_D8F10.state.current == 0x22) {
             moby->state = 5;
-            moby->unkBC = 1;
+            moby->command = 1;
             moby->pos.z -= 1.5f;
             if (D_0015EE84 == 0x12)
                 D_0013D50F = 1;
@@ -1190,17 +1190,6 @@ struct MobyTrail_D96B0 {
     struct Moby_D96B0 *source; /* 0x134 */
     s32 copy_count; /* 0x138: copies in use (max 4) */
     s32 active; /* 0x13C */
-};
-struct HeroManipulator {
-    u8 unk0; /* 0x00 */
-    u8 attached; /* 0x01 */
-    u8 unk2; /* 0x02 */
-    u8 unk3; /* 0x03 */
-    u8 pad_4[0x8];
-    f32 unkC; /* 0x0C */
-    Vec4_D96B0 quat; /* 0x10 */
-    Vec4_D96B0 scale3; /* 0x20 */
-    Vec4_D96B0 translation; /* 0x30 */
 };
 struct HeroEase_D96B0 {
     u8 unk0; /* 0x00 */

@@ -1585,9 +1585,9 @@ char *func_L13_00306D40(struct Moby *src, short cls) {
         pos = m + 0x10;
         func_L00_00250800_306D40(src, cls, pos);
         qcopy(m + 0x40, &src->rot);
-        *(OvlQuad_306D40 *)(m + 0xC0) = *(OvlQuad_306D40 *)&src->unkC0;
-        *(OvlQuad_306D40 *)(m + 0xD0) = *(OvlQuad_306D40 *)&src->unkD0;
-        *(OvlQuad_306D40 *)(m + 0xE0) = *(OvlQuad_306D40 *)&src->unkE0;
+        *(OvlQuad_306D40 *)(m + 0xC0) = *(OvlQuad_306D40 *)&src->rot_row0;
+        *(OvlQuad_306D40 *)(m + 0xD0) = *(OvlQuad_306D40 *)&src->rot_row1;
+        *(OvlQuad_306D40 *)(m + 0xE0) = *(OvlQuad_306D40 *)&src->rot_row2;
         qcopy(d + 0x10, pos);
         *(int *)(m + 0x94) = 0;
         func_L00_00251E30_306D40(m);
@@ -1682,9 +1682,9 @@ void func_L13_00306EF0_r(struct Moby *moby) {
         if (source == 0 || source->oclass != 0x65 || source->state == 0xfe || source->state == 0xfd)
             goto remove;
         qcopy(&moby->rot, &source->rot);
-        *(OvlQuad_p *)&moby->unkC0 = *(OvlQuad_p *)&source->unkC0;
-        *(OvlQuad_p *)&moby->unkD0 = *(OvlQuad_p *)&source->unkD0;
-        *(OvlQuad_p *)&moby->unkE0 = *(OvlQuad_p *)&source->unkE0;
+        *(OvlQuad_p *)&moby->rot_row0 = *(OvlQuad_p *)&source->rot_row0;
+        *(OvlQuad_p *)&moby->rot_row1 = *(OvlQuad_p *)&source->rot_row1;
+        *(OvlQuad_p *)&moby->rot_row2 = *(OvlQuad_p *)&source->rot_row2;
         moby_pos_p(*(struct Moby **)(data + 0x20), *(short *)(data + 0x26), &moby->pos);
         qcopy(data + 0x10, &moby->pos);
         {
@@ -1723,7 +1723,7 @@ void func_L13_00306EF0_r(struct Moby *moby) {
     distance = dist_p(&moby->pos, data + 0x10);
     other_distance = dist_p(*(char **)(data + 0x2c) + 0x10, data + 0x10);
     if (*(float *)(data + 0x28) < distance || other_distance < distance) {
-        if (moby->unk31 != 0) {
+        if (moby->visible != 0) {
             int i;
             for (i = 0; i < 3; i++) {
                 *(OvlQuad_p *)&work.random_direction = 0;
@@ -1751,7 +1751,7 @@ void func_L13_00306EF0_r(struct Moby *moby) {
         goto bounds;
     }
     qcopy(&moby->pos, &D_L13_00174140_p.pos);
-    if (moby->unk31 != 0) {
+    if (moby->visible != 0) {
         int i;
         for (i = 0; i < 5; i++) {
             *(OvlQuad_p *)&work.direction = 0;
@@ -1946,7 +1946,7 @@ void func_L13_00307798(struct Moby *moby) {
     work.hit[0x19] = 1;
     stationary = *(int *)(data + 0x24) == 0;
     if (*(float *)(data + 0x28) < func_001F9D48(&moby->pos, data + 0x10) || func_001F9908(data + 0x2C) != 0) {
-        if (moby->unk31 != 0) {
+        if (moby->visible != 0) {
             int i;
             for (i = 0; i < 3; i++) {
                 *(OvlQuad_p *)&work.random_direction = 0;
@@ -1966,7 +1966,7 @@ void func_L13_00307798(struct Moby *moby) {
     if (func_L00_001EFFF0(&work.old_pos, &moby->pos, stationary, *(void **)(data + 0x20), work.hit) == 0)
         goto bounds;
     qcopy(&moby->pos, &(*(L13Hit_p *)D_L13_001741C0).pos);
-    if (moby->unk31 != 0) {
+    if (moby->visible != 0) {
         int i;
         for (i = 0; i < 5; i++) {
             *(OvlQuad_p *)&work.random_direction = 0;
@@ -2353,9 +2353,9 @@ void func_L13_00309330(struct Moby *moby) {
     func_L13_0030A1C8(moby);
     target = vars->target;
     func_L00_00264B40(2.5f, moby, 1, vars->unk400);
-    if (moby->unk31 != 0 && FastVecDist(&moby->pos, D_L13_00167140) < 28.0f) {
+    if (moby->visible != 0 && FastVecDist(&moby->pos, D_L13_00167140) < 28.0f) {
         func_L00_0025B178(moby);
-        moby->unk7F = 0x16;
+        moby->shadow_range = 0x16;
     }
     switch (moby->state) {
     case 0:
@@ -2408,7 +2408,7 @@ void func_L13_00309330(struct Moby *moby) {
         }
         break;
     case 2:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 3;
             func_L13_0030A828((char *)moby);
             if (moby->prev_seq != 5) {
@@ -2417,7 +2417,7 @@ void func_L13_00309330(struct Moby *moby) {
         }
         break;
     case 3:
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             f32 dist = func_001F9D48(&moby->pos, &target->pos);
             if (vars->unk164 != 2 && dist < 15.0f) {
                 moby->state = 4;
@@ -2476,17 +2476,17 @@ void func_L13_00309330(struct Moby *moby) {
         }
         }
         qcopy(&vars->unk1E0, &a);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 6;
-            moby->unkBC = 1;
+            moby->command = 1;
             if (moby->prev_seq != 2) {
                 func_00213DE0(moby, 2, 0, scale_ticks(10));
             }
         }
         break;
     case 6:
-        if (moby->unk70 & 2) {
-            moby->state = moby->unkBC;
+        if (moby->anim_flags & 2) {
+            moby->state = moby->command;
             if (moby->prev_seq != 0) {
                 func_00213DE0(moby, 0, 0, scale_ticks(20));
             }
@@ -2580,7 +2580,7 @@ void func_L13_00309330(struct Moby *moby) {
         }
         }
         qcopy(&vars->unk1E0, &a);
-        if (moby->unk70 & 2) {
+        if (moby->anim_flags & 2) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
                 func_00213DE0(moby, 1, 0, scale_ticks(20));
@@ -2766,7 +2766,7 @@ void func_L13_0030A1C8(Moby *moby)
         }
         func_L00_0025E4B0(moby, (short *)vars->flash);
     }
-    moby->unkA4 = 0xFF;
+    moby->hit_slot = 0xFF;
     func_L00_0025E590(moby, vars->flash);
     if (vars->idle_timer != 0) {
         vars->range = vars->far_range;
@@ -3107,7 +3107,7 @@ void func_L13_0030B340(struct Moby *moby) {
             float a;
             func_L01_002B8C00(D_L13_001D9E80_0B340, 22);
             func_L01_002B90A8(1.0f);
-            moby->unk30 = 0xFF;
+            moby->update_dist = 0xFF;
             l = &D_L13_001CAE00;
             l->f00 = 16.0f;
             l->f04 = 16.0f;
@@ -3148,7 +3148,7 @@ void func_L13_0030B340(struct Moby *moby) {
             for (n = 0; n < 22; n++)
                 func_L13_0030B940(n);
         }
-        moby->unk32 = 0;
+        moby->draw_dist = 0;
         moby->state = 1;
         break;
     }

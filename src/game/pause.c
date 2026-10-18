@@ -8511,7 +8511,7 @@ s32 func_002255F8(HandGadgetState *hand) {
                     *((void **)moby->pvars) = hand;
                     (*(void **)&moby->update) = func_00226410;
                     moby->flags = 4;
-                    moby->unkBC = slot_index;
+                    moby->command = slot_index;
                 }
             }
             *ammo_moby_slot = moby;

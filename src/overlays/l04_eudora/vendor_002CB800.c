@@ -1756,14 +1756,14 @@ void func_L04_002E57F8(Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        moby->unk30 = 0xFF;
+        moby->update_dist = 0xFF;
         moby->state = 1;
         data->f14 = -1;
         break;
     case 1:
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, data->f0) != 0
             && D_L04_00179610[0] == 0 && D_L04_00179610[9] == -1
-            && D_0014C150[moby->unkB0 + (D_0015EE84 << 4)] != 0xFF) {
+            && D_0014C150[moby->mission + (D_0015EE84 << 4)] != 0xFF) {
             if (data->f14 == -1) {
                 Help_2E57F8 *h = (Help_2E57F8 *)(D_0014171B + 0x22D);
                 data->f14 = D_0015EFAC;
@@ -2059,7 +2059,7 @@ extern void func_L00_00264870(int);
 void func_L04_002E6780(struct Moby *m) {
     switch (m->state) {
     case 0:
-        m->unk30 = 0xFF;
+        m->update_dist = 0xFF;
         m->state = 1;
         break;
     case 1:

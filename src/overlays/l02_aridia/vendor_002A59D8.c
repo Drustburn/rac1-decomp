@@ -1768,7 +1768,7 @@ void func_L02_002DD170(Moby *m) {
             func_001F9EC0(motion.v, motion.v, D_L02_0016017C_2DD170 + (d->joint << 7));
             d->goal = motion.v[2] + *(float *)(D_L02_0016017C_2DD170 + d->joint * 0x80 + 0x38);
             m->pos.z = motion.v[2] + *(float *)(D_L02_0016017C_2DD170 + d->joint * 0x80 + 0x38) + D_L02_00161C60;
-            m->unkBC = 1;
+            m->command = 1;
             if (d->start_low) {
                 m->state = 2;
             } else {
@@ -1782,7 +1782,7 @@ void func_L02_002DD170(Moby *m) {
             }
             if (func_001F9D48(position, D_0013F450.motion.pos.f) < 20.0f) {
                 clear_u64_value(motion.v);
-                if (m->unkBC) {
+                if (m->command) {
                     motion.v[2] = -1.0f;
                 } else {
                     motion.v[2] = 1.0f;
@@ -1790,7 +1790,7 @@ void func_L02_002DD170(Moby *m) {
                 func_001F9EE8(motion.v, motion.v, D_L02_0016017C_2DD170 + (d->joint << 7));
                 motion.v[2] = motion.v[2] + *(float *)(D_L02_0016017C_2DD170 + d->joint * 0x80 + 0x38) + D_L02_00161C60;
                 if (FastAbsF(D_0013F450.motion.pos.f[2] - motion.v[2]) < 1.0f) {
-                    m->unkBC = (m->unkBC + 1) & 1;
+                    m->command = (m->command + 1) & 1;
                     d->goal = motion.v[2];
                     d->speed = 0.0f;
                     m->state = 3;
@@ -1799,12 +1799,12 @@ void func_L02_002DD170(Moby *m) {
             }
             if (D_0013F450.ground_moby == m && D_0013F450.air_frames.s == 0) {
                 clear_u64_value(motion.v);
-                if (m->unkBC) {
+                if (m->command) {
                     motion.v[2] = -1.0f;
                 } else {
                     motion.v[2] = 1.0f;
                 }
-                m->unkBC = (m->unkBC + 1) & 1;
+                m->command = (m->command + 1) & 1;
                 func_001F9EE8(motion.v, motion.v, D_L02_0016017C_2DD170 + (d->joint << 7));
                 d->goal = motion.v[2] + *(float *)(D_L02_0016017C_2DD170 + d->joint * 0x80 + 0x38) + D_L02_00161C60;
                 d->speed = 0.0f;
@@ -1814,12 +1814,12 @@ void func_L02_002DD170(Moby *m) {
         case 1:
             if ((D_0013F450.ground_moby == m && D_0013F450.air_frames.s == 0) || D_0013D5E2 != 0) {
                 clear_u64_value(motion.v);
-                if (m->unkBC) {
+                if (m->command) {
                     motion.v[2] = -1.0f;
                 } else {
                     motion.v[2] = 1.0f;
                 }
-                m->unkBC = (m->unkBC + 1) & 1;
+                m->command = (m->command + 1) & 1;
                 func_001F9EE8(motion.v, motion.v, D_L02_0016017C_2DD170 + (d->joint << 7));
                 d->goal = motion.v[2] + *(float *)(D_L02_0016017C_2DD170 + d->joint * 0x80 + 0x38) + D_L02_00161C60;
                 d->speed = 0.0f;
@@ -2935,18 +2935,18 @@ void func_L02_002E0D80(struct Moby *m) {
     Vec4 rxy;
     TurnerVars *v = (TurnerVars *)m->pvars;
 
-    if (D_L02_0015F6A8 == 2 && m->unkBC == 0) {
-        m->unk31 = 0;
+    if (D_L02_0015F6A8 == 2 && m->command == 0) {
+        m->visible = 0;
         m->flags |= 1;
     } else {
-        m->unk31 = 1;
+        m->visible = 1;
         m->flags &= ~1;
     }
     switch (m->state) {
     case 0:
         qcopy(&v->start, &m->rot);
         v->start.f[3] = 0.0f;
-        if (D_0014C150[D_0015EE84][m->unkB0] == 0xFF) {
+        if (D_0014C150[D_0015EE84][m->mission] == 0xFF) {
             m->rot.x = v->goal.f[0] * 0.017453292f;
             m->rot.y = v->goal.f[1] * 0.017453292f;
             m->rot.z = v->goal.f[2] * 0.017453292f;
@@ -2967,7 +2967,7 @@ void func_L02_002E0D80(struct Moby *m) {
         }
         break;
     case 1:
-        if (m->unkBC != 0) {
+        if (m->command != 0) {
             m->state = 2;
             v->speed = 0.0f;
             v->t = 0.0f;
@@ -2976,7 +2976,7 @@ void func_L02_002E0D80(struct Moby *m) {
     case 2:
         func_L00_0025CE58(&v->t, &v->speed, 1.0f, D_0015EE70 * 0.5f, D_0015EE70 * 0.5f, D_0015EE6C);
         func_001FA5C8(&qx, &v->start, &v->goal, v->t);
-        func_001FA648(&qx, &m->unkC0);
+        func_001FA648(&qx, &m->rot_row0);
         break;
     }
 }
