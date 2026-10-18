@@ -184,6 +184,9 @@ static inline void TransformPoint(float *dst, float *src, float (*m)[4]) {
     func_001F9EE8(dst, src, m);
 }
 
+/* Draw routine for a backdrop moby with 57 vertices: when the camera is within 16 units in x and
+   y it recomputes per-vertex UVs from reflected view directions (env-map style), otherwise uses
+   the plain transformed vertices, then submits the quad. */
 void func_L06_002D9B08(char *moby) {
     L06BackdropQuad quad;
     float matrix[3][4] __attribute__((aligned(16)));

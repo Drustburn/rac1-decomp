@@ -1057,6 +1057,9 @@ extern void func_L00_0025E590(void *, void *);
 extern float func_002140F8(float, float);
 extern void func_L00_00261478(void *, void *, void *, void *, void *, void *);
 
+/* Per-frame update of a projectile-like moby: despawns when it leaves the 2..1021 coordinate
+   box or when its owner/vehicle state no longer allows it, otherwise advances its timer, sets
+   or clears its visibility flags, and runs target search and collision handling on its vars. */
 void func_L00_002C5688(char *moby) {
     int active = D_0013E633[6];
     char *vars = *(char **)(moby + 0x78);

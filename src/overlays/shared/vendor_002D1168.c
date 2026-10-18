@@ -59,6 +59,9 @@ typedef struct {
 typedef struct { s32 count; s32 pad4[3]; struct { f32 x, y, z; s32 w; } pts[1]; } Path_D1168;
 #define MV_D1168(m) ((Vars_D1168 *)(m)->pvars)
 #define MA8_D1168(m) (*(u16 *)((u8 *)(m) + 0xA8))
+/* Update of a ground-attached object (first of a pair): on first run probes downward for ground
+   under it, snaps to the hit height and links to the hit moby (or detaches), and keeps its
+   position/rotation following that moby; may delete itself when its mission counter is stale. */
 void func_L00_002D1168(Moby *first) {
     extern Path_D1168 *D_L00_001B0830[];
     Moby *moby = first, *second, *next;

@@ -2571,6 +2571,9 @@ extern int D_L18_0015F660 MACRO_ADDR;
 #define I(x) (*(int *)&(x))
 #define F(x) (*(float *)&(x))
 
+/* Spawns a burst of effects at a moby's position: plays a sound, then emits two loops of
+   randomised particles (random direction/speed/colour, via func_00219780 and func_0026B890)
+   plus up to three glow/flash effects and a screen-parameter tweak, all tuned by globals. */
 void func_L18_002EBBF0(void *arg) {
     char *self = arg;
     QVec v10;

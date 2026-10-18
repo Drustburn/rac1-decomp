@@ -665,6 +665,9 @@ extern s32 D_L02_0015F6B0 MACRO_ADDR;
 #define func_L02_002DBAF8 ((void (*)(u64, int, int, float, float))func_L02_002DBAF8)
 #define func_L02_002DBD70 ((void (*)(u64, f32, f32, f32, s32))func_L02_002DBD70)
 typedef struct { int v[12]; } Ring12;
+/* Draw routine for a 12-marker ring moby: dims all active markers, derives a rotation state from
+   the moby's angle/state fields, and draws the three concentric marker rings (+0x20/+0x50/+0x80)
+   as textured sprites placed at 30 degree steps, rotating with the current phase. */
 void func_L02_002DA820(char *moby) {
     struct { char unk0[0x78]; u64 texture; char unk80[0x10]; } ctx;
     int st0, st1;

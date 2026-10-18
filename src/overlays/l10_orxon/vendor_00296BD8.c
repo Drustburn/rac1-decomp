@@ -1711,6 +1711,9 @@ extern u64 func_001F4868(s32);
 extern void func_L00_001FD1D8(void *, void *, s32);
 #define func_L00_001FD1D8_DBA50 func_L00_001FD1D8
 
+/* Per-frame draw of a ribbon/trail effect moby: fades out with distance (full alpha under 48
+   units, zero at 80), builds per-segment transforms from the moby matrix and a scrolling-UV
+   GS packet, and emits the textured quad groups using per-vertex ages from the moby's buffer. */
 void func_L10_002DBA50(u8 *moby) {
     char *data = *(char **)(moby + 0x78);
     char *base = *(char **)((*(int *)(data + 0xc) << 8) + (int)D_L10_00160058_DBA50 + 0x78);

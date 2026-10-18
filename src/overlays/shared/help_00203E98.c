@@ -508,6 +508,9 @@ extern Quad_56a8 D_L00_0017C320[];
 extern Quad_56a8 D_L00_0017C360[];
 extern f32 D_L00_0017C3A0[];
 
+/* Per-frame update of the helper/attached moby: eases a global value toward 1.8 or 1.0, pulses
+   the moby's tint colour with a sine wave (adjusted by a fade timer), and while a timer runs
+   attaches four manipulators to it and animates them from a lookup table until it expires. */
 void func_L00_00205FF0(void) {
     u8 *g, *g2;
     u8 *h0;

@@ -2733,6 +2733,9 @@ typedef struct {
 } D_02C80;
 
 void func_L14_00302C80(char *m);
+/* Init of a 32-point strip (rope/beam style) moby: sets its scale, picks a random value from two
+   range constants, then builds the point and offset arrays (P/Q) spaced along the moby's
+   height, with the ends pinned and the middle points randomly offset, and copies them to its vars. */
 void func_L14_00302C80(char *m) {
     D_02C80 *d = *(D_02C80 **)(m + 0x78);
     Vq_02C80 P[32];
