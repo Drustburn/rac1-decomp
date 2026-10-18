@@ -2800,7 +2800,7 @@ extern float func_001F9CB8(void *);
 extern int func_001F9938(void *);
 extern void func_L14_003039C0(char *);
 extern void func_L14_00303270(char *);
-extern void func_L14_00303430(char *);
+extern void func_L14_00303430(void);
 extern void func_001F49B0(void (*)(void), void *);
 
 void func_L14_00302A58(unsigned char *m) {
