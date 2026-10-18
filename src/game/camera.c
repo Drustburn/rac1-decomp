@@ -115,7 +115,7 @@ void Camera_handleCollWithHero(void *arg0) {
    base) and no amount of reordering the C addition changes it, because
    GCC canonicalises the PLUS before operand order is chosen. Indexing
    a typed array puts the base first. See func_001EC270/func_001EC780. */
-extern DispatchRec D_001E8F80[];
+extern CameraType D_001E8F80[];
 
 /*
  * 1/68, and the residual is one commutative-operand-order byte: retail
@@ -136,7 +136,7 @@ extern DispatchRec D_001E8F80[];
  */
 /* Camera_runSetupToNewCam(UpdateCam *) */
 void Camera_runSetupToNewCam(void *arg0) {
-    void (*fn)(void *) = gCameraTypes[*(short *)((char *)arg0 + 0x8C)].fn_08;
+    void (*fn)(Camera *) = gCameraTypes[*(short *)((char *)arg0 + 0x8C)].activate;
     if (fn != 0) {
         fn(arg0);
     }
@@ -314,7 +314,7 @@ typedef struct {
     char unk14[8];
     int unk1C;
 } CamRec20;
-extern CamRec20 *D_0015F090 MACRO_ADDR;
+extern CameraDef *D_0015F090 MACRO_ADDR;
 extern CamRec20 *D_0015F040 MACRO_ADDR;
 extern char D_0013F450[];
 extern char D_0013F4D0[];
@@ -373,7 +373,7 @@ int Camera_ActivationCheckPriority(void *cur, void *other) {
         }
         break;
     case 4: {
-        char *p = (char *)gCameraDefs[*(short *)(c + 0x84)].unk1C;
+        char *p = (char *)gCameraDefs[*(short *)(c + 0x84)].info;
 
         if (o != 0 && *(short *)(o + 0x7E) == 0 && !(state[8] > *(unsigned char *)(o + 0x7C))) {
             return 0;
@@ -397,8 +397,8 @@ int Camera_ActivationCheckPriority(void *cur, void *other) {
             return 1;
         }
         {
-            CamRec20 *rec = &gCameraDefs[*(short *)(c + 0x84)];
-            int g = *(int *)((char *)rec->unk1C + 0x24);
+            CameraDef *rec = &gCameraDefs[*(short *)(c + 0x84)];
+            int g = *(int *)((char *)rec->info + 0x24);
 
             if (g < 0 || (*(int *)(base + 0x560) == D_0015F040[g].unk10
                           && *(int *)(base + 0x570) == 0)) {
@@ -420,7 +420,7 @@ __asm__(".section .text\n\tnop\n");
    +8; identical 1/68 operand-order residual, same cause. */
 /* Camera_Exit(UpdateCam *) */
 void Camera_Exit(void *arg0) {
-    void (*fn)(void *) = gCameraTypes[*(short *)((char *)arg0 + 0x8C)].fn_10;
+    void (*fn)(Camera *) = gCameraTypes[*(short *)((char *)arg0 + 0x8C)].exit;
     if (fn != 0) {
         fn(arg0);
     }

@@ -4,6 +4,12 @@
 #include "camera.h"
 #include "vector.h"
 
+/* The level copies of the camera tables (include/camera.h). */
+extern Camera D_L00_00167250[];
+extern CameraDef *D_L00_0015F050 MACRO_ADDR;
+extern CameraType D_L00_001EAC00[];
+extern DebugFreeCam D_L00_0016C158;
+
 /* Calls each callback in the table at D_L00_001690F0, in order, for as many entries as the
  * count D_L00_0015F04C says (re-read after each call), then sets the count to zero. */
 extern int D_L00_0015F04C MACRO_ADDR;
@@ -520,16 +526,11 @@ frozen:
 }
 INCLUDE_ASM("asm/overlays", func_L00_001ED460);
 INCLUDE_ASM("asm/overlays", func_L00_001ED464);
-typedef struct {
-    int key;
-    int pad[4];
-} E;
-extern E D_L00_001EAC00[];
 
 /* Returns the index of the entry with the given key, or of the -1 terminator. */
 int Camera_FindTypeIndex(int key) {
     int i = 0;
-    while (gCameraTypesLvl[i].key != -1 && gCameraTypesLvl[i].key != key) {
+    while (gCameraTypesLvl[i].id != -1 && gCameraTypesLvl[i].id != key) {
         i++;
     }
     return i;
@@ -569,22 +570,9 @@ void CameraResetBehindHero(void) {
     u[1] = t[1];
     u[2] = t[2];
 }
-typedef struct {
-    char pad[0x74];
-    int i74;
-    float f78;
-    char c7C, c7D;
-    short s7E, s80, s82, s84, s86;
-    char pad2;
-    char c89;
-    short s8A, s8C, s8E;
-    char pad3[0x10];
-} Elem;
-extern Elem D_L00_00167250[];
 extern char D_L00_00166FF0[];
 extern int D_L00_0015F054 MACRO_ADDR;
 extern short D_L00_0015F040;
-extern char *D_L00_0015F050 MACRO_ADDR;
 extern void func_001F9BC0(void *);
 
 extern float func_001F9F90(float);
@@ -623,7 +611,6 @@ extern void func_L00_001FF328(float *, float *, float);
 extern int func_L00_001F10E0_f(void *, int, void *, float) __asm__("func_L00_001F10E0");
 extern int D_L00_0016C16C;
 extern W D_L00_00173F70;
-extern int D_L00_0016C158[];
 extern W D_L00_00166EC0;
 extern short D_L00_0015F05C;
 
@@ -666,7 +653,7 @@ void MoveCameraToward(float *pos, float r) {
             }
         }
     }
-    if (gDebugFreeCamLvl[5] == 0) {
+    if (gDebugFreeCamLvl.active == 0) {
         qcopy(&D_L00_00166EC0, pos);
     }
 }
