@@ -160,7 +160,7 @@ void func_L06_0021E7B8(void) {
         D_L06_0017C0DC = D_0015EEF0[10];
         func_L00_00205FF0();
         if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 == 0) {
-            ((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 = (char *)func_0020D348(0x4B4);
+            ((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 = (char *)CreateMoby(0x4B4);
             if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 != 0) {
                 *(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90) = 0x801432D7;
                 ((GS_E7B8 *)(D_0013E633 + 0xE1D))->i2300 = 0x301432D7;
@@ -189,16 +189,16 @@ void func_L06_0021E7B8(void) {
                 *(float *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x18) -= off[2];
                 func_L00_00251E30((struct Moby *)((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624);
                 k = 1.7f;
-                if (D_0015EEB0[3] != 0) k = 3.1f;
+                if (gCheats[3] != 0) k = 3.1f;
                 if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FC != 0) k *= 1.4f;
                 func_00214D28((float *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x2C), *(float *)(*(char **)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x24) + 0x24) * k, 0.02f);
             }
         }
         ca = 0x281414C8;
         cb = 0x1E00004B;
-        ((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628 = func_001FA748(((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 2.96705961227417f);
-        if (func_001F9938(&((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FC) == 0) {
-            ((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628 = func_001FA748(((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 12.217304229736328f);
+        ((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628 = FastAddRots(((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 2.96705961227417f);
+        if (FastDecTimer(&((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FC) == 0) {
+            ((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628 = FastAddRots(((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 12.217304229736328f);
             switch (((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FE) {
             case 1:
                 ca = 0x2814C814;
@@ -218,13 +218,13 @@ void func_L06_0021E7B8(void) {
                 break;
             }
         }
-        col = func_001FA8A8(ca, cb, func_001F9FA8(((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628) * 0.5f + 0.5f);
+        col = FastTweenColor(ca, cb, FastSin(((GS_E7B8 *)(D_0013E633 + 0xE1D))->f1628) * 0.5f + 0.5f);
         if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 != 0) {
-            *(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90) = func_001FA8A8(*(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90), col, D_0015EE60 * 0.1f);
+            *(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90) = FastTweenColor(*(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90), col, D_0015EE60 * 0.1f);
         }
-        ((GS_E7B8 *)(D_0013E633 + 0xE1D))->i2300 = func_001FA8A8(((GS_E7B8 *)(D_0013E633 + 0xE1D))->i2300, col, D_0015EE60 * 0.1f);
+        ((GS_E7B8 *)(D_0013E633 + 0xE1D))->i2300 = FastTweenColor(((GS_E7B8 *)(D_0013E633 + 0xE1D))->i2300, col, D_0015EE60 * 0.1f);
         if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 == 0) {
-            m = (char *)func_0020D348(0x47A);
+            m = (char *)CreateMoby(0x47A);
             ((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 = m;
             if (m == 0) goto skip;
             {
@@ -241,49 +241,49 @@ void func_L06_0021E7B8(void) {
             func_0020DAF8(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 5, buf);
             qcopy_nc(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 + 0x10, &buf[12]);
             func_L00_00251E30((struct Moby *)((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620);
-            func_001F9BC0(&buf[16]);
+            clear_u64_value(&buf[16]);
             buf[18] = -((GS_E7B8 *)(D_0013E633 + 0xE1D))->a90[2];
             func_001FA218(rm, &buf[16]);
-            func_001FA540(buf, buf, rm);
+            sce_vu0_mul_matrix(buf, buf, rm);
             func_001FA480(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 + 0xC0, buf);
             *(long *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 + 0x38) = *(long *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x38);
             if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->i2084 == 0x4F) {
                 if (((unsigned char *)((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620)[0x53] != 1) {
-                    func_00213DE0(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 1, 0, func_001F9850(10));
+                    func_00213DE0(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 1, 0, scale_ticks(10));
                 }
             } else if (((unsigned char *)((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620)[0x53] != 0) {
-                func_00213DE0(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 0, 0, func_001F9850(0x11));
+                func_00213DE0(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 0, 0, scale_ticks(0x11));
             }
         }
 skip:
         if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->p22C0 != 0) {
             func_0022ED80(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p22C0 + 0x10, 0, ((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080);
             ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FE = (short)(int)((GS_E7B8 *)(D_0013E633 + 0xE1D))->p22C0;
-            ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FC = func_001F9850(0x39);
+            ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FC = scale_ticks(0x39);
         }
         ((GS_E7B8 *)(D_0013E633 + 0xE1D))->p22C0 = 0;
     }
     func_L00_00248EF8(((GS_E7B8 *)(D_0013E633 + 0xE1D))->a80);
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 3) {
-        if (D_0015EEB0[1] != 0) {
+        if (gCheats[1] != 0) {
             D_L06_0017C44C = 1.9f;
         }
         c20 = 0x80;
-        v = func_001F9850(0xAA);
+        v = scale_ticks(0xAA);
         h = ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22E0;
         if (h == 2) {
-            v = func_001F9850(0x32);
+            v = scale_ticks(0x32);
         } else if (h == 1) {
-            v = func_001F9850(0x5A);
+            v = scale_ticks(0x5A);
         }
         f0 = func_001FA888(v);
         ang = (float)(D_L06_0015F6B0 % v) / f0;
         ang = ang + ang;
         ang = ang * 3.14159274f;
-        f20 = func_001F9FA8(ang + -3.14159274f);
-        r16 = func_001FA898(f20 * 20.0f) + 0x32;
-        r17 = func_001FA898(f20 * 70.0f) + 0xB4;
-        t = func_001FA898(f20 * 10.0f);
+        f20 = FastSin(ang + -3.14159274f);
+        r16 = truncate_float_to_s32(f20 * 20.0f) + 0x32;
+        r17 = truncate_float_to_s32(f20 * 70.0f) + 0xB4;
+        t = truncate_float_to_s32(f20 * 10.0f);
         *(unsigned short *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x34) |= 0x10;
         if (r16 >= 0x100) r16 = 0xFF;
         if (r17 >= 0x100) r17 = 0xFF;
@@ -293,7 +293,7 @@ skip:
         } else {
             color = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
         }
-        *(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90) = func_001FA8A8(*(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90), color, 0.1f);
+        *(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90) = FastTweenColor(*(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90), color, 0.1f);
         for (i = 0; i < 3; i++) {
             func_L00_00250800(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, i, ((GS_E7B8 *)(D_0013E633 + 0xE1D))->a1D50 + i * 0x10);
         }
@@ -305,7 +305,7 @@ skip:
         if (h2 != 0) {
             f20 = func_001FA888(h2);
             f20 = f20 / func_001FA888(0x12);
-            c20 = func_001FA898(f20 * (float)c20);
+            c20 = truncate_float_to_s32(f20 * (float)c20);
         }
         ((GS_E7B8 *)(D_0013E633 + 0xE1D))->c22E4 = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
         func_L00_00208318();
@@ -322,7 +322,7 @@ skip:
                 GS_E7B8 *g = (GS_E7B8 *)(D_0013E633 + 0xE1D);
                 int e = g->b12E7;
                 g->i20B8 = 0;
-                if (e != 0 && g->i300 != 0 && *(unsigned char *)(D_0013D5DD + 7) != 0 &&
+                if (e != 0 && g->i300 != 0 && *(unsigned char *)(gHaveMorphORay + 7) != 0 &&
                     g->s22DE == 0) {
                     func_L00_00217570(0x19, 0);
                     g->s22DE = 0x12;

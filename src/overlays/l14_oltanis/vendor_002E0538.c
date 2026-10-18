@@ -61,12 +61,12 @@ void func_L14_002E0910(void *m, void *path, int outer_alpha, int inner_alpha, in
     int c;
     int i;
 
-    q[0].tex = ((long (*)(int))func_001F4868)(0x2D);
+    q[0].tex = ((long (*)(int))GetEffectTex)(0x2D);
     q[0].r88 = 0x8000000048L;
     q[0].r80 = 0xFF9000000260L;
     q[0].r70 = 0;
     q[0].col[0] = q[0].col[1] = q[0].col[2] = q[0].col[3] = (outer_alpha << 24) | 0x7F7F7F;
-    q[1].tex = ((long (*)(int))func_001F4868)(0x2C);
+    q[1].tex = ((long (*)(int))GetEffectTex)(0x2C);
     c = (inner_alpha << 24) | 0x7F4040;
     q[1].col[3] = c;
     q[1].col[2] = c;
@@ -97,30 +97,30 @@ void func_L14_002E0910(void *m, void *path, int outer_alpha, int inner_alpha, in
     w[0].z = 0.2f;
     w[1].z = 0.4f;
     w[1].w = 1.0f;
-    t.x = func_001F9F90(*(float *)((char *)m + 0x48));
-    t.y = func_001F9FA8(*(float *)((char *)m + 0x48));
+    t.x = FastCos(*(float *)((char *)m + 0x48));
+    t.y = FastSin(*(float *)((char *)m + 0x48));
     t.z = 0.0f;
     qcopy(&mat[0], &t);
-    func_001F9BF0(&mat[1], D_L14_001675C0, (char *)m + 0x10);
-    func_001F9C30(&mat[1], &mat[1], 1.0f);
-    func_001F9CA0(&mat[2], &mat[1], &mat[0]);
+    FastVecSub(&mat[1], D_L14_001675C0, (char *)m + 0x10);
+    FastVecScale(&mat[1], &mat[1], 1.0f);
+    FastVecCross(&mat[2], &mat[1], &mat[0]);
     func_L00_001FF4B0(&mat[2], &mat[2], 1.0f);
-    func_001F9CA0(&mat[0], &mat[2], &mat[1]);
+    FastVecCross(&mat[0], &mat[2], &mat[1]);
     qcopy(&mat[3], (char *)m + 0x10);
     func_001FA218(&wm[0], (char *)m + 0x40);
     qcopy(&wm[3], (char *)m + 0x10);
     qcopy(&q[0].v[0], &w[0]);
-    func_001F9C30(&q[0].v[1], &q[0].v[0], -1.0f);
+    FastVecScale(&q[0].v[1], &q[0].v[0], -1.0f);
     qcopy(&q[1].v[0], &w[1]);
-    func_001F9C30(&q[1].v[1], &q[1].v[0], -1.0f);
+    FastVecScale(&q[1].v[1], &q[1].v[0], -1.0f);
     func_001F9EE8(&p[0], &pts[0], &wm[0]);
     func_001F9EE8(&p[1], &pts[1], &wm[0]);
-    func_001F9BF0(&mat[0], &p[1], &p[0]);
+    FastVecSub(&mat[0], &p[1], &p[0]);
     func_L00_001FF4B0(&mat[0], &mat[0], 1.0f);
-    func_001F9BF0(&mat[1], D_L14_001675C0, &p[0]);
-    func_001F9CA0(&mat[2], &mat[1], &mat[0]);
+    FastVecSub(&mat[1], D_L14_001675C0, &p[0]);
+    FastVecCross(&mat[2], &mat[1], &mat[0]);
     func_L00_001FF4B0(&mat[2], &mat[2], 1.0f);
-    func_001F9CA0(&mat[1], &mat[0], &mat[2]);
+    FastVecCross(&mat[1], &mat[0], &mat[2]);
     qcopy(&mat[3], &p[0]);
     func_001F9EE8(&q[0].v[0], &q[0].v[0], &mat[0]);
     func_001F9EE8(&q[0].v[1], &q[0].v[1], &mat[0]);
@@ -129,20 +129,20 @@ void func_L14_002E0910(void *m, void *path, int outer_alpha, int inner_alpha, in
     for (i = 1; i < n; i++) {
         float f;
         qcopy(&q[0].v[2], &w[0]);
-        func_001F9C30(&q[0].v[3], &q[0].v[2], -1.0f);
+        FastVecScale(&q[0].v[3], &q[0].v[2], -1.0f);
         qcopy(&q[1].v[2], &w[1]);
-        func_001F9C30(&q[1].v[3], &q[1].v[2], -1.0f);
+        FastVecScale(&q[1].v[3], &q[1].v[2], -1.0f);
         if (i == n - 1) {
             func_001F9EE8(&mat[3], &pts[i], &wm[0]);
         } else {
             func_001F9EE8(&p[0], &pts[i], &wm[0]);
             func_001F9EE8(&p[1], &pts[i + 1], &wm[0]);
-            func_001F9BF0(&mat[0], &p[1], &p[0]);
+            FastVecSub(&mat[0], &p[1], &p[0]);
             func_L00_001FF4B0(&mat[0], &mat[0], 1.0f);
-            func_001F9BF0(&mat[1], D_L14_001675C0, &p[0]);
-            func_001F9CA0(&mat[2], &mat[1], &mat[0]);
+            FastVecSub(&mat[1], D_L14_001675C0, &p[0]);
+            FastVecCross(&mat[2], &mat[1], &mat[0]);
             func_L00_001FF4B0(&mat[2], &mat[2], 1.0f);
-            func_001F9CA0(&mat[1], &mat[0], &mat[2]);
+            FastVecCross(&mat[1], &mat[0], &mat[2]);
             qcopy(&mat[3], &p[0]);
         }
         func_001F9EE8(&q[0].v[2], &q[0].v[2], &mat[0]);
@@ -308,7 +308,7 @@ void func_L14_002E9038(struct Moby *m) {
     if (m == 0) return;
     d = (L14LiftVars *)m->pvars;
     if (d == 0) return;
-    if (d->clip >= 0 && func_00215570(&D_0013F450.motion.pos, d->clip) != 0) {
+    if (d->clip >= 0 && is_point_inside_clip_volume(&D_0013F450.motion.pos, d->clip) != 0) {
         COLL(m) = 0;
         FLAGS(m) |= 0x41;
         if (d->rider >= 0) {
@@ -335,10 +335,10 @@ void func_L14_002E9038(struct Moby *m) {
         d->angle = 0.0f;
         d->sound = -1;
         d->h206 = 0;
-        func_0020D960(m, 0, d->manip);
+        AttachManipulator(m, 0, d->manip);
         if (d->rider == -1) {
-            func_001E9730(D_L14_001FCBB0, m->save_id);
-            func_0020D678(m);
+            STUB_printf(D_L14_001FCBB0, m->save_id);
+            DeleteMoby(m);
             return;
         }
         d->riding = 0;
@@ -353,39 +353,39 @@ void func_L14_002E9038(struct Moby *m) {
             qcopy(&base, &m->pos);
         func_001FA218(mat, &m->rot);
         func_001F9EE8(&off, d->offset, mat);
-        func_001F9BD8(&rider->pos, &base, &off);
+        FastVecAdd(&rider->pos, &base, &off);
     }
     if (d->sound == -1 || (func_L00_0028EB98(m, d->sound) == 0 && d->sound == -1))
         d->sound = func_0022ED80(0, 4, m);
-    d->angle = func_001FA748(d->angle, 0.17453292f);
+    d->angle = FastAddRots(d->angle, 0.17453292f);
     func_L00_001FFED8(d->wobble, 0, d->angle);
-    func_001F9BF0(&delta, &m->pos, &old);
+    FastVecSub(&delta, &m->pos, &old);
     func_L00_002617B0((char *)d->spring, &delta, &rot, &m->rot);
     if (D_0013F450.state.control_mode == 13 && D_0013F450.unk964 == rider) {
         if (d->riding == 0) {
             d->riding = 1;
-            d->timer = func_001F9850(D_L14_00161C5C);
+            d->timer = scale_ticks(D_L14_00161C5C);
             d->timer_inv = 1.0f / func_001FA888(d->timer);
         }
     } else {
         if (d->riding == 1) {
             if (D_0013F450.air_frames.s == 0 || D_0013F450.motion.pos.f[2] <= ((Vec4 *)&m->pos)->f[2] - 3.0f) {
                 d->riding = 0;
-                d->timer = func_001F9850(D_L14_00161C60);
+                d->timer = scale_ticks(D_L14_00161C60);
                 d->timer_inv = 1.0f / func_001FA888(d->timer);
                 d->to = d->height;
             } else {
                 qcopy(&base, &D_0013F450.motion.pos);
-                func_001F9BF0(&delta, &rider->pos, &base);
+                FastVecSub(&delta, &rider->pos, &base);
                 delta.f[2] = 0.0f;
-                len = func_001F9CB8(&delta);
+                len = FastVecLength(&delta);
                 max = (*(f32 *)&D_L14_00161C58) * D_0015EE6C;
                 if (max < len) len = max;
                 func_L00_001FF4B0(&D_0013F450.motion.platform_delta, &delta, len);
             }
         }
         if (d->riding == 0) {
-            func_001F9938(&d->timer);
+            FastDecTimer(&d->timer);
             {
                 f32 t = func_001FA888(d->timer) * d->timer_inv;
                 d->height = d->from + (d->to - d->from) * t;
@@ -393,7 +393,7 @@ void func_L14_002E9038(struct Moby *m) {
             return;
         }
     }
-    func_001F9938(&d->timer);
+    FastDecTimer(&d->timer);
     {
         f32 t = func_001FA888(d->timer) * d->timer_inv;
         d->height = (d->from - 0.005f) * t + 0.005f;
@@ -1154,8 +1154,8 @@ void func_L14_002EE990(char *moby) {
         i = 0;
         starts = D_L14_00161DC8;
         *(int *)&D_L14_00161D3C = 0;
-        func_001F9BF0(&delta, D_L14_00161DA0, D_L14_00161D90);
-        len = func_001F9CB8(&delta);
+        FastVecSub(&delta, D_L14_00161DA0, D_L14_00161D90);
+        len = FastVecLength(&delta);
         (*(float *)&D_L14_00161D44) = len / func_001FA888(40);
         D_L14_00161DB0[0] = 0;
         for (; i < 40; i++) {
@@ -1165,7 +1165,7 @@ void func_L14_002EE990(char *moby) {
             p[3] = 1.0f;
             p[0] = (*(float *)&D_L14_00161D44) * (float)i;
             if (i < 39) {
-                p[2] = p[-2] + func_L00_00258C80((*(float *)&D_L14_00161D5C), (*(float *)&D_L14_00161D60));
+                p[2] = p[-2] + randf_sym((*(float *)&D_L14_00161D5C), (*(float *)&D_L14_00161D60));
                 if ((*(float *)&D_L14_00161D64) < (*&p)[2]) {
                     p[2] = (*(float *)&D_L14_00161D64);
                 } else if (p[2] < -(*(float *)&D_L14_00161D64)) {
@@ -1173,17 +1173,17 @@ void func_L14_002EE990(char *moby) {
                 }
             }
             t = func_001FA888(i) / func_001FA888(40);
-            *e = func_001FA898((float)-func_001F9850((*(int *)&D_L14_00161D40)) * t + 0.0f);
+            *e = truncate_float_to_s32((float)-scale_ticks((*(int *)&D_L14_00161D40)) * t + 0.0f);
         }
         func_001F9C08(D_L14_001E0330, D_L14_001E0330 - 4, D_L14_001E0330 + 4, 0.5f);
         sign = -1.0f;
-        D_L14_00161D84 = D_L14_00161DBC = func_001F9850(func_L00_00258BC8((*(int *)&D_L14_00161D68), (*(int *)&D_L14_00161D6C)));
-        D_L14_00161DC0 = 1.0f / func_001FA888(D_L14_00161D84 - func_001F9850((*(int *)&D_L14_00161D40)));
-        if (func_002140B0(2) != 0) {
+        D_L14_00161D84 = D_L14_00161DBC = scale_ticks(rand_range((*(int *)&D_L14_00161D68), (*(int *)&D_L14_00161D6C)));
+        D_L14_00161DC0 = 1.0f / func_001FA888(D_L14_00161D84 - scale_ticks((*(int *)&D_L14_00161D40)));
+        if (random_integer_below(2) != 0) {
             sign = 1.0f;
         }
         for (j = 0; j < 3; j++) {
-            int k = func_L00_00258BC8(5, 22);
+            int k = rand_range(5, 22);
             int m;
             float (*row)[4] = D_L14_001E03A0[j];
             u16 *sq = D_L14_001E06A0[j];
@@ -1191,23 +1191,23 @@ void func_L14_002EE990(char *moby) {
             sq[0] = D_L14_001E0350[k];
             row[0][0] = 0.0f;
             row[0][2] = 0.0f;
-            r = func_002140F8(1.0f, 10.0f);
-            ang = func_002140F8(0.5235988f, 1.3962634f) * sign;
-            row[0][0] = r * func_001F9F90(ang);
-            row[0][2] = r * func_001F9FA8(ang);
+            r = random_float_between(1.0f, 10.0f);
+            ang = random_float_between(0.5235988f, 1.3962634f) * sign;
+            row[0][0] = r * FastCos(ang);
+            row[0][2] = r * FastSin(ang);
             for (m = 1; m < 16; m++) {
                 float d;
                 float na;
-                r = func_002140F8(1.0f, 10.0f);
-                d = func_L00_00258C80(0.0f, 40.0f) * 0.017453292f;
-                na = func_001FA748(ang, d);
-                if (func_001F9B88(na) > 1.3962634f || (ang > 0.0f && na < 0.0f) || (ang < 0.0f && na > 0.0f)) {
-                    ang = func_001FA748(ang, -d);
+                r = random_float_between(1.0f, 10.0f);
+                d = randf_sym(0.0f, 40.0f) * 0.017453292f;
+                na = FastAddRots(ang, d);
+                if (FastAbsF(na) > 1.3962634f || (ang > 0.0f && na < 0.0f) || (ang < 0.0f && na > 0.0f)) {
+                    ang = FastAddRots(ang, -d);
                 } else {
                     ang = na;
                 }
-                D_L14_001E03A0[j][m][0] = r * func_001F9F90(ang);
-                D_L14_001E03A0[j][m][2] = r * func_001F9FA8(ang);
+                D_L14_001E03A0[j][m][0] = r * FastCos(ang);
+                D_L14_001E03A0[j][m][2] = r * FastSin(ang);
                 D_L14_001E06A0[j][m] = D_L14_001E0350[starts[j] + m];
             }
             sign = -sign;
@@ -1217,8 +1217,8 @@ void func_L14_002EE990(char *moby) {
         func_001F9908(&D_L14_00161D84);
         for (i = 0; i < 40; i++) {
             s16 v = ++D_L14_001E0350[i];
-            if (func_001F9850((*(int *)&D_L14_00161D40)) < v) {
-                D_L14_001E0350[i] = func_001F9850((*(int *)&D_L14_00161D40));
+            if (scale_ticks((*(int *)&D_L14_00161D40)) < v) {
+                D_L14_001E0350[i] = scale_ticks((*(int *)&D_L14_00161D40));
             }
             if (i != 0) {
                 if (i >= 35) {
@@ -1228,20 +1228,20 @@ void func_L14_002EE990(char *moby) {
                 }
             }
         }
-        func_001F9850((*(int *)&D_L14_00161D40));
+        scale_ticks((*(int *)&D_L14_00161D40));
         for (j = 0; j < 3; j++) {
             for (n = 0; n < 16; n++) {
                 s16 v = ++D_L14_001E06A0[j][n];
-                if (func_001F9850((*(int *)&D_L14_00161D40)) < v) {
-                    D_L14_001E06A0[j][n] = func_001F9850((*(int *)&D_L14_00161D40));
+                if (scale_ticks((*(int *)&D_L14_00161D40)) < v) {
+                    D_L14_001E06A0[j][n] = scale_ticks((*(int *)&D_L14_00161D40));
                 }
             }
         }
-        if (D_L14_00161D84 < D_L14_00161DBC - func_001F9850((*(int *)&D_L14_00161D40))) {
-            if (func_001F9850(60) < D_L14_00161DBC) {
+        if (D_L14_00161D84 < D_L14_00161DBC - scale_ticks((*(int *)&D_L14_00161D40))) {
+            if (scale_ticks(60) < D_L14_00161DBC) {
                 if ((*(float *)&D_L14_00161D3C) < 6.2831855f) {
-                    (*(short *)&D_L14_00161DB2) = func_001FA898(func_001F9FA8(D_L14_00161DB4) * 128.0f);
-                    D_L14_00161DB4 = func_001FA748(D_L14_00161DB4, (*(float *)&D_L14_00161D38));
+                    (*(short *)&D_L14_00161DB2) = truncate_float_to_s32(FastSin(D_L14_00161DB4) * 128.0f);
+                    D_L14_00161DB4 = FastAddRots(D_L14_00161DB4, (*(float *)&D_L14_00161D38));
                     (*(float *)&D_L14_00161D3C) += (*(float *)&D_L14_00161D38) * D_0015EE60;
                 } else {
                     (*(short *)&D_L14_00161DB2) = 0;
@@ -1249,7 +1249,7 @@ void func_L14_002EE990(char *moby) {
             } else {
                 (*(short *)&D_L14_00161DB2) = 0;
             }
-            D_L14_00161DB0[0] = (unsigned char)(*(short *)&D_L14_00161DB2) + func_001FA898(func_001FA888(D_L14_00161D84) * D_L14_00161DC0 * -255.0f + 255.0f);
+            D_L14_00161DB0[0] = (unsigned char)(*(short *)&D_L14_00161DB2) + truncate_float_to_s32(func_001FA888(D_L14_00161D84) * D_L14_00161DC0 * -255.0f + 255.0f);
             if (D_L14_00161DC4 != 0) {
                 func_0022EEB8(0, 0, moby);
                 D_L14_00161DC4 = 0;
@@ -1260,7 +1260,7 @@ void func_L14_002EE990(char *moby) {
         } else {
             D_L14_00161DB0[0] = 0;
         }
-        func_001F49B0(func_L14_002EF078, (struct Moby *)moby);
+        AddDrawCallback(func_L14_002EF078, (struct Moby *)moby);
     }
 }
 typedef int u128_2EF078 __attribute__((mode(TI)));

@@ -501,7 +501,7 @@ void func_L00_00205FF0(void) {
     s32 alpha, t3, k, r, b, gc, r12, g24, b12, period, low, a;
     f32 fp, fa, s, s24;
 
-    if (D_0015EEB0[3] != 0)
+    if (gCheats[3] != 0)
         func_00214D28((float *)((char *)&D_0015EEF0 + 0x28), 1.8f, 0.05f);
     else
         func_00214D28((float *)((char *)&D_0015EEF0 + 0x28), 1.0f, 0.05f);
@@ -523,48 +523,48 @@ void func_L00_00205FF0(void) {
     r = 0x38;
     if (*(s32 *)(g + 0x22A8) == 1)
         r = gc;
-    period = func_001F9850(0x6E);
+    period = scale_ticks(0x6E);
     fp = func_001FA888(period);
     fa = (f32)(D_L00_0015F6B0 % period) / fp;
     fa = fa + fa;
     fa = fa * 3.1415927f;
-    s = func_001F9FA8(fa + -3.1415927f);
+    s = FastSin(fa + -3.1415927f);
     s24 = s * 24.0f;
-    r12 = func_001FA898(s24) + 0xC;
+    r12 = truncate_float_to_s32(s24) + 0xC;
     r = r + r12;
-    k = func_001FA898(s * 48.0f);
+    k = truncate_float_to_s32(s * 48.0f);
     g24 = k + 0x18;
-    t3 = func_001FA898(s24);
+    t3 = truncate_float_to_s32(s24);
     gc = k + 0xA0;
     b12 = t3 + 0xC;
     b = t3 + 0x4C;
     if (*(s16 *)(g + 0x1EE) != 0) {
         f32 kk = 1.0f;
-        s32 t5 = func_001F9850(5);
-        s32 t20 = func_001F9850(20);
+        s32 t5 = scale_ticks(5);
+        s32 t20 = scale_ticks(20);
         s32 h = *(s16 *)(g + 0x1EE);
 
-        if (func_001F9850(45) - t5 < h) {
-            kk = func_001FA888(func_001F9850(45) - *(s16 *)(g + 0x1EE));
+        if (scale_ticks(45) - t5 < h) {
+            kk = func_001FA888(scale_ticks(45) - *(s16 *)(g + 0x1EE));
             kk = kk / func_001FA888(t5);
         }
         if (*(s16 *)(g + 0x1EE) < t20) {
             kk = func_001FA888(*(s16 *)(g + 0x1EE));
             kk = kk / func_001FA888(t20);
         }
-        r = r - func_001FA898((f32)r12 * kk);
-        gc = gc - func_001FA898((f32)g24 * kk);
-        b = b - func_001FA898((f32)b12 * kk);
-        r = r + func_001FA898(kk * 112.0f);
-        gc = gc - func_001FA898(kk * 72.0f);
+        r = r - truncate_float_to_s32((f32)r12 * kk);
+        gc = gc - truncate_float_to_s32((f32)g24 * kk);
+        b = b - truncate_float_to_s32((f32)b12 * kk);
+        r = r + truncate_float_to_s32(kk * 112.0f);
+        gc = gc - truncate_float_to_s32(kk * 72.0f);
     }
     *(int *)(moby + 0x90) = (alpha << 24) | (b << 16) | (gc << 8) | r;
     g2 = (u8 *)&D_0013F450_05CC0;
     if (g2[0x20A4] != 0)
         return;
-    if (func_001F9938(g2 + 0xFFC) && moby[0x53] == 1) {
-        low = func_001F9850(50);
-        a = func_L00_00258BC8(low, func_001F9850(200));
+    if (FastDecTimer(g2 + 0xFFC) && moby[0x53] == 1) {
+        low = scale_ticks(50);
+        a = rand_range(low, scale_ticks(200));
         *(s16 *)(g2 + 0xFFC) = a;
         *(s16 *)(g2 + 0xFFE) = 1;
     }
@@ -589,7 +589,7 @@ void func_L00_00205FF0(void) {
                 qcopy(&HM[i].quat, &D_L00_0017C2E0[i]);
                 qcopy(&HM[i].scale3, &D_L00_0017C320[i]);
                 qcopy(&HM[i].translation, &D_L00_0017C360[i]);
-                func_001F9C30(&HM[i].translation, &HM[i].translation, *(f32 *)(moby + 0x2C));
+                FastVecScale(&HM[i].translation, &HM[i].translation, *(f32 *)(moby + 0x2C));
             }
         }
         for (j = 0; j < 4; j++)
@@ -869,16 +869,16 @@ void func_L00_002068C8(void) {
                 *(float *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 + 0x18) -= off[2];
                 func_L00_00251E30(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624);
                 k = 1.7f;
-                if (D_0015EEB0[3] != 0) k = 3.1f;
+                if (gCheats[3] != 0) k = 3.1f;
                 if (((GS_68C8 *)(D_0013E633 + 0xE1D))->s22FC != 0) k *= 1.4f;
                 func_00214D28((float *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 + 0x2C), *(float *)(*(char **)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 + 0x24) + 0x24) * k, 0.02f);
             }
         }
         ca = 0x281414C8;
         cb = 0x1E00004B;
-        ((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628 = func_001FA748(((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 2.96705961227417f);
-        if (func_001F9938(&((GS_68C8 *)(D_0013E633 + 0xE1D))->s22FC) == 0) {
-            ((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628 = func_001FA748(((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 12.217304229736328f);
+        ((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628 = FastAddRots(((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 2.96705961227417f);
+        if (FastDecTimer(&((GS_68C8 *)(D_0013E633 + 0xE1D))->s22FC) == 0) {
+            ((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628 = FastAddRots(((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628, D_0015EE6C * 12.217304229736328f);
             switch (((GS_68C8 *)(D_0013E633 + 0xE1D))->s22FE) {
             case 1:
                 ca = 0x2814C814;
@@ -898,11 +898,11 @@ void func_L00_002068C8(void) {
                 break;
             }
         }
-        col = func_001FA8A8(ca, cb, func_001F9FA8(((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628) * 0.5f + 0.5f);
+        col = FastTweenColor(ca, cb, FastSin(((GS_68C8 *)(D_0013E633 + 0xE1D))->f1628) * 0.5f + 0.5f);
         if (((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 != 0) {
-            *(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90) = func_001FA8A8(*(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90), col, D_0015EE60 * 0.1f);
+            *(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90) = FastTweenColor(*(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1624 + 0x90), col, D_0015EE60 * 0.1f);
         }
-        ((GS_68C8 *)(D_0013E633 + 0xE1D))->i2300 = func_001FA8A8(((GS_68C8 *)(D_0013E633 + 0xE1D))->i2300, col, D_0015EE60 * 0.1f);
+        ((GS_68C8 *)(D_0013E633 + 0xE1D))->i2300 = FastTweenColor(((GS_68C8 *)(D_0013E633 + 0xE1D))->i2300, col, D_0015EE60 * 0.1f);
         if (((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620 == 0) {
             m = (char *)func_0020D348_68C8(0x47A);
             ((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620 = m;
@@ -929,23 +929,23 @@ void func_L00_002068C8(void) {
             *(long *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620 + 0x38) = *(long *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080 + 0x38);
             if (((GS_68C8 *)(D_0013E633 + 0xE1D))->i2084 == 0x4F) {
                 if (((unsigned char *)((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620)[0x53] != 1) {
-                    func_00213DE0(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620, 1, 0, func_001F9850(10));
+                    func_00213DE0(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620, 1, 0, scale_ticks(10));
                 }
             } else if (((unsigned char *)((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620)[0x53] != 0) {
-                func_00213DE0(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620, 0, 0, func_001F9850(0x11));
+                func_00213DE0(((GS_68C8 *)(D_0013E633 + 0xE1D))->m1620, 0, 0, scale_ticks(0x11));
             }
         }
 skip:
         if (((GS_68C8 *)(D_0013E633 + 0xE1D))->p22C0 != 0) {
             func_0022ED80_68C8(((GS_68C8 *)(D_0013E633 + 0xE1D))->p22C0 + 0x10, 0, ((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080);
             ((GS_68C8 *)(D_0013E633 + 0xE1D))->s22FE = (short)(int)((GS_68C8 *)(D_0013E633 + 0xE1D))->p22C0;
-            ((GS_68C8 *)(D_0013E633 + 0xE1D))->s22FC = func_001F9850(0x39);
+            ((GS_68C8 *)(D_0013E633 + 0xE1D))->s22FC = scale_ticks(0x39);
         }
         ((GS_68C8 *)(D_0013E633 + 0xE1D))->p22C0 = 0;
     }
     func_L00_00248EF8(((GS_68C8 *)(D_0013E633 + 0xE1D))->a80);
     if (((GS_68C8 *)(D_0013E633 + 0xE1D))->b20A4 == 2) {
-        if (D_0015EEB0[3] != 0) {
+        if (gCheats[3] != 0) {
             D_L00_0017BB6C = *(float *)&D_0015EF18 * 1.4f;
         }
         func_L00_00205FF0();
@@ -957,25 +957,25 @@ skip:
         }
     }
     if (((GS_68C8 *)(D_0013E633 + 0xE1D))->b20A4 == 3) {
-        if (D_0015EEB0[1] != 0) {
+        if (gCheats[1] != 0) {
             D_L00_0017BCCC = 1.9f;
         }
         c20 = 0x80;
-        v = func_001F9850(0xAA);
+        v = scale_ticks(0xAA);
         h = ((GS_68C8 *)(D_0013E633 + 0xE1D))->s22E0;
         if (h == 2) {
-            v = func_001F9850(0x32);
+            v = scale_ticks(0x32);
         } else if (h == 1) {
-            v = func_001F9850(0x5A);
+            v = scale_ticks(0x5A);
         }
         f0 = func_001FA888(v);
         ang = (float)(D_L00_0015F6B0 % v) / f0;
         ang = ang + ang;
         ang = ang * 3.14159274f;
-        f20 = func_001F9FA8(ang + -3.14159274f);
-        r16 = func_001FA898(f20 * 20.0f) + 0x32;
-        r17 = func_001FA898(f20 * 70.0f) + 0xB4;
-        t = func_001FA898(f20 * 10.0f);
+        f20 = FastSin(ang + -3.14159274f);
+        r16 = truncate_float_to_s32(f20 * 20.0f) + 0x32;
+        r17 = truncate_float_to_s32(f20 * 70.0f) + 0xB4;
+        t = truncate_float_to_s32(f20 * 10.0f);
         *(unsigned short *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080 + 0x34) |= 0x10;
         if (r16 >= 0x100) r16 = 0xFF;
         if (r17 >= 0x100) r17 = 0xFF;
@@ -985,7 +985,7 @@ skip:
         } else {
             color = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
         }
-        *(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90) = func_001FA8A8(*(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90), color, 0.1f);
+        *(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90) = FastTweenColor(*(int *)(((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90), color, 0.1f);
         for (i = 0; i < 3; i++) {
             func_L00_00250800(((GS_68C8 *)(D_0013E633 + 0xE1D))->p2080, i, ((GS_68C8 *)(D_0013E633 + 0xE1D))->a1D50 + i * 0x10);
         }
@@ -997,7 +997,7 @@ skip:
         if (h2 != 0) {
             f20 = func_001FA888(h2);
             f20 = f20 / func_001FA888(0x12);
-            c20 = func_001FA898(f20 * (float)c20);
+            c20 = truncate_float_to_s32(f20 * (float)c20);
         }
         ((GS_68C8 *)(D_0013E633 + 0xE1D))->c22E4 = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
         func_L00_00208318();
@@ -1014,7 +1014,7 @@ skip:
                 GS_68C8 *g = (GS_68C8 *)(D_0013E633 + 0xE1D);
                 int e = g->b12E7;
                 g->i20B8 = 0;
-                if (e != 0 && g->i300 != 0 && *(unsigned char *)(D_0013D5DD + 7) != 0 &&
+                if (e != 0 && g->i300 != 0 && *(unsigned char *)(gHaveMorphORay + 7) != 0 &&
                     g->s22DE == 0) {
                     func_L00_00217570(0x19, 0);
                     g->s22DE = 0x12;
@@ -1125,17 +1125,17 @@ void func_L00_00207418(void) {
     if (D_0015EFA0 == 0 && D_0015EF20 == 0) return;
     g = (char *)D_0013E633 + 0xE1D;
     s = 0;
-    if (*(int *)(g + 0x198) == func_001F9850(0xF)) {
+    if (*(int *)(g + 0x198) == scale_ticks(0xF)) {
         if (*(int *)(g + 0x208C) == 4) {
             int b = *(int *)(g + 0x2084);
             if (b == 0xB) {
                 int c = *(int *)(g + 0x450);
                 if (c == 0) {
                     s = 1;
-                    if (D_0015EEB4[0]) s = 2;
+                    if (gCheatMirroredLevels[0]) s = 2;
                 } else if (c == 1) {
                     s = 2;
-                    if (D_0015EEB4[0]) s = 1;
+                    if (gCheatMirroredLevels[0]) s = 1;
                 } else if (c == 3) {
                     s = 3;
                 }
@@ -1158,7 +1158,7 @@ void func_L00_00207418(void) {
         } else if (*(int *)(g + 0x2084) == 0x22) {
             s = 0xB;
         }
-    } else if (*(int *)(g + 0x198) == func_001F9850(0x3C)) {
+    } else if (*(int *)(g + 0x198) == scale_ticks(0x3C)) {
         if (*(int *)(g + 0x2084) == 4) {
             s = 7;
         } else if (*(int *)(g + 0x2084) == 8) {
@@ -1190,10 +1190,10 @@ void func_L00_00207418(void) {
             if (k >= 16) k -= 16;
         }
         if (j == n) {
-            int t = D_0015EEB0[i] == 0;
+            int t = gCheats[i] == 0;
             D_0015EEC0[i] = 1;
-            D_0015EEB0[i] = t;
-            func_L00_00264DB8(t ? 0x4FBE : 0x4FBF, -1);
+            gCheats[i] = t;
+            ShowBanner(t ? 0x4FBE : 0x4FBF, -1);
             break;
         }
     }
@@ -2717,24 +2717,24 @@ void func_L00_0020B060(void) {
         if (func_001F9908(&q[i])) {
             if (i == 0) {
                 int *s;
-                *(float *)(g + 0x1028) = func_L00_00258C80(0.17453292f, 0.5235988f);
+                *(float *)(g + 0x1028) = randf_sym(0.17453292f, 0.5235988f);
                 s = (int *)(D_0013E633 + 0x1E7D);
-                *s = func_L00_00258BC8(func_001F9850(0x46), func_001F9850(0x96));
+                *s = rand_range(scale_ticks(0x46), scale_ticks(0x96));
             } else if (i == 1) {
-                *(float *)((char *)q - 0x28) = func_L00_00258C80(0.17453292f, 0.5235988f);
-                q[1] = func_L00_00258BC8(func_001F9850(0x28), func_001F9850(0x5A));
+                *(float *)((char *)q - 0x28) = randf_sym(0.17453292f, 0.5235988f);
+                q[1] = rand_range(scale_ticks(0x28), scale_ticks(0x5A));
             } else if (i == 2) {
-                *(float *)((char *)q - 0x18) = func_L00_00258C80(0.2617994f, 0.87266463f);
-                q[2] = func_L00_00258BC8(func_001F9850(0x28), func_001F9850(0x5A));
+                *(float *)((char *)q - 0x18) = randf_sym(0.2617994f, 0.87266463f);
+                q[2] = rand_range(scale_ticks(0x28), scale_ticks(0x5A));
             } else {
                 float old, nw;
-                *(float *)(g + i * 0x10 + 0x1024) = func_002140F8(-0.08726646f, 0.5235988f);
+                *(float *)(g + i * 0x10 + 0x1024) = random_float_between(-0.08726646f, 0.5235988f);
                 old = *(float *)(g + i * 0x10 + 0x1028);
-                nw = func_L00_00258C80(0.34906584f, 0.95993108f);
+                nw = randf_sym(0.34906584f, 0.95993108f);
                 *(float *)(g + i * 0x10 + 0x1028) = nw;
                 if ((old <= 0 && nw <= 0) || (old >= 0 && nw >= 0))
                     *(float *)(g + i * 0x10 + 0x1028) = -*(float *)(g + i * 0x10 + 0x1028);
-                q[i] = func_L00_00258BC8(func_001F9850(0x23), func_001F9850(0x46));
+                q[i] = rand_range(scale_ticks(0x23), scale_ticks(0x46));
             }
         }
         f = g + i * 0x10;

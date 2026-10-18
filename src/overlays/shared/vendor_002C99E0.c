@@ -389,21 +389,21 @@ void func_L11_0030A8C8(struct PMoby *moby) {
     qcopy(&previous_pos, &moby->pos);
     moby->scale += (moby->pclass->scale - moby->scale) * 0.1f;
     random.q = 0;
-    random.f[0] = func_002140F8(-1.0f, 1.0f);
-    random.f[1] = func_002140F8(-1.0f, 1.0f);
-    random.f[2] = func_002140F8(-1.0f, 1.0f);
+    random.f[0] = random_float_between(-1.0f, 1.0f);
+    random.f[1] = random_float_between(-1.0f, 1.0f);
+    random.f[2] = random_float_between(-1.0f, 1.0f);
     velocity.q = random.q;
-    func_L00_001FF4B0(&velocity, &velocity, func_002140F8(0.1f, 0.2f) * D_0015EE6C);
-    func_L00_001FF4B0(&offset, &data->step, -func_002140F8(D_0015EE6C * 0.1f, D_0015EE6C));
-    func_001F9BD8(&velocity, &velocity, &offset);
-    func_L00_00272158(&moby->pos, &velocity, func_001F9850(6), 0x7f, 0xb0b0b0,
+    func_L00_001FF4B0(&velocity, &velocity, random_float_between(0.1f, 0.2f) * D_0015EE6C);
+    func_L00_001FF4B0(&offset, &data->step, -random_float_between(D_0015EE6C * 0.1f, D_0015EE6C));
+    FastVecAdd(&velocity, &velocity, &offset);
+    func_L00_00272158(&moby->pos, &velocity, scale_ticks(6), 0x7f, 0xb0b0b0,
                3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     texture = D_L11_001B2D80;
     for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *p;
-        func_L00_001FF4B0(&offset, &data->step, func_002140F8(fraction, fraction + 0.33333334f) * data->speed);
-        func_001F9BD8(&offset, &offset, &moby->pos);
-        p = func_L00_00272158(&offset, &velocity, func_001F9850(60), 0x7f, 0x606060, 3, 40000.0f,
+        func_L00_001FF4B0(&offset, &data->step, random_float_between(fraction, fraction + 0.33333334f) * data->speed);
+        FastVecAdd(&offset, &offset, &moby->pos);
+        p = func_L00_00272158(&offset, &velocity, scale_ticks(60), 0x7f, 0x606060, 3, 40000.0f,
                        1000.0f, 1.0f, -0.0002f, 0.0f);
         if (p != 0) {
             unsigned char *texture_pixels = *(unsigned char **)(texture + 0x5c);
@@ -414,13 +414,13 @@ void func_L11_0030A8C8(struct PMoby *moby) {
         random.q = 0;
         random.f[2] = 0.02f;
         func_001F9EC0(&random, &random, &moby->rot_row0);
-        func_002156E0(&random, &random, &moby->rot_row0, func_00214158());
-        func_L00_0026DA50(&offset, &random, 0x4f007fff, 0x1fffffff, func_001F9850(5), 1, 20000.0f);
+        build_look_at_matrix(&random, &random, &moby->rot_row0, random_angle_radians());
+        func_L00_0026DA50(&offset, &random, 0x4f007fff, 0x1fffffff, scale_ticks(5), 1, 20000.0f);
     }
     pos = &moby->pos;
     target = data->target;
     if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
-        func_001F9D10(&data->target_pos, &target->pos) < 3.0f) {
+        FastVecDist(&data->target_pos, &target->pos) < 3.0f) {
         moby->rot.z = func_L00_001FF860(data->target->pos.x - moby->pos.x, data->target->pos.y - moby->pos.y);
         moby->rot.y = -func_L00_001FF860(func_001F9D48(pos, &data->target->pos), data->target->pos.z - moby->pos.z);
         qcopy(&data->target_pos, &data->target->pos);
@@ -432,21 +432,21 @@ void func_L11_0030A8C8(struct PMoby *moby) {
         data->target = 0;
     }
     func_00215C00(&data->step, data->speed, moby->rot.z, -moby->rot.y);
-    func_001F9BD8(pos, pos, &data->step);
+    FastVecAdd(pos, pos, &data->step);
     if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x || moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
         moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
-        func_0020D678(moby);
+        DeleteMoby(moby);
         return;
     }
     func_L00_00250800(moby, 1, &spray);
     if (func_L00_001EFFF0(&previous_pos, &spray, 0, data->collision, 0)) {
         func_L00_0025F4A8(moby, data, D_L11_001748E0, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
                 -1, 20.0f, 0, 1, -1, 0);
-        func_0020D678(moby);
+        DeleteMoby(moby);
         return;
     }
     if (func_001F9908(&data->timer))
-        func_0020D678(moby);
+        DeleteMoby(moby);
 }
 typedef struct { float u, v; } UV_30BCD8;
 typedef struct { float x, y, z; } Pos_30BCD8;
@@ -1063,10 +1063,10 @@ void func_L11_003121C0(float fa, float fb, float fc, float fd, float fe, int a0,
     s[1] = fd * func_001F9F90_0031B8A8(fe);
     t[0] = fc * func_001F9F90_0031B8A8(fe);
     t[1] = -fc * func_001F9FA8_0031B8A8(fe);
-    func_001F9BD8(w, v, s);
-    func_001F9BF0(w, w, t);
-    func_001F9BD8(x, v, s);
-    func_001F9BF0(y, v, t);
+    FastVecAdd(w, v, s);
+    FastVecSub(w, w, t);
+    FastVecAdd(x, v, s);
+    FastVecSub(y, v, t);
     qcopy(z, v);
 
     *(int *)(D_L11_00161240 + 0) = 0x10000007;

@@ -899,17 +899,17 @@ void func_0021A610(void) {
     s32 frame_y;
 
     slot_count = 14;
-    func_00234C98(0x47, (s64)0x5360B);
-    func_0020E0C8();
-    func_0020E040();
-    func_0020E068();
-    func_0020E180(D_00160018, 4);
+    VU1_addGSregister(0x47, (s64)0x5360B);
+    DrawMobysSetup();
+    InitMobyClassDists();
+    StashMobyClassDists();
+    DrawMobyList(D_00160018, 4);
     func_00219C08();
     func_001F2608();
     for (effect_slot_index = 0; effect_slot_index < slot_count; effect_slot_index++) {
         if (D_001CE640[effect_slot_index] != 0 && ((PanelRenderSlot **)D_001D6120)[effect_slot_index] != 0 &&
             (effect_slot_index != 6 || ((MenuSys_p *)D_001D5F70)->unkD8 != 0)) {
-            func_0020E180(((PanelRenderSlot **)D_001D6120)[effect_slot_index], 1);
+            DrawMobyList(((PanelRenderSlot **)D_001D6120)[effect_slot_index], 1);
         }
     }
 
@@ -1040,26 +1040,26 @@ void func_0021A610(void) {
             } else if (!(draw_result & 0x10)) {
                 continue;
             }
-            func_00234C98(0x42, (s64)0x8000000064L);
-            func_00234C98(0x47, (s64)0x43);
-            func_001F5800(frame_x, frame_y, frame_width, frame_height, texture_left,
+            VU1_addGSregister(0x42, (s64)0x8000000064L);
+            VU1_addGSregister(0x47, (s64)0x43);
+            DrawTexturedQuad(frame_x, frame_y, frame_width, frame_height, texture_left,
                                texture_top, texture_right - texture_left,
                                texture_bottom - texture_top, (s64)0x80808080L, (s64)D_0015EFD0);
         }
         if (pass == 0) {
-            func_0020E098();
-            func_0020E200();
+            RestoreMobyClassDists();
+            DrawMobysCleanUp();
         }
     }
 
-    func_001F4630(0);
+    SetupGifPaging(0);
     for (final_slot_index = 0; final_slot_index < slot_count; final_slot_index++) {
         if (D_001CE640[final_slot_index] != 0 &&
             (final_slot_index != 6 || ((MenuSys_p *)D_001D5F70)->unkD8 != 0)) {
             func_002250B8(((PanelRenderSlot **)D_001D6120)[final_slot_index]);
         }
     }
-    func_001F4748();
+    DoGifPaging();
 }
 
 /*
@@ -1364,8 +1364,8 @@ int func_0021B298(unsigned char *w) {
         font = 2;
         glyphs = D_001DF770;
     }
-    func_00234C98(0x42, 0x44);
-    ((void (*)(int, long))func_00234C98)(0x47, 0x2004B);
+    VU1_addGSregister(0x42, 0x44);
+    ((void (*)(int, long))VU1_addGSregister)(0x47, 0x2004B);
 
     flags = *(int *)(w + 0x30);
     if (flags & 0x20) {
@@ -1397,7 +1397,7 @@ int func_0021B298(unsigned char *w) {
             tbl = (unsigned char *)&D_0013D5C8;
             id = tbl[*(short *)(cell + 6)];
         } else {
-            tbl = D_0013D490;
+            tbl = gSpecialItems;
             id = tbl[*(short *)(cell + 6)];
         }
         if (id == 0) {
@@ -1484,7 +1484,7 @@ int func_0021B298(unsigned char *w) {
         f |= 1;
         a21 = 0xC;
     }
-    if ((*(int *)(w + 0x30) & 0x800) && D_0013D510[content] == 0) {
+    if ((*(int *)(w + 0x30) & 0x800) && gSkillPoints[content] == 0) {
         text = TEXT(0x4F54);
         f |= 3;
     }
@@ -1501,8 +1501,8 @@ int func_0021B298(unsigned char *w) {
         a21 = *(int *)(w + 0x24) / 2;
     }
 
-    func_001F4630(0);
-    tex = func_001F4868(font);
+    SetupGifPaging(0);
+    tex = GetEffectTex(font);
     ((void *(*)(void *, int, int))func_001153FC)(&tmp, 0, 0x18);
     tmp.s[0] = D_00160358;
     tmp.s[1] = *(unsigned short *)(w + 0x24) - D_00160358;
@@ -1517,7 +1517,7 @@ int func_0021B298(unsigned char *w) {
     if (*(int *)(w + 0x30) & 0x10000) {
         win.s[1] = *(unsigned short *)(w + 0x24) - 1;
     }
-    colour = func_0021C6C0(*(int *)(w + 0x44), func_001FA8A8(*(int *)&D_001602B0, 0x80FFA888, 0.5f), 0x80FFA888);
+    colour = func_0021C6C0(*(int *)(w + 0x44), FastTweenColor(*(int *)&D_001602B0, 0x80FFA888, 0.5f), 0x80FFA888);
     win.s[9] |= 4;
     DRAW(colour, text);
     win.s[9] ^= 4;
@@ -1558,7 +1558,7 @@ int func_0021B298(unsigned char *w) {
             *(int *)(w + 0x3C) %= span;
         }
     }
-    func_001F4748();
+    DoGifPaging();
     return 2;
 }
 
@@ -4800,10 +4800,10 @@ int func_00220690(char *arg) {
     y = 0x18;
     i = 0;
     mask = 0;
-    func_001F4630(0);
+    SetupGifPaging(0);
     n = func_0020CA50((void *)0x70000000, &mask, (void *)0, 0);
-    func_00234C98(0x42, 0x44);
-    func_00234C98(0x47, 0x10B);
+    VU1_addGSregister(0x42, 0x44);
+    VU1_addGSregister(0x47, 0x10B);
     FP68E8(4, 4, 0x80FFA888L, MSGS(0x4F59), -1);
     ((void *(*)(void *, int, int))func_001153FC)(s.f, 0, 0x18);
     s.f[1] = *(unsigned short *)(arg + 0x24);
@@ -4827,7 +4827,7 @@ int func_00220690(char *arg) {
             h = (short)t.f[7];
             h = h / (short)t.f[8];
             ids++;
-            func_002208F8(9, (h == 2) ? y + 0x10 : alt, (mask >> i) & 1);
+            draw_menu_selection_marker(9, (h == 2) ? y + 0x10 : alt, (mask >> i) & 1);
             y += h * 16;
             i++;
         } while (i < n);
@@ -4838,7 +4838,7 @@ int func_00220690(char *arg) {
         t.f[4] = *(int *)(arg + 0x24) >> 1;
         func_001F75D0(t.f, 0x8020FFFFL, MSGS(0x5242), -1);
     }
-    func_001F4748();
+    DoGifPaging();
     return 2;
 }
 
@@ -5789,8 +5789,8 @@ int func_00221380(struct Stream_21380 *menu) {
         if (((struct Card_21380 *)D_0013D390)->state < 3 && ((struct Card_21380 *)D_0013D390)->pending_state < 0 && ((struct MS_21380 *)D_001D5F70)->ticks >= 0xB) {
             goto done;
         }
-        func_001F4630(0);
-        text = ((char *(*)(int))func_001FE540)(((struct MS_21380 *)D_001D5F70)->card_op_pending ? ((struct MS_21380 *)D_001D5F70)->card_op_text : 0x4FB9);
+        SetupGifPaging(0);
+        text = ((char *(*)(int))msg_string)(((struct MS_21380 *)D_001D5F70)->card_op_pending ? ((struct MS_21380 *)D_001D5F70)->card_op_text : 0x4FB9);
         ((void *(*)(void *, int, unsigned int))func_001153FC)(window_fields, 0, sizeof(window_fields));
         window_fields[1] = menu->height + 1;
         window_fields[0] = 1;
@@ -5812,7 +5812,7 @@ int func_00221380(struct Stream_21380 *menu) {
         text_window.anchor_x--;
         text_window.anchor_y--;
         func_001F75D0(&text_window, 0x80FFA888L, text, -1);
-        func_001F4748();
+        DoGifPaging();
         goto done;
     }
     if (menu->flags & 4) {
@@ -5821,18 +5821,18 @@ int func_00221380(struct Stream_21380 *menu) {
         if (entry->kind == 0 && (tp = (unsigned char *)&D_0013D5C8, tp[entry->id] == 0)) {
             return 1;
         }
-        if (entry->kind == 1 && D_0013D490[entry->id] == 0) {
+        if (entry->kind == 1 && gSpecialItems[entry->id] == 0) {
             return 1;
         }
     }
-    func_001F4630(0);
+    SetupGifPaging(0);
     if (menu->state < 4) {
         texture = func_00205520(menu->buffer[0]);
     } else {
         texture = func_00205520(menu->buffer[1]);
     }
-    func_001F5800(0, 0, D_00151880[0xB0], D_00151880[0xB1], 0, 0, menu->tw, menu->th, 0x80808080L, texture);
-    func_001F4748();
+    DrawTexturedQuad(0, 0, D_00151880[0xB0], D_00151880[0xB1], 0, 0, menu->tw, menu->th, 0x80808080L, texture);
+    DoGifPaging();
     return 0x10;
 done:
     return 2;
@@ -7768,7 +7768,7 @@ s32 func_00224728(struct MenuScreen_pv *w) {
             }
         }
         memory_card_state_pv.unkFC = 1;
-        *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x24) = D_0015EE98;
+        *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x24) = gBolts;
         *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x20) = D_0015EE84_mm;
         *(s32 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x2C) = D_0015EF24;
         *(SaveWord2 *)((u8 *)&memory_card_state_pv + memory_card_state_pv.save_index * 0x1C + 0x30) = D_0015EF98_s;
@@ -9211,13 +9211,13 @@ int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char *
                     int buf = *slot;
                     func_0020C468(buf + D_001D5F70_q[0].readOff, buf);
                     D_001D5F70_q[0].readOff = 0;
-                    func_002270B0(buf);
+                    clear_record_flag_by_key(buf);
                     D_001D5F70_q[0].loaded[n] = D_001D5F70_q[0].streamed;
                     if (D_001D6250_q[0].arg[0] == D_001D5F70_q[0].streamed) {
                         D_001D6250_q[0].unk00 = 2;
                     }
                     ((Cls_q *)D_001B3580[0])->anim[D_001D5F70_q[0].streamed] = *slot;
-                    func_00203B18(D_001B3580[0], D_001D5F70_q[0].streamed);
+                    relocateObjectPointers(D_001B3580[0], D_001D5F70_q[0].streamed);
                     D_001D5F70_q[0].pending = 0;
                 }
             }
@@ -9235,9 +9235,9 @@ int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char *
                 int k = want - D_001D5F70_q[0].base;
                 int buf = D_001D5F70_q[0].buf[idx];
                 int sz = D_00137C80_q[0].e[k].b << 11;
-                int addr = buf + func_00227018(buf) - sz;
+                int addr = buf + get_stream_buffer_size(buf) - sz;
                 D_001D5F70_q[0].readOff = addr - buf;
-                if (func_00217628(addr, D_00137C80_q[0].e[k].a, D_00137C80_q[0].e[k].b) == 0) {
+                if (start_audio_stream_read(addr, D_00137C80_q[0].e[k].a, D_00137C80_q[0].e[k].b) == 0) {
                     func_001F9978();
                 }
                 func_00227068(buf);

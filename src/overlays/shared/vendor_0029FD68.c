@@ -56,12 +56,12 @@ void func_L00_0029FD68(void *m, int x, int y) {
         ammo_cost = D_L00_001C43B0[MENU.rows[MENU.f58].fD0].hA;
     else
         ammo_cost = D_L00_001C43B0[MENU.rows[MENU.f58].fD0].h8;
-    if (D_0015EE98 < ammo_cost)
+    if (gBolts < ammo_cost)
         goto no_money;
-    func_0020E180(MENU.f20 + 0x500, 1);
+    DrawMobyList(MENU.f20 + 0x500, 1);
     box.half_y = 6;
     box.style = 1;
-    func_001F75D0((void *)&box, 0x80f0f0f0L, func_001FE540(0x523C), -1);
+    func_001F75D0((void *)&box, 0x80f0f0f0L, msg_string(0x523C), -1);
     func_00116248(text, D_L00_00161220, D_L00_00161F30);
     if (D_L00_00161F30 >= 100)
         text_x = 0x17;
@@ -70,34 +70,34 @@ void func_L00_0029FD68(void *m, int x, int y) {
             goto quantity_small;
         text_x = 0x1e;
     }
-    func_001F6968(text_x, 0x32, 0x80f0f0f0L, text, -1);
+    FontPrintSmall(text_x, 0x32, 0x80f0f0f0L, text, -1);
     goto quantity_done;
 quantity_small:
-    func_001F6968(0x25, 0x32, 0x80f0f0f0L, text, -1);
+    FontPrintSmall(0x25, 0x32, 0x80f0f0f0L, text, -1);
 quantity_done:
-    func_001F6968(0xc, 0x32, 0x80f0f0f0L, D_L00_00161228, -1);
-    func_001F6968(0x40, 0x32, 0x80f0f0f0L, D_L00_00161230, -1);
+    FontPrintSmall(0xc, 0x32, 0x80f0f0f0L, D_L00_00161228, -1);
+    FontPrintSmall(0x40, 0x32, 0x80f0f0f0L, D_L00_00161230, -1);
     fmt = D_L00_00161220;
     if (MENU.f40)
         total = D_L00_00161F30 * D_L00_001C43B0[MENU.rows[MENU.f58].fD0].hA;
     else
         total = D_L00_00161F30 * D_L00_001C43B0[MENU.rows[MENU.f58].fD0].h8;
     func_00116248(text, fmt, total);
-    func_001F6D88(0x40, 0x4c, 0x80f0f0f0L, text, -1);
+    font_print_right_small(0x40, 0x4c, 0x80f0f0f0L, text, -1);
     return;
 no_money:
     message_id = 0x523D;
 message:
-    func_001F75D0((void *)&box, 0x80f0f0f0L, func_001FE540(message_id), -1);
+    func_001F75D0((void *)&box, 0x80f0f0f0L, msg_string(message_id), -1);
     return;
 purchase:
-    cost = D_0013D5EB ? D_L00_001C43B0[MENU.rows[MENU.f58].fD0].i4 : D_L00_001C43B0[MENU.rows[MENU.f58].fD0].i0;
-    if (D_0015EE98 >= cost) {
-        func_001F6968(6, 6, 0x80f0f0f0L, func_001FE540(0x523E), -1);
-        func_001F6968(2, 0x20, 0x80f0f0f0L, func_001FE540(0x5239), -1);
-        func_001F6968(2, 0x3e, 0x80f0f0f0L, func_001FE540(0x5250), -1);
+    cost = gHavePersuader ? D_L00_001C43B0[MENU.rows[MENU.f58].fD0].i4 : D_L00_001C43B0[MENU.rows[MENU.f58].fD0].i0;
+    if (gBolts >= cost) {
+        FontPrintSmall(6, 6, 0x80f0f0f0L, msg_string(0x523E), -1);
+        FontPrintSmall(2, 0x20, 0x80f0f0f0L, msg_string(0x5239), -1);
+        FontPrintSmall(2, 0x3e, 0x80f0f0f0L, msg_string(0x5250), -1);
     } else {
-        func_001F75D0((void *)&box, 0x80f0f0f0L, func_001FE540(0x523D), -1);
+        func_001F75D0((void *)&box, 0x80f0f0f0L, msg_string(0x523D), -1);
     }
 }
 typedef struct {
@@ -262,7 +262,7 @@ void func_L00_002A11E8(void) {
     s.hdr[2] = 1;
     s.hdr[3] = 0x4000000044L;
     s.hdr[0] = 0;
-    s.hdr[1] = func_001F4868(0x18);
+    s.hdr[1] = GetEffectTex(0x18);
     for (i = 0; i < 4; i++) {
         func_001F9EC0(v[0], D_L00_001CA680[D_L00_001CA780[i].a], (char *)D_L00_001CA7C0[7] + 0xC0);
         func_001F9EC0(v[1], D_L00_001CA680[*(int *)((char *)D_L00_001CA780 + i * 16 + 4)], (char *)D_L00_001CA7C0[7] + 0xC0);

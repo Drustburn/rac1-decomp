@@ -1594,56 +1594,56 @@ void func_L00_002DD3D8(char *self, char *q) {
     f22 = func_001FA888((&D_0013E620)->b9) + 1.0f;
     step = 1;
     if ((&D_0013E620)->b9 == 0) step = 2;
-    func_001F9C30(b, b, f22);
-    func_001F9BF0(a, D_L00_00166EC0, self + 0x10);
-    f23 = func_001F9CB8(a);
+    FastVecScale(b, b, f22);
+    FastVecSub(a, D_L00_00166EC0, self + 0x10);
+    f23 = FastVecLength(a);
     for (; i < 10 / step; i++) {
         *(u128_DD3D8 *)g = 0;
-        g[0] = func_002140F8(-1.0f, 1.0f);
-        g[1] = func_002140F8(-1.0f, 1.0f);
+        g[0] = random_float_between(-1.0f, 1.0f);
+        g[1] = random_float_between(-1.0f, 1.0f);
         *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-        dt = func_001F9C78(e, c);
+        dt = FastVecDot(e, c);
         func_L00_001FF4B0(d, c, dt);
-        func_001F9BF0(e, e, d);
-        func_L00_001FF4B0(d, c, func_002140F8(0.0f, 1.0f));
-        func_001F9BD8(e, e, d);
-        func_L00_001FF4B0(e, e, f22 * func_002140F8(3.5f, 6.5f) * D_0015EE6C);
-        func_001F9BD8(e, e, b);
+        FastVecSub(e, e, d);
+        func_L00_001FF4B0(d, c, random_float_between(0.0f, 1.0f));
+        FastVecAdd(e, e, d);
+        func_L00_001FF4B0(e, e, f22 * random_float_between(3.5f, 6.5f) * D_0015EE6C);
+        FastVecAdd(e, e, b);
         {
-            int h = func_001F9850(60);
-            func_L00_002B0738(self + 0x10, (char *)e, func_L00_00258BC8(h, func_001F9850(120)), 0, (&D_0013E620)->b9);
+            int h = scale_ticks(60);
+            func_L00_002B0738(self + 0x10, (char *)e, rand_range(h, scale_ticks(120)), 0, (&D_0013E620)->b9);
         }
     }
     for (j = 0; j < 4 / step; j++) {
         *(u128_DD3D8 *)g = 0;
-        g[0] = func_002140F8(-1.0f, 1.0f);
-        g[1] = func_002140F8(-1.0f, 1.0f);
+        g[0] = random_float_between(-1.0f, 1.0f);
+        g[1] = random_float_between(-1.0f, 1.0f);
         *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-        dt = func_001F9C78(e, c);
+        dt = FastVecDot(e, c);
         func_L00_001FF4B0(d, c, dt);
-        func_001F9BF0(e, e, d);
-        func_L00_001FF4B0(d, c, func_002140F8(0.0f, 1.0f));
-        func_001F9BD8(e, e, d);
-        func_L00_001FF4B0(e, e, f22 * func_002140F8(6.5f, 10.0f) * D_0015EE6C);
-        func_001F9BD8(e, e, b);
+        FastVecSub(e, e, d);
+        func_L00_001FF4B0(d, c, random_float_between(0.0f, 1.0f));
+        FastVecAdd(e, e, d);
+        func_L00_001FF4B0(e, e, f22 * random_float_between(6.5f, 10.0f) * D_0015EE6C);
+        FastVecAdd(e, e, b);
         {
-            int h = func_001F9850(60);
-            func_L00_002B0738(self + 0x10, (char *)e, func_L00_00258BC8(h, func_001F9850(90)), 1, (&D_0013E620)->b9);
+            int h = scale_ticks(60);
+            func_L00_002B0738(self + 0x10, (char *)e, rand_range(h, scale_ticks(90)), 1, (&D_0013E620)->b9);
         }
     }
     *(u128_DD3D8 *)g = 0;
-    g[0] = func_002140F8(-1.0f, 1.0f);
-    g[1] = func_002140F8(-1.0f, 1.0f);
-    g[2] = func_002140F8(-1.0f, 1.0f);
+    g[0] = random_float_between(-1.0f, 1.0f);
+    g[1] = random_float_between(-1.0f, 1.0f);
+    g[2] = random_float_between(-1.0f, 1.0f);
     *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
     a[2] += f23 * 0.5f;
     func_L00_001FF4B0(e, e, f23 / 5.0f * D_0015EE6C);
     func_L00_001FF4B0(a, a, (f23 + f23) * D_0015EE6C);
-    func_001F9BD8(e, e, a);
+    FastVecAdd(e, e, a);
     func_L00_001FF548(e, e, D_0015EE6C * 10.0f);
     {
-        int h = func_001F9850(60);
-        func_L00_002B0738(self + 0x10, (char *)e, func_L00_00258BC8(h, func_001F9850(90)), 1, (&D_0013E620)->b9);
+        int h = scale_ticks(60);
+        func_L00_002B0738(self + 0x10, (char *)e, rand_range(h, scale_ticks(90)), 1, (&D_0013E620)->b9);
     }
     if (f23 < 6.0f) {
         k = func_001FA898_r(f23) + 1;
@@ -1657,27 +1657,27 @@ void func_L00_002DD3D8(char *self, char *q) {
     if (k > 0) {
         int cnt = k;
         do {
-            float sh = f22 * func_002140F8(8.0f, 10.0f) * D_0015EE6C - f24 * D_0015EE6C;
+            float sh = f22 * random_float_between(8.0f, 10.0f) * D_0015EE6C - f24 * D_0015EE6C;
             int A, B, r1, r2;
             float big;
             t1 = D_L00_001EA480;
             t2 = D_L00_001EA498;
-            A = func_L00_0025D140(t1.v[func_002140B0(6)], (&D_0013E620)->b9);
-            B = func_L00_0025D140(t2.v[func_002140B0(6)], (&D_0013E620)->b9);
+            A = func_L00_0025D140(t1.v[random_integer_below(6)], (&D_0013E620)->b9);
+            B = func_L00_0025D140(t2.v[random_integer_below(6)], (&D_0013E620)->b9);
             big = f22 * 400000.0f;
-            r1 = func_L00_00258BC8(func_001F9850(15), func_001F9850(20));
-            r2 = func_L00_00258BC8(func_001F9850(25), func_001F9850(30));
+            r1 = rand_range(scale_ticks(15), scale_ticks(20));
+            r2 = rand_range(scale_ticks(25), scale_ticks(30));
             func_L00_0026B890(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
         } while (--cnt);
     }
     if (f23 > 9.0f) {
         float s4 = f22 * 4.0f;
-        func_L00_002E0CB8_DD3D8(s4, self, self + 0x10, b, func_001F9850(15), 0x7F, 0x7F, 0x7F, 0x20);
+        func_L00_002E0CB8_DD3D8(s4, self, self + 0x10, b, scale_ticks(15), 0x7F, 0x7F, 0x7F, 0x20);
         r0 = 0x7F;
         g0 = 0x20;
         b0 = 0;
         func_L00_0025D0E0(&r0, &g0, &b0, (&D_0013E620)->b9);
-        func_L00_002E0CB8_DD3D8(s4, self, self + 0x10, b, func_001F9850(24), r0, g0, b0, 0x20);
+        func_L00_002E0CB8_DD3D8(s4, self, self + 0x10, b, scale_ticks(24), r0, g0, b0, 0x20);
     }
     r1 = 0x7F;
     g1 = 0x3F;
@@ -1685,7 +1685,7 @@ void func_L00_002DD3D8(char *self, char *q) {
     func_L00_0025D0E0(&r1, &g1, &b1, (&D_0013E620)->b9);
     {
         float s = f22 * 4.0f;
-        func_L00_002E0CB8_DD3D8(s, self, self + 0x10, b, func_001F9850(20), r1, g1, b1, 0x30);
+        func_L00_002E0CB8_DD3D8(s, self, self + 0x10, b, scale_ticks(20), r1, g1, b1, 0x30);
     }
     r1 = 0x60;
     g1 = 0x10;
@@ -1693,7 +1693,7 @@ void func_L00_002DD3D8(char *self, char *q) {
     func_L00_0025D0E0(&r1, &g1, &b1, (&D_0013E620)->b9);
     {
         float s = f22 * 3.5f;
-        func_L00_002E0CB8_DD3D8(s, self, self + 0x10, b, func_001F9850(27), r1, g1, b1, 0x40);
+        func_L00_002E0CB8_DD3D8(s, self, self + 0x10, b, scale_ticks(27), r1, g1, b1, 0x40);
     }
     r1 = 0x20;
     g1 = 0;
@@ -1701,10 +1701,10 @@ void func_L00_002DD3D8(char *self, char *q) {
     func_L00_0025D0E0(&r1, &g1, &b1, (&D_0013E620)->b9);
     {
         float s = f22 * 3.0f;
-        func_L00_002E0CB8_DD3D8(s, self, self + 0x10, b, func_001F9850(29), r1, g1, b1, 0x20);
+        func_L00_002E0CB8_DD3D8(s, self, self + 0x10, b, scale_ticks(29), r1, g1, b1, 0x20);
     }
     D_L00_00166D80_DD3D8.f160 = (f23 < 20.0f) ? 0.4f - f23 * 0.0175f : 0.050000012f;
-    D_L00_00166D80_DD3D8.i168 = func_001F9850(25);
+    D_L00_00166D80_DD3D8.i168 = scale_ticks(25);
     func_L00_002D4CE8((char *)&blk, self + 0x10, 0, 0);
     if ((&D_0013E620)->b9) {
         k = func_L00_001F2BE8_DD3D8(3.0f, self + 0x10, 0x10, self, 0);
@@ -2137,7 +2137,7 @@ void func_L00_002DED98(void) {
     short *pv;
     int i, j, k, v;
     unsigned short y;
-    s.t1 = func_001F4868(0x15);
+    s.t1 = GetEffectTex(0x15);
     s.t2 = 0x0000FF9000000260L;
     s.t3 = 0x8000000048L;
     s.t0 = 0;
@@ -2156,11 +2156,11 @@ void func_L00_002DED98(void) {
             qcopy(s.q[1], D_L00_001E6370 + ((j + 1) % 20 * 16 + i * 0x140));
             qcopy(s.q[2], D_L00_001E6230 + (j * 16 + i * 0x140));
             qcopy(s.q[3], D_L00_001E6230 + ((j + 1) % 20 * 16 + i * 0x140));
-            func_001F9BF0(vc, s.q[0], s.q[1]);
-            func_001F9BF0(vd, s.q[2], s.q[1]);
-            func_001F9CA0(ve, vd, vc);
-            func_001F9BF0(vf, s.q[1], D_L00_00166EC0);
-            dot = func_001F9C78(ve, vf);
+            FastVecSub(vc, s.q[0], s.q[1]);
+            FastVecSub(vd, s.q[2], s.q[1]);
+            FastVecCross(ve, vd, vc);
+            FastVecSub(vf, s.q[1], D_L00_00166EC0);
+            dot = FastVecDot(ve, vf);
             if (0.0f <= dot) {
                 b += 0.05f;
             } else {
@@ -2198,7 +2198,7 @@ void func_L00_002DED98(void) {
         }
         a = a2;
     }
-    func_00234C98(0x47, 0x5360B);
+    VU1_addGSregister(0x47, 0x5360B);
 }
 extern short D_L00_001E6358[];
 extern short D_L00_00161C14;
@@ -2240,7 +2240,7 @@ void func_L00_002DF168(char *a, char *b) {
         v = (char *)s + 0x20;
     } else {
         if (hero_2DF168.unk22C8 == 1) {
-            func_001F9C30(s, a + 0xD0, -1.0f);
+            FastVecScale(s, a + 0xD0, -1.0f);
             qcopy((char *)s + 0x10, a + 0xC0);
             qcopy((char *)s + 0x20, a + 0xE0);
             v = (char *)s + 0x20;
@@ -2256,10 +2256,10 @@ void func_L00_002DF168(char *a, char *b) {
     qcopy(D_L00_001E6290, b);
     D_L00_001E6358[0] = 0;
     for (i = 1; i < 10; i++) {
-        func_001F9BD8(D_L00_001E6290 + i * 0x10, D_L00_001E6280 + i * 0x10, (char *)s + 0x30);
+        FastVecAdd(D_L00_001E6290 + i * 0x10, D_L00_001E6280 + i * 0x10, (char *)s + 0x30);
         D_L00_001E6358[i] = 0;
     }
-    func_001F9BC0(D_L00_00161C30);
+    clear_u64_value(D_L00_00161C30);
     s[5] = 0;
     s[6] = 0;
     *(float *)((char *)s + 0x58) = 0.1f;
@@ -2267,8 +2267,8 @@ void func_L00_002DF168(char *a, char *b) {
     *(float *)((char *)s + 0x60) = 1.0f;
     *(float *)((char *)s + 0x6C) = 1.0f;
     {
-        float f = func_00214158();
-        func_002156E0(D_L00_00161C40, (char *)s + 0x50, f, (char *)s + 0x60);
+        float f = random_angle_radians();
+        build_look_at_matrix(D_L00_00161C40, (char *)s + 0x50, f, (char *)s + 0x60);
         D_L00_00161C50 = f;
     }
     *(float *)&D_L00_00161C20 = 0.006f;

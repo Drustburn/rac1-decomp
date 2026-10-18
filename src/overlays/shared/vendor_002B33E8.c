@@ -1811,7 +1811,7 @@ int func_L00_002B7EC0_r(char *m, float r) {
     *(Vx *)&pos = *(Vx *)(m + 0x10);
     d = *(int **)(m + 0x78);
     n = d[5];
-    lim = func_002140B0(n > 0 ? n : 1);
+    lim = random_integer_below(n > 0 ? n : 1);
     d[5] = 0;
     for (i = 0; (e = D_L00_001ABD80[i]) != 0; i++) {
         c = func_L00_0025D390(e);
@@ -1821,12 +1821,12 @@ int func_L00_002B7EC0_r(char *m, float r) {
                 unsigned h = *(unsigned short *)(e + 0xA6);
                 if ((h >= 0x1F4 && h <= 0x1F5) || (short)h == 0x1F9 || (short)h == 0x1FF) {
                     char *g = D_0013E633 + 0xE1D;
-                    if (func_001FA850(*(float *)(g + 0x98), func_L00_001FF860(*(float *)(e + 0x10) - *(float *)(g + 0x80), *(float *)(e + 0x14) - *(float *)(g + 0x84))) < 0.9599311f) {
+                    if (FastDiffRots(*(float *)(g + 0x98), func_L00_001FF860(*(float *)(e + 0x10) - *(float *)(g + 0x80), *(float *)(e + 0x14) - *(float *)(g + 0x84))) < 0.9599311f) {
                         if (d[5] == lim) {
-                            func_001F9BF0(&q, e + 0x10, m + 0x10);
+                            FastVecSub(&q, e + 0x10, m + 0x10);
                             func_L00_001FF4B0(&q, &q, 1.5f);
                             func_L00_0025AC00(e, (int)m, 0x10000, g + 0x80, &q, 1.0f);
-                            d[4] = func_001F9850(func_L00_00258BC8(5, 0x2D));
+                            d[4] = scale_ticks(rand_range(5, 0x2D));
                         }
                         d[5] = d[5] + 1;
                     }
@@ -1836,7 +1836,7 @@ int func_L00_002B7EC0_r(char *m, float r) {
                 float f1;
                 char *gb = D_0013E633 + 0xE1D;
                 f1 = func_L00_001FF860(*(float *)(e + 0x10) - *(float *)(gb + 0x80), *(float *)(e + 0x14) - *(float *)(gb + 0x84));
-                if (func_001FA850(*(float *)(gb + 0x98), f1) < 0.9599311f) {
+                if (FastDiffRots(*(float *)(gb + 0x98), f1) < 0.9599311f) {
                     char *h = *(char **)(c + 0x18);
                     if (h == 0) {
                         *(char **)(c + 0x18) = m;
@@ -1856,7 +1856,7 @@ int func_L00_002B7EC0_r(char *m, float r) {
                 char *h2 = *(char **)(mob + 0x78);
                 if (func_001F9D48(&pos, mob + 0x10) < r) {
                     char *g3 = D_0013E633 + 0xE1D;
-                    if (func_001FA850(*(float *)(g3 + 0x98), func_L00_001FF860(*(float *)(mob + 0x10) - *(float *)(g3 + 0x80), *(float *)(mob + 0x14) - *(float *)(g3 + 0x84))) < 0.9599311f) {
+                    if (FastDiffRots(*(float *)(g3 + 0x98), func_L00_001FF860(*(float *)(mob + 0x10) - *(float *)(g3 + 0x80), *(float *)(mob + 0x14) - *(float *)(g3 + 0x84))) < 0.9599311f) {
                         *(char **)(h2 + 0x78) = m;
                         count++;
                     }

@@ -610,8 +610,8 @@ void func_L00_0026C3A0(unsigned char *m) {
     if (p[0x1F] & 4) {
         w = func_001FA888(D_0013E15A[0x4D6]) * 0.5f + w;
     }
-    func_001F9BD8(m + 0x10, m + 0x10, p);
-    r = -func_001F9CB8(p);
+    FastVecAdd(m + 0x10, m + 0x10, p);
+    r = -FastVecLength(p);
     func_00214D88((float *)(m + 0x30), &r, 0.0f, 0.0f, *(float *)&D_L00_001602A8 * D_0015EE70, r);
     func_L00_001FF4B0(p, p, -r);
     *(float *)(m + 0x18) = *(float *)(m + 0x18) + *(float *)&D_L00_001602AC * D_0015EE6C;
@@ -623,17 +623,17 @@ void func_L00_0026C3A0(unsigned char *m) {
         float lo = *(float *)&D_L00_0016027C * w;
         *(float *)(m + 0xC) = ((*(float *)&D_L00_00160278 - lo) * ratio + lo) * 210000.0f;
     }
-    *(int *)(m + 4) = func_001FA8A8(*(int *)(p + 0x18), *(int *)(p + 0x14), ratio);
-    if (*(short *)(m + 0xA) < func_001F9850(15)) {
+    *(int *)(m + 4) = FastTweenColor(*(int *)(p + 0x18), *(int *)(p + 0x14), ratio);
+    if (*(short *)(m + 0xA) < scale_ticks(15)) {
         float q = func_001FA888(*(short *)(m + 0xA));
-        float t = q / func_001FA888(func_001F9850(10));
-        *(int *)(m + 4) = func_001FA8A8(*(int *)(m + 4) & 0xFFFFFF, *(int *)(m + 4), t);
+        float t = q / func_001FA888(scale_ticks(10));
+        *(int *)(m + 4) = FastTweenColor(*(int *)(m + 4) & 0xFFFFFF, *(int *)(m + 4), t);
     }
     if (*(float *)(m + 0x10) < 2.0f || *(float *)(m + 0x10) > 1021.0f ||
         *(float *)(m + 0x14) < 2.0f || *(float *)(m + 0x14) > 1021.0f ||
         *(float *)(m + 0x18) < 2.0f || *(float *)(m + 0x18) > 1021.0f ||
-        func_001F9938(m + 0xA) != 0) {
-        func_L00_002688A8(m);
+        FastDecTimer(m + 0xA) != 0) {
+        KillPart(m);
     } else if (*(float *)(p + 0x10) < 0.01f) {
         *(short *)(m + 0xA) = *(short *)(m + 0xA) - 1;
     }

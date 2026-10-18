@@ -39,6 +39,16 @@ When sources disagree, the best tier wins, then the source order above;
 the other names are kept in the `alternatives` column. A name is given to
 one symbol only.
 
+## Local names
+
+`config/names_local.tsv` holds names this project gives from reading the
+code (`symbol`, `name`, `evidence`, optional `override`). `tools/names.py
+local` merges it into `names.tsv` (and `build` applies it too): a local name
+fills a symbol with no name or only a candidate, as tier descriptive;
+`override` replaces a wrong recovered/descriptive name, keeping the old one
+in the alternatives. After `local`, run `header`, then `apply-defs` and
+`apply`.
+
 ## Sources (all RaC1)
 
 - **NTSC decomp**: matching NTSC

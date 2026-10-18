@@ -992,13 +992,13 @@ void func_L08_002E35C8(struct Moby *moby) {
             entry = base + off;
             v = *(char **)(*(char **)entry + 0x78);
             func_L00_00260108(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
-            func_001F9BF0(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+            FastVecSub(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
             func_L00_001FF4B0(v, v, D_0015EE6C * 10.0f);
             (*(char **)entry)[0x20] = 1;
             *(char **)entry = 0;
             return;
         } else {
-            int start = func_001FA898(func_002140F8(0.0f, 23.0f));
+            int start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
             for (i = 0; i < 24; i++) {
                 int off = ((i + start) % 24 + 10) * 16;
                 char *entry;
@@ -1008,7 +1008,7 @@ void func_L08_002E35C8(struct Moby *moby) {
                 if (*(char **)entry != 0) {
                     v = *(char **)(*(char **)entry + 0x78);
                     func_L00_00260108(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
-                    func_001F9BF0(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+                    FastVecSub(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
                     func_L00_001FF4B0(v, v, D_0015EE6C * 10.0f);
                     (*(char **)entry)[0x20] = 1;
                     *(char **)entry = 0;

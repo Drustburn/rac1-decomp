@@ -629,7 +629,7 @@ void func_L14_00302288(Moby *m)
   float speed;
   float lo;
   float hi;
-  if (((func_L00_001F10E0(&m->pos, 0, m, 0.65f) != 0) && (D_L14_00174658 != 0)) && (D_L14_00174658 != d->owner))
+  if (((coll_sphere(&m->pos, 0, m, 0.65f) != 0) && (D_L14_00174658 != 0)) && (D_L14_00174658 != d->owner))
   {
     m->state = 3;
   }
@@ -643,13 +643,13 @@ void func_L14_00302288(Moby *m)
 
     case 1:
     {
-      func_001F9BD8(&next, &m->pos, &d->vel);
+      FastVecAdd(&next, &m->pos, &d->vel);
       d->vel.z -= d->vel.w;
       if ((m->state == 1) && (d->vel.z < 0.0f))
       {
         m->state = 0;
       }
-      func_001F9938(&d->trail);
+      FastDecTimer(&d->trail);
       if (d->trail != 0)
       {
         int i;
@@ -661,16 +661,16 @@ void func_L14_00302288(Moby *m)
           char *p;
           *((u128_2288 *) (&from)) = *((u128_2288 *) (&m->pos));
           func_L00_0025C710(&t, &from, &next, ((float) i) * third);
-          spin = func_002140B0(6);
-          if (func_002140B0(2) != 0)
+          spin = random_integer_below(6);
+          if (random_integer_below(2) != 0)
           {
             spin = -spin;
           }
-          p = (char *)func_L00_0026DEA0_2FF358(&t, 0.025f, one, one, spin, D_L14_0015F660_2FF358, ((((float) d->trail) / func_001FA888(func_001F9850(*(int *)&D_L14_0016215C))) * 45000.0f) + 5000.0f, 0x80808080);
+          p = (char *)func_L00_0026DEA0_2FF358(&t, 0.025f, one, one, spin, D_L14_0015F660_2FF358, ((((float) d->trail) / func_001FA888(scale_ticks(*(int *)&D_L14_0016215C))) * 45000.0f) + 5000.0f, 0x80808080);
           if (p != 0)
           {
             char *q = p + 0x20;
-            short fr = func_001F9850(0x78);
+            short fr = scale_ticks(0x78);
             *((short *) (p + 0xA)) = fr;
             *((int *) (q + 4)) = 2;
             q[0xA] = 0x7F;
@@ -687,10 +687,10 @@ void func_L14_00302288(Moby *m)
       {
         qcopy(&m->pos, &next);
       }
-      if (((func_L00_001F10E0(&m->pos, 0, m, *(float *)&D_L14_00162158) != 0) && ((m->state == 0) || ((m->pos.z - D_L14_00174640.hit.z) < 0.0f))) && ((D_L14_00174640.owner == 0) || (D_L14_00174640.owner != d->owner)))
+      if (((coll_sphere(&m->pos, 0, m, *(float *)&D_L14_00162158) != 0) && ((m->state == 0) || ((m->pos.z - D_L14_00174640.hit.z) < 0.0f))) && ((D_L14_00174640.owner == 0) || (D_L14_00174640.owner != d->owner)))
       {
         func_L00_001FF4B0(&t, &D_L14_00174640.normal, *(float *)&D_L14_00162158);
-        func_001F9BD8(&m->pos, &D_L14_00174640.hit, &t);
+        FastVecAdd(&m->pos, &D_L14_00174640.hit, &t);
         func_L00_001FF610(&d->vel, &d->vel, &D_L14_00174640.normal);
         func_0022ED80(1, 0, m);
         if (m->state == 0)
@@ -749,9 +749,9 @@ void func_L14_00302288(Moby *m)
       float min;
       *((Rgb_2288 *) (&next)) = D_L14_00162178;
       f = ((float) d->fade) * d->fade_rate;
-      r = func_001FA898(((((Rgb_2288 *) (&next))->r - 255.0f) * f) + 255.0f);
-      g = func_001FA898(((((Rgb_2288 *) (&next))->g - 0.0f) * f) + 0.0f);
-      b = func_001FA898(((((Rgb_2288 *) (&next))->b - 0.0f) * f) + 0.0f);
+      r = truncate_float_to_s32(((((Rgb_2288 *) (&next))->r - 255.0f) * f) + 255.0f);
+      g = truncate_float_to_s32(((((Rgb_2288 *) (&next))->g - 0.0f) * f) + 0.0f);
+      b = truncate_float_to_s32(((((Rgb_2288 *) (&next))->b - 0.0f) * f) + 0.0f);
       k = ((*(float *)&D_L14_00162164 - 1.0f) * D_0015EE60) + 1.0f;
       min = *(float *)&D_L14_00162160 * D_0015EE6C;
       m->glow_color = 0xFF000000;
@@ -762,13 +762,13 @@ void func_L14_00302288(Moby *m)
         d->vel.w = min;
       }
       func_L00_001FF4B0(&d->vel, &d->vel, d->vel.w);
-      func_001F9BD8(&m->pos, &m->pos, &d->vel);
+      FastVecAdd(&m->pos, &m->pos, &d->vel);
       break;
     }
 
     case 3:
       func_L00_0025F4A8(m, &d->vel, &m->pos, 2.0f, 1.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
-      func_0020D678(m);
+      DeleteMoby(m);
       return;
 
   }
@@ -797,7 +797,7 @@ void func_L14_00302288(Moby *m)
     speed = hi;
   }
   speed -= lo;
-  m->rot.y = func_001FA748((((speed / (hi - lo)) * 7.0f) + 1.0f) * 0.017453292f, m->rot.y);
+  m->rot.y = FastAddRots((((speed / (hi - lo)) * 7.0f) + 1.0f) * 0.017453292f, m->rot.y);
 }
 extern char *func_0020D348(int);
 extern float func_L00_001FF860(float, float);
@@ -1909,7 +1909,7 @@ void func_L14_00316388(char *cam) {
     q->len_b = 0;
     q->dist = 0;
     q->started = 0;
-    q->timer = func_001F9850(*(short *)(obj + 0x3A));
+    q->timer = scale_ticks(*(short *)(obj + 0x3A));
 
     s = (Stops_316388 *)(*(char **)(cam + 0x70) + 0x58);
     for (k = 0; k < 8; k++) {
@@ -1935,7 +1935,7 @@ void func_L14_00316388(char *cam) {
                     k++;
                 }
                 m = i + 1;
-                d = func_001F9D10(ent->pts[i], ent->pts[m % ent->n]);
+                d = FastVecDist(ent->pts[i], ent->pts[m % ent->n]);
                 row[7] = d;
                 if (i < ent->n - 1) {
                     q->len_a += d;
@@ -1945,7 +1945,7 @@ void func_L14_00316388(char *cam) {
     }
 
     if (*(short *)(obj + 0x3A) > 0) {
-        f0 = func_001FA888(func_001F9850(*(short *)(obj + 0x3A)));
+        f0 = func_001FA888(scale_ticks(*(short *)(obj + 0x3A)));
         *(float *)(obj + 0x3C) = q->len_a / f0 * 60.0f;
     }
 
@@ -1956,7 +1956,7 @@ void func_L14_00316388(char *cam) {
                 float *r;
                 int n;
                 n = i + 1;
-                d = func_001F9D10(ent->pts[i], ent->pts[n % ent->n]);
+                d = FastVecDist(ent->pts[i], ent->pts[n % ent->n]);
                 r = (float *)((char *)ent + i * 16);
                 r[7] = d;
                 if (i < ent->n - 1) {
@@ -1972,11 +1972,11 @@ void func_L14_00316388(char *cam) {
     data = *(char **)(cam + 0x70);
     *(float *)(data + 0) = f20;
     *(float *)(data + 4) = f21;
-    func_001F9BC0(data + 0x10);
+    clear_u64_value(data + 0x10);
     data = *(char **)(cam + 0x70);
     *(float *)(data + 0x20) = f20;
     *(float *)(data + 0x24) = f21;
-    func_001F9BC0(data + 0x30);
+    clear_u64_value(data + 0x30);
 
     p = D_L14_00167480_c.p184;
     qcopy(p30, p + 0x30);

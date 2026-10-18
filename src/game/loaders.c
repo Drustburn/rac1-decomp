@@ -118,7 +118,7 @@ s32 func_00202AA8(MipTexture_202AA8 *tex, u64 *regs)
     u64 pal;
     u64 lod;
 
-    func_001F99B0(&upload, 0, sizeof(upload));
+    FastMemSet(&upload, 0, sizeof(upload));
     switch (tex->psm) {
     case 0:
     case 2:
@@ -145,8 +145,8 @@ s32 func_00202AA8(MipTexture_202AA8 *tex, u64 *regs)
     default:
         break;
     }
-    upload.width_log2 = func_001F9968(tex->width);
-    upload.height_log2 = func_001F9968(tex->height);
+    upload.width_log2 = log2dim(tex->width);
+    upload.height_log2 = log2dim(tex->height);
     upload.mip_addresses[0] = (s32)tex->data + upload.palette_size;
     switch (tex->psm) {
     case 0:

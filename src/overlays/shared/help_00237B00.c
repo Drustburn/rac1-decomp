@@ -1107,13 +1107,13 @@ void func_L05_00254328(void) {
         if (first != 0) {
             do {
                 if (*(short *)(first + 0xA6) == 0x473 && func_L00_001FEF78(first + 0xBC) != 0) {
-                    func_001F9BF0(delta, first + 0x10, (char *)D_0013E633 + 0xEED);
+                    FastVecSub(delta, first + 0x10, (char *)D_0013E633 + 0xEED);
                     func_001FA190(matrix);
                     func_001FA4A0(matrix, first + 0xC0);
                     func_001F9EE8(delta, delta, matrix);
-                    if (func_001F9B88(delta[0]) < 0.5f && func_001F9B88(delta[1]) < 2.9f && func_001F9B88(delta[2]) < 2.9f) {
+                    if (FastAbsF(delta[0]) < 0.5f && FastAbsF(delta[1]) < 2.9f && FastAbsF(delta[2]) < 2.9f) {
                         HERO->unk8C4 += **(int **)(first + 0x78);
-                        first[0xBC] = func_001F9850(0x3C);
+                        first[0xBC] = scale_ticks(0x3C);
                         if (HERO->unk86C != 0)
                             func_0022ED80(1, 0, (int)HERO->unk86C);
                     }
@@ -1122,14 +1122,14 @@ void func_L05_00254328(void) {
             } while (first != 0);
         }
     }
-    count = func_001F9850(0x32);
+    count = scale_ticks(0x32);
     period = func_001FA888(count);
     ratio = (float)(*(int *)&D_L05_0015F6B0 % count) / period;
     ratio += ratio;
-    wave = func_001F9FA8(ratio * 3.1415927f + -3.1415927f);
-    red = func_001FA898(wave * 48.0f) + 0x68;
-    green = func_001FA898(wave * 64.0f) + 0xD0;
-    blue = func_001FA898(wave * 24.0f) + 0x3C;
+    wave = FastSin(ratio * 3.1415927f + -3.1415927f);
+    red = truncate_float_to_s32(wave * 48.0f) + 0x68;
+    green = truncate_float_to_s32(wave * 64.0f) + 0xD0;
+    blue = truncate_float_to_s32(wave * 24.0f) + 0x3C;
     if (green > 0xFF)
         green = 0xFF;
     if (*(int *)(state + 0x48) != -1) {
@@ -1142,13 +1142,13 @@ void func_L05_00254328(void) {
                         *(unsigned short *)(second + 0x34) |= 0x10;
                         *(unsigned int *)(second + 0x90) = color;
                         if (func_L00_001FEF78(second + 0xBC) != 0) {
-                            func_001F9BF0(delta, second + 0x10, (char *)D_0013E633 + 0xE9D);
+                            FastVecSub(delta, second + 0x10, (char *)D_0013E633 + 0xE9D);
                             func_001FA190(matrix);
                             func_001FA4A0(matrix, second + 0xC0);
                             func_001F9EE8(delta, delta, matrix);
-                            if (func_001F9B88(delta[0]) < 2.8f && func_001F9B88(delta[1]) < 1.25f && func_001F9B88(delta[2]) < 1.5f) {
+                            if (FastAbsF(delta[0]) < 2.8f && FastAbsF(delta[1]) < 1.25f && FastAbsF(delta[2]) < 1.5f) {
                                 HERO->unk8C4 += **(int **)(second + 0x78);
-                                second[0xBC] = func_001F9850(0x3C);
+                                second[0xBC] = scale_ticks(0x3C);
                                 if (HERO->unk86C != 0)
                                     func_0022ED80(1, 0, (int)HERO->unk86C);
                             }
@@ -1164,9 +1164,9 @@ void func_L05_00254328(void) {
         if (third != 0) {
         ap = (int *)(D_0013D50F + 0x21);
         do {
-            if (*(short *)(third + 0xA6) == 0x1D6 && func_L00_001FEF78(third + 0xBC) != 0 && func_001F9D10((char *)D_0013E633 + 0xEED, third + 0x10) < 1.5f) {
+            if (*(short *)(third + 0xA6) == 0x1D6 && func_L00_001FEF78(third + 0xBC) != 0 && FastVecDist((char *)D_0013E633 + 0xEED, third + 0x10) < 1.5f) {
                 struct Hero *g = HERO;
-                third[0xBC] = func_001F9850(300);
+                third[0xBC] = scale_ticks(300);
                 if (*(int *)((u8_a *)g + 0x10B8) != 0x24) {
                     *(int *)((u8_a *)g + 0x20B8) = 0x24;
                     g->unk20AC = 0;
@@ -1215,7 +1215,7 @@ void func_L05_00254B38(float *out, float *rot) {
             int n2 = *(int *)path + 2;
             int next = (i + n2) % *(int *)path;
             char *q = path + next * 16;
-            if (func_001FA850(angle, func_L00_001FF860(*(float *)(q + 0x10) - *(float *)(p + 0x10), *(float *)(q + 0x14) - *(float *)(p + 0x14))) > 1.5707964f) {
+            if (FastDiffRots(angle, func_L00_001FF860(*(float *)(q + 0x10) - *(float *)(p + 0x10), *(float *)(q + 0x14) - *(float *)(p + 0x14))) > 1.5707964f) {
                 float d;
                 if (D_0015EE84_2523C8 == 0x10 && *(char **)(h + 0x8B4) != 0) {
                     char *verts = *(char **)(h + 0x8B4);
@@ -1224,10 +1224,10 @@ void func_L05_00254B38(float *out, float *rot) {
                     float z1 = *(float *)(v1 + 0x18);
                     float z2 = *(float *)(v2 + 0x18);
                     if (z1 < z2) {
-                        if (func_001F9B88(z2 - *(float *)(p + 0x18)) > limit)
+                        if (FastAbsF(z2 - *(float *)(p + 0x18)) > limit)
                             goto next_point;
                     } else {
-                        if (func_001F9B88(z1 - *(float *)(p + 0x18)) > limit)
+                        if (FastAbsF(z1 - *(float *)(p + 0x18)) > limit)
                             goto next_point;
                     }
                 }
@@ -1243,7 +1243,7 @@ void func_L05_00254B38(float *out, float *rot) {
     qcopy(tmp, out);
     tmp[2] += 2.0f;
     out[2] = func_00214358(tmp, 0, 0.5f);
-    func_001F9BC0(rot);
+    clear_u64_value(rot);
     {
         float *a = (float *)(path + best * 16);
         float *b = (float *)(path + (best + 1) * 16);
@@ -1651,8 +1651,8 @@ int func_L05_002559F0(void)
     if (*(int *)(h + 0x18) != 0) goto L_BAC;
     if (*(int *)(h + 0x1C) == 0) goto L_BAC;
     if (!(1.2217305f < func_L00_001FF860(*(float *)(h + 0x48), func_001F9CE8_4C558(h + 0x40)))) goto L_BAC;
-    g->f8A4 = func_001FA748(func_L00_001FF860(*(float *)(h + 0x40), *(float *)(h + 0x44)), 3.1415927f);
-    if (!(func_001FA850(func_L00_001FF860(g->fE0[0], g->fE0[1]), g->f8A4) < 0.7853982f)) goto L_BAC;
+    g->f8A4 = FastAddRots(func_L00_001FF860(*(float *)(h + 0x40), *(float *)(h + 0x44)), 3.1415927f);
+    if (!(FastDiffRots(func_L00_001FF860(g->fE0[0], g->fE0[1]), g->f8A4) < 0.7853982f)) goto L_BAC;
     if (g->f2DC < 1.0f) {
         func_L05_0024D680(0x6F, 1);
         return 1;
@@ -1718,28 +1718,28 @@ L_D68:
     if (m[0x53] != 0x55 && m[0x53] != 0x7F) goto L_DEC;
     if (m[0x51] < 0xD) {
         int r = func_L05_002559A0();
-        int t = func_001F9850(7);
+        int t = scale_ticks(7);
         func_L00_00232C10(r, 14, (float)t);
     }
 
 L_DEC:
     ok = (((H_9F0 *)(D_0013E633 + 0xE1D))->s30C == 0);
     if (((H_9F0 *)(D_0013E633 + 0xE1D))->b257 != 0) {
-        if (func_001F9B88(((H_9F0 *)(D_0013E633 + 0xE1D))->f218 - ((H_9F0 *)(D_0013E633 + 0xE1D))->f2D8) < 0.05f) ok = 1;
+        if (FastAbsF(((H_9F0 *)(D_0013E633 + 0xE1D))->f218 - ((H_9F0 *)(D_0013E633 + 0xE1D))->f2D8) < 0.05f) ok = 1;
     }
     if (ok == 0) return 0;
     if (((H_9F0 *)(D_0013E633 + 0xE1D))->s89C == 0) return 0;
     if (!(((H_9F0 *)(D_0013E633 + 0xE1D))->fE0[2] < 0.0f)) return 0;
     f20 = 1.0471976f;
-    if (f20 < func_001F9B88(((H_9F0 *)(D_0013E633 + 0xE1D))->f94)) {
+    if (f20 < FastAbsF(((H_9F0 *)(D_0013E633 + 0xE1D))->f94)) {
         func_L05_0024D680(0x6D, 1);
         return 1;
     }
-    if (f20 < func_001F9B88(((H_9F0 *)(D_0013E633 + 0xE1D))->f90)) {
+    if (f20 < FastAbsF(((H_9F0 *)(D_0013E633 + 0xE1D))->f90)) {
         func_L05_0024D680(0x6D, 1);
         return 1;
     }
-    if (1.3962634f < func_001FA850(((H_9F0 *)(D_0013E633 + 0xE1D))->f98, ((H_9F0 *)(D_0013E633 + 0xE1D))->f874)) {
+    if (1.3962634f < FastDiffRots(((H_9F0 *)(D_0013E633 + 0xE1D))->f98, ((H_9F0 *)(D_0013E633 + 0xE1D))->f874)) {
         func_L05_0024D680(0x6D, 1);
         return 1;
     }
@@ -1767,7 +1767,7 @@ L_DEC:
         ee = (int)((H_9F0 *)(D_0013E633 + 0xE1D))->p2080;
         if (((unsigned char *)ee)[0x53] != 0x55 && ((unsigned char *)ee)[0x53] != 0x7F) {
             int r = func_L05_002559A0();
-            int t = func_001F9850(7);
+            int t = scale_ticks(7);
             func_L00_00232C10(r, 14, (float)t);
         }
         return 1;
@@ -1775,7 +1775,7 @@ L_DEC:
     c = ((H_9F0 *)(D_0013E633 + 0xE1D))->p2080[0x53];
     if (c != 0x55 && c != 0x7F) {
         int r = func_L05_002559A0();
-        int t = func_001F9850(7);
+        int t = scale_ticks(7);
         func_L00_00232C10(r, 14, (float)t);
     }
     return 0;

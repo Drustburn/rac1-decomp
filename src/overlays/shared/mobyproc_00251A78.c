@@ -66,7 +66,7 @@ int func_L00_00258250(unsigned char *m, int *item) {
         }
         i = -1;
         if (shortfall != 0) {
-            scan_index = func_002140B0(shortfall);
+            scan_index = random_integer_below(shortfall);
             if (scan_index >= 0) {
                 i = -1;
                 while (1) {
@@ -82,7 +82,7 @@ int func_L00_00258250(unsigned char *m, int *item) {
             *item = D_0015EED0[i] & 0x3F;
         } else if (available != 0) {
             {
-                scan_index = func_002140B0(stocked);
+                scan_index = random_integer_below(stocked);
                 if (scan_index >= 0) {
                     i = -1;
                     while (1) {
@@ -102,7 +102,7 @@ int func_L00_00258250(unsigned char *m, int *item) {
         }
     }
     {
-        int t = func_002140B0(5);
+        int t = random_integer_below(5);
         int two = 2;
         int one = 1;
         return t == 0 ? two : one;

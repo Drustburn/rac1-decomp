@@ -1738,7 +1738,7 @@ void func_L05_00317F80(HGMoby *moby) {
     }
     if (game_mode != 2) {
         update_hoverboard_girl_boobs_animation(moby, state);
-        if ((D_0015EEB0[0]) != 0)
+        if ((gCheats[0]) != 0)
             state->joints[0].target_scale = 2.75f;
         update_joint_animation(moby, &state->joints[0], 0, rotation_step * frame_scale_sq,
                                rotation_limit * frame_scale_sq);

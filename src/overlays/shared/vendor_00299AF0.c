@@ -355,10 +355,10 @@ void func_L10_002EA578(unsigned char *m) {
     func_001FA460(transform, m + 0xC0);
     qcopy(position, m + 0x10);
     position[3] = 1.0f;
-    first.tex = func_001F4868(0x2C);
+    first.tex = GetEffectTex(0x2C);
     first.unk80 = 0xFF9000000260L;
     first.unk70 = 0;
-    second.tex = func_001F4868(0x2C);
+    second.tex = GetEffectTex(0x2C);
     second.unk80 = 0xFF9000000260L;
     second.unk70 = 0;
     second.col[3] = 0;
@@ -397,13 +397,13 @@ void func_L10_002EA578(unsigned char *m) {
         first.col[0] = level;
         for (i = 0; i < 4; i++) {
             for (axis = 0; axis < 2; axis++) {
-                int limit = func_001FA898(D_L10_001DA540[pass][axis] * 360.0f);
+                int limit = truncate_float_to_s32(D_L10_001DA540[pass][axis] * 360.0f);
                 float angle = func_001FA888(D_L10_0015F4F8 % limit) / D_L10_001DA540[pass][axis] - 180.0f;
                 float delta;
                 if (D_L10_001DA580[pass][axis] != 0) {
-                    delta = func_001F9F90(angle * 0.017453292f);
+                    delta = FastCos(angle * 0.017453292f);
                 } else {
-                    delta = func_001F9FA8(angle * 0.017453292f);
+                    delta = FastSin(angle * 0.017453292f);
                 }
                 first.uv[i][axis] = D_L10_001DA5C0[i][axis] + delta * 0.125f;
             }
@@ -536,15 +536,15 @@ void func_L10_002F72D8(char *moby) {
                 v1[3] = 0.0f;
                 func_001F9EC0(v1, v1, D_L10_001674D0);
                 func_001F9BD8_99AF0(v2, gb + 0x10, v1);
-                func_001F9BF0(va, v2, pm);
+                FastVecSub(va, v2, pm);
             } else {
-                func_001F9BF0(va, b + 0x10, pm);
+                FastVecSub(va, b + 0x10, pm);
             }
-            func_001F9C30(v1, D_0013E633 + 0x10AD, -1.0f);
+            FastVecScale(v1, D_0013E633 + 0x10AD, -1.0f);
             func_L00_001FF4B0(moby, va, 1.0f);
-            func_001F9CA0(moby + 0x10, moby, v1);
+            FastVecCross(moby + 0x10, moby, v1);
             func_L00_001FF4B0(moby + 0x10, moby + 0x10, 1.0f);
-            func_001F9CA0(moby + 0x20, moby + 0x10, moby);
+            FastVecCross(moby + 0x20, moby + 0x10, moby);
         }
         return;
     }
@@ -557,10 +557,10 @@ void func_L10_002F72D8(char *moby) {
             *(short *)(f + 0x14) = 3;
             D_L10_0015F4FC = 1.0f;
             x = k->vals[8] * 0.5f;
-            aa = func_001F9FA8(x);
-            bb = func_001F9F90(x);
+            aa = FastSin(x);
+            bb = FastCos(x);
             D_L10_0016CFF0 = aa / bb;
-            func_001F3140();
+            UpdateViewContext();
             *(unsigned char *)(e + 0x39) = 1;
             D_L10_001673D8 = 0.05f;
             *(short *)(moby + 0x7E) = 4;
@@ -591,11 +591,11 @@ void func_L10_002F72D8(char *moby) {
         qcopy(va, (moby + 0x30));
         rr = func_L00_0025E860(g, (moby + 0x30), (int *)f, (float *)(f + 4), *(float *)(e + 0x3C) * D_0015EE6C, 0);
         if (*(short *)(f + 0x16) != 0) {
-            if (func_001F9938(f + 0x16) != 0) {
+            if (FastDecTimer(f + 0x16) != 0) {
                 rr = 1;
             } else if (*(int *)(e + 0x40) != 0) {
                 short s16 = *(short *)(f + 0x16);
-                if (s16 < func_001F9850(func_001FA898(20.0f))) {
+                if (s16 < scale_ticks(truncate_float_to_s32(20.0f))) {
                     rr = 1;
                 }
             }
@@ -631,14 +631,14 @@ void func_L10_002F72D8(char *moby) {
                 }
                 r = func_00214220(k->vals[i], k->vals[i + 1], sum / total);
                 m = r * 0.017453292f * 0.5f;
-                aa = func_001F9FA8(m);
-                bb = func_001F9F90(m);
+                aa = FastSin(m);
+                bb = FastCos(m);
                 cam = D_L10_0016CF40;
                 *(float *)(cam + 0xB0) = aa / bb;
-                func_001F3140();
+                UpdateViewContext();
             }
         }
-        d = func_001F9D10(va, (moby + 0x30));
+        d = FastVecDist(va, (moby + 0x30));
         nv = *(float *)(f + 0x10) + d;
         *(float *)(f + 0x10) = nv;
         if (*(int *)(e + 0x28) >= 0) {
@@ -650,7 +650,7 @@ void func_L10_002F72D8(char *moby) {
             v2[3] = 0.0f;
             func_001F9EC0(v2, v2, D_L10_001674D0);
             func_001F9BD8_99AF0(v3, b17 + 0x10, v2);
-            func_001F9BF0(v1, v3, (moby + 0x30));
+            FastVecSub(v1, v3, (moby + 0x30));
         } else {
             char *h;
             d = (nv / *(float *)(f + 8)) * *(float *)(f + 0xC);
@@ -660,13 +660,13 @@ void func_L10_002F72D8(char *moby) {
             func_L00_0025E860(h, v2, &ia, &ib, d, 0);
             ((void (*)(void *, float))func_001E9768)(v2, 0.2f);
             func_001E9768(h + 0x10, h + (*(int *)h << 4));
-            func_001F9BF0(v1, v2, (moby + 0x30));
+            FastVecSub(v1, v2, (moby + 0x30));
         }
-        func_001F9C30(v2, D_0013E633 + 0x10AD, -1.0f);
+        FastVecScale(v2, D_0013E633 + 0x10AD, -1.0f);
         func_L00_001FF4B0(moby, v1, 1.0f);
-        func_001F9CA0(moby + 0x10, moby, v2);
+        FastVecCross(moby + 0x10, moby, v2);
         func_L00_001FF4B0(moby + 0x10, moby + 0x10, 1.0f);
-        func_001F9CA0(moby + 0x20, moby + 0x10, moby);
+        FastVecCross(moby + 0x20, moby + 0x10, moby);
     }
 }
 extern char *D_L10_0015F050 MACRO_ADDR;

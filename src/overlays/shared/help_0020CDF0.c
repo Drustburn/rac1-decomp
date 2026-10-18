@@ -180,7 +180,7 @@ int func_L00_0020D3A0(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF
             continue;
         if (*D_L00_0015F7EC[i].owner == 0)
             continue;
-        if (func_001F9D10(&D_L00_0015F7EC[i], p) > D_L00_0015F7EC[i].sphere.f[3])
+        if (FastVecDist(&D_L00_0015F7EC[i], p) > D_L00_0015F7EC[i].sphere.f[3])
             continue;
         if (!func_L00_0025EFC0(D_L00_0015F7EC[i].owner, p, to, &gotI, &gotF, D_L00_0015F7EC[i].kind,
                               12.0f, 10.0f, 0.0f))
@@ -195,7 +195,7 @@ int func_L00_0020D3A0(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF
             distance_limit += 0.5f;
         }
         distance = func_001F9D48(p, to);
-        height = func_001F9B88(p->f[2] - to->f[2]);
+        height = FastAbsF(p->f[2] - to->f[2]);
         if (!(distance < distance_limit && height < height_limit))
             continue;
         *outOwner = D_L00_0015F7EC[i].owner;
@@ -799,13 +799,13 @@ void func_L00_0020F118(void) {
         }
         func_00205270(DEFA[id].cls, -1);
         for (i = 0; i < 3; i++) {
-            func_001F99B0(&HERO->unk18F0[i], 0, sizeof(struct HeroEase));
+            FastMemSet(&HERO->unk18F0[i], 0, sizeof(struct HeroEase));
             HERO->unk18F0[i].unkA0 = -1;
         }
         HERO->items[0].item_id = id;
         slot = DEFA[id].slot;
         h = (struct Hero *)((char *)HERO + slot * sizeof(struct HeroItemSlot));
-        m = func_0020D348(DEFS[h->items[0].item_id].cls);
+        m = CreateMoby(DEFS[h->items[0].item_id].cls);
         if (m != 0) {
             m->draw_dist = 0x20;
             m->visible = 1;
@@ -832,7 +832,7 @@ void func_L00_0020F118(void) {
                 id3 = D_0015EE88[3] != 0 ? 3 : 2;
         }
         HERO->items[3].item_id = id3;
-        m = func_0020D348(DEFA[id3].cls);
+        m = CreateMoby(DEFA[id3].cls);
         if (m != 0) {
             m->draw_dist = 0x20;
             m->visible = 1;
@@ -851,7 +851,7 @@ void func_L00_0020F118(void) {
     }
 
     if (HERO->items[3].moby2 == 0) {
-        m = func_0020D348(DEFA[1].cls);
+        m = CreateMoby(DEFA[1].cls);
         if (m != 0) {
             m->draw_dist = 0x20;
             m->visible = 1;
@@ -870,7 +870,7 @@ void func_L00_0020F118(void) {
             HERO->items[2].item_id = HERO->selected_item[2];
         else
             HERO->items[2].item_id = INV(2);
-        m2 = func_0020D348(DEFA[HERO->items[2].item_id].cls);
+        m2 = CreateMoby(DEFA[HERO->items[2].item_id].cls);
         if (m2 != 0) {
             m2->draw_dist = 0x20;
             m2->visible = 1;
@@ -887,7 +887,7 @@ void func_L00_0020F118(void) {
 
     if (HERO->items[1].moby == 0 && INVA[1] != 0) {
         HERO->items[1].item_id = INVA[1];
-        m = func_0020D348(DEFA[INVA[1]].cls);
+        m = CreateMoby(DEFA[INVA[1]].cls);
         if (m != 0) {
             m->draw_dist = 0x20;
             m->visible = 1;
@@ -897,7 +897,7 @@ void func_L00_0020F118(void) {
             HERO->items[1].moby = m;
             HERO->items[1].state = 2;
         }
-        m = func_0020D348(DEFA[INVA[1]].cls2);
+        m = CreateMoby(DEFA[INVA[1]].cls2);
         if (m != 0) {
             m->draw_dist = 0x20;
             m->visible = 1;
@@ -909,8 +909,8 @@ void func_L00_0020F118(void) {
         }
     }
 
-    if (HERO->items[4].moby == 0 && D_0013D5E9[0] != 0) {
-        m4 = func_0020D348(DEFA[0x21].cls);
+    if (HERO->items[4].moby == 0 && gHaveMapOMatic[0] != 0) {
+        m4 = CreateMoby(DEFA[0x21].cls);
         HERO->items[4].item_id = 0x21;
         if (m4 != 0) {
             m4->draw_dist = 0x20;
@@ -923,8 +923,8 @@ void func_L00_0020F118(void) {
         }
     }
 
-    if (HERO->items[4].moby2 == 0 && D_0013D5E9[1] != 0) {
-        m5 = func_0020D348(DEFA[0x22].cls);
+    if (HERO->items[4].moby2 == 0 && gHaveMapOMatic[1] != 0) {
+        m5 = CreateMoby(DEFA[0x22].cls);
         HERO->items[4].item_id = 0x22;
         if (m5 != 0) {
             m5->draw_dist = 0x20;
@@ -935,8 +935,8 @@ void func_L00_0020F118(void) {
         }
     }
 
-    if (HERO->items[5].moby == 0 && D_0013D5E9[2] != 0) {
-        m6 = func_0020D348(DEFA[0x23].cls);
+    if (HERO->items[5].moby == 0 && gHaveMapOMatic[2] != 0) {
+        m6 = CreateMoby(DEFA[0x23].cls);
         HERO->items[5].item_id = 0x23;
         if (m6 != 0) {
             m6->draw_dist = 0x20;
@@ -991,7 +991,7 @@ void func_L00_0020F7F8(char *arg) {
     {
     char *b = D_0013E633 + 0xE1D;
     func_001FA480(D_0013E633 + 0xE1D + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
-    func_00214F78(D_0013E633 + 0xE1D + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    normalize_vector_triplet(D_0013E633 + 0xE1D + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
 
     *(int *)(b + 0x21B8) = (*(int *)(b + 0x21B8) + 1) % 16;
     *(int *)(b + 0x21BC) = *(int *)(b + 0x21BC) + 1;
@@ -1001,7 +1001,7 @@ void func_L00_0020F7F8(char *arg) {
     }
 
     for (k = 0; k < 3; k++) {
-        func_001F9BC0(&vv[k]);
+        clear_u64_value(&vv[k]);
     }
 
     {
@@ -1080,13 +1080,13 @@ void func_L00_0020F7F8(char *arg) {
         int t = i - 15;
         ri = (*(int *)(b + 0x21B8) - t) % 16;
         for (k = 0; k < 3; k++) {
-            func_001F9BD8(&vv[k], &vv[k], D_0013E633 + 0xE1D + 0x12F0 + ri * 0x30 + k * 16);
+            FastVecAdd(&vv[k], &vv[k], D_0013E633 + 0xE1D + 0x12F0 + ri * 0x30 + k * 16);
         }
         }
     }
 
     for (k = 0; k < 3; k++) {
-        func_001F9C30(&vv[k], &vv[k], 1.0f / (float)acc);
+        FastVecScale(&vv[k], &vv[k], 1.0f / (float)acc);
     }
     func_002153E8(vv, out);
 }
@@ -3165,7 +3165,7 @@ void func_L00_002147C0(void) {
     if (*(int *)(g + 0x2084) == 14) {
         near = 0;
         s = D_0015EE6C * 7.0f;
-        if (D_0013D5CA[0] != 0) {
+        if (gHaveHeliPack[0] != 0) {
             if (*(short *)(g + 0x22D8) == 0) {
                 near = func_L00_0020DB30(3) == 3;
             }
@@ -3173,12 +3173,12 @@ void func_L00_002147C0(void) {
         if (D_0015EE84 != 14) {
             if (func_L00_0020DB30(3) == 3) {
                 char *k = D_0013E633 + 0xE1D;
-                if (*(int *)(k + 0x198) == func_001F9850(5)) {
+                if (*(int *)(k + 0x198) == scale_ticks(5)) {
                     func_L00_00217570(1, 0);
                 }
             }
         }
-        func_001F9BF0(vec, D_0013E633 + 0xE9D, D_0013E633 + 0xE9D + 0x380);
+        FastVecSub(vec, D_0013E633 + 0xE9D, D_0013E633 + 0xE9D + 0x380);
         {
             float d = func_L00_002342F8(vec);
             if (near) {
@@ -3197,7 +3197,7 @@ void func_L00_002147C0(void) {
         }
         {
             char *h = D_0013E633 + 0xE1D;
-            if (*(int *)(h + 0x198) < func_001F9850(8)) {
+            if (*(int *)(h + 0x198) < scale_ticks(8)) {
                 float l;
                 char *q = h + 0xE0;
                 l = func_L00_002342F8((float *)q);
@@ -3215,7 +3215,7 @@ void func_L00_002147C0(void) {
             || (k = D_0013E633 + 0xE1D, *(int *)(k + 0x2084) == 0x12)) {
             char *h = D_0013E633 + 0xE1D;
             if (*(float *)(h + 0x430) < *(float *)(h + 0x48C)) {
-                if (*(int *)(h + 0x198) <= func_001F9850(15)) {
+                if (*(int *)(h + 0x198) <= scale_ticks(15)) {
                     *(float *)(h + 0x430) += (*(float *)(h + 0x48C) - *(float *)(h + 0x488)) / (float)*(short *)(h + 0x498);
                     if (*(float *)(h + 0x48C) < *(float *)(h + 0x430)) {
                         *(float *)(h + 0x430) = *(float *)(h + 0x48C);
@@ -3241,7 +3241,7 @@ void func_L00_002147C0(void) {
                     Seq *p = (Seq *)(h + 0x3D0);
                     p->cnt++;
                     while (1) {
-                        if (p->idx != -1 && p->cnt < func_001F9850(p->arr[p->idx].h)) break;
+                        if (p->idx != -1 && p->cnt < scale_ticks(p->arr[p->idx].h)) break;
                         p->cnt = 0;
                         p->idx++;
                         if (p->arr[p->idx].f != -999999.0f) {
@@ -3259,7 +3259,7 @@ void func_L00_002147C0(void) {
     {
         char *h = D_0013E633 + 0xE1D;
         int st = *(int *)(h + 0x2084);
-        if ((st == 0x1C || st == 0x4C) && *(int *)(h + 0x198) < func_001F9850(10)) {
+        if ((st == 0x1C || st == 0x4C) && *(int *)(h + 0x198) < scale_ticks(10)) {
             return;
         }
     }

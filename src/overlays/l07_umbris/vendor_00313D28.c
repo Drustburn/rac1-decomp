@@ -65,17 +65,17 @@ void func_L07_00314250(void *mobyp, float radius, int phase, float speed, int co
     if (*(int *)(vars + 0x164) == 4) {
         float alpha = func_001FA888(color >> 24);
         float fade = func_001FA888(*(int *)(vars + 0x160));
-        fade = fade / func_001F9850(20);
+        fade = fade / scale_ticks(20);
         alpha = alpha * fade;
         if (alpha < 0.0f)
             alpha = 0.0f;
         color &= 0xFFFFFF;
-        color |= func_001FA898(alpha) << 24;
+        color |= truncate_float_to_s32(alpha) << 24;
     } else if (*(int *)(vars + 0x164) > 4) {
         return;
     }
     step = 0.5235988f;
-    texture = func_001F4868(0x3D);
+    texture = GetEffectTex(0x3D);
     {
         float zero = 0.0f;
         float one = 1.0f;
@@ -107,11 +107,11 @@ void func_L07_00314250(void *mobyp, float radius, int phase, float speed, int co
         qcopy(&quad.positions[0], &quad.positions[1]);
         qcopy(&quad.positions[2], &quad.positions[3]);
         wrapped = func_L00_0025F368(angle + spin * 0.02f);
-        offset[1] = radius * func_001F9F90(wrapped);
-        offset[2] = radius * func_001F9FA8(wrapped);
+        offset[1] = radius * FastCos(wrapped);
+        offset[2] = radius * FastSin(wrapped);
         offset[0] = 0.0f;
         func_001F9EC0(offset, offset, moby + 0xC0);
-        func_001F9BD8(&quad.positions[3], vars + 0x140, offset);
+        FastVecAdd(&quad.positions[3], vars + 0x140, offset);
         if (angle != -3.1415927f) {
             func_L00_001FD1D8(&quad, 0, 1);
             qcopy(&inner.positions[2], &quad.positions[2]);
@@ -1670,18 +1670,18 @@ void func_L07_00318CE0(void) {
     float phase_step;
     float column_step;
 
-    packet.header[1] = func_001F4868(0x15);
+    packet.header[1] = GetEffectTex(0x15);
     packet.header[2] = 0xff9000000260ULL;
     packet.header[3] = 0x8000000048ULL;
     packet.header[0] = 0;
     phase = (*(float *)&D_L07_00161C04);
     (*(float *)&D_L07_00161C04) += 0.001f;
     if ((*(float *)&D_L07_00161C04) > 7.0f) (*(float *)&D_L07_00161C04) -= 7.0f;
-    func_00234C98(0x47, 0x5301b);
+    VU1_addGSregister(0x47, 0x5301b);
     phase_step = 0.3f;
     phase += phase_step;
     column_step = 0.05f;
-    func_00234C98(0x4e, (D_0015EF88 >> 13) | 0x1000000 | ((u64)0x8000 << 17));
+    VU1_addGSregister(0x4e, (D_0015EF88 >> 13) | 0x1000000 | ((u64)0x8000 << 17));
     for (row = 1; row < 10; row++) {
         row_phase = (*(float *)&D_L07_00161C08);
         (*(float *)&D_L07_00161C08) += (*(float *)&D_L07_00161C0C);
@@ -1720,8 +1720,8 @@ void func_L07_00318CE0(void) {
         }
         phase += phase_step;
     }
-    func_00234C98(0x4e, (s64)(D_0015EF88 >> 13) | 0x1000000);
-    func_00234C98(0x47, 0x5360b);
+    VU1_addGSregister(0x4e, (s64)(D_0015EF88 >> 13) | 0x1000000);
+    VU1_addGSregister(0x47, 0x5360b);
 }
 typedef int u128_319080 __attribute__((mode(TI)));
 typedef union {

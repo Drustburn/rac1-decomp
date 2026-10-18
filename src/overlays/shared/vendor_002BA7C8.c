@@ -727,16 +727,16 @@ char *func_L00_002BD6B8(char *self, float *position, float *heading, float *pitc
         angle = func_L00_001FF860(target[0] - position[0], target[1] - position[1]);
         distance = func_001F9D48(position, target);
         elevation = func_L00_001FF860(distance, target[2] - position[2]);
-        headingError = func_001FA850(*heading, angle);
-        distance = func_001F9D10(position, target);
+        headingError = FastDiffRots(*heading, angle);
+        distance = FastVecDist(position, target);
         if (distance < 2.5f) {
             float toward;
             char *g1 = D_0013E633 + 0xE1D;
             moby = *(char **)(g1 + 0x2080);
             toward = func_L00_001FF860(*(float *)(candidate + 0x10) - *(float *)(g1 + 0x80),
                                    *(float *)(candidate + 0x14) - *(float *)(g1 + 0x84));
-            if (func_001FA850(*(float *)(moby + 0x48), toward) < 1.0471976f &&
-                func_001F9B88(position[2] - target[2]) < 2.0f &&
+            if (FastDiffRots(*(float *)(moby + 0x48), toward) < 1.0471976f &&
+                FastAbsF(position[2] - target[2]) < 2.0f &&
                 !func_L00_001EFFF0((Vec4f *)position, (Vec4f *)target, 6, *(char **)(g1 + 0x2080), 0)) {
                 res[0] = (int)candidate;
                 *pitch = -elevation;
@@ -750,14 +750,14 @@ char *func_L00_002BD6B8(char *self, float *position, float *heading, float *pitc
             char *g2 = D_0013E633 + 0xE1D;
             func_00215C00(offset, distance, *heading, *pitch + *(float *)(g2 + 0x2E4) * 0.5f);
         }
-        func_001F9BD8(offset, offset, position);
-        apparentAngle = func_001F9FC0(func_001F9D10(offset, target) / (distance + distance));
+        FastVecAdd(offset, offset, position);
+        apparentAngle = FastArcSin(FastVecDist(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
         if (*(float *)&D_L00_001617A8 * 0.017453292f < apparentAngle) {
             data = (char *)func_L00_0025D390(candidate);
             if (data) {
                 radius = func_001FA888(*(unsigned char *)(data + 10)) * 0.125f;
-                reduction = func_001F9FC0(radius / distance);
+                reduction = FastArcSin(radius / distance);
                 if (radius < distance) {
                     apparentAngle -= reduction;
                     if (apparentAngle < 0.0f)

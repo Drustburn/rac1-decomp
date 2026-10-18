@@ -1104,17 +1104,17 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
         return 0;
     qcopy(&previous, m + 0x10);
     if (*(unsigned char *)(m + 0x20) == 0) {
-        position.f[0] = func_001F9F90(func_001FA748(-0.36196801f, func_L00_001FF860(*(float *)(hero + 0x670), *(float *)(hero + 0x674)))) * 0.85903901f;
-        position.f[1] = func_001F9FA8(func_001FA748(-0.36196801f, func_L00_001FF860(*(float *)(hero + 0x670), *(float *)(hero + 0x674)))) * 0.85903901f;
+        position.f[0] = FastCos(FastAddRots(-0.36196801f, func_L00_001FF860(*(float *)(hero + 0x670), *(float *)(hero + 0x674)))) * 0.85903901f;
+        position.f[1] = FastSin(FastAddRots(-0.36196801f, func_L00_001FF860(*(float *)(hero + 0x670), *(float *)(hero + 0x674)))) * 0.85903901f;
         position.f[2] = 0.0f;
-        func_001F9BD8(&position, &position, hero + 0x80);
+        FastVecAdd(&position, &position, hero + 0x80);
         position.f[2] += 0.49082f;
         qcopy(&velocity, v);
         if (*(int *)(hero + 0x208C) == 0xF)
-            func_001F9BD8(&velocity, &velocity, hero + 0x100);
+            FastVecAdd(&velocity, &velocity, hero + 0x100);
         if (*(int *)(hero + 0x2FC) != 0 && func_L00_0025D390(*(unsigned char **)(hero + 0x2FC)) && mode)
-            func_001F9BD8(&velocity, &velocity, hero + 0x100);
-        timer = func_001F9850(300);
+            FastVecAdd(&velocity, &velocity, hero + 0x100);
+        timer = scale_ticks(300);
     } else {
         char *hp = *(char **)(v->holder + 0x78);
         int t50;
@@ -1130,10 +1130,10 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
     hero_position = *(V_AE6B0 *)(cam + 0x10);
     hero_position.f[2] = position.f[2];
     if (func_L00_001EFFF0(&hero_position, &position, 0x10, (int)cam, 0) &&
-        (func_L00_001F3958() || 0.0f < velocity.f[2])) {
+        (CollType() || 0.0f < velocity.f[2])) {
         if (D_H910.moby != 0 && D_H910.i1C <= 0) {
             if (((char *)D_H910.moby != *(char **)(h + 0x2080) && (char *)D_H910.moby != v->holder) ||
-                timer < func_001F9850(300) - func_001F9850(10)) {
+                timer < scale_ticks(300) - scale_ticks(10)) {
                 offset = (V_AE6B0){{0.0f, 0.0f, 0.0f, 0.0f}};
                 offset.f[2] = 0.5f;
                 {
@@ -1144,7 +1144,7 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
                     v->previous_hit = *(V_AE6B0 *)&hh->moby->pos;
                 } else {
                     v->hit_count++;
-                    func_001F9BF0(&start, &hh->moby->pos, &v->previous_hit);
+                    FastVecSub(&start, &hh->moby->pos, &v->previous_hit);
                     v->difference = start;
                     v->previous_hit = *(V_AE6B0 *)&hh->moby->pos;
                 }
@@ -1152,7 +1152,7 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
                 object_hit = 1;
                 qcopy(&v->landing, &D_H910.moby->pos);
                 found = 1;
-                func_001F9BD8(&offset, &offset, &v->landing);
+                FastVecAdd(&offset, &offset, &v->landing);
                 func_00214358(&offset, 0, 0.5f);
             }
         } else if (D_H910.i1C > 0) {
@@ -1164,7 +1164,7 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
         char *g = D_0013E633 + 0xE1D;
         if (*(int *)(g + 0x2084) == 1) {
             float z = velocity.f[2];
-            func_001F9C30(&velocity, &velocity, 1.5f);
+            FastVecScale(&velocity, &velocity, 1.5f);
             velocity.f[2] = z / 1.5f;
         }
     }
@@ -1172,12 +1172,12 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
     while (!func_001F9908(&timer) && !found) {
         qcopy(&previous, &position);
         for (i = 9; i >= 0; i--) {
-            func_001F9BD8(&position, &position, &velocity);
+            FastVecAdd(&position, &position, &velocity);
             velocity.f[2] -= D_0015EE70 * 11.0f;
         }
         if (!func_L00_001EFFF0(&previous, &position, 0x10, (int)m, 0))
             continue;
-        if (!func_L00_001F3958() && 0.0f < velocity.f[2])
+        if (!CollType() && 0.0f < velocity.f[2])
             continue;
         if (D_H910.moby != 0 && D_H910.i1C <= 0) {
             if (!(position.f[2] - hero_position.f[2] < 2.0f))
@@ -1185,7 +1185,7 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
             {
                 char *g = D_0013E633 + 0xE1D;
                 if (((char *)D_H910.moby == *(char **)(g + 0x2080) || (char *)D_H910.moby == v->holder) &&
-                    timer >= func_001F9850(300) - func_001F9850(10))
+                    timer >= scale_ticks(300) - scale_ticks(10))
                     continue;
             }
             offset = (V_AE6B0){{0.0f, 0.0f, 0.0f, 0.0f}};
@@ -1198,14 +1198,14 @@ int func_L00_002AE6B0(void *vp, void *m, int mode) {
                 v->previous_hit = *(V_AE6B0 *)&hh->moby->pos;
             } else {
                 v->hit_count++;
-                func_001F9BF0(&start, &hh->moby->pos, &v->previous_hit);
+                FastVecSub(&start, &hh->moby->pos, &v->previous_hit);
                 v->difference = start;
                 v->previous_hit = *(V_AE6B0 *)&hh->moby->pos;
             }
     }
             object_hit = 1;
             qcopy(&v->landing, &D_H910.moby->pos);
-            func_001F9BD8(&offset, &offset, &v->landing);
+            FastVecAdd(&offset, &offset, &v->landing);
             func_00214358(&offset, 0, 0.5f);
             break;
         }
@@ -1217,7 +1217,7 @@ check_surface:
     }
     if (timer && (mode || (D_L00_00173F58 && func_L00_0025D390((unsigned char *)D_L00_00173F58)))) {
         if (mode != 2 || !D_L00_00173F58 || !func_L00_0025D390((unsigned char *)D_L00_00173F58))
-            func_001F49B0((void *)func_L00_002ADE90, m);
+            AddDrawCallback((void *)func_L00_002ADE90, m);
         if (!object_hit && v->last_hit) {
             last = v->last_hit;
             if (*(unsigned char *)(last + 0x20) == 0xFE) {
@@ -1227,7 +1227,7 @@ check_surface:
             } else if (!(*(unsigned short *)(last + 0x34) & 0x1000)) {
                 v->hit_count = 0;
             } else {
-                if (v->hit_count <= func_001F9850(30))
+                if (v->hit_count <= scale_ticks(30))
                     goto keep_hit;
                 v->hit_count = 0;
             }
@@ -1235,9 +1235,9 @@ check_surface:
         }
     keep_hit:
         v->normal = *(V_AE6B0 *)&D_H910.nrm;
-        func_001F9BF0(&previous, &v->landing, D_L00_00166EC0);
-        func_001F9C30(&previous, &previous, 0.95f);
-        func_001F9BD8(&v->landing, &previous, D_L00_00166EC0);
+        FastVecSub(&previous, &v->landing, D_L00_00166EC0);
+        FastVecScale(&previous, &previous, 0.95f);
+        FastVecAdd(&v->landing, &previous, D_L00_00166EC0);
         return 1;
     }
     return 0;

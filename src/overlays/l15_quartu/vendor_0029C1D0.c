@@ -83,7 +83,7 @@ check_lock:
                 ((*(s32 *)(D_0014C190 + (D_0015EE84 * 0x100 + ((s16)m->save_id >> 5) * 4)) >> (m->save_id & 31)) & 1) != 0)
                 trigger_active = 1;
         }
-        if (func_00215570(D_0013F3D0, d->open_volume)) {
+        if (is_point_inside_clip_volume(D_0013F3D0, d->open_volume)) {
             m->state = 2;
         } else if (trigger_active) {
             m->state = 2;
@@ -112,15 +112,15 @@ check_lock:
                 m->state = 3;
             }
         }
-        offset.f[0] = func_001F9F90(m->rot.z) * -d->travel;
-        offset.f[1] = func_001F9FA8(m->rot.z) * -d->travel;
+        offset.f[0] = FastCos(m->rot.z) * -d->travel;
+        offset.f[1] = FastSin(m->rot.z) * -d->travel;
         offset.f[2] = 0.0f;
-        func_001F9BD8(&pos, &d->home, &offset);
+        FastVecAdd(&pos, &d->home, &offset);
         *(VecQuad *)&m->pos = pos.q;
         return;
     case 3:
-        if (func_00215570(D_0013F3D0, d->close_volume) ||
-            func_00215570(D_L15_00167440, d->close_volume))
+        if (is_point_inside_clip_volume(D_0013F3D0, d->close_volume) ||
+            is_point_inside_clip_volume(D_L15_00167440, d->close_volume))
             return;
         m->state = 4;
         return;
@@ -137,13 +137,13 @@ check_lock:
             d->sound = -1;
             m->state = 1;
         }
-        offset.f[0] = func_001F9F90(m->rot.z) * -d->travel;
-        offset.f[1] = func_001F9FA8(m->rot.z) * -d->travel;
+        offset.f[0] = FastCos(m->rot.z) * -d->travel;
+        offset.f[1] = FastSin(m->rot.z) * -d->travel;
         offset.f[2] = 0.0f;
-        func_001F9BD8(&pos, &d->home, &offset);
+        FastVecAdd(&pos, &d->home, &offset);
         *(VecQuad *)&m->pos = pos.q;
-        if (func_00215570(D_0013F3D0, d->open_volume) ||
-            func_00215570(D_L15_00167440, d->open_volume))
+        if (is_point_inside_clip_volume(D_0013F3D0, d->open_volume) ||
+            is_point_inside_clip_volume(D_L15_00167440, d->open_volume))
             m->state = 2;
         return;
     default:
@@ -525,7 +525,7 @@ void func_L15_002A8AA8(struct Moby *moby)
     __builtin_memcpy(palette, &D_L15_001615E8, 16);
     func_L00_001FF4B0_A8AA8(D_0015EE6C * 10.0f, &first, slot + 0x10);
     func_001F9C30_A8AA8(2.0f, &second, &first);
-    if (func_001F9CB8(slot) != 0.0f) {
+    if (FastVecLength(slot) != 0.0f) {
         base.q = *(u128_A8AA8 *)slot;
     } else {
         base.q = *(u128_A8AA8 *)&moby->pos;
@@ -538,27 +538,27 @@ void func_L15_002A8AA8(struct Moby *moby)
     int i = 0x18;
     do {
         int duration;
-        radius = func_002140F8(0.5f, 1.5f);
-        angle = func_00214158();
+        radius = random_float_between(0.5f, 1.5f);
+        angle = random_angle_radians();
         if (moby->oclass == 0x94)
             radius *= 3.0f;
-        offset.f[0] = func_001F9F90(angle) * radius;
-        offset.f[1] = func_001F9FA8(angle) * radius;
+        offset.f[0] = FastCos(angle) * radius;
+        offset.f[1] = FastSin(angle) * radius;
         offset.f[2] = 0.0f;
-        offset.f[2] = func_002140F8(1.0f, 7.0f);
+        offset.f[2] = random_float_between(1.0f, 7.0f);
         func_L00_001FF240(colors, &offset, &moby->pos);
-        func_001F9BF0(colors, base_position, &offset);
+        FastVecSub(colors, base_position, &offset);
         velocity.q = *(u128_A8AA8 *)colors;
         func_L00_001FF4B0_A8AA8(D_0015EE6C * 5.0f, &velocity, &velocity);
         func_L00_001FF240(colors, &velocity, &second);
         velocity.f[2] += D_0015EE6C * 3.0f;
-        size = func_002140F8(0.75f, 1.25f);
+        size = random_float_between(0.75f, 1.25f);
         func_001F9C30_A8AA8(size, &velocity, &velocity);
-        index = func_002140B0(4);
+        index = random_integer_below(4);
         palette_entry = &palette[index];
-        radius = func_002140F8(0.1f, 0.3f);
-        duration = func_L00_00258BC8(60, 100);
-        size = func_002140F8(3.0f, 7.0f);
+        radius = random_float_between(0.1f, 0.3f);
+        duration = rand_range(60, 100);
+        size = random_float_between(3.0f, 7.0f);
         func_L01_002F9908(&offset, &velocity, *palette_entry, radius, duration,
                                 size, 0.15f, 2.0f, 1);
         i--;
@@ -568,20 +568,20 @@ void func_L15_002A8AA8(struct Moby *moby)
         offset.q = *(u128_A8AA8 *)&moby->pos;
         offset.f[2] += 10.0f;
         radius = 1.0f;
-        func_001F9BF0(colors, base_position, &offset);
+        FastVecSub(colors, base_position, &offset);
         velocity.q = *(u128_A8AA8 *)colors;
         func_L00_001FF4B0_A8AA8(D_0015EE6C * 5.0f, &velocity, &velocity);
         func_L00_001FF240(colors, &velocity, &second);
         velocity.f[2] += D_0015EE6C * 3.0f;
-        size = func_002140F8(0.75f, 1.25f);
+        size = random_float_between(0.75f, 1.25f);
         func_001F9C30_A8AA8(size, &velocity, &velocity);
-        duration = func_L00_00258BC8(60, 100);
+        duration = rand_range(60, 100);
         effect = func_L01_002F9908(&offset, &velocity, 0xc9, radius, duration,
                                         5.0f, radius, 2.0f, 1);
         if (effect != 0)
             func_001F9C30_A8AA8(0.35f, (char *)effect + 0x40, (char *)effect + 0x40);
     }
-    func_001F9BC0(&velocity);
+    clear_u64_value(&velocity);
     func_L00_0025F4A8_A8AA8(moby, &velocity, base_position, 0.0f, 0.0f, 20,
                             3, 4, 10.0f, 5.0f, 100000.0f,
                             0, 3.0f, 15.0f, 1, 1, -1, 0);
@@ -591,28 +591,28 @@ void func_L15_002A8AA8(struct Moby *moby)
         float radius, angle;
         int color, color2, duration;
         __builtin_memcpy(colors, &D_L15_001615F8, 12);
-        radius = func_002140F8(0.0f, 1.5f);
-        angle = func_00214158();
+        radius = random_float_between(0.0f, 1.5f);
+        angle = random_angle_radians();
         if (moby->oclass == 0x94)
             radius *= 3.0f;
-        offset.f[0] = func_001F9F90(angle) * radius;
-        offset.f[1] = func_001F9FA8(angle) * radius;
+        offset.f[0] = FastCos(angle) * radius;
+        offset.f[1] = FastSin(angle) * radius;
         offset.f[2] = 0.0f;
-        func_001F9BD8(&offset, &offset, &moby->pos);
-        offset.f[2] += func_002140F8(1.0f, 5.5f);
-        func_001F9BF0(&position, base_position, &offset);
+        FastVecAdd(&offset, &offset, &moby->pos);
+        offset.f[2] += random_float_between(1.0f, 5.5f);
+        FastVecSub(&position, base_position, &offset);
         velocity.q = position.q;
         func_L00_001FF4B0_A8AA8(D_0015EE6C * 5.0f, &velocity, &velocity);
         func_L00_001FF240(&position, &velocity, &first);
-        size = func_002140F8(0.75f, 1.25f);
+        size = random_float_between(0.75f, 1.25f);
         func_001F9C30_A8AA8(size, &velocity, &velocity);
-        size = func_002140F8(0.25f, 1.0f);
-        color = func_L00_00237B70(size, 0x7f000000, 0x7f182030);
-        size = func_002140F8(0.5f, 1.0f);
-        color2 = func_L00_00237B70(size, 0, 0x5f5f5f);
-        size = func_002140F8(1.0f, 3.0f) * 210000.0f;
-        duration = func_001F9850(180);
-        index = func_002140B0(3);
+        size = random_float_between(0.25f, 1.0f);
+        color = DefaultVtbl_DeleteMoby(size, 0x7f000000, 0x7f182030);
+        size = random_float_between(0.5f, 1.0f);
+        color2 = DefaultVtbl_DeleteMoby(size, 0, 0x5f5f5f);
+        size = random_float_between(1.0f, 3.0f) * 210000.0f;
+        duration = scale_ticks(180);
+        index = random_integer_below(3);
         effect = func_L00_0026CD70(&offset, &velocity, color, color2,
                                          size, duration, colors[index]);
         if (effect != 0)
@@ -696,8 +696,8 @@ void func_L15_002AB4A8(struct Moby *moby) {
     if (hit != 0) {
         __builtin_memcpy(palette, D_L15_00161638, 16);
         func_L00_001FF4B0(&hit_direction, hit + 0x10, D_0015EE6C * 10.0f);
-        func_001F9C30(&push, &hit_direction, 2.0f);
-        if (func_001F9CB8(hit) != 0.0f) {
+        FastVecScale(&push, &hit_direction, 2.0f);
+        if (FastVecLength(hit) != 0.0f) {
             center.q = *(VecQuad *)hit;
         } else {
             center.q = *(VecQuad *)&moby->pos;
@@ -707,32 +707,32 @@ void func_L15_002AB4A8(struct Moby *moby) {
         for (spark = 0; spark < 25; spark++) {
             float radius, angle;
             int life;
-            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
-            radius = func_001F9F90(angle);
-            radius *= func_002140F8(-3.0f, 3.0f);
+            angle = random_float_between(moby->rot.z, 1.5707963267948966f);
+            radius = FastCos(angle);
+            radius *= random_float_between(-3.0f, 3.0f);
             offset.f[0] = radius;
-            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
-            radius = func_001F9FA8(angle);
-            radius *= func_002140F8(-3.0f, 3.0f);
+            angle = random_float_between(moby->rot.z, 1.5707963267948966f);
+            radius = FastSin(angle);
+            radius *= random_float_between(-3.0f, 3.0f);
             offset.f[1] = radius;
             offset.f[2] = 0.0f;
-            offset.f[2] = func_002140F8(1.0f, 7.0f);
+            offset.f[2] = random_float_between(1.0f, 7.0f);
             func_L00_001FF240(colors, &offset, &moby->pos);
-            func_001F9BF0(colors, &center, &offset);
+            FastVecSub(colors, &center, &offset);
             velocity.q = *(VecQuad *)colors;
             func_L00_001FF4B0(&velocity, &velocity, D_0015EE6C * 5.0f);
             func_L00_001FF240(colors, &velocity, &push);
             velocity.f[2] += D_0015EE6C * 3.0f;
-            size = func_002140F8(0.75f, 1.25f);
-            func_001F9C30(&velocity, &velocity, size);
-            pick = func_002140B0(4);
+            size = random_float_between(0.75f, 1.25f);
+            FastVecScale(&velocity, &velocity, size);
+            pick = random_integer_below(4);
             color = &palette[pick];
-            radius = func_002140F8(0.1f, 0.3f);
-            life = func_L00_00258BC8(100, 160);
-            size = func_002140F8(3.0f, 7.0f);
+            radius = random_float_between(0.1f, 0.3f);
+            life = rand_range(100, 160);
+            size = random_float_between(3.0f, 7.0f);
             func_L01_002F9908(&offset, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
         }
-        func_001F9BC0(&velocity);
+        clear_u64_value(&velocity);
         func_L00_0025F4A8(moby, &velocity, &center, 0.0f, 0.0f, 20, 3, 4, 10.0f, 5.0f, 100000.0f, 3.0f, 0,
                          15.0f, 1, 1, -1, 0);
 
@@ -740,36 +740,36 @@ void func_L15_002AB4A8(struct Moby *moby) {
             float radius, angle;
             int color1, color2, life;
             __builtin_memcpy(colors, D_L15_00161648, 12);
-            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
-            radius = func_001F9F90(angle);
-            radius *= func_002140F8(-3.0f, 3.0f);
+            angle = random_float_between(moby->rot.z, 1.5707963267948966f);
+            radius = FastCos(angle);
+            radius *= random_float_between(-3.0f, 3.0f);
             offset.f[0] = radius;
-            angle = func_002140F8(moby->rot.z, 1.5707963267948966f);
-            radius = func_001F9FA8(angle);
-            radius *= func_002140F8(-3.0f, 3.0f);
+            angle = random_float_between(moby->rot.z, 1.5707963267948966f);
+            radius = FastSin(angle);
+            radius *= random_float_between(-3.0f, 3.0f);
             offset.f[1] = radius;
             offset.f[2] = 0.0f;
-            func_001F9BD8(&offset, &offset, &moby->pos);
-            offset.f[2] += func_002140F8(1.0f, 5.5f);
-            func_001F9BF0(&delta, &center, &offset);
+            FastVecAdd(&offset, &offset, &moby->pos);
+            offset.f[2] += random_float_between(1.0f, 5.5f);
+            FastVecSub(&delta, &center, &offset);
             velocity.q = delta.q;
             func_L00_001FF4B0(&velocity, &velocity, D_0015EE6C * 5.0f);
             func_L00_001FF240(&delta, &velocity, &hit_direction);
-            size = func_002140F8(0.75f, 1.25f);
-            func_001F9C30(&velocity, &velocity, size);
-            size = func_002140F8(0.25f, 1.0f);
-            color1 = func_L00_00237B70(size, 0x7f000000, 0x7f182030);
-            size = func_002140F8(0.5f, 1.0f);
-            color2 = func_L00_00237B70(size, 0, 0x5f5f5f);
-            size = func_002140F8(1.0f, 3.0f) * 210000.0f;
-            life = func_001F9850(180);
-            pick = func_002140B0(3);
+            size = random_float_between(0.75f, 1.25f);
+            FastVecScale(&velocity, &velocity, size);
+            size = random_float_between(0.25f, 1.0f);
+            color1 = DefaultVtbl_DeleteMoby(size, 0x7f000000, 0x7f182030);
+            size = random_float_between(0.5f, 1.0f);
+            color2 = DefaultVtbl_DeleteMoby(size, 0, 0x5f5f5f);
+            size = random_float_between(1.0f, 3.0f) * 210000.0f;
+            life = scale_ticks(180);
+            pick = random_integer_below(3);
             debris = func_L00_0026CD70(&offset, &velocity, color1, color2, size, life, colors[pick]);
             if (debris != 0)
                 *(float *)((char *)debris + 0x2c) = moby->pos.z - 0.5f;
         }
         func_L00_002584A8(moby, 0, -1);
-        func_0020D678(moby);
+        DeleteMoby(moby);
     } else {
         *((u8 *)moby + 0xA4) = 0xff;
         if (moby->state != 0)
@@ -780,7 +780,7 @@ void func_L15_002AB4A8(struct Moby *moby) {
         if (D_0013DE55[3] != 0) {
             u16 save_id = moby->save_id;
             if ((*(s32 *)(D_0014171B + 0xAB75 + (((s16)save_id >> 5) * 4) + D_0015EE84 * 256) >> (save_id & 31)) & 1)
-                func_0020D678(moby);
+                DeleteMoby(moby);
         }
     }
 }
@@ -833,7 +833,7 @@ void func_L15_002C3BD8(char *moby) {
     case 0: {
         float a = func_001F9878(*(float *)&D_L15_00161A80 * 60.0f);
         float b = func_001F9878(*(float *)&D_L15_00161A84 * 60.0f);
-        int d = func_001FA898(func_002140F8(a, b));
+        int d = truncate_float_to_s32(random_float_between(a, b));
         *(short *)(data + 0x80) = d;
         *(int *)(data + 0x84) = 0;
         *(short *)(data + 0x82) = 0;
@@ -845,8 +845,8 @@ void func_L15_002C3BD8(char *moby) {
     case 1: {
         int count;
         int ok;
-        if (!func_001F9938(data + 0x80)) break;
-        if (!(func_001F9D10(D_L15_00167440, moby + 0x10) < 42.0f)) break;
+        if (!FastDecTimer(data + 0x80)) break;
+        if (!(FastVecDist(D_L15_00167440, moby + 0x10) < 42.0f)) break;
         {
             ok = 1;
             if (um[0x21] != 0xFF) {
@@ -870,22 +870,22 @@ void func_L15_002C3BD8(char *moby) {
                     }
                 }
                 if (count != 0) {
-                    *(short *)(data + 0x80) = func_001F9850(0x3C);
+                    *(short *)(data + 0x80) = scale_ticks(0x3C);
                     ok = 0;
                 }
             }
         }
         if (!ok) break;
-        *(float *)(data + 0x8C) = func_002140F8(-0.209439516f, 0.209439516f);
+        *(float *)(data + 0x8C) = random_float_between(-0.209439516f, 0.209439516f);
         moby[0x20] = 2;
         break;
     }
     case 2: {
-        int r = func_L00_00258BC8(0, 1);
+        int r = rand_range(0, 1);
         *(short *)(data + 0x82) = r;
-        if (func_001FA850(*(float *)(data + 0x84), *(float *)(data + 0x8C)) < 0.00872664619f) {
+        if (FastDiffRots(*(float *)(data + 0x84), *(float *)(data + 0x8C)) < 0.00872664619f) {
             int k = *(short *)(data + 0x82) * 2 + 1;
-            int q = func_001F9850(6);
+            int q = scale_ticks(6);
             func_00213DE0(moby, k, 0, q);
             moby[0x20] = 3;
         }
@@ -895,24 +895,24 @@ void func_L15_002C3BD8(char *moby) {
     case 3: {
         if (um[0x53] != *(short *)(data + 0x82) * 2 + 1) break;
         if (!(um[0x70] & 2)) break;
-        *(short *)(data + 0x80) = func_001F9850(func_L00_00258BC8(0xF, 0x2D));
+        *(short *)(data + 0x80) = scale_ticks(rand_range(0xF, 0x2D));
         {
             int k = *(short *)(data + 0x82) * 2 + 2;
-            int q = func_001F9850(3);
+            int q = scale_ticks(3);
             func_00213DE0(moby, k, 0, q);
         }
-        *(float *)(data + 0x90) = func_00214158();
+        *(float *)(data + 0x90) = random_angle_radians();
         moby[0x20] = 4;
         break;
     }
     case 4: {
-        if (func_001F9D10(moby + 0x10, D_L15_00167440) < 20.0f && func_002140B0(2) == 0 && um[0x31] != 0) {
+        if (FastVecDist(moby + 0x10, D_L15_00167440) < 20.0f && random_integer_below(2) == 0 && um[0x31] != 0) {
             float A = *(float *)&D_L15_00161A7C;
-            float t1 = func_002140F8(A / 5.0f, A);
+            float t1 = random_float_between(A / 5.0f, A);
             float f22 = t1 * D_0015EE6C;
-            float t2 = func_002140F8(0.0f, *(float *)&D_L15_00161A7C / 5.0f);
+            float t2 = random_float_between(0.0f, *(float *)&D_L15_00161A7C / 5.0f);
             float f23 = t2 * D_0015EE6C;
-            float t3 = func_00214158();
+            float t3 = random_angle_radians();
             float vP[4];
             float vA[4];
             float vB[4];
@@ -921,29 +921,29 @@ void func_L15_002C3BD8(char *moby) {
             float u2;
             float u3;
             float u4;
-            u1 = func_001F9F90(*(float *)(data + 0x90));
+            u1 = FastCos(*(float *)(data + 0x90));
             vA[0] = u1 * f22;
-            u2 = func_001F9FA8(*(float *)(data + 0x90));
+            u2 = FastSin(*(float *)(data + 0x90));
             vA[1] = u2 * f22;
             vA[2] = 0.0f;
-            u3 = func_001F9F90(t3);
+            u3 = FastCos(t3);
             vB[0] = u3 * f23;
-            u4 = func_001F9FA8(t3);
+            u4 = FastSin(t3);
             vB[1] = u4 * f23;
             vB[2] = 0.0f;
             func_L00_001FF240(vO, vA, vB);
             func_L00_00250800(moby, 1, vP);
             {
-                int ra = func_001F9850(*(int *)&D_L15_00161A74);
-                int rb = func_001F9850(*(int *)&D_L15_00161A78);
-                int c = func_L00_00258BC8(ra, rb);
+                int ra = scale_ticks(*(int *)&D_L15_00161A74);
+                int rb = scale_ticks(*(int *)&D_L15_00161A78);
+                int c = rand_range(ra, rb);
                 func_L00_0026DA50(vP, vA, *(int *)&D_L15_00161A6C, *(int *)&D_L15_00161A6C, c, 1, 40000.0f);
             }
         }
-        if (!func_001F9938(data + 0x80)) break;
+        if (!FastDecTimer(data + 0x80)) break;
         {
             int k = *(short *)(data + 0x82) * 2 + 3;
-            int q = func_001F9850(6);
+            int q = scale_ticks(6);
             func_00213DE0(moby, k, 0, q);
         }
         moby[0x20] = 5;
@@ -957,9 +957,9 @@ void func_L15_002C3BD8(char *moby) {
         if (!(um[0x70] & 2)) break;
         a = func_001F9878(*(float *)&D_L15_00161A80 * 60.0f);
         b = func_001F9878(*(float *)&D_L15_00161A84 * 60.0f);
-        t = func_001FA898(func_002140F8(a, b));
+        t = truncate_float_to_s32(random_float_between(a, b));
         *(short *)(data + 0x80) = t;
-        r = func_001F9850(6);
+        r = scale_ticks(6);
         func_00213DE0(moby, 0, 0, r);
         moby[0x20] = 1;
         break;
@@ -971,7 +971,7 @@ void func_L15_002C3BD8(char *moby) {
         func_L00_00265050(moby, 0x74B, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L15_0015F660, D_L15_0015F660, D_L15_0015F660);
         func_L00_00265050(moby, 0x74C, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L15_0015F660, D_L15_0015F660, D_L15_0015F660);
         func_L00_00265050(moby, 0x74D, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L15_0015F660, D_L15_0015F660, D_L15_0015F660);
-        func_0020D678(moby);
+        DeleteMoby(moby);
         break;
     }
 }
@@ -1028,7 +1028,7 @@ void func_L15_002C62A8(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f
     target.q = goal->q;
     look_copy.q = look->q;
     origin.q = *(SQuad *)&moby->pos;
-    distance = func_001F9D10(&moby->pos, target_at);
+    distance = FastVecDist(&moby->pos, target_at);
     step = frame_time_sq * 10.0f;
     old_speed = vars->speed;
     speed_sq = old_speed * old_speed;
@@ -1047,10 +1047,10 @@ void func_L15_002C62A8(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f
         }
     }
 
-    func_001F9BF0(&delta, target_at, &moby->pos);
+    FastVecSub(&delta, target_at, &moby->pos);
     scaled.q = delta.q;
     ((void (*)(float, void *, void *))func_L00_001FF4B0)(vars->speed * 0.1f, &scaled, &scaled);
-    ((void (*)(float, void *, void *))func_001F9C30)(0.9f, &delta, &vars->delta);
+    ((void (*)(float, void *, void *))FastVecScale)(0.9f, &delta, &vars->delta);
     vars->delta.q = delta.q;
     func_L00_001FF240(&delta, &vars->delta, &scaled);
     func_L15_00248E58(1.0f, 2.0f, moby, &vars->delta, 0);
@@ -1065,13 +1065,13 @@ void func_L15_002C62A8(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f
     facing = func_L00_001FF860(dx, dy);
     moby->rot.z = func_L00_00259148(&vars->facing_velocity, moby->rot.z, facing,
                                    0.01f, 0.3f, 0.1f);
-    func_001F9BF0(&delta, &moby->pos, &origin);
+    FastVecSub(&delta, &moby->pos, &origin);
     vars->delta.q = delta.q;
     angle = func_L00_001FF860(vars->delta.f[0], vars->delta.f[1]);
-    angle = func_001FA790(angle, moby->rot.z);
-    c = func_001F9F90(angle);
+    angle = FastSubRots(angle, moby->rot.z);
+    c = FastCos(angle);
     yaw_target = (vars->speed * 0.34906584f * c) / (frame_time * 10.0f);
-    s = func_001F9FA8(angle);
+    s = FastSin(angle);
     pitch_target = (vars->speed * -0.34906584f * s) / (frame_time * 10.0f);
     moby->rot.y = func_L00_00259148(&vars->yaw_velocity, moby->rot.y,
         yaw_target,
@@ -1866,7 +1866,7 @@ void func_L15_002D2398(void *mobyp) {
         if (d <= 0.0f)
             sel = 1;
 
-        r2 = func_001FA898(2560.0f);
+        r2 = truncate_float_to_s32(2560.0f);
         *(float *)(data + 0x80) = *(float *)&D_L15_00161B88 * D_0015EE70;
         *(int *)(data + 0x90) = r2;
         *(float *)(data + 0x98) = 2.5f;
@@ -1948,7 +1948,7 @@ void func_L15_002D2398(void *mobyp) {
         func_L00_00260FB0(*(float *)(data + 0x1B8), moby, data + 0x120, 0, 0, p->pt, p->n);
     }
 
-    if (*(float *)(data + 0x1B8) < func_001F9D10(moby + 0x10, data + 0x120))
+    if (*(float *)(data + 0x1B8) < FastVecDist(moby + 0x10, data + 0x120))
         *(int *)(data + 0x164) = 2;
     if (*(int *)(data + 0x160) == 0)
         *(int *)(data + 0x160) = *(int *)(D_0013E633 + 0x2E9D);

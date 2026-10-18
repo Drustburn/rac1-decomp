@@ -41,8 +41,8 @@ void func_L00_001F3AF0(int x, int y, int color, int s_) {
     long *q;
     int hd;
 
-    func_00234C98(0x42, 0x8000000044L);
-    func_00234C98(0x47, 0x5360B);
+    VU1_addGSregister(0x42, 0x8000000044L);
+    VU1_addGSregister(0x47, 0x5360B);
     base = D_L00_00161280;
     D_L00_00161280 = base + 4;
     p = (long *)D_L00_00161280;
@@ -847,10 +847,10 @@ void func_L00_001F92E8(void) {
             if (1.0f < D_L00_0015F4FC) {
                 D_L00_0015F4FC = 1.0f;
             }
-            func_001F55C0(0, 0, 0, func_001FA898(D_L00_0015F4FC * 128.0f));
+            emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(D_L00_0015F4FC * 128.0f));
         }
-        func_001F3C10();
-        ((int (*)(int))func_001F4630)(0);
+        ResetGsRegisters();
+        ((int (*)(int))SetupGifPaging)(0);
         p = D_L00_00173180;
         if (p->key >= 0) {
             q = p;
@@ -860,7 +860,7 @@ void func_L00_001F92E8(void) {
                 q++;
             } while (p->key >= 0);
         }
-        func_001F4748();
+        DoGifPaging();
     }
 }
 extern int D_L00_0015F4F8 MACRO_ADDR;

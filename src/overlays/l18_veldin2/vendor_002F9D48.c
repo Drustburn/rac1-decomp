@@ -94,7 +94,7 @@ void func_L18_002F9D48(Moby *moby) {
                     }
                 }
             }
-            if (D_L18_0016D2E0_9D48.timer >= func_001F9850(500) && D_L18_0016D2E0_9D48.timer <= func_001F9850(0x35C)) {
+            if (D_L18_0016D2E0_9D48.timer >= scale_ticks(500) && D_L18_0016D2E0_9D48.timer <= scale_ticks(0x35C)) {
                 union { F5_9D48 s; float a[8]; } t;
                 float v[4];
                 int k;
@@ -104,56 +104,56 @@ void func_L18_002F9D48(Moby *moby) {
                     if (D_L18_0016D2E0_9D48.objs[k] == 0) continue;
                     func_L00_00250800(D_L18_0016D2E0_9D48.objs[k], 0, v);
                     f = t.s.f[k - 3];
-                    if (k == 3 && D_L18_0016D2E0_9D48.timer >= func_001F9850(0x285) && D_L18_0016D2E0_9D48.timer <= func_001F9850(0x2E0)) continue;
-                    if (k == 5 && D_L18_0016D2E0_9D48.timer >= func_001F9850(0x285) && D_L18_0016D2E0_9D48.timer <= func_001F9850(0x2DA)) f = 300000.0f;
+                    if (k == 3 && D_L18_0016D2E0_9D48.timer >= scale_ticks(0x285) && D_L18_0016D2E0_9D48.timer <= scale_ticks(0x2E0)) continue;
+                    if (k == 5 && D_L18_0016D2E0_9D48.timer >= scale_ticks(0x285) && D_L18_0016D2E0_9D48.timer <= scale_ticks(0x2DA)) f = 300000.0f;
                     func_L00_00264BE8(v, v, D_L18_0015F660, f, f * 0.4f);
                 }
             }
-            if (D_L18_0016D2E0_9D48.timer == func_001F9850(0x2C2)) {
+            if (D_L18_0016D2E0_9D48.timer == scale_ticks(0x2C2)) {
                 Moby *m = D_L18_0016D2E0_9D48.objs[7];
                 if (m != 0) {
                     float pos[4];
                     float up[4];
                     func_L00_00250800(m, 0, pos);
-                    func_001F9BC0(up);
+                    clear_u64_value(up);
                     up[2] = 1.0f;
                     func_L00_0025F4A8(m, up, pos, 0.0f, 0.0f, 0x32, 0x19, 0x19, 8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 0xF, -1, 0);
                 }
             }
-            if (D_L18_0016D2E0_9D48.timer == func_001F9850(0x2C6)) {
+            if (D_L18_0016D2E0_9D48.timer == scale_ticks(0x2C6)) {
                 Moby *m = D_L18_0016D2E0_9D48.objs[4];
                 if (m != 0) {
                     float pos[4];
                     float up[4];
                     func_L00_00250800(m, 0, pos);
-                    func_001F9BC0(up);
+                    clear_u64_value(up);
                     up[2] = 1.0f;
                     func_L00_0025F4A8(m, up, pos, 0.0f, 0.0f, 0x32, 0x19, 0x19, 8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 0xF, -1, 0);
                 }
             }
-            if (D_L18_0016D2E0_9D48.timer == func_001F9850(0x2D0)) {
+            if (D_L18_0016D2E0_9D48.timer == scale_ticks(0x2D0)) {
                 Moby *m = D_L18_0016D2E0_9D48.objs[6];
                 if (m != 0) {
                     float pos[4];
                     float up[4];
                     func_L00_00250800(m, 0, pos);
-                    func_001F9BC0(up);
+                    clear_u64_value(up);
                     up[2] = 1.0f;
                     func_L00_0025F4A8(m, up, pos, 0.0f, 0.0f, 0x32, 0x19, 0x19, 8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 0xF, -1, 0);
                 }
             }
-            if (D_L18_0016D2E0_9D48.timer == func_001F9850(0x2DA)) {
+            if (D_L18_0016D2E0_9D48.timer == scale_ticks(0x2DA)) {
                 Moby *m = D_L18_0016D2E0_9D48.objs[5];
                 if (m != 0) {
                     float pos[4];
                     float up[4];
                     func_L00_00250800(m, 0, pos);
-                    func_001F9BC0(up);
+                    clear_u64_value(up);
                     up[2] = 1.0f;
                     func_L00_0025F4A8(m, up, pos, 0.0f, 0.0f, 0x32, 0x19, 0x19, 8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 0xF, -1, 0);
                 }
             }
-            if (D_L18_0016D2E0_9D48.timer == func_001F9850(0x2EC)) {
+            if (D_L18_0016D2E0_9D48.timer == scale_ticks(0x2EC)) {
                 float pos[4];
                 float up[4];
                 *(u128_9D48 *)pos = 0;
@@ -161,29 +161,29 @@ void func_L18_002F9D48(Moby *moby) {
                 pos[1] = 454.163f;
                 pos[2] = 102.999f;
                 pos[3] = 1.0f;
-                func_001F9BC0(up);
+                clear_u64_value(up);
                 up[2] = 1.0f;
                 func_L00_0025F4A8(moby, up, pos, 0.0f, 0.0f, 0x12C, 0xC8, 0xC8, 12.0f, 6.0f, 9.0f, 1.0f, -1, 60.0f, 0, 0x3C, -1, 0);
             }
-            if (D_L18_0016D2E0_9D48.timer >= func_001F9850(*(int *)&D_L18_0016254C) && D_L18_0016D2E0_9D48.timer < func_001F9850(*(int *)&D_L18_00162550)) {
-                float f = func_001FA888(D_L18_0016D2E0_9D48.timer - func_001F9850(*(int *)&D_L18_0016254C));
-                f = f / func_001FA888(func_001F9850(*(int *)&D_L18_00162550 - *(int *)&D_L18_0016254C));
+            if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_0016254C) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162550)) {
+                float f = func_001FA888(D_L18_0016D2E0_9D48.timer - scale_ticks(*(int *)&D_L18_0016254C));
+                f = f / func_001FA888(scale_ticks(*(int *)&D_L18_00162550 - *(int *)&D_L18_0016254C));
                 D_L18_001625B4 = func_001FA898_r(f * 255.0f);
-                func_001F49B0(func_L18_002FB080, D_L18_001625B8);
+                AddDrawCallback(func_L18_002FB080, D_L18_001625B8);
             }
-            if (D_L18_0016D2E0_9D48.timer >= func_001F9850(*(int *)&D_L18_00162554) && D_L18_0016D2E0_9D48.timer < func_001F9850(*(int *)&D_L18_00162558)) {
-                float f = func_001FA888(D_L18_0016D2E0_9D48.timer - func_001F9850(*(int *)&D_L18_00162554));
-                f = f / func_001FA888(func_001F9850(*(int *)&D_L18_00162558 - *(int *)&D_L18_00162554));
+            if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_00162554) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162558)) {
+                float f = func_001FA888(D_L18_0016D2E0_9D48.timer - scale_ticks(*(int *)&D_L18_00162554));
+                f = f / func_001FA888(scale_ticks(*(int *)&D_L18_00162558 - *(int *)&D_L18_00162554));
                 D_L18_001625BC = f * 200.0f + 0.25f;
-                func_001F49B0(func_L18_002FB318_9D48, D_L18_001625B8);
+                AddDrawCallback(func_L18_002FB318_9D48, D_L18_001625B8);
             }
-            if (D_L18_0016D2E0_9D48.timer >= func_001F9850(*(int *)&D_L18_00162528) && D_L18_0016D2E0_9D48.timer < func_001F9850(*(int *)&D_L18_00162530)) {
-                func_001F49B0(func_L18_002FABE0, D_L18_0016D2E0_9D48.objs[0]);
-                if (D_L18_0016D2E0_9D48.timer >= func_001F9850(*(int *)&D_L18_0016252C)) {
+            if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_00162528) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162530)) {
+                AddDrawCallback(func_L18_002FABE0, D_L18_0016D2E0_9D48.objs[0]);
+                if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_0016252C)) {
                     D_L18_001625B0 = 10.0f;
                 } else {
-                    float f = func_001FA888(D_L18_0016D2E0_9D48.timer - func_001F9850(*(int *)&D_L18_00162528));
-                    f = f / func_001FA888(func_001F9850(*(int *)&D_L18_0016252C - *(int *)&D_L18_00162528));
+                    float f = func_001FA888(D_L18_0016D2E0_9D48.timer - scale_ticks(*(int *)&D_L18_00162528));
+                    f = f / func_001FA888(scale_ticks(*(int *)&D_L18_0016252C - *(int *)&D_L18_00162528));
                     D_L18_001625B0 = *(float *)&D_L18_00162520 + (*(float *)&D_L18_00162524 - *(float *)&D_L18_00162520) * f;
                 }
             }
@@ -208,20 +208,20 @@ void func_L18_002F9D48(Moby *moby) {
                     }
                 }
             }
-            if (D_L18_0016D2E0_9D48.timer >= func_001F9850(*(int *)&D_L18_0016254C) && D_L18_0016D2E0_9D48.timer < func_001F9850(*(int *)&D_L18_00162550)) {
+            if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_0016254C) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162550)) {
                 float f = func_001FA888(D_L18_0016D2E0_9D48.timer - *(int *)&D_L18_0016254C);
                 f = f / func_001FA888(*(int *)&D_L18_00162550 - *(int *)&D_L18_0016254C);
                 D_L18_001625B4 = func_001FA898_r(f * 255.0f);
-                func_001F49B0(func_L18_002FB080, D_L18_001625B8);
+                AddDrawCallback(func_L18_002FB080, D_L18_001625B8);
             }
-            if (D_L18_0016D2E0_9D48.timer >= func_001F9850(*(int *)&D_L18_00162554) && D_L18_0016D2E0_9D48.timer < func_001F9850(*(int *)&D_L18_00162558)) {
+            if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_00162554) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162558)) {
                 float f = func_001FA888(D_L18_0016D2E0_9D48.timer - *(int *)&D_L18_00162554);
                 f = f / func_001FA888(*(int *)&D_L18_00162558 - *(int *)&D_L18_00162554);
                 D_L18_001625BC = f * 200.0f + 0.25f;
-                func_001F49B0(func_L18_002FB318_9D48, D_L18_001625B8);
+                AddDrawCallback(func_L18_002FB318_9D48, D_L18_001625B8);
             }
-            if (D_L18_0016D2E0_9D48.timer >= func_001F9850(*(int *)&D_L18_00162528) && D_L18_0016D2E0_9D48.timer < func_001F9850(*(int *)&D_L18_00162530)) {
-                func_001F49B0(func_L18_002FABE0, D_L18_0016D2E0_9D48.objs[0]);
+            if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_00162528) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162530)) {
+                AddDrawCallback(func_L18_002FABE0, D_L18_0016D2E0_9D48.objs[0]);
                 if (D_L18_0016D2E0_9D48.timer >= *(int *)&D_L18_0016252C) {
                     D_L18_001625B0 = 10.0f;
                 } else {
@@ -232,12 +232,12 @@ void func_L18_002F9D48(Moby *moby) {
             }
         }
         if (D_L18_0016D2E0_9D48.state == 1 && D_L18_0016D2E0_9D48.objs[3] != 0) {
-            func_001F49B0(func_L18_002FAEF8, D_L18_0016D2E0_9D48.objs[3]);
+            AddDrawCallback(func_L18_002FAEF8, D_L18_0016D2E0_9D48.objs[3]);
         }
-        if (D_L18_0016D2E0_9D48.state == 5 && D_L18_0016D2E0_9D48.timer >= func_001F9850(0x8A) && D_L18_0016D2E0_9D48.timer <= func_001F9850(0x108)) {
+        if (D_L18_0016D2E0_9D48.state == 5 && D_L18_0016D2E0_9D48.timer >= scale_ticks(0x8A) && D_L18_0016D2E0_9D48.timer <= scale_ticks(0x108)) {
             Moby *m = D_L18_0016D2E0_9D48.objs[2];
             if (m != 0) {
-                if (D_L18_0016D2E0_9D48.timer > func_001F9850(0x8C)) {
+                if (D_L18_0016D2E0_9D48.timer > scale_ticks(0x8C)) {
                     float x[4];
                     float e[4];
                     int j;
@@ -258,7 +258,7 @@ void func_L18_002F9D48(Moby *moby) {
                 }
             }
         }
-        if (D_L18_0016D2E0_9D48.state == 1 && D_L18_0016D2E0_9D48.timer >= func_001F9850(0x1BE) && D_L18_0016D2E0_9D48.timer < func_001F9850(0x1F6)) {
+        if (D_L18_0016D2E0_9D48.state == 1 && D_L18_0016D2E0_9D48.timer >= scale_ticks(0x1BE) && D_L18_0016D2E0_9D48.timer < scale_ticks(0x1F6)) {
             Moby *m = D_L18_0016D2E0_9D48.objs[4];
             if (m != 0) {
                 V_9D48 *v = (V_9D48 *)moby->pvars;
@@ -268,7 +268,7 @@ void func_L18_002F9D48(Moby *moby) {
                 v->f10 = 0;
                 func_L00_00250800(m, 3, a);
                 func_L00_00250800(m, 10, b);
-                func_001F9BF0(c, b, a);
+                FastVecSub(c, b, a);
                 func_L00_001FF4B0(&moby->rot_row1, c, 1.0f);
                 qcopy(v->pos, b);
                 col0 = 0x207F7F;
@@ -283,28 +283,28 @@ void func_L18_002F9D48(Moby *moby) {
                 D_L18_00161888 = col1;
             }
         }
-        if (D_L18_0016D2E0_9D48.state == 2 || D_L18_0016D2E0_9D48.state == 0 || (D_L18_0016D2E0_9D48.state == 3 && D_L18_0016D2E0_9D48.timer < func_001F9850(0x24A))) {
+        if (D_L18_0016D2E0_9D48.state == 2 || D_L18_0016D2E0_9D48.state == 0 || (D_L18_0016D2E0_9D48.state == 3 && D_L18_0016D2E0_9D48.timer < scale_ticks(0x24A))) {
             if (D_L18_0016D2E0_9D48.objs[2] != 0) {
-                func_001F49B0(func_L18_002FAEF8, D_L18_0016D2E0_9D48.objs[2]);
+                AddDrawCallback(func_L18_002FAEF8, D_L18_0016D2E0_9D48.objs[2]);
             }
         }
-        if (D_L18_0016D2E0_9D48.state == 3 && D_L18_0016D2E0_9D48.timer == func_001F9850(0x24A)) {
+        if (D_L18_0016D2E0_9D48.state == 3 && D_L18_0016D2E0_9D48.timer == scale_ticks(0x24A)) {
             char *target;
             int i;
             target = D_L18_00167A50;
             func_001F9EC0(a, &D_L18_00162570, target);
-            func_001F9BD8(a, a, target - 0x210);
+            FastVecAdd(a, a, target - 0x210);
             qcopy(b, D_L18_00167A50 + 0x10);
             for (i = 0; i < 32; i++) {
                 int r;
                 char *p;
-                func_002156E0(c, b, D_L18_00167A50, func_001FA888(i) * 0.19634955f);
+                build_look_at_matrix(c, b, D_L18_00167A50, func_001FA888(i) * 0.19634955f);
                 func_L00_001FF4B0(c, c, *(float *)&D_L18_00162580 * D_0015EE60);
-                r = func_002140B0(16);
-                p = func_L00_0026DEA0_c(a, func_002140B0(2) ? -r : r, c, 0.0f, 1.0f, 1.01f, *(float *)&D_L18_00162584, 0x7F7F7F7F);
+                r = random_integer_below(16);
+                p = func_L00_0026DEA0_c(a, random_integer_below(2) ? -r : r, c, 0.0f, 1.0f, 1.01f, *(float *)&D_L18_00162584, 0x7F7F7F7F);
                 if (p != 0) {
                     char *e = p + 0x20;
-                    *(short *)(p + 0xA) = func_001F9850(0x3C);
+                    *(short *)(p + 0xA) = scale_ticks(0x3C);
                     p[9] = func_001FA898_r(4.0f) + 0x40;
                     *(int *)(e + 4) = 2;
                     e[0xA] = 0x7F;
@@ -356,7 +356,7 @@ void func_L18_002FABE0(void) {
     float tilt;
     char *target;
 
-    if (D_L18_0016D2E0.n == func_001F9850((*(int *)&D_L18_00162528) + 1)) {
+    if (D_L18_0016D2E0.n == scale_ticks((*(int *)&D_L18_00162528) + 1)) {
         D_L18_001625E0 = 1.0f;
         D_L18_001625E4 = 0.0f;
         if (D_L18_0016D2E0.state == 7) {
@@ -367,24 +367,24 @@ void func_L18_002FABE0(void) {
         D_L18_001625E8 = tilt;
         D_L18_001625EC = 1.0f;
     }
-    pk.b = func_001F4868(0xB);
+    pk.b = GetEffectTex(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
-    func_00234C98(0x4A, 0);
-    func_00234C98(0x47, 0x51001);
+    VU1_addGSregister(0x4A, 0);
+    VU1_addGSregister(0x47, 0x51001);
     func_001F9EC0(mat[3], &D_L18_001625E0, D_L18_00167A50);
     target = D_L18_00167A50;
     target -= 0x210;
-    func_001F9BD8(mat[3], mat[3], target);
-    func_001F9BF0(mat[0], mat[3], target);
+    FastVecAdd(mat[3], mat[3], target);
+    FastVecSub(mat[0], mat[3], target);
     func_L00_001FF4B0(mat[0], mat[0], 1.0f);
     *(u128_9780 *)up = 0;
     up[2] = 1.0f;
     up[3] = 1.0f;
-    func_001F9CA0(mat[1], mat[0], up);
+    FastVecCross(mat[1], mat[0], up);
     func_L00_001FF4B0(mat[1], mat[1], 1.0f);
-    func_001F9CA0(mat[2], mat[1], mat[0]);
+    FastVecCross(mat[2], mat[1], mat[0]);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -399,7 +399,7 @@ void func_L18_002FABE0(void) {
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        func_001F9C30(pk.m[i], D_L18_001DFE50[i], D_L18_001625B0);
+        FastVecScale(pk.m[i], D_L18_001DFE50[i], D_L18_001625B0);
         func_001F9EE8(pk.m[i], pk.m[i], mat);
     }
     func_L00_001FD1D8(&pk, 0, 0);
@@ -409,12 +409,12 @@ void func_L18_002FABE0(void) {
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        func_001F9C30(pk.m[i], D_L18_001DFE50[i], D_L18_001625B0 * 0.75f);
+        FastVecScale(pk.m[i], D_L18_001DFE50[i], D_L18_001625B0 * 0.75f);
         func_001F9EE8(pk.m[i], pk.m[i], mat);
     }
     func_L00_001FD1D8(&pk, 0, 0);
     for (i = 0; i < 4; i++) {
-        func_001F9C30(pk.m[i], D_L18_001DFE50[i], D_L18_001625B0 * 0.5f);
+        FastVecScale(pk.m[i], D_L18_001DFE50[i], D_L18_001625B0 * 0.5f);
         func_001F9EE8(pk.m[i], pk.m[i], mat);
     }
     func_L00_001FD1D8(&pk, 0, 0);
@@ -553,22 +553,22 @@ void func_L18_002FB318(struct Moby *m) {
     int i = 0;
     int color;
 
-    pk.b = func_001F4868(0xB);
+    pk.b = GetEffectTex(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
-    func_00234C98(0x4A, 0);
-    func_00234C98(0x47, 0x51001);
+    VU1_addGSregister(0x4A, 0);
+    VU1_addGSregister(0x47, 0x51001);
     func_001F9EC0(mat[3], &D_L18_001625F0, &m->rot_row0);
-    func_001F9BD8(mat[3], mat[3], &m->pos);
+    FastVecAdd(mat[3], mat[3], &m->pos);
     *(u128_9c20_FB318 *)up = 0;
     up[2] = -1.0f;
     up[3] = 1.0f;
     func_001F9EC0(mat[0], up, &m->rot_row0);
-    func_001F9BF0(mat[1], mat[3], D_L18_00167840);
-    func_001F9CA0(mat[2], mat[1], mat[0]);
+    FastVecSub(mat[1], mat[3], D_L18_00167840);
+    FastVecCross(mat[2], mat[1], mat[0]);
     func_L00_001FF4B0(mat[2], mat[2], 1.0f);
-    func_001F9CA0(mat[1], mat[0], mat[2]);
+    FastVecCross(mat[1], mat[0], mat[2]);
 
     color = (*(int *)&D_L18_00162594) | 0xFF000000;
     pk.uv[0] = 1.0f;
@@ -1059,15 +1059,15 @@ void func_L18_002FD5C0(void *m_) {
     }
     if (m->state != 7 && (*(int *)&D_L18_0015F6B0) != (*(int *)&D_L18_00162694)) {
         (*(int *)&D_L18_00162694) = (*(int *)&D_L18_0015F6B0);
-        func_001F49B0((void *)func_L18_002FDF58, m);
+        AddDrawCallback((void *)func_L18_002FDF58, m);
     }
     speed = F(D_L18_001626A4);
     if (m->state == 4 || m->state == 5) {
         speed = F(D_L18_001626A8);
     }
-    d->spin = func_001FA748(d->spin, speed * 0.017453292f * D_0015EE6C);
-    *(int *)((char *)m + 0x90) = func_001FA8A8((*(int *)&D_L18_0016269C), (*(int *)&D_L18_001626A0),
-                                func_001F9FA8(d->spin) * 0.5f + 0.5f);
+    d->spin = FastAddRots(d->spin, speed * 0.017453292f * D_0015EE6C);
+    *(int *)((char *)m + 0x90) = FastTweenColor((*(int *)&D_L18_0016269C), (*(int *)&D_L18_001626A0),
+                                FastSin(d->spin) * 0.5f + 0.5f);
     if (m->pos.z < 100.0f && m->state != 7) {
         m->state = 6;
     }
@@ -1076,7 +1076,7 @@ void func_L18_002FD5C0(void *m_) {
         if (m->state != 7) {
             m->state = 8;
             if (*((u8 *)m + 0x53) != 0) {
-                func_00213DE0(m, 0, 0, func_001F9850(10));
+                func_00213DE0(m, 0, 0, scale_ticks(10));
             }
             *(int *)((char *)m + 0x94) = 0;
             *(u16 *)((char *)m + 0x34) = (*(u16 *)((char *)m + 0x34) | 0x41) & ~0x1000;
@@ -1089,7 +1089,7 @@ void func_L18_002FD5C0(void *m_) {
     if (hit != 1 && m->state != 6 && dmg != 0.0f) {
         d->health -= dmg;
         if (d->health <= 0.0f) {
-            if (func_002140B0(2) != 0) {
+            if (random_integer_below(2) != 0) {
                 m->state = 6;
             } else {
                 float k = D_0015EE70;

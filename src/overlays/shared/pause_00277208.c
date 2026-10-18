@@ -40,8 +40,8 @@ void func_L00_002777C0(void) {
     char *st = D_L00_001BA070;
 
     if (*(int *)(st + 0x110) >= 10) {
-        func_00234AC8(1);
-        func_002348E8();
+        VU1_syncChain(1);
+        VU1_initChain();
         if (*(int *)(st + 4) != 0) {
             {
                 for (i = 0; i < 14; i++) {
@@ -80,7 +80,7 @@ void func_L00_002777C0(void) {
             table = D_L00_0017E5D8;
             value = *(int *)(*(char **)(table + 0x18) + 0x74);
             *(int *)&D_0015EF78 = *(int *)(state + 0x18);
-            func_001FF958(0, value, 0);
+            Hud_SendResidentBank(0, value, 0);
         }
         func_L00_00235CA0(2);
         if (*(int *)(*(char **)(table + 0x18) + 0x80) != 0) {
@@ -96,10 +96,10 @@ void func_L00_002777C0(void) {
             }
         }
         handle = func_L00_00235790();
-        func_L00_002367A8(handle, func_001F9850(0xB4));
-        handle = func_001FFB38(2, 0x754E, func_L00_0023A658, func_L00_0023A690,
-                               func_L00_0023A788, &D_0015EE98, 9999999);
-        func_L00_002367A8(handle, func_001F9850(0xB4));
+        func_L00_002367A8(handle, scale_ticks(0xB4));
+        handle = queue_animation_update(2, 0x754E, func_L00_0023A658, func_L00_0023A690,
+                               func_L00_0023A788, &gBolts, 9999999);
+        func_L00_002367A8(handle, scale_ticks(0xB4));
         {
             char *s = D_L00_001BA070;
             *(int *)s = 0x14;
@@ -119,8 +119,8 @@ void func_L00_002777C0(void) {
             int *tbl = (int *)D_L00_00173F40;
             ((struct { int p[4]; int f; } *)tbl)->f &= 0x7FFFFFFF;
         }
-        func_002349B8();
-        func_00234AC8(1);
+        VU1_sendChain();
+        VU1_syncChain(1);
     }
 }
 typedef unsigned int PQ __attribute__((mode(TI), aligned(16)));
@@ -885,7 +885,7 @@ void func_L00_00284410(void) {
         vc = code - 0x3d;
         if (code < 0x25) {
             (D_0013D50F + 0xB9)[code] = 1;
-            (D_0013D5EB + 5)[code] = 1;
+            (gHavePersuader + 5)[code] = 1;
         } else if ((unsigned)(code - 0x25) < 0x12) {
             func_L00_00261848(va);
         } else if ((unsigned)vb < 6) {
@@ -896,7 +896,7 @@ void func_L00_00284410(void) {
             if (!*q) {
                 *q = 1;
                 func_0022EE28(1, 0, 0);
-                func_L00_00264DB8(0x53DB, -1);
+                ShowBanner(0x53DB, -1);
             }
         }
     } else {
@@ -1110,7 +1110,7 @@ void func_L00_002862E0(void) {
     char *e;
     int k, s, i;
     if (*(int *)D_L00_001BB5C0 == 0) {
-        func_001F99B0(D_L00_001BA960, 0, 0xC60);
+        FastMemSet(D_L00_001BA960, 0, 0xC60);
         return;
     }
     func_L00_001FF040((int)D_L00_001BA960, p, 0xC60);
@@ -1154,7 +1154,7 @@ done:
         func_001FA1F8(*(char **)(h + 0x2080) + 0xC0, h + 0x90);
     }
     func_L00_001ED600();
-    func_00216270();
+    register_audio_stream_callback();
 }
 extern unsigned char *D_L00_00160098 MACRO_ADDR;
 extern unsigned char *D_L00_0016009C MACRO_ADDR;

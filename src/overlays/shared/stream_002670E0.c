@@ -75,16 +75,16 @@ int func_L00_00267290(char *p, char *q) {
     if (q == 0) return 0;
     if (*(short *)(q + 0x36) == -1) return 0;
     if (*(unsigned char *)(q + 8) == 0xFF) return 0;
-    f0 = func_001F9D10(p + 0x10, g + 0x80);
+    f0 = FastVecDist(p + 0x10, g + 0x80);
     f = *(float *)(q + 0xC);
     f = f + f;
     if (f < f0) return 0;
     if (*(unsigned char *)(q + 8) == 0) {
         f = func_L00_001FF860(*(float *)(g + 0x80) - *(float *)(p + 0x10), *(float *)(g + 0x84) - *(float *)(p + 0x14));
-        f = func_001FA850(f, *(float *)(p + 0x48));
+        f = FastDiffRots(f, *(float *)(p + 0x48));
         if (*(float *)(q + 0xC) < f) return 0;
         f = func_L00_001FF860(*(float *)(p + 0x10) - *(float *)(g + 0x80), *(float *)(p + 0x14) - *(float *)(g + 0x84));
-        f = func_001FA850(f, *(float *)(g + 0x98));
+        f = FastDiffRots(f, *(float *)(g + 0x98));
         if (1.5700000524520874f < f) return 0;
     }
     func_00217AE8(p, q, 0);
@@ -98,7 +98,7 @@ int func_L00_00267290(char *p, char *q) {
         *(int *)(x + 8) = (int)p; *(int *)(x + 0xC) = (int)q;
         e = (char *)*(int *)(q + 0x3C) + *(short *)(q + 0x36) * 0x1C;
         if (*(unsigned short *)(e + 0x10) & 8) {
-            if (*(short *)(e + 8) == 1) D_0015EE98 = D_0015EE98 - *(int *)(D_L00_001C43B0 + *(short *)(e + 0xA) * 0x18);
+            if (*(short *)(e + 8) == 1) gBolts = gBolts - *(int *)(D_L00_001C43B0 + *(short *)(e + 0xA) * 0x18);
             else if (*(short *)(e + 8) == 4) { tb2 = D_0013D355 + 0x13B; tb2[*(short *)(e + 0xA)] = 0; }
         }
         if (*(short *)(e + 4) == -1) { func_00217AE8(p, q, 1); return 1; }
@@ -112,13 +112,13 @@ int func_L00_00267290(char *p, char *q) {
         return 1;
     }
     if (func_L00_002367A8(*(int *)&D_L00_001601F0, 0xA)) {
-        *(int *)&D_L00_001601F0 = func_001FFB38(0xC, 0, (void*)func_L00_00237B20, (void*)func_L00_00237B70, (void*)func_L00_00237B90, 0, 0);
+        *(int *)&D_L00_001601F0 = queue_animation_update(0xC, 0, (void*)func_L00_00237B20, (void*)DefaultVtbl_DeleteMoby, (void*)func_L00_00237B90, 0, 0);
     }
     {
         char *e2 = (char *)*(int *)(q + 0x3C) + *(short *)(q + 0x36) * 0x1C;
         if (*(short *)(e2 + 8) == 1 || *(short *)(e2 + 8) == 6) {
-            m = func_001FFB38(2, 0x754E, (void*)func_L00_0023A658, (void*)func_L00_0023A690, (void*)func_L00_0023A788, &D_0015EE98, 0x98967F);
-            func_L00_002367A8(m, func_001F9850(0x3C));
+            m = queue_animation_update(2, 0x754E, (void*)func_L00_0023A658, (void*)func_L00_0023A690, (void*)func_L00_0023A788, &gBolts, 0x98967F);
+            func_L00_002367A8(m, scale_ticks(0x3C));
         }
     }
     return 0;

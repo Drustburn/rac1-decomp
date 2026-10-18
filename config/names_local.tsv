@@ -1,0 +1,3 @@
+# Names this project gives functions from reading the code (tools/names.py local merges them into names.tsv).
+# symbol	name	evidence	override
+func_001E9808	StartLevel	src/game/bmain.c: picks the level's load parameters, stops sound, waits for the loader and loads the level; the NTSC name showDebugFont does not fit the body	override

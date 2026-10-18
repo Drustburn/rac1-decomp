@@ -80,7 +80,7 @@ func_001E9088	actuator_CalcPower	recovered	config/symbol_names.txt	text: NTSC/PA
 func_001E94E8	LoadPifAsPSMT8H	recovered	config/symbol_names.txt	text: NTSC/PAL function-size alignment	load_pif_as_psmt8_h
 func_001E96B8	LoadDebugFont	recovered	config/symbol_names.txt	text: NTSC/PAL function-size alignment	
 func_001E9730	STUB_printf	recovered	NTSC config/symbols.txt	STUB_printf at US 0x1E93B0 (hand-named); US/PAL size alignment	
-func_001E9808	showDebugFont	descriptive	NTSC config/symbols.txt	showDebugFont__Fi at US 0x1E9488 (2026-09 naming loop); US/PAL size alignment	start_level
+func_001E9808	StartLevel	descriptive	config/names_local.tsv	src/game/bmain.c: picks the level's load parameters, stops sound, waits for the loader and loads the level; the NTSC name showDebugFont does not fit the body	start_level,showDebugFont
 func_001E9E70	Transition_DrawSky	recovered	config/symbol_names.txt	text: NTSC/PAL function-size alignment	
 func_001EB300	Help_LoadMsgs	descriptive	NTSC config/symbols.txt	Help_LoadMsgs__Fi at US 0x1EAF50 (2026-09 naming loop); US/PAL size alignment	
 func_001EB338	Transition_UpdateMovieCamera	recovered	config/symbol_names.txt	text: NTSC/PAL function-size alignment	transition_update_movie_camera

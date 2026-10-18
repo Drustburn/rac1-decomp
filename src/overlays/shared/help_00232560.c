@@ -1442,7 +1442,7 @@ void func_L00_002353B8(char *obj) {
     }
     s0 = D_L00_0017C440;
     if (*(unsigned char *)(s0 + 1) == 0) {
-        func_0020D960(obj, 0x18, s0);
+        AttachManipulator(obj, 0x18, s0);
         *(float *)(s0 + 0x20) = f20;
         *(float *)(s0 + 0x24) = f20;
         *(float *)(s0 + 0x28) = f20;
@@ -1463,22 +1463,22 @@ void func_L00_002353B8(char *obj) {
     q = D_0013E633 + 0xE1D;
     c1 = 0x806E8C6E;
     c0 = 0x805A3232;
-    *(float *)(q + 0x1628) = func_001FA748(*(float *)(q + 0x1628), D_0015EE6C * 2.0943951f);
+    *(float *)(q + 0x1628) = FastAddRots(*(float *)(q + 0x1628), D_0015EE6C * 2.0943951f);
     if (D_0015EE84 == 0) {
         b = D_L00_0016C960;
         if (*(int *)(b + 0x30) == 0) {
-            if (*(int *)(b + 0x34) >= func_001F9850(0x343)) {
-                if (*(int *)(b + 0x34) <= func_001F9850(0x438)) {
+            if (*(int *)(b + 0x34) >= scale_ticks(0x343)) {
+                if (*(int *)(b + 0x34) <= scale_ticks(0x438)) {
                     c1 = 0x806EAAFA;
                     c0 = 0x80326E5A;
-                    *(float *)(q + 0x1628) = func_001FA748(*(float *)(q + 0x1628), D_0015EE6C * 5.9341192245f);
+                    *(float *)(q + 0x1628) = FastAddRots(*(float *)(q + 0x1628), D_0015EE6C * 5.9341192245f);
                 }
             }
         }
     }
     q2 = D_0013E633 + 0xE1D;
-    t = func_001F9FA8(*(float *)(q2 + 0x1628));
-    *(int *)(obj + 0x90) = func_001FA8A8(c1, c0, t * 0.5f + 0.5f);
+    t = FastSin(*(float *)(q2 + 0x1628));
+    *(int *)(obj + 0x90) = FastTweenColor(c1, c0, t * 0.5f + 0.5f);
     func_L00_002352D0((int)obj);
 }
 extern void func_0020DAF8(int, int, void *);

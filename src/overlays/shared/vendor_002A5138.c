@@ -63,8 +63,8 @@ void func_L00_002A5158(WaterPatch *g, int count, int mode, float x, float y, flo
                     v = amount / func_001F9B50(d2);
                 }
                 if (mode == 0) {
-                    float a = func_001F9B88(v);
-                    if (a < func_001F9B88(g->h[WATER_CUR][r][c])) {
+                    float a = FastAbsF(v);
+                    if (a < FastAbsF(g->h[WATER_CUR][r][c])) {
                         v = g->h[WATER_CUR][r][c];
                     }
                 } else {
@@ -1824,7 +1824,7 @@ char *func_L00_002AA998(void *owner, void *pos, float a, float b, float c, char 
     char *d;
     BoltVector_2AA998 t;
     BoltVector_2AA998 p;
-    m = (char *)func_0020D348(0x100);
+    m = (char *)CreateMoby(0x100);
     if (m != 0) {
         ((unsigned char *)m)[0x30] = 0xFF;
         m[0x31] = 1;
@@ -1857,7 +1857,7 @@ char *func_L00_002AA998(void *owner, void *pos, float a, float b, float c, char 
         }
         *(float *)(d + 0x2C) = a;
         *(float *)(d + 0x30) = b;
-        *(int *)(d + 0x14) = func_001F9850(0x96);
+        *(int *)(d + 0x14) = scale_ticks(0x96);
         if (tgt != 0) {
             qcopy(d, tgt + 0x10);
             *(float *)(d + 8) += c;
@@ -1865,12 +1865,12 @@ char *func_L00_002AA998(void *owner, void *pos, float a, float b, float c, char 
         }
         {
             int r;
-            if (func_001F9CB8((float *)(D_0013F450 + 0x140)) > D_0015EE6C * 0.1f) {
-                r = func_001F9850(0x3C);
+            if (FastVecLength((float *)(D_0013F450 + 0x140)) > D_0015EE6C * 0.1f) {
+                r = scale_ticks(0x3C);
                 *(short *)(d + 0x3E) = r;
                 *(short *)(d + 0x3C) = r;
             } else {
-                r = func_001F9850(1);
+                r = scale_ticks(1);
                 *(short *)(d + 0x3E) = r;
                 *(short *)(d + 0x3C) = r;
             }

@@ -210,9 +210,9 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     FRowE9EC8 *t3;
 
     p = D_001941D8;
-    ((void (*)(void *, int, int))func_001F99B0)(D_0013F450, 0, 0x2310);
-    ((void (*)(void *, int, int))func_001F99B0)(D_00187040, 0, 0x3A0);
-    ((void (*)(void *, int, int))func_001F99B0)(D_001AADC0, 0, 0x180);
+    ((void (*)(void *, int, int))FastMemSet)(D_0013F450, 0, 0x2310);
+    ((void (*)(void *, int, int))FastMemSet)(D_00187040, 0, 0x3A0);
+    ((void (*)(void *, int, int))FastMemSet)(D_001AADC0, 0, 0x180);
     if (D_0015EE80 != 0) {
         if (D_0015EE60 == 1.0f) {
             func_002157C0(1);
@@ -226,8 +226,8 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     D_00194200.xC = 0;
     D_00194200.x10 = 0;
     D_00194200.x14 = 0;
-    func_001F99D8(D_001B7A60, 0x10000);
-    func_001F99D8(D_001C7A60, 0x60);
+    FastMemZero16(D_001B7A60, 0x10000);
+    FastMemZero16(D_001C7A60, 0x60);
 
     c = (unsigned char *)hdr + hdr->x0;
     D_0018CE00.x23C = *(int *)c;
@@ -246,23 +246,23 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     D_0015F58C = *(float *)(c + 4);
     D_0015F590 = *(float *)(c + 8);
     D_0015F594 = *(float *)(c + 12);
-    ((void (*)(void))func_001F2930)();
+    ((void (*)(void))UpdateFog)();
     D_00160FC0 = 512000.0f;
     D_00161070 = 720.0f;
     D_001604E4 = 500.0f;
     D_00160030 = 500;
     D_001601BC = 0x1F4000;
-    func_001FB448(D_0018CE00.x23C, D_0018CE00.x240, D_0018CE00.x244);
-    ((void (*)(void *))func_002347F0)(D_00100AE0);
-    func_001F99D8(D_0019C2C0, 0x100);
-    func_001F99D8(D_0019C4C0, 0x180);
-    func_001F99D8(D_0019BEC0, 0x400);
+    SetBackgroundColor(D_0018CE00.x23C, D_0018CE00.x240, D_0018CE00.x244);
+    ((void (*)(void *))VU0_loadMicroProgram)(D_00100AE0);
+    FastMemZero16(D_0019C2C0, 0x100);
+    FastMemZero16(D_0019C4C0, 0x180);
+    FastMemZero16(D_0019BEC0, 0x400);
 
     lc = (unsigned char *)hdr + hdr->x4;
     n = *(int *)lc;
     lc += 0x10;
     if (n >= 12) {
-        func_001E9730(D_001E79D8);
+        STUB_printf(D_001E79D8);
         n = 12;
     }
     if (n != 0) {
@@ -279,7 +279,7 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
             *sp++ = (unsigned short)i1;
         }
         *sp = 0xFFFF;
-        ((void (*)(void *))func_002362B0)((void *)0x70003000);
+        ((void (*)(void *))LightTfrags)((void *)0x70003000);
     }
 
     sc = (unsigned char *)hdr + hdr->x34;
@@ -289,14 +289,14 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     size0 = D_0016105C << 5;
     p += size0;
     if (D_0016105C != 0) {
-        ((void (*)(void *, int, int))func_001F99B0)(D_00161050, 0, size0);
+        ((void (*)(void *, int, int))FastMemSet)(D_00161050, 0, size0);
     }
     size1 = D_0016105C * 0x1C0;
     p = (unsigned char *)(((unsigned int)p + 0x3F) & ~0x3FU);
     D_00161058 = (ShrubDataE9EC8 *)p;
     p += size1;
     if (D_0016105C != 0) {
-        ((void (*)(void *, int, int))func_001F99B0)(D_00161058, 0, size1);
+        ((void (*)(void *, int, int))FastMemSet)(D_00161058, 0, size1);
     }
     last = -1;
     D_00161054 = &D_00161050[D_0016105C];
@@ -327,17 +327,17 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
         sc += 0x50;
         sd->m[3].w = D_001E1A00[sh->cls]->x40;
         func_001F9EC0(sh, D_001E1A00[sh->cls]->x30, sd);
-        s = func_001F9CB8(sd);
-        len1 = func_001F9CB8(r1);
+        s = FastVecLength(sd);
+        len1 = FastVecLength(r1);
         s = func_001F9B90(s, len1);
-        len2 = func_001F9CB8(r2);
+        len2 = FastVecLength(r2);
         s = func_001F9B90(s, len2);
         sh->scale = D_001E1A00[sh->cls]->scale * s;
         func_001F9C48(sh, sh, sd->m[3].w);
-        func_001F9BD8(sh, sh, r3);
-        D_00161058[i2].m[0].w = 1.0f / func_001F9CB8(&D_00161058[i2].m[0]);
-        D_00161058[i2].m[1].w = 1.0f / func_001F9CB8(&D_00161058[i2].m[1]);
-        D_00161058[i2].m[2].w = 1.0f / func_001F9CB8(&D_00161058[i2].m[2]);
+        FastVecAdd(sh, sh, r3);
+        D_00161058[i2].m[0].w = 1.0f / FastVecLength(&D_00161058[i2].m[0]);
+        D_00161058[i2].m[1].w = 1.0f / FastVecLength(&D_00161058[i2].m[1]);
+        D_00161058[i2].m[2].w = 1.0f / FastVecLength(&D_00161058[i2].m[2]);
         func_001F9A00(sd->x140, sc, 0x80);
         sc += 0x80;
         sh->x1C = *(unsigned short *)sc;
@@ -348,7 +348,7 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
         *spa++ = (unsigned short)i3;
     }
     *spa = 0xFFFF;
-    ((void (*)(void *))func_00238688)((void *)0x70000000);
+    ((void (*)(void *))LightTies)((void *)0x70000000);
 
     tc = (unsigned char *)hdr + hdr->x3C;
     D_001604D0 = *(int *)tc;
@@ -357,21 +357,21 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     size2 = D_001604D0 << 5;
     p += size2;
     if (D_001604D0 != 0) {
-        ((void (*)(void *, int, int))func_001F99B0)(D_001604D4, 0, size2);
+        ((void (*)(void *, int, int))FastMemSet)(D_001604D4, 0, size2);
     }
     p = (unsigned char *)(((unsigned int)p + 0x3F) & ~0x3FU);
     D_001604DC = (TieDataE9EC8 *)p;
     size3 = D_001604D0 << 6;
     p += size3;
     if (D_001604D0 != 0) {
-        ((void (*)(void *, int, int))func_001F99B0)(D_001604DC, 0, size3);
+        ((void (*)(void *, int, int))FastMemSet)(D_001604DC, 0, size3);
     }
     D_001604E0 = p;
     size4 = D_001604D0 * 0x60;
     p += size4;
     p = (unsigned char *)(((unsigned int)p + 0x3F) & ~0x3FU);
     if (D_001604D0 != 0) {
-        ((void (*)(void *, int, int))func_001F99B0)(D_001604E0, 0, size4);
+        ((void (*)(void *, int, int))FastMemSet)(D_001604E0, 0, size4);
     }
     lastTie = -1;
     D_00160BB0.x4 = D_001604E0;
@@ -396,7 +396,7 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
         tie->x1B = 0;
         tie->x1E = 0xFFFF;
         if (D_001D82C0[cls]->x1C != 0) {
-            tie->x17 = (unsigned char)func_001FA898(*D_001D82C0[cls]->x1C);
+            tie->x17 = (unsigned char)truncate_float_to_s32(*D_001D82C0[cls]->x1C);
             rad = func_001FA888(tie->x17) + 24.0f;
             if (tie->radius < rad) {
                 tie->radius = rad;
@@ -411,12 +411,12 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
         qcopy(t3, tc + 0x40);
         tc += 0x50;
         td->m3.w = D_001D82C0[cls]->x20;
-        len0 = func_001F9CB8(td);
-        len1 = func_001F9CB8(t1);
+        len0 = FastVecLength(td);
+        len1 = FastVecLength(t1);
         a = (len0 + len1) * 0.5f;
-        b = func_001F9CB8(t2);
-        x = func_001FA898(a * 4096.0f);
-        y = func_001FA898(b * 4096.0f);
+        b = FastVecLength(t2);
+        x = truncate_float_to_s32(a * 4096.0f);
+        y = truncate_float_to_s32(b * 4096.0f);
         if (x > 0x10000) {
             x = 0x10000;
         }
@@ -435,21 +435,21 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
         tie->x1C = *(unsigned short *)tc;
         tc += 0x10;
         func_001F9EC0(tie, D_001D82C0[cls], td);
-        s = func_001F9CB8(td);
-        len1 = func_001F9CB8(t1);
+        s = FastVecLength(td);
+        len1 = FastVecLength(t1);
         s = func_001F9B90(s, len1);
-        len2 = func_001F9CB8(t2);
+        len2 = FastVecLength(t2);
         s = func_001F9B90(s, len2);
         tie->scale = D_001D82C0[cls]->scale * s;
         func_001F9C48(tie, tie, td->m3.w);
-        func_001F9BD8(tie, tie, t3);
+        FastVecAdd(tie, tie, t3);
     }
     spb = (unsigned short *)0x70000000;
     for (i5 = 0; i5 < D_001604D0; i5++) {
         *spb++ = (unsigned short)i5;
     }
     *spb = 0xFFFF;
-    ((void (*)(void *))func_0022B8F8)((void *)0x70000000);
+    ((void (*)(void *))LightShrubs)((void *)0x70000000);
 
     for (i6 = 0; i6 < D_001604D0; i6++) {
         unsigned char *cp;
@@ -474,7 +474,7 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     }
 
     D_00160018 = (Ent100E9EC8 *)p;
-    ((void (*)(void *, int, int))func_001F99B0)(p, 0, 0x4000);
+    ((void (*)(void *, int, int))FastMemSet)(p, 0, 0x4000);
     p += 0x4000;
     D_0016001C = D_00160018;
     *((unsigned char *)D_00160018 + 0x20) = 0xFF;
@@ -486,7 +486,7 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     D_001601B4 = -1;
     D_001601B0 = 0;
     D_001601B8 = 0;
-    func_001F99D8(D_001CDB00, 0x200);
+    FastMemZero16(D_001CDB00, 0x200);
     for (e = D_00160018; e != D_00160020; e++) {
         e->x36 = 0x7F80;
     }
@@ -501,8 +501,8 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
 
         *(int *)(st + 0x1C) = 0;
     }
-    func_001F3B90();
-    func_00217EC0();
+    ResetDrawGlobals();
+    pad_resetState();
     func_001F6598();
     D_0015F6F0 = 0;
     D_0015F53C = 1.0f;

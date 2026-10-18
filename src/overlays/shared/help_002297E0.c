@@ -40,7 +40,7 @@ int func_L00_002297E0(int *index) {
         *index = 4;
         if (D_L00_00179BB0 != 0) return 0;
         if (!(D_0013F450.unkA98 & 2)) return 0;
-        return func_002140F8(0.0f, 1.0f) < 0.33f;
+        return random_float_between(0.0f, 1.0f) < 0.33f;
     }
     i = 0;
     startp = &start;
@@ -64,7 +64,7 @@ int func_L00_002297E0(int *index) {
         }
         if (i == 4) {
             if (D_0013F450.prev_control_mode != 1) continue;
-            if (func_001F9850(50) < D_0013F450.state_timer) continue;
+            if (scale_ticks(50) < D_0013F450.state_timer) continue;
             if (D_0013F450.hp >= 2) continue;
         }
         *next = i;
@@ -77,7 +77,7 @@ int func_L00_002297E0(int *index) {
         Ent *choice = &D_L00_00179990[choices[i]];
         total += 1.0f / (float)(int)(func_001F9878(choice->interval) * 60.0f);
     }
-    pick = func_002140F8(0.0f, 1.0f);
+    pick = random_float_between(0.0f, 1.0f);
     if (pick < total) {
         for (j = 0; j < count; j++) {
             int picked = choices[j];

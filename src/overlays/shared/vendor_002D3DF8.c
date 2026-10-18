@@ -1840,7 +1840,7 @@ void func_L08_00318468(char *m) {
     axis[1] = open;
     axis[2] = 1.0f;
     do {
-        func_002156E0(p, off, axis, ang);
+        build_look_at_matrix(p, off, axis, ang);
         vadd_3DF8(p, hero_pos_3DF8, p);
         if (func_L00_002644E0_3091B0(p) < ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148) open += 0.05f;
         ang += 0.31415927f;

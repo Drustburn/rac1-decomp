@@ -157,16 +157,16 @@ int func_L00_00262BC0(int idx, void *a, void *b, void *c) {
     int offset;
     float *prev;
     float *cur;
-    func_001F9BF0(v, b, a);
+    FastVecSub(v, b, a);
     v[2] = 0;
-    func_L00_001FF4B0(v, v, 1.0f / func_001F9CB8(v));
-    func_001F9BC0(w);
+    func_L00_001FF4B0(v, v, 1.0f / FastVecLength(v));
+    clear_u64_value(w);
     w[0] = v[1];
     w[1] = -v[0];
-    func_001F9BC0(z);
+    clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    func_001F9BF0(t, (char *)D_L00_001B0830_2629E0[idx] + 0x10, a);
+    FastVecSub(t, (char *)D_L00_001B0830_2629E0[idx] + 0x10, a);
     func_001F9EC0(t, t, v);
     prev = t;
     cur = u;
@@ -174,7 +174,7 @@ int func_L00_00262BC0(int idx, void *a, void *b, void *c) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            func_001F9BF0(cur, (char *)D_L00_001B0830_2629E0[idx] + offset, a);
+            FastVecSub(cur, (char *)D_L00_001B0830_2629E0[idx] + offset, a);
             func_001F9EC0(cur, cur, v);
             if (t[3] != zero || u[3] != zero) {
                 if (u[1] * t[1] < 0.0f) {
@@ -324,7 +324,7 @@ s32 func_L00_002630A8(f32 distance, s32 path_index, Vec4 *point, Vec4 *out) {
                 func_001F9BF0_630A8(&segment, &segment, &scaled_cross);
                 func_L00_001FF4B0_630A8(1.0f, &scaled_segment, &segment);
                 func_001F9CA0_630A8(&cross, &difference, &scaled_segment);
-                segment_length = func_001F9B88(func_001F9C78_630A8(&cross, height_axis));
+                segment_length = FastAbsF(func_001F9C78_630A8(&cross, height_axis));
                 if (distance < segment_length)
                     goto next_segment_262030;
                 segment_length = func_001F9CB8_630A8(&segment);

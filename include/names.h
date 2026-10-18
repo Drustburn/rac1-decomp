@@ -280,7 +280,7 @@
 #define sceMpegGetPicture                func_0023E298
 
 /* descriptive */
-#define showDebugFont                    func_001E9808
+#define StartLevel                       func_001E9808
 #define Help_LoadMsgs                    func_001EB300
 #define Camera_Pos2Polar3d               func_001EC8D8
 #define Camera_stagePendingTransform     func_001ECB98

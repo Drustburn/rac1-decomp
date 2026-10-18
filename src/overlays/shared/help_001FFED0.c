@@ -61,7 +61,7 @@ void func_L15_001FFED0(void) {
     func_L00_00248EF8(b0 + 0x80);
 
     if (b0[0x20A4] == 2) {
-        if (D_0015EEB0[3] != 0)
+        if (gCheats[3] != 0)
             D_L15_0017C0EC = (*(float *)&D_0015EF18) * 1.4f;
         func_L00_00205FF0();
         func_L00_00206808();
@@ -77,18 +77,18 @@ void func_L15_001FFED0(void) {
 
     b1 = D_0013E633 + 0xE1D;
     if (b1[0x20A4] == 3) {
-        if (D_0015EEB0[1] != 0)
+        if (gCheats[1] != 0)
             D_L15_0017C24C = 1.9f;
         alpha = 0x80;
-        period = func_001F9850(0xAA);
+        period = scale_ticks(0xAA);
         if (*(short *)(b1 + 0x22E0) == 2)
-            period = func_001F9850(0x32);
+            period = scale_ticks(0x32);
         else if (*(short *)(b1 + 0x22E0) == 1)
-            period = func_001F9850(0x5A);
-        pulse = func_001F9FA8((((float)(D_L15_0015F6B0 % period) / func_001FA888(period)) * 2.0f) * 3.1415927f + -3.1415927f);
-        red = func_001FA898(pulse * 20.0f) + 0x32;
-        green = func_001FA898(pulse * 70.0f) + 0xB4;
-        blue = func_001FA898(pulse * 10.0f);
+            period = scale_ticks(0x5A);
+        pulse = FastSin((((float)(D_L15_0015F6B0 % period) / func_001FA888(period)) * 2.0f) * 3.1415927f + -3.1415927f);
+        red = truncate_float_to_s32(pulse * 20.0f) + 0x32;
+        green = truncate_float_to_s32(pulse * 70.0f) + 0xB4;
+        blue = truncate_float_to_s32(pulse * 10.0f);
         b2 = D_0013E633 + 0xE1D;
         moby = *(unsigned char **)(b2 + 0x2080);
         if (red > 0xFF) red = 0xFF;
@@ -101,7 +101,7 @@ void func_L15_001FFED0(void) {
             color = (alpha << 24) | (blue << 16) | (green << 8) | red;
         b3 = D_0013E633 + 0xE1D;
         *(unsigned int *)(*(unsigned char **)(b3 + 0x2080) + 0x90) =
-            func_001FA8A8(0.1f, *(unsigned int *)(*(unsigned char **)(b3 + 0x2080) + 0x90), color);
+            FastTweenColor(0.1f, *(unsigned int *)(*(unsigned char **)(b3 + 0x2080) + 0x90), color);
         for (i = 0; i < 3; i++)
         {
             b4 = D_0013E633 + 0xE1D;
@@ -116,7 +116,7 @@ void func_L15_001FFED0(void) {
             red = mb[0x90];
         }
         if (*(short *)(b4 + 0x22DE) != 0)
-            alpha = func_001FA898((func_001FA888(*(short *)(b4 + 0x22DE)) / func_001FA888(0x12)) * (float)alpha);
+            alpha = truncate_float_to_s32((func_001FA888(*(short *)(b4 + 0x22DE)) / func_001FA888(0x12)) * (float)alpha);
         *(unsigned int *)(b4 + 0x22E4) = (alpha << 24) | (blue << 16) | (green << 8) | red;
         func_L00_00208318();
         *(short *)(b4 + 0x22E0) = 0;
@@ -131,7 +131,7 @@ void func_L15_001FFED0(void) {
             } else {
                 b5 = D_0013E633 + 0xE1D;
                 *(int *)(b5 + 0x20B8) = 0;
-                if (b5[0x12E7] != 0 && *(int *)(b5 + 0x300) != 0 && D_0013D5DD[7] != 0 &&
+                if (b5[0x12E7] != 0 && *(int *)(b5 + 0x300) != 0 && gHaveMorphORay[7] != 0 &&
                     *(short *)(b5 + 0x22DE) == 0) {
                     func_L00_00217570(0x19, 0);
                     *(short *)(b5 + 0x22DE) = 0x12;

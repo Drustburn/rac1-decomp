@@ -109,25 +109,25 @@ void func_L01_00228598(void) {
     func_L00_00208070();
     func_L00_00248EF8(GG->a80);
     if (GG->b20A4 == 3) {
-        if (D_0015EEB0[1] != 0) {
+        if (gCheats[1] != 0) {
             D_L01_0017C0CC = 1.9f;
         }
         c20 = 0x80;
-        v = func_001F9850(0xAA);
+        v = scale_ticks(0xAA);
         h = GG->s22E0;
         if (h == 2) {
-            v = func_001F9850(0x32);
+            v = scale_ticks(0x32);
         } else if (h == 1) {
-            v = func_001F9850(0x5A);
+            v = scale_ticks(0x5A);
         }
         f0 = func_001FA888(v);
         ang = (float)(D_L01_0015F6B0 % v) / f0;
         ang = ang + ang;
         ang = ang * 3.14159274f;
-        f20 = func_001F9FA8(ang + -3.14159274f);
-        r16 = func_001FA898(f20 * 20.0f) + 0x32;
-        r17 = func_001FA898(f20 * 70.0f) + 0xB4;
-        t = func_001FA898(f20 * 10.0f);
+        f20 = FastSin(ang + -3.14159274f);
+        r16 = truncate_float_to_s32(f20 * 20.0f) + 0x32;
+        r17 = truncate_float_to_s32(f20 * 70.0f) + 0xB4;
+        t = truncate_float_to_s32(f20 * 10.0f);
         *(unsigned short *)(GG->p2080 + 0x34) |= 0x10;
         if (r16 >= 0x100) r16 = 0xFF;
         if (r17 >= 0x100) r17 = 0xFF;
@@ -137,7 +137,7 @@ void func_L01_00228598(void) {
         } else {
             color = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
         }
-        *(int *)(GG->p2080 + 0x90) = func_001FA8A8(*(int *)(GG->p2080 + 0x90), color, 0.1f);
+        *(int *)(GG->p2080 + 0x90) = FastTweenColor(*(int *)(GG->p2080 + 0x90), color, 0.1f);
         for (i = 0; i < 3; i++) {
             func_L00_00250800(GG->p2080, i, GG->a1D50 + i * 0x10);
         }
@@ -149,7 +149,7 @@ void func_L01_00228598(void) {
         if (h2 != 0) {
             f20 = func_001FA888(h2);
             f20 = f20 / func_001FA888(0x12);
-            c20 = func_001FA898(f20 * (float)c20);
+            c20 = truncate_float_to_s32(f20 * (float)c20);
         }
         GG->c22E4 = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
         func_L00_00208318();
@@ -166,7 +166,7 @@ void func_L01_00228598(void) {
                 GS_28598 *g = GG;
                 int e = g->b12E7;
                 g->i20B8 = 0;
-                if (e != 0 && g->i300 != 0 && *(unsigned char *)(D_0013D5DD + 7) != 0 &&
+                if (e != 0 && g->i300 != 0 && *(unsigned char *)(gHaveMorphORay + 7) != 0 &&
                     g->s22DE == 0) {
                     func_L00_00217570(0x19, 0);
                     g->s22DE = 0x12;
@@ -1505,8 +1505,8 @@ void func_L01_00234970(float step) {
         }
         {
             char *g3 = (char *)D_0013E633 + 0xE1D;
-            v[0] = func_001F9F90(ang) * spd;
-            v[1] = func_001F9FA8(ang) * spd;
+            v[0] = FastCos(ang) * spd;
+            v[1] = FastSin(ang) * spd;
             v[2] = *(float *)(g3 + 0xE8);
             d = -(*(float *)(g3 + 0xE0) * v[0] + *(float *)(g3 + 0xE4) * v[1]);
             l1 = func_001F9CE8(v);
@@ -1532,9 +1532,9 @@ void func_L01_00234970(float step) {
         }
         h = (char *)&D_0013F450 + 0xE0;
         step = step * d;
-        func_001F9BF0(v, v, h);
+        FastVecSub(v, v, h);
         if (step < func_001F9CE8(v)) func_L00_001FF500(v, v, step);
-        func_001F9BD8(h, h, v);
+        FastVecAdd(h, h, v);
         *(u128_34970 *)w = *(u128_34970 *)(h + 0x840);
         {
             float t = func_L00_00213A08(w);

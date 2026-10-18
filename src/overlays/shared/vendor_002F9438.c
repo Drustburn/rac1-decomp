@@ -232,7 +232,7 @@ void func_L07_003121D0(u8 *moby)
         vectors[5] = *(f32 *)(data + 0x20);
         vectors[6] = *(f32 *)(data + 0x24);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
-        *(f32 *)(data + 0x0c) = func_001F9CB8(vectors);
+        *(f32 *)(data + 0x0c) = FastVecLength(vectors);
         if (*(s32 *)(data + 0x30) != -1)
             func_0022ED80(*(s32 *)(data + 0x30), 0, moby);
         moby[0x20] = 2;
@@ -257,11 +257,11 @@ void func_L07_003121D0(u8 *moby)
         *(quadword *)vectors = *(quadword *)(vectors + 4);
         func_001F9EC0(vectors, vectors, moby + 0xc0);
         func_L00_001FF4B0(*(f32 *)(data + 0x28) * D_0015EE6C, vectors + 4, vectors);
-        func_001F9BD8(moby + 0x10, moby + 0x10, vectors + 4);
+        FastVecAdd(moby + 0x10, moby + 0x10, vectors + 4);
         *(f32 *)(data + 0x0c) -= *(f32 *)(data + 0x28) * D_0015EE6C;
         if (!(*(f32 *)(data + 0x0c) < 0.0f))
             return;
-        func_001F9BD8(moby + 0x10, data, vectors);
+        FastVecAdd(moby + 0x10, data, vectors);
         *(f32 *)(data + 0x0c) = 0.0f;
         moby[0x20] = 3;
         if (*(s32 *)(data + 0x34) != -1)
@@ -297,10 +297,10 @@ void func_L07_003121D0(u8 *moby)
             vectors[5] = *(f32 *)(data + 0x20);
             vectors[6] = *(f32 *)(data + 0x24);
             *(quadword *)vectors = *(quadword *)(vectors + 4);
-            distance = func_001F9CB8(vectors);
+            distance = FastVecLength(vectors);
             func_L00_001FF4B0(-(*(f32 *)(data + 0x2c) * D_0015EE6C), vectors, vectors);
             func_001F9EC0(vectors + 4, vectors, moby + 0xc0);
-            func_001F9BD8(moby + 0x10, moby + 0x10, vectors + 4);
+            FastVecAdd(moby + 0x10, moby + 0x10, vectors + 4);
             *(f32 *)(data + 0x0c) += *(f32 *)(data + 0x2c) * D_0015EE6C;
             if (!(distance < *(f32 *)(data + 0x0c)))
                 return;

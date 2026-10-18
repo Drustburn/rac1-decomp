@@ -408,26 +408,26 @@ void func_L00_00246EC0(void) {
         archive_base = D_L00_00173F08;
         archive = (int *)((int)archive_base + 0x9A800);
         scratch = e[1] << 7;
-        func_002176C8(archive, e[0], e[1]);
-        gl[0x8B] = func_00234158((int)archive, scratch, 0x4800, (int)D_L00_001E8E80);
+        Load(archive, e[0], e[1]);
+        gl[0x8B] = Stash_SendData((int)archive, scratch, 0x4800, (int)D_L00_001E8E80);
         gl[0x8D] = scratch;
         func_0020C468((int)archive, (int)archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];
-        gl[0] = func_001FFAB8(first_size, 0, (char *)heap_tag, 0x2DB);
-        func_001F9A98((void *)gl[0], (char *)archive + archive[0], first_size);
+        gl[0] = Hud_HeapAlloc(first_size, 0, (char *)heap_tag, 0x2DB);
+        FastMemCopy((void *)gl[0], (char *)archive + archive[0], first_size);
         gl[0] += 8;
         gl[1] = gl[0];
         second_size = archive[2] - archive[1];
-        gl[5] = func_001FFAB8(second_size, 0, (char *)heap_tag, 0x2EC);
-        func_001F9A98((void *)gl[5], (char *)archive + archive[1], second_size);
-        gl[2] = func_001FFAB8(0x1000, 0, (char *)heap_tag, 0x2F3);
+        gl[5] = Hud_HeapAlloc(second_size, 0, (char *)heap_tag, 0x2EC);
+        FastMemCopy((void *)gl[5], (char *)archive + archive[1], second_size);
+        gl[2] = Hud_HeapAlloc(0x1000, 0, (char *)heap_tag, 0x2F3);
         for (i = 0; i < 8; i++) {
             D_L00_001842F0[12 + i * 4] = -1;
             D_L00_001842F0[13 + i * 4] = -1;
             D_L00_001842F0[14 + i * 4] = D_L00_001842F0[2] + i * 0x200;
         }
-        w = func_001FFAB8(0x8000, 0, D_L00_0015FEC0, 0x2FC);
+        w = Hud_HeapAlloc(0x8000, 0, D_L00_0015FEC0, 0x2FC);
         level_data = D_0014171B + 0x8A5 + D_L00_001842F0[0x89] * 0x800;
         D_L00_001842F0[3] = w;
         if (level_data[0] != 0) {

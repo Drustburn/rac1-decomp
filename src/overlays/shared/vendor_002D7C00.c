@@ -591,8 +591,8 @@ void func_L15_002E6D48(unsigned char *moby) {
     int near_parent = 0;
 
     if ((unsigned char)(moby[0x20] - 1) < 2) {
-        func_001F9BF0(delta, moby + 0x10, D_0013E633 + 0xE9D);
-        if (func_001F9CB8(delta) < vars->distance) {
+        FastVecSub(delta, moby + 0x10, D_0013E633 + 0xE9D);
+        if (FastVecLength(delta) < vars->distance) {
             func_001FA4A0(matrix, moby + 0xC0);
             func_001F9EE8(delta, delta, matrix);
             if (*(float *)(delta + 4) < 0.2f) near_parent = 1;
@@ -602,7 +602,7 @@ void func_L15_002E6D48(unsigned char *moby) {
     case 0:
         if (vars->initialized == 0) {
             func_L00_00250800(moby, 0, delta);
-            vars->distance = func_001F9D10(moby + 0x10, delta);
+            vars->distance = FastVecDist(moby + 0x10, delta);
             vars->notified_count = 0;
             vars->parent = moby;
             func_L00_0025A208(&child, moby[0x21], 0, 0);
@@ -645,7 +645,7 @@ void func_L15_002E6D48(unsigned char *moby) {
             if (parent[0x20] == 1) {
                 vars->child_count = 0;
                 parent[0x20] = 2;
-                parent_vars->timer = parent_vars->frame_count < 1 ? 900 : func_001F9850(vars->frame_count);
+                parent_vars->timer = parent_vars->frame_count < 1 ? 900 : scale_ticks(vars->frame_count);
             }
             parent_vars->child_count++;
             func_0022ED80(3, 0x31, (int)moby);
@@ -660,21 +660,21 @@ void func_L15_002E6D48(unsigned char *moby) {
                 moby[0x20] = 4;
                 break;
             } else {
-                if (func_001F9938(&vars->timer) != 0) {
+                if (FastDecTimer(&vars->timer) != 0) {
                     vars->child_count = 0;
                     vars->triggered = 0;
                     func_0022ED80(2, 0x31, (int)moby);
                     func_L01_0026F090(moby[0x21], 3);
-                } else if (func_001F9938(&vars->delay) != 0) {
+                } else if (FastDecTimer(&vars->delay) != 0) {
                     func_0022ED80(0, 0x31, (int)moby);
-                    first = func_001F9850(0x2d);
-                    second = func_001F9850(5);
-                    divisor = func_001F9850(0x28);
+                    first = scale_ticks(0x2d);
+                    second = scale_ticks(5);
+                    divisor = scale_ticks(0x28);
                     if (first < second + vars->timer / divisor)
-                        vars->delay = func_001F9850(0x2d);
+                        vars->delay = scale_ticks(0x2d);
                     else {
-                        int delay = func_001F9850(5);
-                        int delay_divisor = func_001F9850(0x28);
+                        int delay = scale_ticks(5);
+                        int delay_divisor = scale_ticks(0x28);
                         delay_divisor = delay + vars->timer / delay_divisor;
                         vars->delay = delay_divisor;
                     }
@@ -691,8 +691,8 @@ void func_L15_002E6D48(unsigned char *moby) {
     case 4: {
         unsigned short save_id;
         unsigned int *bits;
-        if (func_001F9938(&vars->flash_timer) != 0) {
-            vars->flash_timer = func_001F9850(0x14);
+        if (FastDecTimer(&vars->flash_timer) != 0) {
+            vars->flash_timer = scale_ticks(0x14);
             if (vars->flash_color != 0) {
                 func_L00_00251328(moby, 0, 0xff, 0);
                 vars->flash_color = 0;
@@ -833,7 +833,7 @@ void func_L15_002EE458(char *m) {
     case 0:
         idx = *(int *)(data + 0x60);
         if (idx == -1) {
-            func_0020D678(m);
+            DeleteMoby(m);
             return;
         }
         p0 = &D_L15_00160058_m[idx];
@@ -858,9 +858,9 @@ void func_L15_002EE458(char *m) {
         if (D_0013F450_2EE458.state.current == 0x1D) break;
         v = D_0013F450_2EE458.vehicle_mode;
         if (v == 0) {
-            func_00215F80(4, 0x3AA4);
+            try_set_help_message(4, 0x3AA4);
         } else if (v == st) {
-            if (D_0015EE84 != 0x12) func_00215F80(4, 0x3AA5);
+            if (D_0015EE84 != 0x12) try_set_help_message(4, 0x3AA5);
         }
         if ((D_0013CA40_2EE458.pressed & 0x10) == 0) return;
         if (D_L15_0015F674 != 4) return;
@@ -884,7 +884,7 @@ void func_L15_002EE458(char *m) {
         if (*(int *)(data + 0x70) != -1) {
             o2 = &D_L15_00160058_m[*(int *)(data + 0x70)];
             if (o2 != 0 && o2->state != 0xFE && o2->state != 0xFD) {
-                func_0020D678(o2);
+                DeleteMoby(o2);
                 *(int *)(data + 0x70) = -1;
             }
         }

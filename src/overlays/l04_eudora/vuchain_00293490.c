@@ -116,7 +116,7 @@ void func_L04_00293578(struct Moby *moby, LegRig_p *rig) {
 
     for (i = 0; i < 13; i++) {
         if (rig->anims[i]->id < 0) {
-            func_001E9730(D_L04_001DB660, i, moby->oclass);
+            STUB_printf(D_L04_001DB660, i, moby->oclass);
             func_001F9978();
         }
         rig->anims[i]->start = func_L04_00242868(moby->class_slot, rig->anims[i]->id);
@@ -147,9 +147,9 @@ void func_L04_00293578(struct Moby *moby, LegRig_p *rig) {
         *(int *)(p + 0xFC) = 0;
         *(float *)(p + 0xF8) = func_L00_001FF860(matrix[1][0], matrix[1][1]);
         if (((unsigned char *)p)[0x161] == 0)
-            func_0020D960(moby, ((unsigned char *)p)[0xF3], (LegRigManip_p *)(p + 0x160));
+            AttachManipulator(moby, ((unsigned char *)p)[0xF3], (LegRigManip_p *)(p + 0x160));
         if (((unsigned char *)p)[0x121] == 0)
-            func_0020D960(moby, ((unsigned char *)p)[0xF2], (LegRigManip_p *)(p + 0x120));
+            AttachManipulator(moby, ((unsigned char *)p)[0xF2], (LegRigManip_p *)(p + 0x120));
     }
     rig->unkEE = 0;
     rig->unkB7 = 0;
@@ -162,7 +162,7 @@ void func_L04_00293578(struct Moby *moby, LegRig_p *rig) {
     rig->unkE4 = 0;
     rig->unkEC = 0;
     rig->mode = 5;
-    func_001E9730(D_L04_001DB6F0, 0x250);
+    STUB_printf(D_L04_001DB6F0, 0x250);
 }
 extern int func_L00_002A2680(int *a, char *b);
 
@@ -535,7 +535,7 @@ int func_L04_00296938(char *m, char *s, float speed, float ang, float accel) {
             if (mask & bit) {
                 cnt = cnt + one;
                 func_001F9BD8_2939E8(v80, v80, s + i * 0x10);
-                func_001F9BF0(v80, v80, &v20[i * 4]);
+                FastVecSub(v80, v80, &v20[i * 4]);
             }
             bit <<= 1;
         }
@@ -577,12 +577,12 @@ int func_L04_00296938(char *m, char *s, float speed, float ang, float accel) {
         }
         buf[2] = buf[2] + *(float *)(s + 0xE8);
         a98 = a98 - *(float *)(s + 0xE8);
-        func_001F9BF0(buf + 4, m + 0x10, buf);
-        for (k = 0; k < 8 && func_L00_001F1D20(a94, a98, buf, 4, m); k++) {
+        FastVecSub(buf + 4, m + 0x10, buf);
+        for (k = 0; k < 8 && coll_capsule(a94, a98, buf, 4, m); k++) {
             qcopy(buf, D_L04_00174070);
             res |= 1;
         }
-        func_001F9BF0(v20, buf, m + 0x10);
+        FastVecSub(v20, buf, m + 0x10);
         func_001F9BD8_2939E8(m + 0x10, buf, buf + 4);
         if (func_001F9CE8_2939E8(v20) < *(float *)(s + 0xC0) * 0.5f) res |= 2;
     }
@@ -604,7 +604,7 @@ int func_L04_00296938(char *m, char *s, float speed, float ang, float accel) {
         for (i = 0; i < 13; i++, pp++) {
             if (*((int **)(s + 0x70))[i] == *(unsigned char *)(m + 0x52)) {
                 if (!(*(float *)(s + 0xC0) < D_0015EE6C * 0.19f) ||
-                    !(func_001FA850(*(float *)(m + 0x48), ang) > 0.092399783f) ||
+                    !(FastDiffRots(*(float *)(m + 0x48), ang) > 0.092399783f) ||
                     !(speed < D_0015EE6C * 0.19f)) {
                     f = ((float **)(s + 0x70))[i];
                     t = *(float *)(s + 0xC0);

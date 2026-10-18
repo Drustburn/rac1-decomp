@@ -332,7 +332,7 @@ void func_00239628(char *text, s32 start_x, s32 start_y, f32 scale) {
 
     blink_next_glyph = 0;
     cursor_text = text;
-    texture = func_00200248(func_00200198(0xE935, 0));
+    texture = GetFrameTex(GetIconFrame(0xE935, 0));
     cursor_x = start_x;
     cursor_y = start_y;
 
@@ -382,7 +382,7 @@ void func_00239628(char *text, s32 start_x, s32 start_y, f32 scale) {
                                     TRUNC(func_001FA888(9) * scale);
                                 glyph_height =
                                     TRUNC(func_001FA888(9) * scale);
-                                func_001F5800(cursor_x, cursor_y, glyph_width, glyph_height,
+                                DrawTexturedQuad(cursor_x, cursor_y, glyph_width, glyph_height,
                                                    texture_u, texture_v, 9, 9, (s64)0x80404040,
                                                    texture);
                             }
@@ -838,18 +838,18 @@ void func_0023AA38(char *m) {
         float x, y, w, h;
         func_0020DB98(m, 3, ids, (char *)out);
         qcopy(base, out);
-        func_001F9BF0(d1, &out[1], out);
-        func_001F9BF0(d2, &out[2], out);
-        len = func_001F9CB8(d1);
+        FastVecSub(d1, &out[1], out);
+        FastVecSub(d2, &out[2], out);
+        len = FastVecLength(d1);
         func_001F9DC0(tmp, d1, D_001E6518[i][0]);
-        func_001F9BD8(base, base, tmp);
+        FastVecAdd(base, base, tmp);
         func_001F9DC0(d1, d1, len - 2.0f * D_001E6518[i][2]);
-        len = func_001F9CB8(d2);
+        len = FastVecLength(d2);
         func_001F9DC0(tmp, d2, D_001E6518[i][1]);
-        func_001F9BD8(base, base, tmp);
+        FastVecAdd(base, base, tmp);
         func_001F9DC0(d2, d2, len - 2.0f * D_001E6518[i][3]);
-        func_001F9BD8(tmp, base, d1);
-        func_001F9BD8(tmp, tmp, d2);
+        FastVecAdd(tmp, base, d1);
+        FastVecAdd(tmp, tmp, d2);
         func_00238F98(base, tmp, &sx, &sy, &sw, &sh);
         if (D_00161398 != 0 || *(int *)&D_001613A0 != 0) {
             f = 1.0f;
@@ -859,20 +859,20 @@ void func_0023AA38(char *m) {
             if (D_00161398 != 0) {
                 f = func_001FA888(*(int *)&D_00161394) * 0.125f;
             }
-            len = func_001F9CB8(d1);
+            len = FastVecLength(d1);
             g = 1.0f - f;
             func_001F9DC0(tmp, d1, len * g * 0.5f);
             func_001F9DC0(d1, d1, len * f);
-            func_001F9BD8(base, base, tmp);
-            len = func_001F9CB8(d2);
+            FastVecAdd(base, base, tmp);
+            len = FastVecLength(d2);
             func_001F9DC0(tmp, d2, len * g * 0.5f);
             func_001F9DC0(d2, d2, len * f);
-            func_001F9BD8(base, base, tmp);
+            FastVecAdd(base, base, tmp);
         }
         qcopy(&c[0], base);
-        func_001F9BD8(&c[1], base, d1);
-        func_001F9BD8(&c[2], base, d2);
-        func_001F9BD8(&c[3], &c[2], d1);
+        FastVecAdd(&c[1], base, d1);
+        FastVecAdd(&c[2], base, d2);
+        FastVecAdd(&c[3], &c[2], d1);
         a[0] = c[0];
         b[0] = c[3];
         func_00238F98(a, b, &x, &y, &w, &h);
@@ -900,11 +900,11 @@ void func_0023AA38(char *m) {
             break;
         }
         func_0023A5E0(i, x, y);
-        func_0023AA08();
+        setupViewContext();
         func_001FB908(0x200, 0x200);
         func_00234C98_l(0x42, 0x8000000064L);
         func_00234C98_l(8, 5);
-        func_00234E80();
+        VU1_texFlush();
         tex = D_0015EFD0;
         if (D_0015EE80 != 0) {
             func_001F5988(w, h, x, y, 0, 0, (int)(sx - 1.0f),

@@ -103,7 +103,7 @@ int viBufCreate(VB *vb, int data, unsigned int tags, int count, int f50, int f54
     sp.init = 1;
     sp.max = 1;
     vb->sema = func_00118C70(&sp);
-    func_0023D090(vb);
+    viBufReset(vb);
     vb->f48 = 0;
     return 1;
 }
@@ -212,7 +212,7 @@ int viBufStopDMA(ViBuf *vb) {
             break;
         }
     }
-    func_0023CF10(0);
+    setD3_CHCR(0);
     s->d3_madr = *(volatile unsigned int *)0x1000B010;
     s->d3_qwc = *(volatile unsigned int *)0x1000B020;
     s->d3_chcr = *(volatile unsigned int *)0x1000B000;
@@ -256,8 +256,8 @@ int viBufRestartDMA(ViBuf *vb) {
             vb->f10++;
         }
     } else {
-        int a = func_0023CEC8(vb, s->d4_madr);
-        int b = func_0023CEC8(vb, madr);
+        int a = getFIFOindex(vb, s->d4_madr);
+        int b = getFIFOindex(vb, madr);
         if (a != b) {
             int id;
             int size = vb->count << 11;
@@ -276,7 +276,7 @@ int viBufRestartDMA(ViBuf *vb) {
     if (s->d3_madr != 0 && s->d3_qwc != 0) {
         *(volatile unsigned int *)0x1000B010 = s->d3_madr;
         *(volatile unsigned int *)0x1000B020 = s->d3_qwc;
-        func_0023CF10(s->d3_chcr | 0x100);
+        setD3_CHCR(s->d3_chcr | 0x100);
     }
     if (vb->f10 != 0) {
         for (;;) {

@@ -2636,7 +2636,7 @@ void func_001F7680(unsigned int source) {
         *(unsigned int *)(PK + 12) = (unsigned int)transfer | 0x50000000;
         D_00161000 = (int *)(PK + 0x10);
     } while (remaining > 0);
-    func_00234E80();
+    VU1_texFlush();
 }
 
 extern short D_0015F448;              /* SDA, gp -0x78B8 */

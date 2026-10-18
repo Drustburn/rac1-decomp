@@ -2385,7 +2385,7 @@ void func_L02_002DF0C0(unsigned char *moby) {
     OvlVec4 c;
     OvlVec4 e;
 
-    func_001F9C30(delta, moby + 0x10, -1.0f);
+    FastVecScale(delta, moby + 0x10, -1.0f);
     qcopy(rot, moby + 0x40);
     if ((*(float *)&D_L02_00161CD4) != 0.0f) {
         for (i = 0; i < *(int *)D_L02_001B0DB0[d->path]; i++) {
@@ -2400,14 +2400,14 @@ void func_L02_002DF0C0(unsigned char *moby) {
         qcopy(moby + 0x10, NODE(d->node_b)[0].pos);
         moby[0x20] = 1;
         *(float *)(moby + 0x18) -= 6.0f;
-        d->rail_a = func_0020D348(0x421);
+        d->rail_a = CreateMoby(0x421);
         *(short *)(d->rail_a + 0x32) = 0x40;
         d->rail_a[0x31] = 1;
         *(u64 *)(d->rail_a + 0x38) = *(u64 *)(moby + 0x38);
         *(unsigned short *)(d->rail_a + 0x34) = *(unsigned short *)(moby + 0x34);
         qcopy_nc(d->rail_a + 0x10, moby + 0x10);
         qcopy_nc(d->rail_a + 0x40, moby + 0x40);
-        d->rail_b = func_0020D348(0x422);
+        d->rail_b = CreateMoby(0x422);
         *(short *)(d->rail_b + 0x32) = 0x40;
         d->rail_b[0x31] = 1;
         *(u64 *)(d->rail_b + 0x38) = *(u64 *)(moby + 0x38);
@@ -2422,20 +2422,20 @@ void func_L02_002DF0C0(unsigned char *moby) {
         break;
     case 1:
         if (((unsigned char *)D_0014171B + 0xAA35)[moby[0xB0] + (D_0015EE84 << 4)] == 0xFF) {
-            d->timer = func_001F9850(30);
+            d->timer = scale_ticks(30);
             moby[0x20] = 2;
         }
         break;
     case 2:
         s = D_0015EE6C * 5.0f;
         func_L00_001FF4B0(a, G(d->gear[0]) + 0xC0, -s);
-        func_001F9BD8(G(d->gear[0]) + 0x10, G(d->gear[0]) + 0x10, a);
+        FastVecAdd(G(d->gear[0]) + 0x10, G(d->gear[0]) + 0x10, a);
         func_L00_001FF4B0(a, G(d->gear[1]) + 0xC0, s);
-        func_001F9BD8(G(d->gear[1]) + 0x10, G(d->gear[1]) + 0x10, a);
+        FastVecAdd(G(d->gear[1]) + 0x10, G(d->gear[1]) + 0x10, a);
         func_L00_001FF4B0(a, G(d->gear[2]) + 0xC0, -s);
-        func_001F9BD8(G(d->gear[2]) + 0x10, G(d->gear[2]) + 0x10, a);
+        FastVecAdd(G(d->gear[2]) + 0x10, G(d->gear[2]) + 0x10, a);
         func_L00_001FF4B0(a, G(d->gear[3]) + 0xC0, s);
-        func_001F9BD8(G(d->gear[3]) + 0x10, G(d->gear[3]) + 0x10, a);
+        FastVecAdd(G(d->gear[3]) + 0x10, G(d->gear[3]) + 0x10, a);
         func_L00_00251E30(G(d->gear[0]));
         func_L00_00251E30(G(d->gear[1]));
         func_L00_00251E30(G(d->gear[2]));
@@ -2459,8 +2459,8 @@ void func_L02_002DF0C0(unsigned char *moby) {
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         func_L02_002E03B8((char *)moby);
-        if (func_001F9B88(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) - 2.0f) < 0.0001f &&
-            func_001F9B88(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 4.0f) < 0.0001f) {
+        if (FastAbsF(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) - 2.0f) < 0.0001f &&
+            FastAbsF(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 4.0f) < 0.0001f) {
             moby[0x20] = 5;
         }
         break;
@@ -2493,23 +2493,23 @@ void func_L02_002DF0C0(unsigned char *moby) {
                 d->cam_goal = 0;
                 d->cam_pos = (float)(*(int *)D_L02_001B0DB0[d->path] - 1);
                 qcopy_nc(a, NODE(d->node_a)[0].look);
-                qcopy(c, D_L02_001B0DB0[d->path] + func_001FA898(d->cam_pos) * 0x10 + 0x10);
-                func_001F9BC0(e);
+                qcopy(c, D_L02_001B0DB0[d->path] + truncate_float_to_s32(d->cam_pos) * 0x10 + 0x10);
+                clear_u64_value(e);
                 e[2] = func_L00_001FF860(b[0] - c[0], b[1] - c[1]);
                 e[1] = -func_L00_001FF860(func_001F9D48(c, b), b[2] - c[2]);
             } else {
                 d->cam_goal = *(int *)D_L02_001B0DB0[d->path] - 1;
                 d->cam_pos = 0.0f;
                 qcopy_nc(a, NODE(d->node_b)[0].look);
-                qcopy(c, D_L02_001B0DB0[d->path] + func_001FA898(d->cam_pos) * 0x10 + 0x10);
-                func_001F9BC0(e);
+                qcopy(c, D_L02_001B0DB0[d->path] + truncate_float_to_s32(d->cam_pos) * 0x10 + 0x10);
+                clear_u64_value(e);
                 e[2] = func_L00_001FF860(b[0] - c[0], b[1] - c[1]);
                 e[1] = -func_L00_001FF860(func_001F9D48(c, b), b[2] - c[2]);
             }
             moby[0x20] = 6;
-            d->ride_timer = func_001F9850(0xB4);
+            d->ride_timer = scale_ticks(0xB4);
             func_L00_00234768(moby + 0x10, 0, a[2]);
-            func_L00_002EBF50(D_L02_00167440, D_L02_00167440 + 0x10, 3, func_001F9850(0xF0), 0);
+            func_L00_002EBF50(D_L02_00167440, D_L02_00167440 + 0x10, 3, scale_ticks(0xF0), 0);
             func_L02_002F9ED8((*(float *)&D_L02_00161CD8), (*(float *)&D_L02_00161CDC), (*(float *)&D_L02_00161CE0), (*(float *)&D_L02_00161CE4), (*(float *)&D_L02_00161CE8),
                               (*(float *)&D_L02_00161CF0));
             func_L00_002EBE88(c);
@@ -2536,8 +2536,8 @@ void func_L02_002DF0C0(unsigned char *moby) {
         d->rail_a_off = -1.0f;
         d->rail_b_off = -1.0f;
         func_L02_002E03B8((char *)moby);
-        if (func_001F9B88(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f &&
-            func_001F9B88(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f) {
+        if (FastAbsF(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f &&
+            FastAbsF(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f) {
             moby[0x20] = 8;
         }
         break;
@@ -2552,19 +2552,19 @@ void func_L02_002DF0C0(unsigned char *moby) {
                 moby[0xBC] = 1;
                 qcopy_nc(moby + 0x10, NODE(d->node_b)[0].pos);
                 qcopy_nc(c, NODE(d->node_b)[0].look);
-                func_001F9BF0(a, D_L02_0016016C + (d->node_b << 7) + 0x30, D_L02_0016016C + (d->node_a << 7) + 0x30);
+                FastVecSub(a, D_L02_0016016C + (d->node_b << 7) + 0x30, D_L02_0016016C + (d->node_a << 7) + 0x30);
             } else {
                 moby[0xBC] = 0;
                 qcopy_nc(moby + 0x10, NODE(d->node_a)[0].pos);
                 qcopy_nc(c, NODE(d->node_a)[0].look);
-                func_001F9BF0(a, D_L02_0016016C + (d->node_a << 7) + 0x30, D_L02_0016016C + (d->node_b << 7) + 0x30);
+                FastVecSub(a, D_L02_0016016C + (d->node_a << 7) + 0x30, D_L02_0016016C + (d->node_b << 7) + 0x30);
             }
             *(float *)(moby + 0x18) -= 6.0f;
-            func_001F9BD8(b, HP, a);
+            FastVecAdd(b, HP, a);
             func_L00_00217718(b, c, 0x72, 0);
             d->speed = -d->speed;
             moby[0x20] = 9;
-            func_L02_002F9E50(2, func_001F9850(0xB4));
+            func_L02_002F9E50(2, scale_ticks(0xB4));
         }
         break;
     case 9:
@@ -2575,7 +2575,7 @@ void func_L02_002DF0C0(unsigned char *moby) {
         func_00215CA8(D_L02_001B0DB0[d->path], 0, c, b, 0, d->cam_pos);
         qcopy(a, moby + 0x10);
         a[2] += 8.0f;
-        func_001F9BC0(b);
+        clear_u64_value(b);
         b[2] = func_L00_001FF860(a[0] - c[0], a[1] - c[1]);
         b[1] = -func_L00_001FF860(func_001F9D48(c, a), a[2] - c[2]);
         func_L00_002EBE88(c);
@@ -2595,16 +2595,16 @@ void func_L02_002DF0C0(unsigned char *moby) {
         d->rail_a_off = 2.0f;
         d->rail_b_off = -4.0f;
         func_L02_002E03B8((char *)moby);
-        if (func_001F9B88(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) - 2.0f) < 0.01f &&
-            func_001F9B88(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 4.0f) < 0.01f) {
+        if (FastAbsF(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) - 2.0f) < 0.01f &&
+            FastAbsF(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 4.0f) < 0.01f) {
             {
                 extern unsigned short D_00141992[];
-                t = func_001F9850(D_0015EFA4) - D_00141992[0] * 600;
+                t = scale_ticks(D_0015EFA4) - D_00141992[0] * 600;
             }
-            lim = func_001F9850(3600) * 60.0f;
+            lim = scale_ticks(3600) * 60.0f;
             if (!(lim < t) || (*(unsigned int *)(D_0014171B + 0x591) & (1 << D_0015EE84))) {
             } else {
-                    func_L00_00203F20(0x7DD, 0x48);
+                    Help_Request(0x7DD, 0x48);
             }
             moby[0x20] = 0xD;
             func_L00_002EC0C8(2);
@@ -2623,14 +2623,14 @@ void func_L02_002DF0C0(unsigned char *moby) {
         }
         break;
     case 14:
-        d->rail_a = func_0020D348(0x421);
+        d->rail_a = CreateMoby(0x421);
         *(short *)(d->rail_a + 0x32) = 0x40;
         d->rail_a[0x31] = 1;
         *(u64 *)(d->rail_a + 0x38) = *(u64 *)(moby + 0x38);
         *(unsigned short *)(d->rail_a + 0x34) = *(unsigned short *)(moby + 0x34);
         qcopy_nc(d->rail_a + 0x10, moby + 0x10);
         qcopy_nc(d->rail_a + 0x40, moby + 0x40);
-        d->rail_b = func_0020D348(0x422);
+        d->rail_b = CreateMoby(0x422);
         *(short *)(d->rail_b + 0x32) = 0x40;
         d->rail_b[0x31] = 1;
         *(u64 *)(d->rail_b + 0x38) = *(u64 *)(moby + 0x38);
@@ -2656,8 +2656,8 @@ void func_L02_002DF0C0(unsigned char *moby) {
         func_L02_002E03B8((char *)moby);
         if ((*(float *)&D_L02_00161CD0) == 0.0f) {
             moby[0x20] = 0xF;
-        } else if (func_001F9B88(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) - 2.0f) < 0.01f &&
-                   func_001F9B88(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 4.0f) < 0.01f) {
+        } else if (FastAbsF(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) - 2.0f) < 0.01f &&
+                   FastAbsF(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 4.0f) < 0.01f) {
             moby[0x20] = 0x11;
         }
         break;
@@ -2667,15 +2667,15 @@ void func_L02_002DF0C0(unsigned char *moby) {
         func_L02_002E03B8((char *)moby);
         if ((*(float *)&D_L02_00161CD0) == 0.0f) {
             moby[0x20] = 0xF;
-        } else if (func_001F9B88(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f &&
-                   func_001F9B88(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f) {
+        } else if (FastAbsF(*(float *)(d->rail_a + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f &&
+                   FastAbsF(*(float *)(d->rail_b + 0x18) - *(float *)(moby + 0x18) + 1.0f) < 0.01f) {
             moby[0x20] = 0x10;
         }
         break;
     }
-    func_001F9BD8(delta, delta, moby + 0x10);
-    if (func_001F9CB8(delta) > 4.0f) {
-        func_001F9BC0(delta);
+    FastVecAdd(delta, delta, moby + 0x10);
+    if (FastVecLength(delta) > 4.0f) {
+        clear_u64_value(delta);
     }
     func_L00_002617B0(d->riders, delta, rot, moby + 0x40);
 }

@@ -427,14 +427,14 @@ void func_L00_00236BF8(HudElem *e) {
         span = (232.0f - (v + v)) / (float)n;
         lo = (v - 116.0f) + (float)(i % n) * span;
         hi = lo + span;
-        D_L00_0017E760[i][0] = func_002140F8(v - 17.0f, 17.0f - v);
-        D_L00_0017E760[i][1] = func_002140F8(lo, hi);
-        D_L00_0017E760[i][2] = func_002140F8(-0.4f, 0.4f);
-        D_L00_0017E760[i][3] = func_002140F8(-0.6f, 0.6f);
-        D_L00_0017E760[i][2] += func_002140F8(-0.4f, 0.4f);
-        D_L00_0017E760[i][3] += func_002140F8(-0.6f, 0.6f);
-        D_L00_0017E760[i][2] += func_002140F8(-0.4f, 0.4f);
-        D_L00_0017E760[i][3] += func_002140F8(-0.6f, 0.6f);
+        D_L00_0017E760[i][0] = random_float_between(v - 17.0f, 17.0f - v);
+        D_L00_0017E760[i][1] = random_float_between(lo, hi);
+        D_L00_0017E760[i][2] = random_float_between(-0.4f, 0.4f);
+        D_L00_0017E760[i][3] = random_float_between(-0.6f, 0.6f);
+        D_L00_0017E760[i][2] += random_float_between(-0.4f, 0.4f);
+        D_L00_0017E760[i][3] += random_float_between(-0.6f, 0.6f);
+        D_L00_0017E760[i][2] += random_float_between(-0.4f, 0.4f);
+        D_L00_0017E760[i][3] += random_float_between(-0.6f, 0.6f);
     }
 }
 extern void func_L00_00236830_v(HudElem *) __asm__("func_L00_00236830");
@@ -591,7 +591,7 @@ int func_L00_002381D0(HudElem *e) {
         top -= 16;
         func_00201640(left, top, right, top + 32, 0x80000000, 1);
     } while (i < e->unk74);
-    w = func_00200198(*(int *)e, 0);
+    w = GetIconFrame(*(int *)e, 0);
     func_L00_0023C458(w, pos[0] + e->unk48, pos[1] + e->unk4A, *(int *)&D_L00_0015F840, *(int *)&D_L00_0015F844, 0x80);
     return e->w;
 }
@@ -885,48 +885,48 @@ int func_L00_00238C30(HudElem *rec) {
         phase = func_001FA888(D_L00_0015F6B0 % GI(D_L00_0015F890));
         phase /= func_001FA888(GI(D_L00_0015F890));
         phase *= 6.28318f;
-        angle = func_001F9FA8(phase - 3.14159f);
+        angle = FastSin(phase - 3.14159f);
         radius = open * 128.0f;
-        alpha = func_001FA898(radius);
+        alpha = truncate_float_to_s32(radius);
         angle *= 0.125f;
         angle += 0.875f;
-        marker_alpha = func_001FA898(radius * angle);
+        marker_alpha = truncate_float_to_s32(radius * angle);
     }
     x = rec->unk50;
     y = rec->unk54;
     func_L00_00236400(rec, &x, &y);
     half_w = GI(D_L00_0015F7F8) / 2;
     half_h = GI(D_L00_0015F7FC) / 2;
-    func_00200468(func_00200198(0xe934, 0), x, y, half_w, half_h, alpha);
-    func_00200468(func_00200198(0xe934, 0), x + GI(D_L00_0015F7F8),
+    HudSprite(GetIconFrame(0xe934, 0), x, y, half_w, half_h, alpha);
+    HudSprite(GetIconFrame(0xe934, 0), x + GI(D_L00_0015F7F8),
                   y + GI(D_L00_0015F7FC), -half_w, -half_h, alpha);
-    func_00200468(func_00200198(0xe934, 0), x + GI(D_L00_0015F7F8),
+    HudSprite(GetIconFrame(0xe934, 0), x + GI(D_L00_0015F7F8),
                   y, -half_w, half_h, alpha);
-    func_00200468(func_00200198(0xe934, 0), x,
+    HudSprite(GetIconFrame(0xe934, 0), x,
                   y + GI(D_L00_0015F7FC), half_w, -half_h, alpha);
     for (i = 0; i < D_L00_0015FB48; i++) {
-        angle = func_001FA748(((float)i + (float)i) * 3.1415927f /
+        angle = FastAddRots(((float)i + (float)i) * 3.1415927f /
                               (float)D_L00_0015FB48 - 3.1415927f, 1.5707964f);
         icon_x = x + GI(D_L00_0015F800) +
-                 (int)(GF(D_L00_0015F86C) * func_001F9F90(angle) * GF(D_L00_0015F8A4));
+                 (int)(GF(D_L00_0015F86C) * FastCos(angle) * GF(D_L00_0015F8A4));
         icon_y = y + GI(D_L00_0015F804) +
-                 (int)(GF(D_L00_0015F86C) * func_001F9FA8(angle));
+                 (int)(GF(D_L00_0015F86C) * FastSin(angle));
         if (rec->unk74 == i && ((E_238C30 **)D_L00_0015FB78)[GI(D_L00_0015F80C)][i].id != 0)
-            func_00200468(func_00200198(0xe99c, 0), icon_x - 0x13,
+            HudSprite(GetIconFrame(0xe99c, 0), icon_x - 0x13,
                           icon_y - 0x13, 0x26, 0x26, marker_alpha);
         if (((E_238C30 **)D_L00_0015FB78)[GI(D_L00_0015F80C)][i].id != 0) {
             int icon_alpha;
             if (i != rec->unk74)
-                icon_alpha = func_001FA898((float)alpha * GF(D_L00_0015F8A0));
+                icon_alpha = truncate_float_to_s32((float)alpha * GF(D_L00_0015F8A0));
             else
                 icon_alpha = alpha;
-            func_L00_0023BAB8((char *)rec, func_00200198(((E_238C30 **)D_L00_0015FB78)[GI(D_L00_0015F80C)][i].id,
+            HudFrame((char *)rec, GetIconFrame(((E_238C30 **)D_L00_0015FB78)[GI(D_L00_0015F80C)][i].id,
                           ((unsigned char *)D_0013E15A + 0x4C6)[((E_238C30 **)D_L00_0015FB78)[GI(D_L00_0015F80C)][i].item] ? 4 : 0), icon_x, icon_y, 1, icon_alpha);
         }
     }
     selected = rec->unk74;
     if (selected >= 0 && *(int *)(((char **)D_L00_0015FB78)[GI(D_L00_0015F80C)] + selected * 0x1C) != 0) {
-        color = func_001FA8A8(GI(D_L00_0015F878), GI(D_L00_0015F87C), open * fade);
+        color = FastTweenColor(GI(D_L00_0015F878), GI(D_L00_0015F87C), open * fade);
         {
         int id;
         id = *(int *)((char *)D_0014171B_i + 0x885 + selected * 4);
@@ -936,15 +936,15 @@ int func_L00_00238C30(HudElem *rec) {
             item = *(int *)(D_0013D50F + 0x21 + id * 4);
             func_00116248(formatted, D_L00_0015F8A8, item, *(unsigned short *)(wr + 0xE));
             if (item != 0)
-                shadow = func_001FA8A8(GI(D_L00_0015F888), GI(D_L00_0015F88C), open * fade);
+                shadow = FastTweenColor(GI(D_L00_0015F888), GI(D_L00_0015F88C), open * fade);
             else
-                shadow = func_001FA8A8(GI(D_L00_0015F880), GI(D_L00_0015F884), open * fade);
-            func_001F6EA8(x + GI(D_L00_0015F800) + 1, y + GI(D_L00_0015F804) + 13, color, formatted, -1);
-            func_001F6EA8(x + GI(D_L00_0015F800), y + GI(D_L00_0015F804) + 12, shadow, formatted, -1);
+                shadow = FastTweenColor(GI(D_L00_0015F880), GI(D_L00_0015F884), open * fade);
+            FontPrintCenter(x + GI(D_L00_0015F800) + 1, y + GI(D_L00_0015F804) + 13, color, formatted, -1);
+            FontPrintCenter(x + GI(D_L00_0015F800), y + GI(D_L00_0015F804) + 12, shadow, formatted, -1);
         }
         }
         prefix_length = 0;
-        shadow = func_001FA8A8(GI(D_L00_0015F870), GI(D_L00_0015F874), open * fade);
+        shadow = FastTweenColor(GI(D_L00_0015F870), GI(D_L00_0015F874), open * fade);
         {
             int item, id;
             item = *(int *)(((char **)D_L00_0015FB78)[GI(D_L00_0015F80C)] + selected * 0x1C + 0x18);
@@ -952,7 +952,7 @@ int func_L00_00238C30(HudElem *rec) {
                 id = ((TI_238C30 *)D_L00_00179BC0)[item].h48;
             else
                 id = ((TI_238C30 *)D_L00_00179BC0)[item].h46;
-            text = func_001FE540(id);
+            text = msg_string(id);
         }
         if (text == 0) return rec->w;
         if (func_00116810((char *)text) == 0) return rec->w;
@@ -991,14 +991,14 @@ int func_L00_00238C30(HudElem *rec) {
             text_y += GI(D_L00_0015F89C);
         }
         if (prefix_length != 0) {
-            func_001F6EA8(x + GI(D_L00_0015F800) + 1, text_y + 1, color, (void *)text, prefix_length);
-            func_001F6EA8(x + GI(D_L00_0015F800), text_y, shadow, (void *)text, prefix_length);
+            FontPrintCenter(x + GI(D_L00_0015F800) + 1, text_y + 1, color, (void *)text, prefix_length);
+            FontPrintCenter(x + GI(D_L00_0015F800), text_y, shadow, (void *)text, prefix_length);
             text_y += 16;
-            func_001F6EA8(x + GI(D_L00_0015F800) + 1, text_y + 1, color, (void *)suffix, -1);
-            func_001F6EA8(x + GI(D_L00_0015F800), text_y, shadow, (void *)suffix, -1);
+            FontPrintCenter(x + GI(D_L00_0015F800) + 1, text_y + 1, color, (void *)suffix, -1);
+            FontPrintCenter(x + GI(D_L00_0015F800), text_y, shadow, (void *)suffix, -1);
         } else {
-            func_001F6EA8(x + GI(D_L00_0015F800) + 1, text_y + 1, color, (void *)text, -1);
-            func_001F6EA8(x + GI(D_L00_0015F800), text_y, shadow, (void *)text, -1);
+            FontPrintCenter(x + GI(D_L00_0015F800) + 1, text_y + 1, color, (void *)text, -1);
+            FontPrintCenter(x + GI(D_L00_0015F800), text_y, shadow, (void *)text, -1);
         }
     }
     return rec->w;
@@ -1712,27 +1712,27 @@ int func_L00_0023AC68(char *m) {
     else if (text < 0.0f)
         text = 0.0f;
 
-    text_alpha = func_001FA898(text * 128.0f);
-    alpha = func_001FA898((float)*(int *)&D_L00_0015F9CC * open);
+    text_alpha = truncate_float_to_s32(text * 128.0f);
+    alpha = truncate_float_to_s32((float)*(int *)&D_L00_0015F9CC * open);
     panel_right = x + *(int *)&D_L00_0015F9D4;
-    slide = func_001FA898((float)*(int *)&D_L00_0015F9D0 * open);
-    func_00200650(func_00200198(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
+    slide = truncate_float_to_s32((float)*(int *)&D_L00_0015F9D0 * open);
+    func_00200650(GetIconFrame(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
     panel_left = panel_right - slide;
-    func_00200468(func_00200198(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
-    func_00200468(func_00200198(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
-    func_L00_0023BAB8(m, func_00200198(0x754f, D_L00_0015F6B0 % 60 >> 1), x - 32, y, 0, text_alpha);
+    HudSprite(GetIconFrame(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
+    HudSprite(GetIconFrame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
+    HudFrame(m, GetIconFrame(0x754f, D_L00_0015F6B0 % 60 >> 1), x - 32, y, 0, text_alpha);
 
     func_00116248(buf, D_L00_0015F9F0);
     text_x = x + *(int *)&D_L00_0015F9D8;
     text_y = y + *(int *)&D_L00_0015F9DC;
-    period = func_001F9850(*(int *)&D_L00_0015F9E8);
-    pulse = func_001F9FA8((float)(D_L00_0015F6B0 % period) /
+    period = scale_ticks(*(int *)&D_L00_0015F9E8);
+    pulse = FastSin((float)(D_L00_0015F6B0 % period) /
                      func_001FA888(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
     if (pulse < 0.0f)
         pulse = 0.0f;
     scaled_text = pulse * text;
-    shadow = func_001FA8A8(0, 0x80000000, scaled_text);
-    color = func_001FA8A8(*(int *)&D_L00_0015F9E0, *(int *)&D_L00_0015F9E4, scaled_text);
+    shadow = FastTweenColor(0, 0x80000000, scaled_text);
+    color = FastTweenColor(*(int *)&D_L00_0015F9E0, *(int *)&D_L00_0015F9E4, scaled_text);
     func_L00_001FB7F8(text_x + 1, text_y + 1, shadow, buf, -1);
     func_L00_001FB7F8(text_x, text_y, color, buf, -1);
     return *(int *)(m + 0x58);
@@ -2237,7 +2237,7 @@ void func_L00_0023DB30(void) {
     if (D_0015EE84 >= 0x13) {
         for (k = 0; k < 0x25; k++) {
             (D_0013D50F + 0xB9)[k] = 1;
-            (D_0013D5EB + 5)[k] = 1;
+            (gHavePersuader + 5)[k] = 1;
         }
         D_0015EED0[0] = 0x4A;
         D_0015EED0[1] = 0x50;
@@ -2260,7 +2260,7 @@ void func_L00_0023DB30(void) {
         *(int *)(D_0014171B + 0x89D) = 0x10;
         *(int *)(D_0014171B + 0x8A1) = 0x13;
     } else {
-        if (D_0013D5CA[8] == 0) {
+        if (gHaveHeliPack[8] == 0) {
             func_L00_002618D8(0xA, 1);
             D_0015EED0[0] = 0x4A;
             *(int *)(D_0014171B + 0x45) = 0xA;

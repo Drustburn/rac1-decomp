@@ -176,19 +176,19 @@ void func_001FDF78(s32 left, s32 right, s32 top, s32 bottom) {
     u8 *label_text;
     s32 texture_index;
 
-    func_001F4630(0);
-    func_00234C98(0x42, 0x8000000044);
-    func_00234C98(0x47, 0x4B);
+    SetupGifPaging(0);
+    VU1_addGSregister(0x42, 0x8000000044);
+    VU1_addGSregister(0x47, 0x4B);
     func_00201640(0, 0, 0x200, 0x1C0, 0x80000000, 0);
-    texture_index = func_00200198(0xE99A, 0xE);
+    texture_index = GetIconFrame(0xE99A, 0xE);
     screen_width_subpixels = (right - left) * 16;
     screen_height_subpixels = (bottom - top) * 16;
     func_00200A90(texture_index, 0, 0, screen_width_subpixels, screen_height_subpixels, 0, 0,
                        0x80);
-    func_00234C98(8, 0);
-    func_00200A90(func_00200198(0xE99A, 0xF), 0, 0, screen_width_subpixels,
+    VU1_addGSregister(8, 0);
+    func_00200A90(GetIconFrame(0xE99A, 0xF), 0, 0, screen_width_subpixels,
                        screen_height_subpixels, D_0015F538 & 0xFFF, 0, 0x80);
-    func_00234C98(8, 5);
+    VU1_addGSregister(8, 5);
     for (level_index = 1; level_index < 20; level_index++) {
         if (D_001DE1A8[level_index].x == 0) {
             continue;
@@ -206,7 +206,7 @@ void func_001FDF78(s32 left, s32 right, s32 top, s32 bottom) {
             (availability == 2 &&
              D_0015F538 % (func_001F98C0(0x16) + func_001F98C0(8)) <
                  func_001F98C0(0x16))) {
-            func_00200468(func_00200198(0xE99A, 0xC), marker_x - 5,
+            HudSprite(GetIconFrame(0xE99A, 0xC), marker_x - 5,
                             marker_y - 5, 10, 10, 0x80);
         }
         if (level_index == D_001A01F0.level) {
@@ -218,7 +218,7 @@ void func_001FDF78(s32 left, s32 right, s32 top, s32 bottom) {
             line_fraction = direction_length - 8000;
             line_start_x = label_x + (marker_x - label_x) * line_fraction / direction_length;
             line_start_y = label_y + (marker_y - label_y) * line_fraction / direction_length;
-            label_text = func_001FE540(D_001DE0C4[level_index].label_text);
+            label_text = msg_string(D_001DE0C4[level_index].label_text);
             text_width = func_001F6600(label_text, -1);
             if (D_001DE1A8[level_index].label_offset_x <= -1) {
                 line_end_x = label_x - text_width;
@@ -229,16 +229,16 @@ void func_001FDF78(s32 left, s32 right, s32 top, s32 bottom) {
                           0);
             func_002014B8(label_x + 1, label_y + 1, line_end_x + 1, label_y + 1, 0x80000000, 0);
             text_x = (line_end_x < label_x) ? line_end_x : label_x;
-            func_001F68E8(text_x + 1, label_y - (*(s32 *)&D_0015F770) + 1, 0x80000000, label_text,
+            FontPrintLarge(text_x + 1, label_y - (*(s32 *)&D_0015F770) + 1, 0x80000000, label_text,
                              -1);
             func_002014B8(line_start_x, line_start_y, label_x, label_y, 0x80F0F0F0, 0);
             func_002014B8(label_x, label_y, line_end_x, label_y, 0x80F0F0F0, 0);
-            func_001F68E8(text_x, label_y - (*(s32 *)&D_0015F770), 0x80F0F0F0, label_text, -1);
-            func_00200468(func_00200198(0xE99A, 0xD), marker_x - 10,
+            FontPrintLarge(text_x, label_y - (*(s32 *)&D_0015F770), 0x80F0F0F0, label_text, -1);
+            HudSprite(GetIconFrame(0xE99A, 0xD), marker_x - 10,
                             marker_y - 10, 20, 20, 0x80);
         }
     }
-    func_001F4748();
+    DoGifPaging();
 }
 
 typedef struct {

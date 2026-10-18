@@ -293,7 +293,7 @@ void func_L05_002F9BA0(unsigned char *moby) {
     switch (st) {
     case 0:
                 g = D_0013E633 + 0xE9D;
-                if (func_001F9D10(g, pos) < 5.5f) {
+                if (FastVecDist(g, pos) < 5.5f) {
                     if (*(int *)&D_L05_0015F6B0 >= 4) {
                         int grp;
                         gq = g - 0x80;
@@ -316,11 +316,11 @@ void func_L05_002F9BA0(unsigned char *moby) {
                 if (*(unsigned short *)(D_0014171B + 0x31D) == 0) {
                     if (D_L05_0015F788 != 0) {
                         char *h = D_0013E633 + 0xE1D;
-                        int ret = func_001F9850(0x4B0);
+                        int ret = scale_ticks(0x4B0);
                         if (ret < *(int *)(h + 0x19C)) {
                             extern unsigned short D_00141D60[];
                             if (D_00141D60[0] == 0) {
-                                func_L00_00203F20(0x138F, 0x5F);
+                                Help_Request(0x138F, 0x5F);
                             }
                         }
                     }
@@ -345,45 +345,45 @@ void func_L05_002F9BA0(unsigned char *moby) {
         break;
     }
 
-    func_001F9BF0(v0, pos, data);
+    FastVecSub(v0, pos, data);
     qcopy(data, pos);
-    f1 = func_001F9CB8(v0);
+    f1 = FastVecLength(v0);
     if (moby[0xBC] != 2 && f1 < 2.0f) {
         float f20;
         float f21;
         func_L00_00250800(moby, *(int *)&D_L05_0015F6B0 & 1, v10);
-        f21 = func_00214158();
+        f21 = random_angle_radians();
         f20 = D_0015EE6C * 0.25f;
-        func_L00_001FF4B0(v20, moby + 0xE0, f20 * func_001F9F90(f21));
-        func_L00_001FF4B0(v30, moby + 0xD0, f20 * func_001F9FA8(f21));
-        func_001F9BD8(v20, v20, v0);
-        func_001F9BD8(v20, v20, v30);
+        func_L00_001FF4B0(v20, moby + 0xE0, f20 * FastCos(f21));
+        func_L00_001FF4B0(v30, moby + 0xD0, f20 * FastSin(f21));
+        FastVecAdd(v20, v20, v0);
+        FastVecAdd(v20, v20, v30);
         qcopy(v20, v0);
         *(float *)(v20 + 0xC) = (float)*(int *)&D_L05_001619E8;
         if (moby[0xBC] == 0) {
             int a;
             int b;
             int c;
-            a = func_001F9850(10);
-            b = func_001F9850(13);
-            c = func_L00_00258BC8(a, b);
+            a = scale_ticks(10);
+            b = scale_ticks(13);
+            c = rand_range(a, b);
             func_L00_0026A7F8(v10, v20, *(int *)&D_L05_001619CC, *(int *)&D_L05_001619D0, c, 15, 15, 1);
         } else {
             int a;
             int b;
             int c;
-            func_001F9C30(v40, v0, 0.92f);
-            a = func_001F9850(0xF);
-            b = func_001F9850(0x12);
-            c = func_L00_00258BC8(a, b);
+            FastVecScale(v40, v0, 0.92f);
+            a = scale_ticks(0xF);
+            b = scale_ticks(0x12);
+            c = rand_range(a, b);
             func_L00_0026A7F8(v10, v40, 0x5032F0D2, *(int *)&D_L05_001619D0, c, 0x1E, 0x14, 1);
             {
                 int a2;
                 int b2;
                 int c2;
-                a2 = func_001F9850(8);
-                b2 = func_001F9850(0x11);
-                c2 = func_L00_00258BC8(a2, b2);
+                a2 = scale_ticks(8);
+                b2 = scale_ticks(0x11);
+                c2 = rand_range(a2, b2);
                 func_L00_0026DA50(v10, v20, *(int *)&D_L05_001619CC, *(int *)&D_L05_001619D0, c2, 1, 15000.0f);
             }
         }
@@ -533,7 +533,7 @@ void func_L05_0030DA08(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        *(float *)(d + 3) = func_00214158();
+        *(float *)(d + 3) = random_angle_radians();
         moby->pos.z -= 0.35f;
         id = (short)moby->save_id;
         if (D_L05_001BBA40.done[id] != 0 ||
@@ -560,9 +560,9 @@ void func_L05_0030DA08(struct Moby *moby) {
         }
         break;
     case 1:
-        angle = func_001FA748(*(float *)(d + 3), D_0015EE6C * 6.2831855f);
+        angle = FastAddRots(*(float *)(d + 3), D_0015EE6C * 6.2831855f);
         *(float *)(d + 3) = angle;
-        color = func_001FA898((func_001F9FA8(angle) * 4.0f - 3.0f) * 128.0f);
+        color = truncate_float_to_s32((FastSin(angle) * 4.0f - 3.0f) * 128.0f);
         if (color > 0x80) color = 0x80;
         else if (color < 0x20) color = 0x20;
         shade = 0x80000000 | (color << 8);

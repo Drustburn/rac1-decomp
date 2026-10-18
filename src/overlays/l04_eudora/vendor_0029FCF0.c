@@ -165,9 +165,9 @@ void func_L04_0029FEC8(struct PMoby *moby) {
         D_L04_001661B0[1] = func_001FA888(data->child_count) * 2.073f;
     }
     if (data->path_index == -1) {
-        data->angle = func_001FA748(data->angle, D_0015EE60 * 0.0034906587f);
-        moby->pos.x = data->origin.x + data->radius * func_001F9F90(data->angle);
-        moby->pos.y = data->origin.y + data->radius * func_001F9FA8(data->angle);
+        data->angle = FastAddRots(data->angle, D_0015EE60 * 0.0034906587f);
+        moby->pos.x = data->origin.x + data->radius * FastCos(data->angle);
+        moby->pos.y = data->origin.y + data->radius * FastSin(data->angle);
     } else if (data->initialized != 0) {
         s32 i;
         distance = 10000.0f;
@@ -186,25 +186,25 @@ void func_L04_0029FEC8(struct PMoby *moby) {
         data->child_count = 0;
         for (i = 0; i < data->count; i++) {
             data->children[i] = 0;
-            child = (struct PMoby *)func_0020D348(0x55);
+            child = (struct PMoby *)CreateMoby(0x55);
             if (child != 0) {
                 SwarmPartVars *part = (SwarmPartVars *)child->pvars;
                 data->children[i] = child;
                 child->update_dist = 0x7f;
                 child->draw_dist = 0x7f;
-                child->scale *= func_002140F8(0.7f, 1.3f);
-                child->rot.z = func_00214158();
-                child->anim_speed = func_002140F8(0.6f, 1.2f);
-                func_001F9BC0((float *)&part->velocity);
+                child->scale *= random_float_between(0.7f, 1.3f);
+                child->rot.z = random_angle_radians();
+                child->anim_speed = random_float_between(0.6f, 1.2f);
+                clear_u64_value((float *)&part->velocity);
                 part->unk44 = 0;
                 part->unk4C = 10.0f;
                 qcopy(&child->pos, &moby->pos);
-                angle = func_00214158();
-                angle2 = func_00214158();
-                size = func_002140F8(0.6f, 0.9f);
-                child->pos.x += func_001F9F90(angle) * func_001F9FA8(angle2) * size;
-                child->pos.y += func_001F9FA8(angle) * func_001F9FA8(angle2) * size;
-                child->pos.z += func_001F9F90(angle2) * size;
+                angle = random_angle_radians();
+                angle2 = random_angle_radians();
+                size = random_float_between(0.6f, 0.9f);
+                child->pos.x += FastCos(angle) * FastSin(angle2) * size;
+                child->pos.y += FastSin(angle) * FastSin(angle2) * size;
+                child->pos.z += FastCos(angle2) * size;
                 part->unk50 = 0;
                 part->leader_pos = &moby->pos;
                 part->unk58 = 0;

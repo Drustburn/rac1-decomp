@@ -568,8 +568,8 @@ void func_L08_002F5980(struct Moby *moby)
     }
     case 1: {
         s32 active = func_L00_0025B478_F5980(moby, 0x330000, 0);
-        distance = func_001F9D48(&moby->pos, D_0013F4D0);
-        if ((distance < 2.0f && *(s32 *)(D_0013F4D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F4D0 + 0x1bc) == moby) {
+        distance = func_001F9D48(&moby->pos, gHeroPos);
+        if ((distance < 2.0f && *(s32 *)(gHeroPos + 0x2004) == 0x42) || *(struct Moby **)(gHeroPos + 0x1bc) == moby) {
             func_0022ED80_F5980(0, 0, moby);
             func_L00_0025F4A8(moby, D_L08_0015F660, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
@@ -590,10 +590,10 @@ void func_L08_002F5980(struct Moby *moby)
             func_0020D678_F5980(moby);
             return;
         }
-        moby->rot.y = func_001FA748(moby->rot.y, (*(f32 *)&D_L08_00162000) * 0.017453292f * D_0015EE6C);
-        distance = func_001F9D48(&moby->pos, D_0013F4D0);
-        if (distance < 2.0f && *(s32 *)(D_0013F4D0 + 0x2004) == 0x42) {
-            func_001F9BC0(&velocity);
+        moby->rot.y = FastAddRots(moby->rot.y, (*(f32 *)&D_L08_00162000) * 0.017453292f * D_0015EE6C);
+        distance = func_001F9D48(&moby->pos, gHeroPos);
+        if (distance < 2.0f && *(s32 *)(gHeroPos + 0x2004) == 0x42) {
+            clear_u64_value(&velocity);
             func_L00_0025F4A8(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             func_0020D678_F5980(moby);
@@ -605,13 +605,13 @@ void func_L08_002F5980(struct Moby *moby)
                      (f32 *)((char *)follower + 0x34), 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[waypoint]);
         if (waypoint != 0) {
-            func_001F9BF0(&step, &point, &moby->pos);
+            FastVecSub(&step, &point, &moby->pos);
             func_L00_001FF4B0(&step, &step, D_0015EE6C * 3.0f);
-            func_001F9BD8(&moby->pos, &moby->pos, &step);
+            FastVecAdd(&moby->pos, &moby->pos, &step);
         } else {
-            distance = func_001F9D48(&moby->pos, D_0013F4D0);
+            distance = func_001F9D48(&moby->pos, gHeroPos);
             if (distance < 24.0f) {
-                func_001F9BC0(&velocity);
+                clear_u64_value(&velocity);
                 func_L00_0025F4A8(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                               3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 func_0022ED80_F5980(0, 0, moby);
@@ -620,7 +620,7 @@ void func_L08_002F5980(struct Moby *moby)
             }
             moby->state = 3;
         }
-        if (func_001F9D10(&moby->pos, &point) < 0.1f) {
+        if (FastVecDist(&moby->pos, &point) < 0.1f) {
             follower->point = waypoint;
         }
         moby->pos.z += 0.4f;
@@ -629,7 +629,7 @@ void func_L08_002F5980(struct Moby *moby)
     case 3: {
         Vec4 timer;
         timer.f[0] = (f32)moby->alpha;
-        func_00214D28(&timer, 0.0f, 128.0f / (f32)func_001F9850(30));
+        func_00214D28(&timer, 0.0f, 128.0f / (f32)scale_ticks(30));
         moby->alpha = (u8)(s32)timer.f[0];
         if (moby->alpha == 0) func_0020D678_F5980(moby);
     }
@@ -1327,80 +1327,80 @@ void func_L08_00308A00(char *m) {
 
     switch (data->state) {
     case 0:
-        if (func_00215570(&hero_p.motion.pos, data->third) && hero_p.state.control_mode == 15)
+        if (is_point_inside_clip_volume(&hero_p.motion.pos, data->third) && hero_p.state.control_mode == 15)
             data->state = 1;
         break;
     case 1:
         if (hero_p.state.current == 0x42) {
             data->state = 0;
-        } else if (func_00215570(&hero_p.motion.pos, data->fourth) && unl_p[0xB] == 0) {
+        } else if (is_point_inside_clip_volume(&hero_p.motion.pos, data->fourth) && unl_p[0xB] == 0) {
             unl_p[0xB] = 1;
             func_0022EE28(1, 0, 0);
-            func_L00_00264DB8(0x53DB, -1);
+            ShowBanner(0x53DB, -1);
         }
         break;
     }
     if (ia_p[29] == 0) {
-        if (func_00215570(&hero_p.motion.pos, data->first)) {
-            elapsed = func_001F9850(D_0015EFA4) - HR[48].best * 600;
-            if ((int)((float)func_001F9850(18) * 60.0f) < elapsed || HR[48].best * 600 == 0) {
-                func_L00_00203F20(8000, 0x30);
+        if (is_point_inside_clip_volume(&hero_p.motion.pos, data->first)) {
+            elapsed = scale_ticks(D_0015EFA4) - HR[48].best * 600;
+            if ((int)((float)scale_ticks(18) * 60.0f) < elapsed || HR[48].best * 600 == 0) {
+                Help_Request(8000, 0x30);
             } else {
-                time = func_001F9850(D_0015EFA4) / 600;
+                time = scale_ticks(D_0015EFA4) / 600;
                 if (HR[48].best < time)
-                    HR[48].best = func_001F9850(D_0015EFA4) / 600;
+                    HR[48].best = scale_ticks(D_0015EFA4) / 600;
             }
         }
     }
     if (ia_p[29] != 0) {
-        if (func_00215570(&hero_p.motion.pos, data->first) && alt_p[0x2F] == 0) {
+        if (is_point_inside_clip_volume(&hero_p.motion.pos, data->first) && alt_p[0x2F] == 0) {
             if (HR[49].count != 0) {
-                elapsed = func_001F9850(D_0015EFA4) - HR[49].best * 600;
-                if ((int)((float)func_001F9850(18) * 60.0f) < elapsed || HR[49].best * 600 == 0) {
-                    func_L00_00203F20(8001, 0x31);
+                elapsed = scale_ticks(D_0015EFA4) - HR[49].best * 600;
+                if ((int)((float)scale_ticks(18) * 60.0f) < elapsed || HR[49].best * 600 == 0) {
+                    Help_Request(8001, 0x31);
                 } else {
-                    time = func_001F9850(D_0015EFA4) / 600;
+                    time = scale_ticks(D_0015EFA4) / 600;
                     if (HR[49].best < time)
-                        HR[49].best = func_001F9850(D_0015EFA4) / 600;
+                        HR[49].best = scale_ticks(D_0015EFA4) / 600;
                 }
             } else {
                 HR[49].count++;
-                time = func_001F9850(D_0015EFA4) / 600;
+                time = scale_ticks(D_0015EFA4) / 600;
                 if (HR[49].best < time)
-                    HR[49].best = func_001F9850(D_0015EFA4) / 600;
+                    HR[49].best = scale_ticks(D_0015EFA4) / 600;
                 HR[49].flags = HR[49].flags | (1 << D_0015EE84) | 0x80000000;
             }
         }
     }
     if (ia_p[28] == 0) {
-        if (func_00215570(&hero_p.motion.pos, data->second) && D_0013DE4B[7] != 0) {
-            elapsed = func_001F9850(D_0015EFA4) - HR[50].best * 600;
-            if ((int)((float)func_001F9850(18) * 60.0f) < elapsed || HR[50].best * 600 == 0) {
-                func_L00_00203F20(8002, 0x32);
+        if (is_point_inside_clip_volume(&hero_p.motion.pos, data->second) && D_0013DE4B[7] != 0) {
+            elapsed = scale_ticks(D_0015EFA4) - HR[50].best * 600;
+            if ((int)((float)scale_ticks(18) * 60.0f) < elapsed || HR[50].best * 600 == 0) {
+                Help_Request(8002, 0x32);
             } else {
-                time = func_001F9850(D_0015EFA4) / 600;
+                time = scale_ticks(D_0015EFA4) / 600;
                 if (HR[50].best < time)
-                    HR[50].best = func_001F9850(D_0015EFA4) / 600;
+                    HR[50].best = scale_ticks(D_0015EFA4) / 600;
             }
             goto sample_volume;
         }
     }
     if (ia_p[28] != 0) {
-        if (func_00215570(&hero_p.motion.pos, data->second) && D_0013DE4B[7] != 0) {
+        if (is_point_inside_clip_volume(&hero_p.motion.pos, data->second) && D_0013DE4B[7] != 0) {
             if (HR[112].count != 0) {
-                elapsed = func_001F9850(D_0015EFA4) - HR[112].best * 600;
-                if ((int)((float)func_001F9850(18) * 60.0f) < elapsed || HR[112].best * 600 == 0) {
-                    func_L00_00203F20(8005, 0x70);
+                elapsed = scale_ticks(D_0015EFA4) - HR[112].best * 600;
+                if ((int)((float)scale_ticks(18) * 60.0f) < elapsed || HR[112].best * 600 == 0) {
+                    Help_Request(8005, 0x70);
                 } else {
-                    time = func_001F9850(D_0015EFA4) / 600;
+                    time = scale_ticks(D_0015EFA4) / 600;
                     if (HR[112].best < time)
-                        HR[112].best = func_001F9850(D_0015EFA4) / 600;
+                        HR[112].best = scale_ticks(D_0015EFA4) / 600;
                 }
             } else {
                 HR[112].count++;
-                time = func_001F9850(D_0015EFA4) / 600;
+                time = scale_ticks(D_0015EFA4) / 600;
                 if (HR[112].best < time)
-                    HR[112].best = func_001F9850(D_0015EFA4) / 600;
+                    HR[112].best = scale_ticks(D_0015EFA4) / 600;
                 HR[112].flags = HR[112].flags | (1 << D_0015EE84) | 0x80000000;
             }
         }
@@ -1408,7 +1408,7 @@ void func_L08_00308A00(char *m) {
 sample_volume:
     *(u128_p *)volume = 0;
     volume[2] = -1.0f;
-    if (func_001F9C78((char *)&hero_p + 0x290, volume) < 0.1f)
+    if (FastVecDot((char *)&hero_p + 0x290, volume) < 0.1f)
         HR[112].count = -1;
     if (alt_p[0x2F] == 0 && hero_p.state.control_mode == 15)
         alt_p[0x2F] = 1;

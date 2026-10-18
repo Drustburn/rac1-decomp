@@ -351,7 +351,7 @@ void func_L18_002F33D8(struct Moby *moby) {
     if (1.0f < vars->scroll) {
         vars->scroll -= 1.0f;
     }
-    alpha = (48.0f - func_001F9D10(&moby->pos, D_L18_00167840)) * 0.25f;
+    alpha = (48.0f - FastVecDist(&moby->pos, D_L18_00167840)) * 0.25f;
     if (vars->max_alpha < alpha) {
         alpha = vars->max_alpha;
     } else if (alpha < 0.0f) {
@@ -359,15 +359,15 @@ void func_L18_002F33D8(struct Moby *moby) {
     }
     step = 0.25f;
     for (i = 0; i < 4; i++) {
-        quads[i].texture = ((u64 (*)(int))func_001F4868)(0xE);
+        quads[i].texture = ((u64 (*)(int))GetEffectTex)(0xE);
         quads[i].reserved.value = 0;
         quads[i].texture_state = 0xFF9000000260ULL;
         quads[i].primitive = (u64)*(int *)&D_L18_00162374 | ((u64)*(int *)&D_L18_00162378 << 2) | ((u64)*(int *)&D_L18_0016237C << 4) |
                              ((u64)*(int *)&D_L18_00162380 << 6) | 0x8000000000ULL;
         phase = vars->scroll + i * step;
         phase = phase - (float)func_001FA898_r(phase);
-        color = func_001FA8A8(*(int *)&D_L18_00162358, *(int *)&D_L18_0016235C, phase);
-        color = func_001FA8A8(color & 0xFFFFFF, color, alpha);
+        color = FastTweenColor(*(int *)&D_L18_00162358, *(int *)&D_L18_0016235C, phase);
+        color = FastTweenColor(color & 0xFFFFFF, color, alpha);
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA620[j][0] + i * step;
             quads[i].texture_coordinates[j][1] = D_L18_001DA620[j][1];

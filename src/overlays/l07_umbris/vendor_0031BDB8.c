@@ -158,7 +158,7 @@ void func_L07_0031BDB8(struct Moby *moby) {
         start.f[1] = vars->destination.y;
         start.f[2] = vars->destination.z;
         next.q = start.q;
-        vars->home.w = func_001F9CB8(&next);
+        vars->home.w = FastVecLength(&next);
         if (vars->startSound != -1)
             func_0022ED80(vars->startSound, 0, (int)moby);
         moby->state = 2;
@@ -180,12 +180,12 @@ void func_L07_0031BDB8(struct Moby *moby) {
         next.q = start.q;
         func_001F9EC0(&next, &next, &moby->rot_row0);
         func_L00_001FF4B0(&start, &next, vars->destination.w * D_0015EE6C);
-        func_001F9BD8(&moby->pos, &moby->pos, &start);
+        FastVecAdd(&moby->pos, &moby->pos, &start);
         time = vars->home.w - vars->destination.w * D_0015EE6C;
         vars->home.w = time;
         if (!(time < 0.0f))
             return;
-        func_001F9BD8(&moby->pos, &vars->home, &next);
+        FastVecAdd(&moby->pos, &vars->home, &next);
         vars->home.w = 0;
         if (vars->indicator != -1)
             D_L07_001845A8[vars->indicator] = 1;
@@ -219,10 +219,10 @@ void func_L07_0031BDB8(struct Moby *moby) {
         start.f[1] = vars->destination.y;
         start.f[2] = vars->destination.z;
         next.q = start.q;
-        distance = func_001F9CB8(&next);
+        distance = FastVecLength(&next);
         func_L00_001FF4B0(&next, &next, -(vars->speed * D_0015EE6C));
         func_001F9EC0(&start, &next, &moby->rot_row0);
-        func_001F9BD8(&moby->pos, &moby->pos, &start);
+        FastVecAdd(&moby->pos, &moby->pos, &start);
         time = vars->home.w + vars->speed * D_0015EE6C;
         vars->home.w = time;
         if (!(distance < time))

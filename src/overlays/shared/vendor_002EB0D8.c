@@ -836,9 +836,9 @@ void func_L00_002ED088(void *arg) {
     *(int *)(r + 0x18) = 0;
     *(float *)(r + 0x10) = 0.01f;
     *(float *)(r + 0x14) = 0.3f;
-    *(short *)(r + 0x1E) = func_001F9850(0x78);
+    *(short *)(r + 0x1E) = scale_ticks(0x78);
     *(short *)(r + 0x1C) = 0;
-    func_001F9BC0(r);
+    clear_u64_value(r);
     q = *(char **)(m + 0x70);
     t = q + 0x30;
     *(float *)(t + 4) = 0.02f;
@@ -858,13 +858,13 @@ void func_L00_002ED088(void *arg) {
     *(short *)(m + 0x7E) = 0;
     lvl = *(int *)(g + 0x2084);
     if ((unsigned)(lvl - 0x2C) < 2) {
-        *(float *)(p + 0x30) = func_001F9F90(*(float *)(g + 0x9AC));
-        *(float *)(p + 0x34) = func_001F9FA8(*(float *)(g + 0x9AC));
+        *(float *)(p + 0x30) = FastCos(*(float *)(g + 0x9AC));
+        *(float *)(p + 0x34) = FastSin(*(float *)(g + 0x9AC));
         *(int *)(p + 0x38) = 0;
         *(float *)(s19 + 0xB8) = *(float *)(g + 0x9AC);
         *(int *)(w + 8) = *(int *)(g + 0x994);
     } else {
-        func_001F9BF0(p + 0x30, *(char **)(g + 0x964) + 0x10, m + 0x30);
+        FastVecSub(p + 0x30, *(char **)(g + 0x964) + 0x10, m + 0x30);
         *(int *)(p + 0x38) = 0;
         *(int *)(p + 0x3C) = 0;
         func_L00_001FF4B0(p + 0x30, p + 0x30, 1.0f);
@@ -874,7 +874,7 @@ void func_L00_002ED088(void *arg) {
     gg = (char *)&D_L00_00166D80;
     *(char *)(gg + 0x273) = 2;
     *(short *)(gg + 0x270) = 1;
-    *(int *)(gg + 0x2F4) = func_001F9850(0x3C);
+    *(int *)(gg + 0x2F4) = scale_ticks(0x3C);
 }
 INCLUDE_ASM("asm/overlays", func_L00_002ED320);
 extern void func_001F9BF0(void *, void *, void *);
@@ -1118,7 +1118,7 @@ void func_L00_002EDE38(char *arg) {
         return;
     }
     if (params->check_yaw != 0
-        && func_001FA850(((CamDesc *)D_L00_0015F050)[cam->descriptor_index].yaw, D_L00_00166ED8) >= 1.3962634f) {
+        && FastDiffRots(((CamDesc *)D_L00_0015F050)[cam->descriptor_index].yaw, D_L00_00166ED8) >= 1.3962634f) {
         goto stop;
     }
     if (params->l_buttons_end != 0 && params->type == 5 && (pad_held[0] & 5)) {
@@ -1149,18 +1149,18 @@ stop:
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
         qcopy(state->tail.unk140, tail->unk130);
-        func_001F9C30(dir, (D_0013E633 + 0x10AD), -tail->distance);
+        FastVecScale(dir, (D_0013E633 + 0x10AD), -tail->distance);
         pos = &rec->pos;
-        func_001F9BD8(state->follow.eye, (D_0013E633 + 0xE9D), dir);
-        func_001F9BD8(pos, state->follow.eye, tail->unk130);
-        func_001F9C30(dir, (D_0013E633 + 0x10AD), -follow->look_height);
-        func_001F9BD8(state->follow.look_target, (D_0013E633 + 0xE9D), dir);
+        FastVecAdd(state->follow.eye, (D_0013E633 + 0xE9D), dir);
+        FastVecAdd(pos, state->follow.eye, tail->unk130);
+        FastVecScale(dir, (D_0013E633 + 0x10AD), -follow->look_height);
+        FastVecAdd(state->follow.look_target, (D_0013E633 + 0xE9D), dir);
         qcopy(state->follow.unkD0, state->follow.look_target);
         qcopy(follow->focus, (D_0013E633 + 0xE9D));
         qcopy(state->follow.offset, follow->focus);
         qcopy(state->position, pos);
         qcopy(state->tail.snap.unk1F0, pos);
-        snap->unk200 = tail->unk15C - func_001F9CB8(tail->unk130);
+        snap->unk200 = tail->unk15C - FastVecLength(tail->unk130);
         *(s32 *)&reset->unk34 = 0;
         reset->look_height = follow->look_height;
         { f32 zero = reset->unk34;
@@ -1171,7 +1171,7 @@ stop:
         reset->unk2C = zero; }
     }
     at_end = 0;
-    total = func_001FA888(func_001F9850(200));
+    total = func_001FA888(scale_ticks(200));
     params->timer++;
     if (params->type == 10) {
         func_L00_002E9B30();
@@ -1183,40 +1183,40 @@ stop:
     }
     if (params->type == 2 || params->type == 4) {
         { FollowCamFlags *ctl = &FOLLOW_CAM_STATE(((struct UpdateCam *)D_L00_00166F00))->tail.ctl; ctl->flags |= 3; }
-        if (params->timer > func_001F9850(200)) {
+        if (params->timer > scale_ticks(200)) {
             at_end = 1;
-            params->timer = func_001F9850(200);
+            params->timer = scale_ticks(200);
         }
         func_L00_002E9AD0();
     } else if (params->type == 1 || params->type == 7 || params->type == 10 || params->type == 9) {
         PadSt *pad = &controller_state;
         if (pad->analog[0] != 0.0f || pad->analog[1] != 0.0f) {
-            params->timer = func_001F9850(200);
+            params->timer = scale_ticks(200);
         }
-        if (params->timer >= func_001F9850(200)) {
+        if (params->timer >= scale_ticks(200)) {
             at_end = 1;
             if (D_L00_00166FB4 > 0.0f) {
-                params->timer = func_001F9850(200);
+                params->timer = scale_ticks(200);
             }
         }
-        if (params->timer >= func_001F9850(400)) {
+        if (params->timer >= scale_ticks(400)) {
             at_end = 0;
             params->timer = 1;
         }
     } else if (params->type == 3) {
-        total = func_001FA888(func_001F9850(1));
-        if (params->timer > func_001F9850(1)) {
+        total = func_001FA888(scale_ticks(1));
+        if (params->timer > scale_ticks(1)) {
             at_end = 1;
-            params->timer = func_001F9850(1);
+            params->timer = scale_ticks(1);
         }
     } else {
-        if (params->timer > func_001F9850(200)) {
+        if (params->timer > scale_ticks(200)) {
             at_end = 1;
-            params->timer = func_001F9850(200);
+            params->timer = scale_ticks(200);
         }
     }
-    dir[0] = func_001F9F90(((CamDesc *)D_L00_0015F050)[cam->descriptor_index].yaw);
-    dir[1] = func_001F9FA8(((CamDesc *)D_L00_0015F050)[cam->descriptor_index].yaw);
+    dir[0] = FastCos(((CamDesc *)D_L00_0015F050)[cam->descriptor_index].yaw);
+    dir[1] = FastSin(((CamDesc *)D_L00_0015F050)[cam->descriptor_index].yaw);
     *(s32 *)&dir[2] = 0;
     swing = params->swing * 0.017453292f * (params->timer / total);
     if ((params->type != 1 && params->type != 7 && params->type != 9) || at_end == 0) {
@@ -1258,10 +1258,10 @@ stop:
         func_L00_002E9A18(0);
     }
     if (params->lateral_stiffness != 0.0f || params->lateral_damping != 0.0f) {
-        if (params->timer >= func_001F9850(120)) {
+        if (params->timer >= scale_ticks(120)) {
             func_L00_002E9A40(params->lateral_stiffness, params->lateral_damping);
         } else {
-            t = params->timer / func_001FA888(func_001F9850(120));
+            t = params->timer / func_001FA888(scale_ticks(120));
             func_L00_002E9A40(
                 params->start_lateral_stiffness + (params->lateral_stiffness - params->start_lateral_stiffness) * t,
                 params->start_lateral_damping + (params->lateral_damping - params->start_lateral_damping) * t);
@@ -1428,17 +1428,17 @@ run:
             pos[2] = *(float *)(D_L00_0015F050 + cam->descriptor_index * 32 + 8);
         }
         *(int *)&pos[3] = 0;
-        func_001F9BF0(to_pos, pos, &(*(HeroLike_ee *)D_0013F450).motion.pos);
-        up = func_001F9C78(to_pos, (*(HeroLike_ee *)D_0013F450).gravity_dir);
-        func_001F9C30(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, up);
-        func_001F9BF0(level, to_pos, tmp);
-        params->distance = func_001F9CB8(level);
+        FastVecSub(to_pos, pos, &(*(HeroLike_ee *)D_0013F450).motion.pos);
+        up = FastVecDot(to_pos, (*(HeroLike_ee *)D_0013F450).gravity_dir);
+        FastVecScale(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, up);
+        FastVecSub(level, to_pos, tmp);
+        params->distance = FastVecLength(level);
         params->height = -up;
         angle = params->angle;
-        if (func_001F9B88(angle) == 1.5707964f) {
+        if (FastAbsF(angle) == 1.5707964f) {
             *(int *)&params->offset_scale = 0;
         } else {
-            params->offset_scale = params->height - params->distance * (func_001F9FA8(angle) / func_001F9F90(angle));
+            params->offset_scale = params->height - params->distance * (FastSin(angle) / FastCos(angle));
         }
         rec = (struct UpdateCam_ee *)D_L00_00166F00;
         rig = FOLLOW_CAM_STATE_ee(rec);
@@ -1452,12 +1452,12 @@ run:
         tail->unk15C = params->distance;
         tail->distance = params->height;
         follow->look_height = params->offset_scale;
-        func_001F9C30(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, -tail->distance);
-        func_001F9BD8(state->follow.eye, &(*(HeroLike_ee *)D_0013F450).motion.pos, tmp);
-        func_001F9BF0(tail->unk130, pos, state->follow.eye);
+        FastVecScale(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, -tail->distance);
+        FastVecAdd(state->follow.eye, &(*(HeroLike_ee *)D_0013F450).motion.pos, tmp);
+        FastVecSub(tail->unk130, pos, state->follow.eye);
         qcopy(state->tail.unk140, tail->unk130);
-        func_001F9C30(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, -follow->look_height);
-        func_001F9BD8(state->follow.look_target, &(*(HeroLike_ee *)D_0013F450).motion.pos, tmp);
+        FastVecScale(tmp, (*(HeroLike_ee *)D_0013F450).gravity_dir, -follow->look_height);
+        FastVecAdd(state->follow.look_target, &(*(HeroLike_ee *)D_0013F450).motion.pos, tmp);
         qcopy(state->follow.unkD0, state->follow.look_target);
         qcopy(follow->focus, &(*(HeroLike_ee *)D_0013F450).motion.pos);
         qcopy(state->follow.offset, follow->focus);
@@ -1475,8 +1475,8 @@ run:
         reset->unk2C = zero; }
     }
     params->timer += 1;
-    if (func_001F9850(200) < params->timer) {
-        params->timer = func_001F9850(200);
+    if (scale_ticks(200) < params->timer) {
+        params->timer = scale_ticks(200);
     }
     if (params->distance != 0.0f) {
         func_L00_002E9900(0, params->distance, 0.003f);
