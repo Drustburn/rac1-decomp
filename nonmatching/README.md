@@ -33,7 +33,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_00116948`](core/func_00116948.c) | core | 0 | ? | - |
 | [`func_00116B00`](core/func_00116B00.c) | core | 0 | ? | - |
 | [`func_00119EA8`](functional/func_00119EA8.c) | functional | 0 | ? | - |
-| [`func_0011A0A0`](functional/func_0011A0A0.c) | functional | 0 | ? | - |
 | [`func_0011B868`](functional/func_0011B868.c) | functional | 0 | ? | - |
 | [`func_0011BCB0`](core/func_0011BCB0.c) | core | 0 | ? | - |
 | [`func_0011CB40`](functional/func_0011CB40.c) | functional | 0 | ? | - |
@@ -44,15 +43,12 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_00129690`](functional/func_00129690.c) | functional | 0 | ? | - |
 | [`func_0012A7E8`](functional/func_0012A7E8.c) | functional | 0 | ? | - |
 | [`func_0012AAA8`](core/func_0012AAA8.c) | core | 0 | ? | - |
-| [`func_0012AC80`](core/func_0012AC80.c) | core | 0 | ? | - |
-| [`func_0012C278`](functional/func_0012C278.c) | functional | 0 | ? | - |
 | [`func_0012DA28`](functional/func_0012DA28.c) | functional | 0 | ? | - |
 | [`func_0012DB68`](functional/func_0012DB68.c) | functional | 0 | ? | - |
 | [`func_0012EB18`](functional/func_0012EB18.c) | functional | 0 | ? | - |
 | [`func_001E9EC8`](game/func_001E9EC8.c) | game | 0 | ? | - |
 | [`func_001EBB48`](game/func_001EBB48.c) | game | 0 | ? | - |
 | [`func_001F3890`](game/func_001F3890.c) | game | 768 | ? | - |
-| [`func_001F4868`](game/func_001F4868.c) | game | 328 | ? | - |
 | [`func_001F7070`](game/func_001F7070.c) | game | 1264 | ? | - |
 | [`func_001F7E98`](functional/func_001F7E98.c) | functional | 96 | ? | - |
 | [`func_001F9840`](game/func_001F9840.c) | game | 0 | ? | - |
