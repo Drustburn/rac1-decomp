@@ -92,7 +92,7 @@ by instruction scheduling heuristics:
 | Source | Steps |
 |---|---|
 | `src/core/<ADDR>.c` (`core_text`) | v1.14 `-S` → `tools/check_macro_slots.py` → assemble (989snd and wad also `tools/fix_macro_load_delay.py` and `tools/ps2eeas_nops.py`) |
-| `src/core/<ADDR>.c` marked `ee29` in `config/core_text.objects` (the memory card library, the C library's printf, sprintf, stdio and strtol, libmpeg's bitstream reader, ...) | 2.9-ee `-S` (with its own include directory, for `stdarg.h`) → `tools/fix_volatile_slot.py` → `tools/check_macro_slots.py` → assemble; SDK code built with the SDK's own compiler, like libgcc (`EE29_CORE` in `Makefile.sn`). 2.9-ee spills with `sd` and tail-calls a void function ending in a call by itself, but not `return f(...)` |
+| `src/core/<ADDR>.c` marked `ee29` in `config/core_text.objects` (the memory card library, the C library's printf, sprintf, stdio and strtol, libmpeg's bitstream reader, ...) | 2.9-ee `-S` (with its own include directory, for `stdarg.h`) → `tools/fix_volatile_slot.py` (the whole-object `gas210` profile also models based word-load call-slot filling) → `tools/check_macro_slots.py` → assemble; SDK code built with the SDK's own compiler, like libgcc (`EE29_CORE` in `Makefile.sn`). 2.9-ee spills with `sd` and tail-calls a void function ending in a call by itself, but not `return f(...)` |
 | `src/game/**.c` (`text`) | v1.14 `-S` → `tools/fix_jump_tables.py` → `tools/ps2eeas_dli.py` → `tools/check_macro_slots.py` → `tools/fix_orphan_hi.py` → assemble → `tools/ps2eeas_nops.py` → assemble |
 | `src/libgcc/libgcc2.c` | 2.9-ee `-S`, one object per `L_*` module, like `libgcc.a`'s members → assemble; L__main also goes through `tools/strip_dead.py` |
 | `src/libgcc/fp-bit.c` | 2.9-ee `-S`, whole file twice (`dp-bit.o`, `fp-bit.o` with `-DFLOAT`) → assemble → `tools/strip_dead.py` → assemble |
@@ -417,3 +417,13 @@ anything beyond plain C; actually decompiling any function into real
 (non-`INCLUDE_ASM`) C and confirming it individually matches — this
 result proves the *toolchain and disassembly* are sound, not that any
 particular function has been understood/renamed/rewritten yet.
+
+### Original GNU 2.10-ee cross-check
+
+The Linux binary `sn-prodg-24/local/sce/ee/gcc/bin/ee-as` is GNU
+2.10-ee-001003-1. `tools/tests/verify_read_assembler.py` executes it with
+QEMU and local i386 libc, using unmodified compiler output. This verifies
+the `gas210` assembler profile recorded as the fifth column in
+`config/core_text.objects`; the ordinary build remains portable through
+its documented assembler model. See BUILD_FIDELITY.md for the six exact
+function comparisons and the scope of the load-slot rule.
