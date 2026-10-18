@@ -1997,7 +1997,167 @@ bounds:
         moby->pos.z < 2.0f || moby->pos.z > 1021.0f)
         func_0020D678(moby);
 }
-INCLUDE_ASM("asm/overlays", func_L13_00308860);
+extern char D_L13_00167140[];
+extern char D_L13_001F5850[];
+extern char D_L13_001F5868[];
+extern float func_001F9C78(void *a, void *b);
+extern char *func_L13_0030D600(void *a, void *b, int c, int d);
+extern void func_L00_0026B890(void *, void *, int, int, float, int, int, int, int, float);
+extern void func_L00_001FF548(void *, void *, float);
+extern char *func_L00_002E0CB8(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int);
+typedef struct {
+    float f[4];
+} __attribute__((aligned(16))) V4A;
+typedef struct {
+    char b[24];
+} __attribute__((packed)) blk24;
+
+/* Gemlik vendor moby burst: spreads particle mobys around the vendor in three passes, then emits four fixed bursts. */
+void func_L13_00308860(void *moby, void *data) {
+    float a[4];
+    float b[4];
+    float up[4];
+    float e[4];
+    float c[4];
+    float p[4];
+    float v[4];
+    int cols[6];
+    int cols2[6];
+    float len;
+    float lift;
+    float spread;
+    float r;
+    float d;
+    int i;
+    int n;
+    int k;
+    int j;
+    int lo4;
+    int lo;
+    int lo2;
+    int lo3;
+    int lo5;
+    int life;
+    int life2;
+    int hi;
+    int *col;
+    int *col2;
+    float speed;
+    float scale = 1.5f;
+    float t;
+
+    *(u128 *)up = 0;
+    up[2] = D_0015EE6C + D_0015EE6C;
+    *(u128 *)b = *(u128 *)up;
+    *(u128 *)up = 0;
+    up[2] = 1.0f;
+    qcopy(c, (char *)moby + 0x10);
+    c[2] = c[2] + 1.0f;
+    func_001F9C30(b, b, scale);
+    func_001F9BF0(a, D_L13_00167140, c);
+    len = func_001F9CB8(a);
+
+    for (i = 0; i < 10; i++) {
+        *(u128 *)v = 0;
+        v[0] = func_002140F8(-1.0f, 1.0f);
+        v[1] = func_002140F8(-1.0f, 1.0f);
+        *(V4A *)p = *(V4A *)v;
+        d = func_001F9C78(p, up);
+        func_L00_001FF4B0(e, up, d);
+        func_001F9BF0(p, p, e);
+        r = func_002140F8(0.0f, 1.0f);
+        func_L00_001FF4B0(e, up, r);
+        func_001F9BD8(p, p, e);
+        r = scale * func_002140F8(3.5f, 6.5f);
+        func_L00_001FF4B0(p, p, r * D_0015EE6C);
+        func_001F9BD8(p, p, b);
+        lo = func_001F9850(0x3C);
+        hi = func_001F9850(0x78);
+        func_L13_0030D600(c, p, func_L00_00258BC8(lo, hi), 0);
+    }
+
+    lift = len + len;
+    for (j = 0; j < 4; j++) {
+        *(u128 *)v = 0;
+        v[0] = func_002140F8(-1.0f, 1.0f);
+        v[1] = func_002140F8(-1.0f, 1.0f);
+        *(V4A *)p = *(V4A *)v;
+        d = func_001F9C78(p, up);
+        func_L00_001FF4B0(e, up, d);
+        func_001F9BF0(p, p, e);
+        r = func_002140F8(0.0f, 1.0f);
+        func_L00_001FF4B0(e, up, r);
+        func_001F9BD8(p, p, e);
+        r = scale * func_002140F8(6.5f, 10.0f);
+        func_L00_001FF4B0(p, p, r * D_0015EE6C);
+        func_001F9BD8(p, p, b);
+        lo2 = func_001F9850(0x3C);
+        hi = func_001F9850(0x5A);
+        func_L13_0030D600(c, p, func_L00_00258BC8(lo2, hi), 1);
+    }
+
+    *(u128 *)v = 0;
+    v[0] = func_002140F8(-1.0f, 1.0f);
+    v[1] = func_002140F8(-1.0f, 1.0f);
+    v[2] = func_002140F8(-1.0f, 1.0f);
+    a[2] = a[2] + len * 0.5f;
+    *(V4A *)p = *(V4A *)v;
+    func_L00_001FF4B0(p, p, (len / 5.0f) * D_0015EE6C);
+    func_L00_001FF4B0(a, a, lift * D_0015EE6C);
+    func_001F9BD8(p, p, a);
+    func_L00_001FF548(p, p, 10.0f * D_0015EE6C);
+    lo3 = func_001F9850(0x3C);
+    hi = func_001F9850(0x5A);
+    func_L13_0030D600(c, p, func_L00_00258BC8(lo3, hi), 1);
+
+    if (len < 6.0f) {
+        n = func_001FA898(len) + 1;
+    } else {
+        n = 4;
+    }
+    lift = 0.0f;
+    if (len < 7.0f) {
+        lift = 7.0f - len;
+    }
+
+    for (k = 0; k < n; k++) {
+        r = func_002140F8(8.0f, 10.0f);
+        speed = scale * 400000.0f;
+        spread = scale * r;
+        t = lift * D_0015EE6C;
+        *(blk24 *)cols = *(blk24 *)D_L13_001F5850;
+        spread = spread * D_0015EE6C;
+        *(blk24 *)cols2 = *(blk24 *)D_L13_001F5868;
+        spread = spread - t;
+        col = &cols[func_002140B0(6)];
+        col2 = &cols2[func_002140B0(6)];
+        lo4 = func_001F9850(0xF);
+        hi = func_001F9850(0x14);
+        life = func_L00_00258BC8(lo4, hi);
+        lo5 = func_001F9850(0x19);
+        hi = func_001F9850(0x1E);
+        life2 = func_L00_00258BC8(lo5, hi);
+        func_L00_0026B890(c, b, *col, *col2, speed, life, life2, 0, 0, spread);
+    }
+
+    if (9.0f < len) {
+        float s = 4.0f;
+        func_L00_002E0CB8(moby, c, b, scale * s, func_001F9850(0xF), 0x7F, 0x7F, 0x7F, 0x20);
+        func_L00_002E0CB8(moby, c, b, scale * s, func_001F9850(0x18), 0x20, 0x7F, 0, 0x20);
+    }
+    {
+        float s = 4.0f;
+        func_L00_002E0CB8(moby, c, b, scale * s, func_001F9850(0x14), 0x3F, 0x7F, 0, 0x30);
+    }
+    {
+        float s = 3.5f;
+        func_L00_002E0CB8(moby, c, b, scale * s, func_001F9850(0x1B), 0x10, 0x60, 0, 0x40);
+    }
+    {
+        float s = 3.0f;
+        func_L00_002E0CB8(moby, c, b, scale * s, func_001F9850(0x1D), 0, 0x20, 0, 0x20);
+    }
+}
 extern char *func_L00_0025B478(void *, int, int);
 extern int func_L00_0025B4D0(void *, void *, void *, int, int *, float *, int, int);
 extern void func_L00_002584A8(void *, int, int);
