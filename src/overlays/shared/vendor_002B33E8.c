@@ -369,7 +369,7 @@ void func_L00_002B4340(char *m) {
                     if (*(int *)(g + 0x300) != 0) {
                         int y = *(int *)(g + 0x2FC);
                         if (y == 0 || (*(short *)(y + 0xA6) != 0x13E && *(short *)(y + 0xA6) != 0x46F)) {
-                            if (func_L00_00234638(-1, 1) != 0) {
+                            if (TakeAmmo(-1, 1) != 0) {
                                 f21 = 0;
                                 f20 = *(float *)(g + 0x688);
                                 if (*(int *)(g + 0x2084) == 1 && (*(unsigned short *)(*(int *)(g + 0x2080) + 0x34) & 1)) {
@@ -384,16 +384,16 @@ void func_L00_002B4340(char *m) {
                                     char *q = D_0013E633 + 0xE1D;
                                     if (*(short *)(q + 0x22C8) == 1) {
                                         f21 = func_L00_001FF860(func_001F9CE8(m + 0xD0), *(float *)(m + 0xD8));
-                                        func_00215C00(t0, 0.6f, f20, -f21);
+                                        BuildSphericalOffset(t0, 0.6f, f20, -f21);
                                         FastVecAdd(t0, t0, m + 0x10);
                                     } else {
-                                        func_00215C00(t0, 0.6f, f20, -f21);
+                                        BuildSphericalOffset(t0, 0.6f, f20, -f21);
                                         FastVecAdd(t0, t0, m + 0x10);
                                     }
                                 }
-                                if (*(unsigned char *)(m + 0x53) != 3) func_00213DE0(m, 3, 0, 0);
-                                func_L00_00204130();
-                                p[1] = func_L00_002B6BC8(m, t0, f20, f21);
+                                if (*(unsigned char *)(m + 0x53) != 3) MobyBlendAnimation(m, 3, 0, 0);
+                                HelpPopup_RequestDismiss();
+                                p[1] = VisibombMissileSpawn(m, t0, f20, f21);
                                 {
                                     char *h = D_0014171B + 0x65;
                                     if (*(unsigned short *)(h + 0x68) <= 0xFFFE) {
@@ -414,7 +414,7 @@ void func_L00_002B4340(char *m) {
             }
         }
     }
-    if ((*(unsigned char *)(m + 0x70) & 2) != 0 && *(unsigned char *)(m + 0x53) != 1) func_00213DE0(m, 1, 0, 0);
+    if ((*(unsigned char *)(m + 0x70) & 2) != 0 && *(unsigned char *)(m + 0x53) != 1) MobyBlendAnimation(m, 1, 0, 0);
     *(unsigned short *)(m + 0x34) |= 4;
 }
 extern char *func_L00_0025B478(void *, int, int);
@@ -425,7 +425,7 @@ extern short D_L00_00161548;
 extern short D_L00_00161550;
 
 /* update moby 166 */
-void func_L00_002B4748(char *m) {
+void Moby166Update(char *m) {
     int *p = *(int **)(m + 0x78);
     int b;
     char *r;
@@ -515,7 +515,7 @@ extern void func_001F7868_2B4918(void) __asm__("func_001F7868");
 extern void func_L00_001FDE48_2B4918(int, void *, void *, void *, int) __asm__("func_L00_001FDE48");
 
 /* Draws the moby's beam: orients the moby along its child's two joints, draws three quads and a ribbon of 196 points. */
-void func_L00_002B4918(Moby *m) {
+void DrawChildBeam(Moby *m) {
     Quad_2B4918 pk;
     Vec4A mtx[4];
     Vec4A out[2];
@@ -671,10 +671,10 @@ void func_L00_002B4F40(X *x) {
     qcopy(&a, &x->v10);
     if (D_0013F450.i2084 == 0x81) {
         if ((*(s32 *)&D_L00_0015F6B0_B4F40b) % 3 == 0) {
-            func_L00_0026DA50(&a, &l0, 0x4F007FFF, 0x1FFFFFFF, scale_ticks(10), 1, 10000.0f);
+            PartType21Spawn(&a, &l0, 0x4F007FFF, 0x1FFFFFFF, scale_ticks(10), 1, 10000.0f);
         }
     } else {
-        func_L00_0026DA50(&a, &l0, 0x4F007FFF, 0x1FFFFFFF, scale_ticks(10), 1, 10000.0f);
+        PartType21Spawn(&a, &l0, 0x4F007FFF, 0x1FFFFFFF, scale_ticks(10), 1, 10000.0f);
     }
     if (g->f0C) {
         s = func_001F9D10_B4F40(&g->v10, &a) * 0.5f;
@@ -682,7 +682,7 @@ void func_L00_002B4F40(X *x) {
         for (i = 1; i < 2; i++) {
             func_L00_001FF4B0_B4F40(&t, &d, s * (f32)i);
             func_001F9BD8_B4F40(&t, &a, &t);
-            func_L00_0026DA50(&t, &l0, 0x4F007FFF, 0x1FFFFFFF, scale_ticks(10), 1, 10000.0f);
+            PartType21Spawn(&t, &l0, 0x4F007FFF, 0x1FFFFFFF, scale_ticks(10), 1, 10000.0f);
         }
     }
     g->f00 = random_integer_below(scale_ticks(10));
@@ -710,7 +710,7 @@ void func_L00_002B4F40(X *x) {
         q = 1.037f;
         l0.f[2] -= D_0015EE6C * 3.0f;
     }
-    p = func_L00_0026DEA0(&a, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+    p = PartType23Spawn(&a, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
     if (p) p[3] = 0x44;
     if (g->f0C) {
         s = func_001F9D10_B4F40(&g->v10, &a) * 0.16667f;
@@ -722,7 +722,7 @@ void func_L00_002B4F40(X *x) {
         for (i = 1; i < n; i++) {
             func_L00_001FF4B0_B4F40(&t, &d, s * (f32)i);
             func_001F9BD8_B4F40(&t, &a, &t);
-            p = func_L00_0026DEA0(&t, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
+            p = PartType23Spawn(&t, 0.05f, 1.01f, q, 30000.0f, 6, &l0, col);
             if (p) p[3] = 0x44;
         }
     }
@@ -911,7 +911,7 @@ unsigned char *func_L00_002B5998(int ign, Vec4 *from, float *yaw, float *pitch) 
             continue;
         }
         g = D_0013E633 + 0xE1D;
-        func_00215C00(&w, d, *yaw, *pitch + *(float *)(g + 0x2E4) * 0.5f);
+        BuildSphericalOffset(&w, d, *yaw, *pitch + *(float *)(g + 0x2E4) * 0.5f);
         FastVecAdd(&w, &w, from);
         e = FastArcSin(FastVecDist(&w, &tp) / (d + d));
         e = e + e;
@@ -1319,7 +1319,7 @@ int func_0022ED80_2b58d8(int, int, void *) __asm__("func_0022ED80");
 int func_L00_001EFFF0_2b58d8(void *, void *, int, void *, int) __asm__("func_L00_001EFFF0");
 void func_00216028_2b58d8(int, int) __asm__("func_00216028");
 /* Creates the type-0xAC moby: links it to its owner and a spawn position, fills its private data, sets up two child objects and probes the line to the owner. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002b2100.c, FUN_L00_002b58d8. Declared with the callers' (void *, void *, float, float) -> int prototype. */
-int func_L00_002B6BC8(void *a_, void *pos_, float fa, float fb)
+int VisibombMissileSpawn(void *a_, void *pos_, float fa, float fb)
 {
     unsigned char *m = func_0020D348_2b58d8(0xAC);
     if (m) {
@@ -1389,7 +1389,7 @@ void func_L00_002B6E10(int a, int *b) {
     *(int *)(D_0013E633 + 0x2DFD) = 0;
     func_L00_002ECEC8(b[5]);
     b[5] = 0;
-    func_L00_00222B80(0, 1);
+    HeroEnterMoveState(0, 1);
     func_L00_002B6AE0(a, 1);
     func_L00_00204190();
     DeleteMoby(a);
@@ -1447,7 +1447,7 @@ extern V6 D_L00_001E9DF0;
 extern float D_L00_0015F6B4 MACRO_ADDR;
 
 /* spawns a burst of sparks and glow flashes at a moby, scaled by its distance from the origin marker */
-void func_L00_002B6FF0(char *m, int flag) {
+void SpawnSparkBurstAtMoby(char *m, int flag) {
     float tmp[4];
     float d[4];
     float n[4];
@@ -1458,9 +1458,9 @@ void func_L00_002B6FF0(char *m, int flag) {
 
     qcopy(tmp, m + 0x10);
     tmp[2] += 0.3f;
-    func_L00_0026C630(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
+    PartType13Spawn(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.075f, 0.05f, 50000.0f);
     for (j = 4; j >= 0; j--) {
-        func_L00_0026C630(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
+        PartType13Spawn(tmp, 1, 0x40808080, 0.3f, 1.01f, 1.07f, 0.05f, 50000.0f);
     }
     if (flag != 0) {
         FastVecSub(d, D_L00_00166EC0, m + 0x10);
@@ -1485,7 +1485,7 @@ void func_L00_002B6FF0(char *m, int flag) {
             pb = B.v + random_integer_below(6);
             a = rand_range(scale_ticks(15), scale_ticks(20));
             b = rand_range(scale_ticks(25), scale_ticks(30));
-            func_L00_0026B890(m + 0x10, n, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
+            PartType11Spawn(m + 0x10, n, *pa, *pb, a, b, 0, 0, 400000.0f, sc);
         } while (--i);
         }
         if (D_L00_0015F6B4 < 0.95f) {
@@ -1583,7 +1583,7 @@ extern void func_L00_0025BA50_2B7430(void *, void *, void *, int, int, int, int,
 extern void func_L00_00260958_2B7430(void *, float) __asm__("func_L00_00260958");
 
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
-void func_L00_002B7430(Moby *m) {
+void VisibombMissileUpdate(Moby *m) {
     V_2B7430 v20;
     V_2B7430 k30;
     V_2B7430 k40;
@@ -2130,7 +2130,7 @@ void func_L00_002B9528(unsigned char *m)
         if (*(void **)v)
             func_0020D678_B9528(*(void **)v);
         if (*(short *)(v + 0x44) != -1) {
-            func_L00_0023F1D0(*(short *)(v + 0x44));
+            FreePointLight(*(short *)(v + 0x44));
             *(short *)(v + 0x44) = -1;
         }
         h = *(short *)(v + 0x4A);
@@ -2238,7 +2238,7 @@ void func_L00_002B9730(char *m) {
                     c4 = func_001FA898_r(func_001F9878(random_float_between((float)*(int *)&D_L00_00161624, (float)*(int *)&D_L00_00161628)));
                     rand_vec(v3, 0.0f, f20 + f20);
                     FastVecAdd(v3, v3, (o + 0x10));
-                    func_00219780(v3, qv, v2, c1, c2, 0xA, c3, c4, *(int *)&D_L00_001615FC);
+                    PartType02Spawn(v3, qv, v2, c1, c2, 0xA, c3, c4, *(int *)&D_L00_001615FC);
                 }
             } else if (type < 2) {
                 *(int *)(base - (-(i * 4))) = 0;
@@ -2605,7 +2605,7 @@ extern int D_L00_001DBCD0[];
 
 /* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b2100.c, FUN_L00_002b9310. */
-void func_L00_002BA608(char *moby) {
+void StartBeamWhenPending(char *moby) {
     V2b9310 d;
     V2b9310 step;
     char *data;

@@ -63,7 +63,7 @@ extern void func_L00_0028FB78_30CAE0(void *) __asm__("func_L00_0028FB78");
 extern int func_0020BFC8_30CAE0(int, int) __asm__("func_0020BFC8");
 
 /* Update function for moby class 1353 on level 13: runs the state machine in moby->state. */
-void func_L13_0030CAE0(Moby *moby)
+void Moby1353Update(Moby *moby)
 {
     MobyData_30CAE0 *data = (MobyData_30CAE0 *)moby->pvars;
 
@@ -221,7 +221,7 @@ extern int func_L00_0025EFC0(void *, void *, float *, int *, float *, int, float
 extern int func_L09_00295880(void *, void *, void *, int, int, float);
 
 /* Follows its target moby along a path: snaps to the nearest path point, then walks the path segments. */
-void func_L13_0030D028(char *m) {
+void FollowTargetAlongPath(char *m) {
     int *d = *(int **)(m + 0x78);
     char *path;
     char *pth;
@@ -469,7 +469,7 @@ extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern void func_L10_002E51A8(char *moby);
 
 /* Gemlik moby update (class 1634): two particle bursts around the moby, then movement and expiry. */
-void func_L13_0030D880(char *moby)
+void Moby1634Update(char *moby)
 {
     char *data = *(char **)(moby + 0x78);
     char buf[16];
@@ -509,7 +509,7 @@ void func_L13_0030D880(char *moby)
             ib = func_001FA898_r(func_001F9878(t));
             t = random_float_between(*(float *)&D_L13_00161FB0, *(float *)&D_L13_00161FB0 * 1.20000005f);
             ic = func_001FA898_r(func_001F9878(t));
-            func_00219780(v20, v30, v40, *(int *)&D_L13_00161F98, *(int *)&D_L13_00161F9C, ia, ib, ic, -1);
+            PartType02Spawn(v20, v30, v40, *(int *)&D_L13_00161F98, *(int *)&D_L13_00161F9C, ia, ib, ic, -1);
         }
         v30[3] = *(float *)&D_L13_00161FF4;
         v40[3] = *(float *)&D_L13_00161FF8;
@@ -538,7 +538,7 @@ void func_L13_0030D880(char *moby)
             ib = func_001FA898_r(func_001F9878(r));
             r = random_float_between(*(float *)&D_L13_00161FCC, *(float *)&D_L13_00161FCC * 1.20000005f);
             ic = func_001FA898_r(func_001F9878(r));
-            func_00219780(v50, v30, v40, *(int *)&D_L13_00161FA0, *(int *)&D_L13_00161FA4, ia, ib, ic, -1);
+            PartType02Spawn(v50, v30, v40, *(int *)&D_L13_00161FA0, *(int *)&D_L13_00161FA4, ia, ib, ic, -1);
         }
     }
 
@@ -575,7 +575,7 @@ extern float D_L13_0015F660[] MACRO_ADDR;
 /* UpdateMoby_1805: deletes itself if its bit is set in D_0014C290. State 0 moves to state 1; state 1 takes a hit's value
  * (at +0x2C) off the float at data + 0x20 and moves to state 2 when it falls short; state 2 sets the bit and spawns
  * func_L00_00265050 effects for types 0x709 to 0x70C, twice. */
-void func_L13_0030E280(void *moby) {
+void Moby1805Update(void *moby) {
     char *m = moby;
     char *data;
     char *item;
@@ -609,7 +609,7 @@ void func_L13_0030E280(void *moby) {
             }
             ((unsigned char *)m)[0xA4] = 0xFF;
         }
-        func_L00_0025E590(moby, p);
+        StepColorFade(moby, p);
         break;
     case 2: {
         if (((unsigned char *)m)[0x21] != 0xFF) {
@@ -618,7 +618,7 @@ void func_L13_0030E280(void *moby) {
                 unsigned char *t = (unsigned char *)(D_0013D50F + 1);
                 if (t[0x16] == 0) {
                     t[0x16] = r;
-                    func_0022EE28(1, 0, 0);
+                    PlayBankSound(1, 0, 0);
                     ShowBanner(0x53DB, -1);
                 }
             }

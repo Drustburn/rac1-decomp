@@ -93,7 +93,7 @@ extern void func_L09_002C73D0_2C6B30(struct Moby *) __asm__("func_L09_002C73D0")
 /* Update of the oClass 52 moby: follows its target at a hover height above the hero, with a voice while it moves,
  * and bursts or is removed in its last states.
  * Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay/entities/002c5990.c, FUN_L09_002c5990. */
-void func_L09_002C6B30(struct Moby *moby) {
+void Moby52Update(struct Moby *moby) {
     Moby52Vars_2C6B30 *vars = (Moby52Vars_2C6B30 *)moby->pvars;
     struct Moby *target;
     Vec4 vel;
@@ -595,7 +595,7 @@ extern void delete_2E39E0(Moby *) __asm__("func_0020D678");
 extern void effects_update_2E39E0(Moby *, void *) __asm__("func_L00_0025E590");
 
 /* Ground enemy update: damage reaction, leash and wake checks, then its chase / attack / return state machine. */
-void func_L09_002E39E0(Moby *m) {
+void GroundEnemyUpdate(Moby *m) {
     V_2E39E0 previous;
     Target_2E39E0 query;
     V_2E39E0 step;
@@ -1063,7 +1063,7 @@ extern s32 func_L00_001F2BE8_09118(f32, void *, s32, void *, void *) __asm__("fu
 
 /* Update of the shot FUN_L09_00307ba8 spawns (cf. FUN_L04_002af058): moves along vel, plays its sound once it starts moving away from the hero within 3 units, dies outside the level box, and on a hit (probing along the line from the hero until the timer runs out) bursts into five sparks and a flash, damages around the hit and is removed.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/00307ba8.c, FUN_L09_00307d68. */
-void func_L09_00309118(struct Moby *m)
+void EnemyShotUpdate(struct Moby *m)
 {
     Vec4 old;
     CollisionProbe_307d68_09118 pr;
@@ -1250,7 +1250,7 @@ void func_L09_0030BD98(char *moby, char *d) {
         }
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
-    func_L00_0025E590(moby, d + 0x60);
+    StepColorFade(moby, d + 0x60);
 }
 extern int func_L01_0026EFB8(int, int);
 
@@ -1311,7 +1311,7 @@ typedef struct {
  * moby towards it, state 2 is the explosion. The slot index `last` is declared in a block opened at its call,
  * and d[0x91] is read at each use: both only decide the order GCSE creates its hoisted registers in (its table
  * has 201 buckets here and hashes by register number), which is the order of the four spill slots 0x64..0x70. */
-void func_L09_0030BF88(char *moby)
+void Moby1885Update(char *moby)
 {
     char *d = *(char **)(moby + 0x78);
     float v[4];
@@ -1578,7 +1578,7 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
 }
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/00307ba8.c, FUN_L09_0030b3b0. */
-void func_L09_0030C7F0(struct Moby *moby) {
+void Moby1886Update(struct Moby *moby) {
     BubbleVars *vars = (BubbleVars *)moby->pvars;
     Vec4 prev;
     Vec4 step;
@@ -1660,7 +1660,7 @@ void func_L09_0030C7F0(struct Moby *moby) {
         }
         break;
     }
-    func_L00_0025B040(moby, moby->scale * 0.3f / moby->pclass->scale);
+    RecordMobyShadow(moby, moby->scale * 0.3f / moby->pclass->scale);
     if (moby->pos.z < 5.0f || moby->pos.z > 500.0f) {
         func_L09_0030C790(moby, (char *)vars);
         return;

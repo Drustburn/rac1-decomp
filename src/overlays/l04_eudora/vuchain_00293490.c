@@ -8,7 +8,7 @@ extern float D_L04_00174068;
 extern int func_L00_001EFFF0(void *, void *, int, int, int);
 
 /* probes a ray from just above a point; returns the ground offset or 0 */
-float func_L04_00293490(float *pos) {
+float ProbeGroundOffset(float *pos) {
     float a[4];
     float b[4];
     qcopy(a, pos);
@@ -20,7 +20,7 @@ float func_L04_00293490(float *pos) {
     return 0.0f;
 }
 /* Writes the four joint angle limits of a leg-rig block. */
-void func_L04_00293530(void *unused, char *arg) {
+void SetLegJointLimits(void *unused, char *arg) {
     *(float *)(arg + 0x10C) = -0.19634955f;
     *(float *)(arg + 0x110) = 1.5707964f;
     *(float *)(arg + 0x1BC) = -1.5707964f;
@@ -106,7 +106,7 @@ extern void func_0020DAF8(struct Moby *m, int joint, float *mtx);
 extern float func_L00_001FF860(float, float);
 extern void func_0020D960(struct Moby *m, int slot, void *manip);
 /* Sets up a two-legged rig on a moby. */
-void func_L04_00293578(struct Moby *moby, LegRig_p *rig) {
+void InitTwoLeggedRig(struct Moby *moby, LegRig_p *rig) {
     int joints[6];
     float matrix[4][4];
     int i;
@@ -139,10 +139,10 @@ void func_L04_00293578(struct Moby *moby, LegRig_p *rig) {
     joints[3] = rig->legs[1].joint2;
     joints[4] = rig->jointB4;
     joints[5] = rig->jointB5;
-    func_0020DB98(moby, 6, joints, rig);
+    MobyTransformScaledVertexBatch(moby, 6, joints, rig);
     for (k = 0; k < 2; k++) {
         char *p = (char *)rig + k * 0xB0;
-        func_0020DAF8(moby, ((unsigned char *)p)[0xF0], matrix[0]);
+        MobyTransformScaledVertex(moby, ((unsigned char *)p)[0xF0], matrix[0]);
         *(int *)(p + 0x104) = 0;
         *(int *)(p + 0xFC) = 0;
         *(float *)(p + 0xF8) = func_L00_001FF860(matrix[1][0], matrix[1][1]);
@@ -254,7 +254,7 @@ int func_L04_002939E8(StMoby_2939E8 *m, Steer_2939E8 *a)
         for (j = 0; j < 4; j++) {
             Vec4f *e = &a->pts[j];
             if (a->mask & bit) {
-                h = func_L04_00293490((float *)e);
+                h = ProbeGroundOffset((float *)e);
                 sum += h;
                 if (0.0f < h) {
                     t = func_001F9B88_2939E8(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
@@ -477,7 +477,7 @@ extern float D_0015EE68 MACRO_ADDR;
 typedef int u128_96938 __attribute__((mode(TI)));
 
 /* Level 04 walker update: blends heading and speed, places the legs, probes the ground and sets the anim rate; returns flags. */
-int func_L04_00296938(char *m, char *s, float speed, float ang, float accel) {
+int LegWalkerUpdate(char *m, char *s, float speed, float ang, float accel) {
     float buf[8];
     float v20[24];
     float v80[4];
@@ -498,7 +498,7 @@ int func_L04_00296938(char *m, char *s, float speed, float ang, float accel) {
     float *f;
 
     if (*(unsigned char *)(m + 0x52) != 0xFF) {
-        t = func_0020D830((struct Moby *)m);
+        t = MobyGetFrameValue((struct Moby *)m);
     } else {
         t = func_001FA888(*(unsigned char *)(m + 0x51)) + func_L04_00242868(*(unsigned char *)(m + 0x22), *(unsigned char *)(m + 0x53));
     }
@@ -523,7 +523,7 @@ int func_L04_00296938(char *m, char *s, float speed, float ang, float accel) {
     ((int *)buf)[3] = *(unsigned char *)(s + 0x1A1);
     ((int *)buf)[4] = *(unsigned char *)(s + 0xB4);
     ((int *)buf)[5] = *(unsigned char *)(s + 0xB5);
-    func_0020DB98((struct Moby *)m, 6, (int *)buf, v20);
+    MobyTransformScaledVertexBatch((struct Moby *)m, 6, (int *)buf, v20);
 
     if (!(*(unsigned short *)(s + 0xEE) & 4)) {
         mask = flags | (*(unsigned char *)(s + 0xB6) & 0x30);
@@ -593,7 +593,7 @@ int func_L04_00296938(char *m, char *s, float speed, float ang, float accel) {
     ((int *)buf)[3] = *(unsigned char *)(s + 0x1A1);
     ((int *)buf)[4] = *(unsigned char *)(s + 0xB4);
     ((int *)buf)[5] = *(unsigned char *)(s + 0xB5);
-    func_0020DB98((struct Moby *)m, 6, (int *)buf, s);
+    MobyTransformScaledVertexBatch((struct Moby *)m, 6, (int *)buf, s);
 
     if (*(unsigned char *)(s + 0xB7) == 0x12 && *(unsigned char *)(m + 0x52) == **(int **)(s + 0xA0)) {
         return res;
@@ -711,9 +711,9 @@ void func_L04_00296FA8(struct Moby *m, LegRig *rig) {
     joints[3] = rig->legs[1].joint2;
     joints[4] = rig->jointB4;
     joints[5] = rig->jointB5;
-    func_0020DB98(m, 6, joints, rig);
+    MobyTransformScaledVertexBatch(m, 6, joints, rig);
     for (i = 0; i < 2; i++) {
-        func_0020DAF8(m, rig->legs[i].joint, mtx[0]);
+        MobyTransformScaledVertex(m, rig->legs[i].joint, mtx[0]);
         rig->legs[i].unk14 = 0;
         rig->legs[i].unkC = 0;
         rig->legs[i].yaw = func_L00_001FF860(mtx[1][0], mtx[1][1]);
@@ -723,7 +723,7 @@ void func_L04_00296FA8(struct Moby *m, LegRig *rig) {
             AttachManipulator(m, rig->legs[i].slot_a, &rig->legs[i].manip_a);
     }
     if (m->seq != 0xFF) {
-        t = func_0020D830(m);
+        t = MobyGetFrameValue(m);
     } else {
         t = func_001FA888(m->prev_frame);
         t += func_L04_00242868(m->class_slot, m->prev_seq);

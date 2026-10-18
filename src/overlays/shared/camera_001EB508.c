@@ -18,7 +18,7 @@ void func_L00_001EB508(void) {
 INCLUDE_ASM("asm/overlays", func_L00_001EB564);
 extern u8 D_L00_00167250_1EB578[] __asm__("D_L00_00167250");
 /* the 0xA0-byte record at 0x167250 whose s16 at +0x86 is id, 0 when none. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/camera/001eb188.c, FUN_L00_001eb1f8. */
-char *func_L00_001EB578(int id) {
+char *FindCameraById(int id) {
     s32 p;
     s32 e;
     s16 v;
@@ -137,7 +137,7 @@ extern void func_001F9A98_EB890(void *dst, void *src, s32 size) __asm__("func_00
 extern s32 func_001FA898_EB890(f32 transition_duration) __asm__("func_001FA898");
 
 /* Switches the active camera to next_camera: picks the blend by the old camera's transition state and the new one's descriptor kind, then installs it. Level copy of func_001EC2B8. Adapted from Lombyte (MIT) for PAL: src/textbin/fun_001ebf10.c, switch_active_camera_record. */
-void func_L00_001EB890(char *c) {
+void SwitchCamera(char *c) {
     struct UpdateCam_EB890 *next_camera = (struct UpdateCam_EB890 *)c;
 
     struct UpdateCam_EB890 *previous_camera;
@@ -268,7 +268,7 @@ int func_L00_001EBDA0(void) {
         }
     }
     if (found) {
-        func_L00_001EB890(best);
+        SwitchCamera(best);
     }
     fn = D_L00_001EAC00_raw[*(short *)(best + 0x8C)].fn;
     Camera_handleCollWithHero(best);
@@ -490,7 +490,7 @@ void func_L00_001ED428(void) {
         func_L00_001EC220(*(void **)(c + 0x184));
     }
     if (*(short *)(c + 0x270) == 3) {
-        func_001ED658(target);
+        Camera_UpdateBlend(target);
     } else {
         char *st = D_L00_0016C158_ED428;
         if (*(int *)(st + 0x14) != 0) {
@@ -505,15 +505,15 @@ void func_L00_001ED428(void) {
         char *st = D_L00_0016C158_ED428;
         if (*(int *)(st + 0x14) == 0) {
             func_001FA460(m, D_L00_001670D0);
-            func_002153E8(m, D_L00_001670D0 - 0x200);
+            MatrixToEuler(m, D_L00_001670D0 - 0x200);
         }
     }
 frozen:
     v = D_L00_00166EE0;
-    func_001ED708(v, 0);
-    func_001ED708(v + 0x10, 1);
-    func_001EDB98();
-    func_001EE858(v - 0x20);
+    Camera_UpdateShake(v, 0);
+    Camera_UpdateShake(v + 0x10, 1);
+    Camera_UpdateUnderwaterFlag();
+    Camera_UpdateEnvironment(v - 0x20);
     if (D_0015EEB4_ED428[0] != 0) {
         FastVecCross(v + 0x200, v + 0x210, v + 0x1F0);
     }
@@ -549,7 +549,7 @@ void func_L00_001ED600(void) {
         *(*(char **)(g + 0x180) + 0x7D) = 0;
         *(short *)(*(char **)(g + 0x180) + 0x7E) = 0;
     }
-    *(char **)(g + 0x180) = func_L00_001EB578(0);
+    *(char **)(g + 0x180) = FindCameraById(0);
     *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
     *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169210;
     *(short *)(g + 0x270) = 0;
@@ -628,7 +628,7 @@ extern W D_L00_00166EC0;
 extern short D_L00_0015F05C;
 
 /* moves the camera position a toward a target in steps, stopping each step on collision. Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay_camera_001eb188.c, FUN_L00_001ed6a8. */
-void func_L00_001EDA28(float *pos, float r) {
+void MoveCameraToward(float *pos, float r) {
     W d;
     W v;
     char *o = D_cam_c.o;

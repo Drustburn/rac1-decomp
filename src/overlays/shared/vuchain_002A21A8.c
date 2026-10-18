@@ -28,7 +28,7 @@ extern int func_00122630(void *, short, short, short, short, short, short, short
 extern int *D_L00_00161280 MACRO_ADDR;
 
 /* Uploads a 64-wide image strip in 0x4000-sized chunks: each chunk is a DMA tag pair around a GS load image. */
-void func_L00_002A2258(int a, int b, int n) {
+void UploadImageStrip(int a, int b, int n) {
     int i;
     int k = (n + 0x3FFF) & -0x4000;
     for (i = 0; k > 0; ) {
@@ -200,7 +200,7 @@ extern int D_L00_001CAA60[];
 extern char D_L00_001612A0[];
 
 /* Steps the walk cycle state machine: picks the next walk, run, turn, jump or landing sequence from speed, heading and foot height. */
-void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) {
+void WalkCycleStep(WalkMoby *m, WalkData *d, int flags, float speed, float ang, float accel) {
     float vec[4];
 
     switch (d->bB7) {
@@ -210,7 +210,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
             {
                 WalkAnim *a = d->anim[7];
                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)a->i14);
-                func_00213DE0(m, a->id, f, 10);
+                MobyBlendAnimation(m, a->id, f, 10);
                 func_L00_002A27C8((char *)d);
             }
             d->bB7 = 0xD;
@@ -222,7 +222,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                 {
                     WalkAnim *a = d->anim[0];
                     int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)a->i14);
-                    func_00213DE0(m, a->id, f, 10);
+                    MobyBlendAnimation(m, a->id, f, 10);
                     func_L00_002A27C8((char *)d);
                 }
                 d->bB7 = 1;
@@ -247,13 +247,13 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
     case 11: {
         int idx = D_L00_001CAA60[d->bB7];
         if (m->f58 < 0.25f && FastDiffRots(m->f48, ang) < 0.09239978f && speed < D_0015EE6C * 0.19f) {
-            func_00213DE0(m, d->bB0, 0, 10);
+            MobyBlendAnimation(m, d->bB0, 0, 10);
             func_L00_002A27C8((char *)d);
             d->bB7 = 0;
         } else if (m->b52 == d->anim[idx]->id) {
             float t = (d->anim[7]->f08 + d->anim[0]->f08) * 0.375f;
             if (speed > t && d->fC0 > t && !(d->bB6 & 0x3A)) {
-                float cur = func_0020D830(m);
+                float cur = MobyGetFrameValue(m);
                 int r1 = truncate_float_to_s32(d->anim[idx]->f48 - cur + d->anim[idx]->f10) % truncate_float_to_s32(d->anim[idx]->f10);
                 int r2 = truncate_float_to_s32(d->anim[idx]->f4C - cur + d->anim[idx]->f10) % truncate_float_to_s32(d->anim[idx]->f10);
                 int x;
@@ -269,7 +269,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                     float ft = (float)x;
                     WalkAnim *a = d->anim[7];
                     int f = func_L00_0024FD50(m->pClass->seqs[a->id], ft);
-                    func_00213DE0(m, a->id, f, bl);
+                    MobyBlendAnimation(m, a->id, f, bl);
                     func_L00_002A27C8((char *)d);
                 }
                 d->bB7 = 0xD;
@@ -282,7 +282,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                         int fr = truncate_float_to_s32(d->anim[11]->f40 + d->anim[11]->f38 * 0.125f - d->anim[11]->f0C) % truncate_float_to_s32(d->anim[11]->f10);
                         WalkAnim *a = d->anim[11];
                         int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                        func_00213DE0(m, a->id, f, bl);
+                        MobyBlendAnimation(m, a->id, f, bl);
                         func_L00_002A27C8((char *)d);
                         d->bB7 = 0xF;
                     } else {
@@ -290,7 +290,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                         int fr = truncate_float_to_s32(d->anim[9]->f44 + d->anim[9]->f3C * 0.125f - d->anim[9]->f0C) % truncate_float_to_s32(d->anim[9]->f10);
                         WalkAnim *a = d->anim[9];
                         int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                        func_00213DE0(m, a->id, f, bl);
+                        MobyBlendAnimation(m, a->id, f, bl);
                         func_L00_002A27C8((char *)d);
                         d->bB7 = 0xE;
                     }
@@ -314,7 +314,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[2]->f40 + d->anim[2]->f38 * 0.125f - d->anim[2]->f0C) % truncate_float_to_s32(d->anim[2]->f10);
                                 WalkAnim *a = d->anim[2];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 3;
                             } else {
@@ -322,7 +322,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[1]->f44 + d->anim[1]->f3C * 0.125f - d->anim[1]->f0C) % truncate_float_to_s32(d->anim[1]->f10);
                                 WalkAnim *a = d->anim[1];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 2;
                             }
@@ -333,7 +333,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[5]->f40 + d->anim[5]->f38 * 0.125f - d->anim[5]->f0C) % truncate_float_to_s32(d->anim[5]->f10);
                                 WalkAnim *a = d->anim[5];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 8;
                             } else {
@@ -341,7 +341,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[4]->f44 + d->anim[4]->f3C * 0.125f - d->anim[4]->f0C) % truncate_float_to_s32(d->anim[4]->f10);
                                 WalkAnim *a = d->anim[4];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 7;
                             }
@@ -358,7 +358,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             fr = truncate_float_to_s32(d->anim[5]->f40 + d->anim[5]->f38 * 0.125f - d->anim[5]->f0C) % truncate_float_to_s32(d->anim[5]->f10);
                             a = d->anim[5];
                             f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 8;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) < d->fE0 * 0.75f) {
@@ -368,7 +368,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[3]->f40 + d->anim[3]->f38 * 0.125f - d->anim[3]->f0C) % truncate_float_to_s32(d->anim[3]->f10);
                             WalkAnim *a = d->anim[3];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 4;
                         }
@@ -384,7 +384,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             fr = truncate_float_to_s32(d->anim[4]->f44 + d->anim[4]->f3C * 0.125f - d->anim[4]->f0C) % truncate_float_to_s32(d->anim[4]->f10);
                             a = d->anim[4];
                             f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 7;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) < d->fE0 * 0.75f) {
@@ -394,7 +394,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[3]->f44 + d->anim[3]->f3C * 0.125f - d->anim[3]->f0C) % truncate_float_to_s32(d->anim[3]->f10);
                             WalkAnim *a = d->anim[3];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 4;
                         }
@@ -407,7 +407,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[5]->f40 + d->anim[5]->f38 * 0.125f - d->anim[5]->f0C) % truncate_float_to_s32(d->anim[5]->f10);
                                 WalkAnim *a = d->anim[5];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 8;
                             } else {
@@ -415,7 +415,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[4]->f44 + d->anim[4]->f3C * 0.125f - d->anim[4]->f0C) % truncate_float_to_s32(d->anim[4]->f10);
                                 WalkAnim *a = d->anim[4];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 7;
                             }
@@ -425,7 +425,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[1]->f40 + d->anim[1]->f38 * 0.125f - d->anim[1]->f0C) % truncate_float_to_s32(d->anim[1]->f10);
                                 WalkAnim *a = d->anim[1];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 5;
                             } else {
@@ -433,7 +433,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[2]->f44 + d->anim[2]->f3C * 0.125f - d->anim[2]->f0C) % truncate_float_to_s32(d->anim[2]->f10);
                                 WalkAnim *a = d->anim[2];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 6;
                             }
@@ -450,7 +450,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             fr = truncate_float_to_s32(d->anim[4]->f44 + d->anim[4]->f3C * 0.125f - d->anim[4]->f0C) % truncate_float_to_s32(d->anim[4]->f10);
                             a = d->anim[4];
                             f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 7;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) > d->fE0 * 0.75f) {
@@ -460,7 +460,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[0]->f44 + d->anim[0]->f3C * 0.125f - d->anim[0]->f0C) % truncate_float_to_s32(d->anim[0]->f10);
                             WalkAnim *a = d->anim[0];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 1;
                         }
@@ -476,7 +476,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             fr = truncate_float_to_s32(d->anim[5]->f40 + d->anim[5]->f38 * 0.125f - d->anim[5]->f0C) % truncate_float_to_s32(d->anim[5]->f10);
                             a = d->anim[5];
                             f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 8;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) > d->fE0 * 0.75f) {
@@ -486,7 +486,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[0]->f40 + d->anim[0]->f38 * 0.125f - d->anim[0]->f0C) % truncate_float_to_s32(d->anim[0]->f10);
                             WalkAnim *a = d->anim[0];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 1;
                         }
@@ -497,7 +497,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[2]->f40 + d->anim[2]->f38 * 0.125f - d->anim[2]->f0C) % truncate_float_to_s32(d->anim[2]->f10);
                             WalkAnim *a = d->anim[2];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 3;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) > -d->fE0 * 0.75f) {
@@ -507,7 +507,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[6]->f40 + d->anim[6]->f38 * 0.125f - d->anim[6]->f0C) % truncate_float_to_s32(d->anim[6]->f10);
                             WalkAnim *a = d->anim[6];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 9;
                         }
@@ -518,7 +518,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[1]->f44 + d->anim[1]->f3C * 0.125f - d->anim[1]->f0C) % truncate_float_to_s32(d->anim[1]->f10);
                             WalkAnim *a = d->anim[1];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 2;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) > -d->fE0 * 0.75f) {
@@ -528,7 +528,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[6]->f44 + d->anim[6]->f3C * 0.125f - d->anim[6]->f0C) % truncate_float_to_s32(d->anim[6]->f10);
                             WalkAnim *a = d->anim[6];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 9;
                         }
@@ -540,7 +540,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[2]->f40 + d->anim[2]->f38 * 0.125f - d->anim[2]->f0C) % truncate_float_to_s32(d->anim[2]->f10);
                                 WalkAnim *a = d->anim[2];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 3;
                             } else {
@@ -548,7 +548,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[1]->f44 + d->anim[1]->f3C * 0.125f - d->anim[1]->f0C) % truncate_float_to_s32(d->anim[1]->f10);
                                 WalkAnim *a = d->anim[1];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 2;
                             }
@@ -558,7 +558,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[4]->f40 + d->anim[4]->f38 * 0.125f - d->anim[4]->f0C) % truncate_float_to_s32(d->anim[4]->f10);
                                 WalkAnim *a = d->anim[4];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 10;
                             } else {
@@ -566,7 +566,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                                 int fr = truncate_float_to_s32(d->anim[5]->f44 + d->anim[5]->f3C * 0.125f - d->anim[5]->f0C) % truncate_float_to_s32(d->anim[5]->f10);
                                 WalkAnim *a = d->anim[5];
                                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                                func_00213DE0(m, a->id, f, bl);
+                                MobyBlendAnimation(m, a->id, f, bl);
                                 func_L00_002A27C8((char *)d);
                                 d->bB7 = 11;
                             }
@@ -578,7 +578,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[1]->f44 + d->anim[1]->f3C * 0.125f - d->anim[1]->f0C) % truncate_float_to_s32(d->anim[1]->f10);
                             WalkAnim *a = d->anim[1];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 2;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) < -d->fE0 * 0.75f) {
@@ -588,7 +588,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[0]->f44 + d->anim[0]->f3C * 0.5f - d->anim[0]->f0C) % truncate_float_to_s32(d->anim[0]->f10);
                             WalkAnim *a = d->anim[0];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 1;
                         }
@@ -599,7 +599,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[2]->f40 + d->anim[2]->f38 * 0.125f - d->anim[2]->f0C) % truncate_float_to_s32(d->anim[2]->f10);
                             WalkAnim *a = d->anim[2];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 3;
                         } else if ((h - vec[2]) + d->anim[idx]->f04 * 0.5f * FastSin(d->fB8) < -d->fE0 * 0.75f) {
@@ -609,7 +609,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                             int fr = truncate_float_to_s32(d->anim[0]->f40 + d->anim[0]->f38 * 0.5f - d->anim[0]->f0C) % truncate_float_to_s32(d->anim[0]->f10);
                             WalkAnim *a = d->anim[0];
                             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                            func_00213DE0(m, a->id, f, bl);
+                            MobyBlendAnimation(m, a->id, f, bl);
                             func_L00_002A27C8((char *)d);
                             d->bB7 = 1;
                         }
@@ -634,7 +634,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                     WalkAnim *a = d->anim[0];
                     float ft = (float)fr;
                     int f = func_L00_0024FD50(m->pClass->seqs[a->id], ft);
-                    func_00213DE0(m, a->id, f, 10);
+                    MobyBlendAnimation(m, a->id, f, 10);
                     func_L00_002A27C8((char *)d);
                 }
                 d->bB7 = 1;
@@ -647,7 +647,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                         int fr = truncate_float_to_s32(d->anim[11]->f40 + d->anim[11]->f38 * 0.125f - d->anim[11]->f0C) % truncate_float_to_s32(d->anim[11]->f10);
                         WalkAnim *a = d->anim[11];
                         int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                        func_00213DE0(m, a->id, f, bl);
+                        MobyBlendAnimation(m, a->id, f, bl);
                         func_L00_002A27C8((char *)d);
                         d->bB7 = 0xF;
                     } else {
@@ -655,7 +655,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                         int fr = truncate_float_to_s32(d->anim[9]->f44 + d->anim[9]->f3C * 0.125f - d->anim[9]->f0C) % truncate_float_to_s32(d->anim[9]->f10);
                         WalkAnim *a = d->anim[9];
                         int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-                        func_00213DE0(m, a->id, f, bl);
+                        MobyBlendAnimation(m, a->id, f, bl);
                         func_L00_002A27C8((char *)d);
                         d->bB7 = 0xE;
                     }
@@ -679,7 +679,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
         break;
     }
     case 12:
-        func_00213DE0(m, d->bB0, 0, 10);
+        MobyBlendAnimation(m, d->bB0, 0, 10);
         func_L00_002A27C8((char *)d);
         d->bB7 = 0;
         break;
@@ -691,8 +691,8 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
             d->uEE |= 4;
             d->f6C = func_L00_001FF860(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
         }
-        if (func_0020D830(m) >= d->anim[11]->f0C + d->anim[11]->f10 - m->f58) {
-            func_00213DE0(m, d->bB3, 0, 10);
+        if (MobyGetFrameValue(m) >= d->anim[11]->f0C + d->anim[11]->f10 - m->f58) {
+            MobyBlendAnimation(m, d->bB3, 0, 10);
             func_L00_002A27C8((char *)d);
             d->bB7 = 0x10;
         } else if ((d->uEE & 4) && d->fD8 < 0.0f) {
@@ -707,7 +707,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                 }
                 a = d->anim[12];
                 f = func_L00_0024FD50(m->pClass->seqs[a->id], 0.0f);
-                func_00213DE0(m, a->id, f, bl);
+                MobyBlendAnimation(m, a->id, f, bl);
                 func_L00_002A27C8((char *)d);
                 d->bB7 = 0x12;
             }
@@ -721,8 +721,8 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
             d->uEE |= 4;
             d->f6C = func_L00_001FF860(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
         }
-        if (func_0020D830(m) >= d->anim[9]->f0C + d->anim[9]->f10 - m->f58) {
-            func_00213DE0(m, d->bB3, 0, 10);
+        if (MobyGetFrameValue(m) >= d->anim[9]->f0C + d->anim[9]->f10 - m->f58) {
+            MobyBlendAnimation(m, d->bB3, 0, 10);
             func_L00_002A27C8((char *)d);
             d->bB7 = 0x10;
         } else if ((d->uEE & 4) && d->fD8 < 0.0f) {
@@ -737,7 +737,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                 }
                 a = d->anim[10];
                 f = func_L00_0024FD50(m->pClass->seqs[a->id], 0.0f);
-                func_00213DE0(m, a->id, f, bl);
+                MobyBlendAnimation(m, a->id, f, bl);
                 func_L00_002A27C8((char *)d);
                 d->bB7 = 0x11;
             }
@@ -751,7 +751,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
                 int bl = truncate_float_to_s32(t - len) >> 1;
                 WalkAnim *a = d->anim[12];
                 int f = func_L00_0024FD50(m->pClass->seqs[a->id], 0.0f);
-                func_00213DE0(m, a->id, f, bl);
+                MobyBlendAnimation(m, a->id, f, bl);
                 func_L00_002A27C8((char *)d);
                 d->bB7 = 0x12;
             }
@@ -817,7 +817,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
             int fr = truncate_float_to_s32(d->anim[7]->f40 + 1.0f + d->anim[7]->f38 * 0.125f - d->anim[7]->f0C) % truncate_float_to_s32(d->anim[7]->f10);
             WalkAnim *a = d->anim[7];
             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-            func_00213DE0(m, a->id, f, bl);
+            MobyBlendAnimation(m, a->id, f, bl);
             func_L00_002A27C8((char *)d);
             d->fD8 = 0.0f;
             d->bB7 = 0xD;
@@ -837,7 +837,7 @@ void func_L00_002A2900(WalkMoby *m, WalkData *d, int flags, float speed, float a
             int fr = truncate_float_to_s32(d->anim[7]->f44 + 1.0f + d->anim[7]->f38 * 0.125f - d->anim[7]->f0C) % truncate_float_to_s32(d->anim[7]->f10);
             WalkAnim *a = d->anim[7];
             int f = func_L00_0024FD50(m->pClass->seqs[a->id], (float)fr);
-            func_00213DE0(m, a->id, f, bl);
+            MobyBlendAnimation(m, a->id, f, bl);
             func_L00_002A27C8((char *)d);
             d->fD8 = 0.0f;
             d->bB7 = 0xD;

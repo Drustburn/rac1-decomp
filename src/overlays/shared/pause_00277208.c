@@ -352,10 +352,10 @@ void func_L00_00277A88(void) {
         func_L00_00277208();
     }
     if ((D_0015EFB4_m & 1) && !(*(int *)&D_L00_0015F6AC < 8)) {
-        func_001FBC80(3, GS.owner, 0);
+        Freeze_Enter(3, GS.owner, 0);
         return;
     }
-    func_L00_00284410();
+    PauseCheatEntry();
     if (GS.state == 1) {
         GS.unk14 = (GS.unk14 < 1) ? 0 : GS.unk14 - 1;
         if (GS.unk14 == 0) {
@@ -399,10 +399,10 @@ void func_L00_00277A88(void) {
             if (flag) {
                 int n = GS.owner->ids[j];
                 HEnt *e = D_L00_001BA220[j];
-                func_00213D28(e, n, e->unk24->unk48[n]->unk10 - 1);
+                MobySetAnimation(e, n, e->unk24->unk48[n]->unk10 - 1);
                 D_L00_001BA220[j]->unk58 = -1.0f;
             } else {
-                func_00213D28(D_L00_001BA220[j], GS.unk8->ids[j], 0);
+                MobySetAnimation(D_L00_001BA220[j], GS.unk8->ids[j], 0);
                 D_L00_001BA220[j]->unk58 = 1.0f;
             }
         }
@@ -508,7 +508,7 @@ void func_L00_002781D8(int arg0) {
 
     framebuf_appendLargeSetup();
     pp = 0;
-    func_L00_002A2258(PM.unk10, D_0015EF84, *(int *)((char *)D_0013E15A + 0x4AA) << 11);
+    UploadImageStrip(PM.unk10, D_0015EF84, *(int *)((char *)D_0013E15A + 0x4AA) << 11);
     if (arg0 != 0) {
         return;
     }
@@ -612,7 +612,7 @@ void func_L00_002781D8(int arg0) {
             sv = 1 << th;
             func_002017C8(0, 0, su, sv, D_L00_00160330, 0, 0);
             r = (*(int (**)(char *))(pp[j] + 4))(pp[j]);
-            func_001F7B40();
+            BeginDrawFrame();
             VU1_addGSregister(0x42, 0x8000000064L);
             VU1_addGSregister(0x47, 0x43);
             if (r & 1) {
@@ -843,7 +843,7 @@ extern unsigned char D_0013D50F[];
 extern char D_0013D355[];
 
 /* Cheat-code entry on the pause screen. */
-void func_L00_00284410(void) {
+void PauseCheatEntry(void) {
     char *pad = (char *)D_0013A5E0 + 0x2460;
     int lim0, lim;
     int va, vb, vc;
@@ -895,7 +895,7 @@ void func_L00_00284410(void) {
             unsigned char *q = D_0013D50F + 1 + vc;
             if (!*q) {
                 *q = 1;
-                func_0022EE28(1, 0, 0);
+                PlayBankSound(1, 0, 0);
                 ShowBanner(0x53DB, -1);
             }
         }
@@ -931,7 +931,7 @@ int func_L00_00284620(char *h) {
     } else {
         *(int *)(h + 0x34) = 3;
     }
-    r = func_00226EA8(1);
+    r = ClaimStreamBinding(1);
     *(int *)(h + 0x3C) = r;
     if (r == 0) {
         *(int *)(h + 0x34) = 3;
@@ -983,7 +983,7 @@ extern int D_L00_001604D0 MACRO_ADDR;
 extern Rec D_L00_001BA350[];
 
 /* appends one 13-argument record to the queue of 8 entries; returns 0, or -1 when full */
-int func_L00_00285698(int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int s0, int s1, int s2, int s3, int s4) {
+int QueueRecord(int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int s0, int s1, int s2, int s3, int s4) {
     int n = D_L00_001604D0;
     Rec *r;
     if (n >= 8) {

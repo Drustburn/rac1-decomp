@@ -42,7 +42,7 @@ extern char *func_L00_0025B478(void *, int, int);
 extern int func_0022ED80(int, int, int);
 extern void func_L01_002F9908(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
-void func_L01_002FABE8(DebrisMoby *m) {
+void BreakableRockUpdate(DebrisMoby *m) {
     DebrisHit *hit;
     int i;
     int j;
@@ -75,7 +75,7 @@ void func_L01_002FABE8(DebrisMoby *m) {
                 FastVecAdd(&pos, &pos, &m->pos);
                 func_L00_001FF4B0(&vel, &vel, random_float_between(0.5f, 1.5f) * D_0015EE6C);
                 s = random_float_between(0.5f, 1.0f) * 210000.0f;
-                func_L00_0026DD70(&pos, &vel, 0x5F787878, 0x181818, s, scale_ticks(rand_range(30, 90)));
+                PartType22Spawn(&pos, &vel, 0x5F787878, 0x181818, s, scale_ticks(rand_range(30, 90)));
             }
         }
         for (j = 0; j < 40; j++) {
@@ -139,7 +139,7 @@ extern int func_001F9850(int);
 extern float func_001FA748(float, float);
 
 /* Oscillating spinner: swings its angle between -1 and 1 and turns the moby to match. Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002f9810.c, FUN_L01_002f9bf0. */
-void func_L01_002FAFC8(SwayMoby *m) {
+void OscillatingSpinnerUpdate(SwayMoby *m) {
     SwayVars *v;
     CollQuery q;
 
@@ -279,7 +279,7 @@ extern void func_L00_00251E30(void *, int);
 
 /* Spawns a beam moby (0x2D2) from owner between two points, colored, with random rotation and two glow sprites.
    Adapted from Lombyte (MIT) for PAL: src/overlays/l01/unclassified_002f9810.c, FUN_L01_002fa068. */
-char *func_L01_002FB440(int owner, void *pos, void *target, int color) {
+char *SpawnBeamMoby(int owner, void *pos, void *target, int color) {
     Vy p;
     Vy t;
     char *m;
@@ -306,8 +306,8 @@ char *func_L01_002FB440(int owner, void *pos, void *target, int color) {
         qcopy(m + 0x10, pp);
         qcopy(v, tp);
         *(int *)(v + 0x14) = color;
-        func_L00_0026E940(m, 0x2F00007F, color, -1, 210000.0f);
-        func_L00_0026E940(m, 0x4F004F7F, *(int *)(v + 0x14), -1, 115500.0f);
+        PartType26Spawn(m, 0x2F00007F, color, -1, 210000.0f);
+        PartType26Spawn(m, 0x4F004F7F, *(int *)(v + 0x14), -1, 115500.0f);
         ((void (*)(void *))func_L00_00251E30)(m);
     }
     return m;
@@ -431,7 +431,7 @@ extern void func_L01_002FB588(void *, void *, int, float, float);
 extern int func_L00_001F2BE8_2FB898(float, void *, int, void *, void *) __asm__("func_L00_001F2BE8");
 
 /* Per-frame update of a falling drop: integrates its velocity, tests it against the world and spawns its impact effect. Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002f9810.c, FUN_L01_002fa4c0. */
-void func_L01_002FB898(DropMoby *m) {
+void FallingDropUpdate(DropMoby *m) {
     DropVars *v;
     Vec4 *pos;
     Vec4 prev;
@@ -514,7 +514,7 @@ extern V3_2FBBD8 D_L01_00161D00_2FBBD8 __asm__("D_L01_00161D00");
 extern LvState_2FBBD8 D_L01_001BB9C0_2FBBD8 __asm__("D_L01_001BB9C0");
 
 /* BreakableWallUpdate: update for the cave wall moby (class 729) on level 01; a wall already burst is deleted, else it spawns its debris. */
-void func_L01_002FBBD8(char *moby) {
+void BreakableWallUpdate(char *moby) {
     QuadW_2FBBD8 tab;
     QuadW_2FBBD8 a;
     QuadW_2FBBD8 b;
@@ -686,7 +686,7 @@ extern int func_0020BFC8_2FC140(int, int) __asm__("func_0020BFC8");
 extern void func_L01_002A3680_2FC140(void) __asm__("func_L01_002A3680");
 
 /* Agnogg ship update (moby classes 730, 731, 790 on level 01): state machine on moby->state. */
-void func_L01_002FC140(Moby *moby) {
+void AgnoggShipUpdate(Moby *moby) {
     Data_2FC140 *data;
     Link_2FC140 *q;
     int r16;
@@ -889,7 +889,7 @@ extern unsigned char D_0013E633_u[] __asm__("D_0013E633") NOT_SDA;
 
 // hinged bridge: swings with a sound while triggered and poses the bridge moby from its pivot
 // Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002f9810.c, FUN_L01_002fb8a8.
-void func_L01_002FCC80(char *self) {
+void HingedBridgeUpdate(char *self) {
     char *v;
     Vec4 arm;
     Vec4 d;
@@ -993,7 +993,7 @@ extern f32 D_L01_0016128C MACRO_ADDR;
 extern f32 D_L01_00161290 MACRO_ADDR;
 extern f32 D_L01_00161294 MACRO_ADDR;
 
-void func_L01_002FE4C0(PMoby *moby) {
+void WaterSurfaceFxUpdate(PMoby *moby) {
     s32 *volumes;
     s32 found;
     s32 i;
@@ -1087,7 +1087,7 @@ void func_L01_002FE4C0(PMoby *moby) {
                         f32 x = tiles[D_L01_001FA8A8[i] + j].x + random_float_between(-4.0f, 4.0f);
                         f32 y = tiles[D_L01_001FA8A8[i] + j].y + random_float_between(-4.0f, 4.0f);
 
-                        ((void (*)(f32, f32, f32, f32, void *, s32, s32))func_L00_002A5158)(x, y, 1.0f, -0.05f, D_L01_00161350 + D_L01_001FA8A8[i] + j, 1, 1);
+                        ((void (*)(f32, f32, f32, f32, void *, s32, s32))RippleDisturb)(x, y, 1.0f, -0.05f, D_L01_00161350 + D_L01_001FA8A8[i] + j, 1, 1);
                     }
                 }
             }
@@ -1157,7 +1157,7 @@ extern void func_L01_00279E10(void *, int);
 extern float D_L01_0015F660[] MACRO_ADDR;
 
 /* Update for a breakable pot: waits for its hit flag, then shatters into four sparks. Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002f9810.c, FUN_L01_002fd9a0. */
-void func_L01_002FED78(char *m) {
+void BreakablePotUpdate(char *m) {
     char *hit;
     int flag;
     int i;
@@ -1206,7 +1206,7 @@ extern char D_L01_001FBF40[];
 /* The moby comes in $a0 and goes on to the delete, untouched. */
 void func_L01_002FFF00(void *moby) {
     DefaultVtbl_DeleteMoby(moby);
-    func_L01_002BA898(4, D_L01_001FBF40);
+    DrawScrollingLayers(4, D_L01_001FBF40);
 }
 typedef u32 u128_FFF30 __attribute__((mode(TI), aligned(16)));
 typedef struct {
@@ -1225,7 +1225,7 @@ extern int func_001F49B0_FFF30(void (*)(void), void *) __asm__("func_001F49B0");
 
 /* On first use, lowers and ripples the layers' vertices; every frame, pulses their glow and queues FUN_L01_002feb28.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l01/gameplay/entities/002f9810.c, FUN_L01_002feb58. */
-void func_L01_002FFF30(void *arg) {
+void PulsingMeshUpdate(void *arg) {
     s32 i;
     s32 g;
     s32 j;
@@ -1360,7 +1360,7 @@ extern char *func_L01_00300E68(char *owner);
 typedef int u128b __attribute__((mode(TI)));
 
 // Breakable prop update: when hit, spawns a burst of debris sparks then replaces itself.
-void func_L01_00300C38(char *m) {
+void Moby778Update(char *m) {
     char *d = *(char **)(m + 0x78);
     char *t = func_L00_0025B478(m, 0x10000, 0);
     *(unsigned char *)(m + 0xA4) = 0xFF;
@@ -1393,7 +1393,7 @@ void func_L01_00300C38(char *m) {
             w[2] = 0;
             w[2] = random_float_between(w[2], 3.0f) * D_0015EE6C;
             a = random_float_between(125000.0f, 175000.0f);
-            func_L00_0026DD70(v, w, 0x207F7F7F, 0x272727, a, scale_ticks(rand_range(0x2D, 0x3C)));
+            PartType22Spawn(v, w, 0x207F7F7F, 0x272727, a, scale_ticks(rand_range(0x2D, 0x3C)));
         }
         func_L01_00300E68(m);
         DeleteMoby(m);
@@ -1431,7 +1431,7 @@ typedef union {
 } V300F00 __attribute__((aligned(16)));
 
 /* Smoke emitter: keeps its sound alive and spawns two puffs of particles per frame. Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002f9810.c, FUN_L01_002ffb28. */
-void func_L01_00300F00(char *self) {
+void SmokeEmitterUpdate(char *self) {
     int *v;
     V300F00 pos;
     V300F00 vel;
@@ -1454,7 +1454,7 @@ void func_L01_00300F00(char *self) {
         func_001F9EC0(&vel, &vel, self + 0xC0);
         FastVecAdd(&pos, &pos, self + 0x10);
         size = random_float_between(125000.0f, 175000.0f);
-        func_L00_0026DD70(&pos, &vel, 0x207F7F7F, 0x272727, size, scale_ticks(rand_range(0x2D, 0x3C)));
+        PartType22Spawn(&pos, &vel, 0x207F7F7F, 0x272727, size, scale_ticks(rand_range(0x2D, 0x3C)));
     }
 }
 extern float func_002140F8(float,float);
@@ -1492,7 +1492,7 @@ extern void func_L00_002703E8(void *, void *, int, int);
 
 /* Falling chunk: drops and spins; on its first landing it splashes (sound, splash and 16 drops) and
  * bounces up smaller, then fades out when its timer ends. Deleted if it lands out of bounds. */
-void func_L01_00301198(char *m) {
+void FallingChunkUpdate(char *m) {
     float np[4];
     float at[4];
     float vel[4];
@@ -1507,7 +1507,7 @@ void func_L01_00301198(char *m) {
             if (*(int *)(d + 0x18) == 0) {
                 func_0022ED80(0, 0, (int)m);
             }
-            func_L00_002A5158(D_L01_00161350_s, D_L01_00161358_s, 1, *(float *)(m + 0x10), *(float *)(m + 0x14), 0.5f, -0.35f);
+            RippleDisturb(D_L01_00161350_s, D_L01_00161358_s, 1, *(float *)(m + 0x10), *(float *)(m + 0x14), 0.5f, -0.35f);
             {
                 float g = D_0015EE6C;
                 float h = D_0015EE70_s;
@@ -1532,7 +1532,7 @@ void func_L01_00301198(char *m) {
                 vel[2] = random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.5f);
                 {
                     int c = rand_range(0x5A, 0x78);
-                    func_L00_002703E8(at, vel, random_integer_below(2), c);
+                    PartType35Spawn(at, vel, random_integer_below(2), c);
                 }
             }
         } else {
@@ -1564,7 +1564,7 @@ extern void func_L00_0025D5B0_303590(void *, void *, s32, s32, s32, f32) __asm__
 extern short D_L01_00161F20_303590 __asm__("D_L01_00161F20") ;
 extern PlayerPosView D_0013F450_303590 __asm__("D_0013F450") ;
 /* Enemy-spawner update: state 0 arms it, state 1 spawns one child toward the player while under the count limit and aims its AI path. func_L00_0025D5B0 takes the angle as its last argument. Adapted from Lombyte (MIT) for PAL: overlays/l01/unclassified_002f9810.c, FUN_L01_003021b8. */
-void func_L01_00303590(SpawnerMoby *m) {
+void EnemySpawnerUpdate(SpawnerMoby *m) {
     SpawnerVars *v = m->pvars;
     SpawnerMoby *n;
     CloneAiVars *nv;
@@ -1635,7 +1635,7 @@ char *func_L01_00303700(char *owner) {
 extern char *func_L00_0025B478(void *, int, int);
 extern void func_0020D678(void *);
 
-void func_L01_00309020(void *arg) {
+void Moby1042Update(void *arg) {
     char *item = func_L00_0025B478(arg, 0x10000, 0);
     if (item != 0 && *(float *)(item + 0x2C) > 0.0f) {
         DeleteMoby(arg);
@@ -1654,7 +1654,7 @@ void func_L01_0030AFD0(void *moby) {
     float v;
     int i;
     DefaultVtbl_DeleteMoby(moby);
-    func_L01_002BA898(3, D_L01_00203040);
+    DrawScrollingLayers(3, D_L01_00203040);
     v = FastSin((func_001FA888(D_L01_0015F6B0 & 0x3F) - 32.0f) * 0.09817477f) * 0.5f + 0.5f;
     p = (float *)(D_L01_00203040 + 0x11C);
     for (i = 2; i >= 0; i--) {
@@ -1665,7 +1665,7 @@ void func_L01_0030AFD0(void *moby) {
 extern void func_L01_0030AFD0(void *);
 extern void func_001F49B0(void *, void *);
 
-void func_L01_0030B070(unsigned char *moby) {
+void Moby1225Update(unsigned char *moby) {
     int value = 0xFF;
     *(short *)(moby + 0x32) = value;
     moby[0x30] = value;
@@ -1688,7 +1688,7 @@ extern float func_001F9D10(void *, void *);
 extern int func_L00_00203F20(int, int);
 extern int func_L00_002D95D8(void *);
 extern int func_L01_00276680(float, void *);
-void func_L01_0030C090(Moby *moby) {
+void HelpHintDirectorUpdate(Moby *moby) {
     s32 *data;
     Moby *m;
     Moby *m2;
@@ -1862,7 +1862,7 @@ extern void func_L00_0025F4A8(void *, void *, void *, float, float, int, int, in
 extern void func_L00_0026DA50(void *, void *, int, int, float, int, int);
 extern FxSpark_D568 *func_L00_0026DEA0(void *, float, float, float, int, void *, float, int);
 
-void func_L01_0030CDF0(struct Moby *m) {
+void Moby1510Update(struct Moby *m) {
     BlobVars *v;
     int hit;
     int i;
@@ -1912,7 +1912,7 @@ void func_L01_0030CDF0(struct Moby *m) {
         return;
     }
     s = random_float_between(0.5f, 1.5f) * 210000.0f;
-    func_L00_0026DA50(&m->pos, D_L01_0015F660, 0x4F007FFF, 0x1FFFFFFF, s,
+    PartType21Spawn(&m->pos, D_L01_0015F660, 0x4F007FFF, 0x1FFFFFFF, s,
                rand_range(scale_ticks(10), scale_ticks(20)), 1);
     alpha = 0x60000000;
     for (i = 0; i < 2; i++) {
@@ -1923,7 +1923,7 @@ void func_L01_0030CDF0(struct Moby *m) {
         s = random_float_between(40000.0f, 100000.0f);
         c = rand_range(0x30, 0xFF);
         grey = (c << 8) | 0x60000000;
-        p = func_L00_0026DEA0(&m->pos, 0.025f, 1.0f, 1.0f, n, D_L01_0015F660, s, c | ((c << 16) | grey));
+        p = PartType23Spawn(&m->pos, 0.025f, 1.0f, 1.0f, n, D_L01_0015F660, s, c | ((c << 16) | grey));
         if (p != 0) {
             p[3] = 0x44;
             q = p + 0x20;
@@ -1942,7 +1942,7 @@ extern int func_001F9850(int);
 typedef struct { int w[4]; } __attribute__((aligned(16))) Quad;
 
 /* spawn a debris moby on src, scaled, moving along dir with random spin and lifetime. Adapted from Lombyte (MIT) for PAL: src/overlays/l01/gameplay_vendor_00309bf8.c, FUN_L01_0030be70. */
-char *func_L01_0030D248(char *src, void *dir, float scale) {
+char *SpawnDebrisMoby(char *src, void *dir, float scale) {
     char *m;
     char *v;
 
@@ -1979,7 +1979,7 @@ extern void func_L00_00264BE8(void *, void *, void *, float, float);
 extern void func_00233AB8(void);
 #define fx_cutscene_D568 (*(CutsceneFx_D568 *)&D_L01_0016CD60)
 
-void func_L01_0030D568(struct Moby *moby) {
+void Moby1546Update(struct Moby *moby) {
     FxVec_D568 a;
     FxVec_D568 b;
     FxVec_D568 c;
@@ -2041,21 +2041,21 @@ void func_L01_0030D568(struct Moby *moby) {
                         b.f[1] = FastSin(ang) * r;
                         b.f[2] = random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.5f);
                         n = rand_range(90, 120);
-                        func_L00_002703E8(&a, &b, random_integer_below(2), n);
+                        PartType35Spawn(&a, &b, random_integer_below(2), n);
                     }
                 }
             }
             if (fx_cutscene_D568.scene == 4) {
                 m = fx_cutscene_D568.slot[4];
                 if (m != 0 && m->oclass == 0x213) {
-                    AddDrawCallback(func_00233AB8, m);
+                    AddDrawCallback(DrawEnvMappedObject, m);
                     if (fx_cutscene_D568.frame >= scale_ticks(850) && fx_cutscene_D568.frame <= scale_ticks(1160)) {
                         color = 0x7F204080;
                         for (node = 1; node < 7; node++) {
                             func_L00_00250800(m, node, &a);
                             for (j = 0; j < 2; j++) {
                                 spread = random_integer_below(16);
-                                s = func_L00_0026DEA0(&a, 0.1f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spread : -spread,
+                                s = PartType23Spawn(&a, 0.1f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spread : -spread,
                                                    (char *)D_L01_0015F660, 200000.0f, color);
                                 if (s != 0) {
                                     FxSparkTail_D568 *t = &s->tail;
@@ -2093,15 +2093,15 @@ void func_L01_0030D568(struct Moby *moby) {
                         d.f[2] = d.f[2] - 1.0f;
                         func_L00_0025F4A8(m, &c, &d, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
-                    AddDrawCallback(func_00233AB8, m);
+                    AddDrawCallback(DrawEnvMappedObject, m);
                     func_L00_00250800(m, 1, &c);
                     func_L00_00250800(m, 2, &d);
                     FastVecSub(&c, &c, &a);
                     FastVecSub(&d, &d, &a);
                     FastVecScale(&a, &a, 0.25f);
                     for (step = 0; step < 4; step++) {
-                        func_L00_00264BE8(&c, &c, (char *)D_L01_0015F660, 150000.0f, 60000.0f);
-                        func_L00_00264BE8(&d, &d, (char *)D_L01_0015F660, 150000.0f, 60000.0f);
+                        SpawnSparkRings(&c, &c, (char *)D_L01_0015F660, 150000.0f, 60000.0f);
+                        SpawnSparkRings(&d, &d, (char *)D_L01_0015F660, 150000.0f, 60000.0f);
                         FastVecAdd(&c, &c, &a);
                         FastVecAdd(&d, &d, &a);
                     }
@@ -2112,7 +2112,7 @@ void func_L01_0030D568(struct Moby *moby) {
     }
 }
 /* Breakable crate variant update: state 0 starts, 1 waits for a positive value, 2 breaks into pieces. Keeping 'flag' as its own variable (as the NTSC decomp does) gives retail's second callee-saved register. */
-void func_L01_0030E4C8(char *moby) {
+void Moby1813Update(char *moby) {
     char *hit;
     int flag;
 
@@ -2148,7 +2148,7 @@ extern float D_L01_001621A0 MACRO_ADDR;
 extern float D_L01_001621A4 MACRO_ADDR;
 
 /* Projects each of n point/normal pairs onto a 2D texture coordinate. */
-void func_L01_003102F0(int n, char *pts, char *nrm, int unused, float *out) {
+void ProjectEnvMapUVs(int n, char *pts, char *nrm, int unused, float *out) {
     float v0[4];
     float v1[4];
     float v2[4];
@@ -2197,7 +2197,7 @@ void func_L01_003104B8(void) {
     VU1_addGSregister(0x14, 0xFF9000000260L);
     func_001F7868();
     for (i = 4; i >= 0; i--) {
-        func_L01_003102F0(D_L01_00203160[4 - i], D_L01_002083F8[4 - i], D_L01_002083C8[4 - i], D_L01_002083E0[4 - i], D_L01_00208430);
+        ProjectEnvMapUVs(D_L01_00203160[4 - i], D_L01_002083F8[4 - i], D_L01_002083C8[4 - i], D_L01_002083E0[4 - i], D_L01_00208430);
         func_L00_001FDE48(D_L01_00203160[4 - i], (int)D_L01_002083C8[4 - i], D_L01_00208410[4 - i], D_L01_00208430, 1);
     }
 }
@@ -2211,7 +2211,7 @@ typedef struct {
 extern f32 D_0015EE7C MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l01/gameplay/vendor/00309bf8.c, FUN_L01_0030f208. */
-void func_L01_003105E0(ScrollMoby *m) {
+void Moby1848Update(ScrollMoby *m) {
     f32 d;
 
     switch (m->state) {

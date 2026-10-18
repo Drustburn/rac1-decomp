@@ -12,7 +12,7 @@ int func_L00_00265558(int a) {
         if (D_L00_00161F04 != -1) {
             D_L00_0015F670 = 0;
             D_L00_0015F674 = 0;
-            func_001FFCB0(D_L00_00161F04);
+            Hud_RemoveBank(D_L00_00161F04);
             D_L00_00161F04 = -1;
             return 1;
         }

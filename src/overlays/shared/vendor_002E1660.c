@@ -31,7 +31,7 @@ void func_L00_002E1660(char *m) {
         b[0] += *(float *)(pad + 0x100) * 0.8f;
         b[1] += *(float *)(pad + 0x104) * 0.8f;
         b[2] += *(float *)(pad + 0x108) + random_float_between(D_0015EE6C * -0.5f, D_0015EE6C + D_0015EE6C);
-        func_L00_002703E8(a, b, 2, rand_range(0x5A, 0x78));
+        PartType35Spawn(a, b, 2, rand_range(0x5A, 0x78));
         *(int *)(d + 4) = rand_range(scale_ticks(5), scale_ticks(0xF));
     }
 }
@@ -72,7 +72,7 @@ void func_L00_002E17F0(char *a) {
         func_L00_002EC0C8(3);
     }
     if (*(int *)(D_0013F450 + 0x208C) == 0x13) {
-        func_L00_00222B80(0, 1);
+        HeroEnterMoveState(0, 1);
     }
 }
 typedef struct { u8 pad[0xB0]; u8 b0; u8 pad1; s16 h; u8 pad2[0x4C]; } E_2e03a0_2e03a0;
@@ -272,11 +272,11 @@ int func_L00_002E34F0(int id) {
             D_L00_00161CC8[i] = 0;
             D_L00_00161D58[i] = 0;
             if (D_L00_00161D08[i] != -1) {
-                func_L00_0023F1D0(D_L00_00161D08[i]);
+                FreePointLight(D_L00_00161D08[i]);
                 D_L00_00161D08[i] = -1;
             }
             if (D_L00_00161D18[i] != -1) {
-                func_L00_0023F1D0(D_L00_00161D18[i]);
+                FreePointLight(D_L00_00161D18[i]);
                 D_L00_00161D18[i] = -1;
             }
             return 1;
@@ -295,11 +295,11 @@ void func_L00_002E35A8(int i) {
     D_L00_00161CC8[i] = 0;
     D_L00_00161D58[i] = 0;
     if (v != -1) {
-        func_L00_0023F1D0(v);
+        FreePointLight(v);
         D_L00_00161D08[i] = -1;
     }
     if (D_L00_00161D18[i] != -1) {
-        func_L00_0023F1D0(D_L00_00161D18[i]);
+        FreePointLight(D_L00_00161D18[i]);
         D_L00_00161D18[i] = -1;
     }
 }
@@ -385,7 +385,7 @@ extern int func_L00_0023F0D0_2E3700(float *, float, float, float, float, float) 
 /* Per-frame update of one beam slot: lays out the two 20-point strips between the slot's ends
    (a sine wave and a noisy one), spawns sparks at both ends and keeps the two looping sounds
    at the ends. */
-void func_L00_002E3700(int unused, int idx) {
+void BeamSlotUpdate(int unused, int idx) {
     Vec_2E3700 d;
     Vec_2E3700 dir;
     Vec_2E3700 side;
@@ -866,16 +866,16 @@ void func_L00_002E4F38(unsigned char *m) {
         m[0x30] = 0xFF;
     case 1:
         y = *(float *)(m + 0x18);
-        func_00215CA8(p, d->f6C, d->i70, m + 0x10, (float *)(m + 0x40), 0);
+        SamplePathAt(p, d->f6C, d->i70, m + 0x10, (float *)(m + 0x40), 0);
         *(float *)(m + 0x44) *= 0.5f;
         *(float *)(m + 0x18) += d->f64;
         d->f6C += d->f74;
         if ((float)*p < d->f6C) d->f6C -= (float)*p;
         if (m[0x70] & 2) {
             if (y < *(float *)(m + 0x18) || random_integer_below(3) != 0) {
-                if (m[0x53]) func_00213DE0(m, 0, 0, 10);
+                if (m[0x53]) MobyBlendAnimation(m, 0, 0, 10);
             } else {
-                if (m[0x53] != 1) func_00213DE0(m, 1, 0, 10);
+                if (m[0x53] != 1) MobyBlendAnimation(m, 1, 0, 10);
             }
         }
         break;
@@ -889,13 +889,13 @@ void func_L00_002E5158(char *m) {
     if (FastVecDist(D_0013E633 + 0xE9D, m + 0x10) < 1.0f) {
         if (FastVecLength(D_0013E633 + 0xE9D + 0x80) > D_0015EE6C + D_0015EE6C) {
             if (*(unsigned char *)(m + 0x53) != 1) {
-                func_00213DE0(m, 1, 0, scale_ticks(6));
+                MobyBlendAnimation(m, 1, 0, scale_ticks(6));
             }
         }
     }
     if (*(unsigned char *)(m + 0x70) & 2) {
         if (*(unsigned char *)(m + 0x53) == 1) {
-            func_00213DE0(m, 0, 0, scale_ticks(6));
+            MobyBlendAnimation(m, 0, 0, scale_ticks(6));
         }
     }
 }
@@ -985,7 +985,7 @@ void func_L00_002E5238(char *m) {
             func_L00_001FF4B0(aE0, aE0, 1.0f);
             build_quaternion_from_axis_angle(aE0, aE0, FastVecLength(s23));
             func_001FA6C0(aE0, a90);
-            func_002153E8(a90, s23);
+            MatrixToEuler(a90, s23);
         }
     }
 }
@@ -3063,7 +3063,7 @@ dec:
         }
     }
     f = func_001FA888(BH_2e7d20(0x34));
-    BF_2e7d20(0x30) = func_00214220(0.0f, BF_2e7d20(0x30), f / func_001FA888(scale_ticks(2000)));
+    BF_2e7d20(0x30) = CosineInterpolate(0.0f, BF_2e7d20(0x30), f / func_001FA888(scale_ticks(2000)));
     goto move;
 slow:
     s = BH_2e7d20(0x34);

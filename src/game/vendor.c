@@ -410,7 +410,7 @@ extern void func_001FBAB8(int, int, int, int, int, int, int);
 void update_scrolling_status_message(void) {
     char *v;
     char *w;
-    func_001FBAB8(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     v = D_001E66C0;
     if (func_00116810_s(*(char **)(v + 0x2C)) - *(int *)(v + 0x44) / 20 > 0) {
         *(int *)(v + 0x44) += 2;
@@ -419,15 +419,15 @@ void update_scrolling_status_message(void) {
     }
     w = D_001E66C0;
     func_00239628(*(char **)(w + 0x2C), -*(int *)(w + 0x44), 8, 2.0f);
-    func_001FBAB8(0, 0, 4, 0x40, 0x200, 0x80, 0);
-    func_001FBAB8(0xE2, 0, 0xE6, 0x40, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0, 0, 4, 0x40, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0xE2, 0, 0xE6, 0x40, 0x200, 0x80, 0);
 }
 
 extern int D_001611A8 MACRO_ADDR;
 extern int D_001E66E4;
 
 void func_00239948(void) {
-    func_001FBAB8(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     if (D_001611A8 == 1) {
         DrawMobyList(D_001E66E4, 1);
     }
@@ -438,7 +438,7 @@ extern char D_00161180[];
 /* Unprototyped: the two call sites pass different argument counts. */
 extern void func_00116248();
 
-void func_002399A0(void *arg0, int arg1) {
+void FormatThousands(void *arg0, int arg1) {
     if (arg1 >= 1000) {
         func_00116248(arg0, D_00161178, arg1 / 1000, arg1 % 1000);
     } else {
@@ -470,7 +470,7 @@ extern void func_001FBAB8_u(int, int, int, int, int, int, unsigned int)
 
 /* Vendor item carousel and icon pulse. The solid black draw calls use the
    unsigned color signature, matching retail's argument setup order. */
-void func_00239A00(void) {
+void VendorDrawIconStrip(void) {
     s32 selectedOffset;
     s32 slotOffset;
     s32 selectedMinusThree;
@@ -485,13 +485,13 @@ void func_00239A00(void) {
     s32 *slotKind;
     s32 pulseColor;
 
-    func_001FBAB8(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     if (D_001E66C0_ui.slotCount < 8) {
         itemX = 0xC;
         itemIndex = 0;
         selectedOffset = D_001E66C0_ui.selectedIndex * 0x38;
         pulseColor = ((func_001F9B70(((D_001E66C0_ui.pulseTick * 4) & 0x3F) - 0x20) + 0x40) * 0x10202) | 0x80000000;
-        func_001FBAB8(selectedOffset + 8, 2, selectedOffset + 0x40, 0x3A, 0x200, 0x80, pulseColor);
+        Framebuf_DrawAlphaRect(selectedOffset + 8, 2, selectedOffset + 0x40, 0x3A, 0x200, 0x80, pulseColor);
         func_001FBAB8_u(selectedOffset + 0xA, 4, selectedOffset + 0x3E, 0x38, 0x200, 0x80, 0x80000000);
         if (D_001E66C0_ui.slotCount > 0) {
             do {
@@ -513,7 +513,7 @@ void func_00239A00(void) {
         } else if (D_001E66C0_ui.scrollOffset > 0) {
             D_001E66C0_ui.scrollOffset = (s32) (D_001E66C0_ui.scrollOffset - 4);
         } else {
-            func_001FBAB8(0xB0, 2, 0xE8, 0x3A, 0x200, 0x80, ((func_001F9B70(((D_001E66C0_ui.pulseTick * 4) & 0x3F) - 0x20) + 0x40) * 0x10202) - (s32) 0x80000000);
+            Framebuf_DrawAlphaRect(0xB0, 2, 0xE8, 0x3A, 0x200, 0x80, ((func_001F9B70(((D_001E66C0_ui.pulseTick * 4) & 0x3F) - 0x20) + 0x40) * 0x10202) - (s32) 0x80000000);
             func_001FBAB8_u(0xB2, 4, 0xE6, 0x38, 0x200, 0x80, 0x80000000);
         }
         x = D_001E66C0_ui.scrollOffset - 0x64;
@@ -556,20 +556,20 @@ extern struct P239 D_001E02B0_p[] __asm__("D_001E02B0");
 extern unsigned char D_0013D5C8_b[] __asm__("D_0013D5C8") NOT_SDA;
 
 /* Vendor item panel: draws the selected item's name and description, and for the ammo/alt slots a pulsing price shadow. Adapted from Lombyte (MIT) for PAL: src/ui/menus/fun_002389e0.c, fun_002389e0. */
-void func_00239CF8(void) {
+void VendorDrawItemPanel(void) {
     char buf[0x100];
     int w;
 
-    func_001FBAB8(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     DrawMobyList(D_001E66C0_m.f20 + 0x100, 1);
     DrawMobyList(D_001E66C0_m.f20, 1);
     if (D_001E66C0_m.slots[D_001E66C0_m.idx].kind == 1) {
         func_001F6968_c(6, 8, 0x80F0F0F0L, func_001FE540_id(D_001864D0_t[D_001E66C0_m.slots[D_001E66C0_m.idx].id].text), -1);
         func_001F6968_c(0x18, 0x18, 0x80F0F0F0L, func_001FE540_id(0x4F5D), -1);
-        func_002399A0(buf, D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].c);
+        FormatThousands(buf, D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].c);
         func_001F6D88_c(0x76, 0x65, 0x80F0F0F0L, buf, -1);
         if (D_001E66C0_m.f40 != 0) {
-            w = func_001F6600((unsigned char *)buf, -1);
+            w = MeasureTextWidthRegular((unsigned char *)buf, -1);
             func_00201640(0x75 - w, 0x6D, 0x7B, 0x70, 0x20959544L, 0);
             func_00201640(0x76 - w, 0x6D, 0x7A, 0x70, 0x30959544L, 0);
             func_00201640(0x77 - w, 0x6D, 0x79, 0x70, 0x40959544L, 0);
@@ -577,16 +577,16 @@ void func_00239CF8(void) {
             func_00201640(0x79 - w, 0x6D, 0x77, 0x70, 0x60959544L, 0);
             func_00201640(0x7A - w, 0x6D, 0x76, 0x70, 0x70959544L, 0);
             func_00201640(0x7B - w, 0x6D, 0x75, 0x70, 0x80959544L, 0);
-            func_002399A0(buf, D_001E66C0_m.f40 ? D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].d
+            FormatThousands(buf, D_001E66C0_m.f40 ? D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].d
                                                  : D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].c);
             func_001F6D88_c(0x76, 0x55, 0x80F0F0F0L, buf, -1);
         }
     } else {
         func_001F6968_c(6, 8, 0x80F0F0F0L, func_001FE540_id(D_001864D0_t[D_001E66C0_m.slots[D_001E66C0_m.idx].id].text), -1);
-        func_002399A0(buf, D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].a);
+        FormatThousands(buf, D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].a);
         func_001F6D88_c(0x76, 0x65, D_0013D5C8_b[0x23] ? 0x80808080L : 0x80F0F0F0L, buf, -1);
         if (D_0013D5C8_b[0x23] != 0) {
-            w = func_001F6600((unsigned char *)buf, -1);
+            w = MeasureTextWidthRegular((unsigned char *)buf, -1);
             func_00201640(0x75 - w, 0x6D, 0x7B, 0x70, 0x20959544L, 0);
             func_00201640(0x76 - w, 0x6D, 0x7A, 0x70, 0x30959544L, 0);
             func_00201640(0x77 - w, 0x6D, 0x79, 0x70, 0x40959544L, 0);
@@ -594,7 +594,7 @@ void func_00239CF8(void) {
             func_00201640(0x79 - w, 0x6D, 0x77, 0x70, 0x60959544L, 0);
             func_00201640(0x7A - w, 0x6D, 0x76, 0x70, 0x70959544L, 0);
             func_00201640(0x7B - w, 0x6D, 0x75, 0x70, 0x80959544L, 0);
-            func_002399A0(buf, D_0013D5C8_b[0x23] ? D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].b
+            FormatThousands(buf, D_0013D5C8_b[0x23] ? D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].b
                                                  : D_001E02B0_p[D_001E66C0_m.slots[D_001E66C0_m.idx].id].a);
             func_001F6D88_c(0x76, 0x55, 0x80F0F0F0L, buf, -1);
         }
@@ -643,12 +643,12 @@ typedef struct {
    has. The D_001E02B0 records are reached as char arithmetic cast to a
    struct, which gives retail's index-first addu with the field offset
    left as the load displacement. */
-void func_0023A478(void) {
+void VendorDrawAmmoPrompt(void) {
     Vendor *v;
     int idx;
     int price;
 
-    func_001FBAB8(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     v = &D_001E66C0_v;
     if (v->sel != 0) {
         idx = v->idx;
@@ -773,14 +773,14 @@ extern void func_00234C98_l(int, long) __asm__("func_00234C98");
    524288, 255, 0); then GS registers 0x47 and 0x42 are written through
    func_00234C98, whose value argument is 64-bit (hence the long alias,
    which builds 0x8000000044 as one dli). */
-void func_0023A948(int a, int b, float f) {
+void Framebuf_AllocRenderTarget(int a, int b, float f) {
     int t = a + b;
 
     if (t > 16) {
         t = 16;
     }
-    func_001FB608(a, b, ((0x3FF000 - (4 << t)) >> 13) << 13);
-    func_001F3760(1 << a, 1 << b, f, 0.0f, 524288.0f, 255.0f, 0.0f);
+    Framebuf_SetRenderTarget(a, b, ((0x3FF000 - (4 << t)) >> 13) << 13);
+    SetScreenSize(1 << a, 1 << b, f, 0.0f, 524288.0f, 255.0f, 0.0f);
     func_00234C98_l(0x47, 0x30000);
     func_00234C98_l(0x42, 0x8000000044L);
 }
@@ -816,7 +816,7 @@ extern void func_0023A478_3AA38(char *) __asm__("func_0023A478");
 extern void func_00239A00_3AA38(char *) __asm__("func_00239A00");
 
 /* Renders the six vendor monitor screens: projects each screen's joint box, renders its view off-screen and draws it back. */
-void func_0023AA38(char *m) {
+void VendorDrawScreens(char *m) {
     float len;
     float f;
     float g;
@@ -836,7 +836,7 @@ void func_0023AA38(char *m) {
         u128_3AA38 b[1];
         float sx, sy, sw, sh;
         float x, y, w, h;
-        func_0020DB98(m, 3, ids, (char *)out);
+        MobyTransformScaledVertexBatch(m, 3, ids, (char *)out);
         qcopy(base, out);
         FastVecSub(d1, &out[1], out);
         FastVecSub(d2, &out[2], out);
@@ -876,8 +876,8 @@ void func_0023AA38(char *m) {
         a[0] = c[0];
         b[0] = c[3];
         func_00238F98(a, b, &x, &y, &w, &h);
-        func_0023A948(9, 7, 1.0f);
-        func_001FB908(0x200, 0x200);
+        Framebuf_AllocRenderTarget(9, 7, 1.0f);
+        Framebuf_ClearScreen(0x200, 0x200);
         func_00234C98_l(0x42, 0x8000000064L);
         switch (i) {
         case 0:
@@ -901,7 +901,7 @@ void func_0023AA38(char *m) {
         }
         func_0023A5E0(i, x, y);
         setupViewContext();
-        func_001FB908(0x200, 0x200);
+        Framebuf_ClearScreen(0x200, 0x200);
         func_00234C98_l(0x42, 0x8000000064L);
         func_00234C98_l(8, 5);
         VU1_texFlush();
@@ -936,7 +936,7 @@ extern int func_001FA898_i(float) __asm__("func_001FA898");
 /* Index of the zone whose box (in 1/1024 units, 0x800 deep) holds the
    point and whose 4x4 cell mask at +0x1E has the point's cell set, or
    -1. Cells are sized and offset by the grid in D_001E69E0. */
-int func_0023B018(float x, float y, float z) {
+int FindZoneAtPoint(float x, float y, float z) {
     int ix = func_001FA898_i(x * 1024.0f);
     int iy = func_001FA898_i(y * 1024.0f);
     int iz = func_001FA898_i(z * 1024.0f);
@@ -1003,7 +1003,7 @@ extern void func_001F9CA0(f32 *, f32 *, f32 *);
 extern void func_001F9DC0_3B210(f32 *, f32 *, f32) __asm__("func_001F9DC0");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/fun_00239f58.c, sample_surface_height_map. */
-s32 func_0023B210(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
+s32 SampleSurfaceHeight(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     f32 x_tangent[4] __attribute__((aligned(16)));
     f32 y_tangent[4] __attribute__((aligned(16)));
     SurfaceHeightTile *tile;
@@ -1020,7 +1020,7 @@ s32 func_0023B210(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     f32 weight_x;
     f32 weight_y;
 
-    tile_index = func_0023B018(x, y, z);
+    tile_index = FindZoneAtPoint(x, y, z);
     if (tile_index < 0) {
         return 0;
     }
@@ -1123,7 +1123,7 @@ void func_0023B5D0(char *arg0) {
     char *p = *(char **)(arg0 + 0x78);
 
     cfg = D_00160FD0;
-    func_0020DB98(arg0, 4, &cfg, p);
+    MobyTransformScaledVertexBatch(arg0, 4, &cfg, p);
     func_001F9BF0_b(a, p + 0x10, p);
     func_001F9BF0_b(b, p + 0x20, p);
     *(float *)(p + 0x40) = FastVecLength(a);

@@ -240,7 +240,7 @@ void func_L00_002AB910(M910 *m) {
                 rot.q = 0;
                 rot.f[0] = 3.1415927f;
                 func_001FA218(m1, &rot);
-                func_0020DAF8((char *)v->owner, 0, (char *)m2);
+                MobyTransformScaledVertex((char *)v->owner, 0, (char *)m2);
                 sce_vu0_mul_matrix(m1, m2, m1);
                 func_001FA480(m->mtx, m1);
                 m->i94 = 0;
@@ -267,10 +267,10 @@ void func_L00_002AB910(M910 *m) {
                 } else {
                     v->vel.f[2] -= D_0015EE70 * 9.8f / 10.0f;
                     if (random_integer_below(scale_ticks(6) - 1) == 0) {
-                        float wz = func_00214440((float *)&m->pos, &q);
+                        float wz = GetGroundHeight((float *)&m->pos, &q);
 
                         FastVecScale(&q, v, 0.25f);
-                        func_L00_0026FF20(&m->pos, &q, random_float_between(0.05f, 0.1f) * 210000.0f, wz);
+                        PartType34Spawn(&m->pos, &q, random_float_between(0.05f, 0.1f) * 210000.0f, wz);
                     }
                 }
             }
@@ -302,7 +302,7 @@ void func_L00_002AB910(M910 *m) {
                         int i;
                         char *p;
 
-                        func_L00_002A5158(*(int *)&D_L00_00161390, *(int *)&D_L00_00161398, 1, m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
+                        RippleDisturb(*(int *)&D_L00_00161390, *(int *)&D_L00_00161398, 1, m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
                         v->h50 = 1;
                         clear_u64_value((float *)v);
                         v->vel.f[2] = D_0015EE6C * -1.5f;
@@ -322,7 +322,7 @@ void func_L00_002AB910(M910 *m) {
                             n[1] = FastSin(ang) * rr;
                             n[2] = random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.5f);
                             life = rand_range(0x5A, 0x78);
-                            func_L00_002703E8(t, n, random_integer_below(2), life);
+                            PartType35Spawn(t, n, random_integer_below(2), life);
                         }
                     }
                 } else if (v->h50 != 0 || CollType() != 0) {
@@ -494,7 +494,7 @@ void func_L00_002AB910(M910 *m) {
                     v->i68 = -1;
                     v->h34 = scale_ticks(0x78);
                     if (m->anim != 0) {
-                        func_00213DE0(m, 0, 0, 10);
+                        MobyBlendAnimation(m, 0, 0, 10);
                     }
                 }
                 if (v->p54 != 0 && (m->state & 0x10)) {
@@ -510,7 +510,7 @@ void func_L00_002AB910(M910 *m) {
 
                         *(Q910 *)n = m->pos.q;
                         if ((m->b70 & 2) && m->b52 == 1 && m->anim != 2) {
-                            func_00213DE0(m, 2, 0, 10);
+                            MobyBlendAnimation(m, 2, 0, 10);
                         }
                         if (func_L00_0028EB98(m, v->i68) == 0) {
                             v->i68 = func_0022ED80(1, 4, (int)m);
@@ -560,7 +560,7 @@ void func_L00_002AB910(M910 *m) {
                         }
                     }
                 }
-                func_L00_00263BF8(m, (char *)&v->f60, (char *)&v->f64, 0.5235988f, D_0015EE6C * 0.5235988f, D_0015EE6C * 0.29670596f);
+                LissajousOffsetUpdate(m, (char *)&v->f60, (char *)&v->f64, 0.5235988f, D_0015EE6C * 0.5235988f, D_0015EE6C * 0.29670596f);
                 if (m->state & 4) {
                     V910 t;
                     {
@@ -597,7 +597,7 @@ void func_L00_002AB910(M910 *m) {
                         func_L00_001FF4B0(t, t, 0.75f);
                         FastVecAdd(r, &D_G910.cam->pos, t);
                         *(Q910 *)n = *(Q910 *)r;
-                        func_L00_002594C8(m, &m->pos, n, 0.4f, 0.25f, 0.25f, 0.5235988f, 0);
+                        MoveKeepingOverGround(m, &m->pos, n, 0.4f, 0.25f, 0.25f, 0.5235988f, 0);
                     }
                 } else {
                     M910 *best = 0;
@@ -647,7 +647,7 @@ void func_L00_002AB910(M910 *m) {
                         }
                         m->state |= 0x10;
                         best = o;
-                        func_00213DE0(m, 1, 0, scale_ticks(3));
+                        MobyBlendAnimation(m, 1, 0, scale_ticks(3));
                         func_0022ED80(0, 0, (int)m);
                         v->f40 = 0.0f;
                         v->i58 = scale_ticks(600);
@@ -698,7 +698,7 @@ void func_L00_002AB910(M910 *m) {
                         int hit = coll_sphere_mobys(&m->pos, 0x10, m, 0, s + s);
 
                         *(Q910 *)t = m->pos.q;
-                        func_L00_0025BA50(m, t, D_L00_00178000, hit, 0, 0x810000, 4, 1, 3.0f, 0.25f, 1.5f);
+                        SendRadialMessageToMobys(m, t, D_L00_00178000, hit, 0, 0x810000, 4, 1, 3.0f, 0.25f, 1.5f);
                     }
                 }
                 gz = func_L00_0025A748(&m->pos);
@@ -725,7 +725,7 @@ void func_L00_002AB910(M910 *m) {
                             r[2] = random_float_between(-0.5f, -2.0f);
                             *(Q910 *)n = *(Q910 *)r;
                             func_L00_001FF4B0(n, n, random_float_between(D_0015EE6C * 4.0f, D_0015EE6C * 8.0f));
-                            func_L00_0026FF20(&m->pos, n, random_float_between(0.05f, 0.1f) * 210000.0f, wz);
+                            PartType34Spawn(&m->pos, n, random_float_between(0.05f, 0.1f) * 210000.0f, wz);
                         }
                         cr = 0x60;
                         cg = 0x60;
@@ -766,7 +766,7 @@ void func_L00_002AB910(M910 *m) {
                             c2 = func_L00_0025D140(c2, D_E910.b11);
                             sz = random_float_between(31500.002f, 52500.0f);
                             life = rand_range(scale_ticks(0x5A), scale_ticks(0x96));
-                            func_L00_0026CA10(n, r, c1, c2, sz, life, 1, D_L00_001B2400[11][0], -1);
+                            PartType15Spawn(n, r, c1, c2, sz, life, 1, D_L00_001B2400[11][0], -1);
                         }
                     }
                 } else if (gz + 2.0f < m->pos.f[2]) {
@@ -808,7 +808,7 @@ void func_L00_002AB910(M910 *m) {
                                 float sz = random_float_between(200000.0f, 300000.0f) * sc;
                                 int life = rand_range(scale_ticks(0xB4), scale_ticks(0xF0));
 
-                                func_L00_0026CD70((char *)r, (char *)n, c1, 0x101010, sz, life, 0);
+                                PartType16Spawn((char *)r, (char *)n, c1, 0x101010, sz, life, 0);
                                 break;
                             }
                             case 1: {
@@ -816,7 +816,7 @@ void func_L00_002AB910(M910 *m) {
                                 int c2 = func_L00_0025D140(0x0F081020, D_E910.b11);
                                 float sz = random_float_between(50000.0f, 100000.0f) * sc;
 
-                                func_L00_0026CD70((char *)r, (char *)n, c1, c2, sz, scale_ticks(0xB4), 1);
+                                PartType16Spawn((char *)r, (char *)n, c1, c2, sz, scale_ticks(0xB4), 1);
                                 break;
                             }
                             case 2: {
@@ -828,7 +828,7 @@ void func_L00_002AB910(M910 *m) {
                                 c2 = func_L00_0025D140(0x0F000020, D_E910.b11);
                                 sz = sc * 150000.0f;
                                 life = rand_range(scale_ticks(0x1E), scale_ticks(0x2D));
-                                func_L00_0026CD70((char *)r, (char *)n, c1, c2, sz, life, 2);
+                                PartType16Spawn((char *)r, (char *)n, c1, c2, sz, life, 2);
                                 break;
                             }
                             case 3: {
@@ -839,10 +839,10 @@ void func_L00_002AB910(M910 *m) {
 
                                 c1 = func_L00_0025D140(c1, D_E910.b11);
                                 c2 = func_L00_0025D140(c2, D_E910.b11);
-                                func_00215C00(n, random_float_between(0.0f, 1.0f) * D_0015EE6C, ang, random_angle_radians());
+                                BuildSphericalOffset(n, random_float_between(0.0f, 1.0f) * D_0015EE6C, ang, random_angle_radians());
                                 sz = random_float_between(200000.0f, 300000.0f) * sc;
                                 life = rand_range(scale_ticks(0xF0), scale_ticks(0x12C));
-                                func_L00_0026CD70((char *)r, (char *)n, c1, c2, sz, life, 3);
+                                PartType16Spawn((char *)r, (char *)n, c1, c2, sz, life, 3);
                                 break;
                             }
                             }
@@ -866,7 +866,7 @@ void func_L00_002AB910(M910 *m) {
                 func_L00_00260878(m, D_L00_001B0B30);
                 DeleteMoby(m);
             } else {
-                func_L00_0025B040((unsigned char *)m, 0.25f);
+                RecordMobyShadow((unsigned char *)m, 0.25f);
             }
         }
     }
@@ -1401,7 +1401,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                     n1 = truncate_float_to_s32(func_001F9878((float)*(int *)&D_L00_001614D0 * (random_float_between(-*(float *)&D_L00_001614D8, *(float *)&D_L00_001614D8) + 1.0f)));
                     n2 = truncate_float_to_s32(func_001F9878((float)*(int *)&D_L00_001614D4 * (random_float_between(-*(float *)&D_L00_001614D8, *(float *)&D_L00_001614D8) + 1.0f)));
                     v2.f[2] -= *(float *)&D_L00_001614C0 * D_0015EE70 * (float)n1;
-                    func_00219780(&m->pos, &v1, &v2, p0, p1, n0, n1, n2, *(int *)&D_L00_00161500);
+                    PartType02Spawn(&m->pos, &v1, &v2, p0, p1, n0, n1, n2, *(int *)&D_L00_00161500);
                 }
             }
         }
@@ -1417,10 +1417,10 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
             } else {
                 d->v.f[2] -= D_0015EE70 * 11.0f / 10.0f;
                 if (random_integer_below(scale_ticks(6) - 1) == 0) {
-                    float h = func_00214440((float *)&m->pos, &q);
+                    float h = GetGroundHeight((float *)&m->pos, &q);
 
                     FastVecScale(&q, d, 0.25f);
-                    func_L00_0026FF20(&m->pos, &q, random_float_between(0.05f, 0.1f) * 210000.0f, h);
+                    PartType34Spawn(&m->pos, &q, random_float_between(0.05f, 0.1f) * 210000.0f, h);
                 }
             }
             q.moby = m;
@@ -1447,7 +1447,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                     char *s;
                     int i;
 
-                    func_L00_002A5158(*(int *)&D_L00_00161390, *(int *)&D_L00_00161398, 1, m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
+                    RippleDisturb(*(int *)&D_L00_00161390, *(int *)&D_L00_00161398, 1, m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
                     d->h68 = 1;
                     clear_u64_value(d->v.f);
                     d->v.f[2] = D_0015EE6C * -1.5f;
@@ -1467,7 +1467,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                         vel.f[1] = FastSin(ang) * r;
                         vel.f[2] = random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.5f);
                         n = rand_range(0x5A, 0x78);
-                        func_L00_002703E8(&p, &vel, random_integer_below(2), n);
+                        PartType35Spawn(&p, &vel, random_integer_below(2), n);
                     }
                 } else if (d->h68 != 0 || CollType() != 0) {
                     if (D_H910.moby != 0) {
@@ -1510,7 +1510,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
 
                     n = coll_sphere_mobys(&m->pos, 0x10, m, 0, s * 0.5f);
                     v.q = m->pos.q;
-                    func_L00_0025BA50(m, &v, D_L00_00178000, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
+                    SendRadialMessageToMobys(m, &v, D_L00_00178000, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
                     m->state = 2;
                 }
                 if (D_L00_0016007C > 0x32) {
@@ -1583,7 +1583,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                         C6_2aedd0 c1 = D_L00_001E9CA0;
                         C6_2aedd0 c2 = D_L00_001E9CB8;
 
-                        func_L00_0026B890(&m->pos, &a,
+                        PartType11Spawn(&m->pos, &a,
                                           func_L00_0025D140(c1.c[random_integer_below(6)], (unsigned char)D_E910.p0[0xA]),
                                           func_L00_0025D140(c2.c[random_integer_below(6)], (unsigned char)D_E910.p0[0xA]),
                                           s * 400000.0f,
@@ -1623,7 +1623,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                     float h;
 
                     m->pos.f[2] += 1.0f;
-                    h = func_00214440((float *)&m->pos, &v);
+                    h = GetGroundHeight((float *)&m->pos, &v);
                     m->pos.f[2] -= 1.0f;
                     {
                         int i;
@@ -1638,7 +1638,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                             t.f[2] = random_float_between(-0.5f, 2.0f);
                             u.q = t.q;
                             func_L00_001FF4B0(&u, &u, s * random_float_between(D_0015EE6C * 4.0f, D_0015EE6C * 8.0f));
-                            func_L00_0026FF20(&m->pos, &u, random_float_between(0.05f, 0.1f) * 210000.0f, h);
+                            PartType34Spawn(&m->pos, &u, random_float_between(0.05f, 0.1f) * 210000.0f, h);
                         }
                     }
                 }
@@ -1707,7 +1707,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                             v2.f[2] = gz;
                             sz = random_float_between(31500.002f, 52500.0f);
                             life = rand_range(scale_ticks(0x5A), scale_ticks(0x96));
-                            func_L00_0026CA10(&v2, &w, c0, c1, sz, life, 1, D_L00_001B2400[11][0], -1);
+                            PartType15Spawn(&v2, &w, c0, c1, sz, life, 1, D_L00_001B2400[11][0], -1);
                         }
                     }
                 }
@@ -1738,7 +1738,7 @@ void func_L00_002AEDD0(M_2aedd0 *m) {
                               func_001FA888(m->bBC) / (float)scale_ticks(0xF));
         n = coll_sphere_mobys(&m->pos, 0x10, m, 0, r);
         p.q = m->pos.q;
-        func_L00_0025BA50(m, &p, D_L00_00178000, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
+        SendRadialMessageToMobys(m, &p, D_L00_00178000, n, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
         if (++m->bBC > scale_ticks(0xF)) {
             DeleteMoby(m);
         }
@@ -1800,9 +1800,9 @@ void func_L00_002B08A0(unsigned char *m) {
             if (m[0xBC] & 0xFE) {
                 int a = func_L00_0025D140(c.c[random_integer_below(4)], m[0xBC] >> 1);
                 int b = func_L00_0025D140(0x4FFF, m[0xBC] >> 1);
-                func_L00_0026A7F8(m + 0x10, &v, a, b, scale_ticks(0x2D), 0x32, 0x78, 1);
+                PartType04Spawn(m + 0x10, &v, a, b, scale_ticks(0x2D), 0x32, 0x78, 1);
             } else {
-                func_L00_0026A7F8(m + 0x10, &v, c.c[random_integer_below(4)], 0x4FFF, scale_ticks(0x2D), 0x32, 0x78, 1);
+                PartType04Spawn(m + 0x10, &v, c.c[random_integer_below(4)], 0x4FFF, scale_ticks(0x2D), 0x32, 0x78, 1);
             }
         }
     }
@@ -1891,7 +1891,7 @@ typedef struct DebrisMoby2B0D30 {
     char pad30[0x10]; float rotation[4];
     char pad50[0x28]; DebrisData2B0D30 *data;
 } DebrisMoby2B0D30;
-void func_L00_002B0D30(char *moby) {
+void DebrisBounceUpdate(char *moby) {
     DebrisMoby2B0D30 *mob = (DebrisMoby2B0D30 *)moby;
     float old[4];
     char *pos = moby + 0x10;
@@ -2120,7 +2120,7 @@ void func_L00_002B1290(char *self, O *out, char *skip) {
         }
         if (best < dist) goto next;
         ang = func_001FA888(D_0013E620.bB) * 0.6981317f;
-        func_00215C00(&lv, dist, yaw, pitch + g->f2E4 * 0.5f);
+        BuildSphericalOffset(&lv, dist, yaw, pitch + g->f2E4 * 0.5f);
         FastVecAdd(&lv, &lv, spos);
         z = FastArcSin(FastVecDist(&lv, &v) / (dist + dist));
         ang = ang + 1.5707964f;
@@ -2309,7 +2309,7 @@ void func_L00_002B1688(M910 *m) {
         m->rz=chase1688(&d->yaw_velocity,m->rz,yaw,D_0015EE70*6.2831855f,D_0015EE70*3.1415927f,D_0015EE6C*4.71238899f);
         m->ry=chase1688(&d->pitch_velocity,m->ry,pitch,D_0015EE70*6.2831855f,D_0015EE70*3.1415927f,D_0015EE6C*4.71238899f);
     }
-    func_00215C00(&motion,d->speed,m->rz,-m->ry);
+    BuildSphericalOffset(&motion,d->speed,m->rz,-m->ry);
     func_L00_001FF4B0(&impact1688.normal,&motion,1.0f);
     FastVecScale(&impact1688.normal,&impact1688.normal,-1.0f);
     if(!reduced || !(D_L00_0015F6B0&1)) {
@@ -2401,7 +2401,7 @@ void func_L00_002B1688(M910 *m) {
         int hit=coll_sphere_mobys((&m->pos),16,m,0,(size+size));
         particles=10;
         predicted.q=m->pos.q;
-        func_L00_0025BA50(m,&predicted,D_L00_00178000,hit,(int)skip,0x830000,3,1,3.0f,1.0f,1.0f);
+        SendRadialMessageToMobys(m,&predicted,D_L00_00178000,hit,(int)skip,0x830000,3,1,3.0f,1.0f,1.0f);
         particle_reduction=0;
         basis[0][0]=0.0f;
         basis[1][0]=-normal.f[2];
@@ -2435,7 +2435,7 @@ void func_L00_002B1688(M910 *m) {
             } else {
                 float speed=random_float_between(8.5f,16.5f)*D_0015EE6C*size;
                 float a=random_angle1688();
-                func_00215C00(&predicted,speed,a,random_angle1688());
+                BuildSphericalOffset(&predicted,speed,a,random_angle1688());
             }
             predicted.f[2]+=D_0015EE6C*5.0f;
             FastVecAdd(&predicted,&predicted,&blast_velocity);
@@ -2447,7 +2447,7 @@ void func_L00_002B1688(M910 *m) {
                 if(FastVecLength(&predicted)>1.0f) func_L00_001FF4B0(&predicted,&predicted,D_0015EE6C*8.0f);
                 particle_scale=size*40000.0f;
                 life=rand_range(scale_ticks(60),scale_ticks(120))-particle_reduction*35;
-                func_L00_0026CA10((&m->pos),&predicted,color,fade,particle_scale,life,1,-1,-1);
+                PartType15Spawn((&m->pos),&predicted,color,fade,particle_scale,life,1,-1,-1);
             }
         }
         }
@@ -2674,7 +2674,7 @@ void func_L00_002B30C8(unsigned char *o) {
         {
             int low = scale_ticks(20);
             int high = scale_ticks(60);
-            func_L00_0026DA50(&b, &c, 0x4F007FFF, 0x1FFFFFFF,
+            PartType21Spawn(&b, &c, 0x4F007FFF, 0x1FFFFFFF,
                          rand_range(low, high), 1, 10000.0f);
         }
     }

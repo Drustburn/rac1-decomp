@@ -24,6 +24,6 @@ void func_L07_002664F0(void) {
     if (D_0015EE84 == 7 && D_L07_0016C960.state == 4 &&
         D_L07_0016C960.moby != 0 &&
         D_L07_0016C960.moby->class_id == 0x214) {
-        AddDrawCallback(func_00233AB8, D_L07_0016C960.moby);
+        AddDrawCallback(DrawEnvMappedObject, D_L07_0016C960.moby);
     }
 }

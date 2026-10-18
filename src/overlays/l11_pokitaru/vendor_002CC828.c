@@ -18,7 +18,7 @@ extern unsigned char D_0013D5EB[];
 extern char D_0013E633[];
 
 /* Per-frame update of a pickup moby: waits for the player to come near, then grants the item. */
-void func_L11_002CC828(char *moby) {
+void PickupUpdate(char *moby) {
     switch ((unsigned char)moby[0x20]) {
     case 0:
         if (gHaveHeliPack[4] != 0) {
@@ -49,7 +49,7 @@ extern float func_L00_0025CE58(float *p, float a, float *v, float b, float c, fl
 extern float D_0015EE70 MACRO_ADDR;
 
 // Update for a moby that spawns a child copy once, then eases along a path and changes state.
-void func_L11_002CC9D0(char *moby) {
+void Moby65Update(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int state = (unsigned char)moby[0x20];
     switch (state) {
@@ -121,7 +121,7 @@ extern float D_0015EE64_2D18D0 __asm__("D_0015EE64") MACRO_ADDR;
 /* Update function of moby class 90 (bob): calls func_L05_003188A8, then a switch on the state byte at +0x20
  * (states 0, 1 and 2). Then, when the byte at +0x53 is zero, updates the countdowns at data + 0x184 and 0x188
  * and the vector at data + 0x170 from the moby's distance (8.0) and heading to the block at D_0013E633 + 0xE9D. */
-void func_L11_002D18D0(char *m) {
+void Moby90Update(char *m) {
     char *d = *(char **)(m + 0x78);
     func_L05_003188A8_2D18D0(m);
     switch (*(unsigned char *)(m + 0x20)) {
@@ -227,7 +227,7 @@ extern void func_L11_002D2500(void *);
 extern void func_L11_002D2670(void *);
 extern void func_L11_002D3970(void *);
 
-void func_L11_002D2168(unsigned char *moby) {
+void Moby114Update(unsigned char *moby) {
     func_L02_002E2110(moby);
     if (moby[0x31] && FastVecDist(moby + 0x10, D_L11_00167840) < 38.0f) {
         func_L00_0025B178(moby);
@@ -235,8 +235,8 @@ void func_L11_002D2168(unsigned char *moby) {
     }
     func_L11_002D21F0(moby);
     func_L11_002D2500(moby);
-    func_L11_002D2670(moby);
-    func_L11_002D3970(moby);
+    PokitaruGuideUpdate(moby);
+    GuardHeadUpdate(moby);
 }
 /* NON_MATCHING func_L11_002D21F0 -- src/overlays/l11_pokitaru/vendor_002CC828.c
  * Best so far: BYTES 13/780 (98.3% of the bytes match), checked 2026-10-09.
@@ -324,7 +324,7 @@ void func_L11_002D21F0(char *m) {
         char *o = (char *)(D_L11_00160058_d + (d->rail[k] << 8));
         func_L00_00261568_c(m, o, &D_L11_00161470, &D_L11_00161480, m + 0x10, m + 0x40);
         if (func_L11_0030B850((unsigned char *)o) && boss->animation != 5) {
-            func_00213DE0(m, 5, 0, scale_ticks(0x14));
+            MobyBlendAnimation(m, 5, 0, scale_ticks(0x14));
         }
         break;
     }
@@ -349,7 +349,7 @@ void func_L11_002D2500(void *mp) {
     float B[4];
     qcopy(A, moby + 0x10);
     qcopy(B, d + 0x130);
-    func_L00_00259868((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
+    MoveMobyWithCollision((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
     if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(d + 0x15C) == 3)) {
         func_L00_00262DF0(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10, moby + 0x10);
         switch (*(int *)(d + 0x158)) {
@@ -422,7 +422,7 @@ extern float D_L11_001614A0 SDATA(D_L11_001614A0);
 extern Shared_2D2670 D_L11_0016D2F0;
 
 /* State machine of the Pokitaru guide moby: waits for the hero, walks between stations along cuboids, opens the helper mobys and hands out the reward. */
-void func_L11_002D2670(void *mp) {
+void PokitaruGuideUpdate(void *mp) {
     Moby *moby = mp;
     Data_2D2670 *d = (Data_2D2670 *)moby->pvars;
     float v[4];
@@ -669,7 +669,7 @@ void func_L11_002D3248(struct Moby *moby, unsigned char state) {
     case 12:
     case 14:
         if (moby->prev_seq != 0)
-            func_00213DE0(moby, 0, 0, scale_ticks(0x14));
+            MobyBlendAnimation(moby, 0, 0, scale_ticks(0x14));
         if (moby->state == 14)
             *(float *)(d + 0x2C) = 10.0f;
         clear_u64_value(d + 0x130);
@@ -678,23 +678,23 @@ void func_L11_002D3248(struct Moby *moby, unsigned char state) {
         break;
     case 4:
         if (moby->prev_seq != 2)
-            func_00213DE0(moby, 2, 0, scale_ticks(0x14));
+            MobyBlendAnimation(moby, 2, 0, scale_ticks(0x14));
         *(float *)(d + 0x154) = (*(float *)&D_L11_00161460) * D_0015EE6C;
         break;
     case 5:
     case 6:
         if (moby->prev_seq != 3)
-            func_00213DE0(moby, 3, 0, scale_ticks(0x14));
+            MobyBlendAnimation(moby, 3, 0, scale_ticks(0x14));
         *(float *)(d + 0x154) = (*(float *)&D_L11_00161464) * D_0015EE6C;
         break;
     case 7:
         if (moby->prev_seq != 4)
-            func_00213DE0(moby, 4, 0, scale_ticks(0x14));
+            MobyBlendAnimation(moby, 4, 0, scale_ticks(0x14));
         clear_u64_value(d + 0x130);
         break;
     case 8:
         if (moby->prev_seq != 3)
-            func_00213DE0(moby, 3, 0, scale_ticks(0x14));
+            MobyBlendAnimation(moby, 3, 0, scale_ticks(0x14));
         {
             int *tbl = (int *)(d + 0xF0);
             unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
@@ -712,12 +712,12 @@ void func_L11_002D3248(struct Moby *moby, unsigned char state) {
     case 9:
     case 16:
         if (moby->prev_seq != 0)
-            func_00213DE0(moby, 0, 0, scale_ticks(0x14));
+            MobyBlendAnimation(moby, 0, 0, scale_ticks(0x14));
         clear_u64_value(d + 0x130);
         break;
     case 10:
         if (moby->prev_seq != 3)
-            func_00213DE0(moby, 3, 0, scale_ticks(0x14));
+            MobyBlendAnimation(moby, 3, 0, scale_ticks(0x14));
         {
             int *tbl = (int *)(d + 0xF0);
             unsigned int idx = 0U < *(unsigned int *)(d + 0x158);
@@ -823,7 +823,7 @@ extern int func_L00_001EFFF0(void *, void *, int, void *, int);
 typedef int u128 __attribute__((mode(TI)));
 
 /* Tests whether a moby can drop onto the ground, writing the landing point. */
-int func_L11_002D37A8(char *m, float *out) {
+int CanDropToGround(char *m, float *out) {
     char *s = *(char **)(m + 0x78);
     int *p = (int *)(s + 0xF8);
     int i;
@@ -962,7 +962,7 @@ extern unsigned char D_0013D605_2F21B0[] __asm__("D_0013D605");
 extern unsigned char D_0013D355_2F21B0[] __asm__("D_0013D355");
 
 /* Pokitaru vendor NPC update: spawn, talk and reward states with the visit timer, aims at the player and sets the body and head poses. */
-void func_L11_002F21B0(char *m)
+void PokitaruVendorUpdate(char *m)
 {
     char *d;
     char *p;
@@ -986,7 +986,7 @@ void func_L11_002F21B0(char *m)
     case 0:
         *(unsigned char *)(m + 0x20) = 1;
         if (*(unsigned char *)(m + 0x53) != 1)
-            func_00213DE0(m, 1, 0, scale_ticks(0x14));
+            MobyBlendAnimation(m, 1, 0, scale_ticks(0x14));
         if (D_0013D605_2F21B0[0xE] != 0) {
             DeleteMoby(m);
             return;
@@ -1117,7 +1117,7 @@ extern int func_001F49B0(void (*)(char *), char *);
 
 /* L11 twin of FUN_L01_00308bd8: a three-part switch moby that, once the hero stands on it in mission state 0xB and presses the button, swings its parts open and moves the linked moby (or its fallback) along.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l11/gameplay/entities/002cb668.c, FUN_L11_002f2518. */
-void func_L11_002F3888(struct Moby *moby) {
+void Moby318Update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
 
     switch (moby->state) {
@@ -1150,7 +1150,7 @@ void func_L11_002F3888(struct Moby *moby) {
                 *(int *)(slots[j] + 0x94) = 0;
             }
         }
-        func_L01_0030A6A8(moby);
+        PlaceChildMobys(moby);
         break;
     }
     case 1: {
@@ -1181,12 +1181,12 @@ void func_L11_002F3888(struct Moby *moby) {
     case 2: {
         int r = func_L00_002347B8();
         if (*(float *)(data + 0x20) < 1.0f) {
-            func_00214D88((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
+            ApproachWithVelocity((float *)(data + 0x20), (float *)(data + 0x28), 1.0f,
                                             (*(float *)&D_L11_001619A0) * D_0015EE70,
                                             (*(float *)&D_L11_001619A4) * D_0015EE70,
                                             (*(float *)&D_L11_001619A8) * D_0015EE6C);
         } else if (*(float *)(data + 0x24) < 1.0f) {
-            func_00214D88((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
+            ApproachWithVelocity((float *)(data + 0x24), (float *)(data + 0x2C), 1.0f,
                                             (*(float *)&D_L11_001619A0) * D_0015EE70,
                                             (*(float *)&D_L11_001619A4) * D_0015EE70,
                                             (*(float *)&D_L11_001619A8) * D_0015EE6C);
@@ -1198,12 +1198,12 @@ void func_L11_002F3888(struct Moby *moby) {
                 moby->state = 4;
             }
         }
-        func_L01_0030A6A8(moby);
+        PlaceChildMobys(moby);
         break;
     }
     case 3:
         if (*(float *)(data + 0x3C) != 0.0f) {
-            AddDrawCallback(func_L11_002F40C8, moby);
+            AddDrawCallback(DrawShimmeringRing, moby);
             func_00214D28_F3888((float *)(data + 0x3C), 0.0f, D_0015EE6C * 4.0f);
         } else {
             char *t = D_L11_00160058 + (*(int *)data << 8);
@@ -1218,7 +1218,7 @@ void func_L11_002F3888(struct Moby *moby) {
             func_L00_00217718(v, t + 0x40, 0, 1);
             D_001414F5 = 1;
             if (*(int *)(data + 0x30) != -1 && *(int *)(data + 0x34) != -1) {
-                func_L00_002664B0(*(int *)(data + 0x30), *(int *)(data + 0x34));
+                MusicRequestTrack(*(int *)(data + 0x30), *(int *)(data + 0x34));
             }
             func_L11_002F43B0(t);
             *(unsigned char *)(t + 0x20) = 4;
@@ -1234,29 +1234,29 @@ void func_L11_002F3888(struct Moby *moby) {
             *(float *)(data + 0x28) = 0.0f;
             *(float *)(data + 0x2C) = 0.0f;
             *(float *)(data + 0x3C) = 1.95f;
-            func_L01_0030A6A8(moby);
+            PlaceChildMobys(moby);
         }
         break;
     case 4:
         if (D_0013F4D8 < 138.0f)
             D_0013D4E5 = 1;
         if (*(float *)(data + 0x3C) < 1.95f) {
-            AddDrawCallback(func_L11_002F40C8, moby);
+            AddDrawCallback(DrawShimmeringRing, moby);
             func_00214D28_F3888((float *)(data + 0x3C), 1.95f, D_0015EE6C * 4.0f);
         } else if (0.0f < *(float *)(data + 0x24)) {
-            func_00214D88((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
+            ApproachWithVelocity((float *)(data + 0x24), (float *)(data + 0x28), 0.0f,
                                             (*(float *)&D_L11_001619A0) * D_0015EE70,
                                             (*(float *)&D_L11_001619A4) * D_0015EE70,
                                             (*(float *)&D_L11_001619A8) * D_0015EE6C);
         } else if (0.0f < *(float *)(data + 0x20)) {
-            func_00214D88((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
+            ApproachWithVelocity((float *)(data + 0x20), (float *)(data + 0x2C), 0.0f,
                                             (*(float *)&D_L11_001619A0) * D_0015EE70,
                                             (*(float *)&D_L11_001619A4) * D_0015EE70,
                                             (*(float *)&D_L11_001619A8) * D_0015EE6C);
         } else {
             moby->state = 1;
         }
-        func_L01_0030A6A8(moby);
+        PlaceChildMobys(moby);
         break;
     }
 }
@@ -1298,7 +1298,7 @@ extern void func_L00_001FD1D8(void *, void *, int);
 
 /* Draws the moby's shimmering ring as 32 four-vertex strips around its radius, thicker as the ring
  * shrinks below 1.15, and flags when it gets below 0.65. */
-void func_L11_002F40C8(char *moby) {
+void DrawShimmeringRing(char *moby) {
     Quad_2f40c8 q;
     float m[12];
     float pos[4];
@@ -1389,7 +1389,7 @@ typedef struct {
 } Globals;
 extern Globals D_0013F450;
 
-void func_L11_002F46C0(unsigned char *moby) {
+void Moby361Update(unsigned char *moby) {
     char *state = *(char **)(moby + 0x78);
     switch (moby[0x20]) {
     case 0:
@@ -1410,7 +1410,7 @@ extern void func_00215C00_30A748(void *, float, float, float) __asm__("func_0021
 extern void func_00213DE0(void *, int, int, int);
 extern void func_L00_00251E30(void *);
 /* Spawns an effect moby (class 0x40A) attached to a target and positioned from a source. */
-unsigned char *func_L11_0030A748(char *src, char *pos, char *target, char *vec, int arg, float scale) {
+unsigned char *SpawnAttachedEffect(char *src, char *pos, char *target, char *vec, int arg, float scale) {
     unsigned char *moby = func_0020D348_30A748(0x40A);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -1435,7 +1435,7 @@ unsigned char *func_L11_0030A748(char *src, char *pos, char *target, char *vec, 
         *(int *)(data + 0x34) = 0;
         func_00215C00_30A748(data, scale, *(float *)(vec + 8), -*(float *)(vec + 4));
         if (moby[0x53] != 1) {
-            func_00213DE0(moby, 1, 0, 10);
+            MobyBlendAnimation(moby, 1, 0, 10);
         }
         FastVecAdd(moby + 0x10, moby + 0x10, data);
         if (*(char **)(data + 0x24) != 0) {
@@ -1512,7 +1512,7 @@ extern float D_L11_00161E7C_30AE90 SDATA(D_L11_00161E7C);
 extern float D_L11_00161E80_30AE90 SDATA(D_L11_00161E80);
 
 /* Pokitaru boat update: follows its path points, turns toward the next one and swings its rotor. */
-void func_L11_0030AE90(Moby *m) {
+void PokitaruBoatUpdate(Moby *m) {
     V_30AE90 A;
     V_30AE90 B;
     V_30AE90 C;
@@ -1688,7 +1688,7 @@ int func_L11_0030B850(unsigned char *moby) {
     current[0x20] = 2;
     if (((unsigned char *)current)[0x53]) {
         int value = scale_ticks(0x14);
-        func_00213DE0(current, 0, 0, value);
+        MobyBlendAnimation(current, 0, 0, value);
     }
     return 1;
 }
@@ -1761,7 +1761,7 @@ void func_L11_0030B8D0(struct Moby *moby) {
             vel[2] = 0.0f;
             vel[2] = random_float_between(-2.0f, 2.0f) * D_0015EE6C;
             life = random_float_between(6300.0f, 14700.0f);
-            func_L00_0026FF20(pos, vel, life, 222.5f);
+            PartType34Spawn(pos, vel, life, 222.5f);
         }
     }
 }
@@ -1831,7 +1831,7 @@ extern float D_L11_00161F84 SDATA(D_L11_00161F84);
 extern float D_L11_00161F88 SDATA(D_L11_00161F88);
 
 /* UpdateMoby_1156 (names.tsv role): cutscene controller. State 0 spawns its helper mobys (classes 0x480-0x483), state 1 waits for a moby, state 2 fades in and starts the camera, state 3 runs the chained eases and the camera lerp, state 4 fades out. */
-void func_L11_0030DBF8(Moby *moby) {
+void CutsceneControllerUpdate(Moby *moby) {
     Data_30DBF8 *data = (void *)moby->pvars;
     float a[4];
     float b[4];
@@ -1917,7 +1917,7 @@ void func_L11_0030DBF8(Moby *moby) {
         }
         break;
     case 2:
-        func_00214D28(&data->fC, 1.0f, D_0015EE6C * 4.0f);
+        ApproachValue(&data->fC, 1.0f, D_0015EE6C * 4.0f);
         D_L11_0015F4FC = data->fC;
         if (D_L11_0015F4FC >= 1.0f) {
             moby->state = 3;
@@ -1981,9 +1981,9 @@ void func_L11_0030DBF8(Moby *moby) {
             moby->command = 1;
         }
         if (D_L11_00161F68 < 1.0f && moby->command == 0) {
-            func_00214D28(&data->fC, 0.0f, D_0015EE6C * 4.0f);
+            ApproachValue(&data->fC, 0.0f, D_0015EE6C * 4.0f);
         } else {
-            func_00214D28(&data->fC, 1.0f, D_0015EE6C * 4.0f);
+            ApproachValue(&data->fC, 1.0f, D_0015EE6C * 4.0f);
         }
         D_L11_0015F4FC = data->fC;
         func_00214D88_f(&D_L11_00161F6C, &D_L11_00161F88, 1.0f, D_0015EE70 * 0.2f, D_0015EE70 * 0.2f, D_0015EE6C * 0.2f);
@@ -2006,7 +2006,7 @@ void func_L11_0030DBF8(Moby *moby) {
         }
         break;
     case 4:
-        func_00214D28(&data->fC, 0.0f, D_0015EE6C * 4.0f);
+        ApproachValue(&data->fC, 0.0f, D_0015EE6C * 4.0f);
         D_L11_0015F4FC = data->fC;
         if (D_L11_0015F4FC == 0.0f) {
             moby->state = 5;
@@ -2180,7 +2180,7 @@ typedef struct { char *slot[4][6]; int w60; int w64; int w68; float f6C; float f
 #define D_L11_0016016C_i (*(int*)&D_L11_0016016C)
 
 // Update for moby class 1157: spawns six child mobies per row, then eases a pair of vectors between two linked objects.
-void func_L11_0030EC70(char *m) {
+void Moby1157Update(char *m) {
     EcData *d = *(EcData **)(m + 0x78);
     char *o;
     char *p;
@@ -2238,7 +2238,7 @@ void func_L11_0030EC70(char *m) {
         f21 = d->f78;
         r = scale_ticks(0x14);
         f20 = 1.0f;
-        func_00214D28((float *)&d->f78, 1.0f, 1.0f / (float)r);
+        ApproachValue((float *)&d->f78, 1.0f, 1.0f / (float)r);
         f0 = FastAbsF(d->f78);
         f20 = f20 - f0;
         *(float *)&D_L11_0015F4FC = f20;
@@ -2285,7 +2285,7 @@ void func_L11_0030EC70(char *m) {
         f21 = d->f78;
         r = scale_ticks(0x14);
         f20 = 1.0f;
-        func_00214D28((float *)&d->f78, 1.0f, 1.0f / (float)r);
+        ApproachValue((float *)&d->f78, 1.0f, 1.0f / (float)r);
         f0 = FastAbsF(d->f78);
         f20 = f20 - f0;
         *(float *)&D_L11_0015F4FC = f20;
@@ -2304,7 +2304,7 @@ void func_L11_0030EC70(char *m) {
     default:
         break;
     }
-    func_L11_0030F188((struct Moby *)m);
+    LayoutChildMobyGrid((struct Moby *)m);
 }
 
 #undef func_00214D88_f
@@ -2318,7 +2318,7 @@ extern short D_L11_00161FD8;
 
 /* Lays out the 4x6 grid of child mobys around this one, fanned by the progress value at pvars+0x6C.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l11/gameplay/vendor/0030c788.c, FUN_L11_0030dd18. */
-void func_L11_0030F188(struct Moby *m) {
+void LayoutChildMobyGrid(struct Moby *m) {
     Vec4f v0;
     Vec4f v1;
     Vec4f v2;
@@ -2483,7 +2483,7 @@ extern void func_L11_0030FBF8(int);
 #define D_L11_001DA740_pv D_L11_001DAA00
 #define D_L11_001808C0_pv D_L11_00180940
 
-void func_L11_0030F4F8(struct Moby_pv *m) {
+void Moby1158Update(struct Moby_pv *m) {
     int *pv = (int *)m->pvars;
     int i;
     int n;
@@ -2559,7 +2559,7 @@ void func_L11_0030F4F8(struct Moby_pv *m) {
     case 1:
         n = pv[1];
         D_L11_00161F64_pv = 0;
-        func_L11_0030FBF8(n);
+        BuildGridNeighbors(n);
         m->state = 2;
         break;
     case 3:
@@ -2569,14 +2569,14 @@ void func_L11_0030F4F8(struct Moby_pv *m) {
         }
         m->command = 1;
         if (pv[2] != 0) {
-            func_00214D88(&m->pz, (float *)pv, 132.36f, D_0015EE70 * 4.0f, D_0015EE70 * 4.0f, D_0015EE6C * 4.0f);
+            ApproachWithVelocity(&m->pz, (float *)pv, 132.36f, D_0015EE70 * 4.0f, D_0015EE70 * 4.0f, D_0015EE6C * 4.0f);
             func_L11_0030FB58(m);
         }
         if (random_integer_below(200) == 0) {
             float x = D_L11_001DA880_pv[pv[1]].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
             Ent_pv *t = &D_L11_001DA880_pv[pv[1]];
-            func_L00_002A5158(t, 1, 1, x, t->y + y, 1.0f, -0.03f);
+            RippleDisturb(t, 1, 1, x, t->y + y, 1.0f, -0.03f);
         }
         break;
     case 2:
@@ -2586,14 +2586,14 @@ void func_L11_0030F4F8(struct Moby_pv *m) {
         }
         m->command = 2;
         if (pv[2] != 0) {
-            func_00214D88(&m->pz, (float *)pv, 137.0f, D_0015EE70 * 4.0f, D_0015EE70 * 4.0f, D_0015EE6C * 4.0f);
+            ApproachWithVelocity(&m->pz, (float *)pv, 137.0f, D_0015EE70 * 4.0f, D_0015EE70 * 4.0f, D_0015EE6C * 4.0f);
             func_L11_0030FB58(m);
         }
         if (random_integer_below(200) == 0) {
             float x = D_L11_001DA880_pv[pv[1]].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
             Ent_pv *t = &D_L11_001DA880_pv[pv[1]];
-            func_L00_002A5158(t, 1, 1, x, t->y + y, 1.0f, -0.03f);
+            RippleDisturb(t, 1, 1, x, t->y + y, 1.0f, -0.03f);
         }
         break;
     }
@@ -2628,7 +2628,7 @@ typedef struct {
 extern Ent_0030FBF8 D_L11_001DAB40_e[] __asm__("D_L11_001DAB40");
 
 /* clears entry arg's eight neighbour links, then records which of the 20 entries sit one grid step away */
-void func_L11_0030FBF8(int arg) {
+void BuildGridNeighbors(int arg) {
     int i;
     Ent_0030FBF8 *c = &D_L11_001DAB40_e[arg];
     c->n[0] = 0xFF;
@@ -2681,7 +2681,7 @@ extern unsigned char *D_L11_00160058_t __asm__("D_L11_00160058") MACRO_ADDR;
 extern char D_0013D355_t[] __asm__("D_0013D355");
 typedef struct { char pad[0x57]; char f57; } Rec57;
 
-void func_L11_0030FE40(unsigned char *m) {
+void Moby1159Update(unsigned char *m) {
     char *d = *(char **)(m + 0x78);
     float v[4] __attribute__((aligned(16)));
     unsigned char *c;
@@ -2757,7 +2757,7 @@ extern float func_001FA748_10058(float, float) __asm__("func_001FA748");
 extern void func_L00_002617B0_10058(void *, void *, void *, void *) __asm__("func_L00_002617B0");
 
 /* Adapted from Lombyte (MIT) for PAL: src/overlays/l11/gameplay/vendor/0030c788.c, FUN_L11_0030eb90. */
-void func_L11_00310058(struct Moby *m) {
+void Moby1178Update(struct Moby *m) {
     Vec4f v;
     Vec4f rot;
     float matrix[16] __attribute__((aligned(16)));
@@ -2803,7 +2803,7 @@ extern unsigned char D_0013D4EB NOT_SDA;
 extern short D_L11_0015F6B0;
 
 // Update for a moby that waits, then animates toward its target and changes state.
-void func_L11_00310770(char *moby) {
+void Moby1180Update(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int state = (unsigned char)moby[0x20];
     switch (state) {
@@ -3025,7 +3025,7 @@ void func_L11_00310BF0(struct Moby *m) {
     if (1003.0f < m->pos.z) {
         m->pos.z = 1003.0f;
     }
-    func_L00_0025B040(m, 0.5f);
+    RecordMobyShadow(m, 0.5f);
 }
 char *func_L11_00311260(char *owner) {
     char *moby = CreateMoby(0x4C3);
@@ -3041,7 +3041,7 @@ char *func_L11_00311260(char *owner) {
         qcopy(moby + 0x40, owner + 0x40);
         *(char **)(data + 0x70) = owner;
         if ((unsigned char)moby[0x53] != 2) {
-            func_00213DE0(moby, 2, 0xD, 0);
+            MobyBlendAnimation(moby, 2, 0xD, 0);
         }
         func_L00_00251E30(moby);
         func_L00_0025E210(moby);
@@ -3113,7 +3113,7 @@ extern void func_L11_00311318(void *, void *, void *);
 extern float func_0020D830(void *);
 
 // Per-tick update of moby class 1219: state machine over states 0 to 4.
-void func_L11_003114F0(unsigned char *moby)
+void Moby1219Update(unsigned char *moby)
 {
     char *data = *(char **)(moby + 0x78);
     char *u = data + 0x20;
@@ -3126,7 +3126,7 @@ void func_L11_003114F0(unsigned char *moby)
     switch (moby[0x20]) {
     case 0:
         if (moby[0x53] != 1) {
-            func_00213DE0(moby, 1, 0, 0xF);
+            MobyBlendAnimation(moby, 1, 0, 0xF);
         }
         moby[0x20] = 1;
         break;
@@ -3139,14 +3139,14 @@ void func_L11_003114F0(unsigned char *moby)
     case 2:
         func_L11_00311318(moby, data, u);
         if ((moby[0x70] & 2) && moby[0x53] != 1) {
-            func_00213DE0(moby, 1, 0, 0xA);
+            MobyBlendAnimation(moby, 1, 0, 0xA);
         }
         break;
     case 3:
         if (moby[0x23] != 0) {
             moby[0x23]--;
         }
-        if (func_0020D830(moby) > 13.5f) {
+        if (MobyGetFrameValue(moby) > 13.5f) {
             moby[0x20] = 4;
         }
         break;
@@ -3217,7 +3217,7 @@ extern float D_L11_00162058_311648 SDATA(D_L11_00162058);
 extern float D_L11_0016205C_311648 SDATA(D_L11_0016205C);
 
 /* Pokitaru psytcopus (class 1231) update: a state machine on moby->state. */
-void func_L11_00311648(Moby *moby)
+void PsytcopusUpdate(Moby *moby)
 {
     PsyData_311648 *data = (PsyData_311648 *)moby->pvars;
     Moby *target;
@@ -3416,7 +3416,7 @@ extern float func_001F9B88_311B60(float) __asm__("func_001F9B88");
 
 /* Pokitaru psytcopus movement (called from func_L11_00311648): follows its path, picks a jump or a hop from the
  * path helper's result and keeps the effect attached to it, then checks whether the hero is out of reach. */
-void func_L11_00311B60(Moby *moby) {
+void PsytcopusMove(Moby *moby) {
     Data_311B60 *data = (struct Data_311B60 *)moby->pvars;
     Vec4 v;
     int a;

@@ -257,7 +257,7 @@ collected:
     }
 frame_tail:
     speed = D_0015EE6C;
-    func_L00_00263B78(0.7f, speed * 1.2217305f, moby, vars + 6, vars + 5);
+    MobyBobZ(0.7f, speed * 1.2217305f, moby, vars + 6, vars + 5);
     if (*(float *)(moby + 0x10) < 20.0f) *(float *)(moby + 0x10) = 20.0f;
     if (1003.0f < *(float *)(moby + 0x10)) *(float *)(moby + 0x10) = 1003.0f;
     if (*(float *)(moby + 0x14) < 20.0f) *(float *)(moby + 0x14) = 20.0f;
@@ -296,9 +296,9 @@ unsigned char *func_L13_002E7E90(char *src, char *pos, char *target, char *vec, 
         *(float *)(data + 0x2C) = scale;
         *(int *)(data + 0x30) = 0;
         *(int *)(data + 0x34) = 0;
-        func_00215C00(data, scale, *(float *)(vec + 8), -*(float *)(vec + 4));
+        BuildSphericalOffset(data, scale, *(float *)(vec + 8), -*(float *)(vec + 4));
         if (moby[0x53] != 1) {
-            func_00213DE0(moby, 1, 0, 10);
+            MobyBlendAnimation(moby, 1, 0, 10);
         }
         FastVecAdd(moby + 0x10, moby + 0x10, data);
         if (*(char **)(data + 0x24) != 0) {
@@ -307,7 +307,7 @@ unsigned char *func_L13_002E7E90(char *src, char *pos, char *target, char *vec, 
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) *
                                   (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
         func_L00_00251E30(moby);
-        func_L00_0026E940((char *)moby, 0x60808080, arg, 0, 500000.0f);
+        PartType26Spawn((char *)moby, 0x60808080, arg, 0, 500000.0f);
     }
     return moby;
 }

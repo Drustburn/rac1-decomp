@@ -144,7 +144,7 @@ s32 func_L17_0020E320(s32 arg) {
     if (arg == 0) {
         return 1;
     }
-    func_L00_00207220();
+    HeroClearSoundSlots();
     flag = 0;
     if (tbl->i30 & 1) {
         qcopy(&v, &tbl->v10);
@@ -295,8 +295,8 @@ void func_L17_0020E8F8(void) {
     }
     p = (float *)(D_0013E633 + 0x103D);
     g = (char *)p - 0x220;
-    func_00214D28(p, *(float *)(g + 0x228), D_0015EE60 * 0.02f);
-    func_00214D28(p + 1, *(float *)(g + 0x22C), D_0015EE60 * 0.02f);
+    ApproachValue(p, *(float *)(g + 0x228), D_0015EE60 * 0.02f);
+    ApproachValue(p + 1, *(float *)(g + 0x22C), D_0015EE60 * 0.02f);
     func_L00_0025C918(p + 5, p + 6, *(float *)(g + 0x230),
                       D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.0f);
 }

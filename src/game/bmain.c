@@ -75,7 +75,7 @@ void StartLevel(int level) {
         if (*(int *)(ld + 0xDC) < 3 && *(int *)(ld + 0xE4) < 0) {
             break;
         }
-        func_00209E68();
+        MemCard_UpdateState();
     }
     {
         char *g = D_001941C0;

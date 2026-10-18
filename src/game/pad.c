@@ -205,7 +205,7 @@ extern void func_002181F0(void *, void *, int);
    long; state 1 reads the buttons into func_002181F0 and counts +0x18C
    down; state 2 clears the input and sets +0x18C to 2. The two copy
    loops per block are as retail has them (0..n, then n..3). */
-void func_00217F68(void *arg0) {
+void Pad_UpdatePort(void *arg0) {
     PadState *p = arg0;
     unsigned char buf[0x40];
     int n, i, s;
@@ -252,7 +252,7 @@ void func_00217F68(void *arg0) {
             break;
         case 1:
             n = func_00124D18(p->socket, buf);
-            func_002181F0(p, buf, n);
+            Pad_ProcessReport(p, buf, n);
             if (p->unk18C != 0) {
                 p->unk18C--;
             }
@@ -495,5 +495,5 @@ extern void func_00217F68(void *);
 
 /* UpdatePad(void) */
 void UpdatePad(void) {
-    func_00217F68(D_0013CA40);
+    Pad_UpdatePort(D_0013CA40);
 }

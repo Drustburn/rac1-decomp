@@ -178,7 +178,7 @@ extern void func_00216270(void);
    The two -1 stores are one chained assignment written last: that
    shares one register between the word and the byte store, and leaves
    the other stores in source order, as retail has them. */
-void func_002161E0(void) {
+void Music_Reset(void) {
     char *s = (char *)D_001517D0;
 
     *(char *)(s + 0x30) = 0x20;
@@ -203,7 +203,7 @@ extern void func_0012F068(void *);
 extern void func_002177F0(int);
 
 void register_audio_stream_callback(void) {
-    func_0012F068(func_002177F0);
+    func_0012F068(FinishAudioStreamRead);
 }
 
 /* The sound tables in the WAD table of contents at D_00137C80, as far as
@@ -270,7 +270,7 @@ void func_00216290(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x56) = arg2;
     *(short *)(s + 0x60) = 0;
     func_0012ED48(h, 0, 0, 0, arg2, 0, 2, 0, 0x21,
-                  func_00217860, (long)(unsigned int)(s + 0x50));
+                  MusicStartCallback, (long)(unsigned int)(s + 0x50));
 }
 
 void func_00216368(int arg0, int arg1, int arg2) {
@@ -296,7 +296,7 @@ void func_00216368(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x56) = arg2;
     *(short *)(s + 0x60) = 0;
     func_0012ED48(h, 0, 0, 0, arg2, 0, 2, 0, 0x21,
-                  func_00217860, (long)(unsigned int)(s + 0x50));
+                  MusicStartCallback, (long)(unsigned int)(s + 0x50));
 }
 
 void func_00216450(int arg0, int arg1, int arg2) {
@@ -322,7 +322,7 @@ void func_00216450(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x56) = arg2;
     *(short *)(s + 0x60) = 0;
     func_0012ED48(h, 0, 0, 0, arg2, 0, 2, 0, 0x21,
-                  func_00217860, (long)(unsigned int)(s + 0x50));
+                  MusicStartCallback, (long)(unsigned int)(s + 0x50));
 }
 
 /* A byte flag; declared int-sized so MACRO_ADDR keeps it off $gp (-G2). */
@@ -352,7 +352,7 @@ void func_00216528(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x56) = arg2;
     *(short *)(s + 0x60) = 0;
     func_0012ED48(*p, 0, 0, 0, *(unsigned char *)&D_0015EF1C_w ? arg2 : 0,
-                  0, 2, 0, 0x21, func_00217860, (long)(unsigned int)D_00151820);
+                  0, 2, 0, 0x21, MusicStartCallback, (long)(unsigned int)D_00151820);
 }
 
 void func_00216620(int arg0, int arg1, int arg2) {
@@ -378,7 +378,7 @@ void func_00216620(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x56) = arg2;
     *(short *)(s + 0x60) = 0;
     func_0012ED48(h, 0, 0, 0, arg2, 0, 2, 0, 0x21,
-                  func_00217860, (long)(unsigned int)(s + 0x50));
+                  MusicStartCallback, (long)(unsigned int)(s + 0x50));
 }
 
 void func_002166F0(int arg0, int arg1, int arg2) {
@@ -404,7 +404,7 @@ void func_002166F0(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x56) = arg2;
     *(short *)(s + 0x60) = 0;
     func_0012ED48(h, 0, 0, 0, arg2, 0, 2, 0, 0x21,
-                  func_00217860, (long)(unsigned int)(s + 0x50));
+                  MusicStartCallback, (long)(unsigned int)(s + 0x50));
 }
 
 extern char D_0013A764[];
@@ -459,7 +459,7 @@ void music_start_track_by_id(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x56) = arg2;
     *(short *)(s + 0x60) = 0;
     func_0012ED48(handle, 0, 0, 0, arg2, 0, 2, 0, 0x21,
-                  func_00217860, (long)(unsigned int)(s + 0x50));
+                  MusicStartCallback, (long)(unsigned int)(s + 0x50));
 }
 
 extern short D_001517D0[];
@@ -505,7 +505,7 @@ void music_PreseekTrack(int arg0, int arg1, int arg2) {
     *(short *)(s + 0x3A) = arg2;
     *(short *)(s + 0x44) = 0;
     func_0012ED48(h, 0, 0, 0, arg2, 0, 1, 0, 0x21,
-                  func_002178C0, (long)(unsigned int)(s + 0x34));
+                  MusicPreseekCallback, (long)(unsigned int)(s + 0x34));
 }
 
 extern void func_002179C8(int, long);
@@ -793,7 +793,7 @@ void music_UpdateStream(MusicPlaying *p) {
         if (p->state != 2 && p->state != 3) {
             h = p->handle;
             p->handle = 0xFFFFFFFF;
-            func_0012EE10(h, func_00217A60, (long)(unsigned int)p);
+            func_0012EE10(h, MusicTimeRemainingCallback, (long)(unsigned int)p);
             func_0012E588(h, func_00217A08, (long)(unsigned int)p);
             return;
         }

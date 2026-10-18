@@ -23,7 +23,7 @@ extern int func_001F9850(int);
 extern float func_001F9878(float);
 
 /* Hero idle-fidget picker; returns 1 and writes the chosen index if one is picked. */
-int func_L00_002297E0(int *index) {
+int PickIdleFidget(int *index) {
     int choices[20];
     Vec4_r end;
     Vec4_r start;
@@ -111,12 +111,12 @@ void func_L00_00229B78(void) {
     b = D_0013E633 + 0xE1D;
     *(int *)(b + 0x2284) = 0;
     if (*(unsigned char *)(b + 0x12E2) != 0 && *(float *)&D_0015EE6C_229B78 * 0.5f < *(float *)(b + 0x164)) {
-        func_L00_00222B80(0x2F, 1);
+        HeroEnterMoveState(0x2F, 1);
         return;
     }
     func_L00_00211F80(0, 1.0f);
     if (*(int *)(D_0013A5E0_229B78 + 0x2600) & 0xA) {
-        func_L00_00222B80(4, 0);
+        HeroEnterMoveState(4, 0);
         func_L00_00232C10(0xD, 2, -2.0f);
         func_L00_00232E60(3, 0x12);
         return;
@@ -124,10 +124,10 @@ void func_L00_00229B78(void) {
     c = D_0013E633 + 0xE1D;
     if (0.3f < *(float *)(c + 0x229C) && *(int *)(c + 0x1C4) == 0) {
         if (*(unsigned char *)(c + 0x12E2) != 0 || *(unsigned char *)(c + 0x20A9) != 0) {
-            func_L00_00222B80(2, 1);
+            HeroEnterMoveState(2, 1);
             return;
         }
-        if (func_L00_00222B80(2, 0)) {
+        if (HeroEnterMoveState(2, 0)) {
             *(int *)(c + 0x2088) = 1;
             n = scale_ticks(8);
             if (scale_ticks(5) < *(int *)(c + 0x418)) n = scale_ticks(14);
@@ -138,14 +138,14 @@ void func_L00_00229B78(void) {
     }
     d = D_0013E633 + 0xE1D;
     if ((*(float *)&D_0015EE6C_229B78 * 3.0f < *(float *)(d + 0x168) && scale_ticks(3) < *(int *)(d + 0x418)) || *(int *)(d + 0x2084) == 0x10) {
-        if (func_L00_00222B80(3, 0)) {
+        if (HeroEnterMoveState(3, 0)) {
             func_L00_00232C10(5, 0, -1.0f);
             func_L00_002607A8(D_0013E633 + 0xF6D, *(float *)((char *)&D_0015EE64 + 8) * 5.0f);
         }
         return;
     }
     if (scale_ticks(12) < *(int *)(d + 0x418) || (*(int *)(d + 0xA98) & 2)) {
-        if (func_L00_00222B80(0, 0)) {
+        if (HeroEnterMoveState(0, 0)) {
             if (func_L00_00205618(0) == 0x54) {
                 n = func_L00_00205618(0);
                 func_L00_00232C10(n, 0, (float)scale_ticks(15));
@@ -174,18 +174,18 @@ int func_L00_00229E30(void) {
     if (*(int *)(g + 0x2084) == 0xE) {
         return 0;
     }
-    n = func_L00_00222520();
+    n = GetStickTilt();
     t = scale_ticks(5);
-    if ((*(int *)(D_0013A5E0 + 0x2600) & 0xA) != 0 && n > 0 && func_L00_00267C48(0x40, 0x1F000, t + n, n) != 0) {
+    if ((*(int *)(D_0013A5E0 + 0x2600) & 0xA) != 0 && n > 0 && PadComboWithin(0x40, 0x1F000, t + n, n) != 0) {
         m = 0xB;
 found:
-        func_L00_00222B80(m, 1);
+        HeroEnterMoveState(m, 1);
         return 1;
     }
     k = scale_ticks(9);
     p = (char *)D_0013E633 + 0xE1D;
     if (scale_ticks(6) < *(int *)(p + 0x198)) {
-        if (func_L00_00267BA8(0x40, k, 0) == 0) {
+        if (PadPressedWithin(0x40, k, 0) == 0) {
             return 0;
         }
         if (func_L00_0020DB30(3) == 2 && gHaveHeliPack != 0 && *(short *)(p + 0x22D8) == 0 &&
@@ -234,7 +234,7 @@ extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern float D_L00_00173F68;
 
 /* Test whether the player can reach the point in front of him. */
-int func_L00_0022A0E0(void) {
+int CanReachPointAhead(void) {
     char *g = (char *)D_0013E633 + 0xE1D;
     Vec4A a, b;
     float t, d;
@@ -273,7 +273,7 @@ int func_L00_0022A268(void) {
             return 0;
         }
         v = D_L00_00179BC0[i].v;
-        if (func_L00_00222B80(0, 0) == 0) return 0;
+        if (HeroEnterMoveState(0, 0) == 0) return 0;
         func_L00_00232C10(v, 0, (float)scale_ticks(11));
         if (*(int *)(p + 0xD08) != 0) *(int *)(p + 0xD14) = 1;
         *(int *)(p + 0x2294) = v;

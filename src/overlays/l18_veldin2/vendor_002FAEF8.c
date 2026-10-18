@@ -36,11 +36,11 @@ void func_L18_002FAEF8(void *moby) {
     f = f * 6.18318f;
     f = FastSin(f - 3.14159f);
     h = FastTweenColor(D_L18_001624E8, D_L18_001624EC, f * 0.5f + 0.5f);
-    func_0020DAF8(moby, 1, b);
+    MobyTransformScaledVertex(moby, 1, b);
     FastVecScale(e, c, *(float*)&D_L18_00162590);
     FastVecSub(a, d, e);
     func_L00_00264690(a, h, D_L18_001624E0, D_L18_001624E4);
-    func_0020DAF8(moby, 2, b);
+    MobyTransformScaledVertex(moby, 2, b);
     FastVecScale(e, c, *(float*)&D_L18_00162590);
     FastVecSub(a, d, e);
     func_L00_00264690(a, h, D_L18_001624E0_b, D_L18_001624E4_b);

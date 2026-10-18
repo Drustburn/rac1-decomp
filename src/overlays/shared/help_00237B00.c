@@ -14,11 +14,11 @@ void func_L05_00237B00(float *out, float *p, float step) {
     float v[2];
     v[0] = -*(float *)(g + 0x1D20);
     v[1] = *(float *)(g + 0x1D24);
-    func_00214D28(p + 2, v[0], step);
+    ApproachValue(p + 2, v[0], step);
     if (p[2] > 1.0f) p[2] = 1.0f;
     if (p[2] < -1.0f) p[2] = -1.0f;
     out[0] = p[2];
-    func_00214D28(p + 1, v[1], step);
+    ApproachValue(p + 1, v[1], step);
     if (p[1] > 1.0f) p[1] = 1.0f;
     if (p[1] < -1.0f) p[1] = -1.0f;
     out[1] = p[1];
@@ -377,10 +377,10 @@ void func_L05_0023E348(int i) {
                 *(int *)(*(char **)((char *)k + 0xD04) + 0x34) = 1;
             }
             if (*(void **)(s + 0x1090) != 0) {
-                func_00213DE0(*(void **)(s + 0x1090), 2, 0, 2);
+                MobyBlendAnimation(*(void **)(s + 0x1090), 2, 0, 2);
             }
             if (*(void **)(s + 0x1094) != 0 && i != 3) {
-                func_00213DE0(*(void **)(s + 0x1094), 2, 0, 2);
+                MobyBlendAnimation(*(void **)(s + 0x1094), 2, 0, 2);
             }
         }
         {
@@ -494,7 +494,7 @@ extern int func_L00_001F3958(void);
 extern void func_L05_0024D680(int, int);
 
 /* Decides whether the hero's current motion warrants the swing effect, running a probe when the conditions line up. */
-int func_L05_00251DB0(void) {
+int Hero_ShouldSwing(void) {
     char *g = (char *)D_0013E633 + 0xE1D;
     int ret;
     int k = *(int *)(g + 0x208C);
@@ -658,7 +658,7 @@ int func_L05_002523C8(void) {
             if (D_0013F450_h2523C8.on_slip_ground != 0) {
                 break;
             }
-            if (!func_L00_00267BA8(mask, scale_ticks(7), &out0)) {
+            if (!PadPressedWithin(mask, scale_ticks(7), &out0)) {
                 break;
             }
             m = (Moby *)D_0013F450_h2523C8.items[0].moby;
@@ -673,7 +673,7 @@ int func_L05_002523C8(void) {
             }
             if ((D_0013CA40_p2523C8.held & 0xA) || ((D_0013F450_h2523C8.state.current == 1 || D_0013F450_h2523C8.state.current == 0x1E) && D_0013F450_h2523C8.state_timer > scale_ticks(0x14))) {
                 if ((D_0013F450_h2523C8.state.current == 1 || D_0013F450_h2523C8.state.current == 0x1E) && D_0013F450_h2523C8.state_timer > scale_ticks(0x14)) {
-                    func_L00_00217DE0();
+                    LaunchGadgetMoby();
                     break;
                 }
                 func_L05_0024D680_2523C8(0x15, 1);
@@ -696,7 +696,7 @@ int func_L05_002523C8(void) {
                 if (D_0013F450_h2523C8.state.current == 0xB || D_0013F450_h2523C8.state.current == 0xE) {
                     t = scale_ticks(0x12);
                 }
-                if (!func_L00_00267BA8(mask, t, 0)) {
+                if (!PadPressedWithin(mask, t, 0)) {
                     break;
                 }
                 if ((D_0013F450_h2523C8.unk41E == 0 && D_0013F450_h2523C8.ground_distance > 0.1f) || (D_0013F450_h2523C8.unk41E != 0 && D_0013F450_h2523C8.ground_distance > 0.57f)
@@ -720,7 +720,7 @@ int func_L05_002523C8(void) {
                     if (D_0013F450_h2523C8.unkA9C != 0) {
                         break;
                     }
-                    if (D_0013F450_h2523C8.anim_frame >= (float)rec->f10 && (D_0013CA40_p2523C8.held & 0xA) && func_L00_00267BA8(mask, scale_ticks(0xF), 0)) {
+                    if (D_0013F450_h2523C8.anim_frame >= (float)rec->f10 && (D_0013CA40_p2523C8.held & 0xA) && PadPressedWithin(mask, scale_ticks(0xF), 0)) {
                         func_L05_0024D680_2523C8(0x15, 1);
                         break;
                     }
@@ -742,7 +742,7 @@ int func_L05_002523C8(void) {
             if (D_0013F450_h2523C8.on_slip_ground != 0) {
                 break;
             }
-            if (!func_L00_00267BA8(mask, t, 0)) {
+            if (!PadPressedWithin(mask, t, 0)) {
                 break;
             }
             if (D_0013CA40_p2523C8.held & 0xA) {
@@ -768,7 +768,7 @@ int func_L05_002523C8(void) {
             }
             if (D_0013F450_h2523C8.state.control_mode < 2U || D_0013F450_h2523C8.state.control_mode == 4 || D_0013F450_h2523C8.state.control_mode == 2 || D_0013F450_h2523C8.state.control_mode == 0xF
                 || D_0013F450_h2523C8.state.control_mode == 5 || D_0013F450_h2523C8.state.current == 0x1E) {
-                if (func_L00_00267BA8(mask, t, 0) || ((D_0013CA40_p2523C8.held & mask) && D_0013F450_h2523C8.items[0].unk20 > scale_ticks(0xF))) {
+                if (PadPressedWithin(mask, t, 0) || ((D_0013CA40_p2523C8.held & mask) && D_0013F450_h2523C8.items[0].unk20 > scale_ticks(0xF))) {
                     if (D_0013F450_h2523C8.unk99E != 0) {
                         if (D_0013F450_h2523C8.unk968 != 0) {
                             if (D_0013F450_h2523C8.unk998 < D_0013F450_h2523C8.unk984) {
@@ -796,7 +796,7 @@ int func_L05_002523C8(void) {
         if (!func_L00_002104C8()) {
             break;
         }
-        if (!func_L00_00267BA8(mask, scale_ticks(7), 0)) {
+        if (!PadPressedWithin(mask, scale_ticks(7), 0)) {
             break;
         }
         if (D_00141760_2523C8 != 0x1F) {
@@ -814,8 +814,8 @@ int func_L05_002523C8(void) {
         break;
     case 32:
         if (D_0013F450_h2523C8.state.control_mode < 3U || D_0013F450_h2523C8.state.control_mode == 4 || D_0013F450_h2523C8.state.control_mode == 5) {
-            if (func_L00_00267BA8(mask, scale_ticks(8), 0)) {
-                func_L00_0029BA20(0);
+            if (PadPressedWithin(mask, scale_ticks(8), 0)) {
+                VendorOpenMenu(0);
             }
         }
         break;
@@ -829,7 +829,7 @@ int func_L05_002523C8(void) {
             }
             pv = (PVar_2523C8 *)((Moby *)D_0013F450_h2523C8.items[0].moby)->pvars;
             if (((D_0013CA40_p2523C8.held & mask) && D_0013F450_h2523C8.items[0].unk20 > scale_ticks(5)) || (D_0013CA40_p2523C8.pressed & mask)) {
-                if (func_L00_00234718(-1)) {
+                if (GetAmmo(-1)) {
                     if (D_0013F450_h2523C8.unk20A8 == 0) {
                         func_L00_0020EB60();
                     }
@@ -837,7 +837,7 @@ int func_L05_002523C8(void) {
                 }
             }
             if (D_0013CA40_p2523C8.held & mask) {
-                if (!func_L00_00234718(-1)) {
+                if (!GetAmmo(-1)) {
                     if (!func_L00_0028EB98((Moby *)D_0013F450_h2523C8.items[0].moby, pv->fC)) {
                         pv->fC = func_0022ED80(0, 0, (int)((Moby *)D_0013F450_h2523C8.items[0].moby));
                     }
@@ -861,9 +861,9 @@ int func_L05_002523C8(void) {
             }
             t = scale_ticks(7);
             n = D_0013F450_h2523C8.items[0].unk20;
-            if (func_L00_00267BA8(mask, t <= n ? t : n, &out1)
+            if (PadPressedWithin(mask, t <= n ? t : n, &out1)
                 || ((D_0013CA40_p2523C8.held & 0x20) && n > scale_ticks(8) && n < scale_ticks(0x11))) {
-                if (func_L00_00234718(-1)) {
+                if (GetAmmo(-1)) {
                     if (D_0013F450_h2523C8.state.control_mode == 0xC || D_0013F450_h2523C8.state.control_mode == 0 || D_0013F450_h2523C8.state.current == 3
                         || (D_0013F450_h2523C8.state.control_mode == 1 && D_0013F450_h2523C8.unk229C < 0.7f)) {
                         func_L05_0024D680_2523C8(0x23, 1);
@@ -884,7 +884,7 @@ int func_L05_002523C8(void) {
                 int t = scale_ticks(0xA);
                 int n = D_0013F450_h2523C8.items[0].unk20;
 
-                if (func_L00_00267BA8(mask, t <= n ? t : n, &out2)) {
+                if (PadPressedWithin(mask, t <= n ? t : n, &out2)) {
                     if (((Moby *)D_0013F450_h2523C8.items[0].moby) != 0) {
                         func_L05_0024D680_2523C8(0x20, 1);
                         if (((Moby *)D_0013F450_h2523C8.items[0].moby) != 0) {
@@ -929,7 +929,7 @@ int func_L05_002523C8(void) {
             if (D_0013F450_h2523C8.unk8CF != 0) {
                 break;
             }
-            if (!func_L00_00267BA8(mask, scale_ticks(7), 0)) {
+            if (!PadPressedWithin(mask, scale_ticks(7), 0)) {
                 break;
             }
             best = 0;
@@ -1014,7 +1014,7 @@ extern int func_L05_002559A0(void);
 
 /* Hero idle: picks the idle animation from the stick direction, and occasionally plays a fidget or the
  * look-around when standing still. */
-void func_L05_00254030(void) {
+void Hero_IdleUpdate(void) {
     char *g = (char *)D_0013E633 + 0xE1D;
     int pad;
     *(short *)(g + 0x888) = truncate_float_to_s32(func_L00_00233410(60.0f, *(float *)(g + 0x860), -1.0f));
@@ -1301,7 +1301,7 @@ extern void func_001FFDA0_254DE8(int, int) __asm__("func_001FFDA0");
 extern void func_001FFFA0_254DE8(void) __asm__("func_001FFFA0");
 
 /* Hoverboard race tick: advances the hero's and the opponents' path nodes and laps, handles wrong-way and fall resets, ranks everyone and finishes the race after three laps. */
-void func_L05_00254DE8(void) {
+void HoverboardRaceTick(void) {
     float v0[4] __attribute__((aligned(16)));
     float v1[4] __attribute__((aligned(16)));
     Data_254DE8 *d;
@@ -1638,7 +1638,7 @@ int func_L05_002559F0(void)
     g = ((H_9F0 *)(D_0013E633 + 0xE1D));
     if (!(D_0015EE6C * 12.0f < g->f164)) goto L_BAC;
     f20 = 0.0f;
-    func_L00_00233EE0(v1, f20, f20, 0.75f);
+    LocalToWorldPoint(v1, f20, f20, 0.75f);
     vp = v2;
     qcopy(vp, v1);
     qcopy(v3, g->fE0);
@@ -1693,7 +1693,7 @@ L_BAC:
     pp = ((H_9F0 *)(D_0013E633 + 0xE1D))->p8B4;
     if (pp == 0) goto L_D68;
     vp = ((H_9F0 *)(D_0013E633 + 0xE1D))->f80;
-    r16 = func_L01_0028C2D8(vp, pp, 0.0f);
+    r16 = FindClosestDistanceEntry(vp, pp, 0.0f);
     r4 = func_L00_0025E7F8(((H_9F0 *)(D_0013E633 + 0xE1D))->p8B4, r16, -1, 1);
     ((H_9F0 *)(D_0013E633 + 0xE1D))->s8C8 = r16;
     if (D_0015EE84_2523C8 != 5) goto L_D68;

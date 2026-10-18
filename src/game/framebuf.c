@@ -382,7 +382,7 @@ typedef struct {
    the configured Z buffer, followed by TEST_1 0x30003 and a black sprite
    over the whole target. FBP is set through the sceGsFrame bitfield, the
    form that sign-extends the halfword before masking as retail does. */
-void func_001FB608(int a, int b, int c) {
+void Framebuf_SetRenderTarget(int a, int b, int c) {
     int x;
     long *q;
     unsigned long *d;
@@ -454,7 +454,7 @@ void framebuf_appendSmallSetup(void) {
 extern void func_00234C98_l(int, long) __asm__("func_00234C98");
 
 /* Clears the screen through a GIF packet appended to D_00161000: a fixed header then n = w / 32 pairs of sprite corner registers stepping 0x200 per column across a w x h area centred on 0x8000. Adapted from Lombyte (MIT) for PAL: src/rendering/fun_001fb740.c, FUN_001fb740. */
-void func_001FB908(int w, int h) {
+void Framebuf_ClearScreen(int w, int h) {
     int *tag;
     long *q;
     long *c;
@@ -518,7 +518,7 @@ extern void func_00234C98(int, long);
    (fold would otherwise share the 0x8000 with the extent), and the four
    64-bit corner values are converted in the order that leaves retail's
    last uses, which the scheduler follows. */
-void func_001FBAB8(int x0, int y0, int x1, int y1, int w, int h, unsigned int rgba) {
+void Framebuf_DrawAlphaRect(int x0, int y0, int x1, int y1, int w, int h, unsigned int rgba) {
     long *q;
     int ax, ay, bx, by;
     int hw, hh;

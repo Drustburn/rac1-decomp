@@ -422,7 +422,7 @@ void func_L00_002732D8(unsigned char *m) {
     int r;
     old = *pos;
     q->f4 += q->f8;
-    func_L00_002633D8(q->i0, &x, &y, pos, q->f4, q->fc);
+    PathSampleAtDistance(q->i0, &x, &y, pos, q->f4, q->fc);
     if (FastDecTimer(m + 0xA)) {
         KillPart(m);
         return;
@@ -433,7 +433,7 @@ void func_L00_002732D8(unsigned char *m) {
     }
     r = coll_sphere_mobys(0.15f, pos, 0x10, q->p14, 0);
     t = *pos;
-    func_L00_0025BA50(q->p14, (void *)&t, D_L00_00178000, r, 0, 0x810001, 2, 1, 2.0f, 1.0f, 1.0f);
+    SendRadialMessageToMobys(q->p14, (void *)&t, D_L00_00178000, r, 0, 0x810001, 2, 1, 2.0f, 1.0f, 1.0f);
 }
 int func_001FA898(float);
 typedef struct { u8 *o; u8 *b; s32 k; f32 f; } S_2725d8;
@@ -591,7 +591,7 @@ unsigned char *func_L00_00273868(float *pos, unsigned char a1, unsigned char a2,
             x = x * D_0015EE6C;
             y = random_angle_radians();
             z = random_float_between(1.3439035f, 1.7976891f);
-            func_00215C00(v, x, y, z);
+            BuildSphericalOffset(v, x, y, z);
             *(float *)(r + 0xC) = 42000.0f;
             v[0x16] = (func_001160D8() & 0x1F) + 0x10;
             *(int *)(r + 4) = (v[0x16] << 24) | 0x808080;
@@ -1005,7 +1005,7 @@ void func_L00_00274908(struct EmberParticle *p) {
         f = p->size;
         f *= 0.5f;
         n = rand_range(scale_ticks(0x3C), scale_ticks(0x78));
-        func_L00_0026CA10(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
+        PartType15Spawn(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
     } else {
         p->pos.f[2] = m->floor_z;
         m->vel.f[0] += random_float_between(-5.0f, 5.0f) * D_0015EE6C;
@@ -1014,7 +1014,7 @@ void func_L00_00274908(struct EmberParticle *p) {
         f = p->size;
         f *= 0.25f;
         n = rand_range(scale_ticks(0x1E), scale_ticks(0x3C));
-        func_L00_0026CA10(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
+        PartType15Spawn(&p->pos, &m->vel, p->color, m->color2, f, n, 0, p->tex, p->blend);
     }
     if (D_0015EE84 == 10) {
         if (!random_integer_below(0x13)) {
@@ -1036,7 +1036,7 @@ void func_L00_00274908(struct EmberParticle *p) {
             t.f[2] -= 1.5f;
             f = random_float_between(420000.0f, 630000.0f);
             n = rand_range(scale_ticks(0x5A), scale_ticks(0x96));
-            func_L00_0026CD70(&t, &m->vel, c1, c2, f, n, 3);
+            PartType16Spawn(&t, &m->vel, c1, c2, f, n, 3);
         }
     }
     KillPart(p);
@@ -1263,7 +1263,7 @@ void func_L00_002756B8(char *m) {
     a = *(float *)(p + 8) * random_float_between(0.05f, 1.0f);
     b = *(float *)(m + 0x2C);
     func_L00_00250800(*(void **)(m + 0x30), p[4], m + 0x10);
-    func_0020DAF8(*(void **)(m + 0x30), p[4], v);
+    MobyTransformScaledVertex(*(void **)(m + 0x30), p[4], v);
     f = func_001FA888(p[5]);
     f = (random_float_between(-f, f) / 100.0f - 1.0f) * *(float *)(p + 0xC);
     func_L00_001FF4B0(v2, v, f);
@@ -1532,12 +1532,12 @@ void func_L00_002761C0(O_275320 *o) {
     FastVecAdd(&o->pos, &o->pos, D_L00_00160310);
     if (ix != (int)o->pos.f[0] || iy != (int)o->pos.f[1]) {
         t2.q = o->pos.q;
-        h = func_L00_002644E0(&t2);
+        h = SampleHeightMap(&t2);
         if (h < D_L00_00160320) {
             h = D_L00_00160320;
         } else {
             t3.q = o->pos.q;
-            h = func_L00_002644E0(&t3);
+            h = SampleHeightMap(&t3);
         }
         if (o->pos.f[2] < h) {
             t2.q = o->pos.q;

@@ -54,7 +54,7 @@ extern int func_00120858_240398(int, unsigned short) __asm__("func_00120858");
 extern void func_00203E78_240398(void *, void *, void *, int) __asm__("func_00203E78");
 
 /* Loads a level's four packed images through the GS loader and registers the image records and their data blocks. */
-char *func_L00_00240398(char *buf, int *tbl) {
+char *LoadLevelImages(char *buf, int *tbl) {
     int img[24];
     int i = 0;
     int a;
@@ -134,7 +134,7 @@ extern u64 D_L00_00182740[];
 extern u64 D_L00_001828C0[];
 extern u64 D_L00_001828D8[];
 /* writes GIF viewer setup words for a selected or fallback configuration */
-void func_L00_00240CE0(char *out,int a,int b,u64 c,int d,int idx) {
+void SetupVisGifViewer(char *out,int a,int b,u64 c,int d,int idx) {
  u64 x=D_L00_00182740[idx*3];
  u64 y=D_L00_00182740[idx*3+1];
  u64 z=D_L00_00182740[idx*3+2];
@@ -538,7 +538,7 @@ extern char *D_L00_0015F418 MACRO_ADDR;
 extern char *D_L00_0015F410 MACRO_ADDR;
 
 /* Loads a level's gameplay file into the level heap: settings, lights, ties, shrubs, mobys, paths and the occlusion tables; returns the heap cursor. */
-char *func_L00_002422D8(int arg0) {
+char *LoadLevelGameplay(int arg0) {
     Hdr_422D8 *hdr;
     char *mem;
     float *ship;
@@ -1491,7 +1491,7 @@ char *func_L00_002422D8(int arg0) {
                 for (m = D_L00_00160098; m->state != 0xFF; m++) {
                     if (m->oclass == D_L00_00160608[D_0013E130.f26]) {
                         func_L00_0028FB78((char *)m);
-                        func_00213D28(m, 1, 0);
+                        MobySetAnimation(m, 1, 0);
                         break;
                     }
                 }
@@ -1510,7 +1510,7 @@ char *func_L00_002422D8(int arg0) {
             m->rot.z = rot;
             m->update_dist = 0x10;
             m->flags &= ~2;
-            func_00213D28(m, 1, 0);
+            MobySetAnimation(m, 1, 0);
             func_L00_00251E30(m);
             D_0013E130.f0 = m;
             func_L00_0024B1B0((int)m, 0);
@@ -1666,8 +1666,8 @@ char *func_L00_002422D8(int arg0) {
     }
     func_L00_001F8750();
     func_L00_00205278();
-    func_L00_00205598();
-    func_L00_001ED6D8();
+    HeroResetTuning();
+    Camera_InitSlots();
     func_L00_001ED428();
     pad_resetState();
     func_001F6598();
@@ -1726,7 +1726,7 @@ extern void func_00217748(s32);
 
 /* streams entry i of the current sector list into the loader buffer.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/world/loaders/00240348.c, FUN_L00_002451b8. */
-s32 func_L00_00245B88(s32 i) {
+s32 StreamSectorListEntry(s32 i) {
     u8 *buf = D_L00_0016C960_45B88.buf;
     s32 start;
     s32 size;
@@ -1740,7 +1740,7 @@ s32 func_L00_00245B88(s32 i) {
     }
     if (size > 0) {
         func_00217628_45B88(buf, start, size);
-        func_00217748(0);
+        UpdateAudioStreamUntilIdle(0);
     }
     return 1;
 }
@@ -1766,7 +1766,7 @@ extern void func_00217748(int);
 extern void func_001F4E08(int);
 
 /* Reads a level's packed data from disc and builds its chunk pointer table. */
-void func_L00_00245E98(int arg) {
+void ReadLevelPackedData(int arg) {
     int *q;
     int i;
     if (D_0015EE80 == 0) {
@@ -1774,9 +1774,9 @@ void func_L00_00245E98(int arg) {
     } else {
         start_audio_stream_read((int)D_L00_0016C960.base, D_00137C80_g.alt[arg].a, D_00137C80_g.alt[arg].b);
     }
-    func_00217748(0);
+    UpdateAudioStreamUntilIdle(0);
     FadeToBlack(4);
-    func_00217748(1);
+    UpdateAudioStreamUntilIdle(1);
     q = (int *)D_L00_0016C960.base;
     i = 0;
     if (q[1] != 0) {

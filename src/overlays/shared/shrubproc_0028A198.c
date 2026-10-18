@@ -14,7 +14,7 @@ extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 
 /* Fills the sky particle list: entries from a up are dim specks, the first a are coloured sparks with random direction and speed. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_00288ec0.c, FUN_L00_00288ec0. */
-void func_L00_0028A198(int a, int b) {
+void SkyInitParticles(int a, int b) {
     int i;
     E *e;
     float x, y;
@@ -82,7 +82,7 @@ extern float func_001F9B88(float);
 extern int func_001160D8(void);
 
 /* Steps each shrub sparkle entry: type 0 spins and scales a direction, type 1 randomises a colour. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_00288ec0.c, FUN_L00_00289108. */
-void func_L00_0028A3E0(void) {
+void StepSkySparkles(void) {
     int i;
     for (i = 0; i < D_L00_001605DC_g->n; i++) {
         E_289108 *e = &D_L00_001605DC_g->list[i];
@@ -169,7 +169,7 @@ typedef struct {
 #define SKY ((SkyData *)D_L00_001605DC)
 
 /* Initialises and animates the star field of the sky. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/unclassified_00288ec0.c, FUN_L00_002895a0. */
-void func_L00_0028A878(void) {
+void SkyStarFieldUpdate(void) {
     int i, j;
     SkyStar *s;
     f32 a, b;
@@ -287,8 +287,8 @@ void func_L00_0028AEB0(void) {
     float v[4] __attribute__((aligned(16)));
     func_001FA190(D_L00_001BDB70);
     SkyDrawShell(0);
-    if (*(short *)(D_L00_001605DC + 8) == 0) func_L00_0028A198(0x78, 8);
-    func_L00_0028A3E0();
+    if (*(short *)(D_L00_001605DC + 8) == 0) SkyInitParticles(0x78, 8);
+    StepSkySparkles();
     SkySpriteProc();
     VU1_addGSregister(0x42, (0x8000L << 24) | 0x44);
     qzero(v);
@@ -337,7 +337,7 @@ extern f32 func_001F9FA8(f32);
 extern void func_00234C98_8AF90(s32, u64) __asm__("func_00234C98");
 
 /* Initializes and steps three types of sky particles before drawing the sky layer. Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_00288ec0.c, FUN_L00_00289cb8. */
-void func_L00_0028AF90(void) {
+void SkyParticlesUpdate(void) {
     Part *p;
     Part *p2;
     PU *q2;
@@ -479,8 +479,8 @@ void func_L00_0028B4E0(void) {
     float v[4] __attribute__((aligned(16)));
     func_001FA190(D_L00_001BDB70);
     SkyDrawShell(0);
-    if (*(short *)(D_L00_001605DC + 8) == 0) func_L00_0028A198(0x78, 8);
-    func_L00_0028A3E0();
+    if (*(short *)(D_L00_001605DC + 8) == 0) SkyInitParticles(0x78, 8);
+    StepSkySparkles();
     SkySpriteProc();
     VU1_addGSregister(0x42, (0x8000L << 24) | 0x44);
     SkyDrawShell(1);
@@ -513,7 +513,7 @@ extern int D_L00_0015F6B0 MACRO_ADDR;
 extern void func_L00_001FFA40(void *, void *);
 
 /* Draws the sky shells with one extra shell placed at a pseudo-random angle. */
-void func_L00_0028B680(void) {
+void DrawSkyShellsExtra(void) {
     float v[3];
     int r;
     *(short *)(D_L00_001605DC + 4) = 0;
@@ -601,8 +601,8 @@ void func_L00_0028BBF8(void) {
     func_001FA190(D_L00_001BDB70);
     SkyDrawShell(0);
     SkyDrawShell(1);
-    if (*(short *)(D_L00_001605DC + 8) == 0) func_L00_0028A198(0x78, 8);
-    func_L00_0028A3E0();
+    if (*(short *)(D_L00_001605DC + 8) == 0) SkyInitParticles(0x78, 8);
+    StepSkySparkles();
     SkySpriteProc();
     VU1_addGSregister(0x42, 0x8000000044L);
     SkyDrawShell(2);
@@ -628,15 +628,15 @@ void func_L00_0028BC70(void) {
 void func_L00_0028BD70(void) {
     func_001FA190(D_L00_001BDB70);
     SkyDrawShell(0);
-    if (*(short *)(D_L00_001605DC + 8) == 0) func_L00_0028A198(0x78, 8);
-    func_L00_0028A3E0();
+    if (*(short *)(D_L00_001605DC + 8) == 0) SkyInitParticles(0x78, 8);
+    StepSkySparkles();
     SkySpriteProc();
     VU1_addGSregister(0x42, 0x8000000044L);
     SkyDrawShell(1);
 }
 
 /* Initialises and animates a second star field of the sky (variant of func_L00_0028A878). */
-void func_L00_0028BF60(void) {
+void SkyStarField2Update(void) {
     int i, j;
     SkyStar *s;
     f32 a, b;

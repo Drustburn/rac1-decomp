@@ -172,7 +172,7 @@ extern float D_L15_00167440_2d8fa0[] __asm__("D_L15_00167440");
 extern float D_L15_0015F660_2d8fa0[] __asm__("D_L15_0015F660") MACRO_ADDR;
 
 /* Quartu arc emitter: rebuilds the 20-point bolt and its mirror between the data block's end points, regrows or jitters four side arcs, then spawns three particles. */
-void func_L15_002D8FA0(Moby *moby) {
+void QuartuArcEmitter(Moby *moby) {
     V_2d8fa0 s[10];
     V_2d8fa0 d[5];
     Data_2d8fa0 *data = (Data_2d8fa0 *)moby->pvars;
@@ -213,7 +213,7 @@ void func_L15_002D8FA0(Moby *moby) {
         D_L15_001D3CA0[i] = f21;
         a = random_angle_radians();
         b = random_angle_radians();
-        func_00215C00(&s[1], scale, a, b);
+        BuildSphericalOffset(&s[1], scale, a, b);
         s[1].f[2] = s[1].f[2] * 0.5f;
         func_001F9C08(&s[2], &s[3], &s[1], *(float *)&D_L15_00161D18);
         len0 = FastVecLength(&s[2]);
@@ -535,7 +535,7 @@ char *func_L15_002E5970(char *src, float *v, char *pos) {
         *(float *)(m + 0x48) = func_L00_001FF860(v[0], v[1]);
         *(float *)(m + 0x44) = -func_L00_001FF860(func_001F9CE8(v), v[2]);
         func_L00_00251E30(m);
-        func_L00_0026E940(m, 0x600040FF, 0x80, -1, 170000.0f);
+        PartType26Spawn(m, 0x600040FF, 0x80, -1, 170000.0f);
     }
     return m;
 }
@@ -578,7 +578,7 @@ typedef struct {
 } RingVars_6D48;
 
 /* Underwater ring update: approach check, then the ring's state machine. */
-void func_L15_002E6D48(unsigned char *moby) {
+void UnderwaterRingUpdate(unsigned char *moby) {
     RingVars_6D48 *vars = *(RingVars_6D48 **)(moby + 0x78);
     unsigned char delta[16];
     unsigned char matrix[64];
@@ -721,7 +721,7 @@ void func_L15_002EC490(char *moby)
         func_L00_00251328(moby, 0x40, 0x40, 0x40);
         moby[0x20] = 1;
     } else {
-        AddDrawCallback((void *)func_L15_002EC080, moby);
+        AddDrawCallback((void *)DrawRippleStrips, moby);
         *(short *)(moby + 0x32) = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
     }
@@ -745,7 +745,7 @@ void func_L15_002ED168(unsigned char *moby) {
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L15_00162220;
         switch (moby[0x20]) {
         case 0:
-            func_L02_002EBC08(moby);
+            InitRandomMobyData(moby);
             if (D_0013D355[0x13D] != 0) {
                 DeleteMoby(moby);
             } else {
@@ -870,11 +870,11 @@ void func_L15_002EE458(char *m) {
             other->unk34 = other->unk34 | 1;
             other->unk94 = 0;
             other->unk31 = 0;
-            func_L15_002092E0();
-            func_00213D28(other, 0, 0);
+            Help_Reset();
+            MobySetAnimation(other, 0, 0);
             if (D_0015EE84 == 0xF) {
                 func_L00_00299B68(9);
-                func_L00_002664B0(0, 5);
+                MusicRequestTrack(0, 5);
             }
             return;
         }
@@ -902,7 +902,7 @@ void func_L15_002EE458(char *m) {
             func_L00_00299B68(8);
             *(u128_2EE458 *)D_0013F450_2EE458.unk1D00 = *(u128_2EE458 *)&D_0013F450_2EE458.motion.pos;
             *(u128_2EE458 *)(D_0013F450_2EE458.unk1D00 + 0x10) = *(u128_2EE458 *)&D_0013F450_2EE458.motion.rot;
-            func_L00_002664B0(2, 4);
+            MusicRequestTrack(2, 4);
             return;
         }
         if (D_0015EE84 == 0x12) {

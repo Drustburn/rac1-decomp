@@ -315,7 +315,7 @@ char *func_L00_002CA728(char *src) {
         } else {
             DeleteMoby(src);
         }
-        z = 0.0f; func_L00_0026AA10(m + 0x10, 1000000.0f, 0x7F, 0x7F, 0x7F, scale_ticks(0xF), z);
+        z = 0.0f; PartType05Spawn(m + 0x10, 1000000.0f, 0x7F, 0x7F, 0x7F, scale_ticks(0xF), z);
         FastMemSet(d, 0, 0x20);
         r = (unsigned char *)D_L00_001DD450[*(int *)&D_L00_00161924];
         if (r != 0 && *(short *)(r + 0xA6) == 0x10E && r[0x20] != 0xFE && r[0x20] != 0xFD) {
@@ -427,7 +427,7 @@ typedef struct {
 } Vars_2CABC0;
 
 /* Update for moby class 270 (morphoray chicken): wanders, pecks and flees from the hero, grows, and bursts into feathers when its health runs out. */
-void func_L00_002CABC0(Moby *m) {
+void MorphorayChickenUpdate(Moby *m) {
     Vec4A T;
     Vec4A v;
     Vec4A W;
@@ -884,7 +884,7 @@ char *func_L00_002CC3C0(char *a, char *vec, char *b, float f12, float f13, float
         lf[2] = t[2];
         r = func_L00_001EFFF0(lf, t, 0, (int)a, 0);
         if (r != 0) {
-            func_00215C00(out, D_0015EE6C * 40.0f, *(float *)(m + 0x48), -*(float *)(m + 0x44));
+            BuildSphericalOffset(out, D_0015EE6C * 40.0f, *(float *)(m + 0x48), -*(float *)(m + 0x44));
             qcopy(m + 0x10, D_L00_00173F60);
             t = tmp;
             k = 4;
@@ -903,7 +903,7 @@ char *func_L00_002CC3C0(char *a, char *vec, char *b, float f12, float f13, float
                 r = scale_ticks(10);
                 r2 = scale_ticks(15);
                 r3 = rand_range(r, r2);
-                func_L00_0026EBC0(m + 0x10, (char *)v, 0x7F2F4F6F, r3, 30000.0f);
+                PartType27Spawn(m + 0x10, (char *)v, 0x7F2F4F6F, r3, 30000.0f);
             } while (k >= 0);
             p = (unsigned char *)D_0013E15A + 0x4C6;
             if (p[0xF] == 0) {
@@ -923,7 +923,7 @@ char *func_L00_002CC3C0(char *a, char *vec, char *b, float f12, float f13, float
             *(float *)(m + 0x44) = -func_L00_001FF860(len, out[2]);
             return m;
         } else {
-            func_L00_0026E940(m, 0x2F4F7F7F, *(short *)(d + 0x24), -1, *(float *)&D_L00_00161958);
+            PartType26Spawn(m, 0x2F4F7F7F, *(short *)(d + 0x24), -1, *(float *)&D_L00_00161958);
             for (i = 0; i < 17; i++) {
                 q = (char *)func_L00_00275FF8(m + 0x10, (char *)D_L00_0015F660, 1, 0.0f);
                 if (q != 0) {
@@ -1010,7 +1010,7 @@ extern void func_001F9BF0_2CC868(void *, void *, void *) __asm__("func_001F9BF0"
 extern void func_0020D678_2CC868(Moby *) __asm__("func_0020D678");
 
 /* Update for moby class 305: steers the moby toward its target, moves it, and on a hit or a timeout ends it; drags its trail of sixteen mobys behind it. */
-void func_L00_002CC868(Moby *m) {
+void Moby305Update(Moby *m) {
     Vec4A start;
     Vec4A step;
     Query_2CC868 q;
@@ -1207,7 +1207,7 @@ void func_L00_002CD110(u8 *m, s32 enabled)
             func_L00_001FF4B0(vector, &vectors[0],
                 random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.0f));
             lifetime = rand_range(scale_ticks(10), scale_ticks(15));
-            func_L00_0026EBC0(pos, vector, 0x7f2f4f6f, lifetime, 35000.0f);
+            PartType27Spawn(pos, vector, 0x7f2f4f6f, lifetime, 35000.0f);
         }
     }
 
@@ -1220,7 +1220,7 @@ void func_L00_002CD110(u8 *m, s32 enabled)
             vectors[0].f[2] = 1.0f;
             vectors[0].f[3] = 1.0f;
             vectors[0].f[2] = random_float_between(0.01f, 0.025f) * D_0015EE60;
-            effect = func_L00_0026DEA0(pos, sign, 0.2f, 1.0f, &vectors[0], color, 1.02f, 140000.0f);
+            effect = PartType23Spawn(pos, sign, 0.2f, 1.0f, &vectors[0], color, 1.02f, 140000.0f);
             if (effect != 0) {
                 *(s16 *)(effect + 0xa) = scale_ticks(rand_range(50, 80));
                 i = (s32)(effect + 0x20);
@@ -1347,7 +1347,7 @@ extern float func_001F9D48(void *, void *);
 extern float func_001FA850(float, float);
 
 /* Finds the best-scoring target moby in the target list within range and angle limits. */
-char *func_L00_002CD7B0(float *pos, float *lim, int *skip, float maxy, float maxp, float maxd) {
+char *FindBestTargetMoby(float *pos, float *lim, int *skip, float maxy, float maxp, float maxd) {
     char *best = 0;
     float bestScore = 1e9f;
     int i = 0;
@@ -1465,7 +1465,7 @@ extern unsigned char *missile_2CDAB8(Moby *, float *, Moby *, float, float, floa
 extern int rand_2CDAB8(void) __asm__("func_001160D8");
 
 /* Ryno (class 454) update: target lock and reticle while held, then the eight-missile salvo state machine. */
-void func_L00_002CDAB8(Moby *m) {
+void RynoUpdate(Moby *m) {
     Mat3_2CDAB8 cam;
     Mat4_2CDAB8 view;
     Vec4 aim;
@@ -1715,7 +1715,7 @@ unsigned char *func_L00_002CE390(int a, V4 *pos, unsigned char *tgt, float f12, 
         if (func_L00_001EFFF0(&s, pos, 0, (int)p, 0)) {
             m[0xBC] = 2;
             qcopy(m + 0x10, D_L00_00173F60);
-            func_00215C00(&w, *(float *)(v + 0x30), *(float *)(m + 0x48), -*(float *)(m + 0x44));
+            BuildSphericalOffset(&w, *(float *)(v + 0x30), *(float *)(m + 0x48), -*(float *)(m + 0x44));
             func_L00_001FF610(&dir, &w, D_L00_00173F60 + 0x20);
             func_L00_001FF4B0(&dir, &dir, D_0015EE6C + D_0015EE6C);
             func_L00_0025F4A8_alt(m, &dir, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
@@ -1833,7 +1833,7 @@ void func_L00_002CE6A0(char *m) {
         }
     }
 
-    func_00215C00(&v50, *(float *)(d + 0x30), *(float *)(m + 0x48), -*(float *)(m + 0x44));
+    BuildSphericalOffset(&v50, *(float *)(d + 0x30), *(float *)(m + 0x48), -*(float *)(m + 0x44));
     *(u128 *)&u.v.b = 0;
     u.v.b.f[0] = random_float_between(-1.0f, 1.0f);
     u.v.b.f[1] = random_float_between(-1.0f, 1.0f);
@@ -1846,7 +1846,7 @@ void func_L00_002CE6A0(char *m) {
     FastVecAdd(&z, &z, m + 0x10);
     {
         int c1 = scale_ticks(rand_range(0x1C, 0x28));
-        func_L00_0026A7F8(&z, &u.v.a, 0x6F00AFFF, 0x100000FF, c1, 0x28, rand_range(0x28, 0x46), 1);
+        PartType04Spawn(&z, &u.v.a, 0x6F00AFFF, 0x100000FF, c1, 0x28, rand_range(0x28, 0x46), 1);
     }
     qcopy(&v20, m + 0x10);
     FastVecAdd(d + 0x10, d + 0x10, &v50);
@@ -1978,12 +1978,12 @@ void func_L00_002CF170(void) {
     unsigned char *m;
     int i;
     p->b1FF5 = 0;
-    if (func_L00_00234718(0x18)) {
+    if (GetAmmo(0x18)) {
         d[0] = FastCos(p->f98) * 0.25f;
         d[1] = FastSin(p->f98) * 0.25f;
         d[2] = 0.25f;
         if (p->b1FF6 < 6) {
-            func_L00_00234638(0x18, 1);
+            TakeAmmo(0x18, 1);
             s = &D_00141780;
             if (s->hC0 < 0xFFFF) {
                 s->hC0++;
@@ -2265,7 +2265,7 @@ void func_L00_002D06C8(struct Moby *moby) {
         coll->flags &= ~1;
     }
     if (pv->frameB4 != D_L00_0015F6B0 && moby->state != 0 && (pv->flags & 0xC)) {
-        func_L00_002D28D8(moby);
+        ThrownChainUpdate(moby);
     }
     touched = 0;
     other = func_L00_0025B478(moby, 0x1830000, 0);

@@ -108,7 +108,7 @@ int func_L14_002306C8(int a, int b) {
             *(unsigned char *)(p + 0x20B2) = 0;
             *(unsigned char *)(p + 0x20AF) = 0;
             *(short *)(p + 0x22E0) = 0;
-            func_L00_002638B8(p + 0x1670);
+            DeleteOwnedMobys(p + 0x1670);
         }
         if (*(unsigned char *)(p + 0x20A4) == 3) {
             int s = *(int *)(p + 0x2084);
@@ -120,7 +120,7 @@ int func_L14_002306C8(int a, int b) {
     }
     {
         char *p = D_0013E633 + 0xE1D;
-        func_L00_0020E9F8(*(int *)(p + 0x2090), *(int *)(p + 0x2084));
+        SpawnHelpMarkers(*(int *)(p + 0x2090), *(int *)(p + 0x2084));
         *(int *)(p + 0xFF8) = 0;
     }
     switch (a) {
@@ -180,7 +180,7 @@ int func_L14_002306C8(int a, int b) {
         {
             char *p = D_0013E633 + 0xE1D;
             if (*(void **)(p + 0x1614) != 0) {
-                func_00213DE0(*(void **)(p + 0x1614), 0, 0, t);
+                MobyBlendAnimation(*(void **)(p + 0x1614), 0, 0, t);
             }
         }
         break;
@@ -388,7 +388,7 @@ int func_L14_002306C8(int a, int b) {
         char *v = p + 0x110;
         *(int *)(p + 0x208C) = 1;
         *(int *)(p + 0x2284) = 0;
-        *(float *)(p + 0x194) = func_L00_00234250((float *)v);
+        *(float *)(p + 0x194) = ViewXyLength((float *)v);
         qcopy(p + 0x150, v);
         if (b) {
             int id = 6;
@@ -749,7 +749,7 @@ int func_L14_002306C8(int a, int b) {
             r = v - 0xE0;
             if (*(int *)(r + 0x2084) != 0x12) {
                 if (*(unsigned char *)(r + 0x12E4) != 0 && *(float *)(r + 0x88) < *(float *)(r + 0x2F0) + 0.5f) {
-                    func_L00_0020A320(3, 0x10, 0);
+                    HeroKickUpDust(3, 0x10, 0);
                 }
             }
         }
@@ -1110,7 +1110,7 @@ int func_L14_002306C8(int a, int b) {
             *(int *)(q + 0x2284) = 0x50;
             *(int *)(q + 0xA60) = 4;
             *(int *)(q + 0x20F0) = 0;
-            func_L00_00215628(8.0f, 1.0471976f, -1.0f);
+            CameraTrackNearestTarget(8.0f, 1.0471976f, -1.0f);
             *(int *)(q + 0xA70) = 0;
             *(short *)(q + 0x10A8) = 0xA;
             if (b) {
@@ -1119,7 +1119,7 @@ int func_L14_002306C8(int a, int b) {
                 if (*(int *)(q + 0x2090) == 0xB && scale_ticks(0x2A) > *(int *)(q + 0x2098)) n = scale_ticks(0x11);
                 func_L00_00232C10(0x2B, 4, (float)n);
                 m = func_L00_0020DAF8(0);
-                if (func_L00_00211A18(m)) func_00213DE0(m, 0xA, 4, n + 2);
+                if (func_L00_00211A18(m)) MobyBlendAnimation(m, 0xA, 4, n + 2);
             }
             break;
         }
@@ -1145,7 +1145,7 @@ int func_L14_002306C8(int a, int b) {
             q = D_0013E633 + 0xE1D;
             *(int *)(q + 0xA60) = 3;
             *(int *)(q + 0x20F0) = 0;
-            func_L00_00215628(14.0f, 0.5235988f, -1.0f);
+            CameraTrackNearestTarget(14.0f, 0.5235988f, -1.0f);
             *(int *)(q + 0xA7C) = *(int *)(q + 0xA7C) == 0;
             if (b) {
                 int n = scale_ticks(0xA);
@@ -1161,9 +1161,9 @@ int func_L14_002306C8(int a, int b) {
             if (*(void **)(q + 0x1090) == 0) break;
             if (b) {
                 func_L00_00232C10(0x67, 4, -1.0f);
-                func_00213DE0(*(void **)(q + 0x1090), 3, 4, -1);
+                MobyBlendAnimation(*(void **)(q + 0x1090), 3, 4, -1);
             }
-            func_L00_00215628(11.0f, 0.87266463f, -1.0f);
+            CameraTrackNearestTarget(11.0f, 0.87266463f, -1.0f);
             break;
         }
         case 0x13: {
@@ -1189,7 +1189,7 @@ int func_L14_002306C8(int a, int b) {
                 char *r = D_0013E633 + 0xE1D;
                 *(int *)(r + 0xA60) = k;
             }
-            func_L00_00215628(5.0f, 0.7853982f, 0.7853982f);
+            CameraTrackNearestTarget(5.0f, 0.7853982f, 0.7853982f);
             if (b) {
                 char *m;
                 int j = 0;
@@ -1212,7 +1212,7 @@ int func_L14_002306C8(int a, int b) {
                 j = j / 2;
                 func_L00_00232C10(k + 0x17, j, (float)n);
                 m = func_L00_0020DAF8(0);
-                if (func_L00_00211A18(m)) func_00213DE0(m, k + 3, j, n);
+                if (func_L00_00211A18(m)) MobyBlendAnimation(m, k + 3, j, n);
             }
             break;
         }
@@ -1249,7 +1249,7 @@ int func_L14_002306C8(int a, int b) {
                 int n = scale_ticks(5);
                 func_L00_00232C10(e + 0x5C, z, (float)n);
                 m = func_L00_0020DAF8(0);
-                if (func_L00_00211A18(m)) func_00213DE0(m, e + 0xC, z, n);
+                if (func_L00_00211A18(m)) MobyBlendAnimation(m, e + 0xC, z, n);
             }
         }
         break;
@@ -1269,7 +1269,7 @@ int func_L14_002306C8(int a, int b) {
             int n = scale_ticks(4);
             func_L00_00232C10(*(int *)(q + 0xA60) + 0x4E, 0, (float)n);
             m = func_L00_0020DAF8(0);
-            if (func_L00_00211A18(m)) func_00213DE0(m, *(int *)(q + 0xA60) + 0xC, 0, n);
+            if (func_L00_00211A18(m)) MobyBlendAnimation(m, *(int *)(q + 0xA60) + 0xC, 0, n);
         }
         break;
     }
@@ -1287,7 +1287,7 @@ int func_L14_002306C8(int a, int b) {
             n = scale_ticks(5);
             func_L00_00232C10(k + 0x27, 5, (float)n);
             m = func_L00_0020DAF8(0);
-            if (func_L00_00211A18(m)) func_00213DE0(m, k + 7, 5, n);
+            if (func_L00_00211A18(m)) MobyBlendAnimation(m, k + 7, 5, n);
         }
         break;
     }
@@ -1523,7 +1523,7 @@ int func_L14_002306C8(int a, int b) {
             *(unsigned char *)(t + 0x20AC) = 1;
         }
         if (*(int *)(t + 0x208C) != *(int *)(t + 0x2094)) {
-            func_L00_00207220();
+            HeroClearSoundSlots();
         }
         *(int *)(t + 0x198) = 0;
         *(int *)(t + 0x1A0) = 0;

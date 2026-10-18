@@ -214,7 +214,7 @@ extern void func_001EE3B0(void *, float, float);
    at its projected screen position (func_001F2418, then relative to the
    D_0013E600 offset in 1/16 units) or, for off-screen ones, at the
    screen centre; then empties the queue. Nothing in level 0x72. */
-void func_001EE6E0(void) {
+void DrawQueuedGlows(void) {
     float centre[4];
     float pos[4];
     int i;
@@ -273,7 +273,7 @@ extern s32 func_001FA898(f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/update_camera_environment_from_regions.c,
  * update_camera_environment_from_regions; the fog preset written as the struct src/game/draw.c reads. */
-void func_001EE858(void *position) {
+void Camera_UpdateEnvironment(void *position) {
     f32 blend;
     s32 region_index;
     struct CameraEnvironmentRegion *region;

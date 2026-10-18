@@ -35,7 +35,7 @@ void func_L00_0029FD68(void *m, int x, int y) {
     char *fmt;
     int total;
 
-    func_001FBAB8(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
+    Framebuf_DrawAlphaRect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     { int n = sizeof(box); func_001153FC((void *)&box, 0, n); }
     box.half_x = x / 2;
     box.half_y = y / 2;
@@ -136,7 +136,7 @@ void func_L00_002A0C20(char *m) {
         idx[0] = i * 4;
         idx[1] = i * 4 + 1;
         idx[2] = i * 4 + 2;
-        func_0020DB98(m, 3, idx, (char *)P);
+        MobyTransformScaledVertexBatch(m, 3, idx, (char *)P);
         qcopy(C, P[0]);
         FastVecSub(A, P[1], P[0]);
         FastVecSub(B, P[2], P[0]);
@@ -206,7 +206,7 @@ void func_L00_002A0F60(void *m) {
     int x, y, w, h;
     float len;
     ids = D_L00_00161238;
-    func_0020DB98(m, 3, &ids, out);
+    MobyTransformScaledVertexBatch(m, 3, &ids, out);
     qcopy(base, out);
     FastVecSub(d1, &out[1], out);
     FastVecSub(d2, &out[2], out);
@@ -225,13 +225,13 @@ void func_L00_002A0F60(void *m) {
     a = c[0];
     b = c[3];
     func_00238D90(&a, &b, &x, &y, &w, &h);
-    func_0023A948(9, 7, 1.0f);
-    func_001FB908(0x200, 0x200);
+    Framebuf_AllocRenderTarget(9, 7, 1.0f);
+    Framebuf_ClearScreen(0x200, 0x200);
     VU1_addGSregister(0x42, 0x8000000064L);
     func_L00_0029FD68(m, x, y);
     func_0023A5E0(6, (float)x, (float)y);
-    func_001F7B40();
-    func_001FB908(0x200, 0x200);
+    BeginDrawFrame();
+    Framebuf_ClearScreen(0x200, 0x200);
     VU1_addGSregister(0x42, 0x8000000064L);
     DrawMobyList((int)m, 1);
     DrawTexturedQuad(w, h, x, y, 0, 0, x, y, 0x80808080L, D_0015EFD0);

@@ -97,7 +97,7 @@ extern HudBank D_00199C60_b[] __asm__("D_00199C60") NOT_SDA;
    0x2800 bytes of it and sets its byte +0x20 to 0xFF. The records are
    indexed through a struct array: each field access is its own giv,
    and loop.c's pick (the +0x24 one) is retail's loop pointer. */
-void func_001FF6B8(void) {
+void Hud_InitBanks(void) {
     int *arena = &D_0019A4E8;
     int i;
     unsigned char *buf;
@@ -430,7 +430,7 @@ extern void func_001FFB38_v(int, int, int, int, int, int, int) __asm__("func_001
 /* Calls func_001FFB38(i, 0xFFFF, 0, 0, 0, 0, 0) on the record whose
    +0x64 is arg0 and returns 1, or returns 0 when none is. The nop in
    the search loop is ps2eeas's short-loop padding. */
-int func_001FFCB0(int arg0) {
+int Hud_RemoveBank(int arg0) {
     int i;
     for (i = 0; i < 13; i++) {
         if (D_00199C60[i].unk64 == arg0) {
@@ -574,9 +574,9 @@ void HudDraw(void) {
             }
         }
         col = (D_0015F764 << 24) + 0xF0F0F0;
-        func_00201A38(0x100, D_0015F768, col, (int)D_001994D8);
+        DrawFramedText(0x100, D_0015F768, col, (int)D_001994D8);
         if (D_00199528[0] != 0 && D_0015F760 > 1000) {
-            func_00201A38(0x100, D_0015F768, col, (int)D_00199528);
+            DrawFramedText(0x100, D_0015F768, col, (int)D_00199528);
         }
         if (D_0015F760 != 0) {
             D_0015F760--;
@@ -815,7 +815,7 @@ void HudSprite(int tex, int x, int y, int w, int h, int alpha) {
 /* func_00200468 drawn as a four-vertex strip (PRIM 0x154) instead of a
    sprite, the texture turned a quarter: corners (x, y+h), (x, y),
    (x+w, y+h), (x+w, y) take UVs (tw, 0), (tw, th), (0, 0), (0, th). */
-void func_00200650(int tex, int x, int y, int w, int h, int alpha) {
+void DrawHudSpriteTurned(int tex, int x, int y, int w, int h, int alpha) {
     char *arena = D_0019A4E8_raw;
     unsigned char *e = (unsigned char *)(*(char **)(arena + 0x24)
         + *(short *)(*(char **)(arena + 0x20) + tex * 4 + 2) * 8);
@@ -862,7 +862,7 @@ void func_00200650(int tex, int x, int y, int w, int h, int alpha) {
 LINKER_REMNANT("asm/remnants/text", func_002008B0);
 
 /* func_00200468 with the position and size already in 16ths of a pixel. */
-void func_002008B8(int tex, int x, int y, int w, int h, int alpha) {
+void DrawHudSpriteSubpixel(int tex, int x, int y, int w, int h, int alpha) {
     char *arena = D_0019A4E8_raw;
     unsigned char *e = (unsigned char *)(*(char **)(arena + 0x24)
         + *(short *)(*(char **)(arena + 0x20) + tex * 4 + 2) * 8);
@@ -900,7 +900,7 @@ void func_002008B8(int tex, int x, int y, int w, int h, int alpha) {
 
 /* func_002008B8 with an explicit texture window: UVs run from (u, v) to
    (u, v) plus the texture's size in 16ths. */
-void func_00200A90(int tex, int x, int y, int w, int h, int u, int v, int alpha) {
+void DrawHudSpriteUV(int tex, int x, int y, int w, int h, int u, int v, int alpha) {
     char *arena = D_0019A4E8_raw;
     unsigned char *e = (unsigned char *)(*(char **)(arena + 0x24)
         + *(short *)(*(char **)(arena + 0x20) + tex * 4 + 2) * 8);
@@ -991,7 +991,7 @@ extern void func_001F9BF0(float *, float *, float *);
    (func_001F9BD8 adds, func_001F9BF0 subtracts vectors), each packed as
    XYZ2 with D_0013E600[4]/[5] - 8 and the HUD arena's +0xC depth; UVs
    run from (0, 0) to (u * 16, v << 20). */
-void func_00200E38(int u, int v, long tex, float x, float y, float w, float h, float rot) {
+void DrawHudSpriteRotated(int u, int v, long tex, float x, float y, float w, float h, float rot) {
     float a[4];
     float b[4];
     float pos[4];
@@ -1304,7 +1304,7 @@ void draw_stretchable_ui_frame(int a0, int a1, int a2, int a3, int a4) {
     HudSprite(v1, a0, a1, 0x20, a3, a4);
     HudSprite(v0, a0 + 0x20, a1, a2 - 0x40, a3, a4);
     a0 = a0 + a2;
-    func_00200650(v1, a0 - 0x20, a1, 0x20, a3, a4);
+    DrawHudSpriteTurned(v1, a0 - 0x20, a1, 0x20, a3, a4);
 }
 
 extern s32 func_001F6FD8_01A38(s32, s32, u64, s32, s32) __asm__("func_001F6FD8");
@@ -1312,7 +1312,7 @@ extern void func_00201960(s32, s32, s32, s32, s32);
 void func_00201A38(s32 x, s32 y, s32 color, s32 text);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/ui/frames/draw_framed_text.c, draw_framed_text. */
-void func_00201A38(s32 x, s32 y, s32 color, s32 text) {
+void DrawFramedText(s32 x, s32 y, s32 color, s32 text) {
     s32 alpha = (s32)color >> 24;
     s32 text_left;
     s32 left;

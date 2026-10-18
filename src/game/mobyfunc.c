@@ -424,7 +424,7 @@ extern int func_0022ED80(int, int, int);
    branch is what gives retail's two registers: the compare keeps the
    first load, the copy (live across blocks) becomes CSE's canonical
    register for the index and the call. */
-void func_0020D790(unsigned char *s) {
+void MobySyncVoice(unsigned char *s) {
     if (s[0x7D] != 0xFF) {
         int id = s[0x7D];
         char *e = D_0013E650 + id * 0x70;
@@ -449,7 +449,7 @@ extern float func_001FA888(int);
    is starting, else blended between the current and previous frames by
    that factor. Written `frame > prevFrame` so the two bytes load in
    retail's order; prevFrameData is read before the first call. */
-float func_0020D830(Moby *m) {
+float MobyGetFrameValue(Moby *m) {
     int fd;
 
     if (m->seq != 0xFF) {
@@ -565,7 +565,7 @@ extern void func_001F9EC0(void *, void *, void *);
 /* Scale the single vertex block at arg2+0x30 by the object's 0x2C field
    in 1/1024 units, then run it through the two per-object transforms at
    arg0+0xC0 and arg0+0x10. 0x3A800000 is exactly 2^-10. */
-void func_0020DAF8(char *arg0, int arg1, char *arg2) {
+void MobyTransformScaledVertex(char *arg0, int arg1, char *arg2) {
     char buf[0x40];
     int n;
     char *v;
@@ -583,7 +583,7 @@ void func_0020DAF8(char *arg0, int arg1, char *arg2) {
 
 /* The many-vertex form of the same thing: arg1 blocks of 0x10 bytes
    starting at arg3, each scaled and transformed in place. */
-void func_0020DB98(char *arg0, int arg1, void *arg2, char *arg3) {
+void MobyTransformScaledVertexBatch(char *arg0, int arg1, void *arg2, char *arg3) {
     char *v = arg3;
     int n = arg1;
     float s;

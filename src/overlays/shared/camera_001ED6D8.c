@@ -30,7 +30,7 @@ extern char *D_L00_0015F050 MACRO_ADDR;
 extern void func_001F9BC0(void *);
 
 /* Initialises the camera slot tables and the camera state from the hero's transform. */
-void func_L00_001ED6D8(void) {
+void Camera_InitSlots(void) {
     char *g = (char *)&D_L00_00166D80;
     char *g1;
     char *q;

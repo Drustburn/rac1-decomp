@@ -29,7 +29,7 @@ void func_L00_0028FB78(char *m) {
     *(void **)(m + 0x74) = func_L00_0028F458;
     *(unsigned short *)(m + 0x34) &= 0xFFFC;
     *(int *)(m + 0x94) = *(int *)(*(int *)(m + 0x24) + 0x10);
-    func_00213D28(m, 1, 0);
+    MobySetAnimation(m, 1, 0);
     src = *(int **)(m + 0x78);
     *(int *)(g + 0x30) = src[0];
     *(int *)(g + 0x34) = src[1];
@@ -91,9 +91,9 @@ void func_L00_0028FCA0(int a) {
     D_L00_0015F6A8 = 6;
     D_L00_0016128C = u;
     D_L00_0015F500 = 0;
-    func_L00_00222B80(100, 2);
+    HeroEnterMoveState(100, 2);
     D_001414F5[0] = 1;
-    func_L00_00233868();
+    HeroSetObjectFlags();
     D_0013E130_s.x0->flags |= 1;
     for (o = D_L00_0016009C; o->st != 0xFF; o++) {
         if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB)) o->flags |= 0x80;
@@ -132,7 +132,7 @@ void func_L00_0028FCA0(int a) {
     }
     z = (S_171b *)(D_0014171B + 0x100B5);
     z->x1c = t + 40000;
-    func_00205220(0);
+    ParseSpaceSceneChunk(0);
     while (3 != z->x5a) {
         sound_update();
         func_00122598(0);
@@ -157,7 +157,7 @@ void func_L00_0028FFB0(void) {
         if ((unsigned short)(h - 6) >= 2) *(short *)(p + 0x5A) = 5;
     }
     sound_update();
-    func_L00_00203FB8();
+    HelpPopup_Cancel();
     func_L00_0028FCA0(0);
     *(short *)(D_0013E15A + 2) = 0;
 }
@@ -201,7 +201,7 @@ void func_L00_00290030(int dest) {
         *(int *)(h + 0x34) = v;
         t = v / d;
         *(int *)(h + 0x3C) = t;
-        func_00205220(t);
+        ParseSpaceSceneChunk(t);
         *(int *)(h + 0x38) = *(int *)(h + 0x34) % d;
     } else {
         memcard_Save(0, dest);

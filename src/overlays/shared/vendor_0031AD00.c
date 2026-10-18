@@ -197,9 +197,9 @@ void func_L01_0031B500(int *moby) {
             if (s[7] == -1) s[7] = s[6];
             if (s[6] == -1) s[6] = s[7];
             if (v[4] > 0) {
-                func_L00_002664B0(p[1], s[7]);
+                MusicRequestTrack(p[1], s[7]);
             } else {
-                func_L00_002664B0(p[0], s[6]);
+                MusicRequestTrack(p[0], s[6]);
             }
             p[2] = 0;
         }

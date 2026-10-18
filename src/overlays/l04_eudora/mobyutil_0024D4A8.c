@@ -26,7 +26,7 @@ extern float func_001F9B88(float);
 extern void func_001F9C30(void *, void *, float);
 
 /* closest point on a line to a point: writes the point, returns the parameter */
-float func_L04_0024D618(float *dst, float *a, float *b, float *c) {
+float ClosestPointOnLine(float *dst, float *a, float *b, float *c) {
     float d0[4];
     float d1[4];
     float d2[4];
@@ -59,7 +59,7 @@ extern float func_L04_0024D618(float *, float *, float *, float *);
 extern float func_001F9CB8(void *);
 
 /* finds the closest point on a polygon's edges to a point, returns whether the first test hit */
-int func_L04_0024D790(float *out, float *p, float *poly, int n) {
+int ClosestPointOnPolygon(float *out, float *p, float *poly, int n) {
     float tmp[4];
     float diff[4];
     float best;
@@ -68,7 +68,7 @@ int func_L04_0024D790(float *out, float *p, float *poly, int n) {
     best = 0;
     for (i = 0; i < n; i++) {
         float d;
-        func_L04_0024D618(tmp, poly + i * 4, poly + ((i + 1) % n) * 4, p);
+        ClosestPointOnLine(tmp, poly + i * 4, poly + ((i + 1) % n) * 4, p);
         FastVecSub(diff, p, tmp);
         d = FastVecLength(diff);
         if (i == 0 || d < best) {

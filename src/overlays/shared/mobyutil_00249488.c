@@ -34,7 +34,7 @@ void func_L03_0024F6D8(float t, float *dst, float *a, float *b, int flag)
     ang = (1.5707964f - FastArcSin(d)) * 0.5f * t;
     FastVecScale(q, q, FastSin(ang));
     q[3] = FastCos(ang);
-    func_00215650(dst, a, q);
+    RotateVectorByQuaternion(dst, a, q);
 }
 LINKER_REMNANT("asm/overlays", func_L03_0024FA90);
 

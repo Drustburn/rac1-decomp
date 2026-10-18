@@ -105,7 +105,7 @@ int func_L00_00267290(char *p, char *q) {
         y = (char *)&D_L00_00179200;
         *(int *)(y + 8) = (int)p; *(int *)(y + 0xC) = (int)q;
         if (*(unsigned short *)(e + 4) & 0x4000) { func_L00_0029A7D0((short)(*(unsigned short *)(e + 4) ^ 0x4000)); return 1; }
-        func_001FFCB0(*(int *)&D_L00_001601F0);
+        Hud_RemoveBank(*(int *)&D_L00_001601F0);
         h4 = *(short *)(e + 4);
         *(int *)&D_L00_001601F0 = -1;
         func_L00_00299B68(h4);
@@ -207,7 +207,7 @@ s32 func_L00_002676E8(void *p, u8 *out_p)
 }
 typedef struct { char pad[0x18E]; s16 head; s32 count; char pad2[0x1E0-0x194]; u32 t[30]; char pad3[0x2D0-0x258]; f32 v[30]; } Hist_266e80;
 extern Hist_266e80 D_0013CA40;
-int func_L00_00267BA8(int mask, int n, int *out) {
+int PadPressedWithin(int mask, int n, int *out) {
     int lim = D_0013CA40.count;
     int i;
     if (lim >= n)
@@ -225,11 +225,11 @@ int func_L00_00267BA8(int mask, int n, int *out) {
 INCLUDE_ASM("asm/overlays", func_L00_00267C34);
 extern int func_L00_00267BA8(int, int, int *);
 extern int func_001F9B70(int);
-int func_L00_00267C48(int a, int b, int c, int d) {
+int PadComboWithin(int a, int b, int c, int d) {
     int v[2];
     int r = 0;
-    if (func_L00_00267BA8(a, c, &v[0])) {
-        if (func_L00_00267BA8(b, c, &v[1])) {
+    if (PadPressedWithin(a, c, &v[0])) {
+        if (PadPressedWithin(b, c, &v[1])) {
             r = func_001F9B70(v[0] - v[1]) < d;
         }
     }

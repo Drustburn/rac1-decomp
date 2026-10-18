@@ -163,7 +163,7 @@ void func_L18_002F90A0(M1454 *m) {
                 qcopy(t + 0x10, (char *)m + 0x10);
                 *(int *)(t + 0x94) = 0;
             }
-            func_00213DE0(d->c138, 0, 0, 0);
+            MobyBlendAnimation(d->c138, 0, 0, 0);
             func_L00_00251E30(d->c138);
         }
         if (d->c13c == 0) {
@@ -183,11 +183,11 @@ void func_L18_002F90A0(M1454 *m) {
                 qcopy(t + 0x10, (char *)m + 0x10);
                 *(int *)(t + 0x94) = 0;
             }
-            func_00213DE0(d->c13c, 0, 0, 0);
+            MobyBlendAnimation(d->c13c, 0, 0, 0);
             func_L00_00251E30(d->c13c);
         }
         if (m->b53 != 1) {
-            func_00213DE0(m, 1, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 1, 0, scale_ticks(10));
         }
         m->state = 1;
         break;
@@ -197,20 +197,20 @@ void func_L18_002F90A0(M1454 *m) {
             d->f134 = 0;
             d->f130 = 10.0f;
             if (m->b53 != 2) {
-                func_00213DE0(m, 2, 0, scale_ticks(20));
+                MobyBlendAnimation(m, 2, 0, scale_ticks(20));
             }
             m->state = 2;
         }
         break;
     case 2:
         func_L18_002F9AB8_v(m);
-        func_00214D28(&d->f130, 30.0f, D_0015EE6C * 6.0f);
+        ApproachValue(&d->f130, 30.0f, D_0015EE6C * 6.0f);
         d->f134 = FastAddRots(d->f134, D_0015EE6C * 6.2831855f);
         if (func_00215B18((char *)m, 4.0f) || func_00215B18((char *)m, 10.0f)) {
             float v[4];
             float w[4];
             float s;
-            if (func_0020D830(m) < 7.0f) {
+            if (MobyGetFrameValue(m) < 7.0f) {
                 func_L00_00250800(m, 1, w);
                 s = *(float *)&D_L18_0016250C;
             } else {
@@ -232,7 +232,7 @@ void func_L18_002F90A0(M1454 *m) {
         }
         if (*(int *)((char *)d + 0xB4) == 2) {
             if (m->b53 != 1) {
-                func_00213DE0(m, 1, 0, scale_ticks(20));
+                MobyBlendAnimation(m, 1, 0, scale_ticks(20));
             }
             m->state = 1;
         }
@@ -332,7 +332,7 @@ void func_L18_002F94B0(void *mv) {
     func_L00_001FFED8(v, 1, *(float *)(d + 0x118));
     func_L00_001FFED8(d + 0xD0, 2, FastSubRots(*(float *)(d + 0x110), *(float *)(m + 0x48)));
     func_001FA588(d + 0xD0, v, d + 0xD0);
-    func_L00_0025E590(m, d + 0x60);
+    StepColorFade(m, d + 0x60);
 }
 extern int *D_L18_001B11B0[];
 extern short D_L18_00162508;
@@ -355,10 +355,10 @@ void func_L18_002F9AB8(char *m) {
     if (FastDiffRots(ang, *(float *)(m + 0x48)) > 0.2617994f) {
         f = D_0015EE6C_g;
     }
-    func_00214D28((float *)(d + 0x12C), f, D_0015EE70);
+    ApproachValue((float *)(d + 0x12C), f, D_0015EE70);
     z = 0.0f;
     func_L00_001FF4B0(v, m + 0xC0, *(float *)(d + 0x12C));
-    func_L00_00259868((int)m, (int)v, 0.5f, 0.5f, z, 0);
+    MoveMobyWithCollision((int)m, (int)v, 0.5f, 0.5f, z, 0);
     if (FastVecDist(m + 0x10, t) < 1.0f) {
         int k = random_integer_below(*D_L18_001B11B0[*(int *)(d + 0x100)] - 1) + 1;
         *(int *)(d + 0x120) = (*(int *)(d + 0x120) + k) % *D_L18_001B11B0[*(int *)(d + 0x100)];

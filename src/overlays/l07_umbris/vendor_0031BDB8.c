@@ -695,17 +695,17 @@ void func_L07_00320CD0(unsigned char *moby) {
                 func_L00_00250800(o, 3, b0);
                 FastVecSub(c0, a0, b0);
                 func_L00_001FF4B0(c0, c0, *(float *)&D_L07_00161D68);
-                func_L00_00264BE8(a0, a0, c0, *(float *)&D_L07_00161D6C, *(float *)&D_L07_00161D70);
+                SpawnSparkRings(a0, a0, c0, *(float *)&D_L07_00161D6C, *(float *)&D_L07_00161D70);
                 func_L00_00250800(o, 1, a1);
                 func_L00_00250800(o, 4, b1);
                 FastVecSub(c1, a1, b1);
                 func_L00_001FF4B0(c1, c1, *(float *)&D_L07_00161D68);
-                func_L00_00264BE8(a1, a1, c1, *(float *)&D_L07_00161D6C, *(float *)&D_L07_00161D70);
+                SpawnSparkRings(a1, a1, c1, *(float *)&D_L07_00161D6C, *(float *)&D_L07_00161D70);
                 func_L00_00250800(o, 2, a2);
                 func_L00_00250800(o, 5, b2);
                 FastVecSub(c2, a2, b2);
                 func_L00_001FF4B0(c2, c2, *(float *)&D_L07_00161D68);
-                func_L00_00264BE8(a2, a2, c2, *(float *)&D_L07_00161D6C, *(float *)&D_L07_00161D70);
+                SpawnSparkRings(a2, a2, c2, *(float *)&D_L07_00161D6C, *(float *)&D_L07_00161D70);
             }
         }
         break;

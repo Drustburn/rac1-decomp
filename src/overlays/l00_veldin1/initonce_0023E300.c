@@ -38,7 +38,7 @@ void func_L00_0023E300(void) {
         UpdateSkyShellsAnimated();
         break;
     case 2:
-        func_L00_0028A878();
+        SkyStarFieldUpdate();
         break;
     case 3:
         func_L00_0028AC80();
@@ -50,7 +50,7 @@ void func_L00_0023E300(void) {
         func_L00_0028AEB0();
         break;
     case 6:
-        func_L00_0028AF90();
+        SkyParticlesUpdate();
         break;
     case 7:
         func_L00_0028B4E0();
@@ -59,7 +59,7 @@ void func_L00_0023E300(void) {
         func_L00_0028B5C8();
         break;
     case 9:
-        func_L00_0028B680();
+        DrawSkyShellsExtra();
         break;
     case 10:
         func_L00_0028B758();
@@ -83,7 +83,7 @@ void func_L00_0023E300(void) {
         b8f8_b();
         break;
     case 17:
-        func_L00_0028BF60();
+        SkyStarField2Update();
         break;
     case 18:
         func_L00_0028C358();
@@ -154,7 +154,7 @@ void func_L00_0023EC00(void) {
     if (D_0015EE84_m == 0) {
         for (i = 0; i < D_L00_0016C960.count; i++) {
             if (D_L00_0016C960.mobys[i]->oClass == 0x212) {
-                AddDrawCallback((void *)func_00233AB8, (void *)D_L00_0016C960.mobys[i]);
+                AddDrawCallback((void *)DrawEnvMappedObject, (void *)D_L00_0016C960.mobys[i]);
             }
         }
     }
@@ -175,15 +175,15 @@ void func_L00_0023EC00(void) {
                 func_L00_00250800(src, n % 2, buf);
                 a = random_angle_radians();
                 b = random_angle_radians();
-                func_00215C00(v, random_float_between(D_0015EE6C * 0.7f, D_0015EE6C * 2.2f), a, b);
+                BuildSphericalOffset(v, random_float_between(D_0015EE6C * 0.7f, D_0015EE6C * 2.2f), a, b);
                 r = scale_ticks(0xC);
-                func_L00_0026DD70(buf, v, 0x80808080, 0x808080, rand_range(r, scale_ticks(0x23)), 147000.0f);
+                PartType22Spawn(buf, v, 0x80808080, 0x808080, rand_range(r, scale_ticks(0x23)), 147000.0f);
             }
         }
     }
     if (D_0015EE84_m == 7 && D_L00_0016C960.state == 4 && D_L00_0016C960.unk188 != 0
         && D_L00_0016C960.unk188->oClass == 0x214) {
-        AddDrawCallback((void *)func_00233AB8, (void *)D_L00_0016C960.unk188);
+        AddDrawCallback((void *)DrawEnvMappedObject, (void *)D_L00_0016C960.unk188);
     }
     if (D_0015EE84_m == 14 && D_L00_0016C960.state == 0) {
         m = D_L00_0016C960.unk17C;

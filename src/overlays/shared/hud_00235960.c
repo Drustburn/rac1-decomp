@@ -129,7 +129,7 @@ extern void func_001FFC48(void *);
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
    0xFFFF, 0, 0, 0, 0, 1), +0x7C = 0, +0x6C = -6, then reloads it with
    func_001FFC48. */
-void func_L00_00236208(void) {
+void Hud_ResetBanks(void) {
     int i;
 
     for (i = 0; i < 13; i++) {
@@ -166,7 +166,7 @@ typedef struct {
    *X moves left by the width (+0x58) with bit 3, else by half of it.
    Returns 0. The flags are read once for the first test and again after
    the store; `(flags ^ 1) & 1` is retail's xori / andi test of bit 0. */
-int func_L00_00236400(HudElem *rec, int *x, int *y) {
+int Hud_AlignElement(HudElem *rec, int *x, int *y) {
     int w = rec->w;
     int h = rec->h;
     int flags = rec->flags;
@@ -196,7 +196,7 @@ extern float D_L00_0017E500[];
    D_L00_0017E500, and offsets *Y by it times (height + 52) for flags 1
    (up) / 2 (down), or *X by it times (width + 20) for flags 4 (left) /
    8 (right), rounded (func_001FA888 / func_001FA898 convert). */
-void func_L00_00236468(HudElem *e, int *x, int *y, int t, int d) {
+void Hud_SlideElement(HudElem *e, int *x, int *y, int t, int d) {
     int dx = 0;
     int dy = 0;
     float s;
@@ -255,14 +255,14 @@ extern void func_L00_00236610(HudElem *);
 
 /* Resets a HUD element: a timer of 30 + func_001F9850(180) (+0x7C),
    offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
-void func_L00_00236710(HudElem *e) {
+void Hud_InitElement(HudElem *e) {
     e->unk7C = scale_ticks(0xB4) + 0x1E;
     e->unk48 = 0;
     e->unk4A = 0;
     func_L00_00236610(e);
 }
 /* func_L00_00236710 for a 32 x 32 element. */
-void func_L00_00236750(HudElem *e) {
+void Hud_InitSmallElement(HudElem *e) {
     e->unk7C = scale_ticks(0xB4) + 0x1E;
     e->unk48 = 0;
     e->unk4A = 0;
@@ -288,7 +288,7 @@ int func_L00_002367A8(int key, int val) {
 }
 
 /* Eases a counter's shown value toward its target and animates its two drifting digits. */
-void func_L00_00236830(HudElem *e) {
+void Hud_UpdateCounter(HudElem *e) {
     unsigned char *c = e->cnt;
     int v;
     int cap;
@@ -352,7 +352,7 @@ void func_L00_00236830(HudElem *e) {
             c[0]--;
         }
     }
-    func_L00_0023B440((char *)e + 0x40);
+    Hud_EvalAnimFrame((char *)e + 0x40);
 }
 extern int func_L00_0023B440(char *);
 
@@ -401,7 +401,7 @@ void func_L00_00236AB8(HudElem *e) {
             c[0]--;
         }
     }
-    func_L00_0023B440((char *)e + 0x40);
+    Hud_EvalAnimFrame((char *)e + 0x40);
 }
 extern float func_002140F8(float, float);
 extern float D_L00_0017E760[][4];
@@ -411,12 +411,12 @@ extern short D_L00_0015F838;
 extern short D_L00_0015F83C;
 
 /* fills 100 hud particle records with randomised positions and drift */
-void func_L00_00236BF8(HudElem *e) {
+void Hud_InitParticles(HudElem *e) {
     int i;
     float v, lo, span, hi;
     int n;
 
-    func_L00_00236710(e);
+    Hud_InitElement(e);
     for (i = 0; i < 100; i++) {
         v = *(float *)&D_L00_0015F830;
         if (i >= 10) {
@@ -446,7 +446,7 @@ extern short D_L00_0015F838;
 
 /* bounces the drifting particles around a box that depends on their index, after updating its
    HUD element (the element it is the callback of, passed on in $a0) */
-void func_L00_00236DE8(HudElem *e) {
+void Hud_UpdateParticles(HudElem *e) {
     int i;
     int cnt;
     int par;
@@ -504,7 +504,7 @@ void func_L00_00237B20(HudElem *e) {
 }
 // Wrapper function (declaration provided by includes)
 void DefaultVtbl_DeleteMoby(void *e) {
-    func_L00_00236830(e);
+    Hud_UpdateCounter(e);
 }
 INCLUDE_ASM("asm/overlays", func_L00_00237B90);
 extern char D_0013F450[];
@@ -518,7 +518,7 @@ extern void func_L00_00236830(HudElem *);
 void func_L00_00238148(HudElem *e) {
     char *base;
 
-    func_L00_00236830(e);
+    Hud_UpdateCounter(e);
     if (gGoldSuckCannon != 0) {
         e->unk08 = 10;
     } else {
@@ -544,7 +544,7 @@ extern void func_L00_00236468(HudElem *, int *, int *, int, int);
 extern void func_L00_0023C458(int, int, int, int, int, int);
 
 /* Draws a HUD gauge frame. */
-int func_L00_002381D0(HudElem *e) {
+int Hud_DrawGaugeFrame(HudElem *e) {
     int pos[2];
     int left, top, right, bottom, w, h, bh, step, i;
     {
@@ -558,8 +558,8 @@ int func_L00_002381D0(HudElem *e) {
             __builtin_memcpy(dst, src, 4);
         }
     }
-    func_L00_00236400(e, &pos[0], &pos[1]);
-    func_L00_00236468(e, &pos[0], &pos[1], e->unk6C, 0);
+    Hud_AlignElement(e, &pos[0], &pos[1]);
+    Hud_SlideElement(e, &pos[0], &pos[1], e->unk6C, 0);
     w = *(int *)&D_L00_0015F840 * 0xD0;
     h = *(int *)&D_L00_0015F844 * 0xA0;
     bh = *(int *)&D_L00_0015F840 * 0x260;
@@ -818,7 +818,7 @@ void func_L00_00238530(Obj_38530 *p) {
             D_L00_0015FB54_38530 = b;
             D_L00_0015FB50 = a;
         }
-        func_001FFCB0(p->w64);
+        Hud_RemoveBank(p->w64);
         p->w6C = -6;
         D_L00_0015FB4C = D_L00_0015F4F8;
     }
@@ -894,7 +894,7 @@ int func_L00_00238C30(HudElem *rec) {
     }
     x = rec->unk50;
     y = rec->unk54;
-    func_L00_00236400(rec, &x, &y);
+    Hud_AlignElement(rec, &x, &y);
     half_w = GI(D_L00_0015F7F8) / 2;
     half_h = GI(D_L00_0015F7FC) / 2;
     HudSprite(GetIconFrame(0xe934, 0), x, y, half_w, half_h, alpha);
@@ -1101,7 +1101,7 @@ void func_L00_00239510(Obj *o) {
     }
     if (c[0] == 0) {
         { int a = o->w78; int b = o->w74; D_L00_0015FB54_export = b; D_L00_0015FB50 = a; }
-        func_001FFCB0(o->w64);
+        Hud_RemoveBank(o->w64);
         o->w6C = -6;
         D_L00_0015FB4C = D_L00_0015F4F8;
     }
@@ -1253,7 +1253,7 @@ extern HudCounter D_L00_0015FB68 MACRO_ADDR;
    0, 0, 0, 1. They are declared as one 8-byte struct: as separate shorts
    -G2 would put them in $gp's reach, where retail stores them through
    lui $at. */
-void func_L00_00239F40(HudElem *e) {
+void HudHealthInit(HudElem *e) {
     e->unk7C = scale_ticks(0xB4) + 0x1E;
     e->w = 0x40;
     e->h = 0x40;
@@ -1327,7 +1327,7 @@ void func_L00_00239FC0(HudElem *e) {
             e->unk6C = -6;
         }
     }
-    func_L00_0023B440((char *)e + 0x40);
+    Hud_EvalAnimFrame((char *)e + 0x40);
 }
 extern char D_0013E633[];
 extern int D_0015EE80_m __asm__("D_0015EE80") MACRO_ADDR;
@@ -1415,7 +1415,7 @@ int func_L00_0023A1A0(char *e) {
     y = y0 + *(int *)&D_L00_0015F8F0;
     tex = GetIconFrame(0x7580, 1);
     tex2 = GetIconFrame(0x7580, 0);
-    func_00200650(tex, x0 + bw, y, (*(int *)&D_L00_0015F8FC), (*(int *)&D_L00_0015F8FC), w);
+    DrawHudSpriteTurned(tex, x0 + bw, y, (*(int *)&D_L00_0015F8FC), (*(int *)&D_L00_0015F8FC), w);
     HudSprite(tex2, x, y, bw << 1, (*(int *)&D_L00_0015F8FC), w);
     {
         int h = (*(int *)&D_L00_0015F8FC);
@@ -1424,7 +1424,7 @@ int func_L00_0023A1A0(char *e) {
     if (bw2) {
         int x2;
         y += *(int *)&D_L00_0015F8EC;
-        func_00200650(tex, x0 + bw2, y, (*(int *)&D_L00_0015F8FC), (*(int *)&D_L00_0015F8FC), w);
+        DrawHudSpriteTurned(tex, x0 + bw2, y, (*(int *)&D_L00_0015F8FC), (*(int *)&D_L00_0015F8FC), w);
         x2 = x0 - bw2;
         HudSprite(tex2, x2, y, bw2 << 1, (*(int *)&D_L00_0015F8FC), w);
         {
@@ -1595,7 +1595,7 @@ int func_L00_0023A788(HudElem_3A788 *m)
 
     /* panel: right cap, stretched middle, left cap */
     slide = truncate_float_to_s32((f32)((*(s32 *)&D_L00_0015F92C) * digits) * open);
-    func_00200650(GetIconFrame(0x7580, 1), cap_x, y, 32, 32, alpha);
+    DrawHudSpriteTurned(GetIconFrame(0x7580, 1), cap_x, y, 32, 32, alpha);
     panel_x -= slide;
     HudSprite(GetIconFrame(0x7580, 0), panel_x, y, slide + 0x10, 32, alpha);
     HudSprite(GetIconFrame(0x7580, 1), panel_x - 0x20, y, 32, 32, alpha);
@@ -1716,7 +1716,7 @@ int func_L00_0023AC68(char *m) {
     alpha = truncate_float_to_s32((float)*(int *)&D_L00_0015F9CC * open);
     panel_right = x + *(int *)&D_L00_0015F9D4;
     slide = truncate_float_to_s32((float)*(int *)&D_L00_0015F9D0 * open);
-    func_00200650(GetIconFrame(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
+    DrawHudSpriteTurned(GetIconFrame(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
     panel_left = panel_right - slide;
     HudSprite(GetIconFrame(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
     HudSprite(GetIconFrame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
@@ -1750,7 +1750,7 @@ extern void func_00200468(int, int, int, int, int, int);
    32 x 32 icon that is visible only while D_00140A86 is set. Returns the
    width. The position is two scalars, not an array: that gives retail's
    argument order. */
-int func_L00_0023AFD8(HudElem *e) {
+int Hud_DrawMeter(HudElem *e) {
     int x;
     int y;
     int len;
@@ -1759,8 +1759,8 @@ int func_L00_0023AFD8(HudElem *e) {
     y = e->unk54;
     e->w = 0x100;
     e->h = 0x40;
-    func_L00_00236400(e, &x, &y);
-    func_L00_00236468(e, &x, &y, e->unk6C, 0);
+    Hud_AlignElement(e, &x, &y);
+    Hud_SlideElement(e, &x, &y, e->unk6C, 0);
     len = e->unk74 * 0xDD / e->unk08 + 0x1B;
     func_L00_0023C058(GetIconFrame(0x7558, 1), x, y, len, 0x40, 0x80);
     HudSprite(GetIconFrame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
@@ -1820,7 +1820,7 @@ int func_L00_0023B140(char *m) {
         wd = x + truncate_float_to_s32((float)w * f21);
         HudSprite(GetIconFrame(0x7580, 1), x - 0x1C, y, 0x20, 0x20, a);
         HudSprite(GetIconFrame(0x7580, 0), x4, y, wd, 0x20, a);
-        func_00200650(GetIconFrame(0x7580, 1), x4 + wd, y, 0x20, 0x20, a);
+        DrawHudSpriteTurned(GetIconFrame(0x7580, 1), x4 + wd, y, 0x20, 0x20, a);
         tex = GetIconFrame(*(int *)m, 3);
         *(int *)(m + 0x44) = tex;
         HudFrame(m, tex, x, y, 0, alpha);
@@ -1842,7 +1842,7 @@ extern char *D_L00_0017E5F4;
 extern int D_L00_0015F6B0 MACRO_ADDR;
 
 /* Evaluates an animated counter: picks a frame index from a table entry by mode (hold, loop, ping-pong, random pause) and stores it at +4. */
-int func_L00_0023B440(char *p) {
+int Hud_EvalAnimFrame(char *p) {
     char *e = D_L00_0017E5F4 + *(short *)p * 8;
     int r = 0;
 
@@ -1968,8 +1968,8 @@ void func_L00_0023B750(void) {
                 func_001FFDA0(D_hud_pair[1], 0);
                 D_hud_pair[1] = -1;
             }
-            *(short *)(base + 0x1634) = queue_animation_update(0x10, 0xFFFF, (int)func_L00_00236710, (int)func_L00_00236830,
-                                                      (int)func_L00_0023AFD8, (int)(base + 0x1630), 200);
+            *(short *)(base + 0x1634) = queue_animation_update(0x10, 0xFFFF, (int)Hud_InitElement, (int)Hud_UpdateCounter,
+                                                      (int)Hud_DrawMeter, (int)(base + 0x1630), 200);
         } else {
             if (D_hud_pair[1] != -1) {
                 func_001FFDA0(D_hud_pair[1], 0);
@@ -1987,7 +1987,7 @@ extern void func_L00_00236208(void);
 /* Resets the HUD banks (func_L00_00236208), then D_L00_0015FA40 = 1,
    D_L00_0015FA48 = -1 and D_L00_0015FA44 = 0. */
 void func_L00_0023B890(void) {
-    func_L00_00236208();
+    Hud_ResetBanks();
     *(int *)&D_L00_0015FA40 = 1;
     D_L00_0015FA48 = -1;
     D_L00_0015FA44 = 0;

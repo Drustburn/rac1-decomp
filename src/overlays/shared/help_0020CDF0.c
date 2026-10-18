@@ -39,7 +39,7 @@ extern f32 func_001FA850(f32, f32);
 
 /* Ledge probe: steps forward from `pos` along the hero's yaw looking for a flat top (normal within 20 degrees of up, not material 9 or 12) at least `min_height` above the floor and not above pos + up, then for the wall under it. Returns 1 when the hero (facing `*dir`) faces that wall within 65 degrees and the ledge edge is found within 2.4 units along it. Constants live in locals because retail loads each one once.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/0020c758.c, FUN_L00_0020c758. */
-int func_L00_0020CDF0(Vec4 *pos, f32 *dir)
+int ProbeLedge(Vec4 *pos, f32 *dir)
 {
     Vec4 probe, top, low, wall, edge;
     f32 drop, fwd, up, reach, min_height;
@@ -277,7 +277,7 @@ extern void func_L00_00233EE0(float *, float, float, float);
 /* OUT = the camera-space point (0.3, 0, 1.34) in world space
    (func_L00_00233EE0). */
 void func_L00_0020D990(float *out) {
-    func_L00_00233EE0(out, 0.3f, 0.0f, 1.34f);
+    LocalToWorldPoint(out, 0.3f, 0.0f, 1.34f);
 }
 extern char D_0013E633[];
 extern char D_0013A5E0[];
@@ -474,7 +474,7 @@ extern float func_L00_0020DD48(void *obj, float y, float x, float z, float w, in
 extern void *D_L00_001ABD80[];
 
 /* Finds the listed object nearest a point. Adapted from Lombyte (MIT) for PAL: overlays/shared/ui_help_0020c758.c, FUN_L00_0020d8f8. */
-char *func_L00_0020DF90(float a, float b, float c, float d) {
+char *FindNearestListedObject(float a, float b, float c, float d) {
     char *best = 0;
     float bd = 1.0e8f;
     int i = 0;
@@ -589,7 +589,7 @@ void func_L00_0020E100(void) {
             if (*(int *)(w + 0xD10) == 0) {
                 return;
             }
-            if (func_00214D28((float *)(*(char **)(w + 0xD10) + 8), 0.0f, D_0015EE60 * 0.05f) == 0.0f) {
+            if (ApproachValue((float *)(*(char **)(w + 0xD10) + 8), 0.0f, D_0015EE60 * 0.05f) == 0.0f) {
                 func_L00_00250120(*(void **)(w + 0x2080), w + 0xD10);
             }
         }
@@ -599,7 +599,7 @@ void func_L00_0020E100(void) {
         o = *(char **)(z + 0xD10);
         if (o != 0 && flag) {
             char *e;
-            func_00214D28((float *)(o + 8), spd, D_0015EE60 * 0.05f);
+            ApproachValue((float *)(o + 8), spd, D_0015EE60 * 0.05f);
             e = *(char **)(z + 0xD10);
             if (*(unsigned char *)(e + 0x23) != id) {
                 func_L00_00250418(*(int *)(z + 0x2080), *(void **)(z + 0xD10), id, 0, scale_ticks(8), 1);
@@ -619,7 +619,7 @@ extern int func_001F9850(int);
 extern void func_L00_00250418(int, void *, int, int, int, int);
 
 /* Spawn the one or two help markers for the current help target, in free slots. */
-void func_L00_0020E9F8(int a, int b) {
+void SpawnHelpMarkers(int a, int b) {
     char *g = (char *)D_0013E633 + 0xE1D;
     int i;
     int t;
@@ -816,7 +816,7 @@ void func_L00_0020F118(void) {
             h->items[0].state = 2;
             if (id == 8) {
                 h->items[0].button_mask = 0x80;
-                func_00213DE0(m, 1, 0, 1);
+                MobyBlendAnimation(m, 1, 0, 1);
             } else {
                 h->items[0].button_mask = 0x20;
             }
@@ -1088,7 +1088,7 @@ void func_L00_0020F7F8(char *arg) {
     for (k = 0; k < 3; k++) {
         FastVecScale(&vv[k], &vv[k], 1.0f / (float)acc);
     }
-    func_002153E8(vv, out);
+    MatrixToEuler(vv, out);
 }
 INCLUDE_ASM("asm/overlays", func_L00_0020FC18);
 extern char D_0013E633[];
@@ -1515,10 +1515,10 @@ void func_L00_00210558(int i) {
                 *(int *)(*(char **)((char *)k + 0xD04) + 0x34) = 1;
             }
             if (*(void **)(s + 0x1090) != 0) {
-                func_00213DE0(*(void **)(s + 0x1090), 2, 0, 2);
+                MobyBlendAnimation(*(void **)(s + 0x1090), 2, 0, 2);
             }
             if (*(void **)(s + 0x1094) != 0 && i != 3) {
-                func_00213DE0(*(void **)(s + 0x1094), 2, 0, 2);
+                MobyBlendAnimation(*(void **)(s + 0x1094), 2, 0, 2);
             }
         }
         {
@@ -1581,11 +1581,11 @@ void func_L00_002110C0(int mode, int id, char *obj) {
     p[0x20A6] = 1;
     func_L00_00210E00();
     *(char **)(p + 0x2080) = *(char **)(p + 0xA88);
-    func_L00_002638B8(p + 0x1670);
+    DeleteOwnedMobys(p + 0x1670);
     o = *(char **)(p + 0x2080);
     *(int *)(o + 0x98) = -1;
-    func_L00_00233868();
-    func_L00_00207220();
+    HeroSetObjectFlags();
+    HeroClearSoundSlots();
     func_L00_00205B50();
     p[0x20A4] = mode;
     *(char **)(p + 0xA84) = obj;
@@ -1599,7 +1599,7 @@ void func_L00_002110C0(int mode, int id, char *obj) {
     *(float *)(p + 0xA94) = 1.0f;
     func_L00_00232EA8();
     func_L00_0025805C(*(void **)(p + 0x2080));
-    func_L00_00208070();
+    CameraShakeUpdate();
     *(short *)(p + 0x22CC) = id;
     switch (mode) {
     case 1:
@@ -1610,14 +1610,14 @@ void func_L00_002110C0(int mode, int id, char *obj) {
         *(int *)(p + 0x1630) = 0xC8;
         break;
     }
-    func_L00_00222B80(id, 1);
+    HeroEnterMoveState(id, 1);
 }
 extern void func_001FFDA0(int, int);
 extern void func_L00_00207220(void);
 #define B ((char *)D_0013E633 + 0xE1D)
 
 /* Resets the help state: frees its markers, restores the camera target and closes the prompt. */
-void func_L00_002111E8(void) {
+void ResetHelpState(void) {
     char *g = B;
     char *g2;
     void *p;
@@ -1660,7 +1660,7 @@ void func_L00_002111E8(void) {
         DeleteMoby(p);
         *(int *)(g + 0xA8C) = 0;
     }
-    func_L00_00207220();
+    HeroClearSoundSlots();
     r = *(char **)(g + 0xA88);
     *(char **)(g + 0x2080) = r;
     qcopy(r + 0x10, g + 0x80);
@@ -1668,7 +1668,7 @@ void func_L00_002111E8(void) {
     *(float *)(g + 0xA94) = 1.0f;
     func_L00_00232EA8();
     if (*(int *)(g + 0x2084) != 100 || (D_L00_0015F6A8 != 2 && D_L00_0015F6A8 != 6)) {
-        func_L00_00222B80(0, 1);
+        HeroEnterMoveState(0, 1);
     }
 }
 extern void func_L00_001FF500(float *, float *, float);
@@ -1802,7 +1802,7 @@ s32 func_L00_002113A0(s32 arg) {
     if (arg == 0) {
         return 1;
     }
-    func_L00_00207220();
+    HeroClearSoundSlots();
     flag = 0;
     if (tbl->i30 & 1) {
         qcopy(&v, &tbl->v10);
@@ -1822,11 +1822,11 @@ s32 func_L00_002113A0(s32 arg) {
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
-            func_L00_00222B80(id, 1);
+            HeroEnterMoveState(id, 1);
             return 1;
         }
         if (D_0013F450_113A0.i208C == 0x16) {
-            func_L00_00222B80(0x6D, 1);
+            HeroEnterMoveState(0x6D, 1);
             D_0013F450_113A0.f128 = D_0015EE6C * 7.0f;
             return 1;
         }
@@ -1836,7 +1836,7 @@ s32 func_L00_002113A0(s32 arg) {
                 id = 0x82;
                 goto call_ret;
             }
-            func_L00_00222B80(0x75, 1);
+            HeroEnterMoveState(0x75, 1);
         } else if (D_0013F450_113A0.i208C == 0x11) {
             mob = D_0013F450_113A0.p2280;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
@@ -1850,7 +1850,7 @@ s32 func_L00_002113A0(s32 arg) {
                     func_L00_00217570_113A0(0x1C, 0);
                 }
             }
-            func_L00_00222B80(0x76, 1);
+            HeroEnterMoveState(0x76, 1);
         } else if (D_0013F450_113A0.i208C == 3) {
             mob = D_0013F450_113A0.p2280;
             if (mob != 0) {
@@ -1859,9 +1859,9 @@ s32 func_L00_002113A0(s32 arg) {
                     goto call_ret;
                 }
             }
-            func_L00_00222B80(0x16, 1);
+            HeroEnterMoveState(0x16, 1);
         } else {
-            func_L00_00222B80(0x16, 1);
+            HeroEnterMoveState(0x16, 1);
         }
         e = D_0015EE6C;
         a = e * 5.7f;
@@ -1876,12 +1876,12 @@ s32 func_L00_002113A0(s32 arg) {
         }
         break;
     case 1:
-        func_L00_00222B80(0x46, 1);
+        HeroEnterMoveState(0x46, 1);
         func_L00_00211338_113A0(&v, flag, D_0015EE6C * 5.0f, D_0015EE6C * 3.0f);
         break;
     case 2:
         if ((tbl->i24 & 4) || D_0013F450_113A0.i1630 <= 0) {
-            func_L00_00222B80(0x5D, 1);
+            HeroEnterMoveState(0x5D, 1);
             func_L00_002AAE80();
             if (D_0013F450_113A0.h30E == 0) {
                 func_L00_00211338_113A0(&v, flag, D_0015EE6C * 7.0f, D_0015EE6C * 3.5f);
@@ -1891,7 +1891,7 @@ s32 func_L00_002113A0(s32 arg) {
         clear_u64_value(&v);
         break;
     case 3:
-        func_L00_00222B80(0x56, 1);
+        HeroEnterMoveState(0x56, 1);
         func_L00_00211338_113A0(&v, flag, D_0015EE6C * 5.0f, D_0015EE6C * 2.4f);
         break;
     }
@@ -2007,8 +2007,8 @@ void func_L00_00211A38(void) {
     }
     p = (float *)(D_0013F450 + 0x220);
     t = D_0013F450;
-    func_00214D28(p, *(float *)(t + 0x228), D_0015EE60 * 0.02f);
-    func_00214D28(p + 1, *(float *)(t + 0x22C), D_0015EE60 * 0.02f);
+    ApproachValue(p, *(float *)(t + 0x228), D_0015EE60 * 0.02f);
+    ApproachValue(p + 1, *(float *)(t + 0x22C), D_0015EE60 * 0.02f);
     func_L00_0025C918(p + 5, p + 6, *(float *)(t + 0x230),
         D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.0f);
 }
@@ -2228,7 +2228,7 @@ void func_L00_002123B0(float x, float y, float z) {
     func_001FA218(t, in);
     func_001FA218(u, D_0013E633 + 0xEAD);
     sce_vu0_mul_matrix(u, u, t);
-    func_002153E8(u, D_0013E633 + 0xEAD);
+    MatrixToEuler(u, D_0013E633 + 0xEAD);
 }
 typedef struct { float x, y, z, w; } Vp __attribute__((aligned(16)));
 extern void func_001F9EE8(void *, void *, void *);
@@ -2307,9 +2307,9 @@ void func_L00_00212740(float up, float down) {
     float target = *(float *)(base + 0x190);
 
     if (*(float *)(base + 0x194) < target) {
-        func_00214D28((float *)(base + 0x194), target, up);
+        ApproachValue((float *)(base + 0x194), target, up);
     } else {
-        func_00214D28((float *)(base + 0x194), target, down);
+        ApproachValue((float *)(base + 0x194), target, down);
     }
 }
 extern float func_001F9F90(float);
@@ -2349,7 +2349,7 @@ void func_L00_00212790(float arg0) {
 
         qcopy(out, vec);
     } else {
-        func_00215C00(out, r, y, *(float *)(g + 0x2E4));
+        BuildSphericalOffset(out, r, y, *(float *)(g + 0x2E4));
     }
 
     qcopy(D_0013F450 + 0xE0, out);
@@ -2400,7 +2400,7 @@ void func_L00_002129D0(int arg) {
     char *h1, *h2, *h3, *h4, *q;
 
     if (*(short *)(g + 0x308) == 0) {
-        if (func_L00_00234250((float *)(g + 0xE0)) < D_0015EE6C * 0.1f) {
+        if (ViewXyLength((float *)(g + 0xE0)) < D_0015EE6C * 0.1f) {
             return;
         }
         a = 0.37f;
@@ -2616,7 +2616,7 @@ void func_L00_00212E70(void) {
     D_0013F450_12E70.xB12ed = r;
     D_0013F450_12E70.xH12e0 = CollType();
     if (D_0013F450_12E70.xH12e0 == 0) {
-        D_0013F450_12E70.xF2f0 = func_00214440(D_L00_00173F60, (u8 *)&D_0013F450_12E70 + 0x280);
+        D_0013F450_12E70.xF2f0 = GetGroundHeight(D_L00_00173F60, (u8 *)&D_0013F450_12E70 + 0x280);
         if (D_0013F450_12E70.xF88 < D_0013F450_12E70.xF2f0 && D_0013F450_12E70.xI2f8 <= 0) {
             D_0013F450_12E70.xI2f8 = 1;
         }
@@ -2665,7 +2665,7 @@ void func_L00_00212E70(void) {
         D_0013F450_12E70.xF2dc = FastVecDist((u8 *)&D_0013F450_12E70 + 0x80, ((u8 *)&D_0013F450_12E70 + 0x2A0));
         D_0013F450_12E70.xI2fc = D_L00_00173F40_12E70.i18;
         func_001252C0((u8 *)&D_0013F450_12E70 + 0x270, (u8 *)&D_L00_00173F40_12E70.f40);
-        D_0013F450_12E70.u2e0.F = func_L00_002345B0((u8 *)&D_L00_00173F40_12E70.f40);
+        D_0013F450_12E70.u2e0.F = ViewGetPitch((u8 *)&D_L00_00173F40_12E70.f40);
         D_0013F450_12E70.xF2ec = func_L00_001FF860(D_L00_00173F40_12E70.f40, D_L00_00173F40_12E70.f44);
         func_001F9BF0_12E70(&v20, ((u8 *)&D_0013F450_12E70 + 0x2A0), (u8 *)&D_0013F450_12E70 + 0x80);
         if (0.0f < FastVecDot(&v20, (u8 *)&D_0013F450_12E70 + 0x270)) {
@@ -2718,7 +2718,7 @@ d1:
     if (!(D_0013F450_12E70.xF2dc < 0.25f)) {
         return;
     }
-    func_L00_002167C8((u8 *)&D_0013F450_12E70 + 0x270, &v20);
+    VecToHeroAngles((u8 *)&D_0013F450_12E70 + 0x270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
         D_0013F450_12E70.u2e4.F = v20.f[1];
     }
@@ -2730,8 +2730,8 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        func_L00_00233E48(&v30, 0.2f, a, 0.45f);
-        func_L00_00233E48(&v40, 0.2f, a, -0.45f);
+        PolarToWorldPoint(&v30, 0.2f, a, 0.45f);
+        PolarToWorldPoint(&v40, 0.2f, a, -0.45f);
         if (func_L00_001EFFF0(&v30, &v0, 0x22, D_0013F450_12E70.xI2080, 0)) {
             f = D_L00_00173F40_12E70.v20.f[2] - D_0013F450_12E70.u2d8.F;
             D_0013F450_12E70.a2c0.f[i] = f;
@@ -2739,7 +2739,7 @@ d1:
                 D_0013F450_12E70.a2c0.f[i] = 0.0f;
             }
             func_001252C0(&v60, (u8 *)&D_L00_00173F40_12E70.f40);
-            func_L00_002167C8(&v60, &v50);
+            VecToHeroAngles(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 D_0013F450_12E70.a2c8.f[i] = v50.f[1];
             }
@@ -2822,7 +2822,7 @@ void func_L00_00213970(float a, float b) {
     char *p = D_0013E633 + 0x173D;
     char *q = p - 0x920;
     float v;
-    func_00215C00(p, *(float *)(q + 0x930), *(float *)(q + 0x938), *(float *)(q + 0x934));
+    BuildSphericalOffset(p, *(float *)(q + 0x930), *(float *)(q + 0x938), *(float *)(q + 0x934));
     FastVecScale(p, p, a);
     v = FastVecLength(p);
     if (v <= b) {
@@ -3010,7 +3010,7 @@ void func_L00_00213F38(void) {
 
     qcopy(previous.f, base);
     position = (float *)((char *)base - 0x80);
-    func_L00_00234800(((Hero *)position)->unk4F8, (char *)base + 0x70, (char *)base + 0x10);
+    HeroRideMovingPlatform(((Hero *)position)->unk4F8, (char *)base + 0x70, (char *)base + 0x10);
     if (((Hero *)position)->state.current == 34 || ((Hero *)position)->state.current == 20) {
         float limit;
 
@@ -3018,7 +3018,7 @@ void func_L00_00213F38(void) {
             float length;
 
             contact = (float *)((char *)base + 0x60);
-            length = func_L00_00234250(contact);
+            length = ViewXyLength(contact);
             limit = ((Hero *)position)->unk234 - 0.02f;
             if (limit < length) func_L00_001FF4B0(contact, contact, limit);
         }
@@ -3203,7 +3203,7 @@ void func_L00_002147C0(void) {
                 l = func_L00_002342F8((float *)q);
                 len = l;
                 if (l < s) {
-                    func_00214D28(&len, s, D_0015EE70 * 150.0f);
+                    ApproachValue(&len, s, D_0015EE70 * 150.0f);
                 }
                 func_L00_002343A0((float *)q, (float *)q, len);
             }

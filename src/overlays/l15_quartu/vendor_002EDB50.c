@@ -51,7 +51,7 @@ extern float D_0015EE64 MACRO_ADDR;
 extern unsigned char D_0015EEB0[] MACRO_ADDR;
 
 /* Update function of moby class 1446 (ultramech scientist): state switch, then the head look-at block shaped like func_L11_002D18D0's (doit flag guards the vector part). */
-void func_L15_002EDB50(char *moby) {
+void UltramechScientistUpdate(char *moby) {
     char *d;
     char *b;
     char *p;
@@ -215,14 +215,14 @@ void func_L15_002EDB50(char *moby) {
         if (func_001F9908(d + 0x15C) == 0) {
             break;
         }
-        func_L15_002092E0();
-        func_00213D28((char *)D_L15_00160058 + (*(int *)(d + 0x14C) << 8), 0, 0);
+        Help_Reset();
+        MobySetAnimation((char *)D_L15_00160058 + (*(int *)(d + 0x14C) << 8), 0, 0);
         *(int *)(d + 0x140) = 1;
         *(short *)(d + 0x36) = 1;
         *(unsigned char *)(d + 0x8) = 1;
         func_L00_00261848(0x10);
         func_L00_002512D8(*(int *)(d + 0x284));
-        func_L00_002664B0(0, 5);
+        MusicRequestTrack(0, 5);
         if (*(int *)(d + 0x154) != -1) {
             char *b1 = D_L15_0016016C;
             char *b2;
@@ -306,7 +306,7 @@ e1c4:
     f0 = random_float_between(-90.0f, 90.0f);
     yaw = FastAddRots(*(float *)(moby + 0x48), f0 * f21);
     f0 = random_float_between(0.0f, 30.0f);
-    func_00215C00(d + 0x260, 6.0f, yaw, f0 * f21);
+    BuildSphericalOffset(d + 0x260, 6.0f, yaw, f0 * f21);
     FastVecAdd(d + 0x260, d + 0x260, moby + 0x10);
 e26c:
     if (*(int *)(d + 0x274) != 0) {
@@ -398,7 +398,7 @@ extern unsigned char D_0013D5CA_2EE7E8[] __asm__("D_0013D5CA");
 
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
    records of the two hint messages. */
-void func_L15_002EE7E8(Moby *m) {
+void Moby1469Update(Moby *m) {
     Talk_2EE7E8 *t = (struct Talk_2EE7E8 *)m->pvars;
     int st = m->state;
     Moby *e;
@@ -740,7 +740,7 @@ typedef struct {
 } Entry_F8D30;
 
 /* Tests whether the selected vendor entry is available (joined with func_L15_002F8D9C). */
-int func_L15_002F8D30(int index) {
+int IsVendorEntryAvailable(int index) {
     char *other = D_L15_00167480;
     Entry_F8D30 *entries;
     char *sub;
@@ -803,7 +803,7 @@ extern char *D_L15_0016016C MACRO_ADDR;
 extern char D_L15_00167490[];
 extern char D_L15_00167300[];
 /* tests whether the target lies within a cone of the player's axis */
-int func_L15_002F9AE8(char *moby, float a, float b) {
+int IsTargetInAimCone(char *moby, float a, float b) {
     float d[4];
     float p[4];
     float q[4];

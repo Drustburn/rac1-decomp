@@ -78,7 +78,7 @@ void func_L02_00265E88(char *slots, float *position, float *direction, float dis
         travel = distance;
     }
     acceleration = D_0015EE70;
-    func_00214D88(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
+    ApproachWithVelocity(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
                   (*(float *)&D_L02_00160150) * D_0015EE6C);
     ((float (*)(void *, void *, float))func_L00_001FF4B0)(adjusted, adjusted, travel_step);
     n = (*(int *)&D_L02_00160158);
@@ -91,7 +91,7 @@ void func_L02_00265E88(char *slots, float *position, float *direction, float dis
         FastVecScale(velocity, adjusted, random_float_between(0.0f, 1.0f));
         FastVecAdd(velocity, velocity, origin);
         if (i < first_count) fl = 1; else fl = 0;
-        shot = func_L00_0026C0D0(velocity, offset, fl, travel);
+        shot = PartType12Spawn(velocity, offset, fl, travel);
         if (i == 2 && save_shot) {
             int j;
             for (j = 0; j < 7; j++) {
@@ -110,7 +110,7 @@ void func_L02_00265E88(char *slots, float *position, float *direction, float dis
         FastVecScale(velocity, adjusted, random_float_between(0.5f, 0.1f));
         FastVecAdd(velocity, velocity, offset);
         velocity[3] = 0.0f;
-        func_L00_0026E438(position, velocity, 0);
+        PartType25Spawn(position, velocity, 0);
     }
 }
 extern int func_L00_001F2BE8(float, void *, int, int, int);

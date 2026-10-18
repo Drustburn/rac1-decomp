@@ -118,7 +118,7 @@ extern void func_L00_0026EBC0(void *, void *, u32, s32, f32);
 
 /* Update of the class 0xB8 shot (spawned by FUN_L04_002aee30): moves along its direction, plays its sound once it starts moving away from the hero within 3 units, dies off the arena, and on a hit (probing for its owner's targets until the timer runs out) bursts into five sparks and is removed.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002aee30.c, FUN_L04_002af058. */
-void func_L04_002B0290(struct Moby *m)
+void Moby184ShotUpdate(struct Moby *m)
 {
     Vec4 old;
     CollisionProbe pr;
@@ -192,7 +192,7 @@ void func_L04_002B0290(struct Moby *m)
             func_L00_001FF4B0(&push, &push, FastVecLength(&r) * 0.5f);
             FastVecAdd(&push, &r, &push);
             func_L00_001FF4B0(&push, &push, random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.0f));
-            func_L00_0026EBC0(&m->pos, &push, 0x7F2F4F6F,
+            PartType27Spawn(&m->pos, &push, 0x7F2F4F6F,
                              rand_range(scale_ticks(10), scale_ticks(15)), 30000.0f);
         }
     }
@@ -217,7 +217,7 @@ void func_L04_002C5938(char *a, int i, int j, int k) {
     v10[3] = 1.0f;
     func_001F9EC0(v10, v10, a + 0xC0);
     FastVecAdd(v10, v10, a + 0x10);
-    func_L04_002C5560(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_00161940, *(float *)(pj + 0xC) * *(float *)&D_L04_00161940);
+    SpawnSmokeTrail(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_00161940, *(float *)(pj + 0xC) * *(float *)&D_L04_00161940);
 }
 extern short D_L04_00161950;
 extern short D_L04_00161954;

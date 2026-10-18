@@ -156,7 +156,7 @@ extern int D_0015EFB4 MACRO_ADDR;
 extern int D_0015EFB0 MACRO_ADDR;
 extern int D_0013D390[];
 /* advances the card menu according to input and card status */
-void func_L00_0024B750(void) {
+void AdvanceCardMenu(void) {
  int old=D_0015EFB4;
  int intermediate=old&~4;
  int flags=intermediate&~2;
@@ -209,7 +209,7 @@ void func_L00_0024B9A8(void) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024B9B4);
 /* Sets the menu state from the status of the card record at D_0013D355 + 0x3B. */
-void func_L00_0024BA10(void) {
+void SetMenuStateFromCardStatus(void) {
     char *b = D_0013D355 + 0x3B;
     if (*(int *)(b + 0xDC) == 2 && *(int *)(b + 0xE4) < 0) {
         if (*(int *)(b + 0xEC) != 0) {
@@ -235,7 +235,7 @@ extern int D_0015EFB0;
 
 INCLUDE_ASM("asm/overlays", func_L00_0024BA8C);
 /* Marks the selected card slot as 2 if it was 1, then picks the next menu state. */
-void func_L00_0024BAE8(void) {
+void MarkSelectedCardSlot(void) {
  char *p=(char *)D_0013D390; int *item;
  if (*(int *)(p+0xDC)>=3 || *(int *)(p+0xE4)>=0) { int index=*(int *)(p+0xCC); char *r=p+0xB0; item=(int *)(index*192+r); if (*item==1) *item=2; }
  p=(char *)D_0013D390;

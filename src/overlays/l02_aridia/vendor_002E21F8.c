@@ -115,7 +115,7 @@ extern unsigned char D_0015EEB0[] MACRO_ADDR;
 extern float D_L02_0015F4FC MACRO_ADDR;
 
 /* UpdateMoby_786 (skids_agent): steps the agent's conversation states, keeps its child moby on joint 2 and turns its head toward the player. */
-void func_L02_002E21F8(Moby *m) {
+void SkidsAgentUpdate(Moby *m) {
     float v0[4];
     float v1[4];
     float v2[4];
@@ -173,10 +173,10 @@ void func_L02_002E21F8(Moby *m) {
         if (m->prev_seq == 0 && FastDecTimer((int *)&d->f172) != 0) {
             d->f172 = truncate_float_to_s32(func_001F9878(random_float_between(1200.0f, 2400.0f)));
             if (m->prev_seq != 1) {
-                func_00213DE0(m, 1, 0, scale_ticks(10));
+                MobyBlendAnimation(m, 1, 0, scale_ticks(10));
             }
         } else if (m->prev_seq == 1 && (m->anim_flags & 2)) {
-            func_00213DE0(m, 0, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 0, 0, scale_ticks(10));
         }
         break;
     case 2:
@@ -216,7 +216,7 @@ void func_L02_002E21F8(Moby *m) {
         memcard_Save(0, -1);
         goto del;
     case 3:
-        func_00214D88(&d->f180, &d->f184, 1.0f, D_0015EE70 * 0.1f, D_0015EE70 * 0.25f, D_0015EE6C * 0.5f);
+        ApproachWithVelocity(&d->f180, &d->f184, 1.0f, D_0015EE70 * 0.1f, D_0015EE70 * 0.25f, D_0015EE6C * 0.5f);
         func_001F9C08(v0, D_L02_0016016C + (d->f158 << 7) + 0x30, D_L02_0016016C + (d->f15C << 7) + 0x30, d->f180);
         {
             Node_2E21F8 *t = (Node_2E21F8 *)D_L02_0016016C;
@@ -229,9 +229,9 @@ void func_L02_002E21F8(Moby *m) {
         func_L00_002EBE88(v0);
         func_L00_002EBEE0(v1);
         if (d->f180 < 1.0f) {
-            func_00214D28(&d->f17C, 0.0f, 0.1f);
+            ApproachValue(&d->f17C, 0.0f, 0.1f);
         } else {
-            func_00214D28(&d->f17C, 1.0f, 0.1f);
+            ApproachValue(&d->f17C, 1.0f, 0.1f);
             if (d->f17C == 1.0f) {
                 m->state = 4;
                 func_L00_002EC0C8(0);
@@ -240,7 +240,7 @@ void func_L02_002E21F8(Moby *m) {
         D_L02_0015F4FC = d->f17C;
         break;
     case 4:
-        func_00214D28(&d->f17C, 0.0f, 0.1f);
+        ApproachValue(&d->f17C, 0.0f, 0.1f);
         D_L02_0015F4FC = d->f17C;
         if (d->f17C == 0.0f) {
             if (d->f178 != 0) {
@@ -254,7 +254,7 @@ void func_L02_002E21F8(Moby *m) {
     }
     if (d->f178 != 0) {
         func_L00_00250800(m, 2, ((float *)&d->f178->pos));
-        func_0020DAF8(m, 2, v0);
+        MobyTransformScaledVertex(m, 2, v0);
         func_001FA480(((char *)&d->f178->rot_row0), v0);
         func_001F9EC0(v4, &D_L02_00161D70, ((char *)&d->f178->rot_row0));
         FastVecAdd(((float *)&d->f178->pos), ((float *)&d->f178->pos), v4);
@@ -280,7 +280,7 @@ void func_L02_002E21F8(Moby *m) {
             float heading;
             d->f176 = truncate_float_to_s32(func_001F9878(random_float_between(180.0f, 300.0f)));
             heading = FastAddRots(m->rot.z, random_float_between(-90.0f, 90.0f) * 0.017453292f);
-            func_00215C00(d->f160, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
+            BuildSphericalOffset(d->f160, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
             FastVecAdd(d->f160, d->f160, ((float *)&m->pos));
         }
         if (d->f174) {
@@ -375,9 +375,9 @@ void func_L02_002E2D88(char *m)
             mode = 1;
             if (random_integer_below(2) == 0) mode = 2;
             if (*(unsigned char *)(m + 0x53) != mode)
-                func_00213DE0(m, mode, 0, scale_ticks(10));
+                MobyBlendAnimation(m, mode, 0, scale_ticks(10));
         } else if ((*(unsigned char *)(m + 0x70) & 2) && *(unsigned char *)(m + 0x53) != 0) {
-            func_00213DE0(m, 0, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 0, 0, scale_ticks(10));
         }
         break;
     case 2:
@@ -418,7 +418,7 @@ void func_L02_002E2D88(char *m)
             float heading;
             *(int *)(d + 0x18C) = truncate_float_to_s32(func_001F9878(random_float_between(180.0f, 300.0f)));
             heading = FastAddRots(*(float *)(m + 0x48), random_float_between(-90.0f, 90.0f) * 0.017453292f);
-            func_00215C00(d + 0x170, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
+            BuildSphericalOffset(d + 0x170, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
             FastVecAdd(d + 0x170, d + 0x170, m + 0x10);
         }
         if (*(int *)(d + 0x188) != 0) {
@@ -520,8 +520,8 @@ void func_L02_002E33F0(char *moby) {
     } else if (*(int *)(data + 0x180) == 0) {
         if (is_point_inside_clip_volume(gHeroPos, *(int *)(data + 0x148)) != 0) {
             *(int *)(data + 0x180) = 1;
-            *(int *)(data + 0x164) = queue_animation_update(0x15, 0x7D0, func_L00_0023B0F8, func_L02_0023D600, func_L02_0023D6E0, data + 0x14C, 100);
-            *(int *)(data + 0x160) = queue_animation_update(0x17, 0x7D1, func_L00_0023B0F8, func_L02_0023D600, func_L02_0023D6E0, data + 0x150, 7);
+            *(int *)(data + 0x164) = queue_animation_update(0x15, 0x7D0, func_L00_0023B0F8, func_L02_0023D600, Hud_DrawCounter, data + 0x14C, 100);
+            *(int *)(data + 0x160) = queue_animation_update(0x17, 0x7D1, func_L00_0023B0F8, func_L02_0023D600, Hud_DrawCounter, data + 0x150, 7);
         }
     }
 }
@@ -545,7 +545,7 @@ extern void func_L00_002617B0(void *, void *, void *, void *);
 
 /* Lift platform carried by an animated driver moby: follows the driver's joint 0, waits at an end (3/5) for the hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l02/gameplay/entities/002e0dc0.c, FUN_L02_002e2228. */
-void func_L02_002E3660(struct Moby *moby) {
+void DriverLiftUpdate(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     struct Moby *driver = &D_L02_00160058_E3660[*(int *)(data + 0xA0)];
     Vec4 delta;
@@ -561,10 +561,10 @@ void func_L02_002E3660(struct Moby *moby) {
     qcopy(&moby->pos, &pos);
     switch (moby->state) {
     case 0:
-        func_0020DAF8(driver, 0, joint_mtx);
+        MobyTransformScaledVertex(driver, 0, joint_mtx);
         moby->rot.z = func_L00_001FF860(joint_mtx[0], joint_mtx[1]);
         moby->state = 1;
-        func_00213DE0(driver, 3, 0, 0);
+        MobyBlendAnimation(driver, 3, 0, 0);
         break;
     case 1:
         if (D_0014C150[D_0015EE84][moby->mission] == 0xFF) {
@@ -586,11 +586,11 @@ void func_L02_002E3660(struct Moby *moby) {
         if (ride) {
             if (moby->state == 5 || moby->state == 1) {
                 moby->state = 2;
-                func_00213D28(driver, 0, 0);
+                MobySetAnimation(driver, 0, 0);
                 *(int *)(data + 0xA4) = func_0022ED80(2, 4, driver);
             } else {
                 moby->state = 4;
-                func_00213D28(driver, 2, 0);
+                MobySetAnimation(driver, 2, 0);
                 *(int *)(data + 0xA4) = func_0022ED80(0, 4, driver);
             }
         } else if (D_0013F450.ground_moby != moby) {
@@ -599,7 +599,7 @@ void func_L02_002E3660(struct Moby *moby) {
         break;
     case 2:
     case 4:
-        func_0020DAF8(driver, 0, joint_mtx);
+        MobyTransformScaledVertex(driver, 0, joint_mtx);
         moby->rot.z = func_L00_001FF860(joint_mtx[0], joint_mtx[1]);
         if (func_001F9D48(&moby->pos, &D_0013F450.motion.pos) < 1.5f && D_0013F450.motion.pos.f[2] < moby->pos.z - 1.5f) {
             driver->anim_speed = 0.0f;
@@ -632,11 +632,11 @@ void func_L02_002E3660(struct Moby *moby) {
             *(int *)(data + 0xA4) = -1;
             if (moby->state == 2) {
                 moby->state = 3;
-                func_00213DE0(driver, 1, 0, 0);
+                MobyBlendAnimation(driver, 1, 0, 0);
                 func_0022ED80(3, 0, driver);
             } else {
                 moby->state = 5;
-                func_00213DE0(driver, 3, 0, 0);
+                MobyBlendAnimation(driver, 3, 0, 0);
                 func_0022ED80(1, 0, driver);
             }
             moby->command = 1;
@@ -689,7 +689,7 @@ extern void func_L02_002A59D8(float);
 extern void func_L02_002EB480(void);
 extern void func_001F49B0(void (*)(void), void *);
 
-void func_L02_002EB5D0(unsigned char *moby) {
+void Moby854Update(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         func_L02_002A59D8(0.16666667f);
@@ -697,7 +697,7 @@ void func_L02_002EB5D0(unsigned char *moby) {
         moby[0x30] = 0xFF;
         break;
     case 1:
-        AddDrawCallback(func_L02_002EB480, moby);
+        AddDrawCallback(DrawClippedParts, moby);
         break;
     }
 }
@@ -733,7 +733,7 @@ extern void func_L00_00258DB0_ED358(void *, f32, f32) __asm__("func_L00_00258DB0
 
 /* Shard debris update: drifts along its velocity, sheds particle trails and expires when its timer runs out.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l02/gameplay/vendor/002ebf20.c, FUN_L02_002ebf20. */
-void func_L02_002ED358(struct Moby *m) {
+void ShardDebrisUpdate(struct Moby *m) {
     ShardVars_ED358 *v = (ShardVars_ED358 *)m->pvars;
     Vec4f p, back, half, jit;
     u8 *q;
@@ -831,7 +831,7 @@ extern unsigned char D_0015EEDC[4] MACRO_ADDR;
 extern unsigned char D_0015EEE0[4] MACRO_ADDR;
 
 /* UpdateMoby_1324: tutorial hint triggers around the player */
-void func_L02_002EFCC8(unsigned char *moby) {
+void TutorialHintUpdate(unsigned char *moby) {
     int *data = *(int **)(moby + 0x78);
     moby[0x30] = 0xFF;
 
@@ -870,7 +870,7 @@ void func_L02_002EFCC8(unsigned char *moby) {
             unsigned char *q = D_0013D50F + 1;
             if (q[1] == 0) {
                 q[1] = 1;
-                func_0022EE28(1, 0, 0);
+                PlayBankSound(1, 0, 0);
                 ShowBanner(0x53DB, -1);
             }
         }
@@ -1113,7 +1113,7 @@ extern void func_0020D678_2F0458(void *) __asm__("func_0020D678");
 
 /* Level 02 moby update (class 1479): state 0 sets up, states 1 and 2 emit particle bursts from two parameter
  * blocks in sdata (a timed burst loop, then one burst), state 3 deletes the moby. */
-void func_L02_002F0458(Moby *m) {
+void Moby1479Update(Moby *m) {
     V_2F0458 vec;
     V_2F0458 A;
     V_2F0458 B;
@@ -1261,7 +1261,7 @@ extern char D_L02_00167300_F9E50[] __asm__("D_L02_00167300");
 
 /* Sets the vendor camera mode; mode 3 also aims it from the hero's position.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l02/gameplay/vendor/002ebf20.c, FUN_L02_002f8a18. */
-void func_L02_002F9E50(int mode, int arg) {
+void Vendor_SetCameraMode(int mode, int arg) {
     char *g = D_L02_00167300_F9E50;
     char *cam = *(char **)(g + 0x180);
     char *d = *(char **)(cam + 0x70);

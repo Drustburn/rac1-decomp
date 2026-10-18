@@ -51,7 +51,7 @@ extern int func_00116248();
    D_0015F100 string pool past the copy. Indexing the table at every
    store gives retail's two addu forms; a `DrawTextRec *` local folds
    them into one register and comes out 12 bytes short. */
-void func_001F0F78(int x, int y, int color, char *str) {
+void Text_Queue(int x, int y, int color, char *str) {
     int n = *(int *)&D_0015F104;
 
     D_0018AC00[n].x = x;
@@ -72,7 +72,7 @@ extern int D_00189EC0[];
    func_001F0F78. Returns the adjusted x. `idx = ch` followed by the
    out-of-range override gives retail's sltiu 0x60 + movn; the reverse
    (default first, then `if (ch < 0x60)`) becomes sltu + movz. */
-int func_001F0FF8(int x, int y, int color, char *str) {
+int Text_QueueCentered(int x, int y, int color, char *str) {
     int w = 0;
     unsigned char *p = (unsigned char *)str;
 
@@ -85,7 +85,7 @@ int func_001F0FF8(int x, int y, int color, char *str) {
         w += D_00189EC0[idx];
     }
     x -= w >> 1;
-    func_001F0F78(x, y, color, str);
+    Text_Queue(x, y, color, str);
     return x;
 }
 
@@ -212,7 +212,7 @@ typedef struct {
 extern SceneG D_00187040_g __asm__("D_00187040");
 
 /* Builds the view matrices in the camera block from the rotation set up in D_00187390 or the three rotation angles, then copies the result to D_0018D080. Adapted from Lombyte (MIT) for PAL: src/rendering/view/fun_001f2260.c, FUN_001f2260. */
-void func_001F2608(void) {
+void BuildViewMatrices(void) {
     float m[4][4];
     SceneG *g;
     char *x;
@@ -801,7 +801,7 @@ extern float func_001FA888(int);
    The context is reached through one local pointer, which keeps its
    full address in $s0 as retail does (indexing the global directly
    folds +0xB0 into the base and spends $a0 on the %hi). */
-void func_001F3760(int w, int h, float a2, float a3, float a4, float a5, float a6) {
+void SetScreenSize(int w, int h, float a2, float a3, float a4, float a5, float a6) {
     float *ctx = (float *)D_0018CE00;
     int hw = w >> 1;
     int hh = h >> 1;
@@ -1010,7 +1010,7 @@ void DrawDebugProfiler(void) {
         D_0018C44C[0] != 0) {
         framebuf_appendLargeSetup();
     }
-    func_001F2608();
+    BuildViewMatrices();
     func_0020DAB0();
     UpdateOcclusion();
     ResetGsRegisters();
@@ -1084,7 +1084,7 @@ void DrawDebugProfiler(void) {
             VU1_addGSregister(0x42, 0x8000000048L);
             func_001EDFF8();
             func_00234F40();
-            func_001F4C30();
+            DrawLightQuads();
         }
         func_001F2558_a(D_0015F4C0, 6);
         func_001F2560_a(D_0015F4C0, 6);
@@ -1106,7 +1106,7 @@ void DrawDebugProfiler(void) {
                 func_001F9478();
             }
             VU1_addGSregister(0x42, 0x8000000044L);
-            func_001EE6E0();
+            DrawQueuedGlows();
         }
         func_001F2558_a(D_0015F4E0, 6);
         func_001F2560_a(D_0015F4E0, 6);
@@ -1121,11 +1121,11 @@ void DrawDebugProfiler(void) {
     }
     if ((D_0015F534_f & 0x80) && D_0018A3B0[0x40 / 4] != 0) {
         HudDraw();
-        func_001FF1B0();
-        func_001F5148();
+        Help_Draw();
+        DrawLetterboxBars();
     }
     if (D_0015F6E8 == 2 && D_0015EF40_F3D78[0] != 0) {
-        func_001F4F90();
+        DrawSubtitles();
     }
     func_001F2560_a(D_0015F4F8, 0xE);
     func_001F2558_a(D_0015F4F8, 0xE);
@@ -1515,7 +1515,7 @@ extern void func_001F7EF8(void *, int, int);
    colours and UVs are filled on the stack but never sent. Both copies
    are qcopy (retail's lq/sq stay inside the loop), and the inner loop
    needs its own counter, not the one the setup loop used. */
-void func_001F4C30(void) {
+void DrawLightQuads(void) {
     FRow m[4];
     int colors[4];
     float uv[4][2];
@@ -1644,7 +1644,7 @@ extern void func_001F62C8(int, int, int, int, int);
    flag (4) cleared. The list is tested and then read again for the
    loop, which gives retail's copy of it; the clamp test is written
    bottom-first, which gives retail's registers. */
-void func_001F4F90(void) {
+void DrawSubtitles(void) {
     Subtitle *p;
     int lang;
     int idx;
@@ -1693,7 +1693,7 @@ extern char D_00160930[];
    0x104) drawing two full-width strips, the height in 16ths reaching in
    from the top and bottom of the D_0013E600 viewport, the same packet
    steps as func_001F5650. */
-void func_001F5148(void) {
+void DrawLetterboxBars(void) {
     int h;
 
     if (D_0015F544 != 0) {
@@ -2288,17 +2288,17 @@ extern unsigned char D_001DF770[];
 extern unsigned char D_001DFB10[];
 
 /* measure_text_width_regular: width of the first arg1 characters of arg0 in the regular font table. */
-int func_001F6600(unsigned char *arg0, int arg1) {
+int MeasureTextWidthRegular(unsigned char *arg0, int arg1) {
     return measure_text_width(arg0, arg1, D_001DF3D0);
 }
 
 /* measure_text_width_small: width of the first arg1 characters of arg0 in the small font table. */
-int func_001F6620(unsigned char *arg0, int arg1) {
+int MeasureTextWidthSmall(unsigned char *arg0, int arg1) {
     return measure_text_width(arg0, arg1, D_001DF770);
 }
 
 /* measure_text_width_large: width of the first arg1 characters of arg0 in the large font table. */
-int func_001F6640(unsigned char *arg0, int arg1) {
+int MeasureTextWidthLarge(unsigned char *arg0, int arg1) {
     return measure_text_width(arg0, arg1, D_001DFB10);
 }
 
@@ -2493,7 +2493,7 @@ extern int func_001F6620(unsigned char *, int);
    measuring helper, and the first argument stepped back by whatever that
    helper returns. */
 void font_print_right(char *a, void *b, void *c, unsigned char *d, int e) {
-    char *p = a - func_001F6600(d, e);
+    char *p = a - MeasureTextWidthRegular(d, e);
     long mode = GetEffectTex64(1);
 
     FontPrint(p, b, c, d, (void *)e, mode, D_001DF3D0);
@@ -2501,7 +2501,7 @@ void font_print_right(char *a, void *b, void *c, unsigned char *d, int e) {
 
 /* Right-aligned FontPrint with the second font. */
 void font_print_right_small(char *a, void *b, void *c, unsigned char *d, int e) {
-    char *p = a - func_001F6620(d, e);
+    char *p = a - MeasureTextWidthSmall(d, e);
     long mode = GetEffectTex64(2);
 
     FontPrint(p, b, c, d, (void *)e, mode, D_001DF770);
@@ -2509,7 +2509,7 @@ void font_print_right_small(char *a, void *b, void *c, unsigned char *d, int e) 
 
 /* Right-aligned FontPrint with the third font. */
 void font_print_right_large(char *a, void *b, void *c, unsigned char *d, int e) {
-    char *p = a - func_001F6640(d, e);
+    char *p = a - MeasureTextWidthLarge(d, e);
     long mode = GetEffectTex64(3);
 
     FontPrint(p, b, c, d, (void *)e, mode, D_001DFB10);
@@ -2521,7 +2521,7 @@ void font_print_right_large(char *a, void *b, void *c, unsigned char *d, int e) 
    the extern func_001F7288 already declares for func_001F6FD8. */
 /* FontPrintCenter */
 int FontPrintCenter(int a, int b, int c, int d, int e) {
-    int p = a - (func_001F6600((unsigned char *)d, e) >> 1);
+    int p = a - (MeasureTextWidthRegular((unsigned char *)d, e) >> 1);
     long mode = GetEffectTex64(1);
 
     FontPrint((void *)p, (void *)b, (void *)c, (void *)d, (void *)e,
@@ -2531,7 +2531,7 @@ int FontPrintCenter(int a, int b, int c, int d, int e) {
 
 /* FontPrintCenterSmall */
 int FontPrintCenterSmall(int a, int b, int c, int d, int e) {
-    int p = a - (func_001F6620((unsigned char *)d, e) >> 1);
+    int p = a - (MeasureTextWidthSmall((unsigned char *)d, e) >> 1);
     long mode = GetEffectTex64(2);
 
     FontPrint((void *)p, (void *)b, (void *)c, (void *)d, (void *)e,
@@ -2541,7 +2541,7 @@ int FontPrintCenterSmall(int a, int b, int c, int d, int e) {
 
 /* FontPrintCenterLarge */
 int FontPrintCenterLarge(int a, int b, int c, int d, int e) {
-    int p = a - (func_001F6640((unsigned char *)d, e) >> 1);
+    int p = a - (MeasureTextWidthLarge((unsigned char *)d, e) >> 1);
     long mode = GetEffectTex64(3);
 
     FontPrint((void *)p, (void *)b, (void *)c, (void *)d, (void *)e,
@@ -2594,7 +2594,7 @@ extern int D_0013E604[];
 #define PK ((unsigned char *)D_00161000)
 
 /* Uploads a block to the GS in DMA packets. */
-void func_001F7680(unsigned int source) {
+void UploadToGs(unsigned int source) {
     int remaining = D_0013E604[0];
     int destination = D_0015EF84 >> 8;
     unsigned long count;
@@ -2729,8 +2729,8 @@ void func_001F7A50(int a, int b, int flag, float f) {
         base = D_0015EF8C - (4 << t);
         base = (base >> 13) << 13;
     }
-    func_001FB608(a, b, base);
-    func_001F3760(1 << a, 1 << b, f, 0.0f, 524288.0f, 255.0f, 0.0f);
+    Framebuf_SetRenderTarget(a, b, base);
+    SetScreenSize(1 << a, 1 << b, f, 0.0f, 524288.0f, 255.0f, 0.0f);
     if (flag != 0) {
         VU1_addGSregister(0x47, 0);
     } else {
@@ -2744,7 +2744,7 @@ __asm__(".section .text\n\tnop\n");
 extern void func_001F3008(void);
 
 /* Frame start for the large draw buffer. */
-void func_001F7B40(void) {
+void BeginDrawFrame(void) {
     PutDrawBufferLarge();
     InitViewContext();
     UpdateViewContext();

@@ -218,7 +218,7 @@ extern void func_0020D6D0_a(void *) __asm__("func_0020D6D0");
    (func_0020D6D0) and copies the first float of the new frame to +0x5C.
    The frame count is re-read through the class at each test, as retail
    reloads it after the byte stores. */
-void func_00213D28(MobyAnim *m, int seq, int frame) {
+void MobySetAnimation(MobyAnim *m, int seq, int frame) {
     int n = m->pClass->seqs[seq]->nframes;
 
     m->seq = seq;
@@ -247,7 +247,7 @@ extern char D_001B2F80[];
    to the sequence's last one; if the moby hasn't settled, park the
    current pose in a D_001B2F80 blend slot (seq 0xFF, frame = slot). Then
    set the new sequence and frame and arm the blend timer from arg3. */
-void func_00213DE0(MobyAnim *arg0, int arg1, int arg2, int arg3) {
+void MobyBlendAnimation(MobyAnim *arg0, int arg1, int arg2, int arg3) {
     int n = arg0->pClass->seqs[arg1]->nframes;
     int slot;
     unsigned char oldSeq;
@@ -294,7 +294,7 @@ void func_00213DE0(MobyAnim *arg0, int arg1, int arg2, int arg3) {
    resets unk54, clears unk70 bit 1, stores 1/func_001FA888(arg3) into
    unk5C, and copies a not-yet-named byte (offset 0x11) out of
    pClass->seqs[arg1] into unk7C. */
-void func_00213F28(MobyAnim *arg0, int arg1, int arg2, int arg3, int arg4) {
+void MobyBlendAnimationEx(MobyAnim *arg0, int arg1, int arg2, int arg3, int arg4) {
     int slot;
     int flags;
     unsigned char oldSeq;
@@ -358,15 +358,15 @@ extern float func_00214158(void);
 extern float func_002140F8(float, float);
 extern void func_00215C00(void *, float, float, float);
 
-void func_002141A8(void *arg0, float arg1, float arg2) {
+void RandomSphericalOffset(void *arg0, float arg1, float arg2) {
     float r1 = random_angle_radians();
     float r2 = random_angle_radians();
 
-    func_00215C00(arg0, random_float_between(arg1, arg2), r1, r2);
+    BuildSphericalOffset(arg0, random_float_between(arg1, arg2), r1, r2);
 }
 
 /* Cosine interpolation: a + (b - a) * ((1 - cos(t * pi)) * 0.5). */
-float func_00214220(float a, float b, float t) {
+float CosineInterpolate(float a, float b, float t) {
     if (t == 0.0f) {
         return a;
     }
@@ -419,12 +419,12 @@ extern void func_001F9BC8(void *);
    array: its fields are symbol+offset accesses, which the compiler
    counts as two instructions and so keeps out of delay slots, as retail
    has them. */
-float func_00214440(float *pos, void *out) {
+float GetGroundHeight(float *pos, void *out) {
     float h;
 
     if (D_00161298 != 0) {
         h = pos[2];
-        if (func_0023B210(&h, out, pos[0], pos[1], h) != 0) {
+        if (SampleSurfaceHeight(&h, out, pos[0], pos[1], h) != 0) {
             return h;
         }
     }
@@ -453,7 +453,7 @@ extern float func_001F9B90(float, float);
    shifted against the light direction D_001CAE00 by its size, then a
    second one along the light from just above; +0x84/+0x88 get the lower
    and upper hit height (at most 4 apart), or 0 when nothing is below. */
-void func_00214550(char *m) {
+void MobyUpdateShadowRange(char *m) {
     float dir[4];
     float p[4];
     float a[4];
@@ -502,7 +502,7 @@ INCLUDE_ASM("asm/nonmatchings/text", func_00214778);
 
 LINKER_REMNANT("asm/remnants/text", func_00214CF8);
 
-float func_00214D28(float *p, float target, float maxstep) {
+float ApproachValue(float *p, float target, float maxstep) {
     float d = target - *p;
     if (maxstep < d) {
         d = maxstep;
@@ -525,7 +525,7 @@ LINKER_REMNANT("asm/remnants/text", func_00214D80);
    Then, if |*p2| < |diff| the velocity is added and returned, else *p1
    snaps to `a` and diff is returned. func_001F9B88 is fabsf; the fabs
    calls are made in retail's order through temporaries. */
-float func_00214D88(float *p1, float *p2, float a, float b, float c, float d) {
+float ApproachWithVelocity(float *p1, float *p2, float a, float b, float c, float d) {
     float diff = a - *p1;
 
     if (*p2 * diff >= 0.0f && diff != 0.0f) {
@@ -535,9 +535,9 @@ float func_00214D88(float *p1, float *p2, float a, float b, float c, float d) {
             float s = FastAbsF(diff);
             s += FastAbsF(*p2);
             if (half < s) {
-                func_00214D28(p2, 0.0f, c);
+                ApproachValue(p2, 0.0f, c);
             } else {
-                func_00214D28(p2, 0.0f, c * 1.1f);
+                ApproachValue(p2, 0.0f, c * 1.1f);
             }
         } else {
             float speed = func_001F9B50((c + c) * diff);
@@ -546,9 +546,9 @@ float func_00214D88(float *p1, float *p2, float a, float b, float c, float d) {
                 speed = d;
             }
             if (diff < 0.0f) {
-                func_00214D28(p2, -speed, b);
+                ApproachValue(p2, -speed, b);
             } else {
-                func_00214D28(p2, speed, b);
+                ApproachValue(p2, speed, b);
             }
         }
         {
@@ -563,7 +563,7 @@ float func_00214D88(float *p1, float *p2, float a, float b, float c, float d) {
             return diff;
         }
     }
-    func_00214D28(p2, 0.0f, c);
+    ApproachValue(p2, 0.0f, c);
     *p1 += *p2;
     return *p2;
 }
@@ -661,7 +661,7 @@ extern QuatNext D_001600D8;
 /* Rotation matrix (rows of four floats) to quaternion (x, y, z, w), by
    Shoemake's method: from the trace when it is positive, else from the
    largest diagonal element, working on a packed 3x3 copy. */
-void func_002150B0(void *arg0, void *arg1) {
+void MatrixToQuaternion(void *arg0, void *arg1) {
     float *q = arg0;
     float (*m)[4] = arg1;
     QuatNext n = D_001600D8;
@@ -717,7 +717,7 @@ extern void func_001FA480(void *, void *);
 void func_00215328(void *arg0, void *arg1) {
     char buf[0x40];
     func_001FA460_2(buf, arg1);
-    func_002150B0(arg0, buf);
+    MatrixToQuaternion(arg0, buf);
     func_001FA480(arg1, buf);
 }
 
@@ -750,7 +750,7 @@ extern void func_001FA238(float *, float *);
    then read X from row 1; out = (x, y, z). The last undo vector is
    filled but never used. The 16-byte aligned struct copy is retail's
    four interleaved lq/sq. */
-void func_002153E8(Mtx44 *src, float *out) {
+void MatrixToEuler(Mtx44 *src, float *out) {
     float rot[16];
     Mtx44 m;
     float v[4];
@@ -823,7 +823,7 @@ LINKER_REMNANT("asm/remnants/text", func_00215648);
 /* Conjugate-style sandwich: arg0 = arg2 * (arg1 with w = 0) * a, where
    a is arg2 negated with its w kept (func_001FA588 is the quaternion
    multiply). The 16-byte copy of arg1 is qcopy's lq/sq. */
-void func_00215650(void *arg0, void *arg1, void *arg2) {
+void RotateVectorByQuaternion(void *arg0, void *arg1, void *arg2) {
     float a[4];
     float b[4];
     float c[4];
@@ -852,7 +852,7 @@ void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) {
     }
     func_001F9DC0(q, axis, 1.0f);
     build_quaternion_from_axis_angle(q, q, angle);
-    func_00215650(dst, vec, q);
+    RotateVectorByQuaternion(dst, vec, q);
 }
 
 LINKER_REMNANT("asm/remnants/text", func_00215788);
@@ -975,7 +975,7 @@ extern float func_0020D830(void);
 extern float func_00215A98(int, float);
 
 int func_00215B18(char *arg0, float arg1) {
-    float now = func_0020D830();
+    float now = MobyGetFrameValue();
     float a = round_float_to_decimal_places(4, now - arg1);
     float b = round_float_to_decimal_places(4, *(float *)(arg0 + 0x58) * *(float *)(arg0 + 0x5C));
 
@@ -991,7 +991,7 @@ LINKER_REMNANT("asm/remnants/text", func_00215BA8);
    func_001F9F90 is cos, func_001F9FA8 sin (named in the comments at
    func_00212xxx). Each product is spelled trig * r * trig so the two
    calls are issued before the multiplies, the way retail does. */
-void func_00215C00(void *arg0, float r, float y, float z) {
+void BuildSphericalOffset(void *arg0, float r, float y, float z) {
     float *out = (float *)arg0;
 
     out[0] = FastCos(y) * r * FastCos(z);
@@ -1018,7 +1018,7 @@ extern float func_001FA748(float, float);
    floor(t) and the next into pos and, unless flags bit 0 is set, writes
    the rotation interpolated between the two segments' directions (and
    the points' w as roll) into rot. Without wrap the last segment clamps. */
-void func_00215CA8(Path *path, int wrap, void *pos, float *rot, int flags, float t) {
+void SamplePathAt(Path *path, int wrap, void *pos, float *rot, int flags, float t) {
     PathPt a;
     PathPt b;
     PathPt c;

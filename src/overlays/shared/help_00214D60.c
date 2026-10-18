@@ -40,7 +40,7 @@ extern int D_0015EE84 MACRO_ADDR;
 /* Per-state horizontal velocity and turn updates for the hero's movement states: func_L12_00236270
  * (help_002284A8.c, adapted from Lombyte (MIT), FUN_L12_00235c08) instruction for instruction, plus the
  * state 0x4C arm. Lombyte's own version is FUN_L00_00214658. */
-void func_L00_00214D60(void) {
+void HeroMoveStateVelocity(void) {
     Vec4 tmp;
     f32 x;
     f32 speed;
@@ -56,7 +56,7 @@ void func_L00_00214D60(void) {
         D_0013F450_s.ground_speed = D_0013F450_s.motion.unk164;
     } else if (state == 16) {
         if (scale_ticks(0x36) < D_0013F450_s.state_timer) {
-            func_00214D28(&D_0013F450_s.unk4A0, D_0015EE70 * 25.0f, D_0015EE70 * 7.0f);
+            ApproachValue(&D_0013F450_s.unk4A0, D_0015EE70 * 25.0f, D_0015EE70 * 7.0f);
         }
         if (D_0013F450_s.state_timer < scale_ticks(0x37)) {
             D_0013F450_s.target_speed = D_0013F450_s.unk3F4;
@@ -73,9 +73,9 @@ void func_L00_00214D60(void) {
         }
         if (13.0f <= D_0013F450_s.anim_frame && D_0013F450_s.anim_frame <= 30.0f) {
             if (27.0f < D_0013F450_s.anim_frame) {
-                func_00214D28(&D_0013F450_s.unk45C, 0.0f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450_s.unk45C, 0.0f, D_0015EE70 * 8.0f);
             } else {
-                func_00214D28(&D_0013F450_s.unk45C, D_0015EE6C * 2.0f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450_s.unk45C, D_0015EE6C * 2.0f, D_0015EE70 * 8.0f);
             }
         }
         D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.motion.rot.f[2]) * D_0013F450_s.unk45C;
@@ -83,9 +83,9 @@ void func_L00_00214D60(void) {
     } else if (state == 0x4C) {
         if (5.0f <= D_0013F450_s.anim_frame && D_0013F450_s.anim_frame <= 18.0f) {
             if (15.0f < D_0013F450_s.anim_frame) {
-                func_00214D28(&D_0013F450_s.unk45C, 0.0f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450_s.unk45C, 0.0f, D_0015EE70 * 8.0f);
             } else {
-                func_00214D28(&D_0013F450_s.unk45C, D_0015EE6C * 1.25f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450_s.unk45C, D_0015EE6C * 1.25f, D_0015EE70 * 8.0f);
             }
         }
         D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.motion.rot.f[2]) * D_0013F450_s.unk45C;
@@ -103,9 +103,9 @@ void func_L00_00214D60(void) {
         }
         if (D_0013F450_s.state.current == 11) {
             if (D_0013F450_s.unk41E != 0 && D_0013F450_s.unk44C < scale_ticks(0xC)) {
-                func_00214D28(&D_0013F450_s.unk458, 0.0f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450_s.unk458, 0.0f, D_0015EE70 * 8.0f);
             } else {
-                func_00214D28(&D_0013F450_s.unk458, D_0015EE6C * 4.2f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450_s.unk458, D_0015EE6C * 4.2f, D_0015EE70 * 8.0f);
             }
         }
         D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.unk438) * D_0013F450_s.unk458;
@@ -149,7 +149,7 @@ void func_L00_00214D60(void) {
                 d = D_0013F450_s.unk944;
                 if (D_0013F450_s.unk12E2) d = D_0015EE70 * 0.17f;
                 speed = func_001F9CE8(&D_0013F450_s.motion.velocity);
-                func_00214D28(&speed, 0.0f, d);
+                ApproachValue(&speed, 0.0f, d);
                 func_L00_001FF500(D_0013F450_s.motion.velocity.f, D_0013F450_s.motion.velocity.f, speed);
                 return;
             }
@@ -179,7 +179,7 @@ extern float func_L00_001FF860(float, float);
 extern char D_0013E633[];
 
 /* tracks the nearest target for the camera and stores the heading toward it */
-void func_L00_00215628(float a, float b, float c) {
+void CameraTrackNearestTarget(float a, float b, float c) {
     char *g = D_0013E633 + 0xE1D;
     float d;
     char *m;
@@ -191,7 +191,7 @@ void func_L00_00215628(float a, float b, float c) {
             *(int *)(g + 0xA58) = 1;
             *(int *)(g + 0xA54) = 0;
         }
-        m = func_L00_0020DF90(a, d, b, c);
+        m = FindNearestListedObject(a, d, b, c);
         if (m != 0 && (*(int *)(g + 0xA54) == 0 || *(int *)(g + 0xA58) != 0)) {
             *(float *)(g + 0xA5C) = func_L00_001FF860(*(float *)(m + 0x10) - *(float *)(g + 0x80), *(float *)(m + 0x14) - *(float *)(g + 0x84));
             *(char **)(g + 0xA54) = m;
@@ -400,7 +400,7 @@ extern float D_0015EE6C MACRO_ADDR;
 #define X3(o) (*(float *)(x3 + (o)))
 
 /* Sets the camera lean/offset terms from the pad input for the glide, spin and hover states. Adapted from Lombyte (MIT) for PAL: overlays/shared/ui_help_00214658.c, FUN_L00_00215b68. */
-void func_L00_002162B8(void) {
+void CameraLeanFromPad(void) {
     char *g = D_0013E633 + 0xE1D;
     char *x;
     char *x2;
@@ -532,7 +532,7 @@ extern void func_001F9EE8(void *, void *, void *);
 extern float func_L00_001FF860(float, float);
 
 /* Writes the elevation and -azimuth of the vector in, rotated into the hero moby's frame. */
-void func_L00_002167C8(Vx *in, float *out) {
+void VecToHeroAngles(Vx *in, float *out) {
     Mx m0;
     Mx n0;
     Vx v0;
@@ -556,7 +556,7 @@ typedef int Q_c __attribute__((mode(TI)));
 typedef struct { Q_c q[4]; } QM_c;
 
 /* builds the camera rotation matrix m that looks along v, with pitch smoothing. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/ui_help_00214658.c, FUN_L00_00216130. */
-void func_L00_00216880(V_c *v, M_c *m, void *p, float a, float b, float c) {
+void CameraLookAtMatrix(V_c *v, M_c *m, void *p, float a, float b, float c) {
     M_c m0;
     M_c m1;
     V_c r;
@@ -612,8 +612,8 @@ void func_L00_00216880(V_c *v, M_c *m, void *p, float a, float b, float c) {
     r.f[1] = 0.0f;
     func_L00_001FFA40(&m1, &r);
     sce_vu0_mul_matrix(m, &m1, m);
-    if (p) func_002153E8(m, p);
-    else func_002153E8(m, D_0013E633 + 0xEAD);
+    if (p) MatrixToEuler(m, p);
+    else MatrixToEuler(m, D_0013E633 + 0xEAD);
 }
 typedef int U128 __attribute__((mode(TI)));
 extern float D_0015EE64 MACRO_ADDR;
@@ -621,7 +621,7 @@ extern void func_001F9C30(void *, void *, float);
 extern int func_001F9850(int);
 
 /* builds the three view vectors and applies the camera offset to the moby. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/ui_help_00214658.c, FUN_L00_002163f0. */
-void func_L00_00216B40(void) {
+void BuildCameraViewVectors(void) {
     unsigned char *g = (unsigned char *)D_0013E633 + 0xE1D;
     unsigned char *h;
     M_c m;
@@ -647,7 +647,7 @@ void func_L00_00216B40(void) {
         f20 = D_0015EE64 * 0.001f;
         f21 = f20;
     }
-    func_L00_00216880(&a, &m, 0, f21, f20, f22);
+    CameraLookAtMatrix(&a, &m, 0, f21, f20, f22);
     {
     unsigned char *n = (unsigned char *)D_0013E633 + 0xE1D;
     if (n[0x20B3] == 1 && *(short *)(n + 0x30E) != 0) {
@@ -687,7 +687,7 @@ void func_L00_00216D40(void) {
         func_L00_0025CCF0(g + 0x94, g + 0xA4, 0, -t[1], D_0015EE64 * 0.015f, D_0015EE64 * 0.3f, D_0015EE6C * 5.2359877f);
     } else if (r >= 0) {
         if (r < 3) {
-            func_L00_00216B40();
+            BuildCameraViewVectors();
         }
     }
 }
@@ -698,7 +698,7 @@ extern void func_001F9BC0(void *);
 // Bleeds off the hero's momentum vector by amount a, clearing it when it is tiny.
 void func_L00_00216E98(float a) {
     float *v = (float *)(D_0013E633 + 0xF6D);
-    float s = func_L00_00234250(v);
+    float s = ViewXyLength(v);
     if (s > 0.001f) {
         float z = 0.0f;
         float d;
@@ -918,7 +918,7 @@ void func_L00_002175D0(int idx, int a, int b) {
 extern unsigned char D_0013F450_178A0b[] __asm__("D_0013F450");
 
 /* fills the first free record in the help queue */
-void func_L00_00217648(int x, int y, int z) {
+void Help_QueueAdd(int x, int y, int z) {
     char *base = (char *)D_0013F450_178A0b;
     char *p = base + 0x21D8;
     int i = 0;
@@ -974,7 +974,7 @@ void func_L00_00217718(void *a, void *b, int c, int d) {
     func_001FA218(q, p + 0x10);
     func_001FA1F8(*(char **)(q + 0x2080) + 0xC0, p + 0x10);
     func_L00_00211F68();
-    func_L00_002638B8(p + 0x15F0);
+    DeleteOwnedMobys(p + 0x15F0);
     *(int *)(q + 0x364) &= -2;
     *(short *)(q + 0x30E) = 1;
     *(int *)(q + 0x364) &= -3;
@@ -992,7 +992,7 @@ void func_L00_00217718(void *a, void *b, int c, int d) {
     pad_resetState();
     func_L00_0020ED30();
     func_L00_00205B50();
-    if (c != -1) func_L00_00222B80(c, 1);
+    if (c != -1) HeroEnterMoveState(c, 1);
     func_L00_00232DF8(*(unsigned char *)(*(char **)(q + 0x2080) + 0x53), *(unsigned char *)(*(char **)(q + 0x2080) + 0x51));
     if (*(int *)(q + 0x208C) == 0x11) D_L00_00167114 = 1;
     else D_L00_00167114 = 0;
@@ -1073,7 +1073,7 @@ void func_L00_002178A0(float a, float b)
     r = 1.0f;
     if (func_L00_001EFFF0(t, u, 4, *(void **)(D_0013F450_178A0 + 0x2080), 0)) {
         e = D_L00_00173F40;
-        if (*(int *)(e + 0x1C) > 0 && func_L00_002345B0(e + 0x40) <= 0.87266463f)
+        if (*(int *)(e + 0x1C) > 0 && ViewGetPitch(e + 0x40) <= 0.87266463f)
             r = 0.0f;
     }
     if (r != 0.0f)
@@ -1141,10 +1141,10 @@ void func_L00_00217BD8(void) {
         ang = random_angle_radians();
         e = random_float_between(0.34906584f, 1.3962634f);
         r = random_float_between(0.05f, *(float *)(g + 0x234) + 0.2f);
-        func_00215C00(&out, s, ang, e);
+        BuildSphericalOffset(&out, s, ang, e);
         pos[0].f[0] += FastCos(ang) * r;
         pos[0].f[1] += FastSin(ang) * r;
-        func_L00_0026A7F8(pos, &out, 0x7000C0F0, 0x70F0, t, a, b, 1);
+        PartType04Spawn(pos, &out, 0x7000C0F0, 0x70F0, t, a, b, 1);
     } while (i >= 0);
     if (!ang) {
     }
@@ -1175,7 +1175,7 @@ extern void func_00213DE0(void *, s32, s32, s32);
 
 /* Launches the equipped gadget moby: aims it at its target (or along the camera), builds its orientation matrix and starts its animation/sound.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/00214658.c, FUN_L00_00217658. */
-void func_L00_00217DE0(void) {
+void LaunchGadgetMoby(void) {
     f32 dir[4];
     f32 delta[4];
     f32 mat[12];
@@ -1198,7 +1198,7 @@ void func_L00_00217DE0(void) {
             tpv = (ThrowPvars_217658 *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
-                func_L00_00233EE0(dir, 0.5f, 0.0f, 0.5f);
+                LocalToWorldPoint(dir, 0.5f, 0.0f, 0.5f);
                 func_001F9BF0_17DE0(delta, tpv->unk50, dir);
                 D_0013F450_15A90.aim_yaw = func_L00_001FF860(delta[0], delta[1]);
                 D_0013F450_15A90.aim_pitch = func_L00_001FF860(func_001F9CE8(delta), delta[2]);
@@ -1226,7 +1226,7 @@ void func_L00_00217DE0(void) {
     if (!aimed) {
         func_L00_00233F88(pv->unk40, pv->unk40, 1.0f);
     } else {
-        func_00215C00(pv->unk40, 1.0f, D_0013F450_15A90.aim_yaw, D_0013F450_15A90.aim_pitch);
+        BuildSphericalOffset(pv->unk40, 1.0f, D_0013F450_15A90.aim_yaw, D_0013F450_15A90.aim_pitch);
     }
     clear_u64_value(dir);
     func_001FA1F8(mat, dir);
@@ -1240,11 +1240,11 @@ void func_L00_00217DE0(void) {
         func_001FA4F0(mat, &D_0013F450_15A90.moby->rot_row0, mat);
     }
     func_001FA460(out_mat, mat);
-    func_002153E8(out_mat, &item->rot);
+    MatrixToEuler(out_mat, &item->rot);
     pv->unk64 = 0;
     pv->unk60 = D_0015EE6C * 23.0f;
     func_L00_00263578(item, D_00140C00);
     func_L00_002635A0(D_00140C00, 0x30, 3);
     func_L00_002635A0(D_00140C00, 0x17, 5);
-    func_00213DE0(item, 6, 0, scale_ticks(5));
+    MobyBlendAnimation(item, 6, 0, scale_ticks(5));
 }

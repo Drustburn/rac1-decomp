@@ -183,10 +183,10 @@ void func_001FDF78(s32 left, s32 right, s32 top, s32 bottom) {
     texture_index = GetIconFrame(0xE99A, 0xE);
     screen_width_subpixels = (right - left) * 16;
     screen_height_subpixels = (bottom - top) * 16;
-    func_00200A90(texture_index, 0, 0, screen_width_subpixels, screen_height_subpixels, 0, 0,
+    DrawHudSpriteUV(texture_index, 0, 0, screen_width_subpixels, screen_height_subpixels, 0, 0,
                        0x80);
     VU1_addGSregister(8, 0);
-    func_00200A90(GetIconFrame(0xE99A, 0xF), 0, 0, screen_width_subpixels,
+    DrawHudSpriteUV(GetIconFrame(0xE99A, 0xF), 0, 0, screen_width_subpixels,
                        screen_height_subpixels, D_0015F538 & 0xFFF, 0, 0x80);
     VU1_addGSregister(8, 5);
     for (level_index = 1; level_index < 20; level_index++) {
@@ -219,7 +219,7 @@ void func_001FDF78(s32 left, s32 right, s32 top, s32 bottom) {
             line_start_x = label_x + (marker_x - label_x) * line_fraction / direction_length;
             line_start_y = label_y + (marker_y - label_y) * line_fraction / direction_length;
             label_text = msg_string(D_001DE0C4[level_index].label_text);
-            text_width = func_001F6600(label_text, -1);
+            text_width = MeasureTextWidthRegular(label_text, -1);
             if (D_001DE1A8[level_index].label_offset_x <= -1) {
                 line_end_x = label_x - text_width;
             } else {
@@ -254,7 +254,7 @@ extern char D_001997D0[];
 /* Advances the help screen's state (D_001997D0). Every access goes
    through the global, and cases 6 and 7 are spelled out: the jump table
    has eight entries. */
-void func_001FE438(void) {
+void Help_AdvanceState(void) {
     switch (((HelpState *)D_001997D0)->state) {
     case 0:
         ((HelpState *)D_001997D0)->x24 = -1;
@@ -340,7 +340,7 @@ extern int D_0013E604;
    stays 12 above the screen's; written as `screenY - 0xC - hHalf5`, CSE
    folds it to retail's screenY - (h/2 + 0x11). The fade flags are bytes
    read through MACRO_ADDR int aliases, which keeps retail's lui+lbu. */
-void func_001FE588(void) {
+void Help_Open(void) {
     short win[12];
     int idx;
     char *text;
@@ -352,7 +352,7 @@ void func_001FE588(void) {
     ((HelpState *)D_001997D0)->state = 1;
     ((HelpState *)D_001997D0)->x04 = 0;
     if (D_0015EF1D_b || D_0015EF1C_b) {
-        func_0022EE28(0, 1, 0);
+        PlayBankSound(0, 1, 0);
     }
 
     idx = ((HelpState *)D_001997D0)->pad[6];
@@ -469,7 +469,7 @@ void Help_Update(void) {
         if (HS.msg >= 0) {
             if (HS.shown == 0) {
                 if (func_001F9908_r(HS.wait) != 0) {
-                    func_001FE588();
+                    Help_Open();
                     HS.shown++;
                 }
                 break;
@@ -488,7 +488,7 @@ void Help_Update(void) {
             HS.msg = Help_FindIndex(HS.pending);
             HS.pending = -1;
             if (HS.msg >= 0) {
-                func_001FE588();
+                Help_Open();
             }
         }
         break;
@@ -661,7 +661,7 @@ __asm__(".section .text\n\tnop\n");
    frame and the entry text, fading in (4) or out (6) through the text
    colour's alpha (4, 5, 6), or the closing frame (7). The fade flag is
    re-read in each case, as retail's per-case andi shows. */
-void func_001FF1B0(void) {
+void Help_Draw(void) {
     if (((HelpState *)D_001997D0)->state == 0) {
         return;
     }
@@ -761,7 +761,7 @@ extern short D_00199810[];
    (idx * 4) when which != 0. idx * 4 is computed before the compare,
    so it lives across the branch and fills its delay slot; the address
    is an int sum so the addu takes the offset first. */
-int func_001FF4F8(short key, int which, short *out) {
+int FindHelpEntry(short key, int which, short *out) {
     char *base = (char *)D_00199810;
     short *p = (short *)(base + which * 2);
     int idx = 0;
@@ -797,8 +797,8 @@ extern int D_0015EF30 MACRO_ADDR;
    value is appended. Unknown ids (-1) change nothing. The search loop
    tests the byte before the bound, as retail does: it reads
    D_00141F08[0] before it first reads the count. */
-void func_001FF560(short id) {
-    int val = func_001FF4F8(id, 0, 0);
+void PushHelpHistory(short id) {
+    int val = FindHelpEntry(id, 0, 0);
     int i;
 
     if (val == -1) {

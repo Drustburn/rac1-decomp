@@ -268,7 +268,7 @@ extern short func_001F9968_s(int) __asm__("func_001F9968");
 
 /* Unpack count point records (x, y, u, v words, 12.4 fixed point for
    x/y) into D_0018D540. Adapted from Lombyte (MIT) for PAL. */
-void func_00203038(int *src, int count) {
+void UnpackPointRecords(int *src, int count) {
     int x;
     int y;
     int u;
@@ -330,7 +330,7 @@ extern SkyDefL *D_0016055C_s __asm__("D_0016055C") MACRO_ADDR;
    retail reloads it after each call. The item pointer is a separate
    `sh + k` local: loop.c then reduces it to one register starting at sh
    and reaches the item at +0x20 from it, as retail does. */
-void func_00203118(SkyDefL *s) {
+void RelocateSkyDefinition(SkyDefL *s) {
     int i;
 
     D_0016055C_s = s;
@@ -719,7 +719,7 @@ typedef struct {
    loop pass hoists their constants into saved registers, and the pointer
    advances in the for increment so the reversed counter's decrement
    lands in FlushCache's delay slot. */
-void func_00203958(int base, int count, Chunk *list) {
+void UploadTextureImages(int base, int count, Chunk *list) {
     GsLoadImage li;
     int i;
 
@@ -970,7 +970,7 @@ extern void func_00203B70(void *, int, int, int);
    the slot count is bumped. A non-null arg0 also has its +0x2C field
    kept in D_001B6500 and is set up by func_00203B70 once the count is
    bumped. The slot byte is D_00160000 read again as a byte. */
-void func_00203E78(void *arg0, int arg1, int arg2, int arg3) {
+void RegisterMobyClass(void *arg0, int arg1, int arg2, int arg3) {
     int idx = D_00160000;
 
     D_001B3E40[arg3] = *(unsigned char *)&D_00160000;
@@ -1063,7 +1063,7 @@ extern s32 func_00120F30_04C60(s32) __asm__("func_00120F30");
    error or a 720-frame stall, then by stage reads the shared, level and sound archives
    below 0x1FF8000 and swaps the level's sound bank. Returns 1 when everything is in.
    Adapted from Lombyte (MIT) for PAL: src/gameplay/state/fun_00204428.c, service_level_archive_load. */
-s32 func_00204C60(void) {
+s32 LevelArchiveLoadStep(void) {
     s32 stage;
     u16 next_stage;
     s32 retry_stage;
@@ -1286,7 +1286,7 @@ extern struct Moby *func_0020D348_m(int) __asm__("func_0020D348");
    spawning (func_0020D348) and initialising the moby the first time; each
    part's pointer table is made absolute. Adapted from Lombyte (MIT) for
    PAL. */
-void func_00204FC0(void *arg0) {
+void UpdateWorldObjectAnimation(void *arg0) {
     struct ModelRec *rec;
     struct Moby *mob;
     int *cp;
@@ -1371,11 +1371,11 @@ extern int D_0016100C_m __asm__("D_0016100C") MACRO_ADDR;
    with the chunk's value as the current one meanwhile. The slot address is
    written base - (-(index * 4)), which keeps retail's base-first addu
    (adapted from Lombyte (MIT) for PAL). */
-void func_00205220(int arg0) {
+void ParseSpaceSceneChunk(int arg0) {
     char *base = (char *)&D_0018CC20;
     char *p = base - (-(arg0 * 4));
     *(int *)(base + 0x5C) = *(int *)(p + 0x60);
-    func_00204FC0(p);
+    UpdateWorldObjectAnimation(p);
     *(int *)(base + 0x5C) = D_001941C8 + D_0016100C_m;
 }
 

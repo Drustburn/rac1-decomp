@@ -564,7 +564,7 @@ extern char D_001872B0[];
    stashes two of them into D_001872B0's record (+0x90, +0xA0), calls
    func_001EC8D8 to compute the camera's yaw/pitch/dist into +0x70,
    then copies +0xD0 back over +0xB0 (retail's qcopy, see common.h). */
-void func_001ECAB8(void) {
+void Camera_CaptureOrientation(void) {
     char *g = D_0013F450;
     char *r = D_001872B0;
     char local0[16];
@@ -627,7 +627,7 @@ extern float func_001FA888(int);
    modes restore through func_001ECB98/func_001ECC10. Then the mode
    becomes 3, +2 takes the sub-mode, and either the +0x10 blend resets or
    the +0x70 timer advances. */
-void func_001ECC48(void *arg) {
+void Camera_StartBlend(void *arg) {
     char *arg0 = arg;
     char *r = D_001872B0;
     char local0[16];
@@ -643,7 +643,7 @@ void func_001ECC48(void *arg) {
         } else if (sub == 2) {
             qcopy(r + 0xC0, arg0 + 0x30);
             func_00215328(r + 0xD0, arg0);
-            func_001ECAB8();
+            Camera_CaptureOrientation();
         } else {
             char *g = D_0013F450;
 
@@ -659,7 +659,7 @@ void func_001ECC48(void *arg) {
         sub = r[3];
         if (sub == 2) {
             Camera_stagePendingTransform();
-            func_001ECAB8();
+            Camera_CaptureOrientation();
         } else if (sub == 1) {
             Camera_stagePendingTransform();
             qcopy(r + 0xB0, r + 0xD0);
@@ -702,7 +702,7 @@ extern void func_001FA480(void *, void *);
    (func_001FA5C8) into cam+0x50 and load it as the view matrix, then
    advance both blends by their rates times D_0015EE60, capped at 1.
    Returns 1 once both are complete. */
-int func_001ECEA0(void *arg0, void *arg1) {
+int Camera_StepBlend(void *arg0, void *arg1) {
     float *to = arg0;
     float *cam = arg1;
     float m[4];
@@ -714,7 +714,7 @@ int func_001ECEA0(void *arg0, void *arg1) {
     if (cam[3] == 1.0f && cam[0] == 1.0f) {
         return 1;
     }
-    t = func_00214220(0.0f, 1.0f, cam[3]);
+    t = CosineInterpolate(0.0f, 1.0f, cam[3]);
     FastVecAdd(cam + 12, D_0013F590, cam + 12);
     st = D_0018C418;
     cam[16] = cam[12] + (to[12] - cam[12]) * t;
@@ -725,7 +725,7 @@ int func_001ECEA0(void *arg0, void *arg1) {
     }
     func_00215328(m, to);
     rot = cam + 20;
-    t = func_00214220(0.0f, 1.0f, cam[0]);
+    t = CosineInterpolate(0.0f, 1.0f, cam[0]);
     func_001FA5C8(rot, cam + 8, m, t);
     func_001FA6C0(rot, q);
     if (*(int *)(st + 0x14) == 0) {
@@ -766,7 +766,7 @@ typedef struct {
 
 /* Camera update toward a target orientation: blends yaw/pitch/distance and rebuilds the camera basis.
    Adapted from Lombyte (MIT) for PAL: src/gameplay/camera/fun_001eccd8.c, FUN_001eccd8. */
-int func_001ED080(void *arg0, void *arg1) {
+int Camera_UpdateTowardTarget(void *arg0, void *arg1) {
     char *cam = arg0;
     float *b = arg1;
     Vec ang;
@@ -795,7 +795,7 @@ int func_001ED080(void *arg0, void *arg1) {
     if (*(int *)(b + 3) <= 0) {
         return 1;
     }
-    step = 1.0f / func_00214220(1.0f, (float)*(int *)(b + 5), (float)*(int *)(b + 3) * b[4]);
+    step = 1.0f / CosineInterpolate(1.0f, (float)*(int *)(b + 5), (float)*(int *)(b + 3) * b[4]);
     if (D_001872B2 == 2) {
         qcopy(&target, gHeroPos);
         qcopy(&fwd, b + 8);
@@ -849,14 +849,14 @@ int func_001ED080(void *arg0, void *arg1) {
         qcopy(&r1, &m[1]);
     } else {
         build_quaternion_from_axis_angle(&r2, &m[2], turn);
-        func_00215650(&r0, &m[0], &r2);
-        func_00215650(&r1, &m[1], &r2);
+        RotateVectorByQuaternion(&r0, &m[0], &r2);
+        RotateVectorByQuaternion(&r1, &m[1], &r2);
     }
     if (FastAbsF(yaw) < 1e-5f) {
         qcopy(&r2, &m[0]);
     } else {
         build_quaternion_from_axis_angle(&q, &m[2], yaw);
-        func_00215650(&r2, &m[0], &q);
+        RotateVectorByQuaternion(&r2, &m[0], &q);
     }
     yaw = 1.5707964f - FastArcSin(FastVecDot(&r2, cam));
     d = FastVecDot(&r2, cam + 0x20);
@@ -887,14 +887,14 @@ extern int func_001ED080(void *, void *);
    destination is -0x210 from D_00187390, a different member reached by
    pointer arithmetic on the same char array. Either way it clears
    D_001872B0's leading halfword and its flag byte. */
-void func_001ED658(char *arg0) {
+void Camera_UpdateBlend(char *arg0) {
     char *base = D_001872B0;
     int result;
 
     if (*(unsigned char *)(base + 2) == 0) {
-        result = func_001ECEA0(arg0, base + 0x10);
+        result = Camera_StepBlend(arg0, base + 0x10);
     } else {
-        result = func_001ED080(arg0, base + 0x70);
+        result = Camera_UpdateTowardTarget(arg0, base + 0x70);
     }
     if (result != 0) {
         if (D_0018C42C == 0) {
@@ -926,7 +926,7 @@ extern char D_001873B0[];
    countdown-zero exit is the else arm after the main path (retail's
    `b L800` over it), and the state-6 stores are written 8 then 0xC so
    the scheduler emits 0xC first and cross-jumping leaves them alone. */
-void func_001ED708(char *arg0, int arg1) {
+void Camera_UpdateShake(char *arg0, int arg1) {
     char buf[16];
 
     if (D_001871C0 != 0 && *(short *)((char *)D_001871C0 + 0x86) == 6) {
@@ -1120,7 +1120,7 @@ extern float func_00214440(void *, int);
    not a water surface, flag D_00187040+0x394 when the focus is below the
    surface height + 0.04. Off for camera mode 6 or while D_0015F6E8 is
    set. */
-void func_001EDB98(void) {
+void Camera_UpdateUnderwaterFlag(void) {
     char *cam = D_00187040;
     float a[4];
     float b[4];
@@ -1137,7 +1137,7 @@ void func_001EDB98(void) {
     i = 0;
     while (i < 6 && func_001EFE10(a, b, 0x12, 0, 0) != 0) {
         if (func_001F0F00() == 0) {
-            float h = func_00214440(D_00194220, 0) + 0.04f;
+            float h = GetGroundHeight(D_00194220, 0) + 0.04f;
             char *c2 = D_00187040;
 
             if (*(float *)(c2 + 0x148) < h) {
@@ -1265,10 +1265,10 @@ void UpdateCamera(void) {
     UpdateAllCameras();
     target = *(char **)(c + 0x180);
     if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {
-        func_001ECC48(*(void **)(c + 0x184));
+        Camera_StartBlend(*(void **)(c + 0x184));
     }
     if (*(short *)(c + 0x270) == 3) {
-        func_001ED658(target);
+        Camera_UpdateBlend(target);
     } else {
         char *st = D_0018C418;
         if (*(int *)(st + 0x14) != 0) {
@@ -1283,15 +1283,15 @@ void UpdateCamera(void) {
         char *st = D_0018C418;
         if (*(int *)(st + 0x14) == 0) {
             func_001FA460(m, D_00187390);
-            func_002153E8(m, D_00187390 - 0x200);
+            MatrixToEuler(m, D_00187390 - 0x200);
         }
     }
 frozen:
     v = D_001871A0;
-    func_001ED708(v, 0);
-    func_001ED708(v + 0x10, 1);
-    func_001EDB98();
-    func_001EE858(v - 0x20);
+    Camera_UpdateShake(v, 0);
+    Camera_UpdateShake(v + 0x10, 1);
+    Camera_UpdateUnderwaterFlag();
+    Camera_UpdateEnvironment(v - 0x20);
     if (D_0015EEB4_m[0] != 0) {
         FastVecCross(v + 0x200, v + 0x210, v + 0x1F0);
     }

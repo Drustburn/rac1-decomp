@@ -31,7 +31,7 @@ extern void func_L00_001FF4B0(void *, void *, float);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 /* Builds a view matrix and multiplies it into the camera and projection matrices. The mode flag is read as a byte of a MACRO_ADDR int, which gives retail's one-register lui/lbu. */
-void func_L00_002EB170(char *p) {
+void BuildViewProjection(char *p) {
     char a[16] __attribute__((aligned(16)));
     char b[16] __attribute__((aligned(16)));
     char *g = D_0013E633 + 0xE1D;
@@ -210,7 +210,7 @@ extern void func_L00_001ED600_2eb938(void) __asm__("func_L00_001ED600");
 extern void func_001F9908_2eb938(void *) __asm__("func_001F9908");
 #define P D_0013F450_2eb938
 /* Camera-mode transition update for an InitCamera moby: counts frames while the player and the other camera are in an allowed state, and eases the camera (0.07 / 0.14 rad) toward the target. Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay_vendor_002e9010.c, FUN_L00_002ea488. */
-int func_L00_002EB938(u8 *m, char *a1) {
+int Camera_TransitionUpdate(u8 *m, char *a1) {
     Q_2eb938 *q;
     char *o;
     char *r;
@@ -291,7 +291,7 @@ extern void func_0022ED80(int, int, int);
 
 /* ActivateCamera_4, the first-person camera's init: the camera it gets is handed on to the
    state reset (func_L00_002EB3A0), which builds the camera's rows. */
-void func_L00_002EBC50(char *cam) {
+void Camera_FirstPersonInit(char *cam) {
     S *g = &D_L00_00166D80;
     S *h;
     if (g->s == 0) g->s = 1; else g->s = 2;
@@ -309,7 +309,7 @@ extern float func_001F9CB8(void *);
 extern float func_001F9FC0(float);
 
 /* Exit-camera update: reset the camera state, or drop to state 4 when the view lines up within 80 degrees. */
-void func_L00_002EBCC0(char *m) {
+void Camera_ExitUpdate(char *m) {
     char *p = (char *)D_0013E633_2EBCC0 + 0xE1D;
     S *g;
     S *h;
@@ -358,7 +358,7 @@ void func_L00_002EBE88(char *src) {
     char *g = D_L00_00166F00;
     char *p;
     if (*(short *)(g + 0x86) != 5)
-        p = func_L00_001EB578(5);
+        p = FindCameraById(5);
     else
         p = g;
     qcopy(*(char **)(p + 0x70) + 0x80, src);
@@ -368,7 +368,7 @@ void func_L00_002EBEE0(char *src) {
     char *g = D_L00_00166F00;
     char *p;
     if (*(short *)(g + 0x86) != 5)
-        p = func_L00_001EB578(5);
+        p = FindCameraById(5);
     else
         p = g;
     qcopy(*(char **)(p + 0x70) + 0x90, src);
@@ -457,7 +457,7 @@ LINKER_REMNANT("asm/overlays", func_L00_002EC208);
 extern void func_001F9BC0(void *);
 
 /* Camera-state init: sets the default parameters and builds the moby's matrix. */
-void func_L00_002EC210(char *m) {
+void Camera_StateInit(char *m) {
     float v[16];
     char *q;
     char *p;
@@ -511,7 +511,7 @@ void func_L00_002EC2D0(void *arg) {
         float u;
         func_001F9908((int *)c);
         u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / func_001FA888(*(int *)(c + 4));
-        func_L00_00258FA8(m + 0x30, m + 0x30, b, u);
+        LerpVectorCosine(m + 0x30, m + 0x30, b, u);
         func_L00_00259088((float *)(m + 0x40), (float *)(m + 0x40), (float *)(d + 0x90), u);
     } else if (t == 3) {
         if (func_001F9908((int *)c) != 0) {
@@ -531,13 +531,13 @@ void func_L00_002EC2D0(void *arg) {
                 } else if (diff > z && y < z) {
                     diff = -diff;
                 }
-                F(c, 0x1C) += func_00214220(0, diff, t);
+                F(c, 0x1C) += CosineInterpolate(0, diff, t);
             } else {
                 F(c, 0x1C) = func_L00_00258F28(F(c, 0x1C), F(c, 8), t);
             }
             F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) * func_L00_00258E58(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
             F(c, 0x20) = func_L00_00258F28(F(c, 0x20), F(c, 0xC), t);
-            func_L00_00258FA8(c + 0x30, c + 0x30, D_0013E633 + 0xE9D, t);
+            LerpVectorCosine(c + 0x30, c + 0x30, D_0013E633 + 0xE9D, t);
             func_L00_001ED900(m + 0x30, c + 0x1C, c + 0x30);
             func_L00_00259088((float *)(m + 0x40), (float *)(m + 0x40), (float *)(b + 0x10), t);
         }
@@ -564,7 +564,7 @@ void func_L00_002EC6C8(char *a) {
     func_L00_002EC2D0(a);
     if (*(int *)(p + 0x40) != 0) {
         a[0x89] = 0;
-        func_L00_001EDA28(a + 0x30, 0.5f);
+        MoveCameraToward(a + 0x30, 0.5f);
     }
 }
 extern float func_001FA748(float, float);
@@ -742,11 +742,11 @@ extern char D_L00_001E7B40[];
 
 // initialises a moby of type 6 from the given one
 char *func_L00_002ECDE0(char *a) {
-    char *m = func_L00_001EB578(6);
+    char *m = FindCameraById(6);
     char *p;
     char *q;
     D_L00_00166FF0[0] = 0;
-    func_L00_001EB890(m);
+    SwitchCamera(m);
     func_L00_002ECAF8(m, a);
     p = *(char **)(m + 0x70);
     qcopy(p + 0xB0, p + 0x80);
@@ -884,7 +884,7 @@ extern void func_002156E0(void *, void *, void *, float);
 extern char D_0013E633[] NOT_SDA;
 extern char D_L00_00166F30[] NOT_SDA;
 /* orients a moby to face the camera, blending by the turn angle */
-void func_L00_002ED958(char *m) {
+void FaceMobyToCamera(char *m) {
     char *p = *(char **)(m + 0x70);
     char *q = p + 0x40;
     char *g = D_0013E633 + 0xE9D;
@@ -949,7 +949,7 @@ void func_L00_002EDB70(char *m) {
     }
 done:
     RefreshPointLight((int)m);
-    func_L00_001EDA28(q, 0.5f);
+    MoveCameraToward(q, 0.5f);
     *(int *)(*(char **)(m + 0x70) + 0x80) = 0;
 }
 extern char D_0013F450[];
@@ -1083,7 +1083,7 @@ extern void func_L00_002E9A18(int);
 extern void func_L00_002E9A40(f32, f32);
 
 /* Camera-swing script update. */
-void func_L00_002EDE38(char *arg) {
+void Camera_SwingUpdate(char *arg) {
     struct UpdateCam *cam = (struct UpdateCam *)arg;
     CameraVec dir;
     SwingCameraParams *params;
@@ -1296,7 +1296,7 @@ int func_L00_002EE6E0(char *m) {
     if ((short)*(unsigned short *)(p + 0x2C) == 2 && *(int *)(D_0013E633 + 0x2EA9) != 0x1A) {
         *(short *)(p + 0x2E) = 0;
     } else {
-        func_L00_002EDE38(m);
+        Camera_SwingUpdate(m);
     }
     return 0;
 }
@@ -1383,7 +1383,7 @@ typedef struct {
 typedef struct { unsigned char pad0[0x80]; struct { float pos[4]; } motion; unsigned char pad90[0x200]; float gravity_dir[4]; } HeroLike_ee;
 
 /* Aim-camera update. */
-void func_L00_002EE948(void *cam_) {
+void Camera_AimUpdate(void *cam_) {
     struct UpdateCam_ee *cam = cam_;
     CameraVec_ee pos;
     CameraVec_ee to_pos;
@@ -1500,7 +1500,7 @@ extern int D_L00_0015F6A8 MACRO_ADDR;
 extern int func_L00_002EE7F8(void *);
 extern void func_L00_002EE948(void *);
 /* Aim-camera moby update; always returns 0. */
-int func_L00_002EED60(char *a) {
+int Camera_AimMobyUpdate(char *a) {
     char *p = *(char **)(D_L00_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
     if (*(short *)(p + 0x26) != 0) return 0;
     if (D_L00_0015F6A8 != 0) {
@@ -1510,7 +1510,7 @@ int func_L00_002EED60(char *a) {
             return 0;
         }
     }
-    func_L00_002EE948(a);
+    Camera_AimUpdate(a);
     return 0;
 }
 typedef struct { s32 id; s32 w4; s32 w8; s32 wC; s32 snd; } S_2ed950;

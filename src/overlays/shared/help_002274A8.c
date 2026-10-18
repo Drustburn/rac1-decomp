@@ -106,7 +106,7 @@ void func_L01_00228598(void) {
     if (GG->b20A4 == 0) return;
     func_L00_00209088();
     func_L00_00208260();
-    func_L00_00208070();
+    CameraShakeUpdate();
     func_L00_00248EF8(GG->a80);
     if (GG->b20A4 == 3) {
         if (gCheats[1] != 0) {
@@ -152,7 +152,7 @@ void func_L01_00228598(void) {
             c20 = truncate_float_to_s32(f20 * (float)c20);
         }
         GG->c22E4 = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
-        func_L00_00208318();
+        QueueHeroDraw();
         GG->s22E0 = 0;
         if (GG->b20A4 == 3) {
             v2 = GG->i20B8;
@@ -248,12 +248,12 @@ void HeroUpdate(void) {
     func_L00_00215738();
     func_L00_00205B00();
     func_L00_00208E98();
-    func_L00_002098B8(0);
+    HeroComputeAttachMatrices(0);
     func_L00_00210FE0();
-    func_001F7B40();
+    BeginDrawFrame();
     func_L00_00208260();
-    func_L00_00208070();
-    func_L00_00207310();
+    CameraShakeUpdate();
+    HelpHintsPeriodicCheck();
     func_L00_002064C0();
     func_L00_00206698();
     func_L00_00207418();
@@ -705,10 +705,10 @@ void func_L01_00231960(int a, int b, int c) {
     *(char *)(g + 0x20A6) = 1;
     func_L00_00210E00();
     *(int *)(g + 0x2080) = *(int *)(g + 0xA88);
-    func_L00_002638B8(g + 0x1670);
+    DeleteOwnedMobys(g + 0x1670);
     *(int *)(*(char **)(g + 0x2080) + 0x98) = -1;
-    func_L00_00233868();
-    func_L00_00207220();
+    HeroSetObjectFlags();
+    HeroClearSoundSlots();
     func_L00_00205B50();
     *(char *)(g + 0x20A4) = a;
     *(int *)(g + 0xA84) = c;
@@ -721,7 +721,7 @@ void func_L01_00231960(int a, int b, int c) {
     *(float *)(g + 0xA94) = 1.0f;
     func_L00_00232EA8();
     func_L00_0025805C(*(void **)(g + 0x2080));
-    func_L00_00208070();
+    CameraShakeUpdate();
     *(short *)(g + 0x22CC) = b;
     if (a == 1) {
         *(unsigned short *)(g + 0x22B0) = *(unsigned short *)(g + 0x22A8);
@@ -752,7 +752,7 @@ void func_L01_00231A68(void) {
         DeleteMoby(m);
         *(int *)(g + 0xA8C) = 0;
     }
-    func_L00_00207220();
+    HeroClearSoundSlots();
     a = *(char **)(g + 0xA88);
     *(char **)(g + 0x2080) = a;
     qcopy(a + 0x10, g + 0x80);
@@ -862,7 +862,7 @@ s32 func_L01_00231B98(s32 arg) {
     if (arg == 0) {
         return 1;
     }
-    func_L00_00207220();
+    HeroClearSoundSlots();
     flag = 0;
     if (tbl->i30 & 1) {
         qcopy(&v, &tbl->v10);
@@ -1017,8 +1017,8 @@ void func_L01_002320F8(void) {
     if (!D_0013F450_2320F8.b257 || D_0013F450_2320F8.i2094 == 0x12 || D_0013F450_2320F8.i208C == 0x11 || D_0013F450_2320F8.b12E4 || func_001F9D48(D_0013F450_2320F8.v210, D_0013F450_2320F8.v80) > D_0013F450_2320F8.f234 * 0.5f) {
         f32 *q = D_0013F670;
         P231ae0 *b = (P231ae0 *)((u8 *)q - 0x220);
-        func_00214D28(b->f228, D_0015EE60_320F8 * 0.02f, q);
-        func_00214D28(b->f22C, D_0015EE60_320F8 * 0.02f, q + 1);
+        ApproachValue(b->f228, D_0015EE60_320F8 * 0.02f, q);
+        ApproachValue(b->f22C, D_0015EE60_320F8 * 0.02f, q + 1);
         func_L00_0025C918(q + 5, q + 6, b->f230, D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.0f);
     }
 }
@@ -1079,7 +1079,7 @@ void func_L01_00232F90(int flag) {
     if (*(short *)(g + 0x308) != 0) {
         return;
     }
-    if (func_L00_00234250((float *)(g + 0xE0)) < D_0015EE6C * 0.1f) {
+    if (ViewXyLength((float *)(g + 0xE0)) < D_0015EE6C * 0.1f) {
         return;
     }
     f2 = 0.37f;
@@ -1261,7 +1261,7 @@ void func_L01_002333D8(void) {
     D_0013F450.xB12ed = r;
     D_0013F450.xH12e0 = CollType();
     if (D_0013F450.xH12e0 == 0) {
-        D_0013F450.xF2f0 = func_00214440(D_L01_00174360, (u8 *)&D_0013F450 + 0x280);
+        D_0013F450.xF2f0 = GetGroundHeight(D_L01_00174360, (u8 *)&D_0013F450 + 0x280);
         if (D_0013F450.xF88 < D_0013F450.xF2f0 && D_0013F450.xI2f8 <= 0) {
             D_0013F450.xI2f8 = 1;
         }
@@ -1300,7 +1300,7 @@ void func_L01_002333D8(void) {
         D_0013F450.xF2dc = FastVecDist((u8 *)&D_0013F450 + 0x80, ((u8 *)&D_0013F450 + 0x2A0));
         D_0013F450.xI2fc = D_L01_00174340_333D8.i18;
         func_001252C0((u8 *)&D_0013F450 + 0x270, (u8 *)&D_L01_00174340_333D8.f40);
-        D_0013F450.u2e0.F = func_L00_002345B0((u8 *)&D_L01_00174340_333D8.f40);
+        D_0013F450.u2e0.F = ViewGetPitch((u8 *)&D_L01_00174340_333D8.f40);
         D_0013F450.xF2ec = func_L00_001FF860(D_L01_00174340_333D8.f40, D_L01_00174340_333D8.f44);
         FastVecSub(&v20, ((u8 *)&D_0013F450 + 0x2A0), (u8 *)&D_0013F450 + 0x80);
         if (0.0f < FastVecDot(&v20, (u8 *)&D_0013F450 + 0x270)) {
@@ -1353,7 +1353,7 @@ d1:
     if (!(D_0013F450.xF2dc < 0.25f)) {
         return;
     }
-    func_L00_002167C8((u8 *)&D_0013F450 + 0x270, &v20);
+    VecToHeroAngles((u8 *)&D_0013F450 + 0x270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
         D_0013F450.u2e4.F = v20.f[1];
     }
@@ -1365,8 +1365,8 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        func_L00_00233E48(&v30, 0.2f, a, 0.45f);
-        func_L00_00233E48(&v40, 0.2f, a, -0.45f);
+        PolarToWorldPoint(&v30, 0.2f, a, 0.45f);
+        PolarToWorldPoint(&v40, 0.2f, a, -0.45f);
         if (func_L00_001EFFF0(&v30, &v0, 0x22, D_0013F450.xI2080, 0)) {
             f = D_L01_00174340_333D8.v20.f[2] - D_0013F450.u2d8.F;
             D_0013F450.a2c0.f[i] = f;
@@ -1374,7 +1374,7 @@ d1:
                 D_0013F450.a2c0.f[i] = 0.0f;
             }
             func_001252C0(&v60, (u8 *)&D_L01_00174340_333D8.f40);
-            func_L00_002167C8(&v60, &v50);
+            VecToHeroAngles(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 D_0013F450.a2c8.f[i] = v50.f[1];
             }
@@ -1546,8 +1546,8 @@ void func_L01_00234970(float step) {
     case 1:
     case 2: {
         char *h = (char *)&D_0013F450 + 0xE0;
-        u[0] = func_L00_00234250((float *)h);
-        func_00214D28(*(float *)(h + 0xB0), step, u);
+        u[0] = ViewXyLength((float *)h);
+        ApproachValue(*(float *)(h + 0xB0), step, u);
         func_L00_00234420((float *)h, (float *)h, 0.0f);
         func_L00_00233F88(h, h, u[0]);
         break;
@@ -1641,7 +1641,7 @@ void func_L01_0023CE00(void) {
         D_0013F450_293D0.health.hp != 0 && (*(s32 *)&D_L01_0015F6A8_3CE00) == 0) {
         if (D_0013F450_293D0.vehicle_mode == 3) {
             func_L01_00231A68();
-            if (func_L00_00267BA8(0x80, scale_ticks(0x12), 0)) {
+            if (PadPressedWithin(0x80, scale_ticks(0x12), 0)) {
                 D_0013F450_293D0.unk20A6 = 1;
             }
         } else {
@@ -1685,7 +1685,7 @@ void func_L01_0023CE00(void) {
     D_0013F450_293D0.unk1E2 = 0;
 skip:
     func_L00_002222F0();
-    func_L00_00233EE0(&D_0013F450_293D0.motion.unkD0, 0.0f, 0.0f, 0.7f);
+    LocalToWorldPoint(&D_0013F450_293D0.motion.unkD0, 0.0f, 0.0f, 0.7f);
     if (D_0013D5C8[0x22]) {
         D_0013F450_293D0.reach_distance = 12.0f;
         D_0013F450_293D0.reach_height = 4.5f;

@@ -372,7 +372,7 @@ void func_L00_002BC860(char *m) {
         break;
     case 2:
         if (*(int *)(g + 0x2084) == 0x20) {
-            float f = func_0020D830(m);
+            float f = MobyGetFrameValue(m);
             if (6.0f <= f) {
                 flag = 1;
                 if (func_001F9908_r(&D_L00_0016179C) == 0) {
@@ -394,7 +394,7 @@ void func_L00_002BC860(char *m) {
         } else {
             D_L00_0016179C = scale_ticks(*(int *)&D_L00_00161778);
             D_L00_001617A0 = scale_ticks(*(int *)&D_L00_0016177C);
-            func_00213DE0(m, 1, 0, scale_ticks(12));
+            MobyBlendAnimation(m, 1, 0, scale_ticks(12));
         }
     }
     FastVecScale(vec0, m + 0xD0, -0.5f);
@@ -416,7 +416,7 @@ void func_L00_002BC860(char *m) {
                 int k;
                 D_L00_001DC1C0[i] = 2;
                 D_L00_001DC1D8[i] = 0x40;
-                func_002141A8(vec1, *(float *)&D_L00_00161774, *(float *)&D_L00_00161774);
+                RandomSphericalOffset(vec1, *(float *)&D_L00_00161774, *(float *)&D_L00_00161774);
                 qcopy(D_L00_001DBEA0 + i * 0x50, vec0);
                 n = i + 1;
                 sign = 1.0f;
@@ -469,7 +469,7 @@ void func_L00_002BCE08(int arg) {
             func_L00_002BCED0(D_L00_001DBEA0 + (9 - i) * 0x50, r, r, 5, *(float *)&D_L00_00161760, *(float *)&D_L00_00161764, 0.2f);
         }
     }
-    func_L00_002BD4A8(arg);
+    DrawBillboardQuad(arg);
 }
 extern void func_001F9BF0(void *, void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
@@ -614,7 +614,7 @@ typedef struct {
 } T;
 
 /* builds a four-vector billboard quad around a point and runs the draw packet */
-void func_L00_002BD4A8(int arg) {
+void DrawBillboardQuad(int arg) {
     char *m = (char *)arg;
     W q[4];
     T t;
@@ -748,7 +748,7 @@ char *func_L00_002BD6B8(char *self, float *position, float *heading, float *pitc
             continue;
         {
             char *g2 = D_0013E633 + 0xE1D;
-            func_00215C00(offset, distance, *heading, *pitch + *(float *)(g2 + 0x2E4) * 0.5f);
+            BuildSphericalOffset(offset, distance, *heading, *pitch + *(float *)(g2 + 0x2E4) * 0.5f);
         }
         FastVecAdd(offset, offset, position);
         apparentAngle = FastArcSin(FastVecDist(offset, target) / (distance + distance));
@@ -1135,7 +1135,7 @@ extern int func_001F9908_2BE3A8(int *) __asm__("func_001F9908");
 /* Tesla claw arc: bends the twelve-point beam toward the target, builds the two side rails and the ring of
  * twenty points around each node, queues the draw callback, sparks at the tip, and runs the three travelling
  * pulses along the beam. */
-void func_L00_002BE3A8(Moby *m) {
+void TeslaClawArcDraw(Moby *m) {
     Vec4A aim;
     Vec4A seg;
     Vec4A off;
@@ -1993,7 +1993,7 @@ extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
 
 /* Steps a vector by n repeated additions of the normalised difference. */
-void func_L00_002C0B18(char *a, char *b, int n) {
+void StepVectorToward(char *a, char *b, int n) {
     float d[4];
     float t[4];
     int i;
@@ -2012,7 +2012,7 @@ extern float D_0015EE6C MACRO_ADDR;
 
 /* Updates a homing state block o from target m: turn rate, heading, and a speed clamped to seven times a global.
    Adapted from Lombyte (MIT) for PAL: src/overlays/shared/unclassified_002b94d0.c, FUN_L00_002bf8b0. */
-void func_L00_002C0BB8(unsigned char *m, unsigned char *o, void *src) {
+void UpdateHomingState(unsigned char *m, unsigned char *o, void *src) {
     float s, t, r, lim;
 #define F2BF(p, x) (*(float *)((p) + (x)))
     *(int *)(o + 0x30) = 0;
@@ -2070,7 +2070,7 @@ extern void *D_L00_00173F58_2C0CF8 __asm__("D_L00_00173F58");
 
 /* Tries a hop of the moby toward q: probes the ground at the landing point and the path to it, and sets the jump
  * state on success. When blocked and the hop is long enough it tries again with half the distance. */
-int func_L00_002C0CF8(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
+int TryMobyHop(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     float d[4];
     float land[4];
     float from[4];
@@ -2096,13 +2096,13 @@ int func_L00_002C0CF8(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     d[2] = land[2] - m->pos[2];
     if (land[2] == 0.0f) {
         if (ok) {
-            return func_L00_002C0CF8(m, p, half, 1);
+            return TryMobyHop(m, p, half, 1);
         }
         return 0;
     }
     if (m->f2C * 3.0f / m->p24->f24 < d[2]) {
         if (ok) {
-            return func_L00_002C0CF8(m, p, half, 1);
+            return TryMobyHop(m, p, half, 1);
         }
         return 0;
     }
@@ -2112,14 +2112,14 @@ int func_L00_002C0CF8(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     sum = sum + func_001F9B88_2C0CF8(mid[1]);
     if (func_001F9B88_2C0CF8(mid[2]) < sum) {
         if (ok) {
-            return func_L00_002C0CF8(m, p, half, 1);
+            return TryMobyHop(m, p, half, 1);
         }
         return 0;
     }
     land[2] = land[2] + m->f2C * 0.025f / m->p24->f24;
     if (func_L00_002BFDB8_2C0CF8(m, 6, land)) {
         if (ok) {
-            return func_L00_002C0CF8(m, p, half, 1);
+            return TryMobyHop(m, p, half, 1);
         }
         return 0;
     }
@@ -2131,7 +2131,7 @@ int func_L00_002C0CF8(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     if (flag) {
         if (func_L00_001EFFF0_2C0CF8(from, to, 6, m, 0) == 0) {
             if (ok) {
-                return func_L00_002C0CF8(m, p, half, 1);
+                return TryMobyHop(m, p, half, 1);
             }
             return 0;
         }
@@ -2148,13 +2148,13 @@ int func_L00_002C0CF8(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     func_L00_002C0B18_2C0CF8(to, mid, 10, 0, 32, 32, 40000.0f, 60);
     if (func_L00_001EFFF0_2C0CF8(from, mid, 6, m, 0) != 0 && D_L00_00173F58_2C0CF8 != p->p38) {
         if (ok) {
-            return func_L00_002C0CF8(m, p, half, 1);
+            return TryMobyHop(m, p, half, 1);
         }
         return 0;
     }
     if (func_L00_001EFFF0_2C0CF8(mid, to, 6, m, 0) != 0 && D_L00_00173F58_2C0CF8 != p->p38) {
         if (ok) {
-            return func_L00_002C0CF8(m, p, half, 1);
+            return TryMobyHop(m, p, half, 1);
         }
         return 0;
     }

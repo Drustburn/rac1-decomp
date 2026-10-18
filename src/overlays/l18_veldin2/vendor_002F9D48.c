@@ -70,7 +70,7 @@ extern void func_L18_002FB318_9D48(void *) __asm__("func_L18_002FB318");
 extern void func_L18_002FAEF8(void);
 
 /* Class 1563 update: a cutscene director that times its effects (part flashes, fades, bursts) off the level script state. */
-void func_L18_002F9D48(Moby *moby) {
+void Moby1563Update(Moby *moby) {
     switch (moby->state) {
     case 0:
         *(int *)&D_L18_00162528 = 0x163;
@@ -106,7 +106,7 @@ void func_L18_002F9D48(Moby *moby) {
                     f = t.s.f[k - 3];
                     if (k == 3 && D_L18_0016D2E0_9D48.timer >= scale_ticks(0x285) && D_L18_0016D2E0_9D48.timer <= scale_ticks(0x2E0)) continue;
                     if (k == 5 && D_L18_0016D2E0_9D48.timer >= scale_ticks(0x285) && D_L18_0016D2E0_9D48.timer <= scale_ticks(0x2DA)) f = 300000.0f;
-                    func_L00_00264BE8(v, v, D_L18_0015F660, f, f * 0.4f);
+                    SpawnSparkRings(v, v, D_L18_0015F660, f, f * 0.4f);
                 }
             }
             if (D_L18_0016D2E0_9D48.timer == scale_ticks(0x2C2)) {
@@ -178,7 +178,7 @@ void func_L18_002F9D48(Moby *moby) {
                 AddDrawCallback(func_L18_002FB318_9D48, D_L18_001625B8);
             }
             if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_00162528) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162530)) {
-                AddDrawCallback(func_L18_002FABE0, D_L18_0016D2E0_9D48.objs[0]);
+                AddDrawCallback(DrawCutsceneFlare, D_L18_0016D2E0_9D48.objs[0]);
                 if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_0016252C)) {
                     D_L18_001625B0 = 10.0f;
                 } else {
@@ -221,7 +221,7 @@ void func_L18_002F9D48(Moby *moby) {
                 AddDrawCallback(func_L18_002FB318_9D48, D_L18_001625B8);
             }
             if (D_L18_0016D2E0_9D48.timer >= scale_ticks(*(int *)&D_L18_00162528) && D_L18_0016D2E0_9D48.timer < scale_ticks(*(int *)&D_L18_00162530)) {
-                AddDrawCallback(func_L18_002FABE0, D_L18_0016D2E0_9D48.objs[0]);
+                AddDrawCallback(DrawCutsceneFlare, D_L18_0016D2E0_9D48.objs[0]);
                 if (D_L18_0016D2E0_9D48.timer >= *(int *)&D_L18_0016252C) {
                     D_L18_001625B0 = 10.0f;
                 } else {
@@ -247,8 +247,8 @@ void func_L18_002F9D48(Moby *moby) {
                         float f = func_001FA888(j) / 12.0f;
                         func_001F9C08(x, a, D_L18_001625C0, f);
                         func_001F9C08(e, b, D_L18_001625D0, f);
-                        func_L18_002FB6B0(x, x, D_L18_0015F660, *(float *)&D_L18_00162560, *(float *)&D_L18_00162560 * 0.4f);
-                        func_L18_002FB6B0(e, e, D_L18_0015F660, *(float *)&D_L18_00162560, *(float *)&D_L18_00162560 * 0.4f);
+                        EmitBeamSparks(x, x, D_L18_0015F660, *(float *)&D_L18_00162560, *(float *)&D_L18_00162560 * 0.4f);
+                        EmitBeamSparks(e, e, D_L18_0015F660, *(float *)&D_L18_00162560, *(float *)&D_L18_00162560 * 0.4f);
                     }
                     qcopy(D_L18_001625C0, a);
                     qcopy(D_L18_001625D0, b);
@@ -277,7 +277,7 @@ void func_L18_002F9D48(Moby *moby) {
                 v->f4C = func_L00_001FF860(func_001F9CE8(&moby->rot_row1), moby->rot_row1.z);
                 save = D_L18_001617DC;
                 D_L18_001617DC = 24.0f;
-                func_L00_002BE3A8(moby);
+                TeslaClawArcDraw(moby);
                 D_L18_001617DC = save;
                 D_L18_00161884 = col0;
                 D_L18_00161888 = col1;
@@ -330,7 +330,7 @@ extern volatile float D_L18_001625E8 MACRO_ADDR;
 extern float D_L18_001625EC MACRO_ADDR;
 extern float D_L18_001625B0 MACRO_ADDR;
 /* Draws the cutscene flare. */
-void func_L18_002FABE0(void) {
+void DrawCutsceneFlare(void) {
     extern ML_9780 D_L18_0016D2E0;
     extern int func_001F9850(int);
     extern unsigned long func_001F4868(int);
@@ -639,7 +639,7 @@ extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int) __asm__("func_L00_0026DEA0");
 
 /* Emits spark streaks for a beam effect. */
-void func_L18_002FB6B0(void *a, void *b, void *c, float f0, float f1) {
+void EmitBeamSparks(void *a, void *b, void *c, float f0, float f1) {
     char v0[16];
     char v1[16];
     int i;
@@ -779,7 +779,7 @@ typedef struct {
 extern void func_0020D678(void *);
 
 /* Remove a vendor moby and any child it owns. */
-void func_L18_002FBD40(Level18VendorMoby *moby) {
+void RemoveMobyAndChild(Level18VendorMoby *moby) {
     if (moby->class_id == 0x630) {
         void *child = moby->data->child;
         if (child != 0) {
@@ -826,7 +826,7 @@ void func_L18_002FC188(M2 *m) {
                 func_L00_00250800(p, 9, buf2);
                 FastVecSub(buf3, buf, buf2);
                 func_L00_001FF4B0(buf3, buf3, *(float *)&D_L18_00162608);
-                func_L00_00264BE8(buf, buf, buf3, *(float *)&D_L18_0016260C, *(float *)&D_L18_00162610);
+                SpawnSparkRings(buf, buf, buf3, *(float *)&D_L18_0016260C, *(float *)&D_L18_00162610);
             }
         }
         break;
@@ -858,7 +858,7 @@ extern short D_L18_00162690;
 extern char D_L18_00162698;
 
 /* Moby update for the class 0x772 enemy. */
-void func_L18_002FD058(unsigned char *m) {
+void Moby1906Update(unsigned char *m) {
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
     unsigned char *s0;
@@ -900,7 +900,7 @@ void func_L18_002FD058(unsigned char *m) {
         if (*(float *)(m + 0x18) < r) {
             *(float *)(m + 0x18) = r;
             m[0x20] = 2;
-            if (m[0x53]) func_00213DE0(m, 0, 0, scale_ticks(10));
+            if (m[0x53]) MobyBlendAnimation(m, 0, 0, scale_ticks(10));
         } else if (*(float *)(m + 0x18) < a) {
             m[0x20] = 6;
         }
@@ -917,7 +917,7 @@ void func_L18_002FD058(unsigned char *m) {
             if (!(10.0f < f9d48_i(m + 0x10, e + 0x180))) break;
         }
         m[0x20] = 3;
-        if (m[0x53] != 1) func_00213DE0(m, 1, 0, scale_ticks(10));
+        if (m[0x53] != 1) MobyBlendAnimation(m, 1, 0, scale_ticks(10));
         break;
     case 3: {
         float f;
@@ -925,14 +925,14 @@ void func_L18_002FD058(unsigned char *m) {
         f = fd9a0_c(m, tmp);
         if (*(int *)(e + 0x1C4) == 2 && f < 5.0f) {
             m[0x20] = 2;
-            if (m[0x53]) func_00213DE0(m, 0, 0, scale_ticks(10));
+            if (m[0x53]) MobyBlendAnimation(m, 0, 0, scale_ticks(10));
             break;
         }
         if (f < 1.5f) {
             m[0x20] = 4;
             if (m[0x53] != 2) {
                 int v = (int)*(float *)&D_L18_00162690;
-                func_00213DE0(m, 2, v, scale_ticks(5));
+                MobyBlendAnimation(m, 2, v, scale_ticks(5));
             }
         }
         break;
@@ -949,12 +949,12 @@ void func_L18_002FD058(unsigned char *m) {
         if (m[0x70] & 2) {
             if (*(int *)(e + 0x1C4) == 2) {
                 m[0x20] = 2;
-                if (m[0x53]) func_00213DE0(m, 0, 0, scale_ticks(10));
+                if (m[0x53]) MobyBlendAnimation(m, 0, 0, scale_ticks(10));
                 break;
             }
             if (!(2.5f < f9d48_i(m + 0x10, e + 0x180))) break;
             m[0x20] = 3;
-            if (m[0x53] != 1) func_00213DE0(m, 1, 0, scale_ticks(10));
+            if (m[0x53] != 1) MobyBlendAnimation(m, 1, 0, scale_ticks(10));
             break;
         }
         break;
@@ -966,7 +966,7 @@ void func_L18_002FD058(unsigned char *m) {
         ((float *)tmp)[2] += 0.5f;
         func_L00_0025F4A8_alt(m, e + 0x40, tmp, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 0.5f, 4, 0.0f, 0, 1, -1, 0);
         m[0x20] = 8;
-        if (m[0x53]) func_00213DE0(m, 0, 0, scale_ticks(10));
+        if (m[0x53]) MobyBlendAnimation(m, 0, 0, scale_ticks(10));
         *(int *)(m + 0x94) = 0;
         *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
         break;
@@ -975,7 +975,7 @@ void func_L18_002FD058(unsigned char *m) {
     func_001FA1F8(s0, m + 0x40);
     if (*(float *)(e + 0x1F4) != 0.0f) {
         float g;
-        func_00214D28((float *)(e + 0x1F4), 0.0f, D_0015EE6C * 4.0f);
+        ApproachValue((float *)(e + 0x1F4), 0.0f, D_0015EE6C * 4.0f);
         g = 1.0f;
         FastVecScale(m + 0xE0, m + 0xE0, *(float *)(e + 0x1F4) + g);
         g = g - *(float *)(e + 0x1F4);
@@ -1076,7 +1076,7 @@ void func_L18_002FD5C0(void *m_) {
         if (m->state != 7) {
             m->state = 8;
             if (*((u8 *)m + 0x53) != 0) {
-                func_00213DE0(m, 0, 0, scale_ticks(10));
+                MobyBlendAnimation(m, 0, 0, scale_ticks(10));
             }
             *(int *)((char *)m + 0x94) = 0;
             *(u16 *)((char *)m + 0x34) = (*(u16 *)((char *)m + 0x34) | 0x41) & ~0x1000;
@@ -1123,10 +1123,10 @@ void func_L18_002FD5C0(void *m_) {
         }
     }
     *((u8 *)m + 0xA4) = 0xFF;
-    func_L00_0025E590(m, d->anim);
+    StepColorFade(m, d->anim);
     b = (int)&D_L18_001B11B0[d->path];
     a = *(int *)b;
-    func_L00_00260FB0(512.0f, m, &d->target, 0, 0, (int *)(a + 0x10), *(int *)a);
+    FindNearestEligibleMoby(512.0f, m, &d->target, 0, 0, (int *)(a + 0x10), *(int *)a);
     if (d->target_mode == 2) {
         if (hero.state.control_mode == 0xF) {
             int *list = (int *)hero.unk560;
@@ -1162,11 +1162,11 @@ float func_L18_002FD9A0(char *self, float *src) {
     }
     b[0] = z;
     dist = func_001F9D48((float *)(self + 0x10), a.v);
-    func_00214D88(b, (float *)(o + 0x1F0), dist, D_0015EE70 * 6.0f, D_0015EE70 * 6.0f, D_0015EE6C * 5.0f);
+    ApproachWithVelocity(b, (float *)(o + 0x1F0), dist, D_0015EE70 * 6.0f, D_0015EE70 * 6.0f, D_0015EE6C * 5.0f);
     v[0] = FastCos(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
     v[1] = FastSin(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
     v[2] = -(D_0015EE6C + D_0015EE6C);
-    func_L00_00259868((int)self, (int)v, h, h, z, 0);
+    MoveMobyWithCollision((int)self, (int)v, h, h, z, 0);
     func_L00_00262DF0(h, *(void **)(o + 0x1E0), self + 0x10, self + 0x10);
     return dist;
 }
@@ -1217,7 +1217,7 @@ int func_L18_002FDB28(int group, void *from, void *to, float speed) {
     }
 }
 /* Counts the class 0x772 mobys in list idx that are not inactive. */
-short func_L18_002FDCA0(int idx) {
+short CountActiveMoby1906(int idx) {
     unsigned short *p = D_L18_001AC540[idx];
     short n = 0;
     int base;
@@ -1342,11 +1342,11 @@ int func_L18_002FE070(char *a) {
     return r;
 }
 /* Puts a moby into the inactive state (8). */
-void func_L18_002FE1C0(unsigned char *arg) {
+void SetMobyInactive(unsigned char *arg) {
     unsigned short flags;
     arg[0x20] = 8;
     if (arg[0x53] != 0) {
-        func_00213DE0(arg, 0, 0, scale_ticks(10));
+        MobyBlendAnimation(arg, 0, 0, scale_ticks(10));
     }
     flags = *(unsigned short *)(arg + 0x34);
     arg[0x31] = 0;

@@ -53,7 +53,7 @@ void func_L00_0023E4C8(char *moby)
     pk.l[2] = 0xFF9000000260L;
     pk.l[0] = 5;
     pk.l[3] = 0x8000000048L;
-    func_0020DAF8(moby, 0, (char *)m);
+    MobyTransformScaledVertex(moby, 0, (char *)m);
     sc = 4.0f;
     build_look_at_matrix(m[0], m[0], m[1], -0.34906584f);
     FastVecCross(m[1], m[0], m[2]);
@@ -203,7 +203,7 @@ extern float D_L00_0015F6B8 MACRO_ADDR;
 extern char D_L00_00180740[];
 
 /* Allocates a free point-light slot, fills in position, radius, color and intensity, returns its index or -1. */
-int func_L00_0023EF78(float *pos, float radius, float intensity, int color) {
+int AllocPointLight(float *pos, float radius, float intensity, int color) {
     int i;
     unsigned char *e;
     unsigned char *s;
@@ -242,7 +242,7 @@ extern P_0023e738 D_L00_001803C0_0023e738[] __asm__("D_L00_001803C0");
 extern char D_L00_00180740_0023e738[] __asm__("D_L00_00180740");
 void func_001F99D8_0023e738(void *, int) __asm__("func_001F99D8");
 /* Update (reads the frame-time float D_L00_0015F6B8). Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_0023db30.c, FUN_L00_0023e738. */
-int func_L00_0023F0D0(u128_pt *v, float a, float b_0023e738, float c, float d, float e) {
+int UpdatePointLight(u128_pt *v, float a, float b_0023e738, float c, float d, float e) {
     int i;
     T_0023e738 *t;
     P_0023e738 *p;
@@ -269,7 +269,7 @@ extern unsigned char D_L00_001803C0[];
 extern unsigned char D_L00_001805C0[];
 
 /* FreePointLight: detaches point light index and clears its slots. */
-void func_L00_0023F1D0(int index)
+void FreePointLight(int index)
 {
     DetachPointLight(index);
     FastMemZero16(D_L00_001803C0 + index * 0x20, 0x20);

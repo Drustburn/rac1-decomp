@@ -58,7 +58,7 @@ void func_L16_00209D98(void) {
         if (*(int *)(q + 0x2084) != 0x7B) {
             if (coll_sphere(*(float *)(q + 0x234) + 0.03f, q + 0xD0, 2, 0)) {
                 if (CollType() == 0xB) {
-                    func_L16_0021EA88(0x7B, 1);
+                    Hero_TryMoveState(0x7B, 1);
                     return;
                 }
             }
@@ -106,7 +106,7 @@ void func_L16_00209D98(void) {
         if (*(unsigned char *)(q + 0x12E3) != 0 && *(int *)(q + 0x300) != 0) {
             int k = *(int *)(q + 0x208C);
             if (k != 0x10 && k != 0x14 && k != 7) {
-                func_L16_0021EA88(0x31, 1);
+                Hero_TryMoveState(0x31, 1);
                 return;
             }
         }
@@ -116,7 +116,7 @@ void func_L16_00209D98(void) {
                 if (*(float *)(h + 0x2F0) - *(float *)(h + 0x88) > 0.0f) {
                     if (*(float *)(h + 0x108) < 0.0f) {
                         func_L00_0020BFA8();
-                        func_L16_0021EA88(0x7F, 1);
+                        Hero_TryMoveState(0x7F, 1);
                     }
                 }
             }
@@ -261,7 +261,7 @@ void func_L16_002105C8(void) {
     D_0013F450.xB12ed = r;
     D_0013F450.xH12e0 = CollType();
     if (D_0013F450.xH12e0 == 0) {
-        D_0013F450.xF2f0 = func_00214440(D_L16_001742E0, (u8 *)&D_0013F450 + 0x280);
+        D_0013F450.xF2f0 = GetGroundHeight(D_L16_001742E0, (u8 *)&D_0013F450 + 0x280);
         if (D_0013F450.xF88 < D_0013F450.xF2f0 && D_0013F450.xI2f8 <= 0) {
             D_0013F450.xI2f8 = 1;
         }
@@ -303,7 +303,7 @@ void func_L16_002105C8(void) {
         D_0013F450.xF2dc = FastVecDist((u8 *)&D_0013F450 + 0x80, ((u8 *)&D_0013F450 + 0x2A0));
         D_0013F450.xI2fc = D_L16_001742C0.i18;
         func_001252C0((u8 *)&D_0013F450 + 0x270, (u8 *)&D_L16_001742C0.f40);
-        D_0013F450.u2e0.F = func_L00_002345B0((u8 *)&D_L16_001742C0.f40);
+        D_0013F450.u2e0.F = ViewGetPitch((u8 *)&D_L16_001742C0.f40);
         D_0013F450.xF2ec = func_L00_001FF860(D_L16_001742C0.f40, D_L16_001742C0.f44);
         FastVecSub(&v20, ((u8 *)&D_0013F450 + 0x2A0), (u8 *)&D_0013F450 + 0x80);
         if (0.0f < FastVecDot(&v20, (u8 *)&D_0013F450 + 0x270)) {
@@ -356,7 +356,7 @@ d1:
     if (!(D_0013F450.xF2dc < 0.25f)) {
         return;
     }
-    func_L00_002167C8((u8 *)&D_0013F450 + 0x270, &v20);
+    VecToHeroAngles((u8 *)&D_0013F450 + 0x270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
         D_0013F450.u2e4.F = v20.f[1];
     }
@@ -368,8 +368,8 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        func_L00_00233E48(&v30, 0.2f, a, 0.45f);
-        func_L00_00233E48(&v40, 0.2f, a, -0.45f);
+        PolarToWorldPoint(&v30, 0.2f, a, 0.45f);
+        PolarToWorldPoint(&v40, 0.2f, a, -0.45f);
         if (func_L00_001EFFF0(&v30, &v0, 0x22, D_0013F450.xI2080, 0)) {
             f = D_L16_001742C0.v20.f[2] - D_0013F450.u2d8.F;
             D_0013F450.a2c0.f[i] = f;
@@ -377,7 +377,7 @@ d1:
                 D_0013F450.a2c0.f[i] = 0.0f;
             }
             func_001252C0(&v60, (u8 *)&D_L16_001742C0.f40);
-            func_L00_002167C8(&v60, &v50);
+            VecToHeroAngles(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 D_0013F450.a2c8.f[i] = v50.f[1];
             }
@@ -425,7 +425,7 @@ int func_L16_00211178(int a) {
     t = (*(int *)(g + 0x208C));
     if (t == 0x11) {
     } else if (t == 0x16) {
-        func_L00_00233EE0(v1, 0.0f, 0.0f, 0.7f);
+        LocalToWorldPoint(v1, 0.0f, 0.0f, 0.7f);
         FastVecSub(v1, v1, g + 0x80);
     } else {
         int c = (*(unsigned char *)(g + 0x20B3));
@@ -534,7 +534,7 @@ void func_L16_002116B0(void) {
 
     qcopy(previous.f, position);
     player = (Hero *)((char *)position - 0x80);
-    func_L00_00234800(player->unk4F8, (char *)position + 0x70, (char *)position + 0x10);
+    HeroRideMovingPlatform(player->unk4F8, (char *)position + 0x70, (char *)position + 0x10);
     /* Limit the velocity by state and mode. Inside an arm `position` moves on to the velocity; it is formed again below. */
     if (player->state.current == 34 || player->state.current == 20) {
         float limit;
@@ -544,7 +544,7 @@ void func_L16_002116B0(void) {
             float length;
 
             position = (float *)((char *)position + 0x60);
-            length = func_L00_00234250(position);
+            length = ViewXyLength(position);
             limit = player->unk234 - 0.02f;
             if (limit < length) func_L00_001FF4B0(position, position, limit);
         }

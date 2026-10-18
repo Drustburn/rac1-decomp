@@ -302,7 +302,7 @@ void func_L05_00240968(void) {
     D_0013F450_40968.xB12ed = r;
     D_0013F450_40968.xH12e0 = CollType();
     if (D_0013F450_40968.xH12e0 == 0) {
-        D_0013F450_40968.xF2f0 = func_00214440(D_L05_00174360, (u8 *)&D_0013F450_40968 + 0x280);
+        D_0013F450_40968.xF2f0 = GetGroundHeight(D_L05_00174360, (u8 *)&D_0013F450_40968 + 0x280);
         if (D_0013F450_40968.xF88 < D_0013F450_40968.xF2f0 && D_0013F450_40968.xI2f8 <= 0) {
             D_0013F450_40968.xI2f8 = 1;
         }
@@ -354,7 +354,7 @@ void func_L05_00240968(void) {
         D_0013F450_40968.xF2dc = FastVecDist((u8 *)&D_0013F450_40968 + 0x80, ((u8 *)&D_0013F450_40968 + 0x2A0));
         D_0013F450_40968.xI2fc = D_L05_00174340.i18;
         func_001252C0((u8 *)&D_0013F450_40968 + 0x270, (u8 *)&D_L05_00174340.f40);
-        D_0013F450_40968.u2e0.F = func_L00_002345B0((u8 *)&D_L05_00174340.f40);
+        D_0013F450_40968.u2e0.F = ViewGetPitch((u8 *)&D_L05_00174340.f40);
         D_0013F450_40968.xF2ec = func_L00_001FF860(D_L05_00174340.f40, D_L05_00174340.f44);
         FastVecSub(&v20, ((u8 *)&D_0013F450_40968 + 0x2A0), (u8 *)&D_0013F450_40968 + 0x80);
         if (0.0f < FastVecDot(&v20, (u8 *)&D_0013F450_40968 + 0x270)) {
@@ -407,7 +407,7 @@ d1:
     if (!(D_0013F450_40968.xF2dc < 0.25f)) {
         return;
     }
-    func_L00_002167C8((u8 *)&D_0013F450_40968 + 0x270, &v20);
+    VecToHeroAngles((u8 *)&D_0013F450_40968 + 0x270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
         D_0013F450_40968.u2e4.F = v20.f[1];
     }
@@ -419,8 +419,8 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        func_L00_00233E48(&v30, 0.2f, a, 0.45f);
-        func_L00_00233E48(&v40, 0.2f, a, -0.45f);
+        PolarToWorldPoint(&v30, 0.2f, a, 0.45f);
+        PolarToWorldPoint(&v40, 0.2f, a, -0.45f);
         if (func_L00_001EFFF0(&v30, &v0, 0x22, D_0013F450_40968.xI2080, 0)) {
             f = D_L05_00174340.v20.f[2] - D_0013F450_40968.u2d8.F;
             D_0013F450_40968.a2c0.f[i] = f;
@@ -428,7 +428,7 @@ d1:
                 D_0013F450_40968.a2c0.f[i] = 0.0f;
             }
             func_001252C0(&v60, (u8 *)&D_L05_00174340.f40);
-            func_L00_002167C8(&v60, &v50);
+            VecToHeroAngles(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 D_0013F450_40968.a2c8.f[i] = v50.f[1];
             }
@@ -459,7 +459,7 @@ extern int func_L00_001F34F0(float, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
 
 /* Camera collision step: moves the camera by a delta, probing 8 times, returns -1 if it moved too far. */
-int func_L05_00241590(int mode) {
+int Camera_MoveWithCollision(int mode) {
     float saved[4];
     float tmp[4];
     float d[4];
@@ -480,7 +480,7 @@ int func_L05_00241590(int mode) {
     m = *(int *)(a + 0x208C);
     if (m == 0x11) {
     } else if (m == 0x16) {
-        func_L00_00233EE0(tmp, 0.0f, 0.0f, 0.7f);
+        LocalToWorldPoint(tmp, 0.0f, 0.0f, 0.7f);
         FastVecSub(tmp, tmp, a + 0x80);
     } else {
         int c = *(unsigned char *)(a + 0x20B3);
@@ -561,7 +561,7 @@ extern float func_L00_00213A08(void *);
 extern void func_001F9C30(void *, void *, f32);
 
 /* Integrate player motion, resolve contacts, and measure the resulting movement. */
-void func_L05_00241AA0(void) {
+void Hero_MoveAndCollide(void) {
     Vec4 previous;
     Vec4 work;
     Vec4 plane;
@@ -582,7 +582,7 @@ void func_L05_00241AA0(void) {
 
     qcopy(previous.f, position);
     player = (Hero *)((char *)position - 0x80);
-    func_L00_00234800(player->unk4F8, (char *)position + 0x70, (char *)position + 0x10);
+    HeroRideMovingPlatform(player->unk4F8, (char *)position + 0x70, (char *)position + 0x10);
     if (player->state.current == 34 || player->state.current == 20) {
         float limit;
         float *limited_velocity;
@@ -591,7 +591,7 @@ void func_L05_00241AA0(void) {
             float length;
 
             position = (float *)((char *)position + 0x60);
-            length = func_L00_00234250(position);
+            length = ViewXyLength(position);
             limit = player->unk234 - 0.02f;
             if (limit < length) func_L00_001FF4B0(position, position, limit);
         }

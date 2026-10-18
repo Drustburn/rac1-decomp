@@ -85,7 +85,7 @@ int func_L09_0030B648(struct Moby *moby) {
         }
         d = FastVecDist(&moby->pos, &path->node[path->count - 1]);
         v = 0.0f;
-        func_00214D88(d, D_0015EE70 * 3.0f, D_0015EE70 * 3.0f, D_0015EE6C * 10.0f, &v, &vars->speed);
+        ApproachWithVelocity(d, D_0015EE70 * 3.0f, D_0015EE70 * 3.0f, D_0015EE6C * 10.0f, &v, &vars->speed);
     } else {
         f32 v;
         if (FastVecDist(&target, &moby->pos) < vars->speed + vars->speed) {
@@ -95,7 +95,7 @@ int func_L09_0030B648(struct Moby *moby) {
         }
         d = FastVecDist(&moby->pos, &path->node[0]);
         v = 0.0f;
-        func_00214D88(d, D_0015EE70 * 3.0f, D_0015EE70 * 3.0f, D_0015EE6C * 10.0f, &v, &vars->speed);
+        ApproachWithVelocity(d, D_0015EE70 * 3.0f, D_0015EE70 * 3.0f, D_0015EE6C * 10.0f, &v, &vars->speed);
     }
     if (path->node[vars->node].f[3] == 42.0f)
         vars->yaw_offset = 0.0f;
@@ -130,7 +130,7 @@ void func_L09_0030BA28(char *m) {
     case 2:
         func_0022ED80(0, 0, (int)m);
         func_L01_00279790(m);
-        func_L00_00264EA8(m, 0x73B, 1, 0x73B, 1, 7, 2);
+        SpawnMobyBurstFx(m, 0x73B, 1, 0x73B, 1, 7, 2);
         func_L01_00279E10(m, 0x73A);
         DeleteMoby(m);
         break;

@@ -674,7 +674,7 @@ extern s32 func_00122958_EABE8(void *, u8 *) __asm__("func_00122958");
    their tables, the three kinds of moby classes, sound and help text tables, the loading image;
    then resets the sequence state and relocates the eight help text tables.
    Adapted from Lombyte (MIT) for PAL: src/gameplay/state/transition_load_wad.c, transition_load_wad. */
-void func_001EABE8(void)
+void LoadSpaceTransitionWad(void)
 {
   u8 li[0x60];
   WadHeader_EABE8 *hdr;
@@ -985,7 +985,7 @@ extern void func_0022DD68_EB458(void) __asm__("func_0022DD68");
    scene chunks, the movie camera, each actor's animation frame and interpolated position,
    then the intro overlay fades and the mode's own update (pause menu, freeze) and sound.
    Adapted from Lombyte (MIT) for PAL: src/textbin/fun_001eb0a8.c, update_gameplay_frame. */
-void func_001EB458(void) {
+void UpdateSpaceFlightSequence(void) {
     Vec4A first_position;
     Vec4A next_position;
     RenderSequenceActor_EB458 *actor;
@@ -1135,7 +1135,7 @@ void Transition_DefaultDraw(s32 *arg0)
     }
     FastMemSet(D_001940C0, -1, 0x80);
     func_001EB338_EB7C0();
-    func_001F2608();
+    BuildViewMatrices();
     func_0020DAB0();
     ResetGsRegisters();
     D_0015F704 = -1;

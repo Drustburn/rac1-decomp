@@ -294,7 +294,7 @@ int Load(int arg0, int arg1, int arg2) {
    $a0 for the guard), loop.c hoists the loop's copy into $s0 and CSE turns
    it into `daddu $s0,$a0,$0`. A second, separate local for the return keeps
    its base a temp ($v1) sharing the %hi with the guard through $s1. */
-short func_00217748(int arg0) {
+short UpdateAudioStreamUntilIdle(int arg0) {
     if (arg0 != 0) {
         char *d;
         while (d = (char *)D_001517D0, *(short *)(d + 0x8) != 0) {
@@ -318,7 +318,7 @@ short func_00217748(int arg0) {
 
 extern int func_0012F030(void);
 
-void func_002177F0(int arg0) {
+void FinishAudioStreamRead(int arg0) {
     char *d;
     if (arg0 == 1) {
         d = (char *)D_001517D0;
@@ -338,7 +338,7 @@ void func_00217830(int arg0, long arg1) {
 
 extern void func_002167C0(short, short, short);
 
-void func_00217860(int arg0, long arg1) {
+void MusicStartCallback(int arg0, long arg1) {
     short *p = (short *)(int)arg1;
     if (p == 0) {
         return;
@@ -356,7 +356,7 @@ void func_00217860(int arg0, long arg1) {
 
 extern void func_002169B8(short, short, short);
 
-void func_002178C0(int arg0, long arg1) {
+void MusicPreseekCallback(int arg0, long arg1) {
     short *p = (short *)(int)arg1;
     if (p == 0) {
         return;
@@ -443,7 +443,7 @@ void func_00217A08(int arg0, long arg1) {
     }
 }
 
-void func_00217A60(int arg0, long arg1) {
+void MusicTimeRemainingCallback(int arg0, long arg1) {
     char *p = (char *)(int)arg1;
     short *b;
     if (p == 0) {
@@ -561,7 +561,7 @@ void func_00217AE8(void *arg0, Menu *menu, s32 arg2) {
                 if (e->unk4 & 0x4000) {
                     func_001E97D8((s16)(e->unk4 ^ 0x4000));
                 } else {
-                    func_001FFCB0(D_00160170);
+                    Hud_RemoveBank(D_00160170);
                     D_00160170 = -1;
                     func_001E97E0((s16)e->unk4);
                 }
@@ -589,7 +589,7 @@ void func_00217AE8(void *arg0, Menu *menu, s32 arg2) {
     if (D_001994C0[5] != 0) {
         copy_text_to_shared_buffer(buf);
     } else if (D_00160170 != -1) {
-        func_001FFCB0(D_00160170);
+        Hud_RemoveBank(D_00160170);
         D_00160170 = -1;
     }
     if (e->unk8 == 0) {
@@ -651,7 +651,7 @@ extern void func_00124650(void);
 extern void func_00124B88(int);
 extern int func_00124BC8(void *, void *);
 
-void func_00217EE8(void) {
+void InitPads(void) {
     int *p = &D_001CDAE0;
 
     func_00124650();

@@ -74,12 +74,12 @@ void func_L03_00200890(void) {
     func_L00_00215738();
     func_L00_00205B00();
     func_L00_00208E98();
-    func_L00_002098B8(0);
+    HeroComputeAttachMatrices(0);
     func_L00_00210FE0();
-    func_001F7B40();
+    BeginDrawFrame();
     func_L00_00208260();
-    func_L00_00208070();
-    func_L00_00207310();
+    CameraShakeUpdate();
+    HelpHintsPeriodicCheck();
     func_L00_002064C0();
     func_L00_00206698();
     func_L00_00207418();

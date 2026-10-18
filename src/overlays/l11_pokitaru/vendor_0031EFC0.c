@@ -83,9 +83,9 @@ void func_L11_0031F760(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         if (*(int *)&D_L11_001625BC == 0) {
-            func_L08_002F2428(&D_L11_00162600, 4, &D_L11_001625C0, 0.7f, 1.0f, 0.9f, 0.5f, 1);
-            func_L08_002F2428(D_L11_001F9D08, 11, D_L11_001F4C38, 0.5f, 0.5f, 0.5f, 1.0f, 1);
-            func_L08_002F2428(D_L11_001FF9F0, 8, D_L11_001F9D38, 0.25f, 0.25f, 0.25f, 0.7f, 1);
+            ScaleColorTables(&D_L11_00162600, 4, &D_L11_001625C0, 0.7f, 1.0f, 0.9f, 0.5f, 1);
+            ScaleColorTables(D_L11_001F9D08, 11, D_L11_001F4C38, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            ScaleColorTables(D_L11_001FF9F0, 8, D_L11_001F9D38, 0.25f, 0.25f, 0.25f, 0.7f, 1);
             *(int *)&D_L11_001625BC = 1;
         }
         moby[0x20] = 1;
@@ -131,9 +131,9 @@ void func_L11_0031F760(unsigned char *moby) {
                             *(char *)&D_L11_00162620 = 0;
                         }
                     }
-                    func_L08_002F2838(0);
-                    func_L08_002F2838(0);
-                    func_L08_002F2838(1);
+                    AdvanceScrollEntry(0);
+                    AdvanceScrollEntry(0);
+                    AdvanceScrollEntry(1);
                     AddDrawCallback(func_L11_0031EFC0, moby);
                 }
             }
@@ -167,7 +167,7 @@ extern int D_L11_00207B98[];
 extern Pair8 D_L11_001626A8[] MACRO_ADDR;
 
 /* Places the level's 9 effect pieces from their tables (a relative of func_L11_0031FCC8). */
-void func_L11_0031FBF0(int a) {
+void PlaceEffectPieces(int a) {
     int i;
     for (i = 0; i < 9; i++) {
         func_L08_00259040(D_L11_00217A30, D_L11_00207B48[i], D_L11_002009E8[i], &D_L11_001626A8[a]);
@@ -216,9 +216,9 @@ void func_L11_0031FDA0(char *m) {
     }
     VU1_addGSregister(6, GetEffectTex(0x2A));
     VU1_addGSregister(0x42, ((long)*(int *)&D_L11_00162678 << 32) | 0x48);
-    func_L11_0031FBF0(0);
+    PlaceEffectPieces(0);
     VU1_addGSregister(0x42, ((long)D_L11_0016267C << 32) | 0x48);
-    func_L11_0031FBF0(1);
+    PlaceEffectPieces(1);
     if (flag) {
         VU1_addGSregister(6, GetEffectTex(0x2B));
         VU1_addGSregister(0x42, ((long)*(int *)&D_L11_00162688 << 32) | 0x48);
@@ -250,9 +250,9 @@ void func_L11_003205C0(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         if (*(int *)&D_L11_0016268C == 0) {
-            func_L08_002F2428(D_L11_002154E0, 17, D_L11_00207BC0, 0.7f, 1.0f, 0.9f, 0.5f, 1);
-            func_L08_002F2428(D_L11_00217A00, 5, D_L11_00215528, 0.5f, 0.5f, 0.5f, 1.0f, 1);
-            func_L08_002F2428(D_L11_00207B98, 9, D_L11_002009E8, 0.25f, 0.25f, 0.25f, 0.7f, 1);
+            ScaleColorTables(D_L11_002154E0, 17, D_L11_00207BC0, 0.7f, 1.0f, 0.9f, 0.5f, 1);
+            ScaleColorTables(D_L11_00217A00, 5, D_L11_00215528, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            ScaleColorTables(D_L11_00207B98, 9, D_L11_002009E8, 0.25f, 0.25f, 0.25f, 0.7f, 1);
             *(int *)&D_L11_0016268C = 1;
         }
         moby[0x20] = 1;
@@ -298,9 +298,9 @@ void func_L11_003205C0(unsigned char *moby) {
                             *(char *)&D_L11_001626A0_w = 0;
                         }
                     }
-                    func_L08_002F2838(0);
-                    func_L08_002F2838(0);
-                    func_L08_002F2838(1);
+                    AdvanceScrollEntry(0);
+                    AdvanceScrollEntry(0);
+                    AdvanceScrollEntry(1);
                     AddDrawCallback((void (*)(void))func_L11_0031FDA0, moby);
                 }
             }

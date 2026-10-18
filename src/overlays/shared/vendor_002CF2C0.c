@@ -120,7 +120,7 @@ extern void func_L05_002F6518_F6588(struct Moby *, TriggerVars_2f5200 *, s32, s3
 extern void func_L05_002F62E8_F6588(s32, TriggerVars_2f5200 *, s32) __asm__("func_L05_002F62E8");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b3840.c, FUN_L05_002f5200. */
-void func_L05_002F6588(struct Moby *m) {
+void Moby258Update(struct Moby *m) {
     TriggerVars_2f5200 *v = (TriggerVars_2f5200 *)m->pvars;
     Vec4 target;
     s32 inside;
@@ -174,7 +174,7 @@ extern char D_0013F450[];
 extern short D_L05_00160098;
 
 /* Moby update: plays an animation when its state and a flag allow, then calls the next stage. */
-void func_L05_002F9478(char *m) {
+void Moby341Update(char *m) {
     char *g = D_0013F450;
     int f = 0;
     int *d = *(int **)(m + 0x78);
@@ -184,17 +184,17 @@ void func_L05_002F9478(char *m) {
     switch ((unsigned char)m[0x53]) {
     case 0:
         if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_00160098 + d[0] * 256 + 0xBC) & 1) && !f)
-            func_00213DE0(m, 1, 0, 0);
+            MobyBlendAnimation(m, 1, 0, 0);
         break;
     case 2:
         if (d[0] >= 0 && (*(unsigned char *)(*(int *)&D_L05_00160098 + d[0] * 256 + 0xBC) & 2) && !f)
-            func_00213DE0(m, 3, 0, 0);
+            MobyBlendAnimation(m, 3, 0, 0);
         break;
     case 3:
-        if (m[0x70] & 2) func_00213DE0(m, 0, 0, 0);
+        if (m[0x70] & 2) MobyBlendAnimation(m, 0, 0, 0);
         break;
     case 1:
-        if (m[0x70] & 2) func_00213DE0(m, 2, 0, 0);
+        if (m[0x70] & 2) MobyBlendAnimation(m, 2, 0, 0);
         break;
     }
     func_L05_002F95B0(m);
@@ -219,7 +219,7 @@ void func_L05_002F95B0(void *mv) {
     int r;
     float s;
     if (*(char **)(base + 0x2FC) == moby) {
-        func_00214D28((float *)(data + 0x1C), 1.0f, D_0015EE6C + D_0015EE6C);
+        ApproachValue((float *)(data + 0x1C), 1.0f, D_0015EE6C + D_0015EE6C);
         if (*(int *)(base + 0x1090) != 0) {
             if (*(int *)(base + 0x10B8) == 0x16) ((unsigned char *)moby)[0xBC] = 1;
             else ((unsigned char *)moby)[0xBC] = 0;
@@ -227,7 +227,7 @@ void func_L05_002F95B0(void *mv) {
             ((unsigned char *)moby)[0xBC] = 0;
         }
     } else {
-        func_00214D28((float *)(data + 0x1C), 0.0f, *(float *)&D_0015EE6C_s);
+        ApproachValue((float *)(data + 0x1C), 0.0f, *(float *)&D_0015EE6C_s);
     }
     if (*(float *)(data + 0x1C) != 0.0f) {
         s = FastAddRots(*(float *)(data + 0x18), D_0015EE6C * 6.2831855f);
@@ -274,7 +274,7 @@ extern unsigned char D_0014171B[];
  * From the staged near miss (nonmatching/shared/func_L05_002F9BA0.c); fixed: state 0 saves the
  * position into pvars +0x10 (the near miss copied the other way), and the state tests.
  * equiv: NEAR (all copies: retail rebuilds moby + 0x10 where this keeps it). */
-void func_L05_002F9BA0(unsigned char *moby) {
+void HoverboardUpdate(unsigned char *moby) {
 #define pos ((char *)moby + 0x10)
     char *data;
     char *g;
@@ -367,7 +367,7 @@ void func_L05_002F9BA0(unsigned char *moby) {
             a = scale_ticks(10);
             b = scale_ticks(13);
             c = rand_range(a, b);
-            func_L00_0026A7F8(v10, v20, *(int *)&D_L05_001619CC, *(int *)&D_L05_001619D0, c, 15, 15, 1);
+            PartType04Spawn(v10, v20, *(int *)&D_L05_001619CC, *(int *)&D_L05_001619D0, c, 15, 15, 1);
         } else {
             int a;
             int b;
@@ -376,7 +376,7 @@ void func_L05_002F9BA0(unsigned char *moby) {
             a = scale_ticks(0xF);
             b = scale_ticks(0x12);
             c = rand_range(a, b);
-            func_L00_0026A7F8(v10, v40, 0x5032F0D2, *(int *)&D_L05_001619D0, c, 0x1E, 0x14, 1);
+            PartType04Spawn(v10, v40, 0x5032F0D2, *(int *)&D_L05_001619D0, c, 0x1E, 0x14, 1);
             {
                 int a2;
                 int b2;
@@ -384,7 +384,7 @@ void func_L05_002F9BA0(unsigned char *moby) {
                 a2 = scale_ticks(8);
                 b2 = scale_ticks(0x11);
                 c2 = rand_range(a2, b2);
-                func_L00_0026DA50(v10, v20, *(int *)&D_L05_001619CC, *(int *)&D_L05_001619D0, c2, 1, 15000.0f);
+                PartType21Spawn(v10, v20, *(int *)&D_L05_001619CC, *(int *)&D_L05_001619D0, c2, 1, 15000.0f);
             }
         }
     }
@@ -468,7 +468,7 @@ extern void func_L00_001FFED8(void *, int, float);
 extern void func_L05_0030D678(void);
 
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */
-void func_L05_0030D500(unsigned char *m) {
+void Moby823Update(unsigned char *m) {
     char *d = *(char **)(m + 0x78);
     float r, lo, hi;
     switch (m[0x20]) {
@@ -518,7 +518,7 @@ extern unsigned char D_0014C150[];
 extern int func_0022ED80_DA08() __asm__("func_0022ED80");
 
 /* Floor button update: settles, checks whether it is already pressed, pulses and records the press. */
-void func_L05_0030DA08(struct Moby *moby) {
+void FloorButtonUpdate(struct Moby *moby) {
     int *d = (int *)moby->pvars;
     short id;
     int i;
@@ -735,7 +735,7 @@ void func_L05_0031AA20(void *moby_v)
 {
     char *moby = moby_v;
     char *data = *(char **)(moby + 0x78);
-    char *spawn = func_L05_0031AAA8(moby, *(short *)(data + 0xB6));
+    char *spawn = FindMobyByDataId(moby, *(short *)(data + 0xB6));
     char *position;
     if (spawn != 0) {
         int index;
@@ -758,7 +758,7 @@ typedef struct {
 } M_p;
 #define POOL (*(char **)&D_L05_00160098)
 /* Returns the moby in the group whose data word at +0xB4 equals id, or 0. */
-char *func_L05_0031AAA8(void *arg, int id) {
+char *FindMobyByDataId(void *arg, int id) {
     unsigned short *p = (unsigned short *)D_L05_001AC040[*((unsigned char *)arg + 0x21)];
     char *pool;
     int idx;
@@ -780,12 +780,12 @@ extern float func_00214D88(float, float, float, float, float *, float *);
 extern void func_00215CA8(int *, int, void *, float *, int, float);
 
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
-int func_L05_0031AB08(char *m) {
+int AdvanceMobyPath(char *m) {
     char *d = *(char **)(m + 0x78);
     int *path;
-    func_00214D88(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8), *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
+    ApproachWithVelocity(1.0f, *(float *)(d + 0xD8), *(float *)(d + 0xD8), *(float *)(d + 0xD4), (float *)(d + 0xC0), (float *)(d + 0xC4));
     path = *(int **)(d + 0xAC);
-    func_00215CA8(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xC0) * (float)(*path - 1));
+    SamplePathAt(path, 0, d + 0x60, (float *)(d + 0x70), 0, *(float *)(d + 0xC0) * (float)(*path - 1));
     return *(float *)(d + 0xC0) >= 1.0f;
 }
 extern void func_00215F80(int, int);
@@ -803,7 +803,7 @@ void func_L05_0031ABA0(char *moby) {
 }
 extern float D_0015EE6C MACRO_ADDR;
 /* Wobbles a moby's position and rotation from its sine-driven state. */
-void func_L05_0031AC50(char *moby) {
+void WobbleMoby(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float s, t, w;
     qcopy(moby + 0x10, d + 0x60);
@@ -854,7 +854,7 @@ extern unsigned char *func_L00_00275248(float f0, float f1, int a0, void *pos, i
 extern char D_L05_0015F660[] MACRO_ADDR;
 
 // Moby update: wakes up, then bursts particles when the player is near.
-void func_L05_0031C0F0(char *moby) {
+void Moby1139Update(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case 0:
         ((unsigned char *)moby)[0x30] = 0x80;
@@ -974,7 +974,7 @@ void func_L05_0031DDF0(struct Moby *moby) {
     } else {
         vars->alpha = vars->max_alpha;
     }
-    func_001F49B0_1DDF0(func_L05_0031E468, moby);
+    func_001F49B0_1DDF0(DrawGlowSprite, moby);
     hit = func_L00_0025B478(moby, 0x810000, 0);
     moby->hit_slot = 0xFF;
     if (hit == 0) {
@@ -1021,7 +1021,7 @@ void func_L05_0031DDF0(struct Moby *moby) {
         }
         yaw = random_angle_radians();
         pitch = random_float_between(0.34906584f, 1.5358897f);
-        func_00215C00(&dir, random_float_between(0.05f, 0.1f) * D_0015EE60, yaw, pitch);
+        BuildSphericalOffset(&dir, random_float_between(0.05f, 0.1f) * D_0015EE60, yaw, pitch);
         qcopy(&start, &tip);
         start.f[0] += randf_sym(0.0f, 0.15f);
         start.f[1] += randf_sym(0.0f, 0.15f);
@@ -1036,7 +1036,7 @@ void func_L05_0031DDF0(struct Moby *moby) {
         dir.f[2] = random_float_between(0.01f, 0.05f) * D_0015EE60;
         speed = random_float_between(60000.0f, 200000.0f);
         turn = random_integer_below(2);
-        spark = func_L00_0026DEA0(&tip, 0.3f, 1.0f, 1.02f, random_integer_below(2) ? -turn : turn, &dir, speed, 0x407F7F7F);
+        spark = PartType23Spawn(&tip, 0.3f, 1.0f, 1.02f, random_integer_below(2) ? -turn : turn, &dir, speed, 0x407F7F7F);
         if (spark != 0) {
             spark->life = scale_ticks(rand_range(0x5A, 0x78));
             draw = &spark->draw;
@@ -1069,7 +1069,7 @@ extern int func_002140B0(int);
 extern void func_L00_001FD1D8(void *, void *, s32);
 
 /* Draws the moby's camera-facing glow sprite, flickering its alpha at random. */
-void func_L05_0031E468(char *m) {
+void DrawGlowSprite(char *m) {
     char *d = *(char **)(m + 0x78);
     Pk_31e468 pk;
     float up[4];
@@ -1560,7 +1560,7 @@ extern void vec_cross_32B1F8(void *, void *, void *) __asm__("func_001F9CA0");
 extern void orbit_32B1F8(Camera_32B1F8 *) __asm__("func_L05_0032ADE8");
 
 /* Camera follow: springs the position toward the focus, keeps clear of walls, eases distance and height, then rebuilds the basis. */
-void func_L05_0032B1F8(Camera_32B1F8 *m) {
+void CameraFollowUpdate(Camera_32B1F8 *m) {
     V_32B1F8 down;
     V_32B1F8 focus;
     V_32B1F8 rel;
@@ -1707,5 +1707,5 @@ void func_L05_0032BBF0(char *out)
     qcopy(out + 0x10, src + 0x10);
     qcopy(out + 0x20, src + 0x20);
     func_00215328(out + 0x40, out);
-    func_L05_0032ABF0(out);
+    ResetCameraFromPreset(out);
 }

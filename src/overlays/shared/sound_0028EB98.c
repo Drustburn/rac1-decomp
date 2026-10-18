@@ -162,9 +162,9 @@ void func_L00_0028F458(unsigned char *m) {
             } else {
                 *(int *)(m + 0x90) = v | (v << 8) | (v << 16);
             }
-            AddDrawCallback(func_00233AB8, m);
+            AddDrawCallback(DrawEnvMappedObject, m);
             if (func_001F9D48(m + 0x10, D_L00_00166EC0) < 32.0f) {
-                AddDrawCallback(func_0022F258, m);
+                AddDrawCallback(DrawLightFlare, m);
             }
         }
         p = (float *)(m + 0x10);

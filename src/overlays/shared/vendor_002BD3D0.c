@@ -169,7 +169,7 @@ void func_L12_00309AE8(void *unused, struct Moby *m) {
     d->unk70 = -1.0f;
     d->unk74 = -1.0f;
     m->flags &= ~0x1000;
-    func_00213DE0(m, 1, 0, 0);
+    MobyBlendAnimation(m, 1, 0, 0);
 }
 typedef struct { char pad[0x40]; float vx, vy; } MO;
 extern int func_L00_0025D6F0(void *, void *);

@@ -225,9 +225,9 @@ void func_L14_002FF728(L14Moby *m) {
     char *hit;
 
     if ((m->status & 2) && m->frame == m->animation && m->frame == 1)
-        func_00213DE0(m, 4, 0, scale_ticks(5));
+        MobyBlendAnimation(m, 4, 0, scale_ticks(5));
     if (((L14Hero *)(D_0013E633 + 0xE1D))->standing == m && m->animation != 1 && m->frame != 1)
-        func_00213DE0(m, 1, 0, scale_ticks(5));
+        MobyBlendAnimation(m, 1, 0, scale_ticks(5));
     hit = func_L00_0025B478(m, 0x210000, 0);
     if (hit && m->state != 6) {
         L14Hero *hero = (L14Hero *)(D_0013E633 + 0xE1D);
@@ -250,7 +250,7 @@ void func_L14_002FF728(L14Moby *m) {
         if (d->mode == 2) {
             m->state = 1;
             d->turn = 0.0f;
-            func_00213D28(m, 4, 0);
+            MobySetAnimation(m, 4, 0);
         } else {
             if (d->path == -1) {
                 STUB_printf(D_L14_001FD290, m->id);
@@ -290,7 +290,7 @@ void func_L14_002FF728(L14Moby *m) {
     case 1: {
         L14Hero *hero = (L14Hero *)(D_0013E633 + 0xE1D);
 
-        func_L00_002592B0((char *)m,
+        MobySpringTurn((char *)m,
                           func_L00_001FF860(hero->position[0] - m->position[0], hero->position[1] - m->position[1]),
                           &d->turn, 0.005f, 0.2f, 0.0f);
         func_L14_00300130(m);
@@ -299,11 +299,11 @@ void func_L14_002FF728(L14Moby *m) {
     case 2:
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, d->trigger)) {
             if (d->mode == 1) {
-                func_00213D28(m, 0, 0);
+                MobySetAnimation(m, 0, 0);
             } else {
                 d->child = func_L14_00300F80(m, m->position);
                 func_L14_003000B0(m);
-                func_00213D28(m, 2, 0);
+                MobySetAnimation(m, 2, 0);
             }
             m->flags &= 0xFFBE;
             m->bounds = m->model->bounds;
@@ -315,7 +315,7 @@ void func_L14_002FF728(L14Moby *m) {
             func_L14_003000B0(m);
         if (func_L14_002FFF08((char *)m)) {
             m->state = 3;
-            func_00213DE0(m, 3, 0, 5);
+            MobyBlendAnimation(m, 3, 0, 5);
         }
         func_L14_00300130(m);
         break;
@@ -336,14 +336,14 @@ void func_L14_002FF728(L14Moby *m) {
             if (a->mode == 1) {
                 m->state = 1;
                 a->turn = zero;
-                func_00213D28(m, 4, 0);
+                MobySetAnimation(m, 4, 0);
             } else {
                 if (a->child) {
                     func_L14_00301090(a->child);
                     a->child = 0;
                 }
                 m->state = 5;
-                func_00213DE0(m, 0, 0, 20);
+                MobyBlendAnimation(m, 0, 0, 20);
                 a->timer = zero;
                 a->counter = 0;
             }
@@ -381,7 +381,7 @@ void func_L14_002FF728(L14Moby *m) {
         }
         break;
     }
-    func_L00_0025E590(m, d->effect);
+    StepColorFade(m, d->effect);
 }
 extern float D_0015EE6C MACRO_ADDR;
 extern int D_0015EE84 MACRO_ADDR;
@@ -416,7 +416,7 @@ int func_L14_002FFF08(char *moby) {
     FastVecSub(delta, pos, moby + 0x10);
     if (FastAbsF(delta[0]) > 0.01f) {
         if (FastAbsF(delta[1]) > 0.01f) {
-            func_L00_002592B0(moby, func_L00_001FF860(delta[0], delta[1]), (float *)(data + 0xF0), *(float *)&D_L14_0016208C, *(float *)&D_L14_00162090, 0.0f);
+            MobySpringTurn(moby, func_L00_001FF860(delta[0], delta[1]), (float *)(data + 0xF0), *(float *)&D_L14_0016208C, *(float *)&D_L14_00162090, 0.0f);
         }
     }
     return r;
@@ -458,7 +458,7 @@ extern unsigned char D_0014171B[] NOT_SDA;
 /* Update function of moby class 924: a state machine on the byte at +0x20 (state 0 waits until the moby may
  * start, state 1 tracks the hero and fills D_L14_0016D060, state 2 marks the moby done and deletes it, as state
  * 3 does), then the aiming tail on the countdowns at data + 0x160 and 0x164. */
-void func_L14_00300468(char *m) {
+void Moby924Update(char *m) {
     char *d = *(char **)(m + 0x78);
     func_L02_002E2110(m);
     switch (*(unsigned char *)(m + 0x20)) {
@@ -542,7 +542,7 @@ void func_L14_00300468(char *m) {
                 *(int *)(d + 0x164) = func_001FA898_r(func_001F9878(x));
                 y = FastAddRots(*(float *)(m + 0x48), random_float_between(-90.0f, 90.0f) * 0.017453292f);
                 z = random_float_between(0.0f, 30.0f) * 0.017453292f;
-                func_00215C00(d + 0x150, 6.0f, y, z);
+                BuildSphericalOffset(d + 0x150, 6.0f, y, z);
                 FastVecAdd(d + 0x150, d + 0x150, m + 0x10);
             }
             if (*(int *)(d + 0x160) != 0) {
@@ -620,7 +620,7 @@ extern Rgb_2288 D_L14_00162178;
 extern float D_0015EE60 MACRO_ADDR;
 
 /* Moby update for a bouncing spark projectile. */
-void func_L14_00302288(Moby *m)
+void BouncingSparkUpdate(Moby *m)
 {
   Spark_2288 *d = (Spark_2288 *) m->pvars;
   Vec4f next;
@@ -1170,7 +1170,7 @@ extern char D_0013E633_3071B0[] __asm__("D_0013E633");
 
 /* Update function
  * for moby class 1395 on level 14: fills the six-slot table of helper mobys, then lowers them one by one. */
-void func_L14_003071B0(Moby *moby) {
+void Moby1395Update(Moby *moby) {
     Data_3071B0 *data = (struct Data_3071B0 *)moby->pvars;
     float vec[4];
 
@@ -1461,7 +1461,7 @@ extern float D_0015EE6C_308368 __asm__("D_0015EE6C") MACRO_ADDR;
 
 /* Blarg heavy interceptor update (class 1417): hit reaction, then a state machine (0 set up on its path,
  * 1 wait for the trigger volume, 2 chase with its thruster part, 3 respawn), then its engine sound. */
-void func_L14_00308368(Moby *m) {
+void BlargInterceptorUpdate(Moby *m) {
     Data_308368 *d = (void *)m->pvars;
     Vec4A vec;
     char *hit;
@@ -1617,7 +1617,7 @@ extern float func_L00_001FF860(float, float);
 extern char *D_L14_001B0F30[];
 
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */
-void func_L14_00308998(char *moby) {
+void InitPathSegments(char *moby) {
     char *d = *(char **)(moby + 0x78);
     char *p = D_L14_001B0F30[*(int *)(d + 0x78)];
     int i;
@@ -1817,7 +1817,7 @@ void func_L14_00309C48(unsigned char *moby) {
         if (func_L01_0026EFB8(d[0], -1) == 0) {
             if (gSkillPoints[0x17] == 0) {
                 gSkillPoints[0x17] = 1;
-                func_0022EE28(1, 0, 0);
+                PlayBankSound(1, 0, 0);
                 ShowBanner(0x53DB, -1);
             }
         }
@@ -1886,7 +1886,7 @@ typedef struct {
 } Stops_316388;
 
 /* Activate function of camera 20 (level 14): clears the record, builds the path tables and copies the camera vectors. */
-void func_L14_00316388(char *cam) {
+void Camera20Activate(char *cam) {
     float v[4] __attribute__((aligned(16)));
     char *obj;
     char *data;
@@ -2148,7 +2148,7 @@ void func_L14_00316718(struct UpdateCam *cam) {
             sum += q->t;
             for (n = q->seg; n < s->seg[i + 1]; n++)
                 total += *(float *)(path + (n * 16 + 0x1C));
-            ang = func_00214220(s->fov[i], s->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
+            ang = CosineInterpolate(s->fov[i], s->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
             D_L14_0016D240.fB0 = FastSin(ang) / FastCos(ang);
             UpdateViewContext();
         }
@@ -2320,7 +2320,7 @@ extern void func_001F9C30(void *, void *, float);
 extern void func_002156E0(void *dst, void *vec, void *axis, float angle);
 
 /* Camera 21 update (level 14): follows keyed angles along the hero's path progress, triggers three mobys, builds the camera matrix. */
-void func_L14_003171D0(char *cam) {
+void Camera21Update(char *cam) {
     CamData171D0 *data = ((CamObj171D0 *)cam)->data;
     CamState171D0 *st = &data->st;
     CamRec171D0 *rec = D_L14_0015F050_s[((CamObj171D0 *)cam)->slot].rec;
@@ -2543,7 +2543,7 @@ void func_L14_003171D0(char *cam) {
    (func_L14_00317C4C): one function of 152 bytes with the nops the build pads
    its short backward branch with. Every "return 0" arm leaves through the one
    shared exit at the end. */
-int func_L14_00317BD0(char *moby, char *b)
+int Camera21Init(char *moby, char *b)
 {
     char *rec = *(char **)(D_L14_0015F050 + *(short *)(moby + 0x84) * 32 + 0x1C);
 

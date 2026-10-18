@@ -72,7 +72,7 @@ void func_L02_00222D18(void) {
 
     qcopy(previous.f, start);
     position = (float *)((char *)start - 0x80);
-    func_L00_00234800(((Hero *)position)->unk4F8, (char *)start + 0x70, (char *)start + 0x10);
+    HeroRideMovingPlatform(((Hero *)position)->unk4F8, (char *)start + 0x70, (char *)start + 0x10);
     if (((Hero *)position)->state.current == 34 || ((Hero *)position)->state.current == 20) {
         float limit;
 
@@ -80,7 +80,7 @@ void func_L02_00222D18(void) {
             float length;
 
             start = (float *)((char *)start + 0x60);
-            length = func_L00_00234250(start);
+            length = ViewXyLength(start);
             limit = ((Hero *)position)->unk234 - 0.02f;
             if (limit < length) func_L00_001FF4B0(start, start, limit);
         }
@@ -225,7 +225,7 @@ void func_L02_00223AE0(void) {
         D_0013F450.ground_speed = D_0013F450.motion.unk164;
     } else if (state == 16) {
         if (scale_ticks(0x36) < D_0013F450.state_timer) {
-            func_00214D28(&D_0013F450.unk4A0, D_0015EE70 * 25.0f, D_0015EE70 * 7.0f);
+            ApproachValue(&D_0013F450.unk4A0, D_0015EE70 * 25.0f, D_0015EE70 * 7.0f);
         }
         if (D_0013F450.state_timer < scale_ticks(0x37)) {
             D_0013F450.target_speed = D_0013F450.unk3F4;
@@ -242,9 +242,9 @@ void func_L02_00223AE0(void) {
         }
         if (13.0f <= D_0013F450.anim_frame && D_0013F450.anim_frame <= 30.0f) {
             if (27.0f < D_0013F450.anim_frame) {
-                func_00214D28(&D_0013F450.unk45C, 0.0f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450.unk45C, 0.0f, D_0015EE70 * 8.0f);
             } else {
-                func_00214D28(&D_0013F450.unk45C, D_0015EE6C * 2.0f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450.unk45C, D_0015EE6C * 2.0f, D_0015EE70 * 8.0f);
             }
         }
         D_0013F450.motion.velocity.f[0] = FastCos(D_0013F450.motion.rot.f[2]) * D_0013F450.unk45C;
@@ -266,9 +266,9 @@ void func_L02_00223AE0(void) {
         }
         if (D_0013F450.state.current == 11) {
             if (D_0013F450.unk41E != 0 && D_0013F450.unk44C < scale_ticks(0xC)) {
-                func_00214D28(&D_0013F450.unk458, 0.0f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450.unk458, 0.0f, D_0015EE70 * 8.0f);
             } else {
-                func_00214D28(&D_0013F450.unk458, D_0015EE6C * 4.2f, D_0015EE70 * 8.0f);
+                ApproachValue(&D_0013F450.unk458, D_0015EE6C * 4.2f, D_0015EE70 * 8.0f);
             }
         }
         D_0013F450.motion.velocity.f[0] = FastCos(D_0013F450.unk438) * D_0013F450.unk458;
@@ -311,7 +311,7 @@ void func_L02_00223AE0(void) {
             if (D_0013F450.state.control_mode == 2) {
                 d = D_0013F450.unk944;
                 speed = func_001F9CE8(&D_0013F450.motion.velocity);
-                func_00214D28(&speed, 0.0f, d);
+                ApproachValue(&speed, 0.0f, d);
                 func_L00_001FF500(D_0013F450.motion.velocity.f, D_0013F450.motion.velocity.f, speed);
                 return;
             }
@@ -383,7 +383,7 @@ int func_L02_0022F568(void) {
             if (D_0013F450_h22F568.on_slip_ground != 0) {
                 break;
             }
-            if (!func_L00_00267BA8(mask, scale_ticks(7), &out[0])) {
+            if (!PadPressedWithin(mask, scale_ticks(7), &out[0])) {
                 break;
             }
             m = (Moby *)D_0013F450_h22F568.items[0].moby;
@@ -398,7 +398,7 @@ int func_L02_0022F568(void) {
             }
             if ((D_0013CA40_p22F568.held & 0xA) || ((D_0013F450_h22F568.state.current == 1 || D_0013F450_h22F568.state.current == 0x1E) && D_0013F450_h22F568.state_timer > scale_ticks(0x14))) {
                 if ((D_0013F450_h22F568.state.current == 1 || D_0013F450_h22F568.state.current == 0x1E) && D_0013F450_h22F568.state_timer > scale_ticks(0x14)) {
-                    func_L00_00217DE0();
+                    LaunchGadgetMoby();
                     break;
                 }
                 func_L02_0022BE40(0x15, 1);
@@ -421,7 +421,7 @@ int func_L02_0022F568(void) {
                 if (D_0013F450_h22F568.state.current == 0xB || D_0013F450_h22F568.state.current == 0xE) {
                     t = scale_ticks(0x12);
                 }
-                if (!func_L00_00267BA8(mask, t, 0)) {
+                if (!PadPressedWithin(mask, t, 0)) {
                     break;
                 }
                 if ((D_0013F450_h22F568.unk41E == 0 && D_0013F450_h22F568.ground_distance > 0.1f) || (D_0013F450_h22F568.unk41E != 0 && D_0013F450_h22F568.ground_distance > 0.57f)
@@ -445,7 +445,7 @@ int func_L02_0022F568(void) {
                     if (D_0013F450_h22F568.unkA9C != 0) {
                         break;
                     }
-                    if (D_0013F450_h22F568.anim_frame >= (float)rec->f10 && (D_0013CA40_p22F568.held & 0xA) && func_L00_00267BA8(mask, scale_ticks(0xF), 0)) {
+                    if (D_0013F450_h22F568.anim_frame >= (float)rec->f10 && (D_0013CA40_p22F568.held & 0xA) && PadPressedWithin(mask, scale_ticks(0xF), 0)) {
                         func_L02_0022BE40(0x15, 1);
                         break;
                     }
@@ -467,7 +467,7 @@ int func_L02_0022F568(void) {
             if (D_0013F450_h22F568.on_slip_ground != 0) {
                 break;
             }
-            if (!func_L00_00267BA8(mask, t, 0)) {
+            if (!PadPressedWithin(mask, t, 0)) {
                 break;
             }
             if (D_0013CA40_p22F568.held & 0xA) {
@@ -493,7 +493,7 @@ int func_L02_0022F568(void) {
             }
             if (D_0013F450_h22F568.state.control_mode < 2U || D_0013F450_h22F568.state.control_mode == 4 || D_0013F450_h22F568.state.control_mode == 2 || D_0013F450_h22F568.state.control_mode == 0xF
                 || D_0013F450_h22F568.state.control_mode == 5 || D_0013F450_h22F568.state.current == 0x1E) {
-                if (func_L00_00267BA8(mask, t, 0) || ((D_0013CA40_p22F568.held & mask) && D_0013F450_h22F568.items[0].unk20 > scale_ticks(0xF))) {
+                if (PadPressedWithin(mask, t, 0) || ((D_0013CA40_p22F568.held & mask) && D_0013F450_h22F568.items[0].unk20 > scale_ticks(0xF))) {
                     if (D_0013F450_h22F568.unk99E != 0) {
                         if (D_0013F450_h22F568.unk968 != 0) {
                             if (D_0013F450_h22F568.unk998 < D_0013F450_h22F568.unk984) {
@@ -521,7 +521,7 @@ int func_L02_0022F568(void) {
         if (!func_L00_002104C8()) {
             break;
         }
-        if (!func_L00_00267BA8(mask, scale_ticks(7), 0)) {
+        if (!PadPressedWithin(mask, scale_ticks(7), 0)) {
             break;
         }
         if (D_00141760_22F568 != 0x1F) {
@@ -539,8 +539,8 @@ int func_L02_0022F568(void) {
         break;
     case 32:
         if (D_0013F450_h22F568.state.control_mode < 3U || D_0013F450_h22F568.state.control_mode == 4 || D_0013F450_h22F568.state.control_mode == 5) {
-            if (func_L00_00267BA8(mask, scale_ticks(8), 0)) {
-                func_L00_0029BA20(0);
+            if (PadPressedWithin(mask, scale_ticks(8), 0)) {
+                VendorOpenMenu(0);
             }
         }
         break;
@@ -554,7 +554,7 @@ int func_L02_0022F568(void) {
             }
             pv = (PVar_22F568 *)((Moby *)D_0013F450_h22F568.items[0].moby)->pvars;
             if (((D_0013CA40_p22F568.held & mask) && D_0013F450_h22F568.items[0].unk20 > scale_ticks(5)) || (D_0013CA40_p22F568.pressed & mask)) {
-                if (func_L00_00234718(-1)) {
+                if (GetAmmo(-1)) {
                     if (D_0013F450_h22F568.unk20A8 == 0) {
                         func_L00_0020EB60();
                     }
@@ -562,7 +562,7 @@ int func_L02_0022F568(void) {
                 }
             }
             if (D_0013CA40_p22F568.held & mask) {
-                if (!func_L00_00234718(-1)) {
+                if (!GetAmmo(-1)) {
                     if (!func_L00_0028EB98((Moby *)D_0013F450_h22F568.items[0].moby, pv->fC)) {
                         pv->fC = func_0022ED80(0, 0, (int)((Moby *)D_0013F450_h22F568.items[0].moby));
                     }
@@ -586,9 +586,9 @@ int func_L02_0022F568(void) {
             }
             t = scale_ticks(7);
             n = D_0013F450_h22F568.items[0].unk20;
-            if (func_L00_00267BA8(mask, t <= n ? t : n, &out[1])
+            if (PadPressedWithin(mask, t <= n ? t : n, &out[1])
                 || ((D_0013CA40_p22F568.held & 0x20) && n > scale_ticks(8) && n < scale_ticks(0x11))) {
-                if (func_L00_00234718(-1)) {
+                if (GetAmmo(-1)) {
                     if (D_0013F450_h22F568.state.control_mode == 0xC || D_0013F450_h22F568.state.control_mode == 0 || D_0013F450_h22F568.state.current == 3
                         || (D_0013F450_h22F568.state.control_mode == 1 && D_0013F450_h22F568.unk229C < 0.7f)) {
                         func_L02_0022BE40(0x23, 1);
@@ -609,7 +609,7 @@ int func_L02_0022F568(void) {
                 int t = scale_ticks(0xA);
                 int n = D_0013F450_h22F568.items[0].unk20;
 
-                if (func_L00_00267BA8(mask, t <= n ? t : n, &out[2])) {
+                if (PadPressedWithin(mask, t <= n ? t : n, &out[2])) {
                     if (((Moby *)D_0013F450_h22F568.items[0].moby) != 0) {
                         func_L02_0022BE40(0x20, 1);
                         if (((Moby *)D_0013F450_h22F568.items[0].moby) != 0) {

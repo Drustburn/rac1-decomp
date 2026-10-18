@@ -198,12 +198,12 @@ void func_L10_002CD6A8(char *m) {
                                               D_0015EE70 * 3.1415927f, D_0015EE6C * 6.2831855f,
                                               &d->pitchSpeed);
             ((Rot_cc2e8 *)m)->rx = FastAddRots(((Rot_cc2e8 *)m)->rx, D_0015EE6C * 6.2831855f);
-            func_00215C00(speed, ((Rot_cc2e8 *)m)->rz, -((Rot_cc2e8 *)m)->ry, d);
+            BuildSphericalOffset(speed, ((Rot_cc2e8 *)m)->rz, -((Rot_cc2e8 *)m)->ry, d);
         }
         clear_u64_value(c);
-        func_L00_0026A7F8(p, c, 0x6F00AFFF, 0xFF, scale_ticks(rand_range(15, 22)), 0x28,
+        PartType04Spawn(p, c, 0x6F00AFFF, 0xFF, scale_ticks(rand_range(15, 22)), 0x28,
                     rand_range(20, 35), 1);
-        func_L00_0026A7F8(p, c, 0x1FFFFFFF, 0x4F4F4F, scale_ticks(rand_range(30, 60)), 0x28,
+        PartType04Spawn(p, c, 0x1FFFFFFF, 0x4F4F4F, scale_ticks(rand_range(30, 60)), 0x28,
                     rand_range(50, 75), 0);
         dist = FastVecDist(p, gHeroPos);
         func_001F9BD8_CD6A8(p, p, d);
@@ -268,7 +268,7 @@ void func_L10_002E51A8(char *moby) {
     v[2] = v[2] + 0.025f;
     g = *(int *)&D_L10_00161ED8;
     h = *(int *)&D_L10_00161EDC;
-    func_L01_00287F20(v, c, d, g, h, e);
+    PartType52Spawn(v, c, d, g, h, e);
 }
 extern void func_001FA4A0(void *, void *);
 extern void func_001F9EE8(void *, void *, void *);
@@ -490,7 +490,7 @@ struct CamK_72D8 {
 };
 
 /* Camera 19 update: advances the blend state and aims the camera each frame. */
-void func_L10_002F72D8(char *moby) {
+void Camera19_Update(char *moby) {
     float va[4];
     float v1[4];
     float v2[4];
@@ -566,7 +566,7 @@ void func_L10_002F72D8(char *moby) {
             *(short *)(moby + 0x7E) = 4;
             D_L10_0015F504 = 0;
             if (*(int *)(e + 0x4C) == 0) {
-                func_L00_00222B80(0, 1);
+                HeroEnterMoveState(0, 1);
             }
         }
         if (*(int *)(e + 0x40) == 0) {
@@ -629,7 +629,7 @@ void func_L10_002F72D8(char *moby) {
                 for (j2 = *(int *)f; j2 < k->ids[i + 1]; j2++) {
                     total = total + *(float *)(g + j2 * 16 + 0x1C);
                 }
-                r = func_00214220(k->vals[i], k->vals[i + 1], sum / total);
+                r = CosineInterpolate(k->vals[i], k->vals[i + 1], sum / total);
                 m = r * 0.017453292f * 0.5f;
                 aa = FastSin(m);
                 bb = FastCos(m);

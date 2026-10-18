@@ -92,7 +92,7 @@ typedef struct {
 } Ray;
 
 /* Plasmabot update: validates its path and target, walks the path, turns to aim at its owner's target and fires, dies or despawns. */
-void func_L14_002B2A28(char *m) {
+void PlasmabotUpdate(char *m) {
     char *data;
     char *owner;
     int st;
@@ -126,7 +126,7 @@ void func_L14_002B2A28(char *m) {
         *(unsigned short *)(m + 0x34) |= 0x1000;
     }
     if (((unsigned char *)m)[0x20] != 0) {
-        func_L14_002B41B0(m);
+        EnemyHitReaction(m);
         func_L14_002B44B8(m);
         func_L14_002B4128((struct Moby *)m);
         owner = *(char **)(data + 0x110);
@@ -214,7 +214,7 @@ void func_L14_002B2A28(char *m) {
         *(short *)(data + 0x248) = scale_ticks(*(int *)&D_L14_001615B8);
         func_L14_002B4580(m);
         ((unsigned char *)m)[0x20] = 2;
-        func_00213D28(m, 1, 0);
+        MobySetAnimation(m, 1, 0);
         p = (float *)D_L14_001B0F30[*(int *)(data + 0x240)];
         *(float *)(m + 0x48) = func_L00_001FF860(p[8] - p[4], p[9] - p[5]);
         *(int *)(data + 0x268) = 0;
@@ -230,12 +230,12 @@ void func_L14_002B2A28(char *m) {
         return;
     }
     case 2:
-        if (func_0020D830(m) >= 3.0f) {
+        if (MobyGetFrameValue(m) >= 3.0f) {
             func_L14_002B4668(m);
         }
         if ((m[0x70] & 2) && ((unsigned char *)m)[0x52] == ((unsigned char *)m)[0x53]) {
             ((unsigned char *)m)[0x20] = 3;
-            func_00213DE0(m, 3, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 3, 0, scale_ticks(10));
             *(float *)(m + 0x58) = 1.0f;
         }
         break;
@@ -244,7 +244,7 @@ void func_L14_002B2A28(char *m) {
         func_L00_0025C918((float *)(m + 0x10), (float *)(data + 0x254), p[4], 0.01f, 0.2f, 0.0f);
         func_L00_0025C918((float *)(m + 0x14), (float *)(data + 0x258), p[5], 0.01f, 0.2f, 0.0f);
         if ((m[0x70] & 2) && ((unsigned char *)m)[0x52] == ((unsigned char *)m)[0x53]) {
-            func_00213DE0(m, 0, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 0, 0, scale_ticks(10));
             ((unsigned char *)m)[0x20] = 1;
             *(float *)(m + 0x58) = 1.0f;
             func_L14_002B4568(m);
@@ -262,7 +262,7 @@ void func_L14_002B2A28(char *m) {
         if (*(int *)(data + 0x114) == 2) break;
         if (FastDecTimer(data + 0x248) == 0) break;
         ((unsigned char *)m)[0x20] = 3;
-        func_00213DE0(m, 3, 0, scale_ticks(10));
+        MobyBlendAnimation(m, 3, 0, scale_ticks(10));
         *(float *)(m + 0x58) = 1.0f;
         *(int *)(data + 0x250) = 0;
         *(float *)(data + 0x27C) = 1.0f;
@@ -274,7 +274,7 @@ void func_L14_002B2A28(char *m) {
     }
     case 3:
         if (func_L14_002B4668(m) != 0) {
-            func_00213DE0(m, 0, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 0, 0, scale_ticks(10));
             ((unsigned char *)m)[0x20] = 4;
         }
         break;
@@ -284,7 +284,7 @@ void func_L14_002B2A28(char *m) {
         }
         if (func_L14_002B4668(m) != 0) {
             if (((unsigned char *)data)[0x24A] != 0) {
-                func_00213DE0(m, 2, 0, scale_ticks(10));
+                MobyBlendAnimation(m, 2, 0, scale_ticks(10));
                 ((unsigned char *)m)[0x20] = 9;
             } else {
                 *(short *)(data + 0x248) = scale_ticks(*(int *)&D_L14_001615B8);
@@ -307,7 +307,7 @@ void func_L14_002B2A28(char *m) {
             if (*(int *)(data + 0x240) == -1) break;
             ((unsigned char *)m)[0x20] = 8;
             if (((unsigned char *)m)[0x53] != 3) {
-                func_00213DE0(m, 3, 0, scale_ticks(0x14));
+                MobyBlendAnimation(m, 3, 0, scale_ticks(0x14));
             }
             {
                 int n = *(int *)(data + 0x24C) - 1;
@@ -331,7 +331,7 @@ void func_L14_002B2A28(char *m) {
         func_L14_002B4AE0(((unsigned char *)m)[0x21]);
         *(float *)(data + 0x278) = ang;
         ((unsigned char *)m)[0x20] = 5;
-        func_00213DE0(m, 4, 0, scale_ticks(5));
+        MobyBlendAnimation(m, 4, 0, scale_ticks(5));
         *(short *)(data + 0x262) = scale_ticks(*(int *)&D_L14_001615B4);
         break;
     }
@@ -342,7 +342,7 @@ void func_L14_002B2A28(char *m) {
         func_L14_002B4828(m, 0, FastSubRots(ang, *(float *)&D_L14_001615B0));
         func_L14_002B4A00(m, ang);
         if ((m[0x70] & 2) && ((unsigned char *)m)[0x52] == ((unsigned char *)m)[0x53]) {
-            func_00213DE0(m, 5, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 5, 0, scale_ticks(10));
             ((unsigned char *)m)[0x20] = 6;
         }
         break;
@@ -367,7 +367,7 @@ void func_L14_002B2A28(char *m) {
         }
         func_L14_002B4828(m, flag, f);
         func_L14_002B4A00(m, ang);
-        func_0020DAF8(m, 0, mat);
+        MobyTransformScaledVertex(m, 0, mat);
         qcopy(v, mat[1]);
         if (flag == 0) {
             v[2] = 0.0f;
@@ -392,7 +392,7 @@ void func_L14_002B2A28(char *m) {
         }
         func_L00_002E3640(m, mat, hit);
         if (FastDecTimer(data + 0x262) != 0) {
-            func_00213DE0(m, 6, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 6, 0, scale_ticks(10));
             ((unsigned char *)m)[0x20] = 7;
             func_L00_002E34F0(m);
         }
@@ -400,7 +400,7 @@ void func_L14_002B2A28(char *m) {
     }
     case 7:
         if ((m[0x70] & 2) && ((unsigned char *)m)[0x52] == ((unsigned char *)m)[0x53]) {
-            func_00213DE0(m, 0, 0, scale_ticks(10));
+            MobyBlendAnimation(m, 0, 0, scale_ticks(10));
             ((unsigned char *)m)[0x20] = 4;
         }
         break;
@@ -414,7 +414,7 @@ void func_L14_002B2A28(char *m) {
     check_next:
         if (((unsigned char *)m)[0x53] == 7) break;
     idle:
-        func_00213DE0(m, 0, 0, 10);
+        MobyBlendAnimation(m, 0, 0, 10);
         ((unsigned char *)m)[0x20] = 4;
         break;
     }
@@ -446,7 +446,7 @@ void func_L14_002B2A28(char *m) {
         func_L14_002B4828(m, 0, *(float *)(m + 0x48));
         func_L14_002B4A00(m, *(float *)(m + 0x48));
     }
-    func_L14_002B3850((struct Moby *)m);
+    ShipEngineEffects((struct Moby *)m);
 }
 typedef struct { f32 x; f32 y; f32 z; } Vec3_2B3850;
 typedef struct {
@@ -497,7 +497,7 @@ extern void func_L00_001FF4B0_2B3850(void *, void *, f32) __asm__("func_L00_001F
 
 /* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2.
  * Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay/entities/002b17d8.c, FUN_L14_002b2600. */
-void func_L14_002B3850(struct Moby *m)
+void ShipEngineEffects(struct Moby *m)
 {
     Vec4 pos;
     Vec4 dir;
@@ -732,7 +732,7 @@ extern void func_L00_002584A8(void *, int, int);
 extern void func_L00_0025E4B0(void *m, short *p);
 
 /* Enemy hit reaction: takes damage from attacks (not from its own kind), staggers or is knocked away and dies. */
-void func_L14_002B41B0(char *m) {
+void EnemyHitReaction(char *m) {
     char *d = *(char **)(m + 0x78);
     int hit;
     float dmg;
@@ -741,7 +741,7 @@ void func_L14_002B41B0(char *m) {
     if (((unsigned char *)m)[0x20] == 0 || ((unsigned char *)m)[0x20] == 0xB) {
         if (((unsigned char *)m)[0x20] == 0xB) {
             ((unsigned char *)m)[0xA4] = 0xFF;
-            func_L00_0025E590(m, d + 0xC0);
+            StepColorFade(m, d + 0xC0);
         }
         return;
     }
@@ -811,7 +811,7 @@ void func_L14_002B41B0(char *m) {
         func_L00_0025E4B0(m, (short *)(d + 0xC0));
     }
     ((unsigned char *)m)[0xA4] = 0xFF;
-    func_L00_0025E590(m, d + 0xC0);
+    StepColorFade(m, d + 0xC0);
 }
 extern char D_0013E633[];
 extern int *D_L14_001B0F30[];
@@ -822,7 +822,7 @@ extern float func_001F9D48(void *, void *);
 void func_L14_002B44B8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int *tbl = D_L14_001B0F30[*(int *)(data + 0x244)];
-    if (func_L00_00260FB0(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, tbl + 4, *tbl) != 2) {
+    if (FindNearestEligibleMoby(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, tbl + 4, *tbl) != 2) {
         if (*(float *)(data + 0x234) < func_001F9D48(moby + 0x10, data + 0xD0)) {
             *(int *)(data + 0x114) = 2;
         }
@@ -1033,7 +1033,7 @@ extern void func_001F9C30(void *, void *, float);
 extern void func_L00_001FD1D8(void *, void *, s32);
 
 /* Draws the moby's glow quad, pulled toward the camera so it is not hidden by the moby. */
-void func_L14_002B4C70(char *m) {
+void DrawMobyGlow(char *m) {
     float pos[4];
     Pk_2B4C70 pk;
     float v[4];
@@ -1105,18 +1105,18 @@ void func_L14_002DAA70(char *moby) {
     case 1:
         if (func_001F9908(data + 8) != 0) {
             moby[0x20] = 2;
-            func_00213D28(moby, 1, 0);
+            MobySetAnimation(moby, 1, 0);
         }
         break;
     case 2:
         if ((moby[0x70] & 2) != 0) {
             moby[0x20] = 3;
-            func_00213D28(moby, 2, 0);
+            MobySetAnimation(moby, 2, 0);
         }
         break;
     case 3:
         if (*(s16 *)(D_L14_00167600 + 0x86) != 0x14) {
-            func_00213D28(moby, 0, 0);
+            MobySetAnimation(moby, 0, 0);
             moby[0x20] = 4;
         }
         break;
@@ -1125,19 +1125,19 @@ void func_L14_002DAA70(char *moby) {
     case 5:
         if ((moby[0x70] & 2) != 0) {
             moby[0x20] = 6;
-            func_00213D28(moby, 2, 0);
+            MobySetAnimation(moby, 2, 0);
         }
         break;
     case 6:
         if (func_001F9908(data + 8) != 0) {
-            func_00213D28(moby, 3, 0);
+            MobySetAnimation(moby, 3, 0);
             moby[0x20] = 7;
         }
         break;
     case 7:
         if ((moby[0x70] & 2) != 0) {
             moby[0x20] = 0;
-            func_00213D28(moby, 0, 0);
+            MobySetAnimation(moby, 0, 0);
         }
         break;
     }
@@ -1152,7 +1152,7 @@ int func_L14_002DAC00(int i)
     int r = 0;
     if (moby[0x20] == 0) {
         moby[0x20] = 5;
-        func_00213D28(moby, 1, 0);
+        MobySetAnimation(moby, 1, 0);
     } else {
         r = moby[0x20] == 6;
     }
@@ -1187,7 +1187,7 @@ extern void func_0020D678(struct Moby *);
 extern float D_L14_0015F660[] MACRO_ADDR;
 
 /* Moby update for a falling debris particle. */
-void func_L14_002DFA70(struct MobyDf *moby) {
+void DebrisParticleUpdate(struct MobyDf *moby) {
     float *velocity = (float *)moby->pvars;
     int i;
     int n;
@@ -1231,7 +1231,7 @@ void func_L14_002DFA70(struct MobyDf *moby) {
         DeleteMoby((struct Moby *)moby);
         return;
     }
-    func_L00_0026DA50(&moby->pos, D_L14_0015F660, 0x4F007FFF, 0x1FFFFFFF,
+    PartType21Spawn(&moby->pos, D_L14_0015F660, 0x4F007FFF, 0x1FFFFFFF,
                          rand_range(scale_ticks(10), scale_ticks(20)), 1, 60000.0f);
     for (i = 0; i < 2; i++) {
         n = random_integer_below(6);
@@ -1239,7 +1239,7 @@ void func_L14_002DFA70(struct MobyDf *moby) {
         size = random_float_between(40000.0f, 100000.0f);
         color = rand_range(0x30, 0xFF);
         alpha = 0x60000000;
-        particle = (unsigned char *)func_L00_0026DEA0(&moby->pos, 0.025f, 1.0f, 1.0f, n,
+        particle = (unsigned char *)PartType23Spawn(&moby->pos, 0.025f, 1.0f, 1.0f, n,
                                         D_L14_0015F660, size,
                                         color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
@@ -1337,7 +1337,7 @@ extern short D_L14_00161C18;
 
 /* A piece of debris: follows its race path until its timer runs out, then flies, spins and falls until it hits something or leaves the map.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b17d8.c, FUN_L14_002dfd10. */
-void func_L14_002E1110(struct Moby *moby) {
+void RaceDebrisUpdate(struct Moby *moby) {
     Data_dfd10 *data = (Data_dfd10 *)moby->pvars;
     Vec4 probe;
     f32 vec[4];
@@ -1661,7 +1661,7 @@ void func_L14_00300130(unsigned char *m) {
         P_eca8 *part;
         T_eca8 *tail;
         n = random_integer_below(0x10);
-        part = func_L00_0026DEA0(pos, 0.2f, 1.0f, 0.9f, random_integer_below(2) == 0 ? n : -n, D_L14_0015F660, 100000.0f, (*(int *)&D_L14_001620B4));
+        part = PartType23Spawn(pos, 0.2f, 1.0f, 0.9f, random_integer_below(2) == 0 ? n : -n, D_L14_0015F660, 100000.0f, (*(int *)&D_L14_001620B4));
         if (part) {
             tail = &part->tail;
             part->hA = scale_ticks(0xC);
@@ -1680,7 +1680,7 @@ void func_L14_00300130(unsigned char *m) {
     for (j = 0; j < 3; j++) {
         P_eca8 *part;
         T_eca8 *tail;
-        part = func_L00_0026DEA0(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F660, size, 0x7FFFFFFF);
+        part = PartType23Spawn(pos, 0.05f, 1.0f, 1.0f, n, D_L14_0015F660, size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->hA = life;
@@ -2671,7 +2671,7 @@ void func_L14_00302A58(unsigned char *m) {
     }
     if (*(int *)&D_L14_001621A8_s == 0) {
         if (func_001F9D48(m + 0x10, D_0013E633 + 0xE9D) < 10.0f) {
-            func_L14_003039C0((char *)m);
+            BeamSweepDamage((char *)m);
         }
     }
     if (d->s12 != 0) {
@@ -2816,7 +2816,7 @@ void func_L14_00302C80(char *m) {
             B.w = (*(float *)&D_L14_001621E4);
             s17 = random_integer_below(2) ? (*(int *)&D_L14_001621EC) : (*(int *)&D_L14_001621F0);
             n = scale_ticks(random_integer_below(10) + 20);
-            func_00219780(&A, &B, &B, (*(int *)&D_L14_001621D8), (*(int *)&D_L14_001621DC), l >> 1, 15, n, s17);
+            PartType02Spawn(&A, &B, &B, (*(int *)&D_L14_001621D8), (*(int *)&D_L14_001621DC), l >> 1, 15, n, s17);
         }
         for (k = 0; k < 2; k++) {
             int n, c;
@@ -2825,7 +2825,7 @@ void func_L14_00302C80(char *m) {
             B.w = (*(float *)&D_L14_001621E4);
             c = random_integer_below(2) ? (*(int *)&D_L14_001621EC) : (*(int *)&D_L14_001621F0);
             n = scale_ticks(random_integer_below(10) + 20);
-            func_00219780(&A, &B, &B, (*(int *)&D_L14_001621D8), (*(int *)&D_L14_001621DC),
+            PartType02Spawn(&A, &B, &B, (*(int *)&D_L14_001621D8), (*(int *)&D_L14_001621DC),
                         d->cnt[k] >> 1, 15, n, (*(int *)&D_L14_001621F0));
         }
     }
@@ -2880,7 +2880,7 @@ extern int func_L00_001EFFF0_3039C0(void *, void *, int, void *, void *) __asm__
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam.
  * Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay/vendor/003015d0.c, FUN_L14_00302538. */
-void func_L14_003039C0(char *self) {
+void BeamSweepDamage(char *self) {
     struct Moby *m = (struct Moby *)self;
     D1224_3039C0 *d = (D1224_3039C0 *)m->pvars;
     VendorBeamReq_3039C0 req;
@@ -2988,7 +2988,7 @@ void func_L14_00304E68(unsigned char *m) {
                 func_L00_002E35A8(i);
             } else if (st != 0) {
                 n++;
-                func_L00_002E3700(D_L14_001622A8[i], i);
+                BeamSlotUpdate(D_L14_001622A8[i], i);
                 D_L14_00162218[i] = 4;
             }
         }

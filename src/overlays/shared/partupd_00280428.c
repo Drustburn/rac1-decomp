@@ -10,7 +10,7 @@ extern int func_001F9850(int);
 extern unsigned char *D_L01_001B280C;
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
-void func_L01_00280428(char *pos, char *vel) {
+void PartType10Spawn(char *pos, char *vel) {
     unsigned char *p = func_00218928(10);
     if (p != 0) {
         char *q = (char *)p + 0x20;
@@ -35,7 +35,7 @@ extern int func_002140B0(int);
 extern unsigned char *D_L01_001B2838;
 
 /* spawns a type 14 particle at the given position with jitter */
-char *func_L01_00281738(int a, char *b) {
+char *PartType14Spawn(int a, char *b) {
     char *p = func_00218928(0xE);
     int r;
     int *q;
@@ -72,7 +72,7 @@ extern int func_001FA898(float);
 
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF derives the frame from flags and picks one of two blend modes.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/rendering/0027f660.c, FUN_L01_00285768. */
-char *func_L01_00286530(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) {
+char *PartType41Spawn(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) {
     char *r = func_00218928_86530(0x29);
     if (r != 0) {
         int *tail = (int *)(r + 0x20);
@@ -104,7 +104,7 @@ extern float func_001FA888(int);
 extern unsigned char *D_L01_001B28D0;
 
 /* spawns a type-0x34 particle at a with colour b, links c, lifetime d, scale f and drag g */
-unsigned char *func_L01_00287F20(void *a, int b, int c, int d, float f, float g) {
+unsigned char *PartType52Spawn(void *a, int b, int c, int d, float f, float g) {
     unsigned char *r = func_00218928(0x34);
     if (r != 0) {
         char *v = (char *)r + 0x20;
@@ -132,7 +132,7 @@ extern void func_001FA4A0(void *,void *);
 extern void func_001F9EE8(void *,void *,void *);
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2928");
 /* spawns a type-74 particle with transformed offset and velocity */
-unsigned char *func_L01_0028B570(char *m,char *pos,float *vel,char *cfg,int flag) {
+unsigned char *PartType74Spawn(char *m,char *pos,float *vel,char *cfg,int flag) {
  float v[4]; float mat[16];
  unsigned char *p=func_00218928(74);
  if(p) {
@@ -186,7 +186,7 @@ typedef struct {
 extern float func_001F9B88(float);
 
 /* Returns the index of the entry whose distance to arg0 is closest to a target value. */
-int func_L01_0028C2D8(void *arg0, List *arg1, float target) {
+int FindClosestDistanceEntry(void *arg0, List *arg1, float target) {
     int best = 0;
     int i;
     float bestDiff = 1e11f;
@@ -380,7 +380,7 @@ float func_L01_0028C958(float a, float b, T_28b828 *path, int particles, void *m
     *(int *)path = 0;
     nextNode.q = *(OvlQuad *)((char *)path->f10 + 0x10);
     if (particles) {
-        func_L01_00286530(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
+        PartType41Spawn(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
     }
     /* The SN ABI assigns float arguments independently of the integer arguments.
      * Keep the retail argument setup order without changing the shared helper. */
@@ -395,7 +395,7 @@ float func_L01_0028C958(float a, float b, T_28b828 *path, int particles, void *m
         currentNode.q = nextNode.q;
         previousTangent.q = nextTangent.q;
         if (particles) {
-            func_L01_00286530(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
+            PartType41Spawn(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
         }
         t = 0.05f;
         nextIndex = func_L01_0028C5F0_8C958(path, index + 1);
@@ -407,7 +407,7 @@ float func_L01_0028C958(float a, float b, T_28b828 *path, int particles, void *m
         step = t;
         do {
             if (particles) {
-                func_L01_00286530(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
+                PartType41Spawn(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
             }
             func_L01_0028C848(t, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
             t += step;

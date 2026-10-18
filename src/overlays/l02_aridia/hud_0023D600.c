@@ -71,7 +71,7 @@ extern short D_L02_0015FA34;
 
 /* Draws the counter: a stretched bar behind the icon and the count, on whichever side of the screen it sits.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l02/ui/text/0023ccc8.c, FUN_L02_0023cda8. */
-s32 func_L02_0023D6E0(HudElem *m) {
+s32 Hud_DrawCounter(HudElem *m) {
     char text[16];
     int x;
     int y;
@@ -94,7 +94,7 @@ s32 func_L02_0023D6E0(HudElem *m) {
     }
     x = m->unk50;
     y = m->unk54;
-    func_L00_00236400(m, &x, &y);
+    Hud_AlignElement(m, &x, &y);
     left = x < 0x101;
     if (left) {
         x = (*(s32 *)&D_L02_0015FA1C);
@@ -131,10 +131,10 @@ s32 func_L02_0023D6E0(HudElem *m) {
         frame = GetIconFrame(0x7580, 0);
         HudSprite(frame, bar, y, width, 0x20, alpha);
         frame = GetIconFrame(0x7580, 1);
-        func_00200650(frame, bar + width, y, 0x20, 0x20, alpha);
+        DrawHudSpriteTurned(frame, bar + width, y, 0x20, 0x20, alpha);
     } else {
         frame = GetIconFrame(0x7580, 1);
-        func_00200650(frame, bar, y, 0x20, 0x20, alpha);
+        DrawHudSpriteTurned(frame, bar, y, 0x20, 0x20, alpha);
         px = bar - width;
         frame = GetIconFrame(0x7580, 0);
         HudSprite(frame, px, y, width, 0x20, alpha);
@@ -167,7 +167,7 @@ extern int D_0015EF88 MACRO_ADDR;
 void func_L02_00240980(void) {
     SetupSkyGifPaging();
     if (D_0015EE84_m == 2) {
-        func_L00_0028A878();
+        SkyStarFieldUpdate();
     } else {
         UpdateSkyShellsStatic();
     }

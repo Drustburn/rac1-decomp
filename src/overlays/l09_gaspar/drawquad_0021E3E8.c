@@ -100,7 +100,7 @@ extern int D_L09_0015F6B0 MACRO_ADDR;
 typedef struct { char pad[0x20]; short idx[16]; } Strip;
 
 /* Draws a list of scrolling-texture strips (water) into the scratchpad. */
-void func_L09_0021E770(char *list, int count, long tex0, long tex1) {
+void DrawScrollingStrips(char *list, int count, long tex0, long tex1) {
     int i;
     int j;
     int c;
@@ -153,7 +153,7 @@ extern int D_0015EF88 MACRO_ADDR;
 void func_L09_0025DEE0(void) {
     SetupSkyGifPaging();
     if (D_0015EE84_m == 9) {
-        func_L00_0028B680();
+        DrawSkyShellsExtra();
     } else {
         UpdateSkyShellsStatic();
     }

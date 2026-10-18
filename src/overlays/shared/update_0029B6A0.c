@@ -230,7 +230,7 @@ extern u8 D_L00_001CA9E0[];
 extern s32 D_0015EE88 MACRO_ADDR;
 extern f32 D_0015EE60 MACRO_ADDR;
 /* Opens the vendor menu. */
-void func_L00_0029BA20(VendorMoby_pv *m) {
+void VendorOpenMenu(VendorMoby_pv *m) {
     extern s32 D_L00_00173F00[];
     s32 i;
     Vec4 *v;
@@ -280,7 +280,7 @@ void func_L00_0029BA20(VendorMoby_pv *m) {
         s32 item = VP.entries[VP.cursor].item;
 
         VP.item_text = queue_animation_update(0x30, item + 0xEA60, func_L00_0023B0F8,
-                                                  func_L00_00236830, func_L00_0023B140,
+                                                  Hud_UpdateCounter, func_L00_0023B140,
                                                   &D_0013D530[item], D_L00_001C43B0[item].hE);
     }
     D_L00_0015F6BC = 1;
@@ -293,21 +293,21 @@ void func_L00_0029BA20(VendorMoby_pv *m) {
     if (VP.mode == 0) {
         FadeToBlack(4);
     }
-    func_L00_00203FB8();
+    HelpPopup_Cancel();
     *(f32 *)&D_L00_0015F4FC = 1.0f;
     *(s32 *)((char *)&D_L00_0015F6BC - 0x14) = 5;
     *(s32 *)&D_L00_0015F500 = 0;
-    func_L00_00222B80(100, 1);
+    HeroEnterMoveState(100, 1);
     {
         u8 *hp = (u8 *)D_0013E633 + 0xE1D;
         hp[0x20AC] = 1;
         hp[0x20A5] = 1;
     }
-    func_L00_00233868();
+    HeroSetObjectFlags();
     if (VP.mode != 0) {
-        func_00213D28(m, 3, 0);
+        MobySetAnimation(m, 3, 0);
     } else {
-        func_00213D28(m, 2, 0);
+        MobySetAnimation(m, 2, 0);
     }
     m->f58 = D_0015EE60 * 0.5f;
     if (VP.mode == 0) {
@@ -377,9 +377,9 @@ void func_L00_0029BED8(int a) {
     func_001FFFA0();
     D_L00_0015F6BC = 1;
     *(int *)&D_L00_0015F6A8 = 0;
-    func_L00_00222B80(0, 1);
+    HeroEnterMoveState(0, 1);
     D_001414F5[0] = 0;
-    func_L00_00233950();
+    HeroClearObjectFlags();
     if (*(int *)(g + 0x40) == 0) {
         func_001F9EC0(&v, &D_L00_00161130, *(char **)(g + 0x1C) + 0xC0);
         FastVecAdd(&v, &v, *(char **)(g + 0x1C) + 0x10);
@@ -1357,10 +1357,10 @@ void func_L00_0029C070(void) {
     if (D_0013F450.pending_item[0] == 0x18)
         D_0013F450.pending_item[0] = 0;
     func_00205270(D_L00_00179BC0_9C070[D_L00_001CA7C0_9C070.f48].id, -1);
-    func_L00_00245E98(item);
+    ReadLevelPackedData(item);
     state = &D_001517D0;
     *(s32 *)&state->pad[0x1C] = 0x2734;
-    func_00205220(0);
+    ParseSpaceSceneChunk(0);
     mode = D_001517D0.mode;
     while (mode != 3) {
         sound_update();
@@ -1378,9 +1378,9 @@ void func_L00_0029C2E8(void) {
     char *q;
     D_L00_0015F6BC = 1;
     *(int *)&D_L00_0015F6A8 = 0;
-    func_L00_00222B80(0, 1);
+    HeroEnterMoveState(0, 1);
     D_001414F5[0] = 0;
-    func_L00_00233950();
+    HeroClearObjectFlags();
     g = D_L00_001CA7C0;
     func_001F9EC0(v, &D_L00_001611C0, *(char **)(g + 0x28) + 0xC0);
     FastVecAdd(v, v, *(char **)(g + 0x28) + 0x10);
@@ -1437,7 +1437,7 @@ void func_L00_0029C840(int a) {
         D_L00_00161250 = a;
         D_L00_00161254 = 0;
         *(int *)(D_0014171B + 0x100D1) = r1 * 0x12 + *(int *)(b + 0x38) + 10000;
-        if (m[0x53] != a) func_00213DE0(m, 1, 0, 10);
+        if (m[0x53] != a) MobyBlendAnimation(m, 1, 0, 10);
         m[0x20] = 10;
         break;
     case 2:
@@ -1515,9 +1515,9 @@ void func_L00_0029C9E8(void) {
     *(float *)(P + 0x144) = q[TA].d4;
     *(float *)(P + 0x148) = q[TA].d8 + *(float *)(GG->cam + 0x48);
     func_L00_00251E30(P + 0x100);
-    func_00213D28(P + 0x100, 0, 0);
+    MobySetAnimation(P + 0x100, 0, 0);
     if (*(unsigned char *)(*(char **)(P + 0x124) + 0xC) >= 2) {
-        func_00213D28(P + 0x100, 1, 0);
+        MobySetAnimation(P + 0x100, 1, 0);
     }
     *(int *)(P + 0x158) = 0;
     *(char *)(P + 0x151) = 0;
@@ -1543,9 +1543,9 @@ void func_L00_0029C9E8(void) {
     *(short *)(P + 0x332) = 0x40;
     *(int *)(P + 0x394) = 0;
     func_L00_00251E30(P + 0x300);
-    func_00213D28(P + 0x300, 0, 0);
+    MobySetAnimation(P + 0x300, 0, 0);
     if (*(unsigned char *)(*(char **)(P + 0x324) + 0xC) >= 2) {
-        func_00213D28(P + 0x300, 1, 0);
+        MobySetAnimation(P + 0x300, 1, 0);
     }
     *(int *)(P + 0x358) = 0;
     *(char *)(P + 0x351) = 0;
@@ -1590,7 +1590,7 @@ extern void func_L00_002618D8(int, int);
 extern int func_L00_002346C0(int, int);
 
 /* vendor buy dialog: quantity selection with held-button repeat, confirm and purchase */
-void func_L00_0029CDE0(void) {
+void VendorBuyDialogUpdate(void) {
     float v[4];
     int n;
     int room;
@@ -1606,7 +1606,7 @@ void func_L00_0029CDE0(void) {
         *(u128_9CDE0 *)v = 0;
         FastVecAdd(D_L00_001CA7C0_9CDE0.obj + 0x410, v, D_L00_001CA7C0_9CDE0.cam + 0x10);
         qcopy_nc(D_L00_001CA7C0_9CDE0.obj + 0x440, D_L00_001CA7C0_9CDE0.cam + 0x40);
-        func_00213D28(D_L00_001CA7C0_9CDE0.obj + 0x400, 0, 0);
+        MobySetAnimation(D_L00_001CA7C0_9CDE0.obj + 0x400, 0, 0);
         if (*(u8 *)(*(char **)(*(char **)(D_L00_001CA7C0_9CDE0.obj + 0x424) + 0x48) + 0x10) < 2) {
             *(int *)(D_L00_001CA7C0_9CDE0.obj + 0x458) = 0;
             *(char *)(D_L00_001CA7C0_9CDE0.obj + 0x451) = 0;
@@ -1673,19 +1673,19 @@ void func_L00_0029CDE0(void) {
             D_L00_001CA7C0_9CDE0.state = 3;
             m = D_L00_001CA7C0_9CDE0.obj;
             D_L00_00161F0C = 0;
-            func_00213DE0(m + 0x400, 0, ((VBObj_9CDE0 *)m)->pc->sub->cnt - 1, 1);
+            MobyBlendAnimation(m + 0x400, 0, ((VBObj_9CDE0 *)m)->pc->sub->cnt - 1, 1);
             func_L00_00251E30(D_L00_001CA7C0_9CDE0.obj + 0x400);
         } else if (D_0013CA40_9CDE0.pressed & 0x40) {
             char *m;
             D_L00_001CA7C0_9CDE0.state = 3;
             m = D_L00_001CA7C0_9CDE0.obj;
             D_L00_00161F0C = 1;
-            func_00213DE0(m + 0x400, 0, ((VBObj_9CDE0 *)m)->pc->sub->cnt - 1, 8);
+            MobyBlendAnimation(m + 0x400, 0, ((VBObj_9CDE0 *)m)->pc->sub->cnt - 1, 8);
             func_L00_00251E30(D_L00_001CA7C0_9CDE0.obj + 0x400);
         } else {
             MobyAnimAdvance(D_L00_001CA7C0_9CDE0.obj + 0x400);
             if (*(u8 *)(D_L00_001CA7C0_9CDE0.obj + 0x453) == 0 && (*(u8 *)(D_L00_001CA7C0_9CDE0.obj + 0x470) & 2)) {
-                func_00213DE0(D_L00_001CA7C0_9CDE0.obj + 0x400, 1, 0, 1);
+                MobyBlendAnimation(D_L00_001CA7C0_9CDE0.obj + 0x400, 1, 0, 1);
             }
             func_L00_00251E30(D_L00_001CA7C0_9CDE0.obj + 0x400);
         }
@@ -1752,7 +1752,7 @@ void func_L00_0029CDE0(void) {
                         D_L00_001CA7C0_9CDE0.f50 = -1;
                         if (D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].sel == 1) {
                             D_L00_001CA7C0_9CDE0.f50 = queue_animation_update(0x30, D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item + 0xEA60,
-                                                                     func_L00_0023B0F8, func_L00_00236830, func_L00_0023B140,
+                                                                     func_L00_0023B0F8, Hud_UpdateCounter, func_L00_0023B140,
                                                                      &D_0013D530[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item],
                                                                      D_L00_001C43B0[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item].hE);
                         } else {

@@ -77,7 +77,7 @@ void func_L08_002D49E8(char *m);
 void func_L08_002D5080(char *m);
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
-void func_L08_002D3DF8(Moby *moby) {
+void ScoutbotUpdate(Moby *moby) {
     Data_3DF8 *d = (struct Data_3DF8 *)moby->pvars;
     float tgt[4];
     float v30[4];
@@ -266,7 +266,7 @@ void func_L08_002D3DF8(Moby *moby) {
         delete_3DF8(moby);
         return;
     }
-    func_L08_002D5080((char *)moby);
+    SteerAlongPath((char *)moby);
     if (moby->state != 5 && (signed char)moby->state >= 0) {
         int col = 0x7F20FF20;
 
@@ -475,7 +475,7 @@ extern int func_L00_001F39B0(void *, int, int, void *, int);
 extern float D_L08_001746F0[];
 
 /* Steers a moby along its path state and lifts it clear of the ground. */
-void func_L08_002D5080(char *m) {
+void SteerAlongPath(char *m) {
     char *s = *(char **)(m + 0x78);
     float f = FastVecLength((float *)(s + 0x40)) - D_0015EE70 * 6.0f;
     float lim = D_0015EE6C * 3.0f;
@@ -530,7 +530,7 @@ void *func_L08_002D5358(char *arg)
     *(float *)(obj + 0x200) = 4.0f;
     *(float *)(obj + 0x208) = 0.5f;
     if ((unsigned char)arg[0x53] != 2) {
-        func_00213DE0(arg, 2, 0, 3);
+        MobyBlendAnimation(arg, 2, 0, 3);
     }
     *(short *)(obj + 0xC8) = 0;
     return result;
@@ -689,12 +689,12 @@ char *func_L08_002E9288(int owner, float *position, float *rotation, int value) 
                 velocity[3] = (*(float *)&D_L08_00161DA4);
                 offset[3] = (*(float *)&D_L08_00161DA8);
                 i++;
-                func_L00_0026DA50(moby + 0x10, velocity_ptr, (*(int *)&D_L08_00161D88), (*(int *)&D_L08_00161D8C),
+                PartType21Spawn(moby + 0x10, velocity_ptr, (*(int *)&D_L08_00161D88), (*(int *)&D_L08_00161D8C),
                     rand_range(scale_ticks(10), scale_ticks(20)), 1, 20000.0f);
                 a = truncate_float_to_s32(func_001F9878(random_float_between((float)(*(int *)&D_L08_00161D98), (float)(*(int *)&D_L08_00161D98) * 1.2f)));
                 b = truncate_float_to_s32(func_001F9878(random_float_between((float)(*(int *)&D_L08_00161D9C), (float)(*(int *)&D_L08_00161D9C) * 1.2f)));
                 c = truncate_float_to_s32(func_001F9878(random_float_between((float)(*(int *)&D_L08_00161DA0), (float)(*(int *)&D_L08_00161DA0) * 1.5f)));
-                func_00219780(moby + 0x10, velocity_ptr, offset_ptr, (*(int *)&D_L08_00161D80), (*(int *)&D_L08_00161D84), a, b, c, -1);
+                PartType02Spawn(moby + 0x10, velocity_ptr, offset_ptr, (*(int *)&D_L08_00161D80), (*(int *)&D_L08_00161D84), a, b, c, -1);
             } while ((float)i < (*(float *)&D_L08_00161D70));
         }
         if (D_0015EE84 == 12)
@@ -735,7 +735,7 @@ extern short D_L08_00161DB0;
 extern float D_L08_001746E0[4];
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002937a0.c, FUN_L08_002e8210. */
-void func_L08_002E95E8(char *moby) {
+void Moby458Update(char *moby) {
     char *position_ptr = moby + 0x10;
     char *data = *(char **)(moby + 0x78);
     float position_copy[4] __attribute__((aligned(16)));
@@ -778,7 +778,7 @@ void func_L08_002E95E8(char *moby) {
             (float)(*(int *)&D_L08_00161D9C), (float)(*(int *)&D_L08_00161D9C) * 1.2f)));
         c = truncate_float_to_s32(func_001F9878(random_float_between(
             (float)(*(int *)&D_L08_00161DA0), (float)(*(int *)&D_L08_00161DA0) * 1.5f)));
-        func_00219780(position, velocity, offset, (*(int *)&D_L08_00161D78),
+        PartType02Spawn(position, velocity, offset, (*(int *)&D_L08_00161D78),
                                (*(int *)&D_L08_00161D7C), a, b, c, -1);
     }
     *(float *)(moby + 0x40) = FastAddRots(*(float *)(moby + 0x40),
@@ -881,7 +881,7 @@ extern float func_001FA888(int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 
 /* Scales every RGBA word of a set of colour tables by four factors, optionally using the flat 255 for colour. */
-void func_L08_002F2428(int **tabs, int n, int *counts, int flat, float r, float g, float b, float a) {
+void ScaleColorTables(int **tabs, int n, int *counts, int flat, float r, float g, float b, float a) {
     int i, j;
     for (i = 0; i < n; i++) {
         for (j = 0; j < counts[i]; j++) {
@@ -947,7 +947,7 @@ extern float D_L08_00161EA4[] MACRO_ADDR;
 
 /* Advances the X and Y scroll offsets of entry `i` by speed * frame step, wrapping them into [-1, 1].
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002937a0.c, FUN_L08_002f1378. */
-void func_L08_002F2838(int i) {
+void AdvanceScrollEntry(int i) {
     float *p;
     p = &D_L08_00161EA0_F2838[i * 2];
     *p += (((float *)&D_L08_00161E70))[i * 2] * D_0015EE7C;
@@ -980,7 +980,7 @@ extern short D_L08_00162034;
 extern short D_L08_00162038;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_002937a0.c, FUN_L08_002f5830. */
-void func_L08_002F6CF0(char *m) {
+void Moby648Update(char *m) {
     f32 v0[4], v1[4], c[4], d[4], e[16];
     char *v;
     s32 s0, s16, s2;
@@ -1009,7 +1009,7 @@ void func_L08_002F6CF0(char *m) {
         s0 = truncate_float_to_s32(func_001F9878(random_float_between((f32)(*(s32 *)&D_L08_0016201C), (f32)(*(s32 *)&D_L08_0016201C) * 1.2f)));
         s16 = truncate_float_to_s32(func_001F9878(random_float_between((f32)(*(s32 *)&D_L08_00162020), (f32)(*(s32 *)&D_L08_00162020) * 1.2f)));
         s2 = truncate_float_to_s32(func_001F9878(random_float_between((f32)(*(s32 *)&D_L08_00162024), (f32)(*(s32 *)&D_L08_00162024) * 1.2f)));
-        func_00219780(c, v0, v1, (*(s32 *)&D_L08_00162004), (*(s32 *)&D_L08_00162008), s0, s16, s2, -1);
+        PartType02Spawn(c, v0, v1, (*(s32 *)&D_L08_00162004), (*(s32 *)&D_L08_00162008), s0, s16, s2, -1);
     } else {
         *(s32 *)(v + 0x3C) = *(s32 *)(v + 0x14);
         func_001FA218(e, m + 0x40);
@@ -1032,7 +1032,7 @@ void func_L08_002F6CF0(char *m) {
         s0 = truncate_float_to_s32(func_001F9878(random_float_between((f32)*(s32 *)(v + 0x08), (f32)*(s32 *)(v + 0x08) * 1.2f)));
         s16 = truncate_float_to_s32(func_001F9878(random_float_between((f32)*(s32 *)(v + 0x0C), (f32)*(s32 *)(v + 0x0C) * 1.2f)));
         s2 = truncate_float_to_s32(func_001F9878(random_float_between((f32)*(s32 *)(v + 0x10), (f32)*(s32 *)(v + 0x10) * 1.2f)));
-        func_00219780(c, v0, v1, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), s0, s16, s2, -1);
+        PartType02Spawn(c, v0, v1, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), s0, s16, s2, -1);
     }
 }
 typedef struct {
@@ -1142,7 +1142,7 @@ typedef struct {
 } Paratrooper302618;
 /* Paratrooper: initializes its path and steering, patrols, attacks its target,
  * and handles hit recovery and death. Shared by Batalia and Gaspar. */
-void func_L08_00302618(char *m) {
+void ParatrooperUpdate(char *m) {
     Paratrooper302618 *d = (Paratrooper302618 *)(*(char * *)((char *)(m)+0x78));
     char *path;
     char *target;
@@ -1471,7 +1471,7 @@ extern void func_L00_00260108(void *, void *, int, float, float);
 extern void func_0020D678(void *);
 
 /* Fire bolt: flies along its velocity with a smoke trail (while the level is not underwater), damaging what it hits. */
-void func_L08_00308758(char *m) {
+void FireBoltUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
     float prev[4];
     float sc[4];
@@ -1492,7 +1492,7 @@ void func_L08_00308758(char *m) {
             func_L00_001FF4B0(off, d, -0.1f);
             func_L00_001FF240(tmp, off, m + 0x10);
             a = scale_ticks(rand_range(0xF, 0x14));
-            func_L00_0026A7F8(off, sc, 0x6F00AFFF, 0xFF, a, 0x28, scale_ticks(rand_range(7, 0xA)), 1);
+            PartType04Spawn(off, sc, 0x6F00AFFF, 0xFF, a, 0x28, scale_ticks(rand_range(7, 0xA)), 1);
         }
         FastVecAdd(m + 0x10, m + 0x10, d);
         if (func_L00_001EFFF0(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
@@ -1577,7 +1577,7 @@ extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("fun
 extern void func_L00_00264570_3091B0(void *) __asm__("func_L00_00264570");
 
 /* moby class 1400 update: steers the offset vectors from the mode, fans them out to the object over counted loops */
-void func_L08_003091B0(Moby *m) {
+void Moby1400Update(Moby *m) {
     V_3091B0 pt;
     V_3091B0 dv;
     V_3091B0 base;
@@ -1780,7 +1780,7 @@ extern float func_001F9F90(float);
 extern void func_L08_00273A80(void *, void *, void *, float);
 
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
-void func_L08_00309AB0(char *moby) {
+void Moby1629Update(char *moby) {
     float v[4];
     float pos[4];
     float w[4];
@@ -1825,7 +1825,7 @@ extern int func_L00_0028F210(int, int);
 extern int func_L00_0028F0B0(int a, int b, int c, int d);
 
 /* Wind ambience: probes 20 points around the hero; the more of them are below the camera, the louder the loop. */
-void func_L08_00318468(char *m) {
+void WindAmbienceUpdate(char *m) {
     float p[4];
     float off[4];
     float axis[4];

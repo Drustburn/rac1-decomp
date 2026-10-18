@@ -35,10 +35,10 @@ void func_L03_0022D028(void) {
   a = random_angle_radians();
   b = random_angle_radians();
   size = random_float_between(D_0015EE6C * 0.7f, D_0015EE6C * 2.2f);
-  func_00215C00(direction, size, a, b);
+  BuildSphericalOffset(direction, size, a, b);
   lo = scale_ticks(12);
   hi = scale_ticks(35);
   value = rand_range(lo, hi);
-  func_L00_0026DD70(position, direction, 0x80808080, 0x808080, value, 147000.0f);
+  PartType22Spawn(position, direction, 0x80808080, 0x808080, value, 147000.0f);
  }
 }

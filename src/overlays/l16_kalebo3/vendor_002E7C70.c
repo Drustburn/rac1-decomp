@@ -173,7 +173,7 @@ void func_L16_002E7C70(L16ChallengeMoby *m) {
             unsigned char *flags = (unsigned char *)D_0013D50F + 1;
             if (!flags[0x1A]) {
                 flags[0x1A] = 1;
-                func_0022EE28(1, 0, 0);
+                PlayBankSound(1, 0, 0);
                 ShowBanner(0x53DB, -1);
             }
             if (D_0015EF68_challenge[1] < 4500) D_0015EF68_challenge[1] = player->points;
@@ -237,7 +237,7 @@ void func_L16_002E7C70(L16ChallengeMoby *m) {
             float heading;
             d->target_timer = truncate_float_to_s32(func_001F9878(random_float_between(180.0f, 300.0f)));
             heading = FastAddRots(m->yaw, random_float_between(-90.0f, 90.0f) * 0.017453292f);
-            func_00215C00(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
+            BuildSphericalOffset(d->target, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
             FastVecAdd(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
@@ -289,7 +289,7 @@ void func_L16_002E8538(char *moby) {
     }
     *(float *)&D_L16_0015F718 = 74.0f;
     func_L16_002DF780(76.0f);
-    func_L00_002664B0(2, 6);
+    MusicRequestTrack(2, 6);
 }
 extern void func_L16_002DF780(float);
 
@@ -310,7 +310,7 @@ void func_L16_002E85E0(char *moby)
         p++;
     }
     func_L16_002DF780(100.0f);
-    func_L00_002664B0(0, 8);
+    MusicRequestTrack(0, 8);
 }
 extern char D_0013E633[];
 extern char D_0013D50F[];
@@ -337,7 +337,7 @@ void func_L16_002E8680(char *moby) {
             unsigned char *f = (unsigned char *)D_0013D50F + 0x1;
             if (f[0x19] == 0) {
                 f[0x19] = 1;
-                func_0022EE28(1, 0, 0);
+                PlayBankSound(1, 0, 0);
                 ShowBanner(0x53DB, -1);
             }
         }
@@ -378,7 +378,7 @@ typedef struct {
 } L16WalkerData;
 
 /* Update of a path walker: keeps its sound alive, follows the path behind its owner and jumps ahead while unobserved. */
-void func_L16_002E8B30(unsigned char *m) {
+void PathWalkerUpdate(unsigned char *m) {
     float old[4], rotation[4], trial[4];
     char *path;
     L16WalkerData *d;
@@ -413,11 +413,11 @@ void func_L16_002E8B30(unsigned char *m) {
            instruction. A same-width copy (int) is folded away and does not do it. */
         char blocked = playing;
 
-        func_00215CA8(path, d->parameter, 0, m + 0x10, (float *)(m + 0x40), 0);
+        SamplePathAt(path, d->parameter, 0, m + 0x10, (float *)(m + 0x40), 0);
         acceleration = D_L16_00161F38 * D_0015EE70;
         *(float *)(m + 0x18) += d->height_step;
         d->parameter += d->speed;
-        func_00214D28(&d->speed, d->target_speed, acceleration);
+        ApproachValue(&d->speed, d->target_speed, acceleration);
         gap = other->parameter - d->parameter;
         if (gap < 0.0f) {
             gap += d->period;
@@ -431,8 +431,8 @@ void func_L16_002E8B30(unsigned char *m) {
         }
         if (gap < 1.5f) {
             step = D_0015EE70 * 50.0f;
-            func_00214D28(&d->speed, d->target_speed, step);
-            func_00214D28(&other->speed, other->target_speed, step);
+            ApproachValue(&d->speed, d->target_speed, step);
+            ApproachValue(&other->speed, other->target_speed, step);
         }
         if (m[0x31] == 0 && blocked == 0) {
             if (gap > D_L16_00161F2C + 1.0f) {
@@ -446,7 +446,7 @@ void func_L16_002E8B30(unsigned char *m) {
                 if (next < 0.0f) {
                     next += d->period;
                 }
-                func_00215CA8(path, next, 0, trial, rotation, 1);
+                SamplePathAt(path, next, 0, trial, rotation, 1);
                 trial[2] += height;
                 trial[3] = 2.0f;
                 if (FastBSphereCheck((char *)trial, (float)D_L16_00161F50) == -1) {
@@ -500,7 +500,7 @@ void func_L16_002E8EA8(unsigned char *m, void *v) {
     FastVecAdd(offset, offset, m + 0x10);
     a = random_angle_radians();
     b = random_angle_radians();
-    func_00215C00(velocity, size, a, b);
+    BuildSphericalOffset(velocity, size, a, b);
     FastVecAdd(velocity, velocity, out);
     final_size = *(float *)&D_L16_00161F68;
     final_size *= 210000.0f;
@@ -596,12 +596,12 @@ void func_L16_002E9278(char *moby) {
             func_L00_00250800(p, 4, c);
             FastVecSub(e, a, c);
             func_L00_001FF4B0(e, e, k1);
-            func_L00_00264BE8(a, a, e, k2, k3);
+            SpawnSparkRings(a, a, e, k2, k3);
             func_L00_00250800(p, 7, b);
             func_L00_00250800(p, 5, d);
             FastVecSub(f, b, d);
             func_L00_001FF4B0(f, f, j1);
-            func_L00_00264BE8(b, b, f, j2, j3);
+            SpawnSparkRings(b, b, f, j2, j3);
         }
         }
         break;
@@ -719,11 +719,11 @@ void func_L16_002E93F8(L16PlatformMoby *m) {
             if (func_001F9D48(hero_position, D_L16_001601BC + (d->joint << 7) + 0x30) > 2.25f
                 || FastAbsF(m->position[2] - hero_position[2] - 2.0f) > 1.0f
                 || m->position[2] < d->goal) {
-                speed = func_00214D88(&m->position[2], &d->speed, d->goal,
+                speed = ApproachWithVelocity(&m->position[2], &d->speed, d->goal,
                                       D_L16_00161F7C * D_0015EE70, D_L16_00161F7C * D_0015EE70,
                                       *(float *)&D_L16_00161F78 * D_0015EE6C);
             } else {
-                speed = func_00214D88(&m->position[2], &d->speed, m->position[2],
+                speed = ApproachWithVelocity(&m->position[2], &d->speed, m->position[2],
                                       D_L16_00161F7C * 4.0f * D_0015EE70, D_L16_00161F7C * 4.0f * D_0015EE70,
                                       *(float *)&D_L16_00161F78 * D_0015EE6C);
             }
@@ -744,7 +744,7 @@ void func_L16_002E93F8(L16PlatformMoby *m) {
                 break;
             }
             if (d->speed != 0.0f) {
-                AddDrawCallback(func_L16_002E9960, m);
+                AddDrawCallback(DrawRingStack, m);
             }
             break;
         }
@@ -772,7 +772,7 @@ typedef struct {
 } L16RingPacket;
 typedef struct { L16RingVector basis[3]; L16RingVector position; } L16RingMatrix;
 /* Draw stacked alternating rings with a rotating transformation and interpolated tint. */
-void func_L16_002E9960(char *m) {
+void DrawRingStack(char *m) {
     L16RingPacket packet;
     L16RingMatrix matrix;
     char *d=*(char **)(m+0x78);
@@ -1086,7 +1086,7 @@ extern L16SingleSphere D_L16_00162040_bounds[] __asm__("D_L16_00162040") MACRO_A
 extern void func_L16_002EA6E8(void);
 
 /* Compute bounding spheres for one mesh and register their renderer. */
-void func_L16_002EA828(unsigned char *m) {
+void RegisterMeshSpheres(unsigned char *m) {
     int i, j;
     float maxx, maxy, maxz, minx, miny, minz;
     float p[4];

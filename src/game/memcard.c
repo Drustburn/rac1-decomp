@@ -125,7 +125,7 @@ extern void func_00116B00(void *, void *, int);
 /* Builds a 13-byte name/version stamp in D_0013D2D0 from the record's
    region byte (arg0[0x12]) and the record's date/version fields, then
    copies that stamp into the six on-disk name buffers. */
-void func_00209A60(void *arg0) {
+void MemCard_BuildNameStamp(void *arg0) {
     unsigned char *a = (unsigned char *)arg0;
     unsigned char region = a[0x12];
     int i;
@@ -162,7 +162,7 @@ extern int D_0013D390_i[] __asm__("D_0013D390");
 /* The comparison is bound to a local before the shift:
    `(a < b) << 1` folds into `a < b ? 2 : 0` (li/slt/movn), not retail's
    slti/sll. */
-int func_00209BB8(void) {
+int MemCard_CheckFreeSpace(void) {
     int type, free, format, cmd, result;
 
     result = func_00124068(D_0013D390_i[0], D_0013D390_i[1], &type, &free, &format);
@@ -245,7 +245,7 @@ void func_00209DC0(void) {
     int s2;
 
     func_001FDF10(D_00137C80[5] << 11, &a, &b);
-    func_00217748(1);
+    UpdateAudioStreamUntilIdle(1);
     func_002176C8_i(a, D_00137C80[4], D_00137C80[5]);
     s2 = D_0015EEF0;
     s1 = D_0015EEEC;
@@ -358,7 +358,7 @@ extern s32 mc_call_00123D48(s32 fd, void *buf, s32 size) __asm__("func_00123D48"
 extern s32 mc_call_00116248(char *str, const char *format, ...) __asm__("func_00116248");
 extern char *mc_call_001166FC(char *, const char *) __asm__("func_001166FC");
 
-void func_00209E68(void) {
+void MemCard_UpdateState(void) {
     union {
         char name[0x40];
         struct {
@@ -1708,7 +1708,7 @@ int memcard_Save(int slot, int flags) {
     func_00121A80(D_0015EF98);
     func_0012D818(D_0015EF98);
     func_00208FA0();
-    func_00208338(D_00141FC0 + (D_0015EE84_m << 11));
+    Menu_ReadSector(D_00141FC0 + (D_0015EE84_m << 11));
     {
         char *p = D_0013D390;
         int active = *(int *)(p + 0xC8);

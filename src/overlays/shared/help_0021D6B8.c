@@ -145,8 +145,8 @@ void func_L06_0021E7B8(void) {
     func_L00_00211D28();
     func_L06_00223630();
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 1) {
-        func_L00_0020C568();
-        func_L00_002162B8();
+        HeroLedgeProbe();
+        CameraLeanFromPad();
     }
     func_L06_0023BBE8();
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 0) return;
@@ -155,7 +155,7 @@ void func_L06_0021E7B8(void) {
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 0) return;
     func_L00_00209088();
     func_L00_00208260();
-    func_L00_00208070();
+    CameraShakeUpdate();
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 1) {
         D_L06_0017C0DC = D_0015EEF0[10];
         func_L00_00205FF0();
@@ -178,9 +178,9 @@ void func_L06_0021E7B8(void) {
         if ((*(unsigned short *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x34) ^ 1) & 1) {
             func_L00_00250800(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 7, buf);
             qcopy(((GS_E7B8 *)(D_0013E633 + 0xE1D))->a1D80, buf);
-            func_L00_00208318();
+            QueueHeroDraw();
             if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 != 0) {
-                func_0020DAF8(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 7, &buf[4]);
+                MobyTransformScaledVertex(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 7, &buf[4]);
                 qcopy_nc(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x10, &buf[16]);
                 func_001FA480(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0xC0, &buf[4]);
                 *(u128_E7B8 *)off = 0;
@@ -191,7 +191,7 @@ void func_L06_0021E7B8(void) {
                 k = 1.7f;
                 if (gCheats[3] != 0) k = 3.1f;
                 if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22FC != 0) k *= 1.4f;
-                func_00214D28((float *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x2C), *(float *)(*(char **)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x24) + 0x24) * k, 0.02f);
+                ApproachValue((float *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x2C), *(float *)(*(char **)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 + 0x24) + 0x24) * k, 0.02f);
             }
         }
         ca = 0x281414C8;
@@ -238,7 +238,7 @@ void func_L06_0021E7B8(void) {
             }
         }
         if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 != 0) {
-            func_0020DAF8(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 5, buf);
+            MobyTransformScaledVertex(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 5, buf);
             qcopy_nc(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 + 0x10, &buf[12]);
             func_L00_00251E30((struct Moby *)((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620);
             clear_u64_value(&buf[16]);
@@ -249,10 +249,10 @@ void func_L06_0021E7B8(void) {
             *(long *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620 + 0x38) = *(long *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x38);
             if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->i2084 == 0x4F) {
                 if (((unsigned char *)((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620)[0x53] != 1) {
-                    func_00213DE0(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 1, 0, scale_ticks(10));
+                    MobyBlendAnimation(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 1, 0, scale_ticks(10));
                 }
             } else if (((unsigned char *)((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620)[0x53] != 0) {
-                func_00213DE0(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 0, 0, scale_ticks(0x11));
+                MobyBlendAnimation(((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1620, 0, 0, scale_ticks(0x11));
             }
         }
 skip:
@@ -308,7 +308,7 @@ skip:
             c20 = truncate_float_to_s32(f20 * (float)c20);
         }
         ((GS_E7B8 *)(D_0013E633 + 0xE1D))->c22E4 = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
-        func_L00_00208318();
+        QueueHeroDraw();
         ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22E0 = 0;
         if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 3) {
             v2 = ((GS_E7B8 *)(D_0013E633 + 0xE1D))->i20B8;
@@ -371,7 +371,7 @@ void func_L06_00228390(void) {
         DeleteMoby(*(void **)(g2 + 0xA8C));
         *(void **)(g2 + 0xA8C) = 0;
     }
-    func_L00_00207220();
+    HeroClearSoundSlots();
     {
         unsigned char *o = *(unsigned char **)(g2 + 0xA88);
         *(unsigned char **)(g2 + 0x2080) = o;
@@ -414,7 +414,7 @@ void func_L06_00229868(int arg) {
     int s;
     float f;
     if (*(short *)(p + 0x308) != 0) return;
-    if (func_L00_00234250((float *)(p + 0xE0)) < D_0015EE6C * 0.1f) return;
+    if (ViewXyLength((float *)(p + 0xE0)) < D_0015EE6C * 0.1f) return;
     sa = 0.37f;
     sb = 0.5f;
     if ((unsigned)(*(int *)(p + 0x208C) - 0x11) < 2) {
@@ -692,7 +692,7 @@ void func_L06_00235038(void) {
         D_0013F450_35038.health.hp != 0 && (*(s32 *)&D_L06_0015F6A8_35038) == 0) {
         if (D_0013F450_35038.vehicle_mode == 3) {
             func_L06_00228390();
-            if (func_L00_00267BA8(0x80, scale_ticks(0x12), 0)) {
+            if (PadPressedWithin(0x80, scale_ticks(0x12), 0)) {
                 D_0013F450_35038.unk20A6 = 1;
             }
         } else {
@@ -737,11 +737,11 @@ void func_L06_00235038(void) {
 skip:
     func_L00_002222F0();
     if (D_0013F450_35038.vehicle_mode == 1) {
-        func_L00_00233EE0(&D_0013F450_35038.motion.unkD0, 0.0f, 0.0f, 0.4f);
+        LocalToWorldPoint(&D_0013F450_35038.motion.unkD0, 0.0f, 0.0f, 0.4f);
         D_0013F450_35038.reach_distance = 2.125f;
         D_0013F450_35038.reach_height = 1.25f;
     } else {
-        func_L00_00233EE0(&D_0013F450_35038.motion.unkD0, 0.0f, 0.0f, 0.7f);
+        LocalToWorldPoint(&D_0013F450_35038.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D5EA) {
             D_0013F450_35038.reach_distance = 12.0f;
             D_0013F450_35038.reach_height = 4.5f;
@@ -811,7 +811,7 @@ f32 func_L06_002431A0(f32 a, f32 b, f32 c) {
             func_L00_0025E290(&v, t);
             qcopy(&v, &(&D_0013F450_431A0)->v80);
             if (func_L00_001EFFF0(&v, t, 0xd24, 0, 0) != 0) {
-                if (func_L00_002345B0((f32 *)D_L06_00174700) <= 0.87266463f) {
+                if (ViewGetPitch((f32 *)D_L06_00174700) <= 0.87266463f) {
                     c = *(f32 *)(D_L06_00174700 - 0x18);
                 }
             }

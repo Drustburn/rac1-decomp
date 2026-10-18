@@ -91,7 +91,7 @@ extern int D_L00_00173F40[];
 extern float D_0015EE70 MACRO_ADDR;
 
 /* Drops a moby onto the ground or a riding platform: follows the platform if there is one, else falls under gravity. */
-void func_L00_002D9668(D9668Moby *m) {
+void DropMobyToGround(D9668Moby *m) {
     D9668Rec *d = m->rec;
     Vt P;
     Vt Q;
@@ -381,7 +381,7 @@ extern float func_001FA888_2D9EA0(int) __asm__("func_001FA888");
 extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__("func_L00_00258E58");
 
 /* Nanotech ball update: spawns, homes in on its target, hits or fizzles; kills itself when its owner goes. */
-void func_L00_002D9EA0(Moby *m) {
+void NanotechBallUpdate(Moby *m) {
     V_2D9EA0 v0, v10, v20, v30, v40, v50, v60;
     D_2D9EA0 *d = (D_2D9EA0 *)m->pvars;
 
@@ -725,7 +725,7 @@ int func_L00_002DB508(u8 *p, void *q, void *m_, void *r_, void *buf) {
             if (D_0013E629_2db508 == 0 ? n < 5 : n < 10) {
                 x = *(char **)(r + 0x70);
                 if (((unsigned char *)m)[0x53] != (unsigned char)x[3]) {
-                    func_00213DE0(m, (unsigned char)x[3], 0, scale_ticks(10));
+                    MobyBlendAnimation(m, (unsigned char)x[3], 0, scale_ticks(10));
                 }
                 *(short *)(r + 0x68) = 3;
                 *(int *)(r + 0x6C) = 0;
@@ -1032,7 +1032,7 @@ extern void func_L00_002DB480(char *,char *,void *);
 
 /* Update the Suck Cannon's suction, aiming and firing state, stored mobys,
    target selection, usage statistics and cancellation input. */
-void func_L00_002DBC40(M40 *self) {
+void SuckCannonUpdate(M40 *self) {
     Work40 work;
     Suck40 *data;
     Stats40 *stats;
@@ -1040,7 +1040,7 @@ void func_L00_002DBC40(M40 *self) {
     M40 *stored;
 
     queue_animation_update(4, 0x753F, (int)delete_callback40, (int)func_L00_00238148,
-                 (int)func_L00_002381D0, (int)&hero40.count, 5);
+                 (int)Hud_DrawGaugeFrame, (int)&hero40.count, 5);
     data = self->data;
     special = hero40.weapon_mode == 3;
     if ((u8)self->state != 3 && (u8)self->state != 0) func_L00_002E0490((int)self);
@@ -1056,7 +1056,7 @@ void func_L00_002DBC40(M40 *self) {
         hero40.firing = 0;
         if (hero40.count > 0) {
             data->blocked = 1;
-            func_00213DE0(self, 6, 0, scale_ticks(4));
+            MobyBlendAnimation(self, 6, 0, scale_ticks(4));
             self->state = 4;
         } else {
             data->cooldown = 0;
@@ -1065,11 +1065,11 @@ void func_L00_002DBC40(M40 *self) {
         reset_suck40(self);
         break;
     case 1:
-        if (self->anim_flags & 2) func_00213DE0(self,1,0,scale_ticks(0));
+        if (self->anim_flags & 2) MobyBlendAnimation(self,1,0,scale_ticks(0));
         func_001F9908_r(&data->cooldown);
         if (data->cooldown == 0) func_L00_0020ED30();
         if (hero40.count > 0) {
-            func_00213DE0(self,6,0,scale_ticks(4));
+            MobyBlendAnimation(self,6,0,scale_ticks(4));
             self->state = 4;
             break;
         }
@@ -1087,7 +1087,7 @@ void func_L00_002DBC40(M40 *self) {
         }
         break;
     case 2:
-        if (self->anim_flags & 2) func_00213DE0(self,3,0,scale_ticks(5));
+        if (self->anim_flags & 2) MobyBlendAnimation(self,3,0,scale_ticks(5));
         if (func_L00_002DB428()!=0 || hero40.disabled || hero40.locked) {
             sound = data->sound;
             if (sound!=-1) {
@@ -1098,12 +1098,12 @@ void func_L00_002DBC40(M40 *self) {
             func_L00_0020ED30();
             hero40.firing=0;
             if (hero40.count>0) {
-                func_00213DE0(self,6,0,scale_ticks(4));
+                MobyBlendAnimation(self,6,0,scale_ticks(4));
                 next_state=4;
                 goto changed;
             } else {
                 data->cooldown=0;
-                func_00213DE0(self,1,0,scale_ticks(4));
+                MobyBlendAnimation(self,1,0,scale_ticks(4));
                 next_state=1;
                 goto changed;
             }
@@ -1115,7 +1115,7 @@ void func_L00_002DBC40(M40 *self) {
         break;
     case 3:
         if (self->anim_state!=3 && (self->anim_state!=0 || (self->anim_flags&2)))
-            func_00213DE0(self,3,0,scale_ticks(5));
+            MobyBlendAnimation(self,3,0,scale_ticks(5));
         func_001F9908_r(&data->cooldown);
         if (!(hero40.sucking || (hero40.count < (order40.gold==0?5:10) &&
             func_L00_002DB428()==0 && ((input40.held&hero40.fire_mask) || data->cooldown) &&
@@ -1130,19 +1130,19 @@ void func_L00_002DBC40(M40 *self) {
             func_L00_002E04F8((int)self);
             hero40.firing=0;
             if(hero40.count>0) {
-                func_00213DE0(self,6,0,scale_ticks(4));
+                MobyBlendAnimation(self,6,0,scale_ticks(4));
                 data->cooldown=0;
                 data->blocked=1;
                 self->state=4;
                 goto done;
             } else {
                 data->cooldown=0;
-                func_00213DE0(self,1,0,scale_ticks(4));
+                MobyBlendAnimation(self,1,0,scale_ticks(4));
                 self->state=1;
                 goto done;
             }
         } else {
-            if (self->anim_flags&2) func_00213DE0(self,3,0,scale_ticks(2));
+            if (self->anim_flags&2) MobyBlendAnimation(self,3,0,scale_ticks(2));
             func_L00_002DB810((u8 *)self,data);
         }
         break;
@@ -1150,13 +1150,13 @@ void func_L00_002DBC40(M40 *self) {
         func_001F9908_r(&data->cooldown);
         if (!data->cooldown) func_L00_0020ED30();
         if (self->anim_flags&2) {
-            func_00213DE0(self,6,0,scale_ticks(0));
+            MobyBlendAnimation(self,6,0,scale_ticks(0));
             func_L00_0020ED30();
         }
         if (!(input40.held&hero40.fire_mask)) data->blocked=0;
         if (func_001F9908_r(&data->target_timer) ||
             (data->target && ((u8)data->target->state&0x80))) data->target=0;
-        if (hero40.camera_mode==1) func_L00_00222B80(30,1);
+        if (hero40.camera_mode==1) HeroEnterMoveState(30,1);
         if (hero40.camera_mode==30 && (hero40.moby->flags&1) && !hero40.disabled) {
             char *camera=D_L00_00166D80;
             V40 *eye;
@@ -1194,7 +1194,7 @@ void func_L00_002DBC40(M40 *self) {
             hero40.move_mode!=18 && hero40.move_mode!=17 && !hero40.disabled && !hero40.locked &&
             scale_ticks(22)<hero40.cooldown) {
             func_L00_0020EB60();
-            func_00213DE0(self,5,0,scale_ticks(2));
+            MobyBlendAnimation(self,5,0,scale_ticks(2));
             hero40.firing=2;
             data->cooldown=scale_ticks(25);
             stats=(Stats40 *)(D_0014171B+0x65);
@@ -1209,7 +1209,7 @@ void func_L00_002DBC40(M40 *self) {
         break;
     case 5:
         stored=0;
-        if (!(0.0f <= func_0020D830(self))) break;
+        if (!(0.0f <= MobyGetFrameValue(self))) break;
         for(i=0; i<(order40.gold==0?5:10);i++) {
             if(hero40.stored[i]) {
                 stored=hero40.stored[i];
@@ -1272,7 +1272,7 @@ void func_L00_002DBC40(M40 *self) {
                             }
                             if(!(limit<distance)) {
                                 float delta;
-                                func_00215C00(&work.fire.tmp,distance,yaw,pitch);
+                                BuildSphericalOffset(&work.fire.tmp,distance,yaw,pitch);
                                 FastVecAdd(&work.fire.tmp,&work.fire.tmp,&work.fire.launch);
                                 delta=FastVecDist(&work.fire.tmp,&work.fire.point);
                                 offangle=1.5707964f-FastArcSin(1.0f-delta*delta/((distance+distance)*distance));
@@ -1368,7 +1368,7 @@ s32 func_L00_002DCDA8(u8 *moby, u8 *position, u8 *target) {
             {
                 u8 *seq = *(u8 **)(record + 0x70);
                 if (moby[0x53] != seq[2]) {
-                    func_00213DE0(moby, seq[2], 0, scale_ticks(10));
+                    MobyBlendAnimation(moby, seq[2], 0, scale_ticks(10));
                 }
             }
             *(s32 *)(record + 0x6C) = 0;
@@ -1378,7 +1378,7 @@ s32 func_L00_002DCDA8(u8 *moby, u8 *position, u8 *target) {
         {
             u8 *seq = *(u8 **)(record + 0x70);
             if (moby[0x53] != seq[1]) {
-                func_00213DE0(moby, seq[1], 0, scale_ticks(10));
+                MobyBlendAnimation(moby, seq[1], 0, scale_ticks(10));
             }
         }
         return 1;
@@ -1396,7 +1396,7 @@ s32 func_L00_002DCDA8(u8 *moby, u8 *position, u8 *target) {
         {
             u8 *seq = *(u8 **)(record + 0x70);
             if (moby[0x53] != seq[3]) {
-                func_00213DE0(moby, seq[3], 0, scale_ticks(10));
+                MobyBlendAnimation(moby, seq[3], 0, scale_ticks(10));
             }
         }
         *(s16 *)(record + 0x68) = 3;
@@ -1408,7 +1408,7 @@ s32 func_L00_002DCDA8(u8 *moby, u8 *position, u8 *target) {
         {
             u8 *seq = *(u8 **)(record + 0x70);
             if (moby[0x53] != seq[1]) {
-                func_00213DE0(moby, seq[1], 0, scale_ticks(10));
+                MobyBlendAnimation(moby, seq[1], 0, scale_ticks(10));
             }
         }
         *(s32 *)(record + 0x6C) = 0;
@@ -1445,7 +1445,7 @@ int func_L00_002DCFD0(unsigned char *m, void *v) {
         *(short *)(o + 0x68) = 4;
         if (m[0x53] != *(unsigned char *)(*(unsigned char **)(o + 0x70) + 4)) {
             unsigned char c = *(unsigned char *)(*(unsigned char **)(o + 0x70) + 4);
-            func_00213DE0(m, c, 0, scale_ticks(10));
+            MobyBlendAnimation(m, c, 0, scale_ticks(10));
         }
         *(int *)(m + 0x2C) = 0;
         return 1;
@@ -1475,13 +1475,13 @@ int func_L00_002DD0E0(char *m, float *pos, char *other, float f) {
         r = *(unsigned char **)(d + 0x70);
         if (pos[3] == 1.23456f) {
             if ((unsigned char)m[0x53] != r[6]) {
-                func_00213DE0(m, r[6], 0, scale_ticks(0x14));
+                MobyBlendAnimation(m, r[6], 0, scale_ticks(0x14));
             }
             *(int *)(m + 0x98) = *(int *)(d + 0x88);
             *(short *)(d + 0x68) = 6;
         } else {
             if ((unsigned char)m[0x53] != r[5]) {
-                func_00213DE0(m, r[5], 0, scale_ticks(0));
+                MobyBlendAnimation(m, r[5], 0, scale_ticks(0));
             }
             *(short *)(d + 0x68) = 5;
         }
@@ -1529,7 +1529,7 @@ int func_L00_002DD2D0(char *m) {
     case 2: {
         if (*(unsigned char *)(m + 0x53) != *(unsigned char *)(*(char **)(s + 0x70) + 7)) {
             unsigned char c = *(unsigned char *)(*(char **)(s + 0x70) + 7);
-            func_00213DE0(m, c, 0, scale_ticks(10));
+            MobyBlendAnimation(m, c, 0, scale_ticks(10));
         }
         *(short *)(s + 0x68) = 7;
         return 0;
@@ -1569,7 +1569,7 @@ extern int func_L00_001F2BE8_DD3D8(float, void *, int, void *, void *) __asm__("
 extern void func_L00_0025BA50(void *, void *, void *, int, int, int, int, int, float, float, float);
 
 /* Explosion burst for a moby: debris sprays, sparks, coloured flashes, camera shake and an optional damage area. */
-void func_L00_002DD3D8(char *self, char *q) {
+void SpawnExplosionBurst(char *self, char *q) {
     B50_DD3D8 blk;
     float a[4];
     float b[4];
@@ -1667,7 +1667,7 @@ void func_L00_002DD3D8(char *self, char *q) {
             big = f22 * 400000.0f;
             r1 = rand_range(scale_ticks(15), scale_ticks(20));
             r2 = rand_range(scale_ticks(25), scale_ticks(30));
-            func_L00_0026B890(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
+            PartType11Spawn(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
         } while (--cnt);
     }
     if (f23 > 9.0f) {
@@ -1709,7 +1709,7 @@ void func_L00_002DD3D8(char *self, char *q) {
     if ((&D_0013E620)->b9) {
         k = func_L00_001F2BE8_DD3D8(3.0f, self + 0x10, 0x10, self, 0);
         *(u128_DD3D8 *)e = *(u128_DD3D8 *)(self + 0x10);
-        func_L00_0025BA50(self, e, D_L00_00178000, k, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
+        SendRadialMessageToMobys(self, e, D_L00_00178000, k, 0, 0x830000, 2, 1, 2.0f, 1.0f, 1.0f);
     }
 }
 typedef struct { int v[16]; } __attribute__((aligned(16))) Mtx2DDDE8;
@@ -1720,7 +1720,7 @@ extern void func_L00_002DD3D8(char *, char *);
 void func_L00_002DDDE8(char *p, char *q, int flag) {
     Mtx2DDDE8 m;
     void (*fn)(char *);
-    if (flag) func_L00_002DD3D8(p, q);
+    if (flag) SpawnExplosionBurst(p, q);
     *(int *)(p + 0x98) = *(int *)(q + 0x84);
     qzero(p + 0x40);
     func_001FA218(&m, p + 0x40);
@@ -2334,7 +2334,7 @@ extern void func_L00_002A84B0(void *, int, float, float);
 extern void func_L00_002C6F48(void *);
 
 /* Scatter a moby away from nearby positions in the hazard table. */
-void func_L00_002E0690(char *m) {
+void ScatterMobyFromHazards(char *m) {
     char *base;
     char *pos;
     int i;
@@ -2560,7 +2560,7 @@ extern int func_001F9908_2E0E50(void *) __asm__("func_001F9908");
 /* Hydrodisplacer pad: while the hero holds the hydrodisplacer it tunes his water physics; the pad waits for the
    hero to stand on it with the gadget, then drains or fills the water level (D_L00_0015F4FC) with a camera move
    between the pad's two path nodes. */
-void func_L00_002E0E50(Moby *m) {
+void HydrodisplacerPadUpdate(Moby *m) {
     Vec_2E0E50 v0, v10;
     Data_2E0E50 *d = (void *)m->pvars;
 

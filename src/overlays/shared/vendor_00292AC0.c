@@ -13,7 +13,7 @@ extern char D_L03_001CB180[];
 
 void func_L03_00292AC0(char *moby)
 {
-    func_L02_002A52D0(moby);
+    DrawMobyVu1Packet(moby);
     func_L02_002100E8(D_L03_001CB180, 0x70002800, 0xF8);
     func_L02_00250720(moby);
     func_L02_00250A58(moby);
@@ -93,7 +93,7 @@ extern float *func_L00_0025D390_p(void *) __asm__("func_L00_0025D390");
 /* Spawns a child from m's pool of 18 linked mobys: revives the first dead one (of class cls, or any if
  * -1) at `at`, splitting m's health with it, and counts m's living children. Prints a warning if no
  * free child was found. */
-char *func_L03_002C0028(char *m, float *at, int cls) {
+char *SpawnLinkedChild(char *m, float *at, int cls) {
     float pos[4];
     float *pp;
     char *d;
@@ -139,7 +139,7 @@ char *func_L03_002C0028(char *m, float *at, int cls) {
         ((unsigned char *)o)[0x72] = 0xFF;
         ((unsigned char *)o)[0xA4] = 0xFF;
         if (d[0x83] & 2) *(float *)(o + 0x2C) = *(float *)(*(char **)(o + 0x24) + 0x24) * 0.1f;
-        func_00213D28(o, 0, 0);
+        MobySetAnimation(o, 0, 0);
         {
             char *t = func_L00_002DCD40(o);
             if (t != 0) {
@@ -250,7 +250,7 @@ extern float D_L03_0015F660[] MACRO_ADDR;
 extern float D_0015EE70 MACRO_ADDR;
 
 /* Update of moby class 455 (spawner): counts its living children, takes hits, runs its state machine and spawns class 0x221 children at a point picked by its mode. */
-void func_L03_002C0330(Moby *moby) {
+void ChildSpawnerUpdate(Moby *moby) {
     int used[4];
     Vec4A v30;
     Vec4A v40;
@@ -571,7 +571,7 @@ void func_L03_002C0330(Moby *moby) {
             }
         }
     }
-    func_L00_0025E590(moby, d->f60);
+    StepColorFade(moby, d->f60);
 }
 extern char *func_0020D348_m_2C59A0(int) __asm__("func_0020D348");
 extern int func_001F9850(int);
@@ -741,7 +741,7 @@ void func_L03_002C5AE0(char *moby)
         *(int *)(moby + 0x1C) = 0;
         *(float *)(moby + 0x18) = f0 + 0.2f;
         *(VecQuad *)t = *(VecQuad *)(moby + 0x10);
-        *(int *)(d + 0x18) = (int)func_L03_002C0028(*(char **)(d + 0x10), t, -1);
+        *(int *)(d + 0x18) = (int)SpawnLinkedChild(*(char **)(d + 0x10), t, -1);
         ((unsigned char *)moby)[0x20] = 2;
     break;
     }
@@ -767,7 +767,7 @@ void func_L03_002C5AE0(char *moby)
             }
     }
     }
-    func_L00_0025B040((unsigned char *)moby, *(float *)(moby + 0x2C) * 0.3f / *(float *)(*(char **)(moby + 0x24) + 0x24));
+    RecordMobyShadow((unsigned char *)moby, *(float *)(moby + 0x2C) * 0.3f / *(float *)(*(char **)(moby + 0x24) + 0x24));
     if (*(float *)(moby + 0x18) < 5.0f || 500.0f < *(float *)(moby + 0x18)) {
         DeleteMoby(moby);
         return;
@@ -890,7 +890,7 @@ extern void func_L00_00251E30_2CDDC8(void *) __asm__("func_L00_00251E30");
 
 /* Updates the gunship (helicopter) moby: activation path (1), patrol route with gun aiming and shots (2),
    exit path or climb-out (3), a short reaction after a route change (4) and destruction (5). */
-void func_L03_002CDDC8(HMob49_2CDDC8 *m) {
+void HelicopterGunshipUpdate(HMob49_2CDDC8 *m) {
     HData49_2CDDC8 *d=m->data;
     HWork49_2CDDC8 w;
     float target_range=40.0f;
@@ -1212,7 +1212,7 @@ void func_L03_002CF600(char *m) {
         }
     }
     *(unsigned char *)(m + 0xA4) = 0xFF;
-    func_L00_0025E590(m, d + 0x60);
+    StepColorFade(m, d + 0x60);
 }
 extern float D_L03_0015F660[] MACRO_ADDR;
 extern void func_L01_00279790(void *);
@@ -1395,10 +1395,10 @@ void func_L03_002D5B88(Moby *moby) {
                     func_L00_001FF4B0(&vF0, &vF0, FastVecLength(&vB0) * 0.65f);
                     FastVecAdd(&vF0, &vB0, &vF0);
                     func_L00_001FF4B0(&vF0, &vF0, random_float_between(D_0015EE6C * 5.0f, D_0015EE6C * 15.0f));
-                    func_L00_0026EBC0(&vA0, &vF0, 0x5F2F4F6F, rand_range(scale_ticks(5), scale_ticks(10)), 50000.0f);
+                    PartType27Spawn(&vA0, &vF0, 0x5F2F4F6F, rand_range(scale_ticks(5), scale_ticks(10)), 50000.0f);
                 }
                 func_L00_001FF4B0(&vB0, &vB0, D_0015EE6C * 0.5f);
-                func_L00_0026EBC0(&vA0, &vB0, 0x2F4F7F7F, rand_range(scale_ticks(4), scale_ticks(7)), 400000.0f);
+                PartType27Spawn(&vA0, &vB0, 0x2F4F7F7F, rand_range(scale_ticks(4), scale_ticks(7)), 400000.0f);
                 FastVecScale(&v100, d, func_001F9878(6.0f));
                 FastVecAdd(&v100, &v100, &moby->pos);
                 FastVecSub(&v100, &v100, &vD0);
@@ -1422,7 +1422,7 @@ void func_L03_002D5B88(Moby *moby) {
                         func_L00_001FF4B0(&vF0, &vF0, FastVecLength(&v100) * 0.5f);
                         FastVecAdd(&v100, &v100, &vF0);
                         func_L00_001FF4B0(&v100, &v100, random_float_between(D_0015EE6C * 3.0f, D_0015EE6C * 6.0f));
-                        func_L00_0026EBC0(&vA0, &v100, 0x7F2F4F6F, rand_range(scale_ticks(0xF), scale_ticks(0x14)), 30000.0f);
+                        PartType27Spawn(&vA0, &v100, 0x7F2F4F6F, rand_range(scale_ticks(0xF), scale_ticks(0x14)), 30000.0f);
                     }
                     func_L00_001FF4B0(&vB0, &vB0, -1.0f);
                     FastVecAdd(&vC0, &vA0, &vB0);
@@ -1465,7 +1465,7 @@ void func_L03_002D5B88(Moby *moby) {
 extern struct Moby *func_0020D348_m(int) __asm__("func_0020D348");
 
 /* Spawns a class 0x350 moby and fills its data block from a position, vector and parameters. */
-char *func_L03_002D65D0(char *a, char *pos, int c, int d, float f)
+char *SpawnHomingSpark(char *a, char *pos, int c, int d, float f)
 {
     char *m = (char *)func_0020D348_m(0x350);
     char *data;
@@ -1542,7 +1542,7 @@ extern float D_0015EE64 MACRO_ADDR;
 extern Moby *D_L03_00160058_2DD840 __asm__("D_L03_00160058") MACRO_ADDR;
 
 /* Qwark watch update: aims at the player, turns the target and sets the body and head poses. */
-void func_L03_002DD840(char *m)
+void QwarkWatchUpdate(char *m)
 {
     char *d;
     char *p;
@@ -1610,7 +1610,7 @@ void func_L03_002DD840(char *m)
             float heading;
             *(int *)(d + 0x11C) = func_001FA898_r(func_001F9878(random_float_between(180.0f, 300.0f)));
             heading = FastAddRots(*(float *)(m + 0x48), random_float_between(-90.0f, 90.0f) * 0.017453292f);
-            func_00215C00(d + 0x100, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
+            BuildSphericalOffset(d + 0x100, 6.0f, heading, random_float_between(0.0f, 30.0f) * 0.017453292f);
             FastVecAdd(d + 0x100, d + 0x100, m + 0x10);
         }
         if (*(int *)(d + 0x118) != 0) {
@@ -1704,7 +1704,7 @@ extern int func_001F9908(int *arg0);
 extern void func_0020D678(void *);
 
 /* Falling moby: applies gravity, eases its angles toward the target and fades out until its timer ends. */
-void func_L03_002DF738(char *moby) {
+void FallingMobyUpdate(char *moby) {
     float v[4];
     char *d = *(char **)(moby + 0x78);
     *(float *)(d + 8) = *(float *)(d + 8) - D_0015EE70 * 9.8f;

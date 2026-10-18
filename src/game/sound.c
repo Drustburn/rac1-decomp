@@ -258,7 +258,7 @@ extern int func_001EFE10_a(void *, void *, int, int, int) __asm__("func_001EFE10
    frame at D_00187180, and if the emitter accepts it, re-derive it from
    D_00194220, damp to 3/4 and fold the frame in again. */
 void func_0022D8C0(void *arg0) {
-    func_002141A8(arg0, 0.5f, 6.0f);
+    RandomSphericalOffset(arg0, 0.5f, 6.0f);
     func_001F9BD8_a(arg0, arg0, D_00187180_a);
     if (func_001EFE10_a(D_00187180_a, arg0, 0x82, D_0013E6BC, 0) != 0) {
         func_001F9BF0_a(arg0, D_00194220, D_00187180_a);
@@ -397,7 +397,7 @@ void func_0022DBE8(void) {
     ((SndState_2DBE8 *)D_0013E650)->vol[3] = (v * 7) / 10;
     ((SndState_2DBE8 *)D_0013E650)->vol[4] = (v * 7) / 10;
     ((SndState_2DBE8 *)D_0013E650)->vol[5] = v;
-    func_002161E0();
+    Music_Reset();
     func_0012E348(0, ((SndState_2DBE8 *)D_0013E650)->vol[0]);
     func_0012E348(1, ((SndState_2DBE8 *)D_0013E650)->vol[1]);
     func_0012E348(2, ((SndState_2DBE8 *)D_0013E650)->vol[2]);
@@ -671,7 +671,7 @@ int func_0022ED80(int idx, int arg1, int arg2) {
 
 extern char *D_0015F714 MACRO_ADDR;
 
-int func_0022EE28(int idx, int arg1, int arg2) {
+int PlayBankSound(int idx, int arg1, int arg2) {
     int h;
 
     if (idx >= D_0015F694) {
@@ -688,7 +688,7 @@ int func_0022EE28(int idx, int arg1, int arg2) {
 
 extern int D_0015F710 MACRO_ADDR;
 
-int func_0022EEB8(int rel, int arg1, int arg2) {
+int PlayGroupSound(int rel, int arg1, int arg2) {
     int idx = rel + D_0015F694;
     int h;
 
@@ -719,7 +719,7 @@ static inline char *SndSys(void) {
  * `i * 0x90 + (int)table` (not an offset variable) gives the
  * offset-first addu.
  */
-void func_0022EF68(void) {
+void SoundRunEntryCallbacks(void) {
     int i;
     for (i = 0; i < *(int *)(SndSys() + 0xD90); i++) {
         char *e = (char *)(i * 0x90 + *(int *)(SndSys() + 0xD94));

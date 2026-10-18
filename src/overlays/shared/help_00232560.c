@@ -27,13 +27,13 @@ void func_L00_00232560(void) {
     if (*(unsigned char *)(a + 0x53) != 1) {
         return;
     }
-    if (func_L00_00232850(0, &buf[0], &buf[1]) == 0) {
+    if (HeroPickRandomSequence(0, &buf[0], &buf[1]) == 0) {
         return;
     }
     seq = buf[0];
-    func_00213DE0(a, seq, 0, scale_ticks(7));
+    MobyBlendAnimation(a, seq, 0, scale_ticks(7));
     seq = buf[1];
-    func_00213DE0(b, seq, 0, scale_ticks(7));
+    MobyBlendAnimation(b, seq, 0, scale_ticks(7));
 }
 typedef struct {
     short seq;
@@ -108,12 +108,12 @@ void func_L00_002326D0(int id, int arg, float t) {
     if (a == 0 || b == 0) {
         return;
     }
-    if (func_L00_00232850(id, &seq0, &seq1) != 0 && id != 0) {
+    if (HeroPickRandomSequence(id, &seq0, &seq1) != 0 && id != 0) {
         if (*(unsigned char *)(a + 0x53) == seq0) {
             return;
         }
-        func_00213DE0(a, seq0, arg, (int)t);
-        func_00213DE0(b, seq1, arg, (int)t);
+        MobyBlendAnimation(a, seq0, arg, (int)t);
+        MobyBlendAnimation(b, seq1, arg, (int)t);
         return;
     }
     blk2 = D_0013F450;
@@ -132,10 +132,10 @@ void func_L00_002326D0(int id, int arg, float t) {
         seq = scale_ticks(0x13);
     }
     if (*(unsigned char *)(a + 0x53) != 1) {
-        func_00213DE0(a, 1, 0, seq);
+        MobyBlendAnimation(a, 1, 0, seq);
     }
     if (*(unsigned char *)(b + 0x53) != 1) {
-        func_00213DE0(b, 1, 0, seq);
+        MobyBlendAnimation(b, 1, 0, seq);
     }
 }
 extern int func_L00_002056D0(int);
@@ -146,7 +146,7 @@ extern int func_L00_00258BC8(int, int);
    its key and argument bytes in *KEY and *ARG; with no match, *KEY = 1
    and it returns 0. `tbl - -n` keeps retail's index-first addu, which
    `tbl + n` and `&tbl[n]` turn round. */
-int func_L00_00232850(int id, int *key, int *arg) {
+int HeroPickRandomSequence(int id, int *key, int *arg) {
     SeqEntry *tbl;
     int list[20];
     int count;
@@ -201,7 +201,7 @@ void func_L00_00232980(void) {
     if (*(int *)(base + 0x11A4) != 2) {
         return;
     }
-    if (func_L00_00232850(*(unsigned char *)(*(char **)(base + 0x2080) + 0x53), &buf[0], &buf[1]) == 0) {
+    if (HeroPickRandomSequence(*(unsigned char *)(*(char **)(base + 0x2080) + 0x53), &buf[0], &buf[1]) == 0) {
         return;
     }
     if (*(char **)(base + 0x1180) != 0) {
@@ -249,9 +249,9 @@ void func_L00_00232A78(int a0, int a1, float a2) {
         if (*(int *)(base + 0x227C) != 0) {
             ok = func_L00_00232A18(a0, buf);
             if (ok != 0) {
-                func_00213DE0(*(void **)(base + 0x2278), buf[0], a1, (int)a2);
+                MobyBlendAnimation(*(void **)(base + 0x2278), buf[0], a1, (int)a2);
             } else if (*(unsigned char *)(*(char **)(base + 0x2278) + 0x53) != 0) {
-                func_00213DE0(*(void **)(base + 0x2278), 0, 0, scale_ticks(7));
+                MobyBlendAnimation(*(void **)(base + 0x2278), 0, 0, scale_ticks(7));
             }
         }
     }
@@ -560,7 +560,7 @@ typedef struct {
    Each of the three stages takes its own pointer to the block: retail
    re-forms the address from the saved %hi after the loop and again
    before the last test. */
-void func_L00_00233868(void) {
+void HeroSetObjectFlags(void) {
     char *base = D_0013F450;
     char *tail;
     char *last;
@@ -602,7 +602,7 @@ void func_L00_00233868(void) {
    is set, and the first pair's first object when +0x20AF is set, or
    +0x20AE is set in mode 8 (+0x10B8). Each stage takes a fresh pointer to the
    block, as retail re-forms it from the saved %hi before each one. */
-void func_L00_00233950(void) {
+void HeroClearObjectFlags(void) {
     char *base = D_0013F450;
     char *blk2;
     char *blk3;
@@ -658,7 +658,7 @@ void func_L00_00233950(void) {
 }
 /* Sets bit 0 of the flags (0x34) of the objects at D_0013F450 + 0x2080
    and, when present, +0x1620. */
-void func_L00_00233A90(void) {
+void HeroSetMainObjectFlags(void) {
     char *base = D_0013F450;
     char *obj;
 
@@ -670,7 +670,7 @@ void func_L00_00233A90(void) {
 }
 /* Clears what func_L00_00233A90 sets: bit 0 of the flags (0x34) of the
    objects at D_0013F450 + 0x2080 and, when present, +0x1620. */
-void func_L00_00233AC8(void) {
+void HeroClearMainObjectFlags(void) {
     char *base = D_0013F450;
     char *obj;
 
@@ -797,7 +797,7 @@ extern void func_001F9BD8(void *, void *, void *);
 /* The polar form of func_L00_00233EE0: sets OUT to (R cos ANGLE,
    R sin ANGLE, Z) via func_001F9F90 / func_001F9FA8, then transforms it
    by the matrix at D_0013F450 and adds the vector at D_0013F450 + 0x80. */
-void func_L00_00233E48(float *out, float r, float angle, float z) {
+void PolarToWorldPoint(float *out, float r, float angle, float z) {
     char *base;
 
     out[0] = FastCos(angle) * r;
@@ -813,7 +813,7 @@ extern void func_001F9BD8(void *, void *, void *);
 /* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
    then transforms it by the matrix at D_0013F450 and adds the vector at
    D_0013F450 + 0x80. */
-void func_L00_00233EE0(float *out, float x, float y, float z) {
+void LocalToWorldPoint(float *out, float x, float y, float z) {
     char *base;
 
     clear_u64_value(out);
@@ -923,7 +923,7 @@ extern void func_001FA4A0(void *, void *);
    rotation func_001FA218 builds from the angles at +0x40 of the object
    at +0x2080 (func_001FA4A0 transposes it); other modes give 0. The
    switch gives retail's case tree. */
-float func_L00_00234250(float *v) {
+float ViewXyLength(float *v) {
     char *base = D_0013F450;
     float m[16] __attribute__((aligned(16)));
     float inv[16] __attribute__((aligned(16)));
@@ -1017,7 +1017,7 @@ extern float func_001FA888(int);
    n uses the velocity along the view's up axis (func_L00_002342F8) and
    the height is z + VEL.z / 2. The frame count goes to *STEPS when
    given; other modes give 0. */
-float func_L00_002344B0(float *pos, float *vel, int *steps, float step) {
+float JumpApexHeight(float *pos, float *vel, int *steps, float step) {
     int n;
     int k;
     float a;
@@ -1050,7 +1050,7 @@ extern float func_L00_001FF860(float, float);
    (D_0013F450 + 0x20B3) V is first transformed by the matrix at +0x40,
    in an aligned stack copy; any other mode gives 0. The switch gives
    retail's case tree. */
-float func_L00_002345B0(float *v) {
+float ViewGetPitch(float *v) {
     char *base = D_0013F450;
     float tmp[4] __attribute__((aligned(16)));
 
@@ -1071,7 +1071,7 @@ extern int D_00140508;
 extern int D_0013D530[];
 extern int D_0013DFA8[];
 /* takes amount from the weapon's ammo (the current weapon for -1): 1 when taken or the weapon has no ammo limit, 0 when there is too little */
-int func_L00_00234638(int id, int amount) {
+int TakeAmmo(int id, int amount) {
     AmmoInfo *e;
     if (id == -1) id = D_00140508;
     e = &D_L00_001C43B0[id];
@@ -1099,7 +1099,7 @@ int func_L00_002346C0(int a, int b) {
     return 0;
 }
 /* the weapon's ammo (the current weapon for -1), or 1 when it has no ammo limit */
-int func_L00_00234718(int id) {
+int GetAmmo(int id) {
     AmmoInfo *e;
     if (id == -1) id = D_00140508;
     e = &D_L00_001C43B0[id];
@@ -1123,7 +1123,7 @@ void func_L00_00234768(float *pos, int arg, float t) {
     *(int *)(base + 0x1650) = arg;
     *(float *)(base + 0x164C) = t;
     if (state < 0x65 || state > 0x67) {
-        func_L00_00222B80(0x65, 1);
+        HeroEnterMoveState(0x65, 1);
     }
 }
 extern int D_001414D4;
@@ -1173,7 +1173,7 @@ extern float func_001FA790_234800(float, float) __asm__("func_001FA790");
 
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
-void func_L00_00234800(void) {
+void HeroRideMovingPlatform(void) {
     Vec_234800 v0, v10, v20, v30, v40, v50, v60, v70, v80, v90, vA0;
     float sB0, sB4;
     float amt, ang;
@@ -1403,7 +1403,7 @@ void func_L00_002352D0(int a0) {
                 *(unsigned short *)(o + 0x34) |= 0x800;
             }
         }
-        func_L00_002098B8(a0);
+        HeroComputeAttachMatrices(a0);
         func_L00_0020FC18();
         func_L00_00235088();
         base = D_0013F450;
@@ -1498,7 +1498,7 @@ extern char D_L00_0015F788[];
 void func_L00_00235608(int id, char *moby) {
     float m[16] __attribute__((aligned(16)));
 
-    func_0020DAF8(id, 4, m);
+    MobyTransformScaledVertex(id, 4, m);
     qcopy(moby + 0x10, &m[12]);
     func_001FA480(moby + 0xC0, m);
     func_0020EEE8(moby);
@@ -1546,5 +1546,5 @@ extern int func_001FFB38_p(int, int, void *, void *, void *, void *, int) __asm_
    callbacks and the data at D_001416F8. func_001FFB38 is declared with
    int parameters in hud.c; the alias passes pointers. */
 void func_L00_00235790(void) {
-    func_001FFB38_p(1, 0x7535, func_L00_00239F40, func_L00_00239FC0, func_L00_0023A1A0, D_001416F8, 8);
+    func_001FFB38_p(1, 0x7535, HudHealthInit, func_L00_00239FC0, func_L00_0023A1A0, D_001416F8, 8);
 }

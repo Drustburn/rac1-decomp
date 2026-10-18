@@ -118,7 +118,7 @@ extern int func_L00_0023B610_r(int) __asm__("func_L00_0023B610");
 extern void func_001FE6C0(void);
 
 /* per-frame update of the in-level game: pause and cutscene triggers, then the subsystem updates. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/unclassified_00295100.c, FUN_L00_00297f78. */
-void func_L00_00299250(void) {
+void LevelFrameUpdate(void) {
     int lvl, area, noctl, special;
     unsigned char *r;
     if (D_L00_0016C158.wEC) {
@@ -131,7 +131,7 @@ void func_L00_00299250(void) {
     }
     lvl = D_L00_0015F6A8;
     if (lvl == 0 && (D_0015EFB4_m & 0x401) && D_L00_0015F6AC >= 8 && ((HeroS *)(D_0013E633 + 0xE1D))->w2084 != 0x1D) {
-        func_001FBC80(3, 0, 0);
+        Freeze_Enter(3, 0, 0);
         return;
     }
     noctl = ((PadS *)(D_0013A5E0 + 0x2460))->w19C == 0;
@@ -143,7 +143,7 @@ void func_L00_00299250(void) {
     if (area == 15 && D_L00_0015F6AC >= 8 && ((HeroS *)(D_0013E633 + 0xE1D))->b20A4 == 2
         && ((((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x800) || noctl) && ((HeroS *)(D_0013E633 + 0xE1D))->w2084 != 0x72) {
         if (D_L00_00166F00->h86 == 0x13) return;
-        func_001FBC80(4, 0, 0);
+        Freeze_Enter(4, 0, 0);
         return;
     }
     special = 0;
@@ -153,17 +153,17 @@ void func_L00_00299250(void) {
     }
     if (special && D_L00_0015F6AC >= 8 && ((((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x800) || noctl)
         && ((HeroS *)(D_0013E633 + 0xE1D))->w2084 != 0x72 && D_L00_00166F00->h86 != 0x13) {
-        func_001FBC80(1, 0, 0);
+        Freeze_Enter(1, 0, 0);
         return;
     }
     if (lvl == 0 && (area == 8 || area == 0xC) && ((((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x800) || noctl)
         && ((HeroS *)(D_0013E633 + 0xE1D))->w2084 == 0x32) {
-        func_001FBC80(1, 0, 0);
+        Freeze_Enter(1, 0, 0);
         return;
     }
     if (((((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x800) || noctl) && D_L00_0015F6AC >= 8
         && ((HeroS *)(D_0013E633 + 0xE1D))->w2084 != 0x72 && ((HeroS *)(D_0013E633 + 0xE1D))->w208C == 0x16) {
-        func_001FBC80(0, 0, 0);
+        Freeze_Enter(0, 0, 0);
         return;
     }
     if (((((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x800) || noctl) && D_L00_0015F6AC >= 8
@@ -186,7 +186,7 @@ void func_L00_00299250(void) {
     if (((AreaS *)(D_0013D355 + 0x3B))->wFC && !(r = (unsigned char *)(D_0013D355_b + 0x13B))[0x10] && D_L00_0015F6AC >= 8
         && !D_0015EF20 && !((HeroS *)(D_0013E633 + 0xE1D))->b20B1 && ((HeroS *)(D_0013E633 + 0xE1D))->w22A8
         && scale_ticks(0x1E) < D_L00_0015F6B0 && D_0015EE84) {
-        func_001FBC80(5, 0, 0);
+        Freeze_Enter(5, 0, 0);
         r[0x10] = 1;
         return;
     }
@@ -216,8 +216,8 @@ void func_L00_00299250(void) {
     if ((D_L00_0016C158.w8 & 2) || ((D_L00_0016C158.w8 & 0x10) && (((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x200))) {
         func_L00_0024F7E0();
         func_00213C78();
-        func_0022EF68();
-        func_L00_002A5B20();
+        SoundRunEntryCallbacks();
+        LevelAmbienceUpdate();
     }
     func_001E9768_a(D_L00_001610B8, 3);
     if ((D_L00_0016C158.w8 & 1) || ((D_L00_0016C158.w8 & 0x10) && (((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x200))) func_L00_002076E8();
@@ -230,7 +230,7 @@ void func_L00_00299250(void) {
     if ((D_L00_0016C158.w8 & 8) || ((D_L00_0016C158.w8 & 0x10) && (((PadS *)(D_0013A5E0 + 0x2460))->w1A4 & 0x200))) {
         func_L00_001ED428();
     } else if (D_L00_0016C158.w14) {
-        func_L00_001F3E20();
+        DebugFreeCameraUpdate();
         if (D_L00_0016C158.w14 == 2) func_L00_001F4810();
     }
     func_001E9768_a(D_L00_001610E8, 8);
@@ -299,7 +299,7 @@ void func_L00_00299B68(int arg) {
         return;
     }
     music_Pause(0);
-    func_00217748(0);
+    UpdateAudioStreamUntilIdle(0);
     D_L00_0015F6BC = 1;
     FastMemSet(D_L00_0016C960, 0, 0x1C0);
     FastMemSet(D_L00_0017C540, 0, 0x40);
@@ -317,21 +317,21 @@ void func_L00_00299B68(int arg) {
     D_L00_0016128C = v;
     *(int *)(D_L00_0016C960 + 0x58) = D_L00_00173F00[1] + v;
     *(int *)(D_L00_0016C960 + 0x5C) = D_L00_00173F00[2] + v;
-    func_L00_00203FB8();
+    HelpPopup_Cancel();
     *(float *)&D_L00_0015F4FC = one;
     D_L00_0015F6A8 = 2;
     D_L00_0016C960[0x4B] = D_L00_00166D80[0x394];
     *(int *)(D_L00_00166D80 + 0x394) = 0;
     D_L00_0015F500 = 0;
-    func_L00_00222B80(0x64, 2);
+    HeroEnterMoveState(0x64, 2);
     d[0x20A5] = 1;
-    func_L00_00233868();
+    HeroSetObjectFlags();
     if (D_L00_00179208 != 0) *(unsigned short *)(D_L00_00179208 + 0x34) |= 1;
     if (D_L00_001BA15C != 0) *(unsigned short *)(D_L00_001BA15C + 0x34) |= 1;
-    func_L00_00245B88(0);
+    StreamSectorListEntry(0);
     FadeToBlack(scale_ticks(6));
-    func_00217748(1);
-    func_00204FC0();
+    UpdateAudioStreamUntilIdle(1);
+    UpdateWorldObjectAnimation();
     for (p = D_L00_0016009C; p->st != 0xFF; p++) {
         if (p->st & 0x80) continue;
         if (p->type == 0x4A || p->type == 0xCB) {
@@ -347,7 +347,7 @@ void func_L00_00299B68(int arg) {
     q = D_L00_0016C960;
     *(short *)(q + 0x46) = -3;
     ((int (*)(void))func_00216960)();
-    ((int (*)(int))func_L00_00245B88)(1);
+    ((int (*)(int))StreamSectorListEntry)(1);
     for (i = 0; *(short *)(q + 0x46) < i; i--) {
         func_00122598(0);
     }
@@ -412,7 +412,7 @@ void func_L00_00299E70(void) {
         if (!(o->st & 0x80) && (o->type == 0x4A || o->type == 0xCB)) o->flags &= 0xFF7F;
     }
     p = D_0013E633 + 0xE9D;
-    func_L00_00222B80(0, 1);
+    HeroEnterMoveState(0, 1);
     g = func_00214358(p, 0, 0.5f);
     if (2.0f < g) {
         p -= 0x80;
@@ -420,7 +420,7 @@ void func_L00_00299E70(void) {
     }
     b = D_0013E633 + 0xE1D;
     b[0x20A5] = 0;
-    func_L00_00233950();
+    HeroClearObjectFlags();
     if (D_L00_0016C960_c.x4a) {
         f = func_00214358(D_L00_0016C960_c.v, 0, 0.5f);
         if (2.0f < f && FastAbsF(D_L00_0016C960_c.v[2] - f) < 2.0f) D_L00_0016C960_c.v[2] = f;
@@ -452,7 +452,7 @@ extern unsigned char D_0015EEB4_m[4] __asm__("D_0015EEB4") MACRO_ADDR;
 extern short D_L00_0015F680;
 
 /* Builds the camera view matrices from the current camera entry and returns the entry's flag byte. */
-unsigned char func_L00_0029A158(void) {
+unsigned char BuildCameraViewMatrices(void) {
     char *d = D_L00_0016C960;
     int idx = *(int *)(d + 0x38);
     char *e = *(char **)(d + 0x54) + idx * 32;
@@ -690,7 +690,7 @@ void func_L00_0029A300(void) {
     }
     if ((D_L00_0016C158_9A300.update_flags & 2) || ((D_L00_0016C158_9A300.update_flags & 0x10) && (D_0013CBE4 & 0x200))) {
         func_00213C78();
-        func_0022EF68();
+        SoundRunEntryCallbacks();
     }
     func_001E9768(D_L00_001610B8_9A300, 3);
     if ((D_L00_0016C158_9A300.update_flags & 1) || ((D_L00_0016C158_9A300.update_flags & 0x10) && (D_0013CBE4 & 0x200))) {
@@ -726,10 +726,10 @@ void func_L00_0029A300(void) {
     } else {
         lim = D_0015EE80 ? 0x50 : 0x60;
         if (D_L00_0016C960_9A300.f38 >= lim) {
-            func_00217748(1);
+            UpdateAudioStreamUntilIdle(1);
             D_L00_0016C960_9A300.f3C++;
-            func_00204FC0();
-            func_L00_00245B88(D_L00_0016C960_9A300.f3C + 1);
+            UpdateWorldObjectAnimation();
+            StreamSectorListEntry(D_L00_0016C960_9A300.f3C + 1);
         }
         last = func_L00_0029A158_9A300();
         for (i = 0; i < D_L00_0016C960_9A300.h44; i++) {
@@ -749,7 +749,7 @@ void func_L00_0029A300(void) {
             m->b71 = 0xFF;
             func_L00_00251E30(m);
             if (m->b7F) {
-                func_00214550(m);
+                MobyUpdateShadowRange(m);
             }
             if (m->oclass == 0) {
                 func_L00_002353B8(m);
@@ -876,7 +876,7 @@ void func_L00_0029A940(int sector, int size, int arg2) {
     D_L00_00161108_m.unk8 = arg2;
     D_L00_0015F6BC = 1;
     FadeToBlack(4);
-    func_L00_00203FB8();
+    HelpPopup_Cancel();
     D_L00_0015F6A8 = 1;
     D_L00_00161108_m.buf0 = D_L00_00173F04;
     D_L00_00161108_m.buf1 = D_L00_0015F50C;
@@ -937,7 +937,7 @@ void func_L00_0029AD18(void) {
         if (*(int *)(ld + 0xDC) < 3 && *(int *)(ld + 0xE4) < 0) {
             break;
         }
-        func_00209E68();
+        MemCard_UpdateState();
     }
     func_0023B670(D_L00_00161108, D_L00_0016110C,
                   (*(int *)&D_L00_00161114 + 0x3F) & ~0x3F,
@@ -957,7 +957,7 @@ extern G9 D_00137C80;
 /* starts the slideshow: resets state, rebases the level data pointers, and starts the first two streams */
 void func_L00_0029ADD8(void) {
     int t;
-    func_00217748(0);
+    UpdateAudioStreamUntilIdle(0);
     FadeToBlack(8);
     D_L00_0015F6BC = 1;
     *(float *)&D_L00_0015F4FC = 1.0f;
@@ -972,7 +972,7 @@ void func_L00_0029ADD8(void) {
     } else {
         start_audio_stream_read(D_L00_0015F700[2], D_00137C80.normal[((short *)D_L00_0015F700)[1]].a, D_00137C80.normal[((short *)D_L00_0015F700)[1]].b);
     }
-    func_00217748(1);
+    UpdateAudioStreamUntilIdle(1);
     ((short *)D_L00_0015F700)[1]++;
     if (D_0015EE80 != 0) {
         start_audio_stream_read(D_L00_0015F700[3], D_00137C80.alt[((short *)D_L00_0015F700)[1]].a, D_00137C80.alt[((short *)D_L00_0015F700)[1]].b);
@@ -1004,7 +1004,7 @@ void func_L00_0029AFB8(void) {
     int s0, t, i, r, one;
     int *src, *dst;
     float f;
-    func_00217748(0);
+    UpdateAudioStreamUntilIdle(0);
     f = *(float *)&D_L00_0015F4FC - 0.05f;
     *(float *)&D_L00_0015F4FC = f;
     if (f < 0.0f) {
@@ -1015,7 +1015,7 @@ void func_L00_0029AFB8(void) {
     if (IST == 0) {
         if (ITMR >= D_L00_00173D00[IIDX] - 0x24) {
             if (*(short *)(D_0014171B + 0x100BD) != 0) {
-                func_00217748(1);
+                UpdateAudioStreamUntilIdle(1);
             }
             if (!s0 && IIDX == 0x29) {
             quit:

@@ -22,8 +22,8 @@ void func_L00_0028A608(void) {
     *(short *)(D_L00_001605DC + 4) = 0;
     SkyDrawShell(0);
     SkyDrawShell(1);
-    if (*(short *)(D_L00_001605DC + 8) == 0) func_L00_0028A198(0xF4, 0xC);
-    func_L00_0028A3E0();
+    if (*(short *)(D_L00_001605DC + 8) == 0) SkyInitParticles(0xF4, 0xC);
+    StepSkySparkles();
     SkySpriteProc();
     VU1_addGSregister(0x42, 0x8000000044L);
     SkyDrawShell(2);

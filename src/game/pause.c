@@ -446,7 +446,7 @@ void func_00226D50_19E90() __asm__("func_00226D50");
    texture and help text buffers behind the two stream buffers, then creates the fourteen menu
    mobys and starts each on its page animation.
    Adapted from Lombyte (MIT) for PAL: src/rendering/fun_00218f98.c, FUN_00218f98. */
-void func_00219E90(void) {
+void Pause_Open(void) {
     s32 i;
     s32 a, b, c, d;
     D_001D5F70_19E90.state = 2;
@@ -504,7 +504,7 @@ typedef struct { char pad[0x44]; char *items[14]; } ObjList;
 /* Pause teardown: calls each object's +0xC handler, then refreshes the
    14 D_001D6120 handles. Retail's register copies come from gcse, so the
    base is re-read inside each block (and inside the loop body). */
-void func_0021A0B0(void) {
+void Pause_Close(void) {
     char *g = D_001D5F70;
 
     if (*(int *)(g + 0x110) < 10) {
@@ -699,7 +699,7 @@ extern void func_0021A0B0_1A1A0(void) __asm__("func_0021A0B0");
    states 0 and 0x2D, then runs the page switch (leave handlers, the mobys' page animations,
    enter handlers after the timer), every screen's update and the focus hand-over.
    Adapted from Lombyte (MIT) for PAL: src/ui/menus/fun_002192a8.c, FUN_002192a8. */
-void func_0021A1A0(void) {
+void Pause_Update(void) {
     s32 i;
     s32 j;
     s32 k;
@@ -905,7 +905,7 @@ void func_0021A610(void) {
     StashMobyClassDists();
     DrawMobyList(D_00160018, 4);
     func_00219C08();
-    func_001F2608();
+    BuildViewMatrices();
     for (effect_slot_index = 0; effect_slot_index < slot_count; effect_slot_index++) {
         if (D_001CE640[effect_slot_index] != 0 && ((PanelRenderSlot **)D_001D6120)[effect_slot_index] != 0 &&
             (effect_slot_index != 6 || ((MenuSys_p *)D_001D5F70)->unkD8 != 0)) {
@@ -1002,7 +1002,7 @@ void func_0021A610(void) {
             texture_height = 1 << texture_height_log2;
             func_002017C8(0, 0, texture_width, texture_height, *(s32 *)&D_001602B0, 0, 0);
             draw_result = panels[draw_slot_index]->draw(panels[draw_slot_index]);
-            func_001F7B40();
+            BeginDrawFrame();
             if (draw_result & 1) {
                 continue;
             }
@@ -1069,7 +1069,7 @@ void func_0021A610(void) {
  * its family's shape (func_0021F7D0, func_00222DB0): early returns and
  * one `char *` local per block that reads a global.
  */
-int func_0021ACD8(int arg0) {
+int Pause_PageInput(int arg0) {
     char *g = D_001D5F70;
 
     if (*(int *)(*(char **)(g + 4) + 0x40) != arg0) {
@@ -1110,7 +1110,7 @@ extern void func_0022ED80(int, int, int);
    arg0+0x5C derived from it, or pinned to 0x52. The re-reads of 0x3C and
    0x60 are how retail's reloads come out; the page size q - 2 is formed
    after the clamp, and each arm stores the bar position itself. */
-int func_0021AD68(char *arg0) {
+int Pause_ListInput(char *arg0) {
     {
         char *pad = D_0013CA40;
         if (*(int *)(pad + 0x1C4) & 0xD00) {
@@ -1188,7 +1188,7 @@ extern void func_001F4748(void);
    is a 0x200-square image at x, stepping 0x252 down from the scroll
    position at +0x5C; the selected one (+0x3C) gets a pulsing frame. Up
    and down arrows show when the list runs off the top or the bottom. */
-int func_0021AEF8(char *arg0) {
+int Pause_DrawPictureList(char *arg0) {
     int x = (*(int *)(arg0 + 0x20) * 16 - 0x200) >> 1;
     int y = *(int *)(arg0 + 0x5C);
     int top = y;
@@ -1205,7 +1205,7 @@ int func_0021AEF8(char *arg0) {
             func_00201640(x - 0x10, y - 0x10, x + 0x210, y + 0x210,
                           *(int *)&D_001602B0, 1);
         }
-        func_002008B8(GetIconFrame(*(unsigned short *)e, *(short *)(e + 2)), x, y,
+        DrawHudSpriteSubpixel(GetIconFrame(*(unsigned short *)e, *(short *)(e + 2)), x, y,
                       0x200, 0x200, 0x80);
         y += 0x252;
     }
@@ -1216,7 +1216,7 @@ int func_0021AEF8(char *arg0) {
     if (*(int *)(arg0 + 0x24) * 16 < y) {
         func_00201640(0, *(int *)(arg0 + 0x24) - 0x14, *(int *)(arg0 + 0x20),
                       *(int *)(arg0 + 0x24), *(int *)&D_001602B0, 0);
-        func_00200650(GetIconFrame(0xE99E, 6), x >> 4, *(int *)(arg0 + 0x24) - 0x12,
+        DrawHudSpriteTurned(GetIconFrame(0xE99E, 6), x >> 4, *(int *)(arg0 + 0x24) - 0x12,
                       0x20, 0x10, 0x80);
     }
     DoGifPaging();
@@ -1409,7 +1409,7 @@ int func_0021B298(unsigned char *w) {
         content = *(int *)(st + 0x40);
         id = *(short *)(*(char **)(st + 0x34) + content * 12);
         *(int *)(w + 0x34) = 0xFFFF;
-        func_001FF4F8(id, 1, w + 0x34);
+        FindHelpEntry(id, 1, w + 0x34);
     } else {
         char *cell;
         int k;
@@ -1517,7 +1517,7 @@ int func_0021B298(unsigned char *w) {
     if (*(int *)(w + 0x30) & 0x10000) {
         win.s[1] = *(unsigned short *)(w + 0x24) - 1;
     }
-    colour = func_0021C6C0(*(int *)(w + 0x44), FastTweenColor(*(int *)&D_001602B0, 0x80FFA888, 0.5f), 0x80FFA888);
+    colour = Pause_GetFadeColor(*(int *)(w + 0x44), FastTweenColor(*(int *)&D_001602B0, 0x80FFA888, 0.5f), 0x80FFA888);
     win.s[9] |= 4;
     DRAW(colour, text);
     win.s[9] ^= 4;
@@ -1706,7 +1706,7 @@ extern s32 func_0022ED80_1BB90(s32, s32, s32) __asm__("func_0022ED80");
    list the pad: close, back, confirm (the selected entry's action: open a page, freeze the
    game for a prompt, close with a value, pick a level or language) and up/down selection.
    Adapted from Lombyte (MIT) for PAL: src/ui/menus/fun_0021abf8.c, update_menu_entry_actions. */
-s32 func_0021BB90(struct MenuScreen_1BB90 *menu) {
+s32 Pause_TextListUpdate(struct MenuScreen_1BB90 *menu) {
     s32 focused;
     s32 entry_index;
     s32 entry_count;
@@ -2007,7 +2007,7 @@ s32 func_0021C1B0(MenuDescriptor *menu) {
                 color = 0x80006060;
             } else if (enabled) {
             fade_timer:
-                color = func_0021C6C0(selected_item->fade_timer, -1, -1);
+                color = Pause_GetFadeColor(selected_item->fade_timer, -1, -1);
 
             } else {
                 color = 0x80303030;
@@ -2068,7 +2068,7 @@ extern int func_001FA8A8(int, int, float);
    is 1; after that it is 1 - (elapsed - start) / total, and the two
    colours are blended by func_001FA8A8. The parameters are updated in
    place; the timer is read again for each value. */
-int func_0021C6C0(int start, int col1, int col2) {
+int Pause_GetFadeColor(int start, int col1, int col2) {
     float t;
 
     if (start < 0) {
@@ -2583,9 +2583,9 @@ extern int func_0020CA50(void *, void *, void *, int);
 int func_0021D420(void *arg0) {
     int *p;
 
-    func_0020C7A0(arg0);
+    Mission_UpdateObjectives(arg0);
     *(int *)((char *)arg0 + 0x7C) =
-        func_0020CA50((void *)0x70000000, (void *)0, (void *)0x70000100, 1);
+        Mission_CollectObjectiveIds((void *)0x70000000, (void *)0, (void *)0x70000100, 1);
     p = (int *)((char *)arg0 + 0x30);
     p += D_001A0414;
     if (*p != -1) {
@@ -2685,7 +2685,7 @@ int func_0021D4C0(struct Menu *m) {
             func_0022ED80(1, 0x11, m->unk14);
         }
         if ((pad & 0x5000) || D_001A01F0_lv.level != old) {
-            m->count = func_0020CA50((void *)0x70000000, (void *)0, (void *)0x70000100, 1);
+            m->count = Mission_CollectObjectiveIds((void *)0x70000000, (void *)0, (void *)0x70000100, 1);
             p = &ch[D_001A01F0_lv.level];
             D_001CFBF4 = ((unsigned int *)0x70000000)[*p];
             D_001CFAD8 = ((unsigned int *)0x70000100)[*p];
@@ -2727,7 +2727,7 @@ typedef struct {
    leaves any slot it held and is put in the current slot, and the index
    advances. The three conditions are one `&&` (one shared exit) and the
    time is compared call-first, as retail evaluates them. */
-int func_0021D7A0(SelList_0021D7A0 *arg0) {
+int Pause_QuickSelectInput(SelList_0021D7A0 *arg0) {
     char *q = *(char **)(D_001D5F74 + 0x40);
     int item = *(short *)(*(int *)(q + 0x3C) * 10 + *(char **)(q + 0x48) + 6);
     int old = arg0->idx;
@@ -2781,7 +2781,7 @@ typedef struct {
    wrapped to 0..7. Indexing arg0->list directly in both loops (no local
    list pointer) is what gives retail's hoisted base; the scan is a do-while
    guarded by list[0] (a plain while/for rotated differently). */
-int func_0021D9C8(SelList_0021D9C8 *arg0) {
+int Pause_LoadQuickSelect(SelList_0021D9C8 *arg0) {
     int i;
     for (i = 0; i < 8; i++) {
         arg0->list[i] = D_00141FA0[i];
@@ -2955,7 +2955,7 @@ void func_0012E380_1DB30(s32 menu) __asm__("func_0012E380");
    the sound or music volume by 3 (0..0x400) and push the new levels to the mixer groups,
    confirm on the third row toggles mono/stereo.
    Adapted from Lombyte (MIT) for PAL: src/textbin/ui/menus/audio/sound_options_menu.c, sound_options_menu. */
-s32 func_0021DB30(struct SoundMenu_1DB30 *menu) {
+s32 Pause_SoundOptionsInput(struct SoundMenu_1DB30 *menu) {
     s32 previous_selection;
     s32 *sound_volume_ptr;
     s32 previous_music_volume;
@@ -3291,7 +3291,7 @@ typedef struct {
 } MenuBox;
 
 /* Draws a pause-menu list (rows of text with optional subtext, cursor highlight, scrolling). Adapted from Lombyte (MIT) for PAL: ui/menus/fun_0021d4a8.c, FUN_0021d4a8. */
-int func_0021E4B0(Menu *menu) {
+int Pause_DrawList(Menu *menu) {
     int size;
     int kind;
     int focused;
@@ -3471,7 +3471,7 @@ extern s32 func_00234C98_1E950(s32, s64) __asm__("func_00234C98");
 s32 func_0021E950(MenuItemGrid *grid);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/ui/menus/fun_0021d948.c, draw_menu_item_grid. */
-s32 func_0021E950(MenuItemGrid *grid) {
+s32 Pause_DrawItemGrid(MenuItemGrid *grid) {
     Font *font;
     MenuGridCell *cell;
     s32 focused;
@@ -3548,7 +3548,7 @@ s32 func_0021E950(MenuItemGrid *grid) {
                         frame_offset = 2;
                     }
                 }
-                func_002008B8(GetIconFrame(cell->icon, cell->frame + frame_offset), left, top, icon_width, icon_height, 0x80);
+                DrawHudSpriteSubpixel(GetIconFrame(cell->icon, cell->frame + frame_offset), left, top, icon_width, icon_height, 0x80);
             }
             cell++;
             x += column_step;
@@ -3661,7 +3661,7 @@ extern void func_0021F200(char *);
    when the entry's class (D_001864D0 record +0x3A) is -1, spawn it in
    front of the camera focus when there is none yet, or respawn it with
    the old one's position and orientation when the class changed. */
-int func_0021EFA0(char *arg0) {
+int Pause_UpdateItemPreview(char *arg0) {
     char *q = *(char **)(D_001D5F74 + 0x40);
     int item = *(short *)(*(int *)(q + 0x3C) * 10 + *(char **)(q + 0x48) + 6);
     short cur;
@@ -4151,7 +4151,7 @@ s32 func_0021F238(struct ItemPreviewBinding_1F238 *preview) {
             moby->rot.x = D_001E0708_1F238[item_index].rotation_x;
             moby->rot.y = D_001E0708_1F238[item_index].rotation_y;
             moby->rot.z = 3.1415927f;
-            moby->update = func_0021F6A0;
+            moby->update = Pause_PlaceItemPreview;
             preview_vars = (struct ItemPreviewVars_1F238 *)moby->pvars;
             preview_vars->owner = preview;
             preview_vars->item_index = item_index;
@@ -4159,7 +4159,7 @@ s32 func_0021F238(struct ItemPreviewBinding_1F238 *preview) {
             if (animation_index < last_animation) {
                 last_animation = animation_index;
             }
-            func_00213D28(moby, last_animation, 0);
+            MobySetAnimation(moby, last_animation, 0);
         }
         if (has_secondary_moby && moby != 0) {
             moby = func_00226720_1F238(D_001864D0_1F238[1].oclass);
@@ -4169,11 +4169,11 @@ s32 func_0021F238(struct ItemPreviewBinding_1F238 *preview) {
                 qcopy(&moby->pos, &source_moby->pos);
                 qcopy(&moby->rot, &source_moby->rot);
                 preview->secondary_moby = moby;
-                moby->update = func_0021F6A0;
+                moby->update = Pause_PlaceItemPreview;
                 secondary_vars = (struct ItemPreviewVars_1F238 *)moby->pvars;
                 secondary_vars->item_index = item_index;
                 secondary_vars->owner = preview;
-                func_00213D28(moby,
+                MobySetAnimation(moby,
                                    (animation_index < moby->pclass->seq_count - 1)
                                        ? animation_index
                                        : moby->pclass->seq_count - 1,
@@ -4259,7 +4259,7 @@ extern f32 func_001F9FA8(f32);
 
 /* Position the selected item relative to the preview camera. Owner flag bit 0 selects alternate_x; otherwise use normal_x. Rotate the side and forward offsets in the X/Y plane after adding the unrotated placement position.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/update_item_preview_transform.c, update_item_preview_transform. */
-void func_0021F6A0(struct ItemPreviewMoby *moby) {
+void Pause_PlaceItemPreview(struct ItemPreviewMoby *moby) {
     struct ItemPreviewBinding *preview = moby->preview_vars->owner;
     s32 item_index = moby->preview_vars->item_index;
     f32 side_offset;
@@ -4371,8 +4371,8 @@ int DrawQuitGameMenu(char *arg0) {
     func_00234C98_l(0x47, 0x2004B);
     func_001F7560(box, 0x80FFA888L, func_001FE540_id(0x4F6D), -1);
     FontPrintCenter(cx, y1, 0x80FFA888L, func_001FE540_id(0x4F3F), -1);
-    a = func_001F6600(func_001FE540_id(0x5250), -1);
-    b = func_001F6600(func_001FE540_id(0x5254), -1);
+    a = MeasureTextWidthRegular(func_001FE540_id(0x5250), -1);
+    b = MeasureTextWidthRegular(func_001FE540_id(0x5254), -1);
     if (b >= a) {
         a = b;
     }
@@ -4638,7 +4638,7 @@ extern char D_001603D0[]; /* "%d,%03d" */
    appends at text + the first one's length; forming that pointer in each
    arm (`q = text + sprintf(...)`) lets gcc merge the two into one addu at
    the join, as retail has it. */
-int func_00220160(char *arg0) {
+int Pause_DrawItemCount(char *arg0) {
     char text[0x50];
     short box[10];
     char *p = *(char **)(D_001D5F74 + 0x40);
@@ -4704,26 +4704,26 @@ int DrawMissionsMenu(char *arg0) {
     VU1_addGSregister(0x42, 0x44);
     VU1_addGSregister(0x47, 0xB);
     SetupGifPaging(0);
-    maxw = func_001F6620(func_001FE540_id(0x4EEE), -1);
-    w = func_001F6620(func_001FE540_id(0x4EFA), -1);
+    maxw = MeasureTextWidthSmall(func_001FE540_id(0x4EEE), -1);
+    w = MeasureTextWidthSmall(func_001FE540_id(0x4EFA), -1);
     if (w >= maxw) {
         maxw = w;
     }
     if (D_0015EE84 != 0) {
-        w = func_001F6620(func_001FE540_id(0x4EEF), -1);
+        w = MeasureTextWidthSmall(func_001FE540_id(0x4EEF), -1);
         if (w >= maxw) {
             maxw = w;
         }
     }
-    w = func_001F6620(func_001FE540_id(0x4EFB), -1);
+    w = MeasureTextWidthSmall(func_001FE540_id(0x4EFB), -1);
     if (w >= maxw) {
         maxw = w;
     }
-    w = func_001F6620(func_001FE540_id(0x4EFC), -1);
+    w = MeasureTextWidthSmall(func_001FE540_id(0x4EFC), -1);
     if (w >= maxw) {
         maxw = w;
     }
-    w = func_001F6620(func_001FE540_id(0x4EE0), -1);
+    w = MeasureTextWidthSmall(func_001FE540_id(0x4EE0), -1);
     if (w >= maxw) {
         maxw = w;
     }
@@ -4801,7 +4801,7 @@ int func_00220690(char *arg) {
     i = 0;
     mask = 0;
     SetupGifPaging(0);
-    n = func_0020CA50((void *)0x70000000, &mask, (void *)0, 0);
+    n = Mission_CollectObjectiveIds((void *)0x70000000, &mask, (void *)0, 0);
     VU1_addGSregister(0x42, 0x44);
     VU1_addGSregister(0x47, 0x10B);
     FP68E8(4, 4, 0x80FFA888L, MSGS(0x4F59), -1);
@@ -5247,14 +5247,14 @@ int func_00220D08(void *arg0) {
     char *s = (char *)arg0;
 
     *(int *)(s + 0x44) = 0;
-    *(int *)(s + 0x48) = func_00226EA8(*(int *)(s + 0x34) & 0x200);
-    *(int *)(s + 0x4C) = func_00226EA8(*(int *)(s + 0x34) & 0x200);
+    *(int *)(s + 0x48) = ClaimStreamBinding(*(int *)(s + 0x34) & 0x200);
+    *(int *)(s + 0x4C) = ClaimStreamBinding(*(int *)(s + 0x34) & 0x200);
     if ((*(int *)(s + 0x34) & 0x200) == 0) {
         if (*(int *)(s + 0x48) == 0) {
-            *(int *)(s + 0x48) = func_00226EA8(1);
+            *(int *)(s + 0x48) = ClaimStreamBinding(1);
         }
         if (*(int *)(s + 0x4C) == 0) {
-            *(int *)(s + 0x4C) = func_00226EA8(1);
+            *(int *)(s + 0x4C) = ClaimStreamBinding(1);
         }
     }
     *(int *)(s + 0x5C) = 0;
@@ -5267,8 +5267,8 @@ extern int func_00226F68(int);
 
 int func_00220DA0(void *arg0) {
     char *s = (char *)arg0;
-    *(int *)(s + 0x48) = func_00226F68(*(int *)(s + 0x48));
-    *(int *)(s + 0x4C) = func_00226F68(*(int *)(s + 0x4C));
+    *(int *)(s + 0x48) = ReleaseStreamBinding(*(int *)(s + 0x48));
+    *(int *)(s + 0x4C) = ReleaseStreamBinding(*(int *)(s + 0x4C));
     *(int *)(s + 0x50) = -1;
     *(int *)(s + 0x54) = -1;
     *(int *)(s + 0x44) = -1;
@@ -5827,9 +5827,9 @@ int func_00221380(struct Stream_21380 *menu) {
     }
     SetupGifPaging(0);
     if (menu->state < 4) {
-        texture = func_00205520(menu->buffer[0]);
+        texture = LoadMapTexture(menu->buffer[0]);
     } else {
-        texture = func_00205520(menu->buffer[1]);
+        texture = LoadMapTexture(menu->buffer[1]);
     }
     DrawTexturedQuad(0, 0, D_00151880[0xB0], D_00151880[0xB1], 0, 0, menu->tw, menu->th, 0x80808080L, texture);
     DoGifPaging();
@@ -5911,9 +5911,9 @@ int draw_two_texture_panels(void *arg0) {
     c = 0x80808080L;
     SetupGifPaging(0);
     DrawTexturedQuad(0, 0, 0x100, 0x100, 0, 0, 0x100, 0x100, c,
-                  func_00205520(*(int *)((char *)arg0 + 0x48)));
+                  LoadMapTexture(*(int *)((char *)arg0 + 0x48)));
     DrawTexturedQuad(0x100, 0, 0x100, 0x100, 0, 0, 0x100, 0x100, c,
-                  func_00205520(*(int *)((char *)arg0 + 0x4C)));
+                  LoadMapTexture(*(int *)((char *)arg0 + 0x4C)));
     DoGifPaging();
     return 8;
 }
@@ -6001,7 +6001,7 @@ typedef struct {
    selected slot (drawn with a pulsing highlight box), and slots[i]
    indexes an icon-info table (D_001864D0, 0x4C bytes/entry) and a byte
    flags table (D_0013E620) when nonzero. */
-int func_00221B58(char *arg0) {
+int Pause_DrawQuickSelectRing(char *arg0) {
     int v0, v1;
     int flag;
     float cx, cy, radius;
@@ -6133,7 +6133,7 @@ int func_00221E60(char *arg0) {
                 if ((*(Row14 **)(arg0 + 0x34))[*(int *)(arg0 + 0x38)].flags & 1) {
                     if (*(unsigned char *)&D_0016044C_i) {
                         char *g3 = D_001D5F70;
-                        func_001FBC80(6, *(void **)(g3 + 4), 0);
+                        Freeze_Enter(6, *(void **)(g3 + 4), 0);
                     } else {
                         FadeToBlack(4);
                         *(int *)(arg0 + 0x3C) = func_001F98C0(0x10);
@@ -6329,7 +6329,7 @@ struct OptItem { int text; unsigned char *value; int names[4]; };
 struct OptMenu { unsigned char pad0[0x20]; int x; int height; unsigned char pad28[0xC]; struct OptItem *items; int selected; };
 
 /* Draws an options menu: each item's label at left, its current value's name at right, selected one highlighted. Adapted from Lombyte (MIT) for PAL: src/ui/menus/fun_00221460.c, FUN_00221460. */
-int func_002224A8(struct OptMenu *m) {
+int Pause_DrawOptionsMenu(struct OptMenu *m) {
     struct OptItem *p;
     struct OptItem *it;
     int n;
@@ -6378,7 +6378,7 @@ extern char D_001D1080[];
 /* Builds the pause-menu item list from the 15 entries of D_001CF4A0
    that D_0013D5C8 enables. The flag needs its own `f = b != 0`:
    `(b != 0) << 2` folds into a branch. */
-int func_00222640(void) {
+int Pause_BuildItemList(void) {
     int i;
     int n = 0;
     char *m;
@@ -6567,14 +6567,14 @@ extern char *D_001D5F74 NOT_SDA;
 
 int func_00222A90(void *arg0) {
     *(int *)(D_001D5F74 + 0x84) = 0;
-    *(int *)((char *)arg0 + 0x54) = func_00226EA8(0);
+    *(int *)((char *)arg0 + 0x54) = ClaimStreamBinding(0);
     return 0;
 }
 
 extern int func_00226F68(int);
 
 int func_00222AD0(void *arg0) {
-    *(int *)((char *)arg0 + 0x54) = func_00226F68(*(int *)((char *)arg0 + 0x54));
+    *(int *)((char *)arg0 + 0x54) = ReleaseStreamBinding(*(int *)((char *)arg0 + 0x54));
     return 0;
 }
 
@@ -6642,7 +6642,7 @@ extern void func_001F75D0(TextBox *, long, char *, int);
    is an aggregate initializer: this compiler clears it with a memset
    libcall, fills a temporary and copies that into the local with
    ldl/ldr/sdl/sdr pairs, exactly retail's sequence. */
-int func_00222B98(char *arg0) {
+int Pause_DrawPromptBox(char *arg0) {
     char *text;
     int v;
 
@@ -6860,12 +6860,12 @@ extern void func_00228268(void);
    loads, $at stores and $gp-relative stores in delay slots); globals
    used as bases get a `char *` local per block, so retail keeps only the
    D_0013D510 %hi across the calls. */
-int func_002232E0(void) {
+int Pause_RestartInput(void) {
     int v = D_0013CBE4;
 
     if (v & 0x20) {
         D_0015EFB4_m |= 2;
-        func_001FBC80(3, D_001D5240, 0);
+        Freeze_Enter(3, D_001D5240, 0);
         return 0;
     }
     if (v & 0x40) {
@@ -7323,13 +7323,13 @@ int func_00223E40(char *arg0) {
 
 int func_00223FD0(void *arg0) {
     func_00226D50(1);
-    *(int *)((char *)arg0 + 0x48) = func_00226EA8(0);
+    *(int *)((char *)arg0 + 0x48) = ClaimStreamBinding(0);
     *(int *)((char *)arg0 + 0x4C) = 0;
     return 0;
 }
 
 int func_00224010(void *arg0) {
-    *(int *)((char *)arg0 + 0x48) = func_00226F68(*(int *)((char *)arg0 + 0x48));
+    *(int *)((char *)arg0 + 0x48) = ReleaseStreamBinding(*(int *)((char *)arg0 + 0x48));
     return 0;
 }
 
@@ -7356,7 +7356,7 @@ extern void func_00227C78(int, int);
    handling, with slot selection on 0x1000/0x4000 and 0x40 either
    loading the slot (via D_001D28F8) or re-arming. Each branch reaches
    the globals through its own block-scoped pointers. */
-int func_00224040(char *arg0) {
+int Pause_SaveSlotInput(char *arg0) {
     char *g = D_001D5F70;
     int s;
     int old;
@@ -7408,7 +7408,7 @@ int func_00224040(char *arg0) {
 
                 D_0015EFB4_m |= 0x80;
                 *(int *)(d2 + 0xFC) = 0;
-                func_001FBC80(3, *(void **)(g4 + 4), 0);
+                Freeze_Enter(3, *(void **)(g4 + 4), 0);
                 return 0;
             }
             e = d + 0x30;
@@ -7510,7 +7510,7 @@ extern void func_0022F4A0(int arg0);
 extern short D_0013E15A_43E8[] __asm__("D_0013E15A");
 
 /* Load-slot menu handler (func_00224040's sibling): with a load armed it either aborts or starts the sound fade and loads; otherwise pad handling with slot selection. */
-int func_002243E8(char *arg0) {
+int Pause_LoadSlotInput(char *arg0) {
     char *g = D_001D5F70;
     int old = *(int *)(arg0 + 0x40);
 
@@ -7533,7 +7533,7 @@ int func_002243E8(char *arg0) {
 
             D_0015EFB4_m |= 0x100;
             *(int *)(d2 + 0xFC) = 0;
-            func_001FBC80(3, *(void **)(g4 + 4), 0);
+            Freeze_Enter(3, *(void **)(g4 + 4), 0);
             return 0;
         }
         {
@@ -7757,13 +7757,13 @@ s32 func_00224728(struct MenuScreen_pv *w) {
         if (memory_card_state_pv.err != 0 || memory_card_state_pv.sync_result != 0 || D_0015FF4C != 0) {
             if (D_0015F6CC != 0) {
                 D_0015EFB4_m |= 0x80;
-                func_001FBC80(8, menu_system_pv.current, memory_card_state_pv.unkFC);
+                Freeze_Enter(8, menu_system_pv.current, memory_card_state_pv.unkFC);
                 memory_card_state_pv.unkFC = 0;
                 return 0;
             } else {
                 D_0015EFB4_m |= 0x80;
                 memory_card_state_pv.unkFC = 0;
-                func_001FBC80(3, menu_system_pv.current, 0);
+                Freeze_Enter(3, menu_system_pv.current, 0);
                 return 0;
             }
         }
@@ -7827,7 +7827,7 @@ s32 func_00224728(struct MenuScreen_pv *w) {
     } else if (pad & 0x20) {
         if (w->flags & 0x2000) {
             if (memory_card_state_pv.unkFC != 0) {
-                func_001FBC80(7, 0, 0);
+                Freeze_Enter(7, 0, 0);
                 goto moved;
             }
             memory_card_state_pv.unkFC = 0;
@@ -7913,7 +7913,7 @@ extern s32 func_00116248_24C30(char *, const char *, ...) __asm__("func_00116248
 /* Draws the five save slots of the memory card page: the cursor frame around the selected
    one once the card is idle, then per slot "empty" or play time, gold bolts, bolts and date.
    Adapted from Lombyte (MIT) for PAL: src/ui/menus/draw_save_slot_list.c, draw_save_slot_list. */
-s32 func_00224C30(SaveMenu_24C30 *menu) {
+s32 Pause_DrawSaveSlots(SaveMenu_24C30 *menu) {
     char text[0x50];
     SaveSlot_24C30 *slot;
     s32 color;
@@ -8060,7 +8060,7 @@ void func_002250B8(struct MenuPanelOwner *owner) {
     }
     func_00234C98_250B8(8, 0);
     func_00234C98_250B8(0x42, 0x8000000044ULL);
-    func_002008B8(GetIconFrame(0xE99E, 7), x << 4, y << 4, width << 4, height << 4, 0x80);
+    DrawHudSpriteSubpixel(GetIconFrame(0xE99E, 7), x << 4, y << 4, width << 4, height << 4, 0x80);
     if (panel->active) {
         panel->time += 2;
         u = random_integer_below(200);
@@ -8129,14 +8129,14 @@ int func_00225358(char *arg0) {
         D_0016004C = -1;
         *(int *)(g + 0x11C) = -1;
         *(int *)(g + 0x120) = -1;
-        *(int *)(g + 0xA0) = func_00226EA8(1);
-        *(int *)(g + 0xA4) = func_00226EA8(1);
+        *(int *)(g + 0xA0) = ClaimStreamBinding(1);
+        *(int *)(g + 0xA4) = ClaimStreamBinding(1);
         g[0xC8] = 0xFF;
         g[0xC9] = 0xFF;
         g[0xCA] = 0;
         p = (int *)(g + 0xB0);
         for (i = 2; i >= 0; i--) {
-            *p = func_00226EA8(0);
+            *p = ClaimStreamBinding(0);
             p++;
         }
     }
@@ -8202,14 +8202,14 @@ int func_00225548(void *arg0) {
     p = (int *)((char *)arg0 + 0x44);
     for (i = 23; i >= 0; i--) { *p = func_002267C0(*p); p++; }
     g = D_001D5F70;
-    *(int *)(g + 0xA0) = func_00226F68(*(int *)(g + 0xA0));
-    *(int *)(g + 0xA4) = func_00226F68(*(int *)(g + 0xA4));
+    *(int *)(g + 0xA0) = ReleaseStreamBinding(*(int *)(g + 0xA0));
+    *(int *)(g + 0xA4) = ReleaseStreamBinding(*(int *)(g + 0xA4));
     g[0xC8] = 0xFF;      // emitted 0xC9 then 0xC8: two stores of the
     g[0xC9] = 0xFF;      // same value come out in the opposite order
     g[0xCA] = 0;
-    func_00227A70();
+    ItemPreview_ClearBindings();
     q = (int *)(g + 0xB0);
-    for (j = 2; j >= 0; j--) { *q = func_00226F68(*q); q++; }
+    for (j = 2; j >= 0; j--) { *q = ReleaseStreamBinding(*q); q++; }
     return 0;
 }
 
@@ -8440,7 +8440,7 @@ s32 LoadHandGadget(HandGadgetState *hand) {
                 moby->flags = 4;
                 if (moby->oclass == 0x25F) {
                     if (moby->prev_seq != 6) {
-                        func_00213DE0(moby, 6, 0, 10);
+                        MobyBlendAnimation(moby, 6, 0, 10);
                     }
                     moby->state = 8;
                 }
@@ -8548,7 +8548,7 @@ s32 LoadHandGadget(HandGadgetState *hand) {
         }
     }
 
-    func_00227100(hand->source_moby_address, hand->class_pose_moby,
+    ItemPreview_UpdateStreamQueue(hand->source_moby_address, hand->class_pose_moby,
                                              hand->animation_moby, &hand->x60, &hand->x64,
                                              &hand->x68);
     return 0;
@@ -8617,14 +8617,14 @@ void func_00225E00(void *arg0) {
     unsigned char *s;
 
     if ((b[0x70] & 2) && b[0x53] != 1) {
-        func_00213DE0(m, 1, 0, 0);
+        MobyBlendAnimation(m, 1, 0, 0);
     }
     for (i = 0; i < 0x25; i++) {
         if (D_001864D0_r[i].cls == m->oclass) {
             break;
         }
     }
-    func_0020DAF8(id, D_001864D0_r[i].bone, mtx);
+    MobyTransformScaledVertex(id, D_001864D0_r[i].bone, mtx);
     qcopy(m->pos, &mtx[12]);
     func_0020ED48(m);
     still = D_001864D0_r[i].still == 0;
@@ -8665,7 +8665,7 @@ void func_00225FB8(PauseMoby *m) {
 
     func_0020E3D0(m);
     func_0020ED48(m);
-    func_0020DAF8(id, 4, mtx);
+    MobyTransformScaledVertex(id, 4, mtx);
     qcopy(m->pos, &mtx[12]);
     func_001FA480(m->mtx, mtx);
     normalize_vector_triplet(m->mtx);
@@ -8714,7 +8714,7 @@ void func_002260A8(void *preview) {
     func_0020E3D0(moby);
     func_0020ED48(moby);
     is_second_preview_moby = moby == *(PauseMoby_260A8 **)(*preview_vars + 0x5C);
-    func_0020DAF8(source_moby_address, is_second_preview_moby ? 3 : 2, transform);
+    MobyTransformScaledVertex(source_moby_address, is_second_preview_moby ? 3 : 2, transform);
     qcopy(moby->pos, &transform[12]);
     func_001FA480(moby->basis, transform);
     normalize_vector_triplet(moby->basis);
@@ -8772,19 +8772,19 @@ void func_00226250(void *arg0) {
             if (b[0x52] == 6) {
                 if (--b[0x20] == 0) {
                     if (b[0x53] != 1) {
-                        func_00213DE0(m, 1, 0, 10);
+                        MobyBlendAnimation(m, 1, 0, 10);
                     }
                 } else if (b[0x53] != 6) {
-                    func_00213DE0(m, 6, 0, 0);
+                    MobyBlendAnimation(m, 6, 0, 0);
                 }
             } else if (b[0x53] != 1) {
-                func_00213DE0(m, 1, 0, 0);
+                MobyBlendAnimation(m, 1, 0, 0);
             }
         } else if (b[0x53] != 1) {
-            func_00213DE0(m, 1, 0, 0);
+            MobyBlendAnimation(m, 1, 0, 0);
         }
     }
-    func_0020DAF8(id, 5, mtx);
+    MobyTransformScaledVertex(id, 5, mtx);
     qcopy(m->pos, &mtx[12]);
     func_001FA480(m->mtx, mtx);
     normalize_vector_triplet(m->mtx);
@@ -8798,7 +8798,7 @@ void func_00226380(PauseMoby *m) {
 
     func_0020E3D0(m);
     func_0020ED48(m);
-    func_0020DAF8(id, m->oclass == 0x197 ? 0x1E : 0x1D, mtx);
+    MobyTransformScaledVertex(id, m->oclass == 0x197 ? 0x1E : 0x1D, mtx);
     qcopy(m->pos, &mtx[12]);
     func_001FA480(m->mtx, mtx);
     normalize_vector_triplet(m->mtx);
@@ -8883,7 +8883,7 @@ void func_00226410(struct AmmoPreviewMoby *moby) {
     orbit_angle = FastAddRots(orbit_angle, phase_angle);
     bob_angle = FastAddRots(bob_angle, double_phase);
     if (D_001D6220[moby->slot] != zero) {
-        func_00214D88(&D_001D6220[moby->slot],
+        ApproachWithVelocity(&D_001D6220[moby->slot],
                                   &D_001D6238[moby->slot],
                                   zero, 1.0f, (*(f32 *)&D_0015EE70) * 6.0f, D_0015EE6C * 6.0f);
     }
@@ -8982,7 +8982,7 @@ int func_00226818(char *h) {
     } else {
         *(int *)(h + 0x34) = 3;
     }
-    r = func_00226EA8(1);
+    r = ClaimStreamBinding(1);
     *(int *)(h + 0x3C) = r;
     if (r == 0) {
         *(int *)(h + 0x34) = 3;
@@ -9002,7 +9002,7 @@ int func_002268F0(void *arg0) {
     int i;
     for (i = 0x17; i >= 0; i--) { *p = func_002267C0(*p); p++; }
     *(int *)((char *)arg0 + 0x3C) =
-        func_00226F68(*(int *)((char *)arg0 + 0x3C));
+        ReleaseStreamBinding(*(int *)((char *)arg0 + 0x3C));
     q = (unsigned short *)D_001517D0;
     if ((unsigned int)(q[0x2D] - 6) >= 2) { q[0x2D] = 5; }
     return 0;
@@ -9037,7 +9037,7 @@ extern int func_00227018(int handle);
    `invert` is given), still has a key and is not already claimed, claim
    it, and scrub its buffer with 0xDEADBEEF. Returns the key, or 0 if
    there is nothing to claim. */
-int func_00226EA8(int invert) {
+int ClaimStreamBinding(int invert) {
     int i;
     int f;
     int n;
@@ -9064,7 +9064,7 @@ int func_00226EA8(int invert) {
    handed back through func_00217588 first. Always returns 0 so callers
    can assign it straight over their handle. The flags are read from the
    table at every use, not kept in a local. */
-int func_00226F68(int key) {
+int ReleaseStreamBinding(int key) {
     int i;
     char *g;
 
@@ -9267,9 +9267,9 @@ int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char *
         if (result != 0) {
             D_001D6410_q[0] = D_001D6250_q[0];
             func_00227928();
-            func_00227A70();
-            func_00227B00(D_001D6410_q[0].arg[11], D_001D6410_q[0].arg[12]);
-            func_00213F28(moby, D_001D6410_q[0].arg[0], 0, 10, 5);
+            ItemPreview_ClearBindings();
+            ItemPreview_StreamBindings(D_001D6410_q[0].arg[11], D_001D6410_q[0].arg[12]);
+            MobyBlendAnimationEx(moby, D_001D6410_q[0].arg[0], 0, 10, 5);
             if (D_001D6410_q[0].arg[0] == D_001D5F70_q[0].loaded[0]) {
                 D_001D5F70_q[0].idx = 1;
             } else if (D_001D6410_q[0].arg[0] == D_001D5F70_q[0].loaded[1]) {
@@ -9277,13 +9277,13 @@ int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char *
             }
             if (D_001864D0_1F238[D_001D6410_q[0].arg[3]].item_type == 2) {
                 if (m2 != 0) {
-                    func_00213F28(m2, D_001D6410_q[0].arg[4], 0, 10, 5);
+                    MobyBlendAnimationEx(m2, D_001D6410_q[0].arg[4], 0, 10, 5);
                 }
                 if (m1 != 0) {
                     func_00213D28_q(m1, 1, 0);
                 }
             } else if (m1 != 0) {
-                func_00213F28(m1, D_001D6410_q[0].arg[4], 0, 10, 5);
+                MobyBlendAnimationEx(m1, D_001D6410_q[0].arg[4], 0, 10, 5);
             }
             *o0 = (char *)func_002267C0((int)*o0);
             *o1 = (char *)func_002267C0((int)*o1);
@@ -9291,7 +9291,7 @@ int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char *
             if (D_001D6410_q[0].arg[5] != -1) {
                 if ((*o0 = func_00226720(D_001D6410_q[0].arg[5])) != 0) {
                     func_00213D28_q(*o0, D_001D6410_q[0].arg[6], 0);
-                    func_00213DE0(*o0, D_001D6410_q[0].arg[6], 0, 10);
+                    MobyBlendAnimation(*o0, D_001D6410_q[0].arg[6], 0, 10);
                     *(short *)(*o0 + 0x34) = 0;
                     p = *o0;
                     qcopy(p + 0x10, moby + 0x10);
@@ -9306,7 +9306,7 @@ int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char *
             if (D_001D6410_q[0].arg[7] != -1) {
                 if ((*o1 = func_00226720(D_001D6410_q[0].arg[7])) != 0) {
                     func_00213D28_q(*o1, D_001D6410_q[0].arg[8], 0);
-                    func_00213DE0(*o1, D_001D6410_q[0].arg[8], 0, 10);
+                    MobyBlendAnimation(*o1, D_001D6410_q[0].arg[8], 0, 10);
                     *(short *)(*o1 + 0x34) = 0;
                     p = *o1;
                     qcopy(p + 0x10, moby + 0x10);
@@ -9321,7 +9321,7 @@ int func_00227100_r(char *moby, char *m1, char *m2, char **o0, char **o1, char *
             if (D_001D6410_q[0].arg[9] != -1) {
                 if ((*o2 = func_00226720(D_001D6410_q[0].arg[9])) != 0) {
                     func_00213D28_q(*o2, D_001D6410_q[0].arg[10], 0);
-                    func_00213DE0(*o2, D_001D6410_q[0].arg[10], 0, 10);
+                    MobyBlendAnimation(*o2, D_001D6410_q[0].arg[10], 0, 10);
                     *(short *)(*o2 + 0x34) = 0;
                     p = *o2;
                     qcopy(p + 0x10, moby + 0x10);
@@ -9449,7 +9449,7 @@ extern PreviewAnimationStreamState D_001D5F70_27A70 __asm__("D_001D5F70");
 void func_00227A70(void);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/ui/menus/item_preview/clear_preview_resource_bindings.c, clear_preview_resource_bindings. */
-void func_00227A70(void) {
+void ItemPreview_ClearBindings(void) {
     register s32 class_slot;
     register s32 class_resource_address;
     s32 resource_index;
@@ -9497,7 +9497,7 @@ extern s32 func_00234238_27B00() __asm__("func_00234238");
    MACRO_ADDR declaration; it is also what orders the loop index before the binding pointer.
    The guard tests the index (zero there): with `count > 0` the index lives twice as long.
    Adapted from Lombyte (MIT) for PAL: src/ui/menus/fun_00226848.c, load_preview_resource_bindings. */
-void func_00227B00(s32 first_resource, s32 resource_count) {
+void ItemPreview_StreamBindings(s32 first_resource, s32 resource_count) {
     s32 count;
     s32 *class_resource_slot;
     s32 read_address;
@@ -9565,7 +9565,7 @@ void func_00227C78(int arg0, int arg1) {
     func_00121A80(D_0015EF98);
     func_0012D818(D_0015EF98);
     func_00208FA0();
-    func_00208338(D_00141FC0 + (D_0015EE84 << 11));
+    Menu_ReadSector(D_00141FC0 + (D_0015EE84 << 11));
     memcard_MakeWholeSave((char *)arg0);
     *(int *)(b + 0xF4) = arg0;
     *(int *)(b + 0x14) = arg1;
@@ -9830,7 +9830,7 @@ typedef union {
 } PauseVec_282D0;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/ui/menus/fun_00226fb8.c, FUN_00226fb8. */
-void func_002282D0(PauseVec_282D0 *dir, f32 scale) {
+void BuildBasisFromDirection(PauseVec_282D0 *dir, f32 scale) {
     PauseVec_282D0 d;
     f32 *v = d.v;
 
@@ -9918,7 +9918,7 @@ extern s32 *D_00161000_284E8 __asm__("D_00161000") MACRO_ADDR;
 extern void func_00234C98_284E8(s32, s64) __asm__("func_00234C98");
 
 /* Appends a DMA packet drawing 32-pixel-wide sprite strips over the screen in a fixed grey (0x7F808080). */
-void func_002284E8(void) {
+void DrawScreenGreyOverlay(void) {
     s32 *base;
     s64 *commands;
     s64 *vertices;
@@ -9997,7 +9997,7 @@ extern s32 *D_00161000_28690 __asm__("D_00161000") MACRO_ADDR;
 
 /* Appends a DMA packet that clears the screen in 32-pixel-wide sprite strips of the given colour.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/fun_00227378.c, append_fullscreen_clear_strips. */
-void func_00228690(s64 color) {
+void ClearScreenColor(s64 color) {
     s32 *base;
     s64 *commands;
     s64 *vertices;
@@ -10104,7 +10104,7 @@ void func_00228860(u8 *command_stream) {
     struct GraphicsSetupRecord *record;
     s32 command_index;
 
-    func_002284E8();
+    DrawScreenGreyOverlay();
     record = (struct GraphicsSetupRecord *)command_stream;
     *(u32 *)(D_00161000_28860 + 0) = 0x30000007;
     *(u32 *)(D_00161000_28860 + 4) =
@@ -10135,7 +10135,7 @@ void func_00228860(u8 *command_stream) {
         func_00234C98_28860(0x4C, 0x80070);
     }
     func_00234C98_28860(0x42, 0x2000000064LL);
-    func_00228690(0);
+    ClearScreenColor(0);
     func_00234C98_28860(0x47, 0x5360B);
     func_00234C98_28860(0x42, 0x8000000044LL);
 }

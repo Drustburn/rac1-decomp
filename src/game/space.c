@@ -278,7 +278,7 @@ extern void func_001F9CA0(void *, void *, void *);
    rebuilt from the other two by func_001F9CA0. Returns the flag byte.
    The flag is read through a 4-byte MACRO_ADDR alias: over -G2, so the
    macro expands to lui/lbu through the destination register. */
-unsigned char func_0022F128(void) {
+unsigned char MovieCamera_StepKeyframe(void) {
     char *t = D_0018CC20_c;
     char *key = *(char **)(t + 0x54) + *(int *)(t + 0x38) * 32;
     unsigned char flag = key[0xC];
@@ -339,7 +339,7 @@ extern float D_001D9B60[][4][4];
    returns. In D_0015F6E8 mode 6 with flare set 3, the flare fades as
    D_0013E130's level passes func_001F98C0(150), and its depth comes from
    func_00214358. The corners are D_001D9B60[set]. */
-void func_0022F258(char *arg0) {
+void DrawLightFlare(char *arg0) {
     float a[4];
     Quad_FBE0 q;
     float b[4];
@@ -440,7 +440,7 @@ void func_001F7EF8_2F4C8(void *, int, int) __asm__("func_001F7EF8");
    and the row size, offsets them by the row, the player's matrix and the
    object position, and draws the quad.
    Adapted from Lombyte (MIT): src/gameplay/fun_0022e1b0.c, FUN_0022e1b0. */
-void func_0022F4C8(unsigned char *m) {
+void DrawResidentEffectQuads(unsigned char *m) {
     GeometryQuad_2F4C8 quad;
     QuadOffset_2F4C8 v;
     QuadOffset_2F4C8 *tbl;
@@ -590,7 +590,7 @@ void func_002305A0(void) {
     struct LevelDisplayState_305A0 *display_state;
     s64 texture;
     framebuf_appendLargeSetup();
-    func_001F2608();
+    BuildViewMatrices();
     func_0020DAB0();
     ResetGsRegisters();
     saved_projection_scale = D_0018CE00.projection_scale;
@@ -599,11 +599,11 @@ void func_002305A0(void) {
         D_0018CE00.projection_scale = 0.63f;
     }
     UpdateViewContext();
-    func_001F2608();
+    BuildViewMatrices();
     func_0022C5A0();
     D_0018CE00.projection_scale = saved_projection_scale;
     UpdateViewContext();
-    func_001F2608();
+    BuildViewMatrices();
     if (D_0013E130_305A0.mode == 4) {
         SetupGifPaging(1);
         func_0022FBE0();
@@ -636,7 +636,7 @@ void func_002305A0(void) {
         rotation_angle = ((D_0015F538 % 55) * (-6.2831855f)) / 55.0f;
         /* The frame counter contributes only the sprite angle modulo 55. */
         /* Retail passes the full texture value in a2 and the five floats in f12-f16. */
-        func_00200E38(1216.0f, screen_y, quad_extent, 272.0f, 0x40, 0x40,
+        DrawHudSpriteRotated(1216.0f, screen_y, quad_extent, 272.0f, 0x40, 0x40,
                             func_001F4868_305A0(3), rotation_angle);
     }
     DoGifPaging();
@@ -656,7 +656,7 @@ extern int func_002140B0(int);
 extern char *func_00219780(void *, void *, void *, int, int, int, int, int, int);
 
 /* Spawns six particles around a moby: random velocity and a position taken from the flare corner table, transformed by the moby's matrices. Adapted from Lombyte (MIT) for PAL: src/rendering/effects/fun_0022f5b0.c, FUN_0022f5b0. */
-void func_002308C8(char *m, float z) {
+void SpawnFlareParticles(char *m, float z) {
     float vel[4];
     float vel2[4];
     float pos[4];
@@ -678,7 +678,7 @@ void func_002308C8(char *m, float z) {
         a = func_001F98C0(4);
         b = func_001F98C0(4);
         c = func_001F98C0(4);
-        func_00219780(pos, vel, vel2, 0x24C0C0C0, 0x14C0C0C0, a, b, c + random_integer_below(func_001F98C0(4)), -1);
+        PartType02Spawn(pos, vel, vel2, 0x24C0C0C0, 0x14C0C0C0, a, b, c + random_integer_below(func_001F98C0(4)), -1);
     }
 }
 
@@ -1935,7 +1935,7 @@ extern void func_001F4E08(int);
 
 /* Plays movie id, taking its {sector, size} from the WAD table of
    contents (from the second table when D_0015EE80 is set). */
-void func_00232920(int id) {
+void PlayMovie(int id) {
     int sector;
     int size;
     int buf;
@@ -2299,15 +2299,15 @@ void func_00232EF0(s32 language_index, s32 first_slide, s32 second_slide,
                                    0x80808080, second_texture);
             }
         }
-        func_00209E68();
-        func_00209070();
+        MemCard_UpdateState();
+        Menu_RunStateHandler();
         VU1_syncChain(1);
         func_00122598(0);
         ResetGsRegistersPr();
         VU1_sendChain();
         VU1_swapChain();
         if (preload_level != 0) {
-            if (func_00204C60() == 0) {
+            if (LevelArchiveLoadStep() == 0) {
                 if (duration_ticks < frame + 0x14) {
                     duration_ticks = frame + 0x14;
                 }
@@ -2429,8 +2429,8 @@ void DoSpaceTransition(void) {
     SetBackgroundColor(0, 0, 0);
     if (D_0015F6E4 < 0) {
         while (D_0013D390_b.fDC >= 3 || D_0013D390_b.fE4 >= 0) {
-            func_00209E68();
-            func_00209070();
+            MemCard_UpdateState();
+            Menu_RunStateHandler();
         }
         FadeToBlack(func_001F98C0(6));
         D_0015EE84_m = D_0015F6E4;
@@ -2443,19 +2443,19 @@ void DoSpaceTransition(void) {
     if (D_0015F6E4 == 0 && D_0013DE60[0] == 0) {
         FadeToBlack(func_001F98C0(6));
         func_00232EF0(lvl, 0, 1, func_001F98C0(240), 0);
-        func_00232920(0);
+        PlayMovie(0);
         func_00232EF0(lvl, 2, 2, func_001F98C0(180), 0);
-        func_00232920(1);
+        PlayMovie(1);
         D_0015EE84_m = D_0015F6E4;
         func_00232EF0(lvl, 3, 4, func_001F98C0(240), 1);
-        func_00232920(2);
+        PlayMovie(2);
     } else if (D_0015EE84_m == 0 && D_0015F6E4 == 1 && D_0013DE60[1] == 0) {
         FadeToBlack(func_001F98C0(6));
         func_00232EF0(lvl, 5, 6, func_001F98C0(240), 0);
-        func_00232920(3);
-        func_00232920(4);
+        PlayMovie(3);
+        PlayMovie(4);
         func_00232EF0(lvl, 7, 7, func_001F98C0(180), 0);
-        func_00232920(5);
+        PlayMovie(5);
         D_0013DE60[D_0015EE84_m] = 2;
         D_0015EE84_m = D_0015F6E4;
         func_00232EF0(lvl, 8, 8, func_001F98C0(240), 1);
@@ -2463,27 +2463,27 @@ void DoSpaceTransition(void) {
         if (D_0015F6E4 == 4 && D_0013DE60[4] == 0) {
             FadeToBlack(func_001F98C0(12));
             func_00232EF0(lvl, 9, 10, func_001F98C0(240), 0);
-            func_00232920(6);
+            PlayMovie(6);
         }
         if (D_0015EE84_m == 7 && D_0013DE60[7] != 2 && D_0013DE48_b.f8 != 0) {
             FadeToBlack(func_001F98C0(12));
             func_00232EF0(lvl, 11, 11, func_001F98C0(240), 0);
-            func_00232920(7);
+            PlayMovie(7);
         }
         if (D_0015F6E4 == 13 && D_0013DE60[13] == 0) {
             FadeToBlack(func_001F98C0(12));
             func_00232EF0(lvl, 12, 13, func_001F98C0(240), 0);
-            func_00232920(8);
+            PlayMovie(8);
         }
         if (D_0015EE84_m == 14 && D_0013DE60[14] != 2 && D_0013DE48_b.fF != 0) {
             FadeToBlack(func_001F98C0(12));
             func_00232EF0(lvl, 14, 14, func_001F98C0(240), 0);
-            func_00232920(9);
+            PlayMovie(9);
         }
         if (D_0015F6E4 == 16 && D_0013DE60[16] == 0) {
             FadeToBlack(func_001F98C0(12));
             func_00232EF0(lvl, 15, 16, func_001F98C0(240), 0);
-            func_00232920(10);
+            PlayMovie(10);
         }
         if ((unsigned int)D_0015EE84_m < 19) {
             ok = 1;
@@ -2512,30 +2512,30 @@ void DoSpaceTransition(void) {
             UpdatePad();
             func_00230A90();
             dispatch_game_state_update();
-            func_00209E68();
-            func_00209070();
+            MemCard_UpdateState();
+            Menu_RunStateHandler();
             VU1_syncChain(1);
             func_00122598_i(0);
             D_0015F538++;
             func_00228110();
             if (!done) {
-                done = func_00204C60();
+                done = LevelArchiveLoadStep();
             }
         }
         if (!done) {
             do {
                 func_00118D80(0);
                 func_00122598_i(0);
-                func_00209E68();
-                func_00209070();
+                MemCard_UpdateState();
+                Menu_RunStateHandler();
                 func_00228110();
-            } while (func_00204C60() == 0);
+            } while (LevelArchiveLoadStep() == 0);
         }
         while (D_0013D390_b.fDC != 2 || D_0013D390_b.fE4 >= 0) {
             func_00118D80(0);
             func_00122598_i(0);
-            func_00209E68();
-            func_00209070();
+            MemCard_UpdateState();
+            Menu_RunStateHandler();
             func_00228110();
         }
     }
@@ -2589,7 +2589,7 @@ extern float func_001FA888(int);
 extern void func_0020DAF8(EnvironmentMappedObject *, int, void *);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/rendering/render_environment_mapped_object.c, render_environment_mapped_object. */
-void func_00233AB8(EnvironmentMappedObject *object) {
+void DrawEnvMappedObject(EnvironmentMappedObject *object) {
     Vec4 quad_positions[4];
     int colors[4];
     float texture_coordinates[4][2];
@@ -2632,7 +2632,7 @@ void func_00233AB8(EnvironmentMappedObject *object) {
     colors[2] = color;
     colors[1] = color;
     colors[0] = color;
-    func_0020DAF8(object, 0, object_transform);
+    MobyTransformScaledVertex(object, 0, object_transform);
     if (D_0015F6E8 != 0 || (FastAbsF(D_00187040_33AB8.position_x - object->position_x) < 16.0f &&
                             FastAbsF(D_00187040_33AB8.position_y - object->position_y) < 16.0f)) {
         mapping_enabled = 1;

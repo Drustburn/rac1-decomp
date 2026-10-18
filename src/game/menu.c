@@ -689,7 +689,7 @@ extern int D_0015EE84 MACRO_ADDR;
 /* Read a sector into arg0 from the open file (D_001A01F0 slot state) or
    clear it when none is open, and track the largest read per slot in
    D_0013D668. Adapted from Lombyte (MIT) for PAL. */
-void func_00208338(int arg0) {
+void Menu_ReadSector(int arg0) {
     int n;
 
     func_00209040();
@@ -719,14 +719,14 @@ void func_002083E0(void *arg0, unsigned char *arg1, int arg2) {
         return;
     }
     if (*arg1 & 1) {
-        func_00208458(arg0, arg1, arg2);
+        DecodeOcclusionMap(arg0, arg1, arg2);
     } else {
         func_00208688(arg0, arg1);
     }
 }
 
 /* Decodes the run-length compressed 1-bit occlusion map into 0x8000 bytes at dst: runs are expanded one byte per bit in the scratchpad, packed eight to a byte and copied out 0x400 bytes at a time. */
-void func_00208458(void *dst, unsigned char *ctrl, int spans) {
+void DecodeOcclusionMap(void *dst, unsigned char *ctrl, int spans) {
     unsigned char *dst_end;
     unsigned char *end;
     unsigned char *span;
@@ -927,7 +927,7 @@ extern int func_00116248_2(void *, char *) __asm__("func_00116248");
    serves both the test and the copy), and each block that reads
    D_001A01F0 has its own char * local, which gives retail's kept %hi
    and rebuilt %lo. */
-void func_00208AB0(int bank, unsigned char *dst) {
+void FormatMenuItemText(int bank, unsigned char *dst) {
     unsigned char buf[16];
     unsigned char *src;
     unsigned char *p;
@@ -1053,7 +1053,7 @@ void func_00208D38(int left, int top, int right, int bottom) {
             float scale = (2.0f * sc[st[0x89]] + 5.0f) / 13.0f;
             float w = scale * (float)(1 << (e[6] + 4));
 
-            func_002008B8(tex, sx - (int)(scale * (float)(1 << (e[6] + 3))),
+            DrawHudSpriteSubpixel(tex, sx - (int)(scale * (float)(1 << (e[6] + 3))),
                           sy - (int)(scale * (float)(1 << (e[7] + 3))),
                           (int)w, (int)(scale * (float)(1 << (e[7] + 4))), 0x80);
         }
@@ -1156,7 +1156,7 @@ extern void (*D_001A0538[])(void);
 /* Calls the handler for the state in D_0015EFB0 from the table at
    D_001A0538. Bits 0x80 and 0x100 of D_0015EFB4 request states 0x15 and
    0x14; D_00161380 counts calls since the state last changed. */
-void func_00209070(void) {
+void Menu_RunStateHandler(void) {
     char *b = D_0013D390;
     int old;
 

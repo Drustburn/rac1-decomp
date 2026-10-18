@@ -7,7 +7,7 @@
 extern float func_001F9D48(void *, void *);
 
 /* index of the nearest of n vectors to a + 0x10 */
-int func_L04_001F2F68(char *a, char *b, int n) {
+int NearestVectorIndex(char *a, char *b, int n) {
     int best = -1;
     int i;
     float m = 32767.0f;
@@ -73,7 +73,7 @@ extern int func_L04_0024D790_1F3010(void *, void *, void *, int) __asm__("func_L
 
 /* Steering for a moby: pulls it along its path (c->path) and toward its target, pushes it away from the
  * listed mobys (and the hero's), and keeps it off the ground; f holds the gains. */
-void func_L04_001F3010(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
+void MobySteer(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
     Vec4A o;
     Vec4A w;
     Vec4A t;

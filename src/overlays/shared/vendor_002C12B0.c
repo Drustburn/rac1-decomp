@@ -68,7 +68,7 @@ void func_L00_002C2A80(void *mv) {
         }
     } break;
     case 2:
-        func_00214D28(m + 0x2C, 0.0f, *(float *)(*(char **)(m + 0x24) + 0x24) * 0.02f);
+        ApproachValue(m + 0x2C, 0.0f, *(float *)(*(char **)(m + 0x24) + 0x24) * 0.02f);
         if (*(float *)(m + 0x2C) == 0.0f)
             DeleteMoby(m);
         break;
@@ -84,7 +84,7 @@ extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 
 /* computes a launch velocity that reaches a point within a limited range */
-void func_L00_002C2C30(float a, float b, float c, float *p, float *q, float *out) {
+void ComputeLaunchVelocity(float a, float b, float c, float *p, float *q, float *out) {
     float v[4];
     float cap = a * c * 0.5f;
     float dx, dy, d, dz, ang, t, s;
@@ -154,7 +154,7 @@ typedef struct {
 } GloveVars_2DD8;
 
 /* update function of moby class 190 (mine_glove): aims the glove, throws a mine at the target */
-void func_L00_002C2DD8(struct Moby *moby) {
+void MineGloveUpdate(struct Moby *moby) {
     GloveVars_2DD8 *vars;
     Vec4 saved, offset, rotatedOffset;
     Vec4 local[4];
@@ -181,7 +181,7 @@ void func_L00_002C2DD8(struct Moby *moby) {
     if (vars == 0)
         return;
     func_L00_00250800(moby, 0, &saved);
-    func_0020DAF8(moby, 0, local);
+    MobyTransformScaledVertex(moby, 0, local);
     func_001F9EE8(&rotatedOffset, &offset, local);
     FastVecAdd(&vars->grip, &saved, &rotatedOffset);
     if (vars->held != 0)
@@ -189,14 +189,14 @@ void func_L00_002C2DD8(struct Moby *moby) {
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
         vars->held = 0;
     if (D_0013F450_2DD8.state.current == 1)
-        func_L00_00222B80(0x1E, 1);
+        HeroEnterMoveState(0x1E, 1);
     if (func_001F9908(&vars->timer58) && !D_0013F450_2DD8.unk20AC) {
         if ((D_0013F450_2DD8.unk20A8 && D_0013F450_2DD8.unk1BC == scale_ticks(0x11)) ||
             ((D_0013CBE4 & D_0013F450_2DD8.items[0].button_mask) &&
-             D_0013F450_2DD8.state.current == 0x1E && func_L00_00234718(-1)) ||
+             D_0013F450_2DD8.state.current == 0x1E && GetAmmo(-1)) ||
             (D_0013F450_2DD8.state.current == 0x23 && D_0013F450_2DD8.state_timer == scale_ticks(0x10))) {
             func_L00_00217570(0x1A, 0);
-            func_L00_00234638(-1, 1);
+            TakeAmmo(-1, 1);
             moby->state = 3;
         }
     }
@@ -225,7 +225,7 @@ void func_L00_002C2DD8(struct Moby *moby) {
             slope = func_L00_001FF860(func_001F9CE8(&arc), arc.f[2]);
             if (0.593411922f < slope) slope = 0.593411922f;
             if (slope < -1.39626336f) slope = -1.39626336f;
-            func_00215C00(&arc, D_0013E620_2DD8.unk11 ? ((D_0013CA40_2DD8.held & 5) ? 12.0f : 4.0f) : ((D_0013CA40_2DD8.held & 5) ? 6.0f : 4.0f), angle, slope);
+            BuildSphericalOffset(&arc, D_0013E620_2DD8.unk11 ? ((D_0013CA40_2DD8.held & 5) ? 12.0f : 4.0f) : ((D_0013CA40_2DD8.held & 5) ? 6.0f : 4.0f), angle, slope);
             {
                 float distance = func_001F9CE8(&arc);
                 float z = arc.f[2];
@@ -253,7 +253,7 @@ void func_L00_002C2DD8(struct Moby *moby) {
                 }
             }
         }
-        func_L00_002C2C30(D_0015EE70_2DD8 * 9.8f, 1.0f, D_0013E620_2DD8.unk11 ? ((D_0013CA40_2DD8.held & 5) ? 12.0f : 4.0f) : ((D_0013CA40_2DD8.held & 5) ? 6.0f : 4.0f), pos.f, target.f, out);
+        ComputeLaunchVelocity(D_0015EE70_2DD8 * 9.8f, 1.0f, D_0013E620_2DD8.unk11 ? ((D_0013CA40_2DD8.held & 5) ? 12.0f : 4.0f) : ((D_0013CA40_2DD8.held & 5) ? 6.0f : 4.0f), pos.f, target.f, out);
     }
     switch (moby->state) {
     case 0:
@@ -302,7 +302,7 @@ void func_L00_002C2DD8(struct Moby *moby) {
     func_001F9908(&vars->timer54);
     if (vars->held != 0) {
         qcopy(&vars->held->pos, &vars->grip);
-    } else if (vars->timer54 == 0 && func_L00_00234718(-1)) {
+    } else if (vars->timer54 == 0 && GetAmmo(-1)) {
         qzero(&launch);
         vars->held = func_L00_002AB170(moby, &vars->grip, &launch);
     }
@@ -451,7 +451,7 @@ void func_L00_002C39D0(struct Moby *moby) {
         return;
     }
     func_L00_00250800((u8 *)moby, 0, &saved);
-    func_0020DAF8(moby, 0, local);
+    MobyTransformScaledVertex(moby, 0, local);
     func_001F9EE8(&rotatedOffset, &offset, local);
     FastVecAdd(&vars->grip, &saved, &rotatedOffset);
     if (vars->held != 0)
@@ -459,14 +459,14 @@ void func_L00_002C39D0(struct Moby *moby) {
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
         vars->held = 0;
     if (D_0013F450_C39D0.state.current == 1)
-        func_L00_00222B80(0x1E, 1);
+        HeroEnterMoveState(0x1E, 1);
     if (func_001F9908(&vars->timer) && !D_0013F450_C39D0.unk20AC) {
         if ((D_0013F450_C39D0.unk20A8 && D_0013F450_C39D0.unk1BC == scale_ticks(0x11)) ||
             ((D_0013CBE4 & D_0013F450_C39D0.items[0].button_mask) &&
-             D_0013F450_C39D0.state.current == 0x1E && func_L00_00234718(-1)) ||
+             D_0013F450_C39D0.state.current == 0x1E && GetAmmo(-1)) ||
             (D_0013F450_C39D0.state.current == 0x23 && D_0013F450_C39D0.state_timer == scale_ticks(0x10))) {
             func_L00_00217570(0x1A, 0);
-            func_L00_00234638(-1, 1);
+            TakeAmmo(-1, 1);
             moby->state = 3;
         }
     }
@@ -499,7 +499,7 @@ void func_L00_002C39D0(struct Moby *moby) {
             if (slope < -1.39626336f) slope = -1.39626336f;
             {
                 f32 speed = (D_0013CA40.held & 5) ? func_001FA888(D_0013E62A[0]) * 2.5f + 8.5f : 8.5f;
-                func_00215C00(&temporary.arc, speed, angle, slope);
+                BuildSphericalOffset(&temporary.arc, speed, angle, slope);
             }
             qcopy(&direction, &D_L00_00166EC0_C39D0);
             {
@@ -602,7 +602,7 @@ void func_L00_002C39D0(struct Moby *moby) {
     }
     if (vars->held != 0)
         qcopy(&vars->held->pos, &vars->grip);
-    else if (func_L00_00234718(-1) || D_0013F450_C39D0.unk20A8)
+    else if (GetAmmo(-1) || D_0013F450_C39D0.unk20A8)
         vars->held = func_L00_002AE110(moby, &vars->grip);
 }
 extern float func_L00_001FF860(float, float);
@@ -1008,7 +1008,7 @@ void func_L00_002C53A8(char *m) {
     len = FastVecLength(v);
     if (len < *(float *)(d + 0x60)) *(float *)(d + 0x60) = len;
     if (*(float *)(d + 0x60) < len) func_L00_001FF4B0(v, v, *(float *)(d + 0x60));
-    func_L00_00259868(m, v, 0.5f, 0.4f, 0.0f, 0);
+    MoveMobyWithCollision(m, v, 0.5f, 0.4f, 0.0f, 0);
     y = func_00214358(m + 0x10, 0, 0.5f);
     if (*(float *)(m + 0x18) < y) {
         *(float *)(m + 0x18) = y;
@@ -1148,7 +1148,7 @@ void func_L00_002C5688(char *moby) {
         }
         if (D_0013F450_C48C8.state.current == 0x1E)
             *(int *)((char *)D_0013F450_C48C8.moby + 0x94) = 0;
-        ok = ((int (*)(void *, void *, float, float, float, int))func_L00_00259868)(moby, vars + 0x10, 0.2f, 0.2f, 0.0f, 0);
+        ok = ((int (*)(void *, void *, float, float, float, int))MoveMobyWithCollision)(moby, vars + 0x10, 0.2f, 0.2f, 0.0f, 0);
         if (ok & 1) {
             qcopy(wv, moby + 0x10);
             wv[2] = wv[2] + 0.2f;
@@ -1180,7 +1180,7 @@ void func_L00_002C5688(char *moby) {
                         if (D_L00_00173F40_C4E00.moby == 0 || D_L00_00173F40_C4E00.unk1C > 0 ||
                             (short)t44 > scale_ticks(240)) {
                             if (*(unsigned char *)(moby + 0x53) != 1)
-                                func_00213DE0(moby, 1, 0, scale_ticks(10));
+                                MobyBlendAnimation(moby, 1, 0, scale_ticks(10));
                             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                             *(int *)(moby + 0x98) = 0;
                             qzero(vars + 0x10);
@@ -1289,10 +1289,10 @@ void func_L00_002C5688(char *moby) {
         }
     skip:
         *(unsigned char *)(moby + 0xA4) = 0xFF;
-        func_L00_0025E590(moby, vars);
+        StepColorFade(moby, vars);
         if ((*(unsigned char *)(moby + 0x70) & 2) != 0) {
             if (*(unsigned char *)(moby + 0x53) != 2)
-                func_00213DE0(moby, 2, 0, scale_ticks(10));
+                MobyBlendAnimation(moby, 2, 0, scale_ticks(10));
             *(float *)(moby + 0x58) = random_float_between(0.7f, 1.05f);
         }
         if (*(unsigned char *)(moby + 0x20) != 4) {
@@ -1330,7 +1330,7 @@ void func_L00_002C5688(char *moby) {
                 *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) + D_0015EE60 * 0.02f;
             if (FastDecTimer(vars + 0x44) != 0) {
                 if (*(unsigned char *)(moby + 0x53) != 0)
-                    func_00213DE0(moby, 0, 0, scale_ticks(60));
+                    MobyBlendAnimation(moby, 0, 0, scale_ticks(60));
                 func_L00_00260878(moby, D_L00_001B0BB0);
                 *(unsigned char *)(moby + 0x20) = 5;
             }
@@ -1447,7 +1447,7 @@ typedef struct {
 
 /* Update ammunition pickup physics, collection, animation and scale.
    Animation states share one stack value; index reloads follow calls. */
-void func_L00_002C6720(Moby *m) {
+void AmmoPickupUpdate(Moby *m) {
     AmmoPickup_6720 *p;
     unsigned int state;
     FxVec position;
@@ -1507,7 +1507,7 @@ void func_L00_002C6720(Moby *m) {
         value_ptr = &value;
         *value_ptr = (float)m->alpha;
         duration = scale_ticks(30);
-        func_00214D28(value_ptr, 128.0f, (float)(128 / duration));
+        ApproachValue(value_ptr, 128.0f, (float)(128 / duration));
         m->alpha = truncate_float_to_s32(*value_ptr);
         if (p->timer > 0)
             return;
@@ -1577,10 +1577,10 @@ void func_L00_002C6720(Moby *m) {
         float distance;
         float factor;
         float class_scale;
-        func_00214D28(&p->rise_speed, 0.0f, D_0015EE70 * 24.0f);
+        ApproachValue(&p->rise_speed, 0.0f, D_0015EE70 * 24.0f);
         m->pos.z += p->rise_speed;
         limit = FastVecLength(&p->velocity);
-        func_00214D28(&limit, D_0015EE6C * 64.0f, D_0015EE70 * 24.0f);
+        ApproachValue(&limit, D_0015EE6C * 64.0f, D_0015EE70 * 24.0f);
         FastVecSub(&p->velocity, D_0013E633 + 0xEED, &m->pos);
         if (m->scale == 0.0f || FastVecLength(&p->velocity) < limit) {
             DeleteMoby(m);
@@ -1599,7 +1599,7 @@ void func_L00_002C6720(Moby *m) {
             distance = 0.3f;
         }
         class_scale = m->pclass->scale;
-        func_00214D28(&m->scale, class_scale * distance, class_scale * 0.1f);
+        ApproachValue(&m->scale, class_scale * distance, class_scale * 0.1f);
         return;
     }
     case 3: {
@@ -1621,7 +1621,7 @@ void func_L00_002C6720(Moby *m) {
         target = (float)(truncate_float_to_s32(oscillation) + 10);
         value_ptr = &value;
         random = scale_ticks(30);
-        func_00214D28(value_ptr, target, (float)(128 / random));
+        ApproachValue(value_ptr, target, (float)(128 / random));
         m->alpha = truncate_float_to_s32(*value_ptr);
         if (func_L00_00251468(m, ((Hero *)D_0013F450)->moby) >= 0.0f) {
             m->state = 1;
@@ -2100,7 +2100,7 @@ void func_L00_002C83D0(unsigned char *m) {
     switch (m[0x20]) {
     case 0:
         if (m[0x70] & 2) {
-            if (m[0x53] != 1) func_00213DE0(m, 1, 0, scale_ticks(10));
+            if (m[0x53] != 1) MobyBlendAnimation(m, 1, 0, scale_ticks(10));
             m[0x20] = 1;
             *(float *)(m + 0x58) = 1.0f;
         }
@@ -2108,11 +2108,11 @@ void func_L00_002C83D0(unsigned char *m) {
     case 1:
         st = (*(unsigned char **)p)[0x20];
         if (st == 2) {
-            if (m[0x53] != 3) func_00213DE0(m, 3, 0, scale_ticks(10));
+            if (m[0x53] != 3) MobyBlendAnimation(m, 3, 0, scale_ticks(10));
             m[0x20] = 3;
             *(float *)(m + 0x58) = 1.0f;
         } else if (st == 8) {
-            if (m[0x53] != 2) func_00213DE0(m, 2, 0, scale_ticks(10));
+            if (m[0x53] != 2) MobyBlendAnimation(m, 2, 0, scale_ticks(10));
             m[0x20] = 2;
             *(float *)(m + 0x58) = 1.0f;
         }
@@ -2125,13 +2125,13 @@ void func_L00_002C83D0(unsigned char *m) {
         break;
     case 3:
         if (m[0x70] & 2) {
-            if (m[0x53] != 4) func_00213DE0(m, 4, 0, scale_ticks(10));
+            if (m[0x53] != 4) MobyBlendAnimation(m, 4, 0, scale_ticks(10));
             m[0x20] = 4;
         }
         break;
     case 4:
         if ((unsigned)((*(unsigned char **)p)[0x20] - 3) < 3) {
-            if (m[0x53] != 5) func_00213DE0(m, 5, 0, scale_ticks(10));
+            if (m[0x53] != 5) MobyBlendAnimation(m, 5, 0, scale_ticks(10));
             m[0x20] = 5;
         }
         break;
@@ -2139,7 +2139,7 @@ void func_L00_002C83D0(unsigned char *m) {
         if (m[0x70] & 2) *(int *)(m + 0x58) = 0;
         if ((unsigned)((*(unsigned char **)p)[0x20] - 6) < 2) {
             *(float *)(m + 0x58) = 1.0f;
-            if (m[0x53] != 7) func_00213DE0(m, 7, 0, scale_ticks(10));
+            if (m[0x53] != 7) MobyBlendAnimation(m, 7, 0, scale_ticks(10));
             m[0x20] = 7;
         }
         break;
@@ -2148,7 +2148,7 @@ void func_L00_002C83D0(unsigned char *m) {
     case 7:
         if (!(m[0x70] & 2)) break;
     default:
-        if (m[0x53] != 1) func_00213DE0(m, 1, 0, scale_ticks(10));
+        if (m[0x53] != 1) MobyBlendAnimation(m, 1, 0, scale_ticks(10));
         m[0x20] = 1;
         break;
     }
@@ -2478,7 +2478,7 @@ void func_L00_002C93D8(void *mm) {
             b = (func_001160D8() + 0x20) & 0x3F;
             c = func_001160D8() & 0x2F;
             f = random_float_between(100000.0f, 800000.0f);
-            func_L00_0026AA10(&v, a, b, c, f, 0.0f, scale_ticks(func_001160D8() % n + 10));
+            PartType05Spawn(&v, a, b, c, f, 0.0f, scale_ticks(func_001160D8() % n + 10));
         } while (--i >= 0);
         m[0x20] = 4;
         break;

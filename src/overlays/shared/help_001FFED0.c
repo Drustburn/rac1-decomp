@@ -57,7 +57,7 @@ void func_L15_001FFED0(void) {
         return;
     func_L00_00209088();
     func_L00_00208260();
-    func_L00_00208070();
+    CameraShakeUpdate();
     func_L00_00248EF8(b0 + 0x80);
 
     if (b0[0x20A4] == 2) {
@@ -70,7 +70,7 @@ void func_L15_001FFED0(void) {
         if (((*(unsigned short *)(m + 0x34) ^ 1) & 1) != 0) {
             func_L00_00250800(m, 6, copy);
             qcopy(b0 + 0x1D80, copy);
-            func_L00_00208318();
+            QueueHeroDraw();
         }
         }
     }
@@ -118,7 +118,7 @@ void func_L15_001FFED0(void) {
         if (*(short *)(b4 + 0x22DE) != 0)
             alpha = truncate_float_to_s32((func_001FA888(*(short *)(b4 + 0x22DE)) / func_001FA888(0x12)) * (float)alpha);
         *(unsigned int *)(b4 + 0x22E4) = (alpha << 24) | (blue << 16) | (green << 8) | red;
-        func_L00_00208318();
+        QueueHeroDraw();
         *(short *)(b4 + 0x22E0) = 0;
         if (b4[0x20A4] == 3) {
             int pending = *(int *)(b4 + 0x20B8);
@@ -149,7 +149,7 @@ extern unsigned char D_0013E15A[];
 extern void func_L00_00207948(int, int);
 
 /* Show the indexed help prompt when its flag and message are active. */
-void func_L15_00200D20(void) {
+void Help_ShowIndexedPrompt(void) {
     unsigned char *base = D_0013E633 + 0xE1D;
     int index = *(int *)(base + 0x10B8);
     if (index >= 0 && *(D_0013E15A + 0x4C6 + index) != 0) {
@@ -176,7 +176,7 @@ void func_L15_00200D70(void) {
         char *m;
         float v[4];
         float w[16];
-        func_L00_00263B78(1.1f, D_0015EE6C * 5.2359877f, *(char **)(base + 0x2080),
+        MobyBobZ(1.1f, D_0015EE6C * 5.2359877f, *(char **)(base + 0x2080),
                           (float *)(base + 0x6A8), (float *)(base + 0x6AC));
         m = *(char **)(base + 0x86C);
         if (m != 0) {
@@ -201,7 +201,7 @@ extern void func_L00_00232EA8(void);
 extern void func_L15_00217348(int, int);
 
 /* Reset the help prompt state and show the default message unless the level is in a special phase. */
-void func_L15_002092E0(void) {
+void Help_Reset(void) {
     unsigned char *base = D_0013E633 + 0xE1D;
     unsigned char *b;
     int p;
@@ -227,7 +227,7 @@ void func_L15_002092E0(void) {
         DeleteMoby(q);
         *(int *)(b + 0xA8C) = 0;
     }
-    func_L00_00207220();
+    HeroClearSoundSlots();
     m = *(char **)(b + 0xA88);
     *(char **)(b + 0x2080) = m;
     qcopy(m + 0x10, b + 0x80);
@@ -317,8 +317,8 @@ void func_L15_00209A88(void) {
     if (!D_0013F450.b257 || D_0013F450.i2094 == 0x12 || D_0013F450.i208C == 0x11 || D_0013F450.b12E4 || func_001F9D48(D_0013F450.v210, D_0013F450.v80) > D_0013F450.f234 * 0.5f) {
         f32 *q = D_0013F670;
         P_209450 *b = (P_209450 *)((u8 *)q - 0x220);
-        func_00214D28(b->f228, D_0015EE60 * 0.02f, q);
-        func_00214D28(b->f22C, D_0015EE60 * 0.02f, q + 1);
+        ApproachValue(b->f228, D_0015EE60 * 0.02f, q);
+        ApproachValue(b->f22C, D_0015EE60 * 0.02f, q + 1);
         func_L00_0025C918(q + 5, q + 6, b->f230, D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.0f);
     }
 }
@@ -345,7 +345,7 @@ void func_L15_0020A960(int arg) {
     float f2, f21, f20;
     int r18, r;
     if (*(short *)(base + 0x308) != 0) return;
-    if (func_L00_00234250((float *)(base + 0xE0)) < D_0015EE6C * 0.1f) return;
+    if (ViewXyLength((float *)(base + 0xE0)) < D_0015EE6C * 0.1f) return;
     f2 = 0.37f;
     f21 = 0.5f;
     if ((unsigned)(*(int *)(base + 0x208C) - 0x11) < 2) {
@@ -556,7 +556,7 @@ void func_L15_0020ADD8(void) {
     D_0013F450_0ADD8.xB12ed = r;
     D_0013F450_0ADD8.xH12e0 = CollType();
     if (D_0013F450_0ADD8.xH12e0 == 0) {
-        D_0013F450_0ADD8.xF2f0 = func_00214440(D_L15_001744E0, (u8 *)&D_0013F450_0ADD8 + 0x280);
+        D_0013F450_0ADD8.xF2f0 = GetGroundHeight(D_L15_001744E0, (u8 *)&D_0013F450_0ADD8 + 0x280);
         if (D_0013F450_0ADD8.xF88 < D_0013F450_0ADD8.xF2f0 && D_0013F450_0ADD8.xI2f8 <= 0) {
             D_0013F450_0ADD8.xI2f8 = 1;
         }
@@ -595,7 +595,7 @@ void func_L15_0020ADD8(void) {
         D_0013F450_0ADD8.xF2dc = FastVecDist((u8 *)&D_0013F450_0ADD8 + 0x80, ((u8 *)&D_0013F450_0ADD8 + 0x2A0));
         D_0013F450_0ADD8.xI2fc = D_L15_001744C0_0ADD8.i18;
         func_001252C0((u8 *)&D_0013F450_0ADD8 + 0x270, (u8 *)&D_L15_001744C0_0ADD8.f40);
-        D_0013F450_0ADD8.u2e0.F = func_L00_002345B0((u8 *)&D_L15_001744C0_0ADD8.f40);
+        D_0013F450_0ADD8.u2e0.F = ViewGetPitch((u8 *)&D_L15_001744C0_0ADD8.f40);
         D_0013F450_0ADD8.xF2ec = func_L00_001FF860(D_L15_001744C0_0ADD8.f40, D_L15_001744C0_0ADD8.f44);
         FastVecSub(&v20, ((u8 *)&D_0013F450_0ADD8 + 0x2A0), (u8 *)&D_0013F450_0ADD8 + 0x80);
         if (0.0f < FastVecDot(&v20, (u8 *)&D_0013F450_0ADD8 + 0x270)) {
@@ -649,7 +649,7 @@ d1:
     if (!(D_0013F450_0ADD8.xF2dc < 0.25f)) {
         return;
     }
-    func_L00_002167C8((u8 *)&D_0013F450_0ADD8 + 0x270, &v20);
+    VecToHeroAngles((u8 *)&D_0013F450_0ADD8 + 0x270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
         D_0013F450_0ADD8.u2e4.F = v20.f[1];
     }
@@ -661,8 +661,8 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        func_L00_00233E48(&v30, 0.2f, a, 0.45f);
-        func_L00_00233E48(&v40, 0.2f, a, -0.45f);
+        PolarToWorldPoint(&v30, 0.2f, a, 0.45f);
+        PolarToWorldPoint(&v40, 0.2f, a, -0.45f);
         if (func_L00_001EFFF0(&v30, &v0, 0x22, D_0013F450_0ADD8.xI2080, 0)) {
             f = D_L15_001744C0_0ADD8.v20.f[2] - D_0013F450_0ADD8.u2d8.F;
             D_0013F450_0ADD8.a2c0.f[i] = f;
@@ -670,7 +670,7 @@ d1:
                 D_0013F450_0ADD8.a2c0.f[i] = 0.0f;
             }
             func_001252C0(&v60, (u8 *)&D_L15_001744C0_0ADD8.f40);
-            func_L00_002167C8(&v60, &v50);
+            VecToHeroAngles(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 D_0013F450_0ADD8.a2c8.f[i] = v50.f[1];
             }
@@ -713,7 +713,7 @@ extern void func_L00_00211908(void);
 
 /* Per-frame hero upkeep: tick the hero timers, spawn the respawn marker, track sinking, and set the camera follow target. Clone of FUN_L00_002215c8 without the case-1 camera tuning.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/001ff938.c, FUN_L15_00215e58. */
-void func_L15_00216568(void) {
+void HeroFrameUpkeep(void) {
     Vec4 sum;
     Vec4 d;
     struct Moby *m;
@@ -772,8 +772,8 @@ void func_L15_00216568(void) {
     if (D_0013F450_16568.unk22DE != 0 && FastDecTimer(&D_0013F450_16568.unk22DE) != 0 &&
         D_0013F450_16568.health.hp != 0 && (*(s32 *)&D_L15_0015F6A8_16568) == 0) {
         if (D_0013F450_16568.vehicle_mode == 3) {
-            func_L15_002092E0();
-            if (func_L00_00267BA8(0x80, scale_ticks(0x12), 0)) {
+            Help_Reset();
+            if (PadPressedWithin(0x80, scale_ticks(0x12), 0)) {
                 D_0013F450_16568.unk20A6 = 1;
             }
         } else {
@@ -821,11 +821,11 @@ void func_L15_00216568(void) {
 skip:
     func_L00_002222F0();
     if (D_0013F450_16568.vehicle_mode == 2) {
-        func_L00_00233EE0(&D_0013F450_16568.motion.unkD0, 0.0f, 0.0f, 4.0f);
+        LocalToWorldPoint(&D_0013F450_16568.motion.unkD0, 0.0f, 0.0f, 4.0f);
         D_0013F450_16568.reach_distance = 15.0f;
         D_0013F450_16568.reach_height = 3.0f;
     } else {
-        func_L00_00233EE0(&D_0013F450_16568.motion.unkD0, 0.0f, 0.0f, 0.7f);
+        LocalToWorldPoint(&D_0013F450_16568.motion.unkD0, 0.0f, 0.0f, 0.7f);
         if (D_0013D5EA) {
             D_0013F450_16568.reach_distance = 12.0f;
             D_0013F450_16568.reach_height = 4.5f;
@@ -849,7 +849,7 @@ skip:
 }
 
 /* Select the message associated with the current help mode. */
-void func_L15_0021B2C8(void) {
+void Help_SelectMessage(void) {
     switch (D_0013E633[0x2EC1]) {
     case 0: func_L15_00217348(0, 1); break;
     case 2: func_L15_00217348(0x5A, 1); break;

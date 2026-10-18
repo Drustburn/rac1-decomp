@@ -90,7 +90,7 @@ extern long D_L02_00161370_2A52D0 __asm__("D_L02_00161370") MACRO_ADDR;
 
 /* Builds one moby's VU1 draw packet: camera matrices and screen setup, the two interpolated vertex tables of
  * its animation frame, then the GS register block for its texture. */
-void func_L02_002A52D0(Arg_2A52D0 *arg) {
+void DrawMobyVu1Packet(Arg_2A52D0 *arg) {
     float m[16];
     int *base;
     int *p;
@@ -251,7 +251,7 @@ void func_L02_002A58C0(void) {
     *(float *)(b + 0x228) = D_L02_00161380;
     *(float *)(b + 0x22C) = D_L02_00161384;
     UpdateViewContext();
-    func_001F2608();
+    BuildViewMatrices();
     D_L02_00161240[0] = 0x10000002;
     D_L02_00161240[1] = 0;
     D_L02_00161240[2] = 0x11000000;
@@ -431,7 +431,7 @@ extern char D_0013A5E0_2D9F08[] __asm__("D_0013A5E0");
 
 /* Trespasser puzzle (level 2): the hero rotates its three rings with the pad; when every ring is aligned the gate
    opens and the puzzle is marked solved. State 0 sets up, 1 waits for the hero, 2 is the puzzle view, 3 opens. */
-void func_L02_002D9F08(Moby *moby) {
+void TrespasserPuzzleUpdate(Moby *moby) {
     Vec_2D9F08 v0, v10;
     Data_2D9F08 *d = (struct Data_2D9F08 *)moby->pvars;
     int i;
@@ -824,15 +824,15 @@ void func_L02_002DA820(char *moby) {
         } else color = (*(int *)&D_L02_00161C34);
         angle = FastAddRots(angle, (float)(i * 30) * 0.017453292f);
         phase = FastAddRots(angle, 0.5235988f);
-        func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BDC), (float)(*(int *)&D_L02_00161BD8), color);
+        DrawEllipticalArc(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BDC), (float)(*(int *)&D_L02_00161BD8), color);
         if (first->v[(i + *(int *)(data + 0x14)) % 12] != 0) {
             if (first->v[(i + *(int *)(data + 0x14)) % 12] >= 3) {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 0, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 0, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
                 first->v[(i + *(int *)(data + 0x14)) % 12] = 2;
             } else if (first->v[(i + *(int *)(data + 0x14)) % 12] == 2) {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 1, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 1, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
             } else {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 2, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 2, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BE0));
             }
         }
     }
@@ -849,15 +849,15 @@ void func_L02_002DA820(char *moby) {
         } else color = (*(int *)&D_L02_00161C34);
         angle = FastAddRots(angle, (float)(i * 30) * 0.017453292f);
         phase = FastAddRots(angle, 0.5235988f);
-        func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BD0), (float)(*(int *)&D_L02_00161BCC), color);
+        DrawEllipticalArc(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BD0), (float)(*(int *)&D_L02_00161BCC), color);
         if (second->v[(i + *(int *)(data + 0x18)) % 12] != 0) {
             if (second->v[(i + *(int *)(data + 0x18)) % 12] >= 3) {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 0, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 0, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
                 second->v[(i + *(int *)(data + 0x18)) % 12] = 2;
             } else if (second->v[(i + *(int *)(data + 0x18)) % 12] == 2) {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 1, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 1, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
             } else {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 2, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 2, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BD4));
             }
         }
     }
@@ -874,15 +874,15 @@ void func_L02_002DA820(char *moby) {
         } else color = (*(int *)&D_L02_00161C34);
         angle = FastAddRots(angle, (float)(i * 30) * 0.017453292f);
         phase = FastAddRots(angle, 0.5235988f);
-        func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BC4), (float)(*(int *)&D_L02_00161BC0), color);
+        DrawEllipticalArc(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BC4), (float)(*(int *)&D_L02_00161BC0), color);
         if (third->v[(i + *(int *)(data + 0x1c)) % 12] != 0) {
             if (third->v[(i + *(int *)(data + 0x1c)) % 12] >= 3) {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 0, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 0, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
                 third->v[(i + *(int *)(data + 0x1c)) % 12] = 2;
             } else if (third->v[(i + *(int *)(data + 0x1c)) % 12] == 2) {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 1, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 1, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
             } else {
-                func_L02_002DBAF8(ctx.texture, (*(int *)&D_L02_00161C38), 2, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
+                DrawRadarArrow(ctx.texture, (*(int *)&D_L02_00161C38), 2, FastAddRots(angle, 0.2617994f), (float)(*(int *)&D_L02_00161BC8));
             }
         }
     }
@@ -898,7 +898,7 @@ void func_L02_002DA820(char *moby) {
             if (value == 2) color = (*(int *)&D_L02_00161C54);
             else if (D_L02_0015F6B0 & 0x20) color = (*(int *)&D_L02_00161C50);
             else color = (*(int *)&D_L02_00161C4C);
-            func_L02_002DB810(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BE8), (float)(*(int *)&D_L02_00161BE4), color);
+            DrawEllipticalArc(ctx.texture, angle, phase, (float)(*(int *)&D_L02_00161BE8), (float)(*(int *)&D_L02_00161BE4), color);
         }
     }
     }
@@ -916,7 +916,7 @@ extern void func_L02_0020BF88(void *, void *, void *, s32, s32);
 
 /* Draws an elliptical arc from angle a to b (radii rx, ry, around the screen centre) as five sprite
  * segments in colour col. */
-void func_L02_002DB810(int tex, u32 col, float a, float b, float rx, float ry) {
+void DrawEllipticalArc(int tex, u32 col, float a, float b, float rx, float ry) {
     long xy[4];
     u32 cols[4];
     int uv[4];
@@ -971,7 +971,7 @@ extern void func_001FA218(void *, void *);
 extern int func_001F4868(int);
 
 /* Draws the rotating radar arrow sprite (style sel) at angle a and scale s, twice. */
-void func_L02_002DBAF8(int p0, int p1, int sel, float a, float s) {
+void DrawRadarArrow(int p0, int p1, int sel, float a, float s) {
     long xy[4];
     u32 col[4];
     int uv[4];
@@ -1186,7 +1186,7 @@ extern short D_L02_00161CA8;
 extern short D_L02_00161CAC;
 extern short D_L02_00161CA4;
 /* Moby update for a pusher that slides back and forth along its heading. */
-void func_L02_002DDAE8(char *moby) {
+void PusherUpdate(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float limit;
     float y;
@@ -1287,7 +1287,7 @@ extern void func_L00_00273F80(void *, void *, int, int, int, int, float);
 
 /* Hideable flower: appears when its slot is free, faces and sparkles at the hero (class 0x323), hides again
  * when its slot is used. */
-void func_L02_002E1888(char *m) {
+void HideableFlowerUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
     float v[4];
     float w[4];
@@ -1423,7 +1423,7 @@ void func_L02_002EB648(char *moby) {
 
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0:
-        func_L02_002EBC08(moby);
+        InitRandomMobyData(moby);
         q = (unsigned char *)(gHavePersuader + 5);
         k = 0.2f;
         if (q[sel] != 0) {
@@ -1478,7 +1478,7 @@ void func_L02_002EB648(char *moby) {
         }
         if (*(short *)(moby + 0xA6) == 0x3ED) {
             ShowBanner(0x7DF, -1);
-            func_L00_00203FB8();
+            HelpPopup_Cancel();
             Help_Request(0x7D9, 0x13);
             D_L02_0015F4FC = 1.0f;
             moby[0x20] = 4;
@@ -1511,7 +1511,7 @@ void func_L02_002EB648(char *moby) {
             a[14] = 0.72f;
             e70 = D_0015EE70 * 0.15f;
             e6c = D_0015EE6C * 0.15f;
-            func_00214D88((float *)(d + 0x40), (float *)(d + 0x44), 1.0f, e70, e70, e6c);
+            ApproachWithVelocity((float *)(d + 0x40), (float *)(d + 0x44), 1.0f, e70, e70, e6c);
             func_001F9C08(o, a, a + 4, *(float *)(d + 0x40));
             t = FastSubRots(a[14], a[10]);
             w[2] = FastAddRots(t * *(float *)(d + 0x40), a[10]);
@@ -1527,9 +1527,9 @@ void func_L02_002EB648(char *moby) {
             func_L00_002EBEE0(w);
             e = &D_L02_00179A90;
             if (D_L02_00179A90 == 0 && e[9] == -1 && *(float *)(d + 0x40) > 0.2f) {
-                func_00214D28(&D_L02_0015F4FC, 1.0f, D_0015EE6C * 4.0f);
+                ApproachValue(&D_L02_0015F4FC, 1.0f, D_0015EE6C * 4.0f);
             } else {
-                func_00214D28(&D_L02_0015F4FC, 0.0f, D_0015EE6C * 4.0f);
+                ApproachValue(&D_L02_0015F4FC, 0.0f, D_0015EE6C * 4.0f);
             }
             if (D_L02_0015F4FC == 1.0f) {
                 func_L00_00217718(D_0013E633 + 0xE9D, D_0013E633 + 0xE9D + 0x10, 0, 0);
@@ -1539,7 +1539,7 @@ void func_L02_002EB648(char *moby) {
         }
         break;
     case 5:
-        func_00214D28(&D_L02_0015F4FC, 0.0f, D_0015EE6C * 4.0f);
+        ApproachValue(&D_L02_0015F4FC, 0.0f, D_0015EE6C * 4.0f);
         if (D_L02_0015F4FC == 0.0f) {
             memcard_Save(0, -1);
             DeleteMoby(moby);
@@ -1550,7 +1550,7 @@ void func_L02_002EB648(char *moby) {
 extern int func_001F9850(int);
 
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
-void func_L02_002EBC08(char *moby) {
+void InitRandomMobyData(char *moby) {
     float *d = *(float **)(moby + 0x78);
     int *q;
     int i;
@@ -1765,9 +1765,9 @@ void func_L02_002ED8F0(char *moby) {
             *(float *)(d + 0x64) = *(float *)(d + 0x64) - (float)*(int *)t;
         }
         if (D_0015EE84_2D9F08 == 9) {
-            func_00215CA8((int *)t, 1, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
+            SamplePathAt((int *)t, 1, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
         } else {
-            func_00215CA8((int *)t, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
+            SamplePathAt((int *)t, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
         }
         if (*(float *)(moby + 0x10) < 8.0f) {
             *(int *)(moby + 0x94) = 0;
@@ -1777,7 +1777,7 @@ void func_L02_002ED8F0(char *moby) {
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
         if (*(unsigned char *)(moby + 0x31) != 0) {
-            func_L02_002EDE68(moby, tv);
+            SpawnThreeParticles(moby, tv);
         }
         if (r != 0 && 0.0f < *(float *)(r + 0x2C)) {
             flag = 1;
@@ -1793,7 +1793,7 @@ void func_L02_002ED8F0(char *moby) {
                 unsigned char *p = D_0013D50F + 1;
                 if (p[2] == 0) {
                     p[2] = 1;
-                    func_0022EE28(1, 0, 0);
+                    PlayBankSound(1, 0, 0);
                     ShowBanner(0x53DB, -1);
                 }
             }
@@ -1805,7 +1805,7 @@ void func_L02_002ED8F0(char *moby) {
                     unsigned char *p = D_0013D50F + 1;
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
-                        func_0022EE28(1, 0, 0);
+                        PlayBankSound(1, 0, 0);
                         ShowBanner(0x53DB, -1);
                     }
                 }
@@ -1867,7 +1867,7 @@ extern short D_L02_00162048;
 extern short D_L02_0016204C;
 
 /* Spawns three particles around a moby with randomized direction, speed and colour. */
-void func_L02_002EDE68(char *m, void *arg1) {
+void SpawnThreeParticles(char *m, void *arg1) {
     float v10[4], v20[4], v30[4], v40[4], v50[4];
     int i;
     FastVecSub(v30, m + 0x10, arg1);
@@ -1886,7 +1886,7 @@ void func_L02_002EDE68(char *m, void *arg1) {
         c = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_00162020 * random_float_between(0.0f, 1.0f) + 1.0f));
         d = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_00162024 * (random_float_between(-*(float *)&D_L02_0016202C, *(float *)&D_L02_0016202C) + 1.0f)));
         e = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_00162028 * (random_float_between(-*(float *)&D_L02_0016202C, *(float *)&D_L02_0016202C) + 1.0f)));
-        p = func_00219780(v50, v10, v20, a, b, c, d, e, -1);
+        p = PartType02Spawn(v50, v10, v20, a, b, c, d, e, -1);
         if (p != 0) p[9] = func_001FA898_r(8.0f) + 0x60;
     }
 }
@@ -2020,9 +2020,9 @@ void func_L02_002EE250(char *moby) {
             *(float *)(d + 0x64) = *(float *)(d + 0x64) - (float)*(int *)t;
         }
         if ((unsigned int)(D_0015EE84_2D9F08 - 9) < 2) {
-            func_00215CA8((int *)t, 1, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
+            SamplePathAt((int *)t, 1, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
         } else {
-            func_00215CA8((int *)t, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
+            SamplePathAt((int *)t, 0, moby + 0x10, (float *)(moby + 0x40), 0, *(float *)(d + 0x64));
         }
         if (*(float *)(moby + 0x10) < 8.0f) {
             *(int *)(moby + 0x94) = 0;
@@ -2035,7 +2035,7 @@ void func_L02_002EE250(char *moby) {
             if (D_0015EE84_2D9F08 != 10) {
                 func_L02_002EE858(moby, tv);
             } else {
-                func_L02_002EEA90(moby, tv);
+                SpawnTwoParticles(moby, tv);
             }
         }
         if (r != 0 && 0.0f < *(float *)(r + 0x2C)) {
@@ -2052,7 +2052,7 @@ void func_L02_002EE250(char *moby) {
                 unsigned char *p = D_0013D50F + 1;
                 if (p[2] == 0) {
                     p[2] = 1;
-                    func_0022EE28(1, 0, 0);
+                    PlayBankSound(1, 0, 0);
                     ShowBanner(0x53DB, -1);
                 }
             }
@@ -2064,7 +2064,7 @@ void func_L02_002EE250(char *moby) {
                     unsigned char *p = D_0013D50F + 1;
                     if (p[0xF] == 0) {
                         p[0xF] = 1;
-                        func_0022EE28(1, 0, 0);
+                        PlayBankSound(1, 0, 0);
                         ShowBanner(0x53DB, -1);
                     }
                 }
@@ -2137,7 +2137,7 @@ void func_L02_002EE858(char *m, void *arg1) {
         c = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_00162074 * random_float_between(0.0f, 1.0f) + 1.0f));
         d = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_00162078 * (random_float_between(-*(float *)&D_L02_00162080, *(float *)&D_L02_00162080) + 1.0f)));
         e = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_0016207C * (random_float_between(-*(float *)&D_L02_00162080, *(float *)&D_L02_00162080) + 1.0f)));
-        p = func_00219780(v50, v10, v20, a, b, c, d, e, -1);
+        p = PartType02Spawn(v50, v10, v20, a, b, c, d, e, -1);
         if (p != 0) p[9] = func_001FA898_r(8.0f) + 0x60;
     }
 }
@@ -2150,7 +2150,7 @@ extern short D_L02_001620B8;
 extern short D_L02_001620BC;
 
 /* spawns two particles around a moby with randomized parameters */
-void func_L02_002EEA90(char *moby, void *arg) {
+void SpawnTwoParticles(char *moby, void *arg) {
     float v0[4];
     float v1[4];
     float mat[4];
@@ -2173,7 +2173,7 @@ void func_L02_002EEA90(char *moby, void *arg) {
         c = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_00162074 * random_float_between(0.0f, 1.0f) + 1.0f));
         d = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_00162078 * (random_float_between(-*(float *)&D_L02_00162080, *(float *)&D_L02_00162080) + 1.0f)));
         e = func_001FA898_r(func_001F9878((float)*(int *)&D_L02_0016207C * (random_float_between(-*(float *)&D_L02_00162080, *(float *)&D_L02_00162080) + 1.0f)));
-        p = func_00219780(m, v0, v1, a, b, c, d, e, -1);
+        p = PartType02Spawn(m, v0, v1, a, b, c, d, e, -1);
         if (p != 0) {
             p[9] = func_001FA898_r(8.0f) + 0x60;
         }
@@ -2199,7 +2199,7 @@ void func_L02_002F3398(char *m) {
     case 2:
         func_0022ED80(0, 0, (int)m);
         func_L01_00279790(m);
-        func_L00_00264EA8(m, 0x71D, 1, 0x71D, 1, 5, 2);
+        SpawnMobyBurstFx(m, 0x71D, 1, 0x71D, 1, 5, 2);
         func_L01_00279E10(m, 0x71C);
         DeleteMoby(m);
         break;
@@ -2415,7 +2415,7 @@ extern char D_L02_00167300[];
 extern float func_001FA850(float, float);
 
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
-int func_L02_002FCBC0(char *moby, float a, float b) {
+int IsWithinAngleRange(char *moby, float a, float b) {
     float d[4];
     float p[4];
     float q[4];

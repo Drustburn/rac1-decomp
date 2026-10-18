@@ -19,7 +19,7 @@ extern float func_001F9FA8(float);
 extern void func_001F9BD8(void *, void *, void *);
 
 /* Orbiting platform: circles its anchor moby at a fixed radius; the turn direction comes from the level switch state. */
-void func_L06_002B5990(char *m) {
+void OrbitingPlatformUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
     float z;
     float a;
@@ -91,7 +91,7 @@ extern void func_001F9C08(void *, void *, void *, float);
 extern float D_0015EE6C MACRO_ADDR;
 
 // Updates a moby that swells its scale vector toward a target.
-void func_L06_002DB0E0(unsigned char *moby) {
+void Moby367Update(unsigned char *moby) {
     char *data;
     data = *(char **)(moby + 0x78);
     switch (moby[0x20]) {
@@ -107,7 +107,7 @@ void func_L06_002DB0E0(unsigned char *moby) {
     }
     case 2: {
         float a = (&D_0015EE6C)[1] * 10.0f;
-        func_00214D88((float *)(data + 0x20), (float *)(data + 0x24), *(float *)(data + 0x28), a, a, D_0015EE6C * 20.0f);
+        ApproachWithVelocity((float *)(data + 0x20), (float *)(data + 0x24), *(float *)(data + 0x28), a, a, D_0015EE6C * 20.0f);
         func_001F9C08(moby + 0x10, data, data + 0x10, *(float *)(data + 0x20));
         if (*(float *)(data + 0x20) == *(float *)(data + 0x28)) moby[0x20] = 1;
         break;
@@ -238,7 +238,7 @@ extern int func_001FA898(float);
 extern int func_001F9850(int);
 
 /* Swinging/spinning hazard: waits, swings with a looping sound, then rests for a random time. */
-void func_L06_002F4F08(char *m) {
+void SwingingHazardUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
     float s;
     if (*(int *)(d + 0x90) >= 0) {
@@ -372,7 +372,7 @@ void func_L06_002F51A0(char *moby)
     FastVecAdd(v50, pos, v80);
     rand_vec(v90, 0.0f, *(float *)&D_L06_00161DB0 * D_0015EE6C);
     FastVecAdd(v90, v90, v70);
-    func_00219780(v50, v60, v90, *(int *)&D_L06_00161D8C, *(int *)&D_L06_00161D90, i30, i23, i21, 0x30);
+    PartType02Spawn(v50, v60, v90, *(int *)&D_L06_00161D8C, *(int *)&D_L06_00161D90, i30, i23, i21, 0x30);
 
     i30 = truncate_float_to_s32(func_001F9878(random_float_between((float)*(int *)&D_L06_00161D94, (float)*(int *)&D_L06_00161D98)));
     i23 = truncate_float_to_s32(func_001F9878(random_float_between((float)*(int *)&D_L06_00161D9C, (float)*(int *)&D_L06_00161DA0)));
@@ -380,7 +380,7 @@ void func_L06_002F51A0(char *moby)
     FastVecAdd(v50, pos, v80);
     rand_vec(v90, 0.0f, *(float *)&D_L06_00161DB0 * D_0015EE6C);
     FastVecAdd(v90, v90, v70);
-    func_00219780(v50, v60, v90, *(int *)&D_L06_00161D8C, *(int *)&D_L06_00161D90, i30, i23, i21, 0x30);
+    PartType02Spawn(v50, v60, v90, *(int *)&D_L06_00161D8C, *(int *)&D_L06_00161D90, i30, i23, i21, 0x30);
 }
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern float func_001FA790(float, float);
@@ -679,7 +679,7 @@ extern int func_0020BFC8_2F69D0(int, int) __asm__("func_0020BFC8");
 
 /* Level 6 drawbridge (class 1028): spawns its two rows of deck pieces, waits for the hero's switch, then
    lowers through three hinge stages (D_L06_00161E08/0C/10) while the camera follows the path nodes. */
-void func_L06_002F69D0(Moby *m) {
+void DrawbridgeUpdate(Moby *m) {
     Vec_2F69D0 v0, v10, v20, v30, v40, v50;
     Data_2F69D0 *s = (struct Data_2F69D0 *)m->pvars;
     float old, t;
@@ -826,7 +826,7 @@ extern Vec_2F69D0 D_L06_00161DE0 SDATA(D_L06_00161DE0);
 extern Vec_2F69D0 D_L06_00161DF0 SDATA(D_L06_00161DF0);
 
 /* Blarg drawbridge pieces: places and rotates the 20 + 10 chained segment mobys. */
-void func_L06_002F71A8(Moby *m)
+void LayoutDrawbridgePieces(Moby *m)
 {
     Vec_2F69D0 v, w, x;
     Data_2F69D0 *s = (Data_2F69D0 *)m->pvars;
@@ -1171,7 +1171,7 @@ extern int D_L06_00161F6C_91A8 SDATA(D_L06_00161F6C);
 extern int D_L06_00161F70_91A8 SDATA(D_L06_00161F70);
 
 // Update function of the alien snapper (moby class 1048): spawn setup, hide/leap/land along a path, chase and bite the hero, knockback and death.
-void func_L06_002F91A8(Moby *moby)
+void Moby1048Update(Moby *moby)
 {
     SnapperVars_91A8 *v = (SnapperVars_91A8 *)moby->pvars;
     Moby *target;
@@ -1937,7 +1937,7 @@ typedef struct {
 } QueenProbe;
 
 /* Alien queen update: wakes, rises, circles and chases the hero, attacks with probes and dies through its states. */
-void func_L06_002FAE58(unsigned char *moby)
+void AlienQueenUpdate(unsigned char *moby)
 {
     unsigned char *data = *(unsigned char **)(moby + 0x78);
     char *target;
@@ -2385,7 +2385,7 @@ hit_response_done:
         func_L00_0025E4B0(moby, data + 0x60);
     }
     *(unsigned char *)(moby + 0xA4) = 0xFF;
-    func_L00_0025E590(moby, data + 0x60);
+    StepColorFade(moby, data + 0x60);
     if ((data[0x2E] & 2) && (unsigned char)moby[0x20] != 15) {
         if (*(int *)(data + 0x10C) != -1) {
             func_001FFDA0(*(int *)(data + 0x10C), 0);
@@ -2439,7 +2439,7 @@ hit_response_done:
     *(int *)(moby + 0x90) = FastTweenColor(*(int *)&D_L06_00161FA0, *(int *)&D_L06_00161FA4,
         (FastSin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
     path = D_L06_001B0FB0[*(int *)(data + 0xEC)];
-    func_L00_00260FB0(255.0f, moby, data + 0x70, 0, 0, path + 4, *path);
+    FindNearestEligibleMoby(255.0f, moby, data + 0x70, 0, 0, path + 4, *path);
     if (*(int *)(data + 0xB0) == 0) *(int *)(data + 0xB0) = *(int *)(D_0013E633 + 0x2E9D);
 }
 extern float func_002140F8(float, float);
@@ -2501,7 +2501,7 @@ extern char D_0013E633[];
 extern float D_0015EE6C MACRO_ADDR;
 extern short D_0015EE70_s __asm__("D_0015EE70");
 /* Aims the camera at a moby, blending toward its orbit; returns nonzero when finished. */
-int func_L06_002FC6D8(char *moby) {
+int AimCameraAtMoby(char *moby) {
     float v0[4], m[4], v1[4], v2[4];
     char *data;
     char *pos;
@@ -2514,7 +2514,7 @@ int func_L06_002FC6D8(char *moby) {
         pos = moby + 0x10;
     } else {
         t = *(float *)&D_0015EE70_s * 3.0f;
-        func_00214D88((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t, D_0015EE6C + D_0015EE6C);
+        ApproachWithVelocity((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t, D_0015EE6C + D_0015EE6C);
         func_L00_001FF4B0(v1, moby + 0xC0, 8.0f);
         FastVecAdd(v1, v1, moby + 0x10);
         x = D_0013E633 + 0xE1D;
@@ -2558,7 +2558,7 @@ int func_L06_002FCA98(char *moby) {
         pos = moby + 0x10;
     } else {
         t = *(float *)&D_0015EE70_s * 0.5f;
-        func_00214D88((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t, D_0015EE6C * 0.5f);
+        ApproachWithVelocity((float *)(data + 0x118), (float *)(data + 0x11C), 1.0f, t, t, D_0015EE6C * 0.5f);
         func_L00_001FF4B0(v1, moby + 0xC0, 8.0f);
         FastVecAdd(v1, v1, moby + 0x10);
         x = D_0013E633 + 0xE1D;
@@ -2638,14 +2638,14 @@ void func_L06_002FD0B8(struct Moby *m) {
                            &v->yaw_vel, D_0015EE70 * 6.2831855f, D_0015EE70 * 6.2831855f,
                            D_0015EE6C * 3.1415927f);
     if (FastVecDist(&m->pos, &goal) > 1.0f && func_001F9D48(&m->pos, &D_0013F450.motion.pos) < 16.0f)
-        func_00214D28(&v->speed, (*(f32 *)&D_L06_00161F88) * D_0015EE6C, (*(f32 *)&D_L06_00161F8C) * D_0015EE70);
+        ApproachValue(&v->speed, (*(f32 *)&D_L06_00161F88) * D_0015EE6C, (*(f32 *)&D_L06_00161F8C) * D_0015EE70);
     else
-        func_00214D28(&v->speed, 0.0f, (*(f32 *)&D_L06_00161F8C) * D_0015EE70);
+        ApproachValue(&v->speed, 0.0f, (*(f32 *)&D_L06_00161F8C) * D_0015EE70);
     if (v->speed == 0.0f) {
         if (m->prev_seq != 1)
-            func_00213DE0(m, 1, 0, scale_ticks(20));
+            MobyBlendAnimation(m, 1, 0, scale_ticks(20));
     } else if (m->prev_seq != 0) {
-        func_00213DE0(m, 0, 0, scale_ticks(20));
+        MobyBlendAnimation(m, 0, 0, scale_ticks(20));
     }
     FastVecSub(&step, &goal, &m->pos);
     step.z = 0.0f;
@@ -2679,7 +2679,7 @@ extern short D_L06_00161FE8;
 extern short D_L06_00161FEC;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l06/gameplay/entities/002b4770.c, FUN_L06_002fbfb0. */
-void func_L06_002FD3E0(char *moby) {
+void Moby1054Update(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *child;
     float v[4];
@@ -2737,8 +2737,8 @@ void func_L06_002FD3E0(char *moby) {
         child = *(char **)(data + 0x40);
         a = target_delta;
         b = FastVecDist(child + 0x10, data + 0x10);
-        func_00214D88(&a, &((float *)data)[2], (*(float *)&D_L06_00161FAC), D_0015EE70 * 10.0f, D_0015EE70 * 20.0f, D_0015EE6C * 5.0f);
-        func_00214D88(&b, &((float *)data)[0x11], (*(float *)&D_L06_00161FB0), D_0015EE70 * 10.0f, D_0015EE70 * 20.0f, D_0015EE6C * 5.0f);
+        ApproachWithVelocity(&a, &((float *)data)[2], (*(float *)&D_L06_00161FAC), D_0015EE70 * 10.0f, D_0015EE70 * 20.0f, D_0015EE6C * 5.0f);
+        ApproachWithVelocity(&b, &((float *)data)[0x11], (*(float *)&D_L06_00161FB0), D_0015EE70 * 10.0f, D_0015EE70 * 20.0f, D_0015EE6C * 5.0f);
         func_L00_001FF4B0(v, data + 0x30, a);
         FastVecAdd(moby + 0x10, data + 0x10, v);
         func_L00_001FF4B0(v, data + 0x30, -b);
@@ -2798,10 +2798,10 @@ void func_L06_002FD3E0(char *moby) {
         next_phase = 1;
         next_timer = truncate_float_to_s32(random_float_between((float)(*(int *)&D_L06_00161FDC), (float)(*(int *)&D_L06_00161FE0)));
         phase_join:
-        func_00214D88(&phase_a, &((float *)data)[2], target_a, acceleration * D_0015EE70, max_speed * D_0015EE70, damping * D_0015EE6C);
-        func_00214D88(&phase_b, &((float *)data)[0x11], target_b, acceleration * D_0015EE70, max_speed * D_0015EE70, damping * D_0015EE6C);
-        func_00214D88((float *)(moby + 0x44), &((float *)data)[3], target_rot_a, rotation_acceleration * 0.017453292f * D_0015EE70, rotation_speed * 0.017453292f * D_0015EE70, rotation_damping * 0.017453292f * D_0015EE6C);
-        func_00214D88((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_rot_b, rotation_acceleration * 0.017453292f * D_0015EE70, rotation_speed * 0.017453292f * D_0015EE70, rotation_damping * 0.017453292f * D_0015EE6C);
+        ApproachWithVelocity(&phase_a, &((float *)data)[2], target_a, acceleration * D_0015EE70, max_speed * D_0015EE70, damping * D_0015EE6C);
+        ApproachWithVelocity(&phase_b, &((float *)data)[0x11], target_b, acceleration * D_0015EE70, max_speed * D_0015EE70, damping * D_0015EE6C);
+        ApproachWithVelocity((float *)(moby + 0x44), &((float *)data)[3], target_rot_a, rotation_acceleration * 0.017453292f * D_0015EE70, rotation_speed * 0.017453292f * D_0015EE70, rotation_damping * 0.017453292f * D_0015EE6C);
+        ApproachWithVelocity((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_rot_b, rotation_acceleration * 0.017453292f * D_0015EE70, rotation_speed * 0.017453292f * D_0015EE70, rotation_damping * 0.017453292f * D_0015EE6C);
         func_L00_001FF4B0(v, data + 0x30, phase_a);
         FastVecAdd(moby + 0x10, data + 0x10, v);
         func_L00_001FF4B0(v, data + 0x30, -phase_b);
@@ -2893,7 +2893,7 @@ extern int D_L06_00162004 SDATA(D_L06_00162004);
 extern int D_L06_00162008 SDATA(D_L06_00162008);
 
 /* Update of moby class 1061: a lift that the hero calls with buttons; it moves between two heights and switches its helper mobys. */
-void func_L06_002FDA70(Moby *moby) {
+void CallableLiftUpdate(Moby *moby) {
     Vec4A v0;
     Vec4A v10;
     Data_2FDA70 *d = (Data_2FDA70 *)moby->pvars;
@@ -2973,7 +2973,7 @@ void func_L06_002FDA70(Moby *moby) {
                         char *b = D_L06_0016016C + (d->f7C << 7);
                         func_L00_00217718(b + 0x30, b + 0x70, 0, 1);
                     }
-                    func_L00_002664B0(0, 10);
+                    MusicRequestTrack(0, 10);
                     ((Moby *)D_L06_00160058)[d->f6C].flags |= 1;
                     ((Moby *)D_L06_00160058)[d->f6C].flags |= 2;
                     if (D_0013D5DD_2F69D0[1] != 0 && D_L06_00162008 == 0) {
@@ -2995,7 +2995,7 @@ void func_L06_002FDA70(Moby *moby) {
                         func_L00_00217718(b + 0x30, b + 0x70, 0, 1);
                     }
                     func_L01_00231960(1, 0x43, (int)(D_L06_00160058 + (d->f6C << 8)));
-                    func_L00_002664B0(2, 7);
+                    MusicRequestTrack(2, 7);
                 } else if (d->f84 == 0) {
                     FadeToBlack(scale_ticks(0x10));
                     func_L06_002F6790(D_L06_00160058 + (d->f64 << 8));
@@ -3062,7 +3062,7 @@ void func_L06_002FDA70(Moby *moby) {
             target += ((Node_2FDA70 *)D_L06_0016016C)[d->f78].v20.z;
         }
         t = D_L06_00161FF8 * D_0015EE70;
-        func_00214D88(&moby->pos.z, &d->f8C, target, t, t, D_L06_00161FF4 * D_0015EE6C);
+        ApproachWithVelocity(&moby->pos.z, &d->f8C, target, t, t, D_L06_00161FF4 * D_0015EE6C);
         if (FastAbsF(moby->pos.z - target) < 0.01f) {
             if (moby->state == 6) {
                 moby->state = 7;
@@ -3113,7 +3113,7 @@ extern void func_L06_002FE890(void);
 extern void func_L06_002FEB78(void);
 
 /* Registers the moby's draw callbacks, choosing by its four slot ids. */
-void func_L06_002FE4B8(char *moby) {
+void RegisterMobyDrawCallbacks(char *moby) {
     int *data = *(int **)(moby + 0x78);
     int *p;
     int i;

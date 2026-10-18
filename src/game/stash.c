@@ -293,7 +293,7 @@ extern Rec10_00234018 D_001DD568_alias[] __asm__("D_001DD568");
    The server check reads through a pointer set inside the loop: loop.c
    then hoists the struct's full address into a register of its own, as
    retail has it, while the client's address stays a constant. */
-void func_00234018(void) {
+void Stash_Init(void) {
     StashState_00234018 *s;
     int reply[4];
     int i;
@@ -372,7 +372,7 @@ extern char D_001DD538[];
    client's RPC 1 (IOP_STASH_FETCH), at most 0xFFFF quadwords per call; returns 0. The RPC
    is sceSifCallRpc, with nine arguments: end function and end
    parameter 0, the last on the stack. */
-int func_00234238(void *dest, unsigned int slot, int offset, int size, int mode) {
+int Stash_ReceiveData(void *dest, unsigned int slot, int offset, int size, int mode) {
     int src;
     int chunk;
 

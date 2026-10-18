@@ -136,7 +136,7 @@ extern char D_001A2F90[];
    Returns whether that count is 0. The head is stored and then read back
    (CSE forwards it, leaving retail's copy into $s0 after the null test),
    and each block reads D_001A2F90 through its own `char *` local. */
-int func_0020C7A0(void) {
+int Mission_UpdateObjectives(void) {
     char *node;
 
     {
@@ -150,9 +150,9 @@ int func_0020C7A0(void) {
     while (*(short *)node != 0) {
         if ((*(unsigned short *)(node + 0x10) & 4) && D_0013DE60[D_001A01F0[0x89]] == 0) {
             *(short *)(node + 0x24) = 0;
-        } else if (!func_0020C940(*(short *)(node + 2), *(int *)(node + 4))) {
+        } else if (!Mission_CheckCondition(*(short *)(node + 2), *(int *)(node + 4))) {
             *(short *)(node + 0x24) = 0;
-        } else if (!func_0020C940(*(short *)(node + 8), *(int *)(node + 0xC))) {
+        } else if (!Mission_CheckCondition(*(short *)(node + 8), *(int *)(node + 0xC))) {
             *(short *)(node + 0x24) = 1;
         } else {
             *(short *)(node + 0x24) = 2;
@@ -191,7 +191,7 @@ extern unsigned char D_0013D490[];
 extern unsigned char D_0014BFC0[][4];
 
 /* A 10-case switch; the explicit `case 9: break;` keeps retail's table. */
-int func_0020C940(short type, int arg) {
+int Mission_CheckCondition(short type, int arg) {
     switch (type) {
     case 0:
         return 1;
@@ -238,7 +238,7 @@ extern MissionNode *D_001A2FA0;
    Bit 31 of *mask says every visible node is done. Returns the count.
    out is indexed by count: loop strength reduction then gives retail's
    pointer and its copy for the second store. */
-int func_0020CA50(int *out, int *mask, int *nums, int arg3) {
+int Mission_CollectObjectiveIds(int *out, int *mask, int *nums, int arg3) {
     MissionNode *p = D_001A2FA0;
     int count = 0;
     int all = 1;
@@ -392,7 +392,7 @@ int func_0020CD80(void) {
 extern unsigned char D_0013D5E7 NOT_SDA;
 
 /* Returns whether the Hologuise is owned. */
-int func_0020CDA8(void) {
+int HasHologuise(void) {
     return gHaveHologuise != 0;
 }
 
@@ -490,7 +490,7 @@ extern void func_001F75D0_0CDE0(struct TextRegion_0CDE0 *, long, char *,
    it is the current level, places the fixed icons (-1..-9) and projects the others to map
    coordinates, then sets each icon's active flag and sizes its label box.
    Adapted from Lombyte (MIT) for PAL: src/ui/map/update_map_icons.c, update_map_icons. */
-void func_0020CDE0(s32 level, s32 flag) {
+void Map_RefreshIcons(s32 level, s32 flag) {
     char label_text[128];
     f32 map_x;
     f32 map_y;

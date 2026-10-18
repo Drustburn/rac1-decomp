@@ -41,7 +41,7 @@ extern int func_001F9938_30D370(void *) __asm__("func_001F9938");
 /* Timed activation pad update: runs the 10-state machine on the data block at moby+0x78.
  * The timer is a MIN() of two expressions with calls in them, so the calls are made twice;
  * the timer of state 1 is a call in each arm (retail cross-jumps the two calls into one). */
-void func_L07_0030D370(unsigned char *moby)
+void TimedPadUpdate(unsigned char *moby)
 {
     char *d;
     char *p;

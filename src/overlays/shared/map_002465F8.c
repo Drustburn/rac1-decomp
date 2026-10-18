@@ -127,7 +127,7 @@ extern void func_00216EF0_2465F8(int) __asm__("func_00216EF0");
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
    quit. */
-void func_L00_002465F8(void) {
+void LevelMainLoop(void) {
     int i;
     int v;
     int quit;
@@ -433,7 +433,7 @@ void func_L00_00246EC0(void) {
         if (level_data[0] != 0) {
             func_002083E0((void *)D_L00_001842F0[3], level_data, D_L00_001842F0[5]);
         } else {
-            func_00206F40((int *)D_L00_001842F0[3], (unsigned char *)D_L00_001842F0[0], (short *)D_L00_001842F0[1]);
+            DecodeMapMask((int *)D_L00_001842F0[3], (unsigned char *)D_L00_001842F0[0], (short *)D_L00_001842F0[1]);
         }
         lim = 256.0f;
         for (y = 0; y < 32; y++) {
@@ -596,7 +596,7 @@ void func_L00_002472D0(void) {
     RenderArchiveState *state = &D_L00_001842F0;
 
     func_001E9768();
-    func_0020CDE0(state->archive_index, 1);
+    Map_RefreshIcons(state->archive_index, 1);
     first_base = D_L00_001BA070.first_base;
     second_base = D_L00_001BA070.second_base;
     buffer = first_base + 0x9a800;
@@ -620,7 +620,7 @@ void func_L00_002472D0(void) {
             bytes = D_00137C80.render_archives[archive_index].size << 7;
             start_audio_stream_read(buffer, D_00137C80.render_archives[archive_index].sector,
                          D_00137C80.render_archives[archive_index].size);
-            func_00217748(1);
+            UpdateAudioStreamUntilIdle(1);
             state->loaded = 1;
             state->transfer_bytes = bytes;
             func_L00_00295010(state->buffer, state->file_handle, 0, bytes);
@@ -632,7 +632,7 @@ void func_L00_002472D0(void) {
         }
         if (D_L00_001842F0.file_handle != -1) {
             D_L00_001842F0.last_transfer_bytes = D_L00_001842F0.transfer_bytes;
-            func_00234238(D_L00_001842F0.buffer, D_L00_001842F0.file_handle, 0, D_L00_001842F0.transfer_bytes, 0);
+            Stash_ReceiveData(D_L00_001842F0.buffer, D_L00_001842F0.file_handle, 0, D_L00_001842F0.transfer_bytes, 0);
             D_L00_001842F0.level_slot = gHaveMapOMatic != 0 ? D_0015EE84 + 0x100 : D_0015EE84;
             D_L00_001842F0.active = 1;
             D_L00_001842F0.load_state = -2;
@@ -664,7 +664,7 @@ typedef struct {
 extern ArchiveSlots_247620 D_L00_001842F0_247620 __asm__("D_L00_001842F0");
 
 /* returns the first active slot whose key is id, or -1 */
-int func_L00_00247620(int id) {
+int FindMapSlotById(int id) {
     int i;
     for (i = 0; i < 5; i++) {
         if (D_L00_001842F0_247620.active[i] != 0 && D_L00_001842F0_247620.key[i] == id) {
@@ -677,7 +677,7 @@ INCLUDE_ASM("asm/overlays", func_L00_00247650);
 extern int *D_L00_00160360 MACRO_ADDR;
 
 /* Returns the index of key in the zero-terminated id list (at most 20 entries), or -1. */
-int func_L00_002477A0(int key) {
+int FindIdInList(int key) {
     int *list = D_L00_00160360;
     int *p = list;
     int i;

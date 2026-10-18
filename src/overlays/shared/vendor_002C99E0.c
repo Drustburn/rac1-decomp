@@ -18,7 +18,7 @@ extern int func_00116248(void *, void *);
 extern void func_0020D678(void *);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_002c8830.c, FUN_L11_002cb790. */
-void func_L11_002CC950(char *a0)
+void Moby37Update(char *a0)
 {
     if (FastVecDist(a0 + 0x10, gHeroPos) < 2.0f) {
         D_0013D491[0] = 1;
@@ -80,7 +80,7 @@ extern void func_L00_00251328(void *, int, int, int);
 extern void func_L00_00251E30(void *);
 
 /* spawns a moby of class 0x3F1 aimed along a direction */
-unsigned char *func_L11_00309C18(char *owner, float *dir, float *pos, float a, float b) {
+unsigned char *SpawnHomingMissile(char *owner, float *dir, float *pos, float a, float b) {
     unsigned char *m = CreateMoby(0x3F1);
     if (m) {
         char *d = *(char **)(m + 0x78);
@@ -197,7 +197,7 @@ void func_L11_00309DA0(struct Moby *moby) {
                 pitch_off *= max_pitch;
             }
             moby->rot.y = FastAddRots(moby->rot.y, pitch_off);
-            func_00215C00(vars, speed, moby->rot.z, -moby->rot.y);
+            BuildSphericalOffset(vars, speed, moby->rot.z, -moby->rot.y);
             func_001E9768(&moby->pos, &vars->target->pos);
         } else {
             vars->target = 0;
@@ -286,7 +286,7 @@ extern int func_001F9908(int *);
 
 /* Fireball: flies along its velocity leaving smoke; when it hits something it bursts into five puffs
  * and is deleted, otherwise it shrinks away once its timer runs out. */
-void func_L11_0030A468(char *m) {
+void FireballUpdate(char *m) {
     float old[4];
     float p[4];
     float v[4];
@@ -306,7 +306,7 @@ void func_L11_0030A468(char *m) {
     rand_vec(p, 0.0f, 0.1f);
     FastVecAdd(p, p, pos);
     FastVecScale(v, d, *(float *)&D_L11_00161E60);
-    func_L00_0026EBC0((char *)p, (char *)v, c, scale_ticks(*(int *)&D_L11_00161E58), (float)*(int *)&D_L11_00161E5C);
+    PartType27Spawn((char *)p, (char *)v, c, scale_ticks(*(int *)&D_L11_00161E58), (float)*(int *)&D_L11_00161E5C);
     FastVecAdd(pos, pos, d);
     func_L00_0025A8C0(hit, m, 0x10000, *(float *)(d + 0x20), d);
     if (func_L00_001EFFF0(old, pos, 0, *(void **)(d + 0x1C), hit)) {
@@ -321,7 +321,7 @@ void func_L11_0030A468(char *m) {
             func_L00_001FF4B0(q, q, FastVecLength(r) * 0.5f);
             FastVecAdd(q, r, q);
             func_L00_001FF4B0(q, q, random_float_between(D_0015EE6C_e * 5.0f, D_0015EE6C_e * 9.0f));
-            func_L00_0026EBC0(m + 0x10, (char *)q, 0x7F2F4F6F, rand_range(scale_ticks(10), scale_ticks(15)), 90000.0f);
+            PartType27Spawn(m + 0x10, (char *)q, 0x7F2F4F6F, rand_range(scale_ticks(10), scale_ticks(15)), 90000.0f);
         }
         DeleteMoby(m);
         return;
@@ -378,7 +378,7 @@ extern float D_0015EE70 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 
 /* Moby update for a missile that homes on its target. */
-void func_L11_0030A8C8(struct PMoby *moby) {
+void Moby1034Update(struct PMoby *moby) {
     Missile *data = (Missile *)moby->pvars;
     Vec4f *pos;
     Vec4 previous_pos, spray, offset, velocity, random;
@@ -415,7 +415,7 @@ void func_L11_0030A8C8(struct PMoby *moby) {
         random.f[2] = 0.02f;
         func_001F9EC0(&random, &random, &moby->rot_row0);
         build_look_at_matrix(&random, &random, &moby->rot_row0, random_angle_radians());
-        func_L00_0026DA50(&offset, &random, 0x4f007fff, 0x1fffffff, scale_ticks(5), 1, 20000.0f);
+        PartType21Spawn(&offset, &random, 0x4f007fff, 0x1fffffff, scale_ticks(5), 1, 20000.0f);
     }
     pos = &moby->pos;
     target = data->target;
@@ -431,7 +431,7 @@ void func_L11_0030A8C8(struct PMoby *moby) {
                D_0015EE70 * 251.32741f, D_0015EE6C * 2513.2742f);
         data->target = 0;
     }
-    func_00215C00(&data->step, data->speed, moby->rot.z, -moby->rot.y);
+    BuildSphericalOffset(&data->step, data->speed, moby->rot.z, -moby->rot.y);
     FastVecAdd(pos, pos, &data->step);
     if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x || moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
         moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
@@ -501,7 +501,7 @@ extern float D_L11_00161E88[2] SDATA(D_L11_00161E88);
 extern UV_30BCD8 D_L11_00161E98[] MACRO_ADDR;
 
 /* Draws the level's water sheet: a fading edge strip, a far quad, and two scrolling layers of grid cells around the camera. */
-void func_L11_0030BCD8(Moby *moby) {
+void DrawWaterSheet(Moby *moby) {
     Vec4f v0;
     Vec4f v1;
     Vec4f a;
@@ -733,7 +733,7 @@ extern int D_L11_0015F6B0_30C728 __asm__("D_L11_0015F6B0") MACRO_ADDR;
 extern float D_0015EE7C_30C728 __asm__("D_0015EE7C") MACRO_ADDR;
 
 /* Ocean update: scrolls the two wave layers with the camera and the time, keeps their offsets in -1..1 and sets the level's tide values. */
-void func_L11_0030C728(OceanMoby_30C728 *moby)
+void OceanUpdate(OceanMoby_30C728 *moby)
 {
     OceanVars_30C728 *d = moby->vars;
     float src[4];
@@ -873,7 +873,7 @@ extern int func_001F9850_3102C8(int) __asm__("func_001F9850");
 
 
 // Thruster pack lock update: a state machine (0 idle, 1 armed, 2 attacking) that aims the pack and counts the cooldown timers.
-void func_L11_003102C8(Lock_3102C8 *moby)
+void Moby1179Update(Lock_3102C8 *moby)
 {
     char *d = moby->vars;
 
@@ -1149,7 +1149,7 @@ extern int func_001FA898_r(float) __asm__("func_001FA898");
 extern unsigned char D_0013E15A[];
 
 /* Projects a world point to screen and stores its x and y in 1/16 units, y plus an offset. */
-void func_L11_003126D8(void *pt, int *outx, int *outy, int yoff) {
+void ProjectPointToScreen(void *pt, int *outx, int *outy, int yoff) {
     float p[4];
     int *g;
     projectWorldPoint(p, pt);
@@ -1197,25 +1197,25 @@ void func_L11_00312780(void *m, char *t) {
         func_L00_00260958(b, *(float *)(t + 0xC4) * 0.02f + 0.02f);
         func_L00_00260958(c, *(float *)(t + 0xC4) * 0.01f + 0.02f);
         vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015EE6C) * scale;
-        func_L01_0028B570(m, a, vel, &D_L11_00162258, 1);
+        PartType74Spawn(m, a, vel, &D_L11_00162258, 1);
         vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015EE6C) * scale;
-        func_L01_0028B570(m, b, vel, &D_L11_00162268, 1);
+        PartType74Spawn(m, b, vel, &D_L11_00162268, 1);
         vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015EE6C) * scale;
-        func_L01_0028B570(m, c, vel, &D_L11_00162278, 1);
+        PartType74Spawn(m, c, vel, &D_L11_00162278, 1);
         if (*(float *)(t + 0xC4) > 0.5f) {
             func_L00_00260958(a, *(float *)(t + 0xC4) * 0.02f + 0.01f);
             func_L00_00260958(b, *(float *)(t + 0xC4) * 0.02f + 0.01f);
             func_L00_00260958(c, *(float *)(t + 0xC4) * 0.01f + 0.01f);
             vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015EE6C) * scale;
-            func_L01_0028B570(m, a, vel, &D_L11_00162258, 1);
+            PartType74Spawn(m, a, vel, &D_L11_00162258, 1);
             vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015EE6C) * scale;
-            func_L01_0028B570(m, b, vel, &D_L11_00162268, 1);
+            PartType74Spawn(m, b, vel, &D_L11_00162268, 1);
             vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015EE6C) * scale;
-            func_L01_0028B570(m, c, vel, &D_L11_00162278, 1);
+            PartType74Spawn(m, c, vel, &D_L11_00162278, 1);
             vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015EE6C) * scale;
-            func_L01_0028B570(m, a, vel, &D_L11_00162288, 1);
+            PartType74Spawn(m, a, vel, &D_L11_00162288, 1);
             vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015EE6C) * scale;
-            func_L01_0028B570(m, pos, vel, &D_L11_00162298, 1);
+            PartType74Spawn(m, pos, vel, &D_L11_00162298, 1);
         }
     }
 }
@@ -1228,7 +1228,7 @@ extern int D_L11_0015F6B0 MACRO_ADDR;
 extern short D_L11_00162480;
 
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
-void func_L11_0031AAE0(char *moby) {
+void TrailRingUpdate(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
@@ -1277,7 +1277,7 @@ extern void func_00213DE0(void *, int, int, int);
 extern int func_L00_001F10E0(float, void *, int, void *);
 
 /* Collectable crate: when hit, updates the totals (count, best time, levels mask, a level-11 bonus) and breaks open. */
-void func_L11_0031B630(char *m) {
+void CollectableCrateUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
     char *info = func_L00_0025B478(m, 0x330000, 0);
     char *g;
@@ -1302,7 +1302,7 @@ void func_L11_0031B630(char *m) {
         if (D_0015EE84_3102C8 == 0xB && *(char **)(info + 0x20) != 0 && *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
             if (++D_0015EF00 >= 3 && gSkillPoints[0x12] == 0) {
                 gSkillPoints[0x12] = 1;
-                func_0022EE28(1, 0, 0);
+                PlayBankSound(1, 0, 0);
                 ShowBanner(0x53DB, -1);
             }
         }
@@ -1316,7 +1316,7 @@ void func_L11_0031B630(char *m) {
         if (cur != st2) {
             m[0x20] = st2;
             if (((unsigned char *)m)[0x53] != 1) {
-                func_00213DE0(m, 1, 0, scale_ticks(10));
+                MobyBlendAnimation(m, 1, 0, scale_ticks(10));
             }
         }
     } else if (((unsigned char *)m)[0x20] == 5) {
@@ -1329,7 +1329,7 @@ void func_L11_0031B630(char *m) {
         if (coll_sphere(1.0f, m + 0x10, 0, m)) {
             m[0x20] = 6;
             if (((unsigned char *)m)[0x53] != 1) {
-                func_00213DE0(m, 1, 0, scale_ticks(10));
+                MobyBlendAnimation(m, 1, 0, scale_ticks(10));
             }
         }
     }
