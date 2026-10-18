@@ -2251,17 +2251,11 @@ extern float D_0015EE64 MACRO_ADDR;
 extern int D_0015EF38 MACRO_ADDR;
 extern int D_L05_00178400[];
 
-typedef struct {
-    float x;
-    float y;
-    float z;
-    float w;
-} __attribute__((aligned(16))) Vec4_308D68;
 
 typedef struct {
     int count;
     int pad[3];
-    Vec4_308D68 points[1];
+    Vec4A points[1];
 } Path_308D68;
 
 typedef struct {

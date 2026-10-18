@@ -2143,20 +2143,19 @@ float func_L00_00209690(float *a, int n) {
     return w * a[i] + (*(float *)(d + 0xAAC) - w) * a[p];
 }
 typedef unsigned int u128_002090d0 __attribute__((mode(TI), aligned(16)));
-typedef struct { float x, y, z, w_002090d0; } __attribute__((aligned(16))) Vec4_002090d0;
-typedef struct { Vec4_002090d0 r[4]; } Mtx_002090d0;
-extern Vec4_002090d0 D_0013F4E0_002090d0 __asm__("D_0013F4E0");
-void func_001FA218_002090d0(Mtx_002090d0 *, Vec4_002090d0 *) __asm__("func_001FA218");
-void func_001F9EE8_002090d0(Vec4_002090d0 *, Vec4_002090d0 *, Mtx_002090d0 *) __asm__("func_001F9EE8");
+typedef struct { Vec4A r[4]; } Mtx_002090d0;
+extern Vec4A D_0013F4E0_002090d0 __asm__("D_0013F4E0");
+void func_001FA218_002090d0(Mtx_002090d0 *, Vec4A *) __asm__("func_001FA218");
+void func_001F9EE8_002090d0(Vec4A *, Vec4A *, Mtx_002090d0 *) __asm__("func_001F9EE8");
 void func_001FA540_002090d0(Mtx_002090d0 *, Mtx_002090d0 *, Mtx_002090d0 *) __asm__("func_001FA540");
-void func_001F9BF0_002090d0(Vec4_002090d0 *, Vec4_002090d0 *, Vec4_002090d0 *) __asm__("func_001F9BF0");
-void func_001F9BD8_002090d0(Vec4_002090d0 *, Vec4_002090d0 *, Vec4_002090d0 *) __asm__("func_001F9BD8");
-void func_002153E8_002090d0(Mtx_002090d0 *, Vec4_002090d0 *) __asm__("func_002153E8");
+void func_001F9BF0_002090d0(Vec4A *, Vec4A *, Vec4A *) __asm__("func_001F9BF0");
+void func_001F9BD8_002090d0(Vec4A *, Vec4A *, Vec4A *) __asm__("func_001F9BD8");
+void func_002153E8_002090d0(Mtx_002090d0 *, Vec4A *) __asm__("func_002153E8");
 /* Camera-relative placement: transforms a position through the camera matrix and an offset rotation, then writes the difference back into the camera block. Adapted from Lombyte (MIT) for PAL: overlays/shared/ui_help_00203b18.c, FUN_L00_002090d0. */
 void func_L00_00209748(float *inf, float x, float y, float z) {
     u128_002090d0 *in = (u128_002090d0 *)inf;
-    struct { Vec4_002090d0 p; Vec4_002090d0 a; Vec4_002090d0 b; Vec4_002090d0 d; Mtx_002090d0 m; Mtx_002090d0 r; Vec4_002090d0 e; } L_002090d0;
-    Vec4_002090d0 *cam = &D_0013F4E0_002090d0;
+    struct { Vec4A p; Vec4A a; Vec4A b; Vec4A d; Mtx_002090d0 m; Mtx_002090d0 r; Vec4A e; } L_002090d0;
+    Vec4A *cam = &D_0013F4E0_002090d0;
     *(u128_002090d0 *)&L_002090d0.p = *in;
     func_001FA218_002090d0(&L_002090d0.m, cam);
     func_001F9EE8_002090d0(&L_002090d0.a, &L_002090d0.p, &L_002090d0.m);
