@@ -1582,13 +1582,69 @@ void DrawScrollingRibbonColored(P_2BF380 *m, int a, int b, float sx, float sy, f
     }
     VU1_addGSregister(0x47, 0x5360B);
 }
-INCLUDE_ASM("asm/overlays", func_L00_002BF958);
+typedef struct { float f[4]; } __attribute__((aligned(16))) V_t;
+extern V_t D_L00_001DC220[];
+typedef struct {
+    float v[4][4];
+    int rgba[4];
+    float uv[4][2];
+    long gs[4];
+} QuadPkt;
+extern int D_L00_001618E8[3] MACRO_ADDR;
+extern float D_L00_001618B8[3] MACRO_ADDR;
+extern float D_L00_001618D8[3] MACRO_ADDR;
+extern Vec4A D_L00_001DD3A0[];
+extern Vec4A D_L00_001DD3D0[];
+extern short D_L00_00161834;
+extern short D_L00_00161830;
+
+void func_L00_002BF958(void *unused) {
+    QuadPkt q;
+    Vec4A A, B, C, D, E;
+    int base;
+    Vec4A *pd;
+    int i;
+    int j;
+    q.gs[1] = func_001F4868_BEF58(8);
+    q.gs[3] = 0x8000000048;
+    q.gs[2] = 0xFF9000000260;
+    q.gs[0] = 0;
+    q.uv[0][0] = 0; q.uv[0][1] = 0;
+    q.uv[1][0] = 0; q.uv[1][1] = 1.0f;
+    q.uv[2][0] = 1.0f; q.uv[2][1] = 0;
+    q.uv[3][0] = 1.0f; q.uv[3][1] = 1.0f;
+    {
+        int c = ((unsigned char)D_0013E633[2] != 0) ? *(int *)&D_L00_00161834 : *(int *)&D_L00_00161830;
+        base = c & 0xFFFFFF;
+    }
+    pd = &D;
+    for (i = 0; i < 3; i++) {
+        int col;
+        if (D_L00_001618E8[i] != 0) {
+            col = base | (func_001FA898_r(D_L00_001618B8[i]) << 24);
+            q.rgba[3] = col;
+            q.rgba[2] = col;
+            q.rgba[1] = col;
+            q.rgba[0] = col;
+            qcopy(pd, &D_L00_001DD3A0[i]);
+            qcopy(&A, &D_L00_001DD3D0[i]);
+            func_001F9C30(&C, D_0013E633 + 0x10AD, -1.0f);
+            func_001F9CA0(&B, &A, &C);
+            func_L00_001FF4B0(&B, &B, 1.0f);
+            func_001F9CA0(&C, &B, &A);
+            for (j = 0; j < 4; j++) {
+                func_001F9C30(&E, &D_L00_001DC220[j], D_L00_001618D8[i]);
+                func_001F9EE8(&q.v[j], &E, &A);
+            }
+            func_L00_001FD1D8(&q, 0, 0);
+        }
+    }
+}
 extern short D_L00_00161888;
 extern short D_L00_00161884;
 extern short D_L00_0016187C;
 extern short D_L00_00161880;
 
-typedef struct { float f[4]; } __attribute__((aligned(16))) V_t;
 typedef struct {
     V_t corner[4];
     int color[4];
@@ -1599,7 +1655,6 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Q_t;
 extern V_t D_L00_001DC260;
-extern V_t D_L00_001DC220[];
 
 // Draws a textured quad twice (first tinted, then white) from a moby's orientation. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002b94d0.c, FUN_L00_002be890.
 void DrawMobyQuadTintedWhite(void *mv) {
