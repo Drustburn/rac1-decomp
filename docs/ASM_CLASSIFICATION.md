@@ -15,6 +15,12 @@ noreorder assembly (see `tools/ps2eeas_nops.py`), with hand-placed nops, `$at`
 used as a scratch register and `mtc1` in branch delay slots, which no C build
 produces. They are original assembly, not C waiting to be matched.
 
+On 2026-10-18, seven libc string routines in core (func_001150D4, func_00116428,
+func_001165B8, func_001166FC, func_00116810, func_00116948, func_00116B00: the
+strlen/strcpy/strncpy family) were added: they use 128-bit MMI compares (psubb,
+pnor, pand, pcpyud) that ee-gcc 2.9 has no patterns for, so they are original
+assembly.
+
 The handwritten functions and the first 69 remnants were taken from the two
 corresponding `tools/triage.py` buckets on 2026-09-27, and 22 remnants were
 split off the functions splat had folded them into the same day. The

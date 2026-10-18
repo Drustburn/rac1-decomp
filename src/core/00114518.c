@@ -520,7 +520,7 @@ int func_00115098(void *r, int *pwc, const char *s, unsigned int n, int *state) 
     return (*t != '\0');
 }
 
-INCLUDE_ASM("asm/nonmatchings/core_text", func_001150D4);
+ASM_FUNC("asm/handwritten/core_text", func_001150D4);
 
 INCLUDE_ASM("asm/nonmatchings/core_text", func_001151B4);
 
