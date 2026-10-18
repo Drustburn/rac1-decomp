@@ -1527,7 +1527,54 @@ void Hero_UpdateItemSelection(int i) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_00210E00);
+#define SLOT(i) ((struct Hero *)((char *)&D_0013F450_0CDF0 + (i) * sizeof(struct HeroItemSlot)))
+extern void func_L00_00210558(int);
+extern void func_L00_00205780(void *);
+extern void func_L00_00210340(int, int);
+
+/* Per-frame update of the hero's seven item slots. */
+void func_L00_00210E00(void) {
+    int i;
+    int k;
+    char *obj;
+
+    for (i = 0; i < 7; i++) {
+        obj = (char *)SLOT(i)->items[0].moby;
+        if (obj != 0) {
+            switch (SLOT(i)->items[0].state) {
+            case 2:
+                SLOT(i)->items[0].unk20++;
+                func_L00_00210558(i);
+                if (i == 0) {
+                    for (k = 0; k < 3; k++) {
+                        if (D_0013F450_0CDF0.unk18F0[k].unkA0 != -1) {
+                            D_0013F450_0CDF0.unk18F0[k].kind = 5;
+                            func_L00_00205780(&D_0013F450_0CDF0.unk18F0[k]);
+                        }
+                    }
+                }
+                if ((*(unsigned char *)(obj + 0x70) & 2) && *(unsigned char *)(obj + 0x53) == 0) {
+                    func_00213DE0(obj, 1, 0, 2);
+                }
+                break;
+            case 3:
+                SLOT(i)->items[0].unk1B++;
+                if ((*(unsigned char *)(obj + 0x70) & 2) || i == 1 || i == 0) {
+                    func_L00_00210340(i, D_L00_0015F4F8 + 2);
+                }
+                break;
+            }
+            if (obj != 0 && *(unsigned char *)(obj + 0x20) != 0xFE && *(unsigned char *)(obj + 0x20) != 0xFD) {
+                if (i != 6 && *(int *)(obj + 0x74) != 0) {
+                    (*(void (**)(char *))(obj + 0x74))(obj);
+                }
+            }
+        } else {
+            func_L00_00210558(i);
+        }
+    }
+}
+#undef SLOT
 extern void func_L00_0020F118();
 extern void func_L00_0020FC18();
 extern void func_L00_00235088();

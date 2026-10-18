@@ -18,7 +18,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_00236F38`](shared/func_L00_00236F38.c) | shared | 1384 | BYTES 99/1384 | 92.8% |
 | [`func_L00_001F3980`](shared/func_L00_001F3980.c) | shared | 8 | BYTES 1/8 | 87.5% |
 | [`func_L14_002E0538`](l14_oltanis/func_L14_002E0538.c) | l14_oltanis | 796 | BYTES 148/796 | 81.4% |
-| [`func_L00_00210E00`](shared/func_L00_00210E00.c) | shared | 480 | BYTES 117/480 | 75.6% |
 | [`func_L00_002AE278`](shared/func_L00_002AE278.c) | shared | 1076 | BYTES 682/1076 | 36.6% |
 | [`func_001151B4`](core/func_001151B4.c) | core | 0 | ? | - |
 | [`func_00115248`](functional/func_00115248.c) | functional | 0 | ? | - |
