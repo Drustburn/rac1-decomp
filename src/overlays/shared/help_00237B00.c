@@ -1184,7 +1184,70 @@ void Hero_CheckLinkedPickupGroups(void) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L05_00254838);
+#define G ((ScoreState_254838 *)(D_0013E633 + 0xE1D))
+extern unsigned char D_0013D355[];
+extern int D_0015EFA4 MACRO_ADDR;
+extern int D_0015EE84 MACRO_ADDR;
+extern float func_001F9878(float);
+typedef struct { float value[5]; } ScoreWeights_254838;
+extern ScoreWeights_254838 D_L05_00216D68;
+typedef struct {
+    char pad0[0x6D0]; float angle[3]; char pad6DC[4];
+    int actions[4]; int actionCount; float multiplier;
+    int elapsed, actionScore; int turns[3]; int maxTurns;
+    int turnScore, total; char pad718[0x190]; int active;
+} ScoreState_254838;
+typedef struct { char pad0[0xF0]; unsigned short attempts, best; unsigned int levels; } ScoreStats_254838;
+
+/* Updates action and rotation scores while the challenge is active. */
+void func_L05_00254838(void) {
+    int i;
+    if (D_0013D355[0x13B] == 0) return;
+    if (((ScoreState_254838 *)(D_0013E633 + 0xE1D))->active != 0) {
+        ScoreStats_254838 *stats = (ScoreStats_254838 *)(D_0014171B + 0x22D);
+        if (stats->attempts < 0xFFFF) stats->attempts++;
+        if (func_001F9850(D_0015EFA4) / 600 > stats->best)
+            stats->best = func_001F9850(D_0015EFA4) / 600;
+        stats->levels = stats->levels | (1 << D_0015EE84) | 0x80000000;
+    }
+    for (i = 0; i < 3; i++) {
+        float *a = &G->angle[i];
+        if (func_001F9B88(*a) > 3.3161256f) {
+            float value = *a;
+            if (value > 0.0f) {
+                *a = value - 6.2831855f;
+                G->turns[i]++;
+            } else {
+                *a = value + 6.2831855f;
+                G->turns[i]++;
+            }
+        }
+    }
+    G->maxTurns = 0;
+    for (i = 0; i < 3; i++) {
+        if (G->maxTurns < G->turns[i]) G->maxTurns = G->turns[i];
+    }
+    {
+        int step = 100;
+        G->turnScore = 0;
+        for (i = 0; i < G->maxTurns; i++) {
+            G->turnScore += step;
+            step += 50;
+        }
+    }
+    G->actionCount = 0;
+    for (i = 0; i < 4; i++) {
+        if (G->actions[i] != 0) G->actionCount++;
+    }
+    {
+        ScoreWeights_254838 weights = D_L05_00216D68;
+        G->multiplier = weights.value[G->actionCount];
+        G->actionScore = func_001FA898((float)((G->elapsed * 100) / (int)(func_001F9878(1.0f) * 60.0f)));
+        G->actionScore += G->actionCount * 25;
+        G->actionScore = func_001FA898((float)G->actionScore * G->multiplier);
+        G->total = G->turnScore + G->actionScore;
+    }
+}
 typedef int u128_254B38 __attribute__((mode(TI)));
 extern char *D_L05_001B0CB0_254B38[] __asm__("D_L05_001B0CB0");
 extern float func_00214358(void *, int, float);
