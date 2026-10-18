@@ -155,7 +155,7 @@ extern int D_0015F6F0 MACRO_ADDR;
 extern float D_0015F53C MACRO_ADDR;
 
 /* Level-load parser: builds the runtime object tables from the level header and returns the end pointer. */
-unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
+unsigned char *Level_ParseObjectTables(LevelHeaderE9EC8 *hdr)
 {
     unsigned char *p;
     unsigned char *c;
@@ -215,10 +215,10 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     ((void (*)(void *, int, int))FastMemSet)(D_001AADC0, 0, 0x180);
     if (D_0015EE80 != 0) {
         if (D_0015EE60 == 1.0f) {
-            func_002157C0(1);
+            SetVideoModeTiming(1);
         }
     } else if (D_0015EE60 != 1.0f) {
-        func_002157C0(0);
+        SetVideoModeTiming(0);
     }
     *(unsigned char *)&D_0016044C = *(unsigned char *)&D_0015EE80;
     D_00194200.x4 = D_001942C0;
@@ -397,7 +397,7 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
         tie->x1E = 0xFFFF;
         if (D_001D82C0[cls]->x1C != 0) {
             tie->x17 = (unsigned char)truncate_float_to_s32(*D_001D82C0[cls]->x1C);
-            rad = func_001FA888(tie->x17) + 24.0f;
+            rad = IntToFloat(tie->x17) + 24.0f;
             if (tie->radius < rad) {
                 tie->radius = rad;
             }
@@ -503,7 +503,7 @@ unsigned char *func_001E9EC8(LevelHeaderE9EC8 *hdr)
     }
     ResetDrawGlobals();
     pad_resetState();
-    func_001F6598();
+    Font_EnableColorCodes();
     D_0015F6F0 = 0;
     D_0015F53C = 1.0f;
     return p;
@@ -1136,7 +1136,7 @@ void Transition_DefaultDraw(s32 *arg0)
     FastMemSet(D_001940C0, -1, 0x80);
     func_001EB338_EB7C0();
     BuildViewMatrices();
-    func_0020DAB0();
+    AnimSlot_ReleaseStale();
     ResetGsRegisters();
     D_0015F704 = -1;
     if (D_0016055C != 0) {
@@ -1155,14 +1155,14 @@ void Transition_DefaultDraw(s32 *arg0)
     }
     Vif1ChainCmd(0x02080000);
     SetupGifPaging(0);
-    func_00234F40();
+    Dma_AppendRefDirect3();
     if (D_0015F564 != 0) {
         ExecuteDrawCallbacks();
     }
-    func_00234F40();
+    Dma_AppendRefDirect3();
     if (D_0018A3E8[0] != 0) {
         func_00234C98_EB7C0(8, 5);
-        func_00234F40();
+        Dma_AppendRefDirect3();
         func_00118D80(0);
         PartProc();
         D_0015F704 = 8;
@@ -1214,7 +1214,7 @@ extern int D_0015F694_m __asm__("D_0015F694") MACRO_ADDR;
 
 /* The older register residual was the split load of D_0015F694; read
    through a MACRO_ADDR alias it is retail's one-register load. */
-int func_001EBAF0(int arg0, int arg1) {
+int IsStateEntryActive(int arg0, int arg1) {
     if (arg0 >= 0) {
         char *p = D_0013E650 + arg0 * 0x70;
         if (*(short *)(p + 0x7E) == arg1 + D_0015F694_m) {

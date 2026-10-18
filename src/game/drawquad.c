@@ -107,7 +107,7 @@ extern s32 func_001FA898(f32);
 extern void func_00234C98(s32, u64);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/append_billboard_batch.c, append_billboard_batch. */
-void func_001F9478(void) {
+void DrawBillboardBatch(void) {
     Vec4f projected_position;
     Vec4f clip_position;
     f32 distance;
@@ -156,7 +156,7 @@ void func_001F9478(void) {
         } else if (distance < 2.0f) {
             distance = 2.0f;
         }
-        radius = record->radius_scale * (func_001FA888(record->alpha + 16) * 0.015625f) *
+        radius = record->radius_scale * (IntToFloat(record->alpha + 16) * 0.015625f) *
                  ((24.0f - distance) * 16.0f);
         sine_offset = truncate_float_to_s32(radius * FastSin(record->angle));
         cosine_offset = truncate_float_to_s32(radius * FastCos(record->angle));

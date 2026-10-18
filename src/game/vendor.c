@@ -311,7 +311,7 @@ extern f32 func_001FA888(s32);
 extern u64 func_00200248(s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/assembly/textbin/fun_00238310.c, render_capture_scrolling_text. */
-void func_00239628(char *text, s32 start_x, s32 start_y, f32 scale) {
+void Vendor_DrawScrollText(char *text, s32 start_x, s32 start_y, f32 scale) {
     s64 texture;
     s32 cursor_x;
     s32 cursor_y;
@@ -379,9 +379,9 @@ void func_00239628(char *text, s32 start_x, s32 start_y, f32 scale) {
                         if (cursor_x + 9 > 0) {
                             if (cursor_x < 0x100) {
                                 glyph_width =
-                                    TRUNC(func_001FA888(9) * scale);
+                                    TRUNC(IntToFloat(9) * scale);
                                 glyph_height =
-                                    TRUNC(func_001FA888(9) * scale);
+                                    TRUNC(IntToFloat(9) * scale);
                                 DrawTexturedQuad(cursor_x, cursor_y, glyph_width, glyph_height,
                                                    texture_u, texture_v, 9, 9, (s64)0x80404040,
                                                    texture);
@@ -390,7 +390,7 @@ void func_00239628(char *text, s32 start_x, s32 start_y, f32 scale) {
                     }
 
                     cursor_x += TRUNC(
-                        func_001FA888(D_001E6418[glyph_index]) * scale);
+                        IntToFloat(D_001E6418[glyph_index]) * scale);
                 }
             }
         }
@@ -418,7 +418,7 @@ void update_scrolling_status_message(void) {
         set_scrolling_status_message(func_001FE540_id(D_001E62B8[random_integer_below(0x18)]));
     }
     w = D_001E66C0;
-    func_00239628(*(char **)(w + 0x2C), -*(int *)(w + 0x44), 8, 2.0f);
+    Vendor_DrawScrollText(*(char **)(w + 0x2C), -*(int *)(w + 0x44), 8, 2.0f);
     Framebuf_DrawAlphaRect(0, 0, 4, 0x40, 0x200, 0x80, 0);
     Framebuf_DrawAlphaRect(0xE2, 0, 0xE6, 0x40, 0x200, 0x80, 0);
 }
@@ -426,7 +426,7 @@ void update_scrolling_status_message(void) {
 extern int D_001611A8 MACRO_ADDR;
 extern int D_001E66E4;
 
-void func_00239948(void) {
+void VendorDrawSalesmanVideo(void) {
     Framebuf_DrawAlphaRect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     if (D_001611A8 == 1) {
         DrawMobyList(D_001E66E4, 1);
@@ -743,7 +743,7 @@ void func_0023A5E0(s32 pass_index, f32 capture_width,
                 scroll_opacity = 0x50;
             }
             scroll_offset =
-                -(func_001FA888(0x200 - D_001E6940[pass_index]) * 0.03125f);
+                -(IntToFloat(0x200 - D_001E6940[pass_index]) * 0.03125f);
             overlay_height = capture_height + 16.0f;
             func_001F5988(0.0f, scroll_offset, capture_width, overlay_height,
                                                  0, 0, overlay_width, (s32)(overlay_height * 1.5f),
@@ -854,10 +854,10 @@ void VendorDrawScreens(char *m) {
         if (D_00161398 != 0 || *(int *)&D_001613A0 != 0) {
             f = 1.0f;
             if (*(int *)&D_001613A0 != 0) {
-                f = func_001FA888(8 - *(int *)&D_0016139C) * 0.125f;
+                f = IntToFloat(8 - *(int *)&D_0016139C) * 0.125f;
             }
             if (D_00161398 != 0) {
-                f = func_001FA888(*(int *)&D_00161394) * 0.125f;
+                f = IntToFloat(*(int *)&D_00161394) * 0.125f;
             }
             len = FastVecLength(d1);
             g = 1.0f - f;
@@ -1033,9 +1033,9 @@ s32 SampleSurfaceHeight(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     fraction_y = y - fraction_y;
     column = func_001FA898_3B210(fraction_x / D_001E69E0_3B210.cell_width);
     row = func_001FA898_3B210(*&fraction_y / D_001E69E0_3B210.cell_height);
-    fraction_x -= func_001FA888(column) * D_001E69E0_3B210.cell_width;
+    fraction_x -= IntToFloat(column) * D_001E69E0_3B210.cell_width;
     weight_x = fraction_x / D_001E69E0_3B210.cell_width;
-    fraction_y -= func_001FA888(row) * D_001E69E0_3B210.cell_height;
+    fraction_y -= IntToFloat(row) * D_001E69E0_3B210.cell_height;
     /* Divide the signed remainder after rounding the row, before choosing the sample bank. */
     weight_y = fraction_y / D_001E69E0_3B210.cell_height;
     h00 = tile->layers[(*(s32 *)&D_001611E0)].samples[row][column];
@@ -1099,7 +1099,7 @@ void func_0023B578(char *arg0) {
         *(float *)(arg0 + 0x54) = f2;
         *(float *)(arg0 + 0x58) = f1;
     }
-    func_0023B5D0(arg0);
+    QuadMoby_UpdateEdgeLengths(arg0);
 }
 
 typedef struct {
@@ -1116,7 +1116,7 @@ extern void func_001F9BF0_b(void *, void *, void *) __asm__("func_001F9BF0");
    unaligned ldl/ldr + sdl/sdr pairs, which is retail's shape -- same
    idiom as func_001FFE88), then record the two resulting lengths at
    +0x40 and +0x44. */
-void func_0023B5D0(char *arg0) {
+void QuadMoby_UpdateEdgeLengths(char *arg0) {
     float a[4];
     float b[4];
     Cfg16 cfg;

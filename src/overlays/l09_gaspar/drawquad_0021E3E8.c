@@ -19,7 +19,7 @@ extern char *D_L09_0015F520_21E410 __asm__("D_L09_0015F520") MACRO_ADDR;
 extern int D_0015EF74_21E410 __asm__("D_0015EF74") MACRO_ADDR;
 
 /* Queues the GS packet for a draw (a == b), or builds the strip between two table entries and queues it. */
-void func_L09_0021E410(int a, int b) {
+void Draw_QueueStrip(int a, int b) {
     if (a == b) {
         int *q;
         long *g;
@@ -108,13 +108,13 @@ void DrawScrollingStrips(char *list, int count, long tex0, long tex1) {
     int idx;
     float s0;
     float s1;
-    func_L09_0021E410(tex0, tex1);
+    Draw_QueueStrip(tex0, tex1);
     D_L09_00161240[0] = 0x30000009;
     D_L09_00161240[1] = (int)D_L09_0016EB20;
     D_L09_00161240[2] = 0;
     D_L09_00161240[3] = 0x50000009;
     D_L09_00161240 += 4;
-    func_001F7868();
+    Draw_BuildVu1Setup();
     s0 = 1.0f - (float)(D_L09_0015F6B0 & 0x7FF) * 0.00048828125f;
     s1 = s0 + s0 + 0.5f;
     sp = (int *)0x70000000;

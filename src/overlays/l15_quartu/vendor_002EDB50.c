@@ -58,7 +58,7 @@ void UltramechScientistUpdate(char *moby) {
     int v;
 
     d = *(char **)(moby + 0x78);
-    func_L12_002E7EE0(moby);
+    Moby_AttachCheatManipulators(moby);
     if (*(int *)(d + 0x14C) == -1) {
         return;
     }
@@ -82,7 +82,7 @@ void UltramechScientistUpdate(char *moby) {
     } else {
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         *(unsigned short *)(moby + 0x34) &= 0xFFBE;
-        func_L02_0025D750(moby);
+        SetMobyZBand(moby);
     }
 
     switch (*(unsigned char *)(moby + 0x20)) {
@@ -138,7 +138,7 @@ void UltramechScientistUpdate(char *moby) {
         if (func_L00_00267290(moby, d) == 0) {
             break;
         }
-        func_L00_002512D8(*(int *)(d + 0x280));
+        SetLevelTriggerDone(*(int *)(d + 0x280));
         *(int *)(moby + 0x58) = 0;
         *(unsigned char *)(moby + 0x20) = 2;
         p = D_L15_00160064;
@@ -176,7 +176,7 @@ void UltramechScientistUpdate(char *moby) {
         if (*(short *)(d + 0x4) == 0) {
             if (*(int *)(d + 0x150) != -1) {
                 char *bb = D_L15_0016016C;
-                func_L00_00286128(bb + (*(int *)(d + 0x150) << 7) + 0x30, bb + (*(int *)(d + 0x150) << 7) + 0x70);
+                PauseMenu_SeedSnapshot(bb + (*(int *)(d + 0x150) << 7) + 0x30, bb + (*(int *)(d + 0x150) << 7) + 0x70);
             }
             *(unsigned char *)(moby + 0x20) = 3;
         } else {
@@ -202,10 +202,10 @@ void UltramechScientistUpdate(char *moby) {
                 }
             }
         }
-        if (func_L01_0026EFB8(*(int *)(d + 0x144), 0x40) != 0) {
+        if (MobyGroup_CountNotInState(*(int *)(d + 0x144), 0x40) != 0) {
             break;
         }
-        if (func_L01_0026EFB8(*(int *)(d + 0x148), 0x40) != 0) {
+        if (MobyGroup_CountNotInState(*(int *)(d + 0x148), 0x40) != 0) {
             break;
         }
         *(unsigned char *)(moby + 0x20) = 4;
@@ -220,33 +220,33 @@ void UltramechScientistUpdate(char *moby) {
         *(int *)(d + 0x140) = 1;
         *(short *)(d + 0x36) = 1;
         *(unsigned char *)(d + 0x8) = 1;
-        func_L00_00261848(0x10);
-        func_L00_002512D8(*(int *)(d + 0x284));
+        UnlockPlanet(0x10);
+        SetLevelTriggerDone(*(int *)(d + 0x284));
         MusicRequestTrack(0, 5);
         if (*(int *)(d + 0x154) != -1) {
             char *b1 = D_L15_0016016C;
             char *b2;
-            func_L00_00217718(b1 + (*(int *)(d + 0x154) << 7) + 0x30, b1 + (*(int *)(d + 0x154) << 7) + 0x70, 0, 1);
+            Hero_ResetToPosition(b1 + (*(int *)(d + 0x154) << 7) + 0x30, b1 + (*(int *)(d + 0x154) << 7) + 0x70, 0, 1);
             b2 = D_L15_0016016C;
-            func_L00_00286128(b2 + (*(int *)(d + 0x154) << 7) + 0x30, b2 + (*(int *)(d + 0x154) << 7) + 0x70);
+            PauseMenu_SeedSnapshot(b2 + (*(int *)(d + 0x154) << 7) + 0x30, b2 + (*(int *)(d + 0x154) << 7) + 0x70);
         }
         *(unsigned char *)(moby + 0x20) = 5;
         break;
     case 5:
-        func_L00_00299B68(1);
+        StartCutscene(1);
         *(unsigned char *)(moby + 0x20) = 6;
         break;
     case 6:
         if (D_L15_0015F6A8 == 2) {
             break;
         }
-        func_L00_0029A7D0(0x10);
+        PlayMovieEntryIfIdle(0x10);
         *(unsigned char *)(moby + 0x20) = 7;
         break;
     case 7:
         if (D_L15_0015F6A8 != 2) {
-            func_L00_00263DB0(0x10);
-            func_L00_00299B68(2);
+            ShowPlanetBanner(0x10);
+            StartCutscene(2);
             *(unsigned char *)(moby + 0x20) = 8;
         }
         memcard_Save(0, -1);
@@ -342,8 +342,8 @@ e26c:
     if (gCheats[0] != 0) {
         *(float *)(d + 0x1D0) = 2.75f;
     }
-    func_L00_00263950(moby, d + 0x160, 1, f22 * D_0015EE64, f23 * D_0015EE64);
-    func_L00_00263950(moby, d + 0x1E0, 0, f22 * D_0015EE64, f23 * D_0015EE64);
+    EaseManipulatorOffsets(moby, d + 0x160, 1, f22 * D_0015EE64, f23 * D_0015EE64);
+    EaseManipulatorOffsets(moby, d + 0x1E0, 0, f22 * D_0015EE64, f23 * D_0015EE64);
     }
 }
 typedef struct Talk_2EE7E8 {
@@ -552,7 +552,7 @@ extern struct L15MissionState D_L15_0016CEE0;
 extern void func_L00_00264870(int);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l15/gameplay/vendor/002e73c0.c, FUN_L15_002edb20. */
-void func_L15_002EEF70(struct Moby *m) {
+void BossSlotEffectUpdate(struct Moby *m) {
     switch (m->state) {
     case 0:
         m->update_dist = 0xFF;
@@ -571,7 +571,7 @@ void func_L15_002EEF70(struct Moby *m) {
                     i = 2;
                 else if (v == 6)
                     i = 1;
-                func_L00_00264870(D_L15_0016CEE0.slot[i]);
+                SpawnMoby750Sparks(D_L15_0016CEE0.slot[i]);
             }
         }
         break;
@@ -626,7 +626,7 @@ void func_L15_002EF030(char *moby) {
     int b;
     int color;
     float scale;
-    scale = func_001FA888(D_L15_0015F6B0) * (D_L15_0016227C * D_0015EE6C);
+    scale = IntToFloat(D_L15_0015F6B0) * (D_L15_0016227C * D_0015EE6C);
     VU1_addGSregister(6, GetEffectTex(D_L15_00162268));
     VU1_addGSregister(0x42, ((long)D_L15_00162264 << 32) | 0x44);
     VU1_addGSregister(8, 0);
@@ -654,7 +654,7 @@ void func_L15_002EF030(char *moby) {
             D_L15_001DF1A8[n][0] = D_L15_001DED58[n][0] + func_L00_00200210(scale * t.f[j][0], 1.0f);
             D_L15_001DF1A8[n][1] = D_L15_001DED58[n][1] + func_L00_00200210(scale * t.f[j][1], 1.0f);
         }
-        func_001F7868();
+        Draw_BuildVu1Setup();
         for (k = 0; k < 1; k++) {
             func_L00_001FDE48(D_L15_00162230[k], D_L15_00162250[k], D_L15_00162260[k], (void *)D_L15_00162258[k], 1);
         }
@@ -685,7 +685,7 @@ extern float D_L15_001622EC SDATA(D_L15_001622EC);
 extern float D_L15_001622F0 SDATA(D_L15_001622F0);
 
 /* Builds and draws the animated ring of lights around a moby: 88 scaled vertices and colours, then two passes of 88 texture coordinates. */
-void func_L15_002EF410(char *moby) {
+void LightRingLargeDraw(char *moby) {
     RingVars_2EF410 *data = *(RingVars_2EF410 **)(moby + 0x78);
     unsigned int i;
     unsigned int n;
@@ -696,7 +696,7 @@ void func_L15_002EF410(char *moby) {
     int b;
     int color;
     float scale;
-    scale = func_001FA888(D_L15_0015F6B0) * (D_L15_001622EC * D_0015EE6C);
+    scale = IntToFloat(D_L15_0015F6B0) * (D_L15_001622EC * D_0015EE6C);
     VU1_addGSregister(6, GetEffectTex(D_L15_001622D8));
     VU1_addGSregister(0x42, ((long)D_L15_001622D4 << 32) | 0x44);
     VU1_addGSregister(8, 0);
@@ -724,7 +724,7 @@ void func_L15_002EF410(char *moby) {
             D_L15_001E0030[n][0] = D_L15_001DF7F0[n][0] + func_L00_00200210(scale * t.f[j][0], 1.0f);
             D_L15_001E0030[n][1] = D_L15_001DF7F0[n][1] + func_L00_00200210(scale * t.f[j][1], 1.0f);
         }
-        func_001F7868();
+        Draw_BuildVu1Setup();
         for (k = 0; k < 1; k++) {
             func_L00_001FDE48(D_L15_001622A0[k], D_L15_001622C0[k], D_L15_001622D0[k], (void *)D_L15_001622C8[k], 1);
         }
@@ -763,11 +763,11 @@ extern char D_0013E633[];
 extern char *D_L15_0015F050 MACRO_ADDR;
 extern int *D_L15_001B0DB0[];
 /* tests several indexed conditions of a moby's entry in the table */
-int func_L15_002F99F8(char *moby) {
+int CamTrigger_IsHeroInside(char *moby) {
     int *e = *(int **)(D_L15_0015F050 + *(short *)(moby + 0x84) * 32 + 0x1C);
     int r;
     int i;
-    if (e[10] >= 0 && func_L00_00260AB0(D_0013E633 + 0xE9D, e[10])) {
+    if (e[10] >= 0 && IsPointInCylinderVolume(D_0013E633 + 0xE9D, e[10])) {
         return 0;
     }
     if (e[3] >= 0) {
@@ -775,16 +775,16 @@ int func_L15_002F99F8(char *moby) {
             return 1;
         }
     } else if (e[4] >= 0) {
-        if (func_L00_00260AB0(D_0013E633 + 0xE9D, e[4])) {
+        if (IsPointInCylinderVolume(D_0013E633 + 0xE9D, e[4])) {
             return 1;
         }
     } else if (e[2] >= 0) {
-        if (func_L00_00260B68((float *)(D_0013E633 + 0xE9D), e[2])) {
+        if (IsPointInSphereVolume((float *)(D_0013E633 + 0xE9D), e[2])) {
             return 1;
         }
     } else if (e[5] >= 0) {
         i = e[5];
-        if (func_L00_0025A778((float *)(D_0013E633 + 0xE9D), (float *)(D_L15_001B0DB0[i] + 4), D_L15_001B0DB0[i][0])) {
+        if (IsPointInPolygon((float *)(D_0013E633 + 0xE9D), (float *)(D_L15_001B0DB0[i] + 4), D_L15_001B0DB0[i][0])) {
             return 1;
         }
     }

@@ -107,7 +107,7 @@ extern int func_00122630(void *, short, short, short, short, short, short, short
 extern int func_00122958(void *, void *);
 extern int func_00120858(int, unsigned short);
 
-s32 func_00202AA8(MipTexture_202AA8 *tex, u64 *regs)
+s32 UploadMipTexture(MipTexture_202AA8 *tex, u64 *regs)
 {
     MipUpload_202AA8 upload;
     LoadImage_202AA8 load_image;
@@ -977,13 +977,13 @@ void RegisterMobyClass(void *arg0, int arg1, int arg2, int arg3) {
     D_001B3C80[idx] = arg3;
     D_001B3580[idx] = arg0;
     if (arg0 == 0) {
-        func_00213BB8(arg3);
+        SetMobyClassEntry(arg3);
         D_00160000 = D_00160000 + 1;
     } else {
         D_001B6500[idx] = *(int *)((char *)arg0 + 0x2C);
-        func_00213BB8(arg3);
+        SetMobyClassEntry(arg3);
         D_00160000 = D_00160000 + 1;
-        func_00203B70(arg0, arg1, arg2, arg3);
+        MobyClassRelocate(arg0, arg1, arg2, arg3);
     }
 }
 __asm__(".section .text\n\tnop\n");
@@ -1004,7 +1004,7 @@ int func_00204BE8(void) {
 
     D_0015EF4C = (int *)(((int)D_1FF7FF0 - want) & -0x10);
     *D_0015EF4C = 0x60;
-    func_002175C8((int)D_0015EF4C + *D_0015EF4C, hdr[0x13E], hdr[0x13F]);
+    Stream_SubmitRead((int)D_0015EF4C + *D_0015EF4C, hdr[0x13E], hdr[0x13F]);
     return 1;
 }
 
@@ -1406,7 +1406,7 @@ extern GadgetRec_05270 D_001864D0[];
 extern unsigned char D_0013E620[];
 extern long D_0019E7F0[];
 
-void func_00205270(int class_id, int buffer_index) {
+void LoadMobyClassResources(int class_id, int buffer_index) {
     int runtime_index;
     int resource_table_index;
     ClassResourceHeader_05270 *resource_data;
@@ -1435,7 +1435,7 @@ void func_00205270(int class_id, int buffer_index) {
     resource_table = D_001B3580;
     resource_table[class_slot] = resource_data;
     D_001B6500[class_slot] = resource_data->original_field_2c;
-    ((void (*)(void *, void *, void *, int))func_00203B70)(resource_data, D_001CAE40, D_001CBF60[D_0016004C], class_id);
+    ((void (*)(void *, void *, void *, int))MobyClassRelocate)(resource_data, D_001CAE40, D_001CBF60[D_0016004C], class_id);
     resource_table_index = D_0016004C;
     resource_tag = D_00160044;
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {

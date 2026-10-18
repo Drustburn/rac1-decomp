@@ -26,7 +26,7 @@ extern void func_L00_00251E30_B0068(void *) __asm__("func_L00_00251E30");
 extern float D_0015EE6C_B0068 __asm__("D_0015EE6C") MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002aee30.c, FUN_L04_002aee30. */
-struct Moby *func_L04_002B0068(struct Moby *owner, void *pos, void *dir, int life)
+struct Moby *SpawnShotMoby(struct Moby *owner, void *pos, void *dir, int life)
 {
     struct Moby *m;
     ShotVars_B0068 *vars;
@@ -204,7 +204,7 @@ extern char D_L04_001D2F60[];
 extern short D_L04_00161940;
 
 /* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
-void func_L04_002C5938(char *a, int i, int j, int k) {
+void SpawnSmokeTrailBetweenPoints(char *a, int i, int j, int k) {
     float v0[4], v10[4];
     char *pi, *pj;
     pi = D_L04_001D2F60 + i * 16;
@@ -230,22 +230,22 @@ extern short D_L04_0016196C;
 extern void func_L04_002C5938(char *a, int i, int j, int k);
 
 // Calls the pair helper for each edge index pair with a per-pair global value.
-void func_L04_002C5A50(char *a)
+void SpawnSmokeTrails(char *a)
 {
-    func_L04_002C5938(a, 0, 1, *(int *)&D_L04_00161950);
-    func_L04_002C5938(a, 2, 3, *(int *)&D_L04_00161954);
-    func_L04_002C5938(a, 4, 5, *(int *)&D_L04_00161958);
-    func_L04_002C5938(a, 5, 6, *(int *)&D_L04_0016195C);
-    func_L04_002C5938(a, 6, 7, *(int *)&D_L04_00161960);
-    func_L04_002C5938(a, 8, 9, *(int *)&D_L04_00161958);
-    func_L04_002C5938(a, 9, 10, *(int *)&D_L04_0016195C);
-    func_L04_002C5938(a, 10, 11, *(int *)&D_L04_00161960);
-    func_L04_002C5938(a, 12, 13, *(int *)&D_L04_00161964);
-    func_L04_002C5938(a, 14, 15, *(int *)&D_L04_00161964);
-    func_L04_002C5938(a, 16, 17, *(int *)&D_L04_00161968);
-    func_L04_002C5938(a, 20, 21, *(int *)&D_L04_00161968);
-    func_L04_002C5938(a, 18, 19, *(int *)&D_L04_0016196C);
-    func_L04_002C5938(a, 22, 23, *(int *)&D_L04_0016196C);
+    SpawnSmokeTrailBetweenPoints(a, 0, 1, *(int *)&D_L04_00161950);
+    SpawnSmokeTrailBetweenPoints(a, 2, 3, *(int *)&D_L04_00161954);
+    SpawnSmokeTrailBetweenPoints(a, 4, 5, *(int *)&D_L04_00161958);
+    SpawnSmokeTrailBetweenPoints(a, 5, 6, *(int *)&D_L04_0016195C);
+    SpawnSmokeTrailBetweenPoints(a, 6, 7, *(int *)&D_L04_00161960);
+    SpawnSmokeTrailBetweenPoints(a, 8, 9, *(int *)&D_L04_00161958);
+    SpawnSmokeTrailBetweenPoints(a, 9, 10, *(int *)&D_L04_0016195C);
+    SpawnSmokeTrailBetweenPoints(a, 10, 11, *(int *)&D_L04_00161960);
+    SpawnSmokeTrailBetweenPoints(a, 12, 13, *(int *)&D_L04_00161964);
+    SpawnSmokeTrailBetweenPoints(a, 14, 15, *(int *)&D_L04_00161964);
+    SpawnSmokeTrailBetweenPoints(a, 16, 17, *(int *)&D_L04_00161968);
+    SpawnSmokeTrailBetweenPoints(a, 20, 21, *(int *)&D_L04_00161968);
+    SpawnSmokeTrailBetweenPoints(a, 18, 19, *(int *)&D_L04_0016196C);
+    SpawnSmokeTrailBetweenPoints(a, 22, 23, *(int *)&D_L04_0016196C);
 }
 typedef int u128 __attribute__((mode(TI)));
 
@@ -254,7 +254,7 @@ extern void func_L00_00251E30(void *);
 
 /* Spawns moby class 0x1F3, copies the 16-byte position from b and a few
    fields from a into it, hands the new moby to func_L00_00251E30. */
-char *func_L04_002CF460(char *a, char *b)
+char *SpawnMoby499(char *a, char *b)
 {
     u128 v = *(u128 *)b;
     u128 *p = &v;

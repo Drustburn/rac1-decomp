@@ -23,7 +23,7 @@ extern int func_001FA898(float);
 extern char D_L10_001672C0[];
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_00298940.c, FUN_L10_00298940. */
-void func_L10_00299AF0(char *m) {
+void DriftingSprites_DrawL10(char *m) {
     L10SpriteData_298940 *p = *(L10SpriteData_298940 **)(m + 0x78);
     float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
@@ -47,10 +47,10 @@ void func_L10_00299AF0(char *m) {
         if (func_001F9908(&p->c[i])) {
             p->c[i] = scale_ticks(0xFF);
         }
-        f = func_001FA888(scale_ticks(0xFF) - p->c[i]);
+        f = IntToFloat(scale_ticks(0xFF) - p->c[i]);
         f = f / (float)scale_ticks(0xFF);
         col = FastTweenColor(0x4040FFFF, 0x1040FFFF, FastAbsF(0.5f - f));
-        func_L00_00273E08(d, col, truncate_float_to_s32(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
+        PartType59Spawn(d, col, truncate_float_to_s32(p->a[i]) & 0xFF, 0x35, 1, 2, 0, p->d[i]);
         func_001F9BD8_99AF0(d, d, e);
     }
 }
@@ -62,7 +62,7 @@ extern void func_L00_00251E30(void *);
 extern char D_0013E633[];
 
 /* spawn a moby of class 0x333 with position, velocity vector and aim angles */
-char *func_L10_002CD578(float scale, void *vel, void *pos, int a, int b, int c) {
+char *Moby819Spawn(float scale, void *vel, void *pos, int a, int b, int c) {
     char *m = (char *)func_0020D348_m(0x333);
     char *d;
     if (m) {
@@ -132,7 +132,7 @@ extern void func_L00_0028EF68(int, int, void *, int);
 extern void func_0020D678(void *);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/00298940.c, FUN_L10_002cc2e8. */
-void func_L10_002CD6A8(char *m) {
+void Moby819Update(char *m) {
     Shot_cc2e8 *d = *(Shot_cc2e8 **)(m + 0x78);
     float pos0[4] __attribute__((aligned(16)));
     float c[4] __attribute__((aligned(16)));
@@ -191,10 +191,10 @@ void func_L10_002CD6A8(char *m) {
                 yaw = func_L00_001FF860(diff[0], diff[1]);
                 pitch = -func_L00_001FF860(func_001F9CE8(diff), diff[2]);
             }
-            ((Rot_cc2e8 *)m)->rz = func_L00_00259148(((Rot_cc2e8 *)m)->rz, yaw, D_0015EE70 * 6.2831855f,
+            ((Rot_cc2e8 *)m)->rz = SpringTurn(((Rot_cc2e8 *)m)->rz, yaw, D_0015EE70 * 6.2831855f,
                                               D_0015EE70 * 3.1415927f, D_0015EE6C * 6.2831855f,
                                               &d->yawSpeed);
-            ((Rot_cc2e8 *)m)->ry = func_L00_00259148(((Rot_cc2e8 *)m)->ry, pitch, D_0015EE70 * 6.2831855f,
+            ((Rot_cc2e8 *)m)->ry = SpringTurn(((Rot_cc2e8 *)m)->ry, pitch, D_0015EE70 * 6.2831855f,
                                               D_0015EE70 * 3.1415927f, D_0015EE6C * 6.2831855f,
                                               &d->pitchSpeed);
             ((Rot_cc2e8 *)m)->rx = FastAddRots(((Rot_cc2e8 *)m)->rx, D_0015EE6C * 6.2831855f);
@@ -220,7 +220,7 @@ void func_L10_002CD6A8(char *m) {
                 if (*(int *)(tb + 0x18) != 0) {
                     func_L00_001FF500(diff, d, 1.0f);
                     d->vel[2] = 1.0f;
-                    func_L00_0025AC00(1.0f, *(int *)(tb + 0x18), m, 0x10003, tb + 0x20, diff);
+                    PostHitMessage(1.0f, *(int *)(tb + 0x18), m, 0x10003, tb + 0x20, diff);
                 }
                 m[0x20] = 2;
             }
@@ -230,10 +230,10 @@ void func_L10_002CD6A8(char *m) {
         break;
     case 2:
         if (D_0015EE84 != 10)
-            func_L00_00260108(m, m + 0x10, -1, 0.25f, 13.0f);
+            SpawnExplosionFx(m, m + 0x10, -1, 0.25f, 13.0f);
         else
-            func_L00_00260108(m, m + 0x10, -1, 0.25f, 0.0f);
-        func_L00_0028EF68(0, 0, m, 0x99);
+            SpawnExplosionFx(m, m + 0x10, -1, 0.25f, 0.0f);
+        Sound_PlayClassSound(0, 0, m, 0x99);
         DeleteMoby(m);
         break;
     }
@@ -253,7 +253,7 @@ extern short D_L10_00161ED8;
 extern short D_L10_00161EDC;
 
 // spawns an effect at a jittered position around the moby
-void func_L10_002E51A8(char *moby) {
+void SpawnPartType52Near(char *moby) {
     float v[3];
     int g, h;
     float a = random_angle_radians();
@@ -281,7 +281,7 @@ extern unsigned char D_0014171B_q[] __asm__("D_0014171B") NOT_SDA;
  * hero+0x50, rotates it with the matrix from func_001FA4A0(moby + 0xC0), and if that point lies
  * in the box -5 < x < 5, 0 < z < 8 sets hero byte 0x224B to (y < 0.5), else (y > 0) clears
  * D_0014171B. Then queues func_L10_002EA578. */
-void func_L10_002EA3E8(unsigned char *m) {
+void Moby1378Update(unsigned char *m) {
     float v[4] __attribute__((aligned(16)));
     float mtx[16] __attribute__((aligned(16)));
     char *hero;
@@ -308,7 +308,7 @@ void func_L10_002EA3E8(unsigned char *m) {
                 D_0014171B_q[0] = 0;
             }
         }
-        AddDrawCallback(func_L10_002EA578, m);
+        AddDrawCallback(Moby1378Draw, m);
         break;
     }
 }
@@ -341,7 +341,7 @@ extern void func_L00_001FD1D8(void *, void *, int);
     ((unsigned long)(a) | ((unsigned long)(b) << 2) | ((unsigned long)(c) << 4) | \
      ((unsigned long)(d) << 6) | ((unsigned long)(fix) << 32))
 
-void func_L10_002EA578(unsigned char *m) {
+void Moby1378Draw(unsigned char *m) {
     Quad_2EA578 first, second;
     float transform[12] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
@@ -398,7 +398,7 @@ void func_L10_002EA578(unsigned char *m) {
         for (i = 0; i < 4; i++) {
             for (axis = 0; axis < 2; axis++) {
                 int limit = truncate_float_to_s32(D_L10_001DA540[pass][axis] * 360.0f);
-                float angle = func_001FA888(D_L10_0015F4F8 % limit) / D_L10_001DA540[pass][axis] - 180.0f;
+                float angle = IntToFloat(D_L10_0015F4F8 % limit) / D_L10_001DA540[pass][axis] - 180.0f;
                 float delta;
                 if (D_L10_001DA580[pass][axis] != 0) {
                     delta = FastCos(angle * 0.017453292f);
@@ -432,7 +432,7 @@ void func_L10_002EA578(unsigned char *m) {
 extern char * D_L10_0015F050 MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002e3de8.c, FUN_L10_002f5a50. */
-void func_L10_002F6E10(int i) {
+void Trigger_Arm(int i) {
     unsigned char *q;
     q = *(unsigned char **)(D_L10_0015F050 + i * 0x20 + 0x1C);
     q[0x38] = 1;
@@ -445,19 +445,19 @@ extern int func_L00_00260B68(float *, int);
 extern int func_L00_0025A778(float *, float *, int);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002e3de8.c, FUN_L10_002f5a78. */
-int func_L10_002F6E38(char *moby, char *unused)
+int Trigger_IsHeroInside(char *moby, char *unused)
 {
     unsigned char *e = *(unsigned char **)(D_L10_0015F050 + *(short *)(moby + 0x84) * 32 + 0x1C);
 
     if (*(int *)(e + 0x0C) >= 0) {
         if (is_point_inside_clip_volume(gHeroPos, *(int *)(e + 0x0C))) return 1;
     } else if (*(int *)(e + 0x10) >= 0) {
-        if (func_L00_00260AB0(gHeroPos, *(int *)(e + 0x10))) return 1;
+        if (IsPointInCylinderVolume(gHeroPos, *(int *)(e + 0x10))) return 1;
     } else if (*(int *)(e + 0x08) >= 0) {
-        if (func_L00_00260B68((float *)gHeroPos, *(int *)(e + 0x08))) return 1;
+        if (IsPointInSphereVolume((float *)gHeroPos, *(int *)(e + 0x08))) return 1;
     } else if (*(int *)(e + 0x14) >= 0) {
         int i = *(int *)(e + 0x14);
-        if (func_L00_0025A778((float *)gHeroPos,
+        if (IsPointInPolygon((float *)gHeroPos,
                                   (float *)(D_L10_001B0C30[i] + 0x10),
                                   *(int *)D_L10_001B0C30[i])) return 1;
     } else if (e[0x38] != 0 && e[0x39] == 0) {
@@ -589,7 +589,7 @@ void Camera19_Update(char *moby) {
 
         g = D_L10_001B0C30[*(int *)(e + 0x20)];
         qcopy(va, (moby + 0x30));
-        rr = func_L00_0025E860(g, (moby + 0x30), (int *)f, (float *)(f + 4), *(float *)(e + 0x3C) * D_0015EE6C, 0);
+        rr = Spline_AdvanceByDistance(g, (moby + 0x30), (int *)f, (float *)(f + 4), *(float *)(e + 0x3C) * D_0015EE6C, 0);
         if (*(short *)(f + 0x16) != 0) {
             if (FastDecTimer(f + 0x16) != 0) {
                 rr = 1;
@@ -657,7 +657,7 @@ void Camera19_Update(char *moby) {
             h = D_L10_001B0C30[*(int *)(e + 0x24)];
             ia = 0;
             ib = 0.0f;
-            func_L00_0025E860(h, v2, &ia, &ib, d, 0);
+            Spline_AdvanceByDistance(h, v2, &ia, &ib, d, 0);
             ((void (*)(void *, float))func_001E9768)(v2, 0.2f);
             func_001E9768(h + 0x10, h + (*(int *)h << 4));
             FastVecSub(v1, v2, (moby + 0x30));
@@ -672,7 +672,7 @@ void Camera19_Update(char *moby) {
 extern char *D_L10_0015F050 MACRO_ADDR;
 
 // Decides whether a moby's camera target passes the checks; -1 disabled, 0 no, 1 yes.
-int func_L10_002F79B8(char *a, char *b) {
+int Trigger_Evaluate(char *a, char *b) {
     unsigned char *d = *(unsigned char **)(D_L10_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
     int x;
     int y;
@@ -685,7 +685,7 @@ int func_L10_002F79B8(char *a, char *b) {
     if (b != 0 && *(short *)(b + 0x7E) == 0 && (unsigned char)b[0x7C] >= (unsigned char)a[0x7C]) {
         return 0;
     }
-    if (func_L10_002F6E38(a, b) == 0) {
+    if (Trigger_IsHeroInside(a, b) == 0) {
         return 0;
     }
     x = *(int *)(d + 0x48);

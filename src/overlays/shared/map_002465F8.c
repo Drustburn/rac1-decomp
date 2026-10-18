@@ -355,7 +355,7 @@ extern unsigned char D_0013D50F[] NOT_SDA;
 extern unsigned char D_0014171B[] NOT_SDA;
 
 /* Sets up the map's tables, loads its data from disc and builds the circular mask. */
-void func_L00_00246EC0(void) {
+void Map_LoadData(void) {
     int i, j;
     int *gl;
     int *q;
@@ -431,7 +431,7 @@ void func_L00_00246EC0(void) {
         level_data = D_0014171B + 0x8A5 + D_L00_001842F0[0x89] * 0x800;
         D_L00_001842F0[3] = w;
         if (level_data[0] != 0) {
-            func_002083E0((void *)D_L00_001842F0[3], level_data, D_L00_001842F0[5]);
+            UnpackOcclusionMap((void *)D_L00_001842F0[3], level_data, D_L00_001842F0[5]);
         } else {
             DecodeMapMask((int *)D_L00_001842F0[3], (unsigned char *)D_L00_001842F0[0], (short *)D_L00_001842F0[1]);
         }
@@ -587,7 +587,7 @@ void func_L00_00295010(s32, s32, s32, s32);
 void func_00234238(s32, s32, s32, s32, s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/rendering/00245c28.c, FUN_L00_002468b8. */
-void func_L00_002472D0(void) {
+void Map_LoadRenderArchive(void) {
     s32 first_base;
     s32 second_base;
     s32 buffer;
@@ -623,7 +623,7 @@ void func_L00_002472D0(void) {
             UpdateAudioStreamUntilIdle(1);
             state->loaded = 1;
             state->transfer_bytes = bytes;
-            func_L00_00295010(state->buffer, state->file_handle, 0, bytes);
+            Stash_FetchSlot(state->buffer, state->file_handle, 0, bytes);
             state->level_slot = D_0015EE84 + 0x100;
             state->last_transfer_bytes = bytes;
             state->active = 1;
@@ -644,7 +644,7 @@ void func_L00_002472D0(void) {
 extern int D_L00_00184568[];
 
 /* finds an occupied slot with an unset key in the requested order (joined with func_L00_002474C4) */
-int func_L00_00247478(int reverse) {
+int Map_FindUnsetKeySlot(int reverse) {
     int i = 0;
     int *base = D_L00_00184568;
     int *keys = base + 5;

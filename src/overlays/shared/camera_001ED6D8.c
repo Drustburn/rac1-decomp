@@ -98,11 +98,11 @@ void Camera_InitSlots(void) {
             h = *(unsigned short *)(e + 0xC);
             D_L00_00169990[i] = 1;
             el->s86 = h;
-            el->s8C = func_L00_001ED5B0((short)h);
+            el->s8C = Camera_FindTypeIndex((short)h);
             i++;
         } while (i < D_L00_0015F054);
     }
-    func_L00_001ED600();
+    CameraResetBehindHero();
     *(short *)D_L00_00166FF0 = 0;
     {
         int *q = (int *)(D_L00_00166FF0 + 0x110);

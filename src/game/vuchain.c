@@ -451,7 +451,7 @@ void write_vif_unpack_packet(int arg0, void *src, int qwc) {
 
 LINKER_REMNANT("asm/remnants/text", func_00234C48);
 
-void func_00234C50(int arg0) {
+void Dma_AppendVifCode(int arg0) {
     D_00161000[0] = 0x10000000;
     D_00161000[1] = 0;
     D_00161000[2] = 0;
@@ -540,7 +540,7 @@ void VU1_gsRegsNormal(void) {
 
 extern char D_001DE770[];
 
-void func_00234F40(void) {
+void Dma_AppendRefDirect3(void) {
     D_00161000[0] = 0x30000003;
     D_00161000[1] = (int)D_001DE770;
     D_00161000[2] = 0;
@@ -552,7 +552,7 @@ LINKER_REMNANT("asm/remnants/text", func_00234FA0);
 
 extern char D_0013D010[];
 
-void func_00234FA8(void) {
+void Dma_AppendRefDirect11(void) {
     D_00161000[0] = 0x3000000B;
     D_00161000[1] = (int)D_0013D010;
     D_00161000[2] = 0;

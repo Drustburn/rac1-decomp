@@ -5,8 +5,8 @@
 extern void func_L00_0025A208(int *);
 
 /* Test whether the current moby identifier matches the requested one. */
-int func_L07_00282EB0(int id) {
+int IsCurrentMobyId(int id) {
     int current;
-    func_L00_0025A208(&current);
+    GroupMobyIter_Start(&current);
     return current == id;
 }

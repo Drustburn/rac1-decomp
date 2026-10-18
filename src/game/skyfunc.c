@@ -263,7 +263,7 @@ extern void func_001FA238_2BEB0(void *, void *) __asm__("func_001FA238");
 extern void func_001F9C48_2BEB0(void *, void *, f32) __asm__("func_001F9C48");
 extern void func_0022C9A8_2BEB0(s32) __asm__("func_0022C9A8");
 
-void func_0022BEF0(void) {
+void DrawSkyShellsScrolling(void) {
     f32 rot[4];
     f32 scale;
     f32 *p;
@@ -416,7 +416,7 @@ void SkyLevelGeneric___maybe(void) {
                 effect->state.angles.azimuth = color_delta;
                 effect->angle = random_angle_radians();
                 effect->size =
-                    func_001FA888(random_integer_below(0x18) + 0x20) * 0.00390625f;
+                    IntToFloat(random_integer_below(0x18) + 0x20) * 0.00390625f;
                 azimuth = FastAddRots(-3.0f, random_angle_radians() * 0.2f);
                 elevation = random_angle_radians();
                 elevation = elevation * 0.09f;
@@ -448,8 +448,8 @@ void SkyLevelGeneric___maybe(void) {
             angles = &effect->state.angles.azimuth;
             effect->state.angles.azimuth = (s16)(effect->state.angles.azimuth + 1);
             angles[1] = (u16)(angles[1] + 1);
-            azimuth = func_001FA888((orbit->azimuth & 0xFFF) - 0x800) * 0.0015339808f;
-            elevation = func_001FA888((angles[1] & 0xFFF) - 0x800) * 0.0015339808f;
+            azimuth = IntToFloat((orbit->azimuth & 0xFFF) - 0x800) * 0.0015339808f;
+            elevation = IntToFloat((angles[1] & 0xFFF) - 0x800) * 0.0015339808f;
             trig_product = FastCos(azimuth);
             trig_product = trig_product * FastSin(elevation);
             trig_product = trig_product * 50.0f;

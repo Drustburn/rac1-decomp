@@ -162,7 +162,7 @@ void Hero_ChooseStateTransition(void) {
     if (func_L08_00222E18(1) == 0) {
         if (D_0013F450.health.hp <= 0 && D_0013F450.state.control_mode != 0x14 && (D_0013F450.state.current == 0 || D_0013F450.state.current == 2)) {
             Hero_TryMoveState(0x3D, 1);
-        } else if (func_L05_002523C8() == 0 && Hero_ShouldSwing() == 0 && func_L00_00227F48() == 0 && HeroTryEnterState35() == 0) {
+        } else if (HeroL05_GadgetInput() == 0 && Hero_ShouldSwing() == 0 && Hero_UpdateWaterState() == 0 && HeroTryEnterState35() == 0) {
             if ((D_0013CA40.pressed & 0x10) || (((int)D_0013CA40.pressed_unmasked) & 0x10)) {
                 if (D_0013F450.items[0].unk1C != 2 && D_L16_0015F674 == 0
                     && (D_0013F450.unk20AC == 0 || D_0013F450.vehicle_mode == 1 || D_0013F450.unk1B2 != 0)
@@ -175,11 +175,11 @@ void Hero_ChooseStateTransition(void) {
                     } else {
                         D_0013F450.unk22D2 = scale_ticks(0xF);
                     }
-                    queue_animation_update(3, 0, (int)func_L00_00238478, (int)func_L00_00238530, (int)func_L00_00238C30, 0, 0);
+                    queue_animation_update(3, 0, (int)QuickSelectInit, (int)QuickSelectUpdate, (int)QuickSelectDraw, 0, 0);
                     id = func_L00_00235790_r();
-                    func_L00_002367A8(id, scale_ticks(0xB4));
-                    id = queue_animation_update(2, 0x754E, (int)func_L00_0023A658, (int)func_L00_0023A690, (int)func_L00_0023A788, (int)&gBolts, 0x98967F);
-                    func_L00_002367A8(id, scale_ticks(0xB4));
+                    Hud_ExtendBankTime(id, scale_ticks(0xB4));
+                    id = queue_animation_update(2, 0x754E, (int)HudBoltsInit, (int)HudBoltsUpdate, (int)HudBoltsDraw, (int)&gBolts, 0x98967F);
+                    Hud_ExtendBankTime(id, scale_ticks(0xB4));
                 }
             }
             FastDecTimer(&D_0013F450.unk22D4);
@@ -218,7 +218,7 @@ void Hero_ChooseStateTransition(void) {
                         Hero_TryMoveState(1, 1);
                         break;
                     }
-                    func_L00_00232EA8();
+                    HeroClearQueuedSequence();
                     if (D_0013F450.unk22CA != 0) {
                         if (D_0013F450.unk308 == 0 || D_0013D5C8[0x1C] == 0) {
                             Hero_TryMoveState(0x81, 1);
@@ -231,9 +231,9 @@ void Hero_ChooseStateTransition(void) {
                         int r;
 
                         flag = 1;
-                        if (func_L00_0020DB30(0) == 0x1B) {
-                            if (((unsigned char *)D_0013F450.moby)[0x53] != func_L01_002274A8(0)) {
-                                func_L00_00232C10(func_L01_002274A8(0), 0, -2.0f);
+                        if (Hero_GetSlotModuleId(0) == 0x1B) {
+                            if (((unsigned char *)D_0013F450.moby)[0x53] != Help_GetRecordValue(0)) {
+                                HeroStartAnim(Help_GetRecordValue(0), 0, -2.0f);
                             }
                             flag = 0;
                         }
@@ -258,7 +258,7 @@ void Hero_ChooseStateTransition(void) {
                             }
                         }
                         r = func_L00_002056D0(moby[0x53]);
-                        if (r == func_L01_002274A8(0) && flag) {
+                        if (r == Help_GetRecordValue(0) && flag) {
                             if (PickIdleFidget(&sp20)) {
                                 Rec70 *rec;
 
@@ -269,7 +269,7 @@ void Hero_ChooseStateTransition(void) {
                                 if (rec->f44 != 0) {
                                     Hero_TryMoveState(0x40, 1);
                                 } else {
-                                    func_L00_00232C10(rec->f48, 0, scale_ticks(0xC));
+                                    HeroStartAnim(rec->f48, 0, scale_ticks(0xC));
                                 }
                             }
                         } else if (D_0013F450.unkA98 & 2) {
@@ -281,10 +281,10 @@ void Hero_ChooseStateTransition(void) {
                             }
                             if (!keep) {
                                 D_0013F450.unk20A8 = 0;
-                                if (func_L01_002274A8(0) == 0x54) {
-                                    func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x12));
+                                if (Help_GetRecordValue(0) == 0x54) {
+                                    HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x12));
                                 } else {
-                                    func_L00_00232C10(func_L01_002274A8(0), 0, -2.0f);
+                                    HeroStartAnim(Help_GetRecordValue(0), 0, -2.0f);
                                 }
                             }
                         }
@@ -294,15 +294,15 @@ void Hero_ChooseStateTransition(void) {
                             if (func_001F9908_r(&D_0013F450.unk22C4)) {
                                 if (0.55850536f > D_L16_0017AB60.f258 && D_L16_0017AB60.f254 < 0.34906584f && D_0013F450.items[3].state == 2) {
                                     D_0013F450.unk22C4 = rand_range(scale_ticks(0x6E), scale_ticks(0x10E));
-                                    func_L00_00232560();
+                                    HeroPickFidget();
                                 }
                             }
                         }
                     }
                     if (D_0013F450.unk20A8 != 0 && D_0013F450.unkA9C == 0 && D_0013F450.unk20AA != 0 && D_0013F450.unk22C8 == 0) {
-                        int id = func_L00_0020DB30(0);
+                        int id = Hero_GetSlotModuleId(0);
                         if (id != D_0013F450.unk2298) {
-                            func_L00_0020ED30();
+                            Hero_ClearPendingModuleAnim();
                         } else {
                             int anim = D_L16_00179FA0[id].f24;
                             if (((unsigned char *)D_0013F450.moby)[0x53] != anim) {
@@ -310,11 +310,11 @@ void Hero_ChooseStateTransition(void) {
                                     D_0013F450.unkD14 = 1;
                                 }
                                 D_0013F450.unk2294 = anim;
-                                func_L00_00232C10(D_0013F450.unk2294, 0, scale_ticks(0xB));
+                                HeroStartAnim(D_0013F450.unk2294, 0, scale_ticks(0xB));
                             }
                         }
                     }
-                    func_L00_00211F80(0, 1.0f);
+                    Hero_SetHeadingFromStick(0, 1.0f);
                     if (D_0013F450.on_slip_ground != 0 && D_0013F450.frames_off_ground.s == 0) {
                         Hero_TryMoveState(0x79, 1);
                         break;
@@ -348,7 +348,7 @@ void Hero_ChooseStateTransition(void) {
                                 if (D_0013F450.unk1D4 != 0) {
                                     t = 1;
                                 }
-                                if (func_L00_00229348(t, 0)) {
+                                if (Hero_TryStartJump(t, 0)) {
                                     break;
                                 }
                             }
@@ -374,7 +374,7 @@ void Hero_ChooseStateTransition(void) {
                         int ok = 1;
                         if (D_0013F450.state.prev == 1 || D_0013F450.state.prev == 0x1E) {
                             if (scale_ticks(0x18) > D_0013F450.state_timer && D_0013F450.unk308 == 0) {
-                                func_L00_00211F80(0, 1.0f);
+                                Hero_SetHeadingFromStick(0, 1.0f);
                                 if (FastDiffRots(D_0013F450.motion.move_yaw, D_L16_00167258) > 1.2217305f) {
                                     ok = 0;
                                 }
@@ -383,8 +383,8 @@ void Hero_ChooseStateTransition(void) {
                         if (ok && 0.22f < D_0013F450.unk229C) {
                             if (D_0015EE84_m == 0xC) {
                                 int slot = D_0013F450.unk12ED;
-                                func_L01_002283E0(slot, 0, 0);
-                                func_L01_002283E0(slot, 1, 0);
+                                HeroFootstepSound(slot, 0, 0);
+                                HeroFootstepSound(slot, 1, 0);
                             }
                             Hero_TryMoveState(2, 1);
                         }
@@ -407,31 +407,31 @@ void Hero_ChooseStateTransition(void) {
                         Hero_TryMoveState(0x41, 1);
                         break;
                     }
-                    func_L00_002122A0();
+                    Hero_UpdateTargetSpeed();
                     if (D_0013F450.target_speed > 0.0f) {
                         Hero_TryMoveState(0x41, 1);
                         break;
                     }
                     if (D_0013F450.unkA98 & 2) {
-                        func_L00_00229778();
+                        Hero_ClearAttachedMobys();
                         Hero_TryMoveState(0, 1);
                     }
                     break;
                 case 0x41:
                     if (scale_ticks(8) < D_0013F450.state_timer) {
-                        func_L00_00229778();
+                        Hero_ClearAttachedMobys();
                         if (D_0013F450.air_frames.s != 0) {
                             Hero_TryMoveState(6, 1);
                             break;
                         }
-                        if (func_L00_00229348(scale_ticks(7), 0)) {
+                        if (Hero_TryStartJump(scale_ticks(7), 0)) {
                             break;
                         }
                         if (D_0013CA40.held & 0xA) {
                             Hero_TryMoveState(4, 1);
                             break;
                         }
-                        func_L00_002122A0();
+                        Hero_UpdateTargetSpeed();
                         if (D_0013F450.target_speed > 0.0f) {
                             Hero_TryMoveState(2, 1);
                             break;
@@ -447,13 +447,13 @@ void Hero_ChooseStateTransition(void) {
                 case 128:
                 case 130:
                     if (D_0013F450.unkA98 & 2) {
-                        func_L00_00211908();
+                        Hero_OnKilled();
                         return;
                     }
                     break;
                 case 127:
                     if (D_0013F450.state_timer > scale_ticks(0xDC)) {
-                        func_L00_00211908();
+                        Hero_OnKilled();
                         return;
                     }
                     break;
@@ -491,7 +491,7 @@ void Hero_ChooseStateTransition(void) {
                 case 52:
                     if (D_0013F450.unkA98 & 2) {
                         if (((unsigned char *)D_0013F450.moby)[0x53] != 0x3C) {
-                            func_L00_00232C10(0x3C, 0, scale_ticks(0xB));
+                            HeroStartAnim(0x3C, 0, scale_ticks(0xB));
                         }
                     }
                     if (0.2f < D_0013F450.unk229C || (D_0013CA40.held & 0xC0) || (D_0013D5C8[4] != 0 && (D_0013CA40.held & 0xA))) {
@@ -524,7 +524,7 @@ void Hero_ChooseStateTransition(void) {
                     }
                     if (D_0013F450.unk20A9 != 0 && D_0013F450.unk22A4 < 0.4f) {
                         if (Hero_TryMoveState(0, 0)) {
-                            func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x12));
+                            HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x12));
                         }
                     }
                     if (0.2f < D_0013F450.unk229C) {
@@ -552,7 +552,7 @@ void Hero_ChooseStateTransition(void) {
                     }
                     if (D_0013F450.unk20A9 != 0 && D_0013F450.unk22A4 < 0.7f) {
                         Hero_TryMoveState(0x73, 0);
-                        func_L00_00232C10(0x60, 0, scale_ticks(0x11));
+                        HeroStartAnim(0x60, 0, scale_ticks(0x11));
                         D_0013F450.motion.velocity.f[2] = 0.0f;
                         D_0013F450.motion.displacement.f[2] = 0.0f;
                     }
@@ -567,7 +567,7 @@ void Hero_ChooseStateTransition(void) {
                             break;
                         }
                         Hero_TryMoveState(0x6A, 1);
-                        func_L00_00232C10(0x5F, 0x28, scale_ticks(0x12));
+                        HeroStartAnim(0x5F, 0x28, scale_ticks(0x12));
                         break;
                     }
                     if (D_0013F450.unkA98 & 2) {
@@ -581,7 +581,7 @@ void Hero_ChooseStateTransition(void) {
                 case 117:
                     if (D_0013F450.health.hp <= 0) {
                         Hero_TryMoveState(0x6A, 1);
-                        func_L00_00232C10(0x5F, 0x25, scale_ticks(0x12));
+                        HeroStartAnim(0x5F, 0x25, scale_ticks(0x12));
                         break;
                     }
                     if (scale_ticks(0x32) < D_0013F450.state_timer) {
@@ -593,12 +593,12 @@ void Hero_ChooseStateTransition(void) {
                         if (D_0013F450.unk20AA == 0 || D_0013F450.unk20A5 != 0) {
                             if (D_0013CA40.held & 0xA) {
                                 if (((unsigned char *)D_0013F450.moby)[0x53] != 0xD) {
-                                    func_L00_00232C10(0xD, 0, scale_ticks(8));
+                                    HeroStartAnim(0xD, 0, scale_ticks(8));
                                 }
                             } else {
-                                int a = func_L01_002274A8(1);
+                                int a = Help_GetRecordValue(1);
                                 if (((unsigned char *)D_0013F450.moby)[0x53] != a) {
-                                    func_L00_00232C10(a, 0, scale_ticks(8));
+                                    HeroStartAnim(a, 0, scale_ticks(8));
                                 }
                             }
                         }
@@ -606,7 +606,7 @@ void Hero_ChooseStateTransition(void) {
                     {
                         unsigned char *m = (unsigned char *)D_0013F450.items[0].moby;
                         int ok = 1;
-                        if (m != 0 && func_L00_00211A18(m) && m[0x20] != 0) {
+                        if (m != 0 && IsMobyClass47(m) && m[0x20] != 0) {
                             ok = 0;
                         }
                         if (D_0013CA40.held & 5) {
@@ -626,9 +626,9 @@ void Hero_ChooseStateTransition(void) {
                     }
                     Hero_TryMoveState(0, 0);
                     {
-                        int a = func_L01_002274A8(1);
+                        int a = Help_GetRecordValue(1);
                         if (((unsigned char *)D_0013F450.moby)[0x53] != a) {
-                            func_L00_00232C10(a, 0, scale_ticks(8));
+                            HeroStartAnim(a, 0, scale_ticks(8));
                         }
                     }
                     break;
@@ -746,8 +746,8 @@ void Hero_ChooseStateTransition(void) {
                         }
                         if (PadPressedWithin(0x40, t, 0)) {
                             if (!(D_0013F450.air_frames.s > scale_ticks(4)) || D_0013F450.unk1E2 != 0) {
-                                func_L00_00211F80(0, 1.0f);
-                                if (func_L00_00229348(t, 1)) {
+                                Hero_SetHeadingFromStick(0, 1.0f);
+                                if (Hero_TryStartJump(t, 1)) {
                                     break;
                                 }
                                 if (D_0013F450.state.step <= 0) {
@@ -800,14 +800,14 @@ void Hero_ChooseStateTransition(void) {
                     if (D_0013F450.state.current == 2) {
                         if (D_0013F450.unk229C < 0.17f) {
                             if (D_0015EE6C * 2.7f < D_0013F450.motion.speed_xy && D_0013F450.unk20AA == 0) {
-                                if (D_0013F450.motion.speed_xy < D_0015EE6C * 4.4f || func_L00_00267CC8(4) < 0.8f) {
+                                if (D_0013F450.motion.speed_xy < D_0015EE6C * 4.4f || RingBuffer_GetRecent(4) < 0.8f) {
                                     if (Hero_TryMoveState(3, 0) == 0) {
                                         break;
                                     }
-                                    if (func_L01_002274A8(0) == 0x54) {
-                                        func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x12));
+                                    if (Help_GetRecordValue(0) == 0x54) {
+                                        HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x12));
                                     } else {
-                                        func_L00_00232C10(0x14, 7, scale_ticks(9));
+                                        HeroStartAnim(0x14, 7, scale_ticks(9));
                                     }
                                     break;
                                 }
@@ -817,16 +817,16 @@ void Hero_ChooseStateTransition(void) {
                             if (!(D_0013F450.state_timer > scale_ticks(0x19))) {
                                 break;
                             }
-                            if (func_L00_0022A268()) {
+                            if (HeroStartPendingAction()) {
                                 break;
                             }
                             if (Hero_TryMoveState(0, 0) == 0) {
                                 break;
                             }
-                            if (func_L01_002274A8(0) == 0x54) {
-                                func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x12));
+                            if (Help_GetRecordValue(0) == 0x54) {
+                                HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x12));
                             } else {
-                                func_L00_00232C10(func_L01_002274A8(0), 0, -1.0f);
+                                HeroStartAnim(Help_GetRecordValue(0), 0, -1.0f);
                             }
                             break;
                         }
@@ -836,7 +836,7 @@ void Hero_ChooseStateTransition(void) {
                         if (D_0013CA40.no_direction != 0) {
                             if (func_001F9CE8(D_0013F450.motion.velocity.f) < D_0015EE6C * 3.2f) {
                                 if (Hero_TryMoveState(0, 0)) {
-                                    func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x11));
+                                    HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x11));
                                 }
                             }
                         }
@@ -903,12 +903,12 @@ void Hero_ChooseStateTransition(void) {
                         break;
                     }
                     if (((unsigned char *)D_0013F450.moby)[0x53] != 0x5B) {
-                        func_L00_00232C10(0x5B, 0, scale_ticks(8));
+                        HeroStartAnim(0x5B, 0, scale_ticks(8));
                     }
                     if (D_0013CA40.no_direction != 0 && !(D_0013F450.state_timer < scale_ticks(0x1E))) {
                         if (Hero_TryMoveState(0, 0)) {
                             clear_u64_value(D_0013F450.motion.unk150.f);
-                            func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0xF));
+                            HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0xF));
                         }
                     }
                     break;
@@ -932,14 +932,14 @@ void Hero_ChooseStateTransition(void) {
                     if (D_0013F450.unk2220 != -1) {
                         Row13E650 *e = (Row13E650 *)(D_0013E650 + D_0013F450.unk2220 * 0x70);
                         if (e->f88 == ((unsigned char *)D_0013F450.moby) && e->f74 != 0) {
-                            func_L00_0028EBF0(D_0013F450.unk2220);
+                            Sound_StopSlot(D_0013F450.unk2220);
                         }
                     }
                     D_0013F450.unk2220 = -1;
                     if (Hero_TryMoveState(0, 0) == 0) {
                         break;
                     }
-                    func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x11));
+                    HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x11));
                     qcopy(D_0013F450.motion.unk150.f, D_0013F450.motion.platform_carry.f);
                     break;
                 case 3:
@@ -972,14 +972,14 @@ void Hero_ChooseStateTransition(void) {
                     if (!(D_0013F450.unk229C > 0.2f)) {
                         break;
                     }
-                    if (func_L01_002274A8(0) != 0x54) {
+                    if (Help_GetRecordValue(0) != 0x54) {
                         if (D_0013F450.ground_speed == 0.0f) {
                             Hero_TryMoveState(0, 0);
                             break;
                         }
                     } else if (D_0013F450.anim_frame > 10.0f) {
                         if (Hero_TryMoveState(0, 0)) {
-                            func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x11));
+                            HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x11));
                         }
                     }
                     if (0.5f < D_0013F450.unk229C) {
@@ -993,7 +993,7 @@ void Hero_ChooseStateTransition(void) {
                     }
                     if (D_0013F450.state_timer > scale_ticks(0xB) && !(D_0013CA40.held & 0xA)) {
                         Hero_TryMoveState(0, 0);
-                        func_L00_00232C10(func_L01_002274A8(0), 0, -2.0f);
+                        HeroStartAnim(Help_GetRecordValue(0), 0, -2.0f);
                         break;
                     }
                     if (D_0013F450.on_slip_ground != 0 && D_0013F450.frames_off_ground.s == 0) {
@@ -1032,7 +1032,7 @@ void Hero_ChooseStateTransition(void) {
                 case 37:
                     HeroSetAnimRate(10.0f, D_0013F450.unk96C, 0.5f, -1.0f);
                     if ((float)scale_ticks(0x16) > D_0013F450.unk96C && (float)scale_ticks(0x1E) > D_0013F450.unk96C) {
-                        func_L00_00232C10(0xA, 0, scale_ticks(0x10));
+                        HeroStartAnim(0xA, 0, scale_ticks(0x10));
                     }
                     {
                         int go = 0;
@@ -1055,14 +1055,14 @@ void Hero_ChooseStateTransition(void) {
                     }
                     if (D_0013F450.ground_distance < 0.3f) {
                         Hero_TryMoveState(0, 0);
-                        func_L00_00232C10(func_L01_002274A8(0), 0, scale_ticks(0x1E));
+                        HeroStartAnim(Help_GetRecordValue(0), 0, scale_ticks(0x1E));
                         break;
                     }
                     if (((unsigned char *)D_0013F450.moby)[0x53] == 0xA) {
                         Hero_TryMoveState(6, 0);
                     } else {
                         Hero_TryMoveState(6, 0);
-                        func_L00_00232C10(0xA, 0, scale_ticks(0x11));
+                        HeroStartAnim(0xA, 0, scale_ticks(0x11));
                     }
                     D_0013F450.unk2284 = 0;
                     D_0013F450.unk944 = D_0015EE70 * 42.0f;
@@ -1216,12 +1216,12 @@ void Hero_ChooseStateTransition(void) {
                         if (D_0013F450.unk5A8 == -1) {
                             int a = D_0013F450.unk58C + 0x31;
                             if (((unsigned char *)D_0013F450.moby)[0x53] != a) {
-                                func_L00_00232C10(a, 0, scale_ticks(0xC));
+                                HeroStartAnim(a, 0, scale_ticks(0xC));
                             }
                         } else {
                             int a = D_0013F450.unk5A8 + 0x4A;
                             if (((unsigned char *)D_0013F450.moby)[0x53] != a) {
-                                func_L00_00232C10(a, 0, scale_ticks(0xC));
+                                HeroStartAnim(a, 0, scale_ticks(0xC));
                             }
                         }
                         if (D_0013F450.unk5BC != 0) {
@@ -1231,11 +1231,11 @@ void Hero_ChooseStateTransition(void) {
 
                                 Hero_TryMoveState(0x29, 1);
                                 D_0013F450.unk5C4 = 1;
-                                h = func_L00_0025BC48(D_0013F450.motion.pos.f, D_0013F450.unk550.f, 0, D_0013F450.motion.unk164, -D_0013F450.unk4A0);
+                                h = ComputeLaunchVelocityZ(D_0013F450.motion.pos.f, D_0013F450.unk550.f, 0, D_0013F450.motion.unk164, -D_0013F450.unk4A0);
                                 *(u128 *)v0 = 0;
                                 *(u128 *)v1 = 0;
                                 v1[2] = h;
-                                t = func_L00_0025A4A0(v0, v1, 0, D_0013F450.unk4A0);
+                                t = PredictBallisticHeight(v0, v1, 0, D_0013F450.unk4A0);
                                 D_0013F450.unk48C = t + 0.05f;
                                 D_0013F450.unk430 = t;
                                 D_0013F450.unk4A0 = D_0013F450.unk5C8;
@@ -1276,7 +1276,7 @@ void Hero_ChooseStateTransition(void) {
                             break;
                         }
                         if (D_0013F450.state.current == 0x29 && D_0013F450.state_timer < scale_ticks(0xA) && D_0013F450.unk41E == 0 && D_0013F450.unk12EE == 0 && D_0013F450.unk229C > 0.5f && D_0013F450.unk590 == 0) {
-                            func_L00_00211F80(0, 1.0f);
+                            Hero_SetHeadingFromStick(0, 1.0f);
                             if (FastDiffRots(FastDiffRots(D_0013F450.motion.move_yaw, D_0013F450.unk57C), 1.5707964f) < 1.2217305f) {
                                 float ang;
                                 float f;
@@ -1293,7 +1293,7 @@ void Hero_ChooseStateTransition(void) {
                                     qcopy(v0, D_0013F450.motion.pos.f);
                                     sp24 = D_0013F450.unk564;
                                     sp28 = D_0013F450.unk568;
-                                    if (func_L00_0025E860((int *)D_0013F450.unk560, v0, &sp24, &sp28, D_0013F450.unk584, d)) {
+                                    if (Spline_AdvanceByDistance((int *)D_0013F450.unk560, v0, &sp24, &sp28, D_0013F450.unk584, d)) {
                                         FastVecScale(v1, D_0013F450.motion.displacement.f, scale_ticks(0x30));
                                         FastVecAdd(v0, D_0013F450.motion.pos.f, v1);
                                     }
@@ -1317,7 +1317,7 @@ void Hero_ChooseStateTransition(void) {
                             }
                         }
                         if (D_0013F450.state_timer > D_0013F450.unk420) {
-                            if (func_L00_002342F8(D_0013F450.motion.velocity.f) < 0.001f) {
+                            if (HeroGetViewZ(D_0013F450.motion.velocity.f) < 0.001f) {
                                 D_0013F450.unk41E = 1;
                             }
                         }
@@ -1368,13 +1368,13 @@ void Hero_ChooseStateTransition(void) {
                             D_0013F450.unk418 = D_0013F450.unk418 + 1;
                             if (scale_ticks(2) < D_0013F450.unk418) {
                                 D_0013F450.state.current = 0x28;
-                                func_L00_00232C10(D_0013F450.unk58C + 0x31, 0, scale_ticks(7));
+                                HeroStartAnim(D_0013F450.unk58C + 0x31, 0, scale_ticks(7));
                                 break;
                             }
                         }
                         if (D_0013F450.unk570 != 0 && D_0013F450.air_frames.s == 0 && D_0013F450.unk41E != 0) {
                             if (Hero_TryMoveState(0, 0)) {
-                                func_L00_00232C10(0xC, 4, scale_ticks(6));
+                                HeroStartAnim(0xC, 4, scale_ticks(6));
                             }
                         }
                     } else if (D_0013F450.state.current == 0x42) {
@@ -1398,12 +1398,12 @@ void Hero_ChooseStateTransition(void) {
                     break;
                 case 25:
                     if ((D_0013F450.unkA98 & 2) && ((unsigned char *)D_0013F450.moby)[0x53] == 0x20) {
-                        func_L00_00232C10(0x21, 0, scale_ticks(6));
+                        HeroStartAnim(0x21, 0, scale_ticks(6));
                     }
-                    func_L00_00211F80(0, 1.0f);
+                    Hero_SetHeadingFromStick(0, 1.0f);
                     qcopy(v0, D_0013F450.motion.pos.f);
                     sp44 = D_0013F450.motion.rot.f[2];
-                    if (func_L01_0022DE30(v0, &sp44) == 0) {
+                    if (HeroFindLedgeTop(v0, &sp44) == 0) {
                         Hero_TryMoveState(6, 1);
                         D_0013F450.unk1B0 = scale_ticks(0xA);
                         break;
@@ -1422,7 +1422,7 @@ void Hero_ChooseStateTransition(void) {
                         v1[0] += FastCos(FastAddRots(D_0013F450.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         v1[1] += FastSin(FastAddRots(D_0013F450.motion.rot.f[2], 1.5707964f)) * 0.3f;
                         sp48 = D_0013F450.motion.rot.f[2];
-                        if (func_L01_0022DE30(v1, &sp48)) {
+                        if (HeroFindLedgeTop(v1, &sp48)) {
                             Hero_TryMoveState(0x1A, 1);
                         }
                         break;
@@ -1432,7 +1432,7 @@ void Hero_ChooseStateTransition(void) {
                         v1[0] += FastCos(FastAddRots(D_0013F450.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         v1[1] += FastSin(FastAddRots(D_0013F450.motion.rot.f[2], -1.5707964f)) * 0.3f;
                         sp4C = D_0013F450.motion.rot.f[2];
-                        if (func_L01_0022DE30(v1, &sp4C)) {
+                        if (HeroFindLedgeTop(v1, &sp4C)) {
                             Hero_TryMoveState(0x1B, 1);
                         }
                     }
@@ -1450,8 +1450,8 @@ void Hero_ChooseStateTransition(void) {
                         v0[0] += FastCos(FastAddRots(D_0013F450.motion.rot.f[2], ang)) * 0.3f;
                         v0[1] += FastSin(FastAddRots(D_0013F450.motion.rot.f[2], ang)) * 0.3f;
                         sp50 = D_0013F450.motion.rot.f[2];
-                        func_L00_00211F80(0, 1.0f);
-                        if (D_0013F450.unk229C < 0.5f || 0.7853982f < FastDiffRots(D_0013F450.motion.move_yaw, FastAddRots(D_0013F450.motion.rot.f[2], ang)) || func_L01_0022DE30(v0, &sp50) == 0) {
+                        Hero_SetHeadingFromStick(0, 1.0f);
+                        if (D_0013F450.unk229C < 0.5f || 0.7853982f < FastDiffRots(D_0013F450.motion.move_yaw, FastAddRots(D_0013F450.motion.rot.f[2], ang)) || HeroFindLedgeTop(v0, &sp50) == 0) {
                             if (D_0013F450.unkA98 & 2) {
                                 Hero_TryMoveState(0x19, 1);
                                 break;
@@ -1469,7 +1469,7 @@ void Hero_ChooseStateTransition(void) {
                     break;
                 case 121:
                     if (scale_ticks(0x12C) < D_0013F450.state_timer) {
-                        func_L00_00211908();
+                        Hero_OnKilled();
                     }
                     if (D_0013F450.on_slip_ground != 0) {
                         break;
@@ -1484,7 +1484,7 @@ void Hero_ChooseStateTransition(void) {
                 case 45:
                     if (D_0013F450.state.step == 0) {
                         if (!(scale_ticks(0x12) > D_0013F450.state_timer) || D_0013F450.ground_distance > 1.75f) {
-                            func_L00_00232C10(0xB, 0, scale_ticks(0x10));
+                            HeroStartAnim(0xB, 0, scale_ticks(0x10));
                             D_0013F450.state.step = 1;
                             if (D_0013F450.state.current == 0x2D) {
                                 D_0013F450.unk2284 = 7;
@@ -1497,8 +1497,8 @@ void Hero_ChooseStateTransition(void) {
                         int first;
                         int one;
 
-                        func_L01_002283E0(D_0013F450.unk12ED, 0, 1);
-                        func_L01_002283E0(D_0013F450.unk12ED, 1, 1);
+                        HeroFootstepSound(D_0013F450.unk12ED, 0, 1);
+                        HeroFootstepSound(D_0013F450.unk12ED, 1, 1);
                         if (D_0015EE6C * -9.0f > D_0013F450.motion.displacement.f[2]) {
                             D_0013F450.motion.displacement.f[2] = D_0015EE6C * -9.0f;
                         }
@@ -1513,7 +1513,7 @@ void Hero_ChooseStateTransition(void) {
                         one = 1;
                         if (!(scale_ticks(0x5A) > D_0013F450.state_timer)) {
                             if (Hero_TryMoveState(0, 0)) {
-                                func_L00_00232C10(0xC, 4, scale_ticks(6));
+                                HeroStartAnim(0xC, 4, scale_ticks(6));
                             }
                             if (first) {
                                 D_0013F450.unk1C4 = scale_ticks(0x16);
@@ -1523,10 +1523,10 @@ void Hero_ChooseStateTransition(void) {
                         }
                         if (D_0013F450.state.step == one) {
                             if (Hero_TryMoveState(0, 0)) {
-                                func_L00_00232C10(0xC, 9, -1.0f);
+                                HeroStartAnim(0xC, 9, -1.0f);
                             }
-                            func_L00_002343A0(D_0013F450.motion.unk150.f, D_0013F450.motion.unk150.f, 0.0f);
-                            func_L00_002607A8(D_0013F450.motion.unk150.f, D_0015EE6C * 7.0f);
+                            HeroPlacePointZ(D_0013F450.motion.unk150.f, D_0013F450.motion.unk150.f, 0.0f);
+                            ClampVectorLength(D_0013F450.motion.unk150.f, D_0015EE6C * 7.0f);
                             D_0013F450.unk1C4 = scale_ticks(7);
                             if (D_0013F450.state.prev == 0x2D) {
                                 D_0013F450.unk1C4 = scale_ticks(0xA);
@@ -1548,8 +1548,8 @@ void Hero_ChooseStateTransition(void) {
                             if (Hero_TryMoveState(3, 0) == 0) {
                                 break;
                             }
-                            func_L00_00232C10(6, 0, scale_ticks(0xC));
-                            func_L00_002607A8(D_0013F450.motion.unk150.f, D_0015EE6C * 7.7f);
+                            HeroStartAnim(6, 0, scale_ticks(0xC));
+                            ClampVectorLength(D_0013F450.motion.unk150.f, D_0015EE6C * 7.7f);
                             break;
                         }
                         Hero_TryMoveState(0, 1);
@@ -1559,7 +1559,7 @@ void Hero_ChooseStateTransition(void) {
                     if (D_0013F450.health.hp <= 0) {
                         break;
                     }
-                    if ((D_0013CA40.held & 0x40) && D_0013D5C8[2] != 0 && func_L00_0020DB30(3) != 4 && D_0013F450.unk22D8 == 0 && D_0013F450.unk1C4 == 0 && D_0013F450.ground_distance > 0.6f) {
+                    if ((D_0013CA40.held & 0x40) && D_0013D5C8[2] != 0 && Hero_GetSlotModuleId(3) != 4 && D_0013F450.unk22D8 == 0 && D_0013F450.unk1C4 == 0 && D_0013F450.ground_distance > 0.6f) {
                         Hero_TryMoveState(8, 1);
                         break;
                     }
@@ -1568,11 +1568,11 @@ void Hero_ChooseStateTransition(void) {
                         if (D_0013F450.unk1D4 != 0) {
                             t = 1;
                         }
-                        if (func_L00_00229348(t, 0)) {
+                        if (Hero_TryStartJump(t, 0)) {
                             break;
                         }
                     }
-                    if (func_L00_0020DB30(3) == 3 && D_0013F450.unk22D8 == 0) {
+                    if (Hero_GetSlotModuleId(3) == 3 && D_0013F450.unk22D8 == 0) {
                         if (PadComboWithin(0x40, 0xA, scale_ticks(9), scale_ticks(8))) {
                             if ((D_0013CA40.held & 0xA) && (D_0013CA40.pressed & 0x40)) {
                                 if (D_0013F450.unk41E == 0 || D_0013F450.ground_distance > 1.5f) {
@@ -1595,7 +1595,7 @@ void Hero_ChooseStateTransition(void) {
                         || (D_0015EE84_m == 6 && 50.0f > D_0013F450.motion.pos.f[2])
                         || (D_0015EE84_m == 0x10 && (77.0f > D_0013F450.motion.pos.f[2] || (D_0013F450.state_timer > 0x14 && D_0013F450.wall_hit != 0 && D_0013F450.motion.displacement.f[2] >= 0.0f)))
                         || D_0013F450.state_timer > scale_ticks(0x78)) {
-                        func_L00_00211908();
+                        Hero_OnKilled();
                         return;
                     }
                     break;
@@ -1620,7 +1620,7 @@ void Hero_ChooseStateTransition(void) {
                         if (!(D_0013F450.state_timer > scale_ticks(0x14))) {
                             break;
                         }
-                        if (func_L00_0020DB30(3) == 3 && !(D_0013CA40.pressed & 0x40) && !both) {
+                        if (Hero_GetSlotModuleId(3) == 3 && !(D_0013CA40.pressed & 0x40) && !both) {
                             break;
                         }
                     }
@@ -1630,14 +1630,14 @@ void Hero_ChooseStateTransition(void) {
                         if (Hero_TryMoveState(0, 0) == 0) {
                             break;
                         }
-                        func_L00_00232C10(7, 0x17, scale_ticks(9));
+                        HeroStartAnim(7, 0x17, scale_ticks(9));
                         func_L00_00233B08(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
                     if (Hero_TryMoveState(0, 0) == 0) {
                         break;
                     }
-                    func_L00_00232C10(func_L01_002274A8(0), 0, -2.0f);
+                    HeroStartAnim(Help_GetRecordValue(0), 0, -2.0f);
                     func_L00_00233B08(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
                 case 8:
@@ -1667,12 +1667,12 @@ void Hero_ChooseStateTransition(void) {
                     if (scale_ticks(0xA) > D_0013F450.state_timer) {
                         D_0013F450.unk1D4 = scale_ticks(0xC) - D_0013F450.state_timer;
                     }
-                    func_L00_00211F80(0, 1.0f);
+                    Hero_SetHeadingFromStick(0, 1.0f);
                     if (D_0013F450.state.prev == 0x10 && scale_ticks(4) > D_0013F450.state_timer) {
                         if (Hero_TryMoveState(3, 0) == 0) {
                             break;
                         }
-                        func_L00_00232C10(5, 0, -1.0f);
+                        HeroStartAnim(5, 0, -1.0f);
                         D_0013F450.unk1C4 = scale_ticks(0x22);
                         break;
                     }
@@ -1689,7 +1689,7 @@ void Hero_ChooseStateTransition(void) {
                         Hero_TryMoveState(2, 0);
                         if (D_0013F450.state.current == 2) {
                             D_0013F450.state.step = 1;
-                            func_L00_00232C10(4, 2, scale_ticks(8));
+                            HeroStartAnim(4, 2, scale_ticks(8));
                             D_0013F450.unk3BC = 1;
                         }
                         func_L00_00233B08(0.016f, 0.002f, 5, 2, 1, 0);
@@ -1703,7 +1703,7 @@ void Hero_ChooseStateTransition(void) {
                         Hero_TryMoveState(2, 0);
                         if (D_0013F450.state.current == 2) {
                             D_0013F450.state.step = 1;
-                            func_L00_00232C10(4, D_L16_0015F7CC, scale_ticks(0xC));
+                            HeroStartAnim(4, D_L16_0015F7CC, scale_ticks(0xC));
                         }
                         func_L00_00233B08(0.016f, 0.002f, 5, 2, 1, 0);
                         break;
@@ -1712,14 +1712,14 @@ void Hero_ChooseStateTransition(void) {
                         if (Hero_TryMoveState(0, 0) == 0) {
                             break;
                         }
-                        func_L00_00232C10(func_L01_002274A8(0), 0, -2.0f);
+                        HeroStartAnim(Help_GetRecordValue(0), 0, -2.0f);
                         func_L00_00233B08(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
                     }
                     if (Hero_TryMoveState(0, 0) == 0) {
                         break;
                     }
-                    func_L00_00232C10(7, 0x17, scale_ticks(9));
+                    HeroStartAnim(7, 0x17, scale_ticks(9));
                     func_L00_00233B08(0.016f, 0.002f, 5, 2, 0, 1);
                     break;
                 case 7:
@@ -1762,7 +1762,7 @@ void Hero_ChooseStateTransition(void) {
                             }
                         }
                     }
-                    if (func_L00_0020DB30(3) == 3 && D_0013F450.unk22D8 == 0
+                    if (Hero_GetSlotModuleId(3) == 3 && D_0013F450.unk22D8 == 0
                         && D_0013F450.state.current != 0x10 && D_0013F450.state.current != 0x11 && D_0013F450.state.current != 0x12 && D_0013F450.state.current != 0x3C
                         && D_0013F450.state.current != 0xF && D_0013F450.state.current != 0xA && D_0013F450.state.current != 0x69
                         && (D_0013F450.state.current == 0xE || scale_ticks(9) < D_0013F450.state_timer)
@@ -1775,9 +1775,9 @@ void Hero_ChooseStateTransition(void) {
                     if (scale_ticks(7) > D_0013F450.state_timer && PadPressedWithin(0xA, 2, 0)
                         && D_0013F450.state.current != 0x10 && D_0013F450.state.current != 0xA && D_0013F450.state.current != 0x12 && D_0013F450.state.current != 0x3C
                         && D_0013F450.state.current != 0x11 && D_0013F450.state.current != 0xE && D_0013F450.state.current != 0x69) {
-                        if (func_L00_0020DB30(3) == 2 && D_0013D5C8[2] != 0 && D_0013F450.unk22D8 == 0 && D_0015EE6C * 0.9f < D_0013F450.motion.unk168) {
+                        if (Hero_GetSlotModuleId(3) == 2 && D_0013D5C8[2] != 0 && D_0013F450.unk22D8 == 0 && D_0015EE6C * 0.9f < D_0013F450.motion.unk168) {
                             Hero_TryMoveState(0xA, 1);
-                        } else if (func_L00_0020DB30(3) == 3 && D_0013F450.unk22D8 == 0 && D_0015EE6C * 0.9f < D_0013F450.motion.unk168 && D_0013F450.unk1B8 == 0) {
+                        } else if (Hero_GetSlotModuleId(3) == 3 && D_0013F450.unk22D8 == 0 && D_0015EE6C * 0.9f < D_0013F450.motion.unk168 && D_0013F450.unk1B8 == 0) {
                             Hero_TryMoveState(0x10, 1);
                         }
                     }
@@ -1786,7 +1786,7 @@ void Hero_ChooseStateTransition(void) {
                         && D_0013F450.unk229C < 0.3f
                         && (D_0013F450.state.current == 7 || D_0013F450.state.current == 9 || D_0013F450.state.current == 0xD || D_0013F450.state.current == 0xF || D_0013F450.state.current == 0xE)) {
                         if (PadPressedWithin(0xA, scale_ticks(9), 0)) {
-                            if (func_L00_0020DB30(3) != 3) {
+                            if (Hero_GetSlotModuleId(3) != 3) {
                                 break;
                             }
                             if (D_0013F450.unk22D8 != 0) {
@@ -1850,7 +1850,7 @@ void Hero_ChooseStateTransition(void) {
                             break;
                         }
                         if (D_0013F450.unk2F8 == 1) {
-                            func_L00_00217570(0x11, 0);
+                            Hero_PlayActiveSound(0x11, 0);
                             HeroKickUpDust(3, 0x18, 1);
                         }
                         if (D_0013F450.unk418 != 0) {
@@ -1862,7 +1862,7 @@ void Hero_ChooseStateTransition(void) {
                             func_L00_00233B08(0.016f, 0.002f, 5, 2, 0, 1);
                             fr = truncate_float_to_s32(D_0013F450.unk448) + 2;
                             if (D_0013F450.unk444 - 1.5f > D_0013F450.anim_frame) {
-                                func_L00_00232C10(func_L00_002056D0(moby[0x53]), fr, scale_ticks(7));
+                                HeroStartAnim(func_L00_002056D0(moby[0x53]), fr, scale_ticks(7));
                             }
                         }
                         if (D_0013F450.unk418 != 0) {
@@ -1879,7 +1879,7 @@ void Hero_ChooseStateTransition(void) {
                                 if (!isNear) {
                                     int fr = truncate_float_to_s32(D_0013F450.unk448) + 2;
                                     if (D_0013F450.anim_speed > 1.8f) {
-                                        func_L00_00232C10(func_L00_002056D0(moby[0x53]), fr, D_0013F450.unk44C + 3);
+                                        HeroStartAnim(func_L00_002056D0(moby[0x53]), fr, D_0013F450.unk44C + 3);
                                     }
                                 }
                                 if (0.2f > D_0013F450.anim_speed) {
@@ -1898,7 +1898,7 @@ void Hero_ChooseStateTransition(void) {
                                 if ((float)scale_ticks(0xA) < sp) {
                                     sp = scale_ticks(0xA);
                                 }
-                                func_L00_00232C10(7, (truncate_float_to_s32(D_0013F450.anim_frame) + 4) / 2, sp);
+                                HeroStartAnim(7, (truncate_float_to_s32(D_0013F450.anim_frame) + 4) / 2, sp);
                                 D_0013F450.state.current = 7;
                             }
                             if (truncate_float_to_s32(D_0013F450.anim_frame) == truncate_float_to_s32(D_0013F450.unk444)) {
@@ -1911,7 +1911,7 @@ void Hero_ChooseStateTransition(void) {
                             if (Hero_TryMoveState(3, 0) == 0) {
                                 break;
                             }
-                            func_L00_00232C10(5, 0, -2.0f);
+                            HeroStartAnim(5, 0, -2.0f);
                             FastVecScale(D_0013F450.motion.unk150.f, D_0013F450.motion.unk150.f, 0.8f);
                             break;
                         }
@@ -1929,7 +1929,7 @@ void Hero_ChooseStateTransition(void) {
                         }
                     }
                     if (D_0013F450.unk418 > scale_ticks(1) && D_0013F450.state.current != 0xA) {
-                        func_L01_002428E0();
+                        HeroLandingNextState();
                     } else if (D_0013F450.unk41E != 0 && !(D_0013F450.unk4AA > D_0013F450.state_timer) && D_0013F450.ground_distance > D_0013F450.unk490) {
                         Hero_TryMoveState(6, 1);
                     }
@@ -1991,9 +1991,9 @@ void Hero_ChooseStateTransition(void) {
                                 if (D_0013F450.state.current != 0xE && D_0013F450.unk20A8 == 0
                                     && (D_0013F450.on_slip_ground == 0 || !(D_0013F450.ground_distance < 0.4f))
                                     && D_0013F450.unk4AF != 0 && scale_ticks(0xE) < D_0013F450.state_timer
-                                    && (D_0013F450.unk41E == 0 || (D_0013F450.ground_distance > 0.7f && FastAbsF(func_L00_002342F8(D_0013F450.motion.velocity.f)) < D_0015EE6C * 5.8f))) {
+                                    && (D_0013F450.unk41E == 0 || (D_0013F450.ground_distance > 0.7f && FastAbsF(HeroGetViewZ(D_0013F450.motion.velocity.f)) < D_0015EE6C * 5.8f))) {
                                     Hero_TryMoveState(0xE, 1);
-                                } else if (D_0013D5C8[2] != 0 && func_L00_0020DB30(3) != 4 && D_0013F450.unk22D8 == 0 && (D_0013CA40.held & 0x40)
+                                } else if (D_0013D5C8[2] != 0 && Hero_GetSlotModuleId(3) != 4 && D_0013F450.unk22D8 == 0 && (D_0013CA40.held & 0x40)
                                     && delay < D_0013F450.state_timer && D_0013F450.unk4A6 < D_0013F450.state_timer) {
                                     float lim = 0.6f;
                                     if (D_0013F450.state.current == 9 || D_0013F450.state.current == 7) {
@@ -2036,7 +2036,7 @@ void Hero_ChooseStateTransition(void) {
                     break;
                 case 107:
                     FastDecTimer(&D_0013F450.unk89E);
-                    if (func_L05_002559F0()) {
+                    if (Hero_PickHelpMode()) {
                         break;
                     }
                     if (D_0013F450.unk89C != 0) {
@@ -2110,7 +2110,7 @@ void Hero_ChooseStateTransition(void) {
                                         int t = scale_ticks(0xA);
                                         float z;
 
-                                        func_L00_00232C10(func_L05_002559A0(), 5, t);
+                                        HeroStartAnim(Hero_GetHelpAnimId(), 5, t);
                                         if (D_0013F450.unk86C != 0) {
                                             MobyBlendAnimation(D_0013F450.unk86C, 6, 5, t);
                                         }
@@ -2132,7 +2132,7 @@ void Hero_ChooseStateTransition(void) {
                         }
                     }
                     Hero_IdleUpdate();
-                    func_L05_00254328();
+                    Hero_CheckLinkedPickupGroups();
                     func_L05_00254838();
                     if ((((unsigned char *)D_0013F450.moby)[0x53] == 0x55 || ((unsigned char *)D_0013F450.moby)[0x53] == 0x7F) && ((unsigned char *)D_0013F450.moby)[0x51] < 0xC) {
                         if (D_0013F450.unk888 != 0) {
@@ -2143,22 +2143,22 @@ void Hero_ChooseStateTransition(void) {
                         }
                     }
                     {
-                        int next = func_L05_002559B8();
+                        int next = Hero_SelectAnimIdByFlags();
 
                         if ((moby[0x53] == 0x52 || moby[0x53] == 0x7D) && (next == 0x68 || next == 0x7E)) {
-                            func_L00_00232C10(next, 0, scale_ticks(7));
+                            HeroStartAnim(next, 0, scale_ticks(7));
                         } else if ((moby[0x53] == 0x68 || moby[0x53] == 0x7E) && (next == 0x52 || next == 0x7D)) {
-                            func_L00_00232C10(next, 0, scale_ticks(0x11));
+                            HeroStartAnim(next, 0, scale_ticks(0x11));
                         }
                         if (D_0013F450.frames_off_ground.s == 0) {
                             D_0013F450.anim_speed = 1.0f;
                             if ((((unsigned char *)D_0013F450.moby)[0x53] == 0x55 || ((unsigned char *)D_0013F450.moby)[0x53] == 0x7F) && D_0013F450.anim_frame < 25.0f) {
-                                func_L00_00232C10(func_L05_002559A0(), 0xE, scale_ticks(8));
+                                HeroStartAnim(Hero_GetHelpAnimId(), 0xE, scale_ticks(8));
                             }
                         }
                         if (D_0013F450.unkA98 & 2) {
                             if (((unsigned char *)D_0013F450.moby)[0x53] != next) {
-                                func_L00_00232C10(next, 0, scale_ticks(0xA));
+                                HeroStartAnim(next, 0, scale_ticks(0xA));
                             }
                         }
                     }
@@ -2173,11 +2173,11 @@ void Hero_ChooseStateTransition(void) {
                             D_0013F450.anim_speed = 2.2f;
                         }
                     }
-                    if (func_L05_002559F0()) {
+                    if (Hero_PickHelpMode()) {
                         break;
                     }
                     Hero_IdleUpdate();
-                    func_L05_00254328();
+                    Hero_CheckLinkedPickupGroups();
                     func_L05_00254838();
                     break;
                 case 109:
@@ -2200,31 +2200,31 @@ void Hero_ChooseStateTransition(void) {
                         return;
                     }
                     if (D_0013F450.unkA98 & 2) {
-                        func_L05_00254B38(v0, v1);
+                        Hero_FindNearestPathNode(v0, v1);
                         D_0013F450.unk874 = v1[2];
-                        func_L00_00217718(v0, v1, 0x6B, 1);
+                        Hero_ResetToPosition(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 110:
                     if (5.0f > D_0013F450.motion.pos.f[0] || 5.0f > D_0013F450.motion.pos.f[1] || D_0013F450.state_timer > D_0013F450.unk8BE) {
-                        func_L05_00254B38(v0, v1);
+                        Hero_FindNearestPathNode(v0, v1);
                         D_0013F450.unk874 = v1[2];
-                        func_L00_00217718(v0, v1, 0x6B, 1);
+                        Hero_ResetToPosition(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 111:
                     if (D_0013F450.unkA98 & 2) {
-                        func_L05_00254B38(v0, v1);
+                        Hero_FindNearestPathNode(v0, v1);
                         D_0013F450.unk874 = v1[2];
-                        func_L00_00217718(v0, v1, 0x6B, 1);
+                        Hero_ResetToPosition(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 83:
                     if (D_0013F450.unkA98 & 2) {
                         if (((unsigned char *)D_0013F450.moby)[0x53] != 0) {
-                            func_L00_00232C10(0, 0, scale_ticks(0xC));
+                            HeroStartAnim(0, 0, scale_ticks(0xC));
                         } else if (random_float_between(0.0f, 1.0f) < 0.5f) {
-                            func_L00_00232C10(5, 0, scale_ticks(8));
+                            HeroStartAnim(5, 0, scale_ticks(8));
                         }
                     }
                     if (D_0013F450.on_slip_ground != 0) {
@@ -2245,21 +2245,21 @@ void Hero_ChooseStateTransition(void) {
                     }
                     if (PadPressedWithin(0x80, scale_ticks(7), 0)) {
                         if (D_0013F450.unk22DE == 0) {
-                            func_L00_00217570(0x19, 0);
+                            Hero_PlayActiveSound(0x19, 0);
                             D_0013F450.unk22DE = 0x12;
                             D_0013F450.unk22DC = 1;
                         }
-                        func_L05_0023E348(0);
+                        HeroL05_UpdateItemSelection(0);
                         break;
                     }
-                    func_L00_00211F80(0, 1.0f);
+                    Hero_SetHeadingFromStick(0, 1.0f);
                     if (D_0013F450.unk229C > 0.22f && D_0013F450.target_speed > 0.0f) {
                         Hero_TryMoveState(0x54, 1);
                     }
                     break;
                 case 88:
                     if (scale_ticks(0x12C) < D_0013F450.state_timer) {
-                        func_L00_00211908();
+                        Hero_OnKilled();
                     }
                     if (D_0013F450.on_slip_ground != 0) {
                         break;
@@ -2277,7 +2277,7 @@ void Hero_ChooseStateTransition(void) {
                     }
                     if (D_0013F450.state_timer > scale_ticks(0x2D) && !(D_0013CA40.held & 0x20)) {
                         Hero_TryMoveState(0x53, 0);
-                        func_L00_00232C10(0, 0, scale_ticks(0x14));
+                        HeroStartAnim(0, 0, scale_ticks(0x14));
                     }
                     break;
                 case 85:
@@ -2299,7 +2299,7 @@ void Hero_ChooseStateTransition(void) {
                         break;
                     }
                     Hero_TryMoveState(0x53, 0);
-                    func_L00_00232C10(7, 0, -1.0f);
+                    HeroStartAnim(7, 0, -1.0f);
                     D_0013F450.anim_speed = 0.35f;
                     D_0013F450.unk1C4 = scale_ticks(0x14);
                     break;
@@ -2317,11 +2317,11 @@ void Hero_ChooseStateTransition(void) {
                     }
                     if (PadPressedWithin(0x80, scale_ticks(7), 0)) {
                         if (D_0013F450.unk22DE == 0) {
-                            func_L00_00217570(0x19, 0);
+                            Hero_PlayActiveSound(0x19, 0);
                             D_0013F450.unk22DE = 0x12;
                             D_0013F450.unk22DC = 1;
                         }
-                        func_L05_0023E348(0);
+                        HeroL05_UpdateItemSelection(0);
                         break;
                     }
                     if (D_0013CA40.pressed & 0x20) {
@@ -2354,12 +2354,12 @@ void Hero_ChooseStateTransition(void) {
                         if (D_0013F450.unk20AA == 0 || D_0013F450.unk20A5 != 0) {
                             if (D_0013CA40.held & 0xA) {
                                 if (((unsigned char *)D_0013F450.moby)[0x53] != 0xD) {
-                                    func_L00_00232C10(0xD, 0, scale_ticks(8));
+                                    HeroStartAnim(0xD, 0, scale_ticks(8));
                                 }
                             } else {
-                                int a = func_L01_002274A8(1);
+                                int a = Help_GetRecordValue(1);
                                 if (((unsigned char *)D_0013F450.moby)[0x53] != a) {
-                                    func_L00_00232C10(a, 0, scale_ticks(8));
+                                    HeroStartAnim(a, 0, scale_ticks(8));
                                 }
                             }
                         }
@@ -2371,9 +2371,9 @@ void Hero_ChooseStateTransition(void) {
                         int a;
 
                         Hero_TryMoveState(0, 0);
-                        a = func_L01_002274A8(1);
+                        a = Help_GetRecordValue(1);
                         if (((unsigned char *)D_0013F450.moby)[0x53] != a) {
-                            func_L00_00232C10(a, 0, scale_ticks(8));
+                            HeroStartAnim(a, 0, scale_ticks(8));
                         }
                     }
                     D_L16_0016CC00 = 0;
@@ -2404,7 +2404,7 @@ void Hero_ChooseStateTransition(void) {
         HeroClearSoundSlots();
     }
     if ((D_0013F450.state.prev == 0x40 && D_0013F450.state.current != 0x41) || (D_0013F450.state.prev == 0x41 && D_0013F450.unk1614 != 0)) {
-        func_L00_00229778();
+        Hero_ClearAttachedMobys();
     }
     if (prevState != D_0013F450.state.step) {
         D_0013F450.unk1A0 = 0;
@@ -2419,10 +2419,10 @@ extern void func_L00_0028A5A8(void);
 extern void func_0022C870(void);
 extern void func_00234C98(int, long);
 extern int D_0015EF88 MACRO_ADDR;
-void func_L16_0023A530(void) {
+void SkyL16_UpdateAndDraw(void) {
     SetupSkyGifPaging();
     if (D_0015EE84_m == 16) {
-        func_L00_0028B8F8();
+        SkyShellsRotateMulti();
     } else {
         UpdateSkyShellsStatic();
     }

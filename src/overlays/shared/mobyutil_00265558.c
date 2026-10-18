@@ -7,7 +7,7 @@ extern int D_L00_0015F670 MACRO_ADDR;
 extern int D_L00_00161F04 MACRO_ADDR;
 extern int func_001FFCB0(int);
 
-int func_L00_00265558(int a) {
+int Hud_ClosePopupIfActive(int a) {
     if (D_L00_0015F674 == a) {
         if (D_L00_00161F04 != -1) {
             D_L00_0015F670 = 0;

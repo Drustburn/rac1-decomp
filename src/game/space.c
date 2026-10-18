@@ -392,7 +392,7 @@ extern int D_0015F6E4 MACRO_ADDR;
 extern int D_0015F6FC_m __asm__("D_0015F6FC") MACRO_ADDR;
 extern short D_0015F690; /* SDA, gp -0x7670 */
 
-void func_0022F4A0(int arg0) {
+void RequestPlanetLoad(int arg0) {
     D_0015F6E4 = arg0;
     *(int *)&D_0015F690 = 1;
     D_0015F6FC_m = 1;
@@ -487,7 +487,7 @@ extern short D_001605F0;
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 
 /* Its 0x8000000044 is built as ps2eeas built it (tools/ps2eeas_dli.py). */
-void func_0022FBE0(void) {
+void DrawTargetPlanetQuad(void) {
     Quad_FBE0 q;
     float s;
     int i;
@@ -517,7 +517,7 @@ extern void func_00234C98_l(int, long) __asm__("func_00234C98");
 extern int D_0013E604;
 extern long D_00160688 MACRO_ADDR;
 
-void func_0022FD20(int arg0) {
+void DrawFadeOverlayQuad(int arg0) {
     func_00234C98_l(0x47, 0x31801);
     func_00234C98_l(0x42, ((long)0x8000 << 24) | 0x44);
     DrawTexturedQuad(0x20, D_0013E604 - 0x58, 0x100, 0x20, 0, 0, 0x100, 0x20,
@@ -581,7 +581,7 @@ extern void func_00234C98_305A0(s32, s64) __asm__("func_00234C98");
 extern struct LevelDisplayState_305A0 D_0013E600_305A0 __asm__("D_0013E600");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/render_level_frame.c, render_level_frame. */
-void func_002305A0(void) {
+void DrawSpaceFlightFrame(void) {
     f32 rotation_angle;
     f32 screen_y;
     f32 quad_extent;
@@ -591,7 +591,7 @@ void func_002305A0(void) {
     s64 texture;
     framebuf_appendLargeSetup();
     BuildViewMatrices();
-    func_0020DAB0();
+    AnimSlot_ReleaseStale();
     ResetGsRegisters();
     saved_projection_scale = D_0018CE00.projection_scale;
     D_0015F704_305A0 = -1;
@@ -606,7 +606,7 @@ void func_002305A0(void) {
     BuildViewMatrices();
     if (D_0013E130_305A0.mode == 4) {
         SetupGifPaging(1);
-        func_0022FBE0();
+        DrawTargetPlanetQuad();
         DoGifPaging();
     }
     DrawMobys();
@@ -620,7 +620,7 @@ void func_002305A0(void) {
         if (overlay_alpha >= 0x81) {
             overlay_alpha = 0x80;
         }
-        func_0022FD20(overlay_alpha);
+        DrawFadeOverlayQuad(overlay_alpha);
     }
     if ((D_0015EE84_305A0 != 0) && ((D_0015EE84_305A0 != 1) || (D_0013DE4B[0] != 0))) {
         func_00233AB8_305A0(D_0018CD98[0]);
@@ -932,7 +932,7 @@ extern void resident_call_0022F258() __asm__("func_0022F258");
 extern void resident_call_0022F738() __asm__("func_0022F738");
 extern void resident_call_00233AB8() __asm__("func_00233AB8");
 
-void func_00230A90(void) {
+void SpaceFlightUpdate(void) {
     Vector4_230A90 scratch_vectors[4];
     s32 keyframe_flags;
     s32 ticks_per_bank;
@@ -1540,7 +1540,7 @@ void dispatch_game_state_update(void) {
             DrawDebugProfiler();
             break;
         case 4:
-            func_002305A0();
+            DrawSpaceFlightFrame();
             break;
         }
     }
@@ -1757,7 +1757,7 @@ extern void func_0022F090();
 #define sceGsSyncV ((s32 (*)(s32))func_00122598)
 #define snd_flush_sound_commands ((s32 (*)(void))func_0012DDC0)
 #define snd_resolve_bank_xrefs ((void (*)(void))func_0012E2E8)
-void func_00232278(void) {
+void BeginLevelArchiveLoad(void) {
     s64 texture_packet[4];
     LevelHeader *header;
     s32 data_base;
@@ -1949,7 +1949,7 @@ void PlayMovie(int id) {
     }
     D_0013E650[0x6B] |= 8;
     buf = D_001941D4;
-    func_0023B670(sector, size, (buf + 0x3F) & ~0x3F,
+    Movie_Play(sector, size, (buf + 0x3F) & ~0x3F,
                   (buf + 0x300000 + 0x3F) & ~0x3F, D_0015EE88);
     func_00122598(0);
     func_00120858(0, 0);
@@ -2105,7 +2105,7 @@ void func_00232B90(s32 language_index, s32 first_slide, s32 second_slide,
     second_output = second_texture;
     archive_memory = &D_001941C0;
     upload_index = 0;
-    func_002175C8((void *)(archive_memory->archive_base + 0x100000),
+    Stream_SubmitRead((void *)(archive_memory->archive_base + 0x100000),
                            D_00137C80.loading_slides[language_index].sector,
                            D_00137C80.loading_slides[language_index].size);
     func_00120F30_32B90(0);
@@ -2273,7 +2273,7 @@ void func_00232EF0(s32 language_index, s32 first_slide, s32 second_slide,
         if (duration_ticks - 0x10 < frame) {
             alpha = (duration_ticks - frame) * 8;
         }
-        scroll_phase = func_001FA888(frame % 600) * 0.0016666667f;
+        scroll_phase = IntToFloat(frame % 600) * 0.0016666667f;
         if (first_slide == second_slide) {
             func_00232A00_32EF0(0, D_0013E600_32EF0.half_height - 0x20, 0x200, 0x40,
                                            (alpha << 24) | 0x808080, shared_texture, 0.0f, 4.0f,
@@ -2501,7 +2501,7 @@ void DoSpaceTransition(void) {
         done = 0;
         D_0015EE84_m = D_0015F6E4;
         D_0015EF48_m = 0;
-        func_00232278();
+        BeginLevelArchiveLoad();
         func_0012F4A8(D_0015EE84_m);
         while (D_0015F6FC_m == 0) {
             VU1_sendChain();
@@ -2510,7 +2510,7 @@ void DoSpaceTransition(void) {
             framebuf_appendSmallSetup();
             PutDrawBufferLarge();
             UpdatePad();
-            func_00230A90();
+            SpaceFlightUpdate();
             dispatch_game_state_update();
             MemCard_UpdateState();
             Menu_RunStateHandler();
@@ -2644,7 +2644,7 @@ void DrawEnvMappedObject(EnvironmentMappedObject *object) {
         (*(s32 *)&D_001605A8) = 1;
         func_001F9908(&(*(s32 *)&D_001605AC));
         transition_fraction =
-            func_001FA888((*(s32 *)&D_001605AC)) / func_001FA888(func_001F98C0(0x3C));
+            IntToFloat((*(s32 *)&D_001605AC)) / IntToFloat(func_001F98C0(0x3C));
         for (element_index = 0; element_index < vertex_count; element_index++) {
             func_001F9EE8(&D_001DC870[element_index], &positions[element_index],
                              object_transform);

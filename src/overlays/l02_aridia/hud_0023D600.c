@@ -5,7 +5,7 @@
 extern int func_001F9850(int);
 
 // Ticks two small counters up or down depending on a random roll; copies a value.
-void func_L02_0023D600(char *m) {
+void HudCounter_UpdateRamp(char *m) {
     unsigned char *p = (unsigned char *)(m + 0x70);
     if (*(int *)(m + 0x7C) >= scale_ticks(5)) {
         if (p[0] < scale_ticks(8)) {
@@ -103,13 +103,13 @@ s32 Hud_DrawCounter(HudElem *m) {
     }
     bottom = D_0013E604[0];
     y = D_0015EE80 != 0 ? bottom - 0x2A : bottom - 0x32;
-    grow = func_001FA888(fade[0]) / func_001FA888((*(s32 *)&D_L02_0015F9F4));
+    grow = IntToFloat(fade[0]) / IntToFloat((*(s32 *)&D_L02_0015F9F4));
     if (1.0f < grow) {
         grow = 1.0f;
     } else if (grow < 0.0f) {
         grow = 0.0f;
     }
-    shade = func_001FA888(fade[1]) / func_001FA888((*(s32 *)&D_L02_0015F9F8));
+    shade = IntToFloat(fade[1]) / IntToFloat((*(s32 *)&D_L02_0015F9F8));
     if (1.0f < shade) {
         shade = 1.0f;
     } else if (shade < 0.0f) {
@@ -164,7 +164,7 @@ extern void func_L00_0028A5A8(void);
 extern void func_0022C870(void);
 extern void func_00234C98(int, long);
 extern int D_0015EF88 MACRO_ADDR;
-void func_L02_00240980(void) {
+void Sky_DrawLevel02(void) {
     SetupSkyGifPaging();
     if (D_0015EE84_m == 2) {
         SkyStarFieldUpdate();

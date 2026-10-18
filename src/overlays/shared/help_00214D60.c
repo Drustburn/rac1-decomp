@@ -51,7 +51,7 @@ void HeroMoveStateVelocity(void) {
 
     state = D_0013F450_s.state.current;
     if (state == 10) {
-        func_L00_00213970(0.7f, D_0015EE6C * 0.0f);
+        Hero_ComputeMoveOffset(0.7f, D_0015EE6C * 0.0f);
         qcopy(&D_0013F450_s.motion.unk150, &D_0013F450_s.move_impulse);
         D_0013F450_s.ground_speed = D_0013F450_s.motion.unk164;
     } else if (state == 16) {
@@ -63,12 +63,12 @@ void HeroMoveStateVelocity(void) {
         } else {
             D_0013F450_s.target_speed = D_0015EE6C * 3.5f;
         }
-        func_L00_00212740(D_0015EE70 * 44.0f, D_0015EE70 * 45.0f);
-        func_L00_00234420(D_0013F450_s.motion.velocity.f, D_0013F450_s.motion.velocity.f, 0.0f);
-        func_L00_00233F88(&D_0013F450_s.motion.velocity, &D_0013F450_s.motion.velocity, D_0013F450_s.ground_speed);
+        Hero_ApproachSpeed(D_0015EE70 * 44.0f, D_0015EE70 * 45.0f);
+        HeroScalePointXY(D_0013F450_s.motion.velocity.f, D_0013F450_s.motion.velocity.f, 0.0f);
+        HeroMoveAlongHeading(&D_0013F450_s.motion.velocity, &D_0013F450_s.motion.velocity, D_0013F450_s.ground_speed);
     } else if (state == 0x1C) {
         if (scale_ticks(0x28) < D_0013F450_s.state_timer) {
-            func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
+            Hero_TurnToHeading(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 15.009831f);
             func_L00_00214520(D_0015EE70 * 20.0f);
         }
         if (13.0f <= D_0013F450_s.anim_frame && D_0013F450_s.anim_frame <= 30.0f) {
@@ -91,11 +91,11 @@ void HeroMoveStateVelocity(void) {
         D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.motion.rot.f[2]) * D_0013F450_s.unk45C;
         D_0013F450_s.motion.velocity.f[1] = FastSin(D_0013F450_s.motion.rot.f[2]) * D_0013F450_s.unk45C;
     } else if (state == 11 || state == 12) {
-        if (D_0015EE84 != 0xE && func_L00_0020DB30(3) == 3 && D_0013F450_s.state_timer == scale_ticks(5)) {
-            func_L00_00217570(1, 0);
+        if (D_0015EE84 != 0xE && Hero_GetSlotModuleId(3) == 3 && D_0013F450_s.state_timer == scale_ticks(5)) {
+            Hero_PlayActiveSound(1, 0);
         }
         D_0013F450_s.motion.move_yaw = D_0013F450_s.unk43C;
-        func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.981317f);
+        Hero_TurnToHeading(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0015EE6C * 6.981317f);
         if (D_0013F450_s.unk450 != 3) {
             D_0013F450_s.ground_speed = D_0013F450_s.unk454;
         } else {
@@ -113,20 +113,20 @@ void HeroMoveStateVelocity(void) {
         a = D_0013F450_s.unk454 * FastSin(FastDiffRots(D_0013F450_s.unk43C, D_0013F450_s.unk438));
         D_0013F450_s.motion.velocity.f[0] += FastCos(D_0013F450_s.unk43C) * a;
         D_0013F450_s.motion.velocity.f[1] += FastSin(D_0013F450_s.unk43C) * a;
-        func_L00_00213970(0.7f, D_0015EE6C * 0.0f);
+        Hero_ComputeMoveOffset(0.7f, D_0015EE6C * 0.0f);
         qcopy(&D_0013F450_s.motion.unk150, &D_0013F450_s.move_impulse);
     } else if (state == 0x11) {
         D_0013F450_s.motion.move_yaw = D_0013F450_s.unk470.f[3];
         qcopy(&D_0013F450_s.motion.unk170, &D_0013F450_s.unk470);
         if (scale_ticks(9) < D_0013F450_s.state_timer) {
-            func_L00_002124E8(-1, D_0015EE64 * 0.042f, D_0015EE64 * 0.2f, D_0015EE6C * 11.868238f);
+            Hero_TurnToHeading(-1, D_0015EE64 * 0.042f, D_0015EE64 * 0.2f, D_0015EE6C * 11.868238f);
         }
         if (scale_ticks(9) <= D_0013F450_s.state_timer) {
             if (D_0013F450_s.unk308 == 0) {
                 D_0013F450_s.motion.velocity.f[0] = FastCos(D_0013F450_s.motion.move_yaw) * (D_0015EE6C * 4.9f);
                 D_0013F450_s.motion.velocity.f[1] = FastSin(D_0013F450_s.motion.move_yaw) * (D_0015EE6C * 4.9f);
             } else {
-                func_L00_00234420(D_0013F450_s.motion.velocity.f, D_0013F450_s.motion.velocity.f, 0.0f);
+                HeroScalePointXY(D_0013F450_s.motion.velocity.f, D_0013F450_s.motion.velocity.f, 0.0f);
                 func_L00_001FF4B0(&tmp, &D_0013F450_s.motion.unk170, D_0015EE6C * 4.9f);
                 FastVecAdd(&D_0013F450_s.motion.velocity, &D_0013F450_s.motion.velocity, &tmp);
             }
@@ -137,11 +137,11 @@ void HeroMoveStateVelocity(void) {
             x = D_0013F450_s.motion.rot.f[2];
             D_0013F450_s.motion.unk188 = func_L00_0025CCF0_214d60(&x, D_0013F450_s.motion.move_yaw, &D_0013F450_s.motion.unk184, 0, D_0015EE64 * 0.018f, D_0015EE64 * 0.2f, D_0015EE6C * 7.330383f);
             a = FastSubRots(x, D_0013F450_s.motion.rot.f[2]);
-            func_L00_00209850(0.0f, 0.0f, a);
+            PlaceRelativeToCameraSimple(0.0f, 0.0f, a);
         } else {
-            func_L00_002124E8(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0013F450_s.unk414);
+            Hero_TurnToHeading(0, D_0015EE64 * 0.04f, D_0015EE64 * 0.2f, D_0013F450_s.unk414);
         }
-        func_L00_00213970(0.7f, D_0015EE6C * 0.0f);
+        Hero_ComputeMoveOffset(0.7f, D_0015EE6C * 0.0f);
         qcopy(&D_0013F450_s.motion.unk150, &D_0013F450_s.move_impulse);
         arg = D_0015EE70 * 20.0f;
         if (D_0013F450_s.target_speed < D_L00_0017BED0[0] * D_0015EE6C * 0.2f) {
@@ -162,7 +162,7 @@ void HeroMoveStateVelocity(void) {
         if (D_0013F450_s.unk4A8 && D_0013F450_s.unk12E2) {
             arg = D_0015EE70 * 0.17f;
             if (D_0013F450_s.state.current == 15) {
-                func_L00_00211F80(0, D_0015EE6C * 2.5f);
+                Hero_SetHeadingFromStick(0, D_0015EE6C * 2.5f);
                 arg = D_0015EE70 * 3.0f;
             }
             if (0.2617994f < D_0013F450_s.ground_slope.f) {
@@ -186,7 +186,7 @@ void CameraTrackNearestTarget(float a, float b, float c) {
     if (*(int *)(g + 0xA58) == 0) {
         d = *(float *)(g + 0x98);
         if (*(float *)(g + 0x229C) > 0.5f) {
-            func_L00_00211F80(0, 1.0f);
+            Hero_SetHeadingFromStick(0, 1.0f);
             d = *(float *)(g + 0x180);
             *(int *)(g + 0xA58) = 1;
             *(int *)(g + 0xA54) = 0;
@@ -212,7 +212,7 @@ extern void func_001F9EE8(void *, void *, void *);
 extern void func_L00_0020A858(f32, f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/00214658.c, FUN_L00_00214fe8. */
-void func_L00_00215738(void) {
+void Hero_SetTiltJoints(void) {
     HopVec_214658 vec;
     f32 *v = vec.f;
     f32 limit, x, y, pitch, z, lean;
@@ -278,7 +278,7 @@ extern f32 func_001F9F90(f32);
 extern f32 func_001FA748(f32, f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/00215340.c, FUN_L00_00215340. */
-void func_L00_00215A90(void) {
+void Hero_SetLeanJoints(void) {
     f32 v, nv, k, a, s, ang;
     f32 w, nw;
     f32 b, c1, c2, c3;
@@ -489,7 +489,7 @@ extern f32 func_001F9B88(f32);
 
 /* In hero state 2, sets the lean values from motion.unk188 (clamped to +-1.4); needs the moby in item slot 3.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/00214658.c, FUN_L00_00215ef8. */
-void func_L00_00216648(void)
+void Hero_SetItemLean(void)
 {
     struct Hero *h = &D_0013F450_15A90;
     f32 scale;
@@ -597,7 +597,7 @@ void CameraLookAtMatrix(V_c *v, M_c *m, void *p, float a, float b, float c) {
         r.f[2] = pitch;
         r.f[0] = 0.0f;
     } else {
-        func_L00_0025CCF0((char *)&t, D_0013E633 + 0xEC1, 0, pitch, a, b, c);
+        SpringAngle((char *)&t, D_0013E633 + 0xEC1, 0, pitch, a, b, c);
         r.f[0] = 0.0f;
         r.f[2] = t;
     }
@@ -663,7 +663,7 @@ extern float D_0015EE64 MACRO_ADDR;
 extern float D_0015EE6C MACRO_ADDR;
 
 /* Applies the two camera-offset adjustments when the game is in a free state. */
-void func_L00_00216D40(void) {
+void Hero_EaseCameraOffsets(void) {
     char *g = D_0013E633 + 0xE1D;
     int r;
     float t[2];
@@ -683,8 +683,8 @@ void func_L00_00216D40(void) {
         }
         t[0] = 0.0f;
         t[1] = 0.0f;
-        func_L00_0025CCF0(g + 0x90, g + 0xA0, 0, -t[0], D_0015EE64 * 0.015f, D_0015EE64 * 0.3f, D_0015EE6C * 5.2359877f);
-        func_L00_0025CCF0(g + 0x94, g + 0xA4, 0, -t[1], D_0015EE64 * 0.015f, D_0015EE64 * 0.3f, D_0015EE6C * 5.2359877f);
+        SpringAngle(g + 0x90, g + 0xA0, 0, -t[0], D_0015EE64 * 0.015f, D_0015EE64 * 0.3f, D_0015EE6C * 5.2359877f);
+        SpringAngle(g + 0x94, g + 0xA4, 0, -t[1], D_0015EE64 * 0.015f, D_0015EE64 * 0.3f, D_0015EE6C * 5.2359877f);
     } else if (r >= 0) {
         if (r < 3) {
             BuildCameraViewVectors();
@@ -696,16 +696,16 @@ extern void func_L00_002343A0(float *dst, float *src, float z);
 extern void func_L00_00234420(float *dst, float *src, float z);
 extern void func_001F9BC0(void *);
 // Bleeds off the hero's momentum vector by amount a, clearing it when it is tiny.
-void func_L00_00216E98(float a) {
+void Hero_DecayMomentum(float a) {
     float *v = (float *)(D_0013E633 + 0xF6D);
     float s = ViewXyLength(v);
     if (s > 0.001f) {
         float z = 0.0f;
         float d;
-        func_L00_002343A0(v, v, z);
+        HeroPlacePointZ(v, v, z);
         d = s - a;
         if (d < z) d = z;
-        func_L00_00234420(v, v, d);
+        HeroScalePointXY(v, v, d);
         FastVecAdd((char *)v - 0x70, (char *)v - 0x70, v);
     } else {
         clear_u64_value(v);
@@ -776,9 +776,9 @@ void func_L00_00216F58(void) {
     G_167d0 *g;
     f32 f20, f21, f22, a, b, c, d, e, h, k;
 
-    func_L00_00211F80(0, 1.0f);
+    Hero_SetHeadingFromStick(0, 1.0f);
     f20 = 0.2f;
-    func_L00_002124E8(0, D_0015EE64 * 0.02f, D_0015EE64 * f20, D_0015EE6C * 3.66519141f);
+    Hero_TurnToHeading(0, D_0015EE64 * 0.02f, D_0015EE64 * f20, D_0015EE6C * 3.66519141f);
     if (D_0013F450_16F58.i2084 == 0x13) {
         if (D_0013F450_16F58.f229C < f20) {
             D_0013F450_16F58.f180 = D_0013F450_16F58.f98;
@@ -797,7 +797,7 @@ void func_L00_00216F58(void) {
     qcopy(&v1, &v0);
     f21 = v0.f[2];
     if (f21 < D_0013F450_16F58.f930) {
-        func_L00_00213970(0.7f, d * f21);
+        Hero_ComputeMoveOffset(0.7f, d * f21);
         qcopy(&v2, &D_0013F450_16F58.f920);
         FastVecAdd(&v0, &v0, &D_0013F450_16F58.f920);
         clear_u64_value(&D_0013F450_16F58.f920);
@@ -878,7 +878,7 @@ void func_L00_00216F58(void) {
     if (0.0f < k) {
         m->f3B0 = m->f3B0 / (k * (D_0015EE6C * 5.9f));
     }
-    func_L00_002129D0(0);
+    Hero_ProbeGroundSupport(0);
     if (m->f3B4 < 0.0174532924f && 0.0872664601f < m->f2E4) {
         FastVecScale(D_0013F530, D_0013F530, FastCos(m->f2E4));
     }
@@ -890,7 +890,7 @@ void func_L00_00216F58(void) {
 extern int func_0022ED80(int, int, int);
 
 /* passes a pointer chosen by a mode byte to func_0022ED80, copying a vector first in mode 3 */
-int func_L00_00217570(int a, int b) {
+int Hero_PlayActiveSound(int a, int b) {
     char *p = D_0013E633 + 0xE1D;
     int c;
     if (*(unsigned char *)(p + 0x20A4) == 3) {
@@ -908,7 +908,7 @@ typedef struct { char pad[0x2218]; int a[8]; int b[8]; } G;
 extern G D_0013F450 NOT_SDA;
 
 /* Per-slot sound start. */
-void func_L00_002175D0(int idx, int a, int b) {
+void Hero_StartSlotSound(int idx, int a, int b) {
     G *g = &D_0013F450;
     if (g->a[idx] == -1) {
         g->a[idx] = func_0022ED80(b, 4, a);
@@ -939,7 +939,7 @@ extern unsigned char D_001414F5[] NOT_SDA;
 extern int func_001F9938(void *);
 
 /* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
-void func_L00_00217698(void) {
+void Hero_TickReleaseTimers(void) {
     char *p = (char *)D_001414F5 + 0x137;
     short *q = (short *)(D_001414F5 + 0x139);
     int i;
@@ -947,7 +947,7 @@ void func_L00_00217698(void) {
     for (i = 0; i < 8; i++) {
         if (FastDecTimer(p + i * 8) == 2) {
             q[i * 4 - 3] = 0;
-            func_L00_00217570(q[i * 4 - 2], q[i * 4]);
+            Hero_PlayActiveSound(q[i * 4 - 2], q[i * 4]);
         }
     }
 }
@@ -964,7 +964,7 @@ extern void func_L00_001ED600(void);
 extern void func_L00_002510F0(int);
 
 /* resets the level state from two vectors: sets up camera matrices, clears flags, starts sound bank */
-void func_L00_00217718(void *a, void *b, int c, int d) {
+void Hero_ResetToPosition(void *a, void *b, int c, int d) {
     char *p = D_0013E633 + 0xE9D;
     char *q;
     qcopy(p, a);
@@ -973,7 +973,7 @@ void func_L00_00217718(void *a, void *b, int c, int d) {
     qcopy(p + 0x10, b);
     func_001FA218(q, p + 0x10);
     func_001FA1F8(*(char **)(q + 0x2080) + 0xC0, p + 0x10);
-    func_L00_00211F68();
+    Hero_ClearSpeedTargets();
     DeleteOwnedMobys(p + 0x15F0);
     *(int *)(q + 0x364) &= -2;
     *(short *)(q + 0x30E) = 1;
@@ -990,15 +990,15 @@ void func_L00_00217718(void *a, void *b, int c, int d) {
     *(char *)(q + 0x22CA) = 0;
     *(short *)(q + 0x22DE) = 0;
     pad_resetState();
-    func_L00_0020ED30();
-    func_L00_00205B50();
+    Hero_ClearPendingModuleAnim();
+    UpdateHeldObjectTable();
     if (c != -1) HeroEnterMoveState(c, 1);
-    func_L00_00232DF8(*(unsigned char *)(*(char **)(q + 0x2080) + 0x53), *(unsigned char *)(*(char **)(q + 0x2080) + 0x51));
+    HeroStartSequenceInBank(*(unsigned char *)(*(char **)(q + 0x2080) + 0x53), *(unsigned char *)(*(char **)(q + 0x2080) + 0x51));
     if (*(int *)(q + 0x208C) == 0x11) D_L00_00167114 = 1;
     else D_L00_00167114 = 0;
-    func_L00_00212E70();
-    if (d) func_L00_001ED600();
-    func_L00_002510F0(*(int *)(D_0013E633 + 0x2E9D));
+    Hero_UpdateGroundCollision();
+    if (d) CameraResetBehindHero();
+    EnvNearestSamplePoint(*(int *)(D_0013E633 + 0x2E9D));
 }
 typedef struct {
     unsigned char pad0[0x80];
@@ -1034,7 +1034,7 @@ float func_L00_002345B0(void *);
 void func_L00_002144A0(float);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_00214658.c, FUN_L00_00217118. */
-void func_L00_002178A0(float a, float b)
+void Hero_EdgeBrake(float a, float b)
 {
     q_217118 t[1];
     q_217118 u[1];
@@ -1057,19 +1057,19 @@ void func_L00_002178A0(float a, float b)
     func_001F9C30_178A0(t, a, Q);
     if (0.0f < b && func_L00_00234250_178A0(t) < b) {
         func_L00_00234420_178A0(t, t, 0.0f);
-        func_L00_00233F88(t, t, b);
+        HeroMoveAlongHeading(t, t, b);
     }
     func_L00_002343A0_178A0(t, t, 0.0f);
     FastVecAdd(t, t, D_0013F4D0_178A0);
     qcopy(u, t);
-    func_L00_00234090(t, t, 0.3f);
+    HeroOffsetAlongViewZ(t, t, 0.3f);
     D_0013F450_178A0 = D_0013F4D0_178A0 - 0x80;
     k = -0.2f;
     if (*(int *)(D_0013F450_178A0 + 0x2084) == 0x20)
         k = -0.35f;
     if (D_0013F450_178A0[0x20A4] == 2)
         k = -0.7f;
-    func_L00_00234090(u, u, k);
+    HeroOffsetAlongViewZ(u, u, k);
     r = 1.0f;
     if (func_L00_001EFFF0(t, u, 4, *(void **)(D_0013F450_178A0 + 0x2080), 0)) {
         e = D_L00_00173F40;
@@ -1077,7 +1077,7 @@ void func_L00_002178A0(float a, float b)
             r = 0.0f;
     }
     if (r != 0.0f)
-        func_L00_002144A0(0.0f);
+        Hero_ScaleMotion(0.0f);
 }
 extern void func_L00_00233F68(float *dst, float *src, float h);
 extern void func_L00_002A90C0(void *, int);
@@ -1098,8 +1098,8 @@ void func_L00_00217AF0(int a, int n) {
             if (t == 5 || t == 9) {
                 float v[4] __attribute__((aligned(16)));
                 qcopy(v, (char *)D_L00_00178000[i] + 0x10);
-                func_L00_00233F68(v, v, 0.5f);
-                func_L00_002A90C0(v, 4);
+                HeroMoveUpAlongNormal(v, v, 0.5f);
+                SpawnSparkPairs(v, 4);
             }
         }
     }
@@ -1115,7 +1115,7 @@ extern float func_001F9FA8(float);
 extern void func_L00_0026A7F8(void *, void *, int, int, int, int, int, int);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_00214658.c, FUN_L00_00217450. */
-void func_L00_00217BD8(void) {
+void Hero_SpawnParticleBurst(void) {
     Vec4 pos[1];
     Vec4 out;
     int t;
@@ -1194,7 +1194,7 @@ void LaunchGadgetMoby(void) {
     if (aimed) {
         target = D_0013F450_15A90.items[0].moby;
         has_target = 0;
-        if (target != 0 && func_L00_00211A18(target)) {
+        if (target != 0 && IsMobyClass47(target)) {
             tpv = (ThrowPvars_217658 *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
@@ -1210,12 +1210,12 @@ void LaunchGadgetMoby(void) {
         }
     }
     item = D_0013F450_15A90.items[0].moby;
-    if (!func_L00_00211A18(item)) {
+    if (!IsMobyClass47(item)) {
         return;
     }
     D_0013F450_15A90.items[0].unk1A = 1;
     if (aimed) {
-        func_L00_00217570(0x1B, 0);
+        Hero_PlayActiveSound(0x1B, 0);
     }
     item->state = 10;
     pv = (ThrowPvars_217658 *)item->pvars;
@@ -1224,7 +1224,7 @@ void LaunchGadgetMoby(void) {
     }
     clear_u64_value(pv->unk40);
     if (!aimed) {
-        func_L00_00233F88(pv->unk40, pv->unk40, 1.0f);
+        HeroMoveAlongHeading(pv->unk40, pv->unk40, 1.0f);
     } else {
         BuildSphericalOffset(pv->unk40, 1.0f, D_0013F450_15A90.aim_yaw, D_0013F450_15A90.aim_pitch);
     }
@@ -1243,8 +1243,8 @@ void LaunchGadgetMoby(void) {
     MatrixToEuler(out_mat, &item->rot);
     pv->unk64 = 0;
     pv->unk60 = D_0015EE6C * 23.0f;
-    func_L00_00263578(item, D_00140C00);
-    func_L00_002635A0(D_00140C00, 0x30, 3);
-    func_L00_002635A0(D_00140C00, 0x17, 5);
+    Manipulator_StartIfIdle(item, D_00140C00);
+    AddSpawnedCopyToList(D_00140C00, 0x30, 3);
+    AddSpawnedCopyToList(D_00140C00, 0x17, 5);
     MobyBlendAnimation(item, 6, 0, scale_ticks(5));
 }

@@ -7,13 +7,13 @@ extern void func_001F49B0(void *, void *);
 extern char D_L07_001D36C0[];
 extern char func_00216270[];
 
-void func_L07_002F9438(unsigned char *moby)
+void AmbientStreamL07Update(unsigned char *moby)
 {
     switch (moby[0x20]) {
     case 0:
         moby[0x20] = 1;
         moby[0x30] = 0xFF;
-        func_L02_002A5238(D_L07_001D36C0, 0x80, 1.0f);
+        ScaleTableIntoBuffer(D_L07_001D36C0, 0x80, 1.0f);
         break;
     case 1:
         AddDrawCallback(register_audio_stream_callback, moby);
@@ -450,5 +450,5 @@ void func_L07_0031C2B0(u8 *moby)
         break;
     }
     FastVecAdd(delta, delta, moby + 0x10);
-    func_L00_002617B0(data + 0x60, delta, old_rotation, moby + 0x40);
+    CarryRiders(data + 0x60, delta, old_rotation, moby + 0x40);
 }

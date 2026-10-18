@@ -237,14 +237,14 @@ extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 extern int func_002176C8_i(int, int, int) __asm__("func_002176C8");
 
 /* func_002176C8 returns int and takes three arguments (stream.c). */
-void func_00209DC0(void) {
+void RestoreGameFromStream(void) {
     int a;
     int b;
     int s0;
     int s1;
     int s2;
 
-    func_001FDF10(D_00137C80[5] << 11, &a, &b);
+    GetTailBufferPair(D_00137C80[5] << 11, &a, &b);
     UpdateAudioStreamUntilIdle(1);
     func_002176C8_i(a, D_00137C80[4], D_00137C80[5]);
     s2 = D_0015EEF0;
@@ -1707,7 +1707,7 @@ int memcard_Save(int slot, int flags) {
 
     func_00121A80(D_0015EF98);
     func_0012D818(D_0015EF98);
-    func_00208FA0();
+    Map_CopyObjectPositions();
     Menu_ReadSector(D_00141FC0 + (D_0015EE84_m << 11));
     {
         char *p = D_0013D390;

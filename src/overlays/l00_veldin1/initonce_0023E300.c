@@ -28,11 +28,11 @@ extern void func_L00_0028C358(void);
 extern void func_L00_0028C478(void);
 extern void b8f8_a(void) __asm__("func_L00_0028B8F8");
 extern void b8f8_b(void) __asm__("func_L00_0028B8F8");
-void func_L00_0023E300(void) {
+void Sky_RenderByMode(void) {
     SetupSkyGifPaging();
     switch (D_0015EE84_m) {
     case 0:
-        func_L00_0028A608();
+        DrawVeldinSky();
         break;
     case 1:
         UpdateSkyShellsAnimated();
@@ -41,43 +41,43 @@ void func_L00_0023E300(void) {
         SkyStarFieldUpdate();
         break;
     case 3:
-        func_L00_0028AC80();
+        SkyShellsRotateTwo();
         break;
     case 4:
-        func_L00_0028AD68();
+        SkyShellsRotateLooped();
         break;
     case 5:
-        func_L00_0028AEB0();
+        SkyShellsSparkleTwo();
         break;
     case 6:
         SkyParticlesUpdate();
         break;
     case 7:
-        func_L00_0028B4E0();
+        SkyShellsSparkleThree();
         break;
     case 8:
-        func_L00_0028B5C8();
+        SkyShellsRotateOne();
         break;
     case 9:
         DrawSkyShellsExtra();
         break;
     case 10:
-        func_L00_0028B758();
+        SkyShellsRotateByIndex();
         break;
     case 11:
-        func_L00_0028B8F8();
+        SkyShellsRotateMulti();
         break;
     case 12:
         b8f8_a();
         break;
     case 13:
-        func_L00_0028BBF8();
+        SkyShellsSparkleStatic();
         break;
     case 14:
-        func_L00_0028BC70();
+        SkyShellsRotatePair();
         break;
     case 15:
-        func_L00_0028BD70();
+        SkyShellsSparkleOne();
         break;
     case 16:
         b8f8_b();
@@ -86,10 +86,10 @@ void func_L00_0023E300(void) {
         SkyStarField2Update();
         break;
     case 18:
-        func_L00_0028C358();
+        SkyShellsSevenLayer();
         break;
     case 19:
-        func_L00_0028C478();
+        SkyShellsEntryUpdate();
         break;
     default:
         UpdateSkyShellsStatic();
@@ -137,7 +137,7 @@ extern float D_0015EE6C MACRO_ADDR;
 extern VeldinLevelState D_L00_0016C960;
 
 /* per-frame Veldin hook: queues callbacks and spawns particles by game state. Adapted from Lombyte (MIT) for PAL: overlays/l00/unclassified_0023d968.c, FUN_L00_0023e268. */
-void func_L00_0023EC00(void) {
+void Veldin_PerFrameHook(void) {
     VeldinMoby *m;
     VeldinMoby *mb;
     VeldinMoby *src;
@@ -172,7 +172,7 @@ void func_L00_0023EC00(void) {
         if (src != 0) {
             for (n = 0; n < 4; n++) {
                 clear_u64_value(v);
-                func_L00_00250800(src, n % 2, buf);
+                Moby_GetJointWorldPos(src, n % 2, buf);
                 a = random_angle_radians();
                 b = random_angle_radians();
                 BuildSphericalOffset(v, random_float_between(D_0015EE6C * 0.7f, D_0015EE6C * 2.2f), a, b);
@@ -188,8 +188,8 @@ void func_L00_0023EC00(void) {
     if (D_0015EE84_m == 14 && D_L00_0016C960.state == 0) {
         m = D_L00_0016C960.unk17C;
         if (m != 0 && (u32)(D_L00_0016C960.timer - 0x1C) < 6) {
-            func_L00_0023E9A0(m);
-            AddDrawCallback((void *)func_L00_0023E4C8, (void *)m);
+            GlowParticlesSpawn(m);
+            AddDrawCallback((void *)GlowQuadsDraw, (void *)m);
         }
     }
     if (D_0015EE84_m == 15 && (u32)(D_L00_0016C960.state - 3) < 2) {

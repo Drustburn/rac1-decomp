@@ -93,6 +93,6 @@ void func_L08_00280BC8(char *a, char *b, int c, float f) {
         t = scale_ticks(c);
         *(short *)(m + 0xA) = t;
         *(U128 *)(m + 0x20) = *(U128 *)b;
-        *(float *)(q + 0xC) = func_001FA888((short)t);
+        *(float *)(q + 0xC) = IntToFloat((short)t);
     }
 }

@@ -12,7 +12,7 @@ extern int func_0023BB90(int,int,int);
 extern void func_0023B740(void*,void*,void*);
 extern void func_0023BE38(void);
 /* No recovered name. Sets movie globals, runs initialization and playback, then clears them. */
-int func_0023B670(int a,int b,int c,char *state,int e) {
+int Movie_Play(int a,int b,int c,char *state,int e) {
     D_00161308=c;
     D_0016130C=state;
     D_00161314=0;

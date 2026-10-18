@@ -249,8 +249,8 @@ struct Obj *PartType02Spawn(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4
         s = &o->sub;
         s->h16 = truncate_float_to_s32(arg1[3] * 210000.0f / 1000.0f);
         s->h18 = truncate_float_to_s32(arg2[3] * 210000.0f / 1000.0f);
-        func_002158E8(arg1, &s->a);
-        func_002158E8(arg2, &s->b);
+        PackVectorScaled(arg1, &s->a);
+        PackVectorScaled(arg2, &s->b);
         load_display_text_resource_entry(t0, &s->a);
         load_display_text_resource_entry(t1, &s->b);
         s->c = arg3;

@@ -172,7 +172,7 @@ __asm__(".section .text\n\tnop\n");
 
 extern int D_001A0468[];
 
-int func_00205728(int arg0) {
+int Map_FindFreeSlot(int arg0) {
     int *a = D_001A0468;
     int *b = D_001A0468 + 5;
     int i = 0;
@@ -249,7 +249,7 @@ extern PadSlots D_001A01F0_slots __asm__("D_001A01F0");
 int AllocMapSlot(void) {
     int i;
 
-    i = func_00205728(1);
+    i = Map_FindFreeSlot(1);
     if (i != 0) {
         return i;
     }
@@ -645,7 +645,7 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("func_00234C98");
 extern void *map_memset_205E70(void *, s32, u32) __asm__("func_001153FC");
 
 /* UNK_NoMapAvailable */
-void func_00205E70(void) {
+void DrawMapView(void) {
     union {
         u8 b[0x80];
         f32 f[2];

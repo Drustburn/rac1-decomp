@@ -8,7 +8,7 @@
 extern int D_L00_0015F04C MACRO_ADDR;
 extern void (*D_L00_001690F0[])(void);
 
-void func_L00_001EB508(void) {
+void Camera_RunQueuedCallbacks(void) {
     int i;
     for (i = 0; i < D_L00_0015F04C; i++) {
         D_L00_001690F0[i]();
@@ -44,7 +44,7 @@ extern float func_001FA748(float, float);
 
 /* steers *p toward a target with damping, clamps it, then calls FA748 */
 /* Joined to the fragment that follows it (config/overlays/joined.tsv): the catalogue splits the delay slot of the final jr off. */
-void func_L00_001EB6A8(float *p, float a, float b, float c, float d, float lim) {
+void Camera_SmoothAngle(float *p, float a, float b, float c, float d, float lim) {
     float r = func_001FA790_f(b, a);
     float v;
     *p = *p + (c * r - d * *p);
@@ -280,7 +280,7 @@ int func_L00_001EBDA0(void) {
     q[0] = p[0];
     q[1] = p[1];
     q[2] = p[2];
-    func_L00_001EB508();
+    Camera_RunQueuedCallbacks();
     return -1;
 }
 extern char D_0013E633[];
@@ -290,7 +290,7 @@ extern char D_L00_00166FF0[];
 
 // Samples three axes of the active camera, stores two and derives the look-at vector from them.
 /* Joined to the fragment that follows it (config/overlays/joined.tsv): the catalogue splits the delay slot of the final jr off. */
-void func_L00_001EC090(void) {
+void Camera_CaptureHeroRelativeView(void) {
     float a[4];
     float b[4];
     float c[4];
@@ -317,7 +317,7 @@ extern int func_001F9850(int);
 extern float func_001FA888(int);
 
 /* Camera mode update from arg: in mode 1 the sub-mode at +3 picks what is captured from it, other modes restore the pending transform; then the mode becomes 3 and the blend resets or the timer advances. Level copy of func_001ECC48. */
-void func_L00_001EC220(void *arg) {
+void Camera_CaptureTransform(void *arg) {
     char *arg0 = arg;
     char *r = D_L00_00166FF0;
     char local0[16];
@@ -333,7 +333,7 @@ void func_L00_001EC220(void *arg) {
         } else if (sub == 2) {
             qcopy(r + 0xC0, arg0 + 0x30);
             func_00215328(r + 0xD0, arg0);
-            func_L00_001EC090();
+            Camera_CaptureHeroRelativeView();
         } else {
             char *g = D_0013E633 + 0xE1D;
 
@@ -349,7 +349,7 @@ void func_L00_001EC220(void *arg) {
         sub = r[3];
         if (sub == 2) {
             Camera_stagePendingTransform();
-            func_L00_001EC090();
+            Camera_CaptureHeroRelativeView();
         } else if (sub == 1) {
             Camera_stagePendingTransform();
             qcopy(r + 0xB0, r + 0xD0);
@@ -373,7 +373,7 @@ void func_L00_001EC220(void *arg) {
         int n = ++*(int *)(b + 0x14);
 
         *(int *)(b + 0xC) = scale_ticks(n);
-        *(float *)(b + 0x10) = 1.0f / func_001FA888(*(int *)(b + 0xC));
+        *(float *)(b + 0x10) = 1.0f / IntToFloat(*(int *)(b + 0xC));
     }
 }
 /* func_L00_001ED2C0 is the head of one C function: its retail code runs on through
@@ -466,7 +466,7 @@ extern void func_001EE858(void *);
 extern void func_001F9CA0(void *, void *, void *);
 
 /* Camera update, once per frame: count the frame, run the camera steps, take the view from the target camera (mode 3 blends it) unless frozen, refresh the angles and the derived vectors. Level copy of func_001EDE50. Joined with func_L00_001ED460 and func_L00_001ED464 (config/overlays/joined.tsv). */
-void func_L00_001ED428(void) {
+void Camera_UpdateFrame(void) {
     char *c;
     char *target;
     char *v;
@@ -483,11 +483,11 @@ void func_L00_001ED428(void) {
     (*(int *)(c + 0x398))++;
     func_001EDE08();
     func_L00_001ED2C0();
-    func_001ED818();
+    CameraPreUpdate();
     func_L00_001EBDA0();
     target = *(char **)(c + 0x180);
     if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {
-        func_L00_001EC220(*(void **)(c + 0x184));
+        Camera_CaptureTransform(*(void **)(c + 0x184));
     }
     if (*(short *)(c + 0x270) == 3) {
         Camera_UpdateBlend(target);
@@ -527,7 +527,7 @@ typedef struct {
 extern E D_L00_001EAC00[];
 
 /* Returns the index of the entry with the given key, or of the -1 terminator. */
-int func_L00_001ED5B0(int key) {
+int Camera_FindTypeIndex(int key) {
     int i = 0;
     while (D_L00_001EAC00[i].key != -1 && D_L00_001EAC00[i].key != key) {
         i++;
@@ -540,7 +540,7 @@ extern void func_001EC038(void);
 extern char D_L00_00169210[];
 
 /* resets the camera behind the hero */
-void func_L00_001ED600(void) {
+void CameraResetBehindHero(void) {
     char *g = (char *)&D_L00_00166D80;
     float *s, *d, *t, *u;
     char *a;
@@ -553,7 +553,7 @@ void func_L00_001ED600(void) {
     *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
     *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169210;
     *(short *)(g + 0x270) = 0;
-    func_001ED818();
+    CameraPreUpdate();
     Camera_runSetupToNewCam(*(char **)(g + 0x180));
     BackupCurrentCam();
     a = *(char **)(g + 0x180);
@@ -591,7 +591,7 @@ extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 extern void func_001F9BD8(void *, void *, void *);
 
-void func_L00_001ED900(float *o, float *v, void *m) {
+void Camera_Polar3dToPos(float *o, float *v, void *m) {
     o[0] = v[2] * FastCos(v[1]) * FastCos(v[0]);
     o[1] = v[2] * FastCos(v[1]) * FastSin(v[0]);
     o[2] = v[2] * FastSin(v[1]);
@@ -604,7 +604,7 @@ extern float func_001F9CE8(float *);
 extern float func_L00_001FF860(float, float);
 extern void func_001FA790(float, float);
 extern float func_001F9CB8(float *);
-int func_L00_001ED9B0(float *a) {
+int Camera_UpdatePolarFromPos(float *a) {
     W v;
     float t;
     FastVecSub(v);
@@ -650,7 +650,7 @@ void MoveCameraToward(float *pos, float r) {
     }
     func_001F9BF0_3(d, pos, v);
     n = func_001FA898_r(FastVecLength(d) / (r * 0.9f)) + 1;
-    func_L00_001FF328(d, d, func_001FA888(n));
+    func_L00_001FF328(d, d, IntToFloat(n));
     qcopy(pos, v);
     for (i = 0; i < n; i++) {
         q = D_L00_00173F70;

@@ -15,7 +15,7 @@ extern float func_001F9F90(float);
 extern void func_00215650(void *arg0, void *arg1, void *arg2);
 
 // Rotates a vector toward another by a fraction of the angle between them using a quaternion.
-void func_L03_0024F6D8(float t, float *dst, float *a, float *b, int flag)
+void RotateVectorToward(float t, float *dst, float *a, float *b, int flag)
 {
     float q[4];
     float d, l, ang;
@@ -38,7 +38,7 @@ void func_L03_0024F6D8(float t, float *dst, float *a, float *b, int flag)
 }
 LINKER_REMNANT("asm/overlays", func_L03_0024FA90);
 
-void func_L03_00251A58(float *p, float a, float b)
+void SetSpringParams(float *p, float a, float b)
 {
     float root = func_001F9B50((b + b) * p[4]);
     float x = (root + root) / p[4];

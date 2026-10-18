@@ -23,7 +23,7 @@ unsigned char *AllocParticleProcess(char *moby, unsigned char a, int b, int c, u
         e[3] = 0x48;
         e[1] = 3;
         e[2] = *D_L13_001B2790;
-        func_L00_00250800(moby, a, p);
+        Moby_GetJointWorldPos(moby, a, p);
         qcopy(e + 0x20, p);
         *(float *)(e + 0x2C) = y;
         *(float *)(e + 0x1C) = x;

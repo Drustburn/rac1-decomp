@@ -299,7 +299,7 @@ INCLUDE_ASM("asm/nonmatchings/text", func_001FA7D8);
 
 INCLUDE_ASM("asm/nonmatchings/text", func_001FA850);
 
-float func_001FA888(int arg0) {
+float IntToFloat(int arg0) {
     return (float)arg0;
 }
 

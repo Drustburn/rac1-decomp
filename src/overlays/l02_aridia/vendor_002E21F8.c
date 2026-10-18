@@ -124,14 +124,14 @@ void SkidsAgentUpdate(Moby *m) {
     Data_2E21F8 *d = *(struct Data_2E21F8 **)&m->pvars;
     float rate, head_rate;
     int tracking;
-    func_L02_002E2110(m);
+    AttachManipulatorsIfCheat(m);
     switch (m->state) {
     case 0:
         if (gHavePersuader[0xA] != 0) goto del;
         d->f20 = D_L02_00161D80;
         m->state = 1;
         func_L00_002676E8(m, d);
-        func_L02_0025D750(m);
+        SetMobyZBand(m);
         d->f178 = (Moby *)CreateMoby(0x38);
         d->f178->draw_dist = 0x40;
         d->f178->visible = 1;
@@ -145,7 +145,7 @@ void SkidsAgentUpdate(Moby *m) {
             d->fC = 3.7f;
         }
         if (func_L00_00267290(m, d) != 0) {
-            func_L01_00279398(2.2f, m);
+            PlaceMarkerAheadOfMoby(2.2f, m);
             m->state = 2;
         } else if (gHaveHeliPack[3] == 0 && func_001F9D48(((float *)&m->pos), (char *)&D_0013E633_2E21F8 + 0xE9D) < 3.0f) {
             Stats_2E21F8 *stats = (Stats_2E21F8 *)(D_0014171B + 0x34D);
@@ -183,10 +183,10 @@ void SkidsAgentUpdate(Moby *m) {
         if (D_L02_0015F6A8 != 2) {
             m->state = 1;
             if (d->f4 == 0) {
-                func_L00_002512D8(m->mission);
+                SetLevelTriggerDone(m->mission);
                 if (d->f150 != -1) {
                     char *t = D_L02_0016016C + (d->f150 << 7);
-                    func_L00_00286128(t + 0x30, t + 0x70);
+                    PauseMenu_SeedSnapshot(t + 0x30, t + 0x70);
                 }
             } else if (d->f4 == 2) {
                 m->visible = 0;
@@ -196,7 +196,7 @@ void SkidsAgentUpdate(Moby *m) {
                     d->f178->flags |= 1;
                     d->f178->visible = 0;
                 }
-                func_L00_0029A7D0(2);
+                PlayMovieEntryIfIdle(2);
                 m->state = 5;
             }
         } else {
@@ -212,7 +212,7 @@ void SkidsAgentUpdate(Moby *m) {
         }
         break;
     case 5:
-        func_L00_002618D8(5, 1);
+        GiveItem(5, 1);
         memcard_Save(0, -1);
         goto del;
     case 3:
@@ -226,15 +226,15 @@ void SkidsAgentUpdate(Moby *m) {
         v1[2] = FastAddRots(FastSubRots(v3[2], v2[2]) * d->f180, v2[2]);
         v1[1] = FastAddRots(FastSubRots(v3[1], v2[1]) * d->f180, v2[1]);
         v1[0] = FastAddRots(FastSubRots(v3[0], v2[0]) * d->f180, v2[0]);
-        func_L00_002EBE88(v0);
-        func_L00_002EBEE0(v1);
+        CameraScript_SetPosition(v0);
+        CameraScript_SetLookAt(v1);
         if (d->f180 < 1.0f) {
             ApproachValue(&d->f17C, 0.0f, 0.1f);
         } else {
             ApproachValue(&d->f17C, 1.0f, 0.1f);
             if (d->f17C == 1.0f) {
                 m->state = 4;
-                func_L00_002EC0C8(0);
+                CameraScript2(0);
             }
         }
         D_L02_0015F4FC = d->f17C;
@@ -253,7 +253,7 @@ void SkidsAgentUpdate(Moby *m) {
         break;
     }
     if (d->f178 != 0) {
-        func_L00_00250800(m, 2, ((float *)&d->f178->pos));
+        Moby_GetJointWorldPos(m, 2, ((float *)&d->f178->pos));
         MobyTransformScaledVertex(m, 2, v0);
         func_001FA480(((char *)&d->f178->rot_row0), v0);
         func_001F9EC0(v4, &D_L02_00161D70, ((char *)&d->f178->rot_row0));
@@ -321,7 +321,7 @@ extern unsigned char D_0013D605[];
 extern unsigned char D_0013E633[];
 
 /* Skid McMarx update: spawn, talk and warp states, aims at the player and sets the body and head poses. */
-void func_L02_002E2D88(char *m)
+void SkidMcMarxAridiaUpdate(char *m)
 {
     char *d;
     char *p;
@@ -334,8 +334,8 @@ void func_L02_002E2D88(char *m)
     float s_delta[4];
 
     d = *(char **)(m + 0x78);
-    func_L02_002E2110(m);
-    func_L02_002E33F0(m);
+    AttachManipulatorsIfCheat(m);
+    SkidMcMarxWarpUpdate(m);
     switch (*(unsigned char *)(m + 0x20)) {
     case 0:
         if (D_0013D605[9] != 0) {
@@ -347,7 +347,7 @@ void func_L02_002E2D88(char *m)
         *(unsigned char *)(m + 0x20) = 1;
         *(unsigned char *)(m + 0x30) = 0xFF;
         func_L00_002676E8(m, d);
-        func_L02_0025D750(m);
+        SetMobyZBand(m);
         break;
     case 1:
         if (*(unsigned char *)(d + 8) == 1 &&
@@ -357,14 +357,14 @@ void func_L02_002E2D88(char *m)
             *(float *)(d + 0xC) = 2.5f;
         }
         if (func_L00_00267290(m, d)) {
-            func_L01_00279398(2.5f, m);
+            PlaceMarkerAheadOfMoby(2.5f, m);
             *(unsigned char *)(m + 0x20) = 2;
         }
         if (*(short *)(d + 4) == 2) {
             Help_Request(0x7D0, 0xA);
-            func_L00_002618D8(0x1E, 1);
-            func_L00_002512D8(*(unsigned char *)(m + 0xB0));
-            func_L00_00286128((char *)&D_0013E633 + 0xE9D, (char *)&D_0013E633 + 0xEAD);
+            GiveItem(0x1E, 1);
+            SetLevelTriggerDone(*(unsigned char *)(m + 0xB0));
+            PauseMenu_SeedSnapshot((char *)&D_0013E633 + 0xE9D, (char *)&D_0013E633 + 0xEAD);
             memcard_Save(0, -1);
             DeleteMoby(m);
             return;
@@ -467,7 +467,7 @@ extern void func_L02_0023D6E0(void);
 
 /* Three-state controller (data+0x180): 0 waits for its trigger, 1 runs timed effects until released, then moves the moby to its spawn point, sets the two linked mobys' flags and enters state 2.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l02/gameplay/entities/002e0dc0.c, FUN_L02_002e1fb8. */
-void func_L02_002E33F0(char *moby) {
+void SkidMcMarxWarpUpdate(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float fx_pos[4] __attribute__((aligned(16)));
     float fx_rot[4] __attribute__((aligned(16)));
@@ -479,9 +479,9 @@ void func_L02_002E33F0(char *moby) {
     if (*(int *)(data + 0x180) == 1) {
         if (is_point_inside_clip_volume(gHeroPos, *(int *)(data + 0x148)) == 0) {
             *(int *)(data + 0x180) = 0;
-            func_001FFDA0(*(int *)(data + 0x160), 0);
+            Hud_SetBarValueById(*(int *)(data + 0x160), 0);
             *(int *)(data + 0x160) = -1;
-            func_001FFDA0(*(int *)(data + 0x164), 0);
+            Hud_SetBarValueById(*(int *)(data + 0x164), 0);
             *(int *)(data + 0x164) = -1;
             return;
         }
@@ -491,9 +491,9 @@ void func_L02_002E33F0(char *moby) {
             return;
         *(int *)(data + 0x180) = 2;
         FadeToBlack(scale_ticks(0x10));
-        func_001FFDA0(*(int *)(data + 0x160), 0);
+        Hud_SetBarValueById(*(int *)(data + 0x160), 0);
         *(int *)(data + 0x160) = -1;
-        func_001FFDA0(*(int *)(data + 0x164), 0);
+        Hud_SetBarValueById(*(int *)(data + 0x164), 0);
         table = D_L02_0016016C;
         entry_off = *(int *)(data + 0x154) << 7;
         mobys = table;
@@ -506,7 +506,7 @@ void func_L02_002E33F0(char *moby) {
         fx_pos[1] += FastSin(*(float *)(moby + 0x48)) * 1.5f;
         clear_u64_value(fx_rot);
         fx_rot[2] = FastAddRots(*(float *)(moby + 0x48), 3.1415927f);
-        func_L00_00217718(fx_pos, fx_rot, 0, 1);
+        Hero_ResetToPosition(fx_pos, fx_rot, 0, 1);
         {
             int i0 = *(int *)(data + 0x158);
             int i1 = *(int *)(data + 0x15C);
@@ -520,8 +520,8 @@ void func_L02_002E33F0(char *moby) {
     } else if (*(int *)(data + 0x180) == 0) {
         if (is_point_inside_clip_volume(gHeroPos, *(int *)(data + 0x148)) != 0) {
             *(int *)(data + 0x180) = 1;
-            *(int *)(data + 0x164) = queue_animation_update(0x15, 0x7D0, func_L00_0023B0F8, func_L02_0023D600, Hud_DrawCounter, data + 0x14C, 100);
-            *(int *)(data + 0x160) = queue_animation_update(0x17, 0x7D1, func_L00_0023B0F8, func_L02_0023D600, Hud_DrawCounter, data + 0x150, 7);
+            *(int *)(data + 0x164) = queue_animation_update(0x15, 0x7D0, HudTileInit, HudCounter_UpdateRamp, Hud_DrawCounter, data + 0x14C, 100);
+            *(int *)(data + 0x160) = queue_animation_update(0x17, 0x7D1, HudTileInit, HudCounter_UpdateRamp, Hud_DrawCounter, data + 0x150, 7);
         }
     }
 }
@@ -557,7 +557,7 @@ void DriverLiftUpdate(struct Moby *moby) {
 
     FastVecScale(&delta, &moby->pos, -1.0f);
     qcopy(&old_rot, &moby->rot);
-    func_L00_00250800(driver, 0, &pos);
+    Moby_GetJointWorldPos(driver, 0, &pos);
     qcopy(&moby->pos, &pos);
     switch (moby->state) {
     case 0:
@@ -607,7 +607,7 @@ void DriverLiftUpdate(struct Moby *moby) {
             if (voice != -1) {
                 char *e = D_0013E650 + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
-                    func_L00_0028EBF0(voice);
+                    Sound_StopSlot(voice);
                 }
             }
             *(int *)(data + 0xA4) = -1;
@@ -626,7 +626,7 @@ void DriverLiftUpdate(struct Moby *moby) {
             if (voice != -1) {
                 char *e = D_0013E650 + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
-                    func_L00_0028EBF0(voice);
+                    Sound_StopSlot(voice);
                 }
             }
             *(int *)(data + 0xA4) = -1;
@@ -646,7 +646,7 @@ void DriverLiftUpdate(struct Moby *moby) {
         break;
     }
     FastVecAdd(&delta, &delta, &moby->pos);
-    func_L00_002617B0(data + 0x60, &delta, &old_rot, &moby->rot);
+    CarryRiders(data + 0x60, &delta, &old_rot, &moby->rot);
 }
 extern int D_L02_0015F6E8_2EB480 __asm__("D_L02_0015F6E8") MACRO_ADDR;
 extern char D_L02_00167440[];
@@ -785,7 +785,7 @@ extern short D_L02_00161FE4;
 
 /* Spawns a projectile moby from src at pos, heading along dir, with its lifetime in the moby data.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l02/gameplay/vendor/002ebf20.c, FUN_L02_002ec228. */
-char *func_L02_002ED660(char *src, void *pos, float *dir) {
+char *SpawnAridiaProjectile(char *src, void *pos, float *dir) {
     char *moby;
     char *data;
     moby = CreateMoby(0x4B8);

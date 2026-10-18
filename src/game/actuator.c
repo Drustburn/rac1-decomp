@@ -99,12 +99,12 @@ s32 actuator_CalcPower(s32 *p1)
             f32 f;
             f32 g;
             if (rem < e->f0c) {
-                f = func_001FA888(rem) * 3.1415927f / func_001FA888(e->f0c);
+                f = IntToFloat(rem) * 3.1415927f / IntToFloat(e->f0c);
             } else {
-                f = 3.1415927f - func_001FA888(rem - e->f0c) * 3.1415927f / func_001FA888(e->f0a);
+                f = 3.1415927f - IntToFloat(rem - e->f0c) * 3.1415927f / IntToFloat(e->f0a);
             }
             f = FastCos(f);
-            g = func_001FA888(e->f0e);
+            g = IntToFloat(e->f0e);
             res = truncate_float_to_s32((f * g + g) * 0.5f) + e->f0f;
             if (res >= 256) {
                 res = 255;
@@ -138,7 +138,7 @@ extern int D_0015EF8C MACRO_ADDR;
 extern int D_0015F020 MACRO_ADDR;
 extern short D_0015EF74;
 
-void func_001E94A8(void) {
+void ResetTextureAllocator(void) {
     D_0015F020 = 0;
     *(int *)&D_0015EF74 = D_0015EF8C;
 }

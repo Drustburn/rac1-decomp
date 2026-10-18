@@ -143,7 +143,7 @@ extern int D_L00_001C47B8[];
 extern int D_L00_001792B8[];
 
 /* stores a value into a table slot chosen by the current index */
-void func_L00_0024B1B0(int a, int b) {
+void SetPlanetTableEntry(int a, int b) {
     int i = D_0015EE84_m;
     if (i < 19) {
         b += D_L00_001C47B8[i];
@@ -172,7 +172,7 @@ INCLUDE_ASM("asm/overlays", func_L00_0024B7AC);
 extern int D_0015EFB4 MACRO_ADDR;
 extern int D_0015EFB0 MACRO_ADDR;
 /* clears the menu flag and advances based on card status */
-void func_L00_0024B8B0(void) {
+void CardMenu_AdvanceOnStatus(void) {
  D_0015EFB4 &= ~0x20;
  if (D_0013D390[2] == 2) {
   int v = D_0013D390[7];
@@ -204,7 +204,7 @@ INCLUDE_ASM("asm/overlays", func_L00_0024B980);
 extern int D_0015EFB0 MACRO_ADDR;
 
 // Stores constant to gp-relative address
-void func_L00_0024B9A8(void) {
+void CardMenu_SetStateFive(void) {
     *(int *)&D_0015EFB0 = 5;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024B9B4);
@@ -250,7 +250,7 @@ INCLUDE_ASM("asm/overlays", func_L00_0024BBCC);
 extern int D_L00_0015F688 MACRO_ADDR;
 /* while D_0013D390[7] is set the menu state is 3; else flag 0x20 is taken down with state 24
    (D_L00_0015F688 set) or 12, or flag 0x10 with state 14 */
-void func_L00_0024BBE8(void) {
+void CardMenu_AdvanceOnFlags(void) {
     int flags;
 
     if (D_0013D390[7] != 0) {
@@ -274,14 +274,14 @@ void func_L00_0024BBE8(void) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024BC04);
 // Stores 12 into the word global D_0015EFB0.
-void func_L00_0024BC2C(void) {
+void CardMenu_SetStateTwelve(void) {
     *(int *)&D_0015EFB0 = 12;
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024BC38);
 typedef struct { int v[60]; } MenuState;
 extern int D_0015EFB4_m __asm__("D_0015EFB4") MACRO_ADDR;
 /* advances the active menu state or requests its alternate action */
-void func_L00_0024BCA0(void) {
+void CardMenu_AdvanceOrAlternate(void) {
  MenuState *p = &D_0013D390;
  if (p->v[55]==2 && p->v[57]<0) {
  if (p->v[59]) { D_0015EFB0=18; D_0015EFB4_m |= 64; }
@@ -290,7 +290,7 @@ void func_L00_0024BCA0(void) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024BCF0);
 /* clears the menu flags 4 and 2, then picks the card menu's next state from the flags and the card status */
-void func_L00_0024BD18(void) {
+void CardMenu_NextStateFromFlags(void) {
     if (D_0015EFB4 & 4) D_0015EFB4 &= ~4;
     if (D_0015EFB4 & 2) D_0015EFB4 &= ~2;
     if (D_0015EFB4 & 0x80) { D_0015EFB0 = 21; D_0015EFB4 = (D_0015EFB4 ^ 0x80) | 0x40; }

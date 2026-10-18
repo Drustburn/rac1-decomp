@@ -377,7 +377,7 @@ int Stash_ReceiveData(void *dest, unsigned int slot, int offset, int size, int m
     int chunk;
 
     if (size == -1) {
-        size = func_00234350(slot);
+        size = Stash_GetSlotSize(slot);
     }
     if (slot >= 0x40) {
         return -3;
@@ -399,7 +399,7 @@ int Stash_ReceiveData(void *dest, unsigned int slot, int offset, int size, int m
     return 0;
 }
 
-int func_00234350(unsigned int arg0) {
+int Stash_GetSlotSize(unsigned int arg0) {
     if (arg0 >= 0x40) {
         return -3;
     }

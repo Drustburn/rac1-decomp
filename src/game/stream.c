@@ -194,7 +194,7 @@ extern int D_0015EFBC MACRO_ADDR;
 extern int D_0015EFC0 MACRO_ADDR;
 extern void func_00121750(int, int, int, void *);
 
-int func_002175C8(int arg0, int arg1, int arg2) {
+int Stream_SubmitRead(int arg0, int arg1, int arg2) {
     StreamHdr hdr = D_00151800;
 
     hdr.b[1] = D_0015EE58[0];
@@ -329,7 +329,7 @@ void FinishAudioStreamRead(int arg0) {
     }
 }
 
-void func_00217830(int arg0, long arg1) {
+void MusicAdvanceStateCallback(int arg0, long arg1) {
     short *p = (short *)(int)arg1;
     if (p != 0 && arg0 != 0 && p[5] == 2) {
         p[5] = 3;
@@ -374,7 +374,7 @@ void MusicPreseekCallback(int arg0, long arg1) {
 
 extern short D_001517F0 NOT_SDA;
 
-void func_00217920(int arg0, long arg1) {
+void MusicTransitionCallback(int arg0, long arg1) {
     short *p = (short *)(int)arg1;
     if (p != 0) {
         *(int *)p = arg0;
@@ -392,7 +392,7 @@ void func_00217920(int arg0, long arg1) {
     }
 }
 
-void func_00217970(int arg0, long arg1) {
+void MusicStartTrackBodyCallback(int arg0, long arg1) {
     short *p = (short *)(int)arg1;
     if (p != 0) {
         if (arg0 < 0) {
@@ -411,7 +411,7 @@ void func_00217970(int arg0, long arg1) {
     }
 }
 
-void func_002179C8(int arg0, long arg1) {
+void MusicStartTrackCallback(int arg0, long arg1) {
     short *p = (short *)(int)arg1;
     if (p != 0) {
         *(int *)p = arg0;
@@ -429,7 +429,7 @@ extern char D_00160168[];
 
 /* `*p = arg0` happens on the 0xFFFFFFFF path too (the older decode made
    it conditional), and D_001E8C60's message is printed. */
-void func_00217A08(int arg0, long arg1) {
+void MusicReleaseCallback(int arg0, long arg1) {
     short *p = (short *)(int)arg1;
     if (p != 0) {
         if (*(unsigned int *)p != 0xFFFFFFFF) {
@@ -529,7 +529,7 @@ extern s32 func_00216098(void);
 
 void func_00217AE8(void *arg0, Menu *menu, s32 arg2);
 
-void func_00217AE8(void *arg0, Menu *menu, s32 arg2) {
+void DialogNode_Update(void *arg0, Menu *menu, s32 arg2) {
     char buf[0x100];
     Suffixes sfx;
     char num[0x20];
@@ -632,7 +632,7 @@ void func_00217AE8(void *arg0, Menu *menu, s32 arg2) {
         menu->unk38 = D_0015F6F0_far;
         e = (MenuItem *)(menu->unk3C + next * 0x1C);
         menu->unk8 = *(u8 *)&e->unk10 & 1;
-        func_00217AE8(arg0, menu, 0);
+        DialogNode_Update(arg0, menu, 0);
     }
 }
 

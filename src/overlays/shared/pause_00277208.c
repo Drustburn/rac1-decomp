@@ -30,7 +30,7 @@ extern void func_L00_0023A690(void);
 extern void func_L00_0023A788(void);
 
 /* PageMenuClose: closes the pause menu. */
-void func_L00_002777C0(void) {
+void PauseMenu_Close(void) {
     int i;
     int value;
     int handle;
@@ -92,14 +92,14 @@ void func_L00_002777C0(void) {
         {
             int k;
             for (k = 0; k < 14; k++) {
-                D_L00_001BA220[k] = func_002267C0(D_L00_001BA220[k]);
+                D_L00_001BA220[k] = DeleteMenuMoby(D_L00_001BA220[k]);
             }
         }
-        handle = func_L00_00235790();
-        func_L00_002367A8(handle, scale_ticks(0xB4));
-        handle = queue_animation_update(2, 0x754E, func_L00_0023A658, func_L00_0023A690,
-                               func_L00_0023A788, &gBolts, 9999999);
-        func_L00_002367A8(handle, scale_ticks(0xB4));
+        handle = Hud_RegisterHealthBank();
+        Hud_ExtendBankTime(handle, scale_ticks(0xB4));
+        handle = queue_animation_update(2, 0x754E, HudBoltsInit, HudBoltsUpdate,
+                               HudBoltsDraw, &gBolts, 9999999);
+        Hud_ExtendBankTime(handle, scale_ticks(0xB4));
         {
             char *s = D_L00_001BA070;
             *(int *)s = 0x14;
@@ -238,7 +238,7 @@ extern void func_L00_002777C0(void);
 
 // Page-menu (pause/map/planet-select) per-frame update: state machine over the menu pages.
 // Adapted from Lombyte (MIT) for PAL: src/overlays/shared/audio_voices_00276368.c, FUN_L00_00276bd0.
-void func_L00_00277A88(void) {
+void PauseMenu_Update(void) {
     Own *u8p;
     Mth *m;
     NO *obj;
@@ -289,7 +289,7 @@ void func_L00_00277A88(void) {
         func_L00_00235FF8(0);
         if (GS.unk140 != 0) {
             *(int *)&D_L00_001600CC = -1;
-            func_00205270(GS.unk140, GS.unk144);
+            LoadMobyClassResources(GS.unk140, GS.unk144);
         }
         UpdateFog();
         D_L00_0015F6BC = 1;
@@ -300,41 +300,41 @@ void func_L00_00277A88(void) {
         if (GS.unkC == 2) {
             char *w = D_L00_001842F0;
             STUB_printf(D_L00_001E9530, *(int *)(w + 0x224));
-            func_L00_00290030(*(int *)(w + 0x224));
+            ShipTravelTo(*(int *)(w + 0x224));
         } else if (GS.unkC == 3) {
             tmp = D_0015EFD8;
             D_0015EFD8 = 2;
             GS.unk130 = tmp;
             FadeToBlack(scale_ticks(0x10));
             D_L00_0015F6A8 = 0;
-            func_L00_0029A7D0((int)GS.unkE4);
+            PlayMovieEntryIfIdle((int)GS.unkE4);
         } else if (GS.unkC == 4) {
             tmp = D_0015EFD8;
             D_0015EFD8 = 1;
             GS.unk130 = tmp;
             FadeToBlack(scale_ticks(0x10));
             D_L00_0015F6A8 = 0;
-            func_L00_0029A8D0((int)GS.unkE4);
+            PlayMovieEntryWithMode((int)GS.unkE4);
         } else if (GS.unkC == 6) {
             tmp = D_0015EFD8;
             D_0015EFD8 = 1;
             GS.unk130 = tmp;
             FadeToBlack(scale_ticks(0x10));
             D_L00_0015F6A8 = 0;
-            func_L00_0029A868((int)GS.unkE4);
+            PlayMovieEntry((int)GS.unkE4);
         } else if (GS.unkC == 5) {
             tmp = D_0015EFD8;
             D_0015EFD8 = 1;
             GS.unk130 = tmp;
             FadeToBlack(scale_ticks(0x10));
             D_L00_0015F6A8 = 0;
-            func_L00_00299B68((int)GS.unkE4);
+            StartCutscene((int)GS.unkE4);
         } else if (GS.unkC == 7) {
             tmp = D_0015EFD8;
             GS.unk130 = tmp;
             FadeToBlack(scale_ticks(0x10));
             D_L00_0015F6A8 = 0;
-            func_L00_0029ADD8();
+            EnterSlideshowMode();
         } else {
             D_L00_0015F6A8 = 0;
         }
@@ -437,7 +437,7 @@ L2:
     func_00213C78();
     sound_update();
     if (GS.unkC != 0) {
-        func_L00_002777C0();
+        PauseMenu_Close();
     }
 }
 typedef int u128 __attribute__((mode(TI)));
@@ -488,7 +488,7 @@ typedef struct PageMobyData {
 } PageMobyData;
 
 /* draws the pause menu pages: lays out each page moby's screen rect, then renders each page's texture */
-void func_L00_002781D8(int arg0) {
+void PauseMenu_DrawPages(int arg0) {
     u128 c[4];
     u128 pad[5];
     u128 box[2];
@@ -607,7 +607,7 @@ void func_L00_002781D8(int arg0) {
             while (tw + th >= 18) {
                 th--;
             }
-            func_001F7A50(tw, th, pass != 0, 1.0f);
+            Framebuf_SetupRenderTarget(tw, th, pass != 0, 1.0f);
             su = 1 << tw;
             sv = 1 << th;
             func_002017C8(0, 0, su, sv, D_L00_00160330, 0, 0);
@@ -665,7 +665,7 @@ void func_L00_002781D8(int arg0) {
     SetupGifPaging(0);
     for (n = 0; n < 14; n++) {
         if (D_L00_001B2740[n] != 0 && (n != 6 || PM.unkD8 != 0)) {
-            func_002250B8((int)D_L00_001BA220[n]);
+            DrawMenuFlashingPanel((int)D_L00_001BA220[n]);
         }
     }
     DoGifPaging();
@@ -679,7 +679,7 @@ extern char D_0013CA40[];
 #define menu_system_p (*(struct MenuSystemP *)D_L00_001BA070)
 #define controller_state_p (*(struct CtrlP *)D_0013CA40)
 /* Menu input check for the page `screen`. */
-int func_L00_002788E0(void *screen) {
+int Menu_CheckPageInput(void *screen) {
     if (menu_system_p.current->focus != screen) {
         return 0;
     }
@@ -704,7 +704,7 @@ INCLUDE_ASM("asm/overlays", func_L00_0027895C);
 extern char D_L00_001BA070[] NOT_SDA;
 
 // Skips the linked menu entries the two active pause filters exclude and, if it moved, makes the entry it stopped on the current one.
-int func_L00_0027A398(char *arg0, int arg1) {
+int Menu_SkipFilteredEntries(char *arg0, int arg1) {
     int ok = 0;
     int found = 0;
 
@@ -748,7 +748,7 @@ extern int D_L00_0015F6A4 MACRO_ADDR;
 extern int D_L00_0015F650 MACRO_ADDR;
 
 /* input of a pause menu entry: accept returns -1, cancel goes back a page or returns -1 when closing is allowed, and 0x20 sets the transition flags */
-int func_L00_0027D3D8(char *entry) {
+int PauseMenu_EntryInput(char *entry) {
  unsigned int pressed = D_0013CA40_27D3D8.pressed_unmasked;
  if (pressed & 0xD00) {
   if (*(int *)(entry + 0x30) & 0x20) D_L00_00184514 = D_0015EE84_m;
@@ -793,7 +793,7 @@ extern int D_0015EFB0_280708 __asm__("D_0015EFB0") MACRO_ADDR;
 
 /* goes back a page, but in menu state 0x10 or 1 only on button 0x20 (setting the page flag at
    +0x84 and clearing +0xD4) or 0x10 (clearing the page flag) */
-int func_L00_00280708(void) {
+int Menu_GoBackWithFlag(void) {
     int state = D_0015EFB0_280708;
     unsigned int pressed;
 
@@ -815,7 +815,7 @@ int func_L00_00280708(void) {
 extern unsigned char D_0013A5E0[] NOT_SDA;
 extern char D_L00_001BA070[] NOT_SDA;
 /* Menu left/right handler; sets the page flag and next page link. Returns 0. */
-int func_L00_00280740(void) {
+int Menu_GoNextWithFlag(void) {
     int f = *(int *)(D_0013A5E0 + 0x2604);
     if (f & 0x20) {
         char *p = D_L00_001BA070;
@@ -887,7 +887,7 @@ void PauseCheatEntry(void) {
             (D_0013D50F + 0xB9)[code] = 1;
             (gHavePersuader + 5)[code] = 1;
         } else if ((unsigned)(code - 0x25) < 0x12) {
-            func_L00_00261848(va);
+            UnlockPlanet(va);
         } else if ((unsigned)vb < 6) {
             char *p3 = D_0013D355 + 0x13B;
             p3[vb] = 1;
@@ -909,7 +909,7 @@ extern void func_001E9768(void *);
 extern char D_L00_00166D80[];
 
 /* sets up a pause-menu helper moby in front of the camera */
-int func_L00_00284620(char *h) {
+int PauseMenu_SetupHelperMoby(char *h) {
     char *m;
     int r;
     m = func_00226720_a(0x7A5);
@@ -940,7 +940,7 @@ int func_L00_00284620(char *h) {
 }
 extern int D_L00_001BA548[];
 // Finds one of five entries and returns its flag-selected size.
-int func_L00_00284E20(int id) {
+int StreamSlot_GetSize(int id) {
     int *p = D_L00_001BA548;
     int i;
     for (i = 0; i < 5; i++, p += 2) {
@@ -956,7 +956,7 @@ INCLUDE_ASM("asm/overlays", func_L00_00284E5C);
 /* Looks for id in the five {id, flags} pairs at D_L00_001BA548; if found sets flags |= 4 and returns 0, else returns 1. Joined with func_L00_00284EA0 loop tail. */
 extern int D_L00_001BA548_84E70[] __asm__("D_L00_001BA548");
 /* Sets flag 4 on the entry with the given id; returns 0, or 1 if not found. */
-int func_L00_00284E70(int id) {
+int StreamSlot_SetFlag4(int id) {
     int i;
     for (i = 0; i < 5; i++) {
         if (D_L00_001BA548_84E70[i * 2] == id) {
@@ -968,7 +968,7 @@ int func_L00_00284E70(int id) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_00284EA0);
 /* Looks for id in the five {id, flags} pairs at D_L00_001BA548; if found clears flag 4 and returns 0, else returns 1. Joined with the copy of func_L00_00284EA0 after it. */
-int func_L00_00284EB8(int id) {
+int StreamSlot_ClearFlag4(int id) {
     int i;
     for (i = 0; i < 5; i++) {
         if (D_L00_001BA548_84E70[i * 2] == id) {
@@ -1012,7 +1012,7 @@ extern BoltSource_286068 D_0014D690[][64];
 
 /* the bolt tally slot of moby uid in level lvl: scanning down from slot 63, the first slot that
    holds uid (stored as uid + 1) or is free, which it claims; -1 when there is none or uid < 0 */
-int func_L00_00286068(int lvl, int uid) {
+int BoltTally_FindSlot(int lvl, int uid) {
     int k = -1;
 
     if (uid >= 0) {
@@ -1046,7 +1046,7 @@ extern unsigned char D_0013E633 NOT_SDA;
 extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 
 /* Seeds the pause-menu snapshot: copies the header, marks valid entries in the bitmasks, fills the state record. Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay_state_00284e50.c, FUN_L00_00284e50. */
-void func_L00_00286128(void *a0, void *a1)
+void PauseMenu_SeedSnapshot(void *a0, void *a1)
 {
     unsigned char *src;
     int i;
@@ -1103,7 +1103,7 @@ extern void func_L00_001ED600(void);
 extern void func_00216270(void);
 
 /* loads the saved pause-menu state block into the game globals */
-void func_L00_002862E0(void) {
+void PauseMenu_LoadSnapshot(void) {
     char *p = (char *)D_L00_001BB5C0;
     unsigned char *g;
     unsigned char *b;
@@ -1143,7 +1143,7 @@ void func_L00_002862E0(void) {
     for (i = 0; (e = (char *)D_L00_00160098 + (i << 8)) < (char *)D_L00_0016009C; i++) {
         if (*(short *)(e + 0xA6) == s) {
             int *q = (int *)D_L00_001BB5C0;
-            func_L00_002110C0(q[0x11], q[0x13], e);
+            Hero_BeginObjectControl(q[0x11], q[0x13], e);
             break;
         }
     }
@@ -1153,13 +1153,13 @@ done:
         func_L00_00251E30(*(void **)(h + 0x2080));
         func_001FA1F8(*(char **)(h + 0x2080) + 0xC0, h + 0x90);
     }
-    func_L00_001ED600();
+    CameraResetBehindHero();
     register_audio_stream_callback();
 }
 extern unsigned char *D_L00_00160098 MACRO_ADDR;
 extern unsigned char *D_L00_0016009C MACRO_ADDR;
 /* Finds the 0x100-byte record whose short at +0xB2 equals id, or 0 if none. */
-int func_L00_00286498(int a, int id) {
+int Moby_FindByRecordId(int a, int id) {
     unsigned char *p;
     for (p = D_L00_00160098; p != D_L00_0016009C; p += 0x100) {
         if (*(short *)(p + 0xB2) == id)
@@ -1172,11 +1172,11 @@ typedef struct { int off; int pad; unsigned short len; short kind; short a; shor
 extern int func_L00_00286498(int, int);
 
 /* Applies a patch table to the matching records. */
-void func_L00_002864E0(int *h) {
+void Moby_ApplyPatchTable(int *h) {
     int i;
 
     for (i = 0; i < *h; i++) {
-        int m = func_L00_00286498(((Ent *)(h + 1))[i].b, ((Ent *)(h + 1))[i].a);
+        int m = Moby_FindByRecordId(((Ent *)(h + 1))[i].b, ((Ent *)(h + 1))[i].a);
         if (m != 0) {
             int dst;
             if (((Ent *)(h + 1))[i].kind == 1) {

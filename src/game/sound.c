@@ -257,7 +257,7 @@ extern int func_001EFE10_a(void *, void *, int, int, int) __asm__("func_001EFE10
 /* Jitter the vector at arg0 between 0.5 and 6.0, fold in the reference
    frame at D_00187180, and if the emitter accepts it, re-derive it from
    D_00194220, damp to 3/4 and fold the frame in again. */
-void func_0022D8C0(void *arg0) {
+void Sound_PickOcclusionOrigin(void *arg0) {
     RandomSphericalOffset(arg0, 0.5f, 6.0f);
     func_001F9BD8_a(arg0, arg0, D_00187180_a);
     if (func_001EFE10_a(D_00187180_a, arg0, 0x82, D_0013E6BC, 0) != 0) {
@@ -275,7 +275,7 @@ extern void func_001EFE10(void *, void *, int, int, int);
 /* Aim the vector from the frame at D_00187180 toward arg0+0x20, scaled to
    3/4 and 64, and return the line test from arg1 to its end. The int
    return keeps retail's argument order for func_001F9BD8. */
-int func_0022D970(void *arg0, void *arg1) {
+int Sound_LineTest(void *arg0, void *arg1) {
     float v[4];
 
     FastVecSub(v, (char *)arg0 + 0x20, D_00187180);
@@ -299,11 +299,11 @@ int sound_GetFade(void *arg0, float x, float lo, float hi) {
     if (*(unsigned char *)(s + 0x19) & 1) {
         if (x <= lo) r = *(int *)(s + 0xC);
         else if (hi <= x) r = *(int *)(s + 0x8);
-        else r = *(int *)(s + 0x8) + func_001FA898_i((hi - x) * (hi - x) * func_001FA888(*(int *)(s + 0xC) - *(int *)(s + 0x8)) / ((hi - lo) * (hi - lo)));
+        else r = *(int *)(s + 0x8) + func_001FA898_i((hi - x) * (hi - x) * IntToFloat(*(int *)(s + 0xC) - *(int *)(s + 0x8)) / ((hi - lo) * (hi - lo)));
     } else {
         if (x <= lo) r = *(int *)(s + 0xC);
         else if (hi <= x) r = *(int *)(s + 0x8);
-        else r = *(int *)(s + 0x8) + func_001FA898_i((hi - x) * func_001FA888(*(int *)(s + 0xC) - *(int *)(s + 0x8)) / (hi - lo));
+        else r = *(int *)(s + 0x8) + func_001FA898_i((hi - x) * IntToFloat(*(int *)(s + 0xC) - *(int *)(s + 0x8)) / (hi - lo));
     }
     return r;
 }
@@ -314,7 +314,7 @@ extern float func_001F9D10(int, void *);
    declaring it int would move its next temporary to $v1. */
 extern void func_0022DA10_v(void *, float, float, float) __asm__("func_0022DA10");
 
-void func_0022DB00(void *arg0, int arg1) {
+void Sound_ApplyDistanceFade(void *arg0, int arg1) {
     char *s = (char *)arg0;
     float v = FastVecDist(arg1, D_00187180);
     float *p = *(float **)(s + 0x8);
@@ -330,7 +330,7 @@ extern void func_001FA898(float);
    arg2, and steer by its heading: atan2 of the xy part, negated and
    converted from radians to degrees (180 * 1/pi), scaled by how far the
    projection runs past 1.0, clamped to 0..1. arg0 is unused. */
-void func_0022DB48(void *arg0, void *arg1, void *arg2) {
+void Sound_ComputePan(void *arg0, void *arg1, void *arg2) {
     float v[4];
     float t;
 
@@ -365,7 +365,7 @@ extern void func_0012E3F8(int, int, int);
 extern void func_0012E348(int, int);
 extern void func_002161E0(void);
 
-void func_0022DBE8(void) {
+void Sound_InitState(void) {
     s32 i;
     s32 p;
     s32 end;

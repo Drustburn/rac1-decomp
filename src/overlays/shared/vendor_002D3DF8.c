@@ -88,7 +88,7 @@ void ScoutbotUpdate(Moby *moby) {
         wake_3DF8(moby);
         moby->shadow_range = 0x16;
     }
-    func_L08_002D49E8((char *)moby);
+    PathEnemyHitUpdate((char *)moby);
     d->f218 = d->f1B0;
     qcopy(tgt, d->v170);
     switch (moby->state) {
@@ -288,19 +288,19 @@ extern float func_001F9D48(void *, void *);
 extern float func_001F9B88(float);
 
 /* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
-void func_L08_002D49E8(char *m) {
+void PathEnemyHitUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
     int hit;
     float dmg;
     int idx;
     dmg = 0.0f;
-    idx = func_L00_0025B4D0(m, func_L00_0025B478(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
+    idx = ComputeHitResponse(m, MobyGetHitMessage(m, 0x330000, 0), d + 0x20, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)m)[0x20] != 0x63) {
         *(float *)(d + 0x20) -= dmg;
         if (*(float *)(d + 0x20) <= 0.0f) idx = 1;
         if (idx < 12) {
             if (idx >= 0) {
-                func_L00_002584A8(m, 0, -1);
+                SetDeathBits(m, 0, -1);
                 m[0x20] = 0x63;
             }
         }
@@ -356,7 +356,7 @@ extern short D_L08_00161908;
 extern float D_L08_00161924 ;
 #define D_L08_00161924_4B80 D_L08_00161924
 
-void func_L08_002D4B80(char *m) {
+void DrawTargetBeam(char *m) {
     char *data = *(char **)(m + 0x78);
     Packet_2D4B80 pk;
     Vec_2D4B80 matrix[3], direction, pos, delta, angles;
@@ -524,7 +524,7 @@ extern void func_00213DE0(void *, int, int, int);
 
 void *func_L08_002D5358(char *arg)
 {
-    void *result = func_L00_002DD2D0(arg);
+    void *result = ReleaseCarriedMobySlot(arg);
     char *obj = *(char **)(arg + 0x78);
     arg[0x20] = 3;
     *(float *)(obj + 0x200) = 4.0f;
@@ -556,7 +556,7 @@ void func_001F9EE8(void *, void *, void *);
 void func_L00_001FD1D8(void *, s32, s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_002937a0.c, FUN_L08_002d4108. */
-void func_L08_002D5410(char *arg) {
+void DrawFacingQuad(char *arg) {
     char *data = *(char **)(arg + 0x78);
     Pk_002d4108 pk;
     float up[4];
@@ -633,7 +633,7 @@ extern short D_L08_00161DA4;
 extern short D_L08_00161DA8;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002937a0.c, FUN_L08_002e7eb0. */
-char *func_L08_002E9288(int owner, float *position, float *rotation, int value) {
+char *Moby458Spawn(int owner, float *position, float *rotation, int value) {
     float position_copy[4] __attribute__((aligned(16)));
     float rotation_copy[4] __attribute__((aligned(16)));
     float matrix[4][4] __attribute__((aligned(16)));
@@ -797,7 +797,7 @@ void Moby458Update(char *moby) {
             FastVecSub(direction, position, moby + 0x10);
             func_L00_001FF4B0(direction, direction, length);
             FastVecSub(velocity, direction, data);
-            func_L00_002607A8(D_0015EE6C * 3.7f, velocity);
+            ClampVectorLength(D_0015EE6C * 3.7f, velocity);
             FastVecAdd(data, data, velocity);
             func_L00_001FF4B0(data, data, length);
         }
@@ -841,7 +841,7 @@ extern void func_L08_00259040(void *, int, int, void *);
 extern void func_L00_001FDE48(int, int, int, void *, int);
 
 /* Runs the two per-entry update calls over a 13-entry table. */
-void func_L08_002F2000(int a) {
+void Moby600_DrawQuads13(int a) {
     int i;
     for (i = 0; i < 13; i++) {
         func_L08_00259040(D_L08_001E8620, D_L08_001E8560[i], D_L08_001E2B18[i], &D_L08_001E8608[a]);
@@ -856,7 +856,7 @@ extern int D_L08_001E2AE8[];
 extern Pair8 D_L08_00161EA0[] MACRO_ADDR;
 
 /* Places the level's 11 effect pieces from their tables (a relative of func_L11_0031FCC8). */
-void func_L08_002F20D8(int a) {
+void Moby600_DrawQuads11(int a) {
     int i;
     for (i = 0; i < 11; i++) {
         func_L08_00259040(D_L08_001E8620, D_L08_001E2A88[i], D_L08_001DE200[i], &D_L08_00161EA0[a]);
@@ -870,7 +870,7 @@ extern int D_L08_001DE1E0[];
 extern Pair D_L08_00161EB0[] MACRO_ADDR;
 
 /* Runs the two per-entry update calls over an 8-entry table. */
-void func_L08_002F21B0(int a) {
+void Moby600_DrawQuads8(int a) {
     int i;
     for (i = 0; i < 8; i++) {
         func_L08_00259040(D_L08_001E8620, D_L08_001DE1A0[i], D_L08_001DB7D8[i], &D_L08_00161EB0[a]);
@@ -892,15 +892,15 @@ void ScaleColorTables(int **tabs, int n, int *counts, int flat, float r, float g
             int c3 = (unsigned)w >> 24;
             float fr, fg, fb, fa;
             if (flat == 0) {
-                fr = r * func_001FA888(c0);
-                fg = g * func_001FA888(c1);
-                fb = b * func_001FA888(c2);
-                fa = a * func_001FA888(c3);
+                fr = r * IntToFloat(c0);
+                fg = g * IntToFloat(c1);
+                fb = b * IntToFloat(c2);
+                fa = a * IntToFloat(c3);
             } else {
                 fr = r * 255.0f;
                 fg = g * 255.0f;
                 fb = b * 255.0f;
-                fa = a * func_001FA888(c3);
+                fa = a * IntToFloat(c3);
             }
             tabs[i][j] = (func_001FA898_r(fa) << 24) + (func_001FA898_r(fb) << 16) + (func_001FA898_r(fg) << 8) + func_001FA898_r(fr);
         }
@@ -910,7 +910,7 @@ extern float func_001F9FA8(float);
 extern float D_0015EE7C MACRO_ADDR;
 
 /* advance a 2-D wrapped phase by a and b and write scaled sines */
-void func_L08_002F2618(float *out, float *ph, float a, float b, float scale) {
+void AdvanceWavePhase(float *out, float *ph, float a, float b, float scale) {
     ph[0] += a * D_0015EE7C;
     if (ph[0] > 1.0f) {
         ph[0] -= 2.0f;
@@ -932,7 +932,7 @@ typedef struct { float x, y; } V2;
 extern V2 D_L08_001DB7C0[];
 
 /* advances two wrapped scroll offsets by per-entry speeds */
-void func_L08_002F2760(int a) {
+void AdvanceScrollOffsets(int a) {
     *(float *)&D_L08_001E8608[a].a = *(float *)&D_L08_001E8608[a].a + D_L08_001DB7C0[a].x * D_0015EE7C;
     if (*(float *)&D_L08_001E8608[a].a > 1.0f) *(float *)&D_L08_001E8608[a].a = *(float *)&D_L08_001E8608[a].a - 1.0f;
     if (*(float *)&D_L08_001E8608[a].a < -1.0f) *(float *)&D_L08_001E8608[a].a = *(float *)&D_L08_001E8608[a].a + 1.0f;
@@ -1437,7 +1437,7 @@ extern float func_001F9CE8(void *);
 extern void func_L00_00251E30(void *);
 
 // Create a moby (class 0x50C) at pos with an orientation vector, and two ints and an angle arg stored in its data.
-char *func_L08_00308650(char *pos, char *dir, int a2, int a3, int a4, int a5) {
+char *Moby1292Spawn(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     char *m = CreateMoby(0x50C);
     if (m != 0) {
         char *d;
@@ -1499,7 +1499,7 @@ void FireBoltUpdate(char *m) {
             char *t = D_L08_001746C0;
             if (*(int *)(t + 0x18) != *(int *)(d + 0x10)) {
                 if (*(int *)(t + 0x18) != 0) {
-                    func_L00_0025AC00(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
+                    PostHitMessage(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
                 }
                 m[0x20] = 2;
             }
@@ -1508,9 +1508,9 @@ void FireBoltUpdate(char *m) {
         break;
     case 2:
         if ((D_L08_0015F6B8 < 0.85f && D_L08_0015F6B4 < 0.85f) || *(int *)(d + 0x2C) == 1) {
-            func_L00_00260108(m, m + 0x10, -1, 0.25f, 13.0f);
+            SpawnExplosionFx(m, m + 0x10, -1, 0.25f, 13.0f);
         } else {
-            func_L00_00260108(m, m + 0x10, -1, 0.25f, 0.0f);
+            SpawnExplosionFx(m, m + 0x10, -1, 0.25f, 0.0f);
         }
         DeleteMoby(m);
         break;
@@ -1809,7 +1809,7 @@ void Moby1629Update(char *moby) {
                 o[1] = D_L08_001623F4 + random_float_between(-r, r);
                 o[2] = -(random_float_between(*(float *)(d + 0x18), *(float *)(d + 0x1C)) * D_0015EE6C);
                 o[3] = 0.0f;
-                func_L08_00273A80(v, *(void **)d, o, *(float *)(moby + 0x18) - *(float *)(d + 0x20));
+                SpawnKindParticle(v, *(void **)d, o, *(float *)(moby + 0x18) - *(float *)(d + 0x20));
             }
         }
     }
@@ -1858,7 +1858,7 @@ void WindAmbienceUpdate(char *m) {
     {
         char *e = D_0013E633 + 0x1D + *(int *)(d + 8) * 0x70;
         if (*(char **)(e + 0x8C) == m && ((unsigned char *)e)[0x74] != 0) {
-            func_L00_0028F210(*(int *)(d + 8),
+            Sound_SetPitchBend(*(int *)(d + 8),
                               (int)((*(float *)(d + 4) + *(float *)&D_L08_00162678) / (*(float *)(d + 4) + 1.0f) * 1024.0f));
         }
     }
@@ -1866,7 +1866,7 @@ void WindAmbienceUpdate(char *m) {
     {
         char *e = D_0013E633 + 0x1D + *(int *)(d + 8) * 0x70;
         if (*(char **)(e + 0x8C) != m || ((unsigned char *)e)[0x74] == 0) {
-            *(int *)(d + 8) = func_L00_0028F0B0(*(int *)d, 0x15, (int)m, 0x400);
+            *(int *)(d + 8) = Sound_PlayLevelSound(*(int *)d, 0x15, (int)m, 0x400);
         }
     }
 }

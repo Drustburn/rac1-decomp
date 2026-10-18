@@ -424,11 +424,11 @@ void BuildOcclVisibility(void) {
         D_0015F72C = 1;
         if (D_0015F728 == 0) {
             gx = (char *)GetOcclGridFromPair(x - 1, y, z, x + 1, y, z,
-                                       D_00187040_cam.focus[0] * scale - func_001FA888(x));
+                                       D_00187040_cam.focus[0] * scale - IntToFloat(x));
             gy = (char *)GetOcclGridFromPair(x, y - 1, z, x, y + 1, z,
-                                       D_00187040_cam.focus[1] * scale - func_001FA888(y));
+                                       D_00187040_cam.focus[1] * scale - IntToFloat(y));
             gz = (char *)GetOcclGridFromPair(x, y, z - 1, x, y, z + 1,
-                                       D_00187040_cam.focus[2] * scale - func_001FA888(z));
+                                       D_00187040_cam.focus[2] * scale - IntToFloat(z));
             if (gx != 0 || gy != 0 || gz != 0) {
                 FastMemZero16(D_00194140, 0x80);
                 if (gx != 0) {
@@ -530,8 +530,8 @@ void InitViewContext(void) {
     ctx[0x28] = 32.0f;
     ctx[0x29] = 745472.0f;
     ctx[0x2C] = 0.63f;
-    ctx[0x80] = func_001FA888(w) * 0.5f;
-    fh = func_001FA888(res[0xA9]) * 0.5f;
+    ctx[0x80] = IntToFloat(w) * 0.5f;
+    fh = IntToFloat(res[0xA9]) * 0.5f;
     ctx[0x81] = fh;
     ctx[0x82] = ctx[0x80] * 4.0f;
     ctx[0x83] = fh * 4.0f;
@@ -818,8 +818,8 @@ void SetScreenSize(int w, int h, float a2, float a3, float a4, float a5, float a
     ctx[0x2C] = a2;
     ctx[0x28] = 32.0f;
     ctx[0x29] = 524288.0f;
-    ctx[0x80] = func_001FA888(w) * 0.5f;
-    fh = func_001FA888(h) * 0.5f;
+    ctx[0x80] = IntToFloat(w) * 0.5f;
+    fh = IntToFloat(h) * 0.5f;
     ctx[0x81] = fh;
     ctx[0x82] = ctx[0x80] * 4.0f;
     ctx[0x83] = fh * 4.0f;
@@ -1011,7 +1011,7 @@ void DrawDebugProfiler(void) {
         framebuf_appendLargeSetup();
     }
     BuildViewMatrices();
-    func_0020DAB0();
+    AnimSlot_ReleaseStale();
     UpdateOcclusion();
     ResetGsRegisters();
     D_0015F704 = -1;
@@ -1037,7 +1037,7 @@ void DrawDebugProfiler(void) {
     }
     Vif1ChainCmd(0x02020000);
     if (D_0018A3B0[0x34 / 4] != 0 && D_0015F56C != 0) {
-        func_00234F40();
+        Dma_AppendRefDirect3();
         SetupGifPaging(1);
         ExecuteDrawCallbacks3();
         DoGifPaging();
@@ -1054,11 +1054,11 @@ void DrawDebugProfiler(void) {
     }
     if (D_0015F534_f & 0x20) {
         SetupGifPaging(1);
-        func_001F7B70();
+        DrawOptionalExtraPass();
         DoGifPaging();
     }
     if (D_0018A3B0[0x34 / 4] != 0 && D_0015F570 != 0) {
-        func_00234F40();
+        Dma_AppendRefDirect3();
         SetupGifPaging(1);
         ExecuteDrawCallbacks4();
         DoGifPaging();
@@ -1076,21 +1076,21 @@ void DrawDebugProfiler(void) {
     func_001F2560_a(D_0015F4B0, 4);
     func_001F2558_a(D_0015F4B0, 4);
     if (D_0015F534_f & 0x20) {
-        func_00234F40();
+        Dma_AppendRefDirect3();
         if (D_0018A3B0[0x34 / 4] != 0) {
             if (D_0015F564 != 0) {
                 ExecuteDrawCallbacks();
             }
             VU1_addGSregister(0x42, 0x8000000048L);
-            func_001EDFF8();
-            func_00234F40();
+            LensFlareUpdate();
+            Dma_AppendRefDirect3();
             DrawLightQuads();
         }
         func_001F2558_a(D_0015F4C0, 6);
         func_001F2560_a(D_0015F4C0, 6);
         if (D_0018A3B0[0x38 / 4] != 0) {
             VU1_addGSregister(8, 5);
-            func_00234F40();
+            Dma_AppendRefDirect3();
             func_00118D80(0);
             PartProc();
             D_0015F704 = 8;
@@ -1099,11 +1099,11 @@ void DrawDebugProfiler(void) {
         func_001F2560_a(D_0015F4D0, 8);
         if (D_0018A3B0[0x3C / 4] != 0) {
             if (D_0015F568 != 0) {
-                func_00234F40();
+                Dma_AppendRefDirect3();
                 ExecuteDrawCallbacks2();
             }
             if (D_0015F6E8 == 0) {
-                func_001F9478();
+                DrawBillboardBatch();
             }
             VU1_addGSregister(0x42, 0x8000000044L);
             DrawQueuedGlows();
@@ -1115,7 +1115,7 @@ void DrawDebugProfiler(void) {
         AA_BlurPass();
     }
     func_001F2560_a(D_0015F4F0, 0xF);
-    func_00234F40();
+    Dma_AppendRefDirect3();
     if (D_0015F534_f & 0x10000) {
         func_00238D88();
     }
@@ -1156,7 +1156,7 @@ void DrawDebugProfiler(void) {
     }
     VU0_loadMicroProgram(D_00100AE0);
     func_00118D80(0);
-    t = func_001FA888(*(volatile int *)0x10000800);
+    t = IntToFloat(*(volatile int *)0x10000800);
     D_0015F6F8 = t / (D_0015EE80 != 0 ? 11520.0f : 9600.0f);
     VU1_syncChain(2);
     func_001F2558_a(D_0015F510, 0x11);
@@ -1172,7 +1172,7 @@ void DrawDebugProfiler(void) {
     if (D_0015F534_f & 4) {
         if (D_0018A3B0[0x18 / 4] != 0) {
             if (D_0015EE80 != 0) {
-                func_00236BB0();
+                LightTieBuffers();
                 copy_render_buffer_pair();
             } else {
                 LightTies(D_001E3500);
@@ -2199,7 +2199,7 @@ void DrawUIFrame(int x0, int x1, int y0, int y1, int a) {
    (a0, a1, a2, a3), offset by +-1/3/5 along each axis, all sharing the
    colour/flags word a4. The first call passes a4 with only its top byte
    kept and the low nibble forced to 4; the rest pass a4 unchanged. */
-void func_001F6410(int a0, int a1, int a2, int a3, int a4) {
+void DrawOutlinedRect(int a0, int a1, int a2, int a3, int a4) {
     int color;
     int t0, t1, t2;
     int t_a0m5, t4, t5;
@@ -2244,12 +2244,12 @@ void func_001F6410(int a0, int a1, int a2, int a3, int a4) {
 extern short D_0015F59C;
 
 /* Sets the word flag at D_0015F59C to 1. */
-void func_001F6598(void) {
+void Font_EnableColorCodes(void) {
     *(int *)&D_0015F59C = 1;
 }
 
 /* Clears the word flag at D_0015F59C. */
-void func_001F65A8(void) {
+void Font_DisableColorCodes(void) {
     *(int *)&D_0015F59C = 0;
 }
 
@@ -2428,7 +2428,7 @@ extern void func_001F5BB8_F69F0(f32, f32, f32, f32, s32, s32, s32, s32, u64, s64
 void func_001F69F0(u64 color, u8 *s, s32 n, s64 tex, struct Glyph *g, f32 x, f32 y, f32 scale);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/audio/music/process_bgm_display_text_event.c, process_bgm_display_text_event. */
-void func_001F69F0(u64 color, u8 *str, s32 n, s64 tex, struct Glyph *g, f32 x, f32 y, f32 scale) {
+void Font_DrawString(u64 color, u8 *str, s32 n, s64 tex, struct Glyph *g, f32 x, f32 y, f32 scale) {
     u8 *s;
     s32 i;
     f32 size;
@@ -2455,11 +2455,11 @@ void func_001F69F0(u64 color, u8 *str, s32 n, s64 tex, struct Glyph *g, f32 x, f
                 color |= D_0018CBF8[*s - 8] & 0xFFFFFF;
             }
         } else if (g[*s].adv != 0) {
-            top = func_001FA888(g[*s].top) * scale;
+            top = IntToFloat(g[*s].top) * scale;
             if ((u8)(*s + 0x80) < 0x28) {
                 e = (struct Glyph *)(((*s + 0x40) << 2) + (s32)g);
-                dx = func_001FA888(e->adv) * scale;
-                dy = func_001FA888(e->top) * scale;
+                dx = IntToFloat(e->adv) * scale;
+                dy = IntToFloat(e->top) * scale;
                 func_001F5BB8_F69F0(x + dx, y + dy, size, size, e->u, e->v, 16, 16, color, tex);
             }
             if (*s < 0x20) {
@@ -2472,7 +2472,7 @@ void func_001F69F0(u64 color, u8 *str, s32 n, s64 tex, struct Glyph *g, f32 x, f
             } else if (*s > 0x20) {
                 func_001F5BB8_F69F0(x, y + top, size, size, g[*s].u, g[*s].v, 16, 16, color, tex);
             }
-            x += func_001FA888(g[*s].adv) * scale;
+            x += IntToFloat(g[*s].adv) * scale;
         }
         i++;
         if (i == n) {
@@ -2557,14 +2557,14 @@ extern int func_001F4868(int);
    mode (1 vs 2) and a different table. Six arguments: EABI passes the
    fifth and sixth in $8/$9, which is why they appear alongside $4-$7
    rather than on the stack. */
-void func_001F7560(void *a, void *b, void *c, void *d) {
+void Font_PrintWindowRegular(void *a, void *b, void *c, void *d) {
     int mode = GetEffectTex(1);
 
     FontPrintWindow(a, b, c, d, mode, D_001DF3D0);
 }
 
 /* FontPrintWindow with the second font. */
-void func_001F75D0(void *a, void *b, void *c, void *d) {
+void Font_PrintWindowAlt(void *a, void *b, void *c, void *d) {
     int mode = GetEffectTex(2);
 
     FontPrintWindow(a, b, c, d, mode, D_001DF770);
@@ -2651,7 +2651,7 @@ extern void func_00234FA8(void);
    (each scaled to 1024 and biased in z by D_0015F448), the screen scale
    and offsets from D_0018CE00, and the GIF register setup; the DMA tag's
    qword count is patched in at the end. */
-void func_001F7868(void) {
+void Draw_BuildVu1Setup(void) {
     float m[16];
     char *cam;
     char *g;
@@ -2701,7 +2701,7 @@ void func_001F7868(void) {
     p = base + 0x3C;
     D_00161000[0] |= ((char *)p - (char *)D_00161000 >> 4) - 1;
     D_00161000 = p;
-    func_00234FA8();
+    Dma_AppendRefDirect11();
 }
 
 extern void func_001FB608(int, int, int);
@@ -2715,7 +2715,7 @@ extern short D_001519EE NOT_SDA;
    flag, 0x30000 without) and 0x42 are then written. Each arm makes its
    own page-aligned base, so the two trailing `<< 13`s are cross-jumped
    into the one retail has ahead of the argument moves. */
-void func_001F7A50(int a, int b, int flag, float f) {
+void Framebuf_SetupRenderTarget(int a, int b, int flag, float f) {
     int base;
 
     if (flag != 0) {
@@ -2760,7 +2760,7 @@ extern void func_001F7868(void);
 extern void func_001F8B6C(void);
 
 /* Optional extra draw pass, enabled by D_0015F578. */
-void func_001F7B70(void) {
+void DrawOptionalExtraPass(void) {
     if (D_0015F578 != 0) {
         VU1_addGSregister(8, 5);
         VU1_addGSregister(0x14, 0x61);
@@ -2768,7 +2768,7 @@ void func_001F7B70(void) {
         VU1_addGSregister(0x4A, 1);
         func_001F91B8();
         *(float *)&D_0015F448 = -0.04f;
-        func_001F7868();
+        Draw_BuildVu1Setup();
         func_001F8B6C();
         *(int *)&D_0015F448 = 0;
         VU1_addGSregister(0x4A, 0);

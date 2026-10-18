@@ -233,7 +233,7 @@ void SwarmLeaderUpdate(struct Moby *moby) {
     }
 }
 /* Moby update: deletes its group's mobys when triggered, else runs a small state machine. */
-void func_L08_002EB770(char *m)
+void GroupClearUpdate(char *m)
 {
     extern unsigned char D_0013D355[];
     extern char func_00214D28[];
@@ -356,20 +356,20 @@ void GateSwingUpdate(struct Moby *moby) {
     if (FastDiffRots(moby->rot.y, yaw) != 0.0f) {
         moby->rot.y = yaw;
         if (moby->oclass == 0x1D4) {
-            if (!func_L00_0028EB98(moby, vars->voice)) {
+            if (!Sound_IsPlaying(moby, vars->voice)) {
                 vars->voice = func_0022ED80_EB980(0, 4, moby);
-                func_L00_0028F210(vars->voice, 1);
+                Sound_SetPitchBend(vars->voice, 1);
             } else if (((VoiceView *)(D_0013E650 + vars->voice * 0x70))->volume < 0x400) {
-                func_L00_0028F210(vars->voice, ((VoiceView *)(D_0013E650 + vars->voice * 0x70))->volume +
+                Sound_SetPitchBend(vars->voice, ((VoiceView *)(D_0013E650 + vars->voice * 0x70))->volume +
                                                   0x400 / scale_ticks(60));
             }
         }
-    } else if (moby->oclass == 0x1D4 && func_L00_0028EB98(moby, vars->voice)) {
+    } else if (moby->oclass == 0x1D4 && Sound_IsPlaying(moby, vars->voice)) {
         if (((VoiceView *)(D_0013E650 + vars->voice * 0x70))->volume < 0x100) {
-            func_L00_0028EBF0(vars->voice);
+            Sound_StopSlot(vars->voice);
             vars->voice = -1;
         } else {
-            func_L00_0028F210(vars->voice, ((VoiceView *)(D_0013E650 + vars->voice * 0x70))->volume -
+            Sound_SetPitchBend(vars->voice, ((VoiceView *)(D_0013E650 + vars->voice * 0x70))->volume -
                                               0x400 / scale_ticks(60));
         }
     }
@@ -380,8 +380,8 @@ void GateSwingUpdate(struct Moby *moby) {
         gSpecialItems[vars->flag + 0x30] = 1;
         moby->state = 2;
         func_0022ED80_EB980(1, 0, moby);
-        if (moby->oclass == 0x1D4 && func_L00_0028EB98(moby, vars->voice))
-            func_L00_0028EBF0(vars->voice);
+        if (moby->oclass == 0x1D4 && Sound_IsPlaying(moby, vars->voice))
+            Sound_StopSlot(vars->voice);
     }
 }
 extern void func_00234C98(int, long);
@@ -398,28 +398,28 @@ extern int D_L08_00161E68 MACRO_ADDR;
 extern int D_L08_00161E84 MACRO_ADDR;
 extern int D_L08_00161E98 MACRO_ADDR;
 /* Draws three rows of HUD elements with their colours. */
-void func_L08_002F2288(void) {
+void Moby600Draw(void) {
     VU1_addGSregister(0x42, 0x8000000044L);
     VU1_addGSregister(8, 0);
     VU1_addGSregister(0x14, 0xFF9000000260L);
     VU1_addGSregister(0x47, 0x513F1);
-    func_001F7868();
+    Draw_BuildVu1Setup();
     VU1_addGSregister(6, GetEffectTex(0x3A));
     VU1_addGSregister(0x42, (long)*(int *)&D_L08_00161E60 << 32 | 0x44);
-    func_L08_002F2000(0);
+    Moby600_DrawQuads13(0);
     VU1_addGSregister(6, GetEffectTex(0x3B));
     VU1_addGSregister(0x42, (long)((D_L08_00161E64 * *(unsigned char *)&D_L08_00161E98) >> 8) << 32 | 0x62);
-    func_L08_002F2000(1);
+    Moby600_DrawQuads13(1);
     VU1_addGSregister(0x42, (long)((D_L08_00161E68 * *(unsigned char *)&D_L08_00161E98) >> 8) << 32 | 0x68);
-    func_L08_002F2000(2);
+    Moby600_DrawQuads13(2);
     VU1_addGSregister(6, GetEffectTex(0x3C));
     VU1_addGSregister(0x42, (long)*(int *)&D_L08_00161E80 << 32 | 0x48);
-    func_L08_002F20D8(0);
+    Moby600_DrawQuads11(0);
     VU1_addGSregister(0x42, (long)D_L08_00161E84 << 32 | 0x48);
-    func_L08_002F20D8(1);
+    Moby600_DrawQuads11(1);
     VU1_addGSregister(6, GetEffectTex(0x3D));
     VU1_addGSregister(0x42, (long)*(int *)&D_L08_00161E90 << 32 | 0x48);
-    func_L08_002F21B0(0);
+    Moby600_DrawQuads8(0);
 }
 typedef struct { int a, b; } PairA;
 typedef struct { int a, b; } Pair8;
@@ -455,7 +455,7 @@ extern short D_L08_00161E50;
 
 /* Update function: state 0 sets up some global tables (running func_L08_002F2428 once), state 1 tests a point
  * and its distance to D_L08_00167640 and sets D_L08_00161E98 to a 0 to 255 value that fades between 20.0 and 84.0. */
-void func_L08_002F2A08(unsigned char *moby) {
+void Moby600Update(unsigned char *moby) {
     int i;
     float v[4];
     float w[4];
@@ -498,9 +498,9 @@ void func_L08_002F2A08(unsigned char *moby) {
             FastVecSub(w, D_L08_00167640, w);
             d = FastVecLength(w);
             if (d <= 84.0f) {
-                func_L08_002F2760(0);
-                func_L08_002F2618(D_L08_001E8610, 0.52f, 0.62f, 0.06f, D_L08_00161EB8_p);
-                func_L08_002F2760(2);
+                AdvanceScrollOffsets(0);
+                AdvanceWavePhase(D_L08_001E8610, 0.52f, 0.62f, 0.06f, D_L08_00161EB8_p);
+                AdvanceScrollOffsets(2);
                 if (d < 20.0f) {
                     *(unsigned char *)&D_L08_00161E98 = 0xFF;
                 } else if (d < 84.0f) {
@@ -512,7 +512,7 @@ void func_L08_002F2A08(unsigned char *moby) {
             AdvanceScrollEntry(0);
             AdvanceScrollEntry(0);
             AdvanceScrollEntry(1);
-            AddDrawCallback(func_L08_002F2288, moby);
+            AddDrawCallback(Moby600Draw, moby);
         }
         break;
     }
@@ -549,7 +549,7 @@ extern void func_L00_0025F4A8(char *, void *, char *, f32, f32, s32, s32, s32, f
 extern short D_L08_00162000;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l08/gameplay/entities/002e9b70.c, FUN_L08_002f44c0. */
-void func_L08_002F5980(struct Moby *moby)
+void Moby621Update(struct Moby *moby)
 {
     SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
     Vec4 point;
@@ -642,7 +642,7 @@ extern float func_001FA888(int);
 float SmoothNoise(float x, char *arg) {
     float f = x * 8.0f;
     int i = func_001FA898_r(f);
-    float fr = f - func_001FA888(i);
+    float fr = f - IntToFloat(i);
     char *t;
     int j;
     i = i % 8;
@@ -832,10 +832,10 @@ extern char D_0013E633[] NOT_SDA;
  * moby), then the relative's aiming tail on the countdowns at data + 0x188 and 0x18C. */
 void CommandoUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
-    func_L02_002E2110(m);
+    AttachManipulatorsIfCheat(m);
     if (*(unsigned char *)(m + 0x31) != 0) {
         if (FastVecDist(m + 0x10, D_L08_00167640) < (float)*(int *)&D_L08_00162268) {
-            func_L00_0025B178(m);
+            SetGroundHeightBand(m);
             m[0x7F] = (*(int *)&D_L08_00162268 * 13) >> 4;
         }
     }
@@ -879,7 +879,7 @@ void CommandoUpdate(char *m) {
         }
         if (func_L00_00267290(m, d + 0x20) != 0) {
             m[0x20] = 3;
-            func_L01_00279398(2.2f, m);
+            PlaceMarkerAheadOfMoby(2.2f, m);
         }
         break;
     case 3:
@@ -887,11 +887,11 @@ void CommandoUpdate(char *m) {
         d[0x28] = 1;
         if (*(short *)(d + 0x24) == 3) {
             char *g;
-            func_L00_00261848(10);
-            func_L00_00263DB0(10);
-            func_L00_002512D8((unsigned char)m[0xB0]);
+            UnlockPlanet(10);
+            ShowPlanetBanner(10);
+            SetLevelTriggerDone((unsigned char)m[0xB0]);
             g = D_0013E633 + 0xE9D;
-            func_L00_00286128(g, g + 0x10);
+            PauseMenu_SeedSnapshot(g, g + 0x10);
             memcard_Save(0, -1);
             DeleteMoby(m);
             return;
@@ -958,8 +958,8 @@ void CommandoUpdate(char *m) {
             *(float *)(d + 0x148) = f20 * 0.4f;
         }
         if (gCheats[0] != 0) *(float *)(d + 0xD0) = 2.75f;
-        func_L00_00263950(m, d + 0x60, 0, sx * D_0015EE64, sy * D_0015EE64);
-        func_L00_00263950(m, d + 0xE0, 1, sx * D_0015EE64, sy * D_0015EE64);
+        EaseManipulatorOffsets(m, d + 0x60, 0, sx * D_0015EE64, sy * D_0015EE64);
+        EaseManipulatorOffsets(m, d + 0xE0, 1, sx * D_0015EE64, sy * D_0015EE64);
     }
 }
 struct G {
@@ -1006,7 +1006,7 @@ void DeserterUpdate(char *m) {
     TriggerMobysOfClass(m);
     if (*(unsigned char *)(m + 0x31) != 0) {
         if (FastVecDist(m + 0x10, D_L08_00167640) < 30.0f) {
-            func_L00_0025B178(m);
+            SetGroundHeightBand(m);
             m[0x7F] = 0x18;
         }
     }
@@ -1024,7 +1024,7 @@ void DeserterUpdate(char *m) {
         break;
     case 1:
         if (func_001F9D48(m + 0x10, D_0013E633 + 0xE9D) < 8.0f) {
-            func_L00_002512D8((unsigned char)m[0xB0]);
+            SetLevelTriggerDone((unsigned char)m[0xB0]);
             m[0x20] = 2;
         }
         break;
@@ -1040,12 +1040,12 @@ void DeserterUpdate(char *m) {
             if (*(int *)(h + 0x2FC) == 0) {
                 if (scale_ticks(30) < *(int *)(h + 0x300) || *(short *)(d + 0x56) != 0) {
                     func_L00_00267290(m, d + 0x20);
-                    func_L01_00279398(2.2f, m);
+                    PlaceMarkerAheadOfMoby(2.2f, m);
                 }
             }
         }
         if (*(short *)(d + 0x24) == 4) {
-            func_L00_00261848(9);
+            UnlockPlanet(9);
             memcard_Save(0, -1);
             DeleteMoby(m);
             return;
@@ -1111,8 +1111,8 @@ void DeserterUpdate(char *m) {
             *(float *)(d + 0x168) = f20 * 0.5f;
         }
         if (gCheats[0] != 0) *(float *)(d + 0xF0) = 2.75f;
-        func_L00_00263950(m, d + 0x80, 0, sx * D_0015EE64, sy * D_0015EE64);
-        func_L00_00263950(m, d + 0x100, 1, sx * D_0015EE64, sy * D_0015EE64);
+        EaseManipulatorOffsets(m, d + 0x80, 0, sx * D_0015EE64, sy * D_0015EE64);
+        EaseManipulatorOffsets(m, d + 0x100, 1, sx * D_0015EE64, sy * D_0015EE64);
     }
 }
 extern short D_L08_00162390;
@@ -1170,7 +1170,7 @@ extern char *D_L08_00160058 MACRO_ADDR;
  * state 5 and one state-0 case delete the moby). Then, when the byte at +0x53 is zero, updates the countdowns at
  * data + 0x174 and 0x178 and the vector at data + 0x160 from the moby's distance (8.0) and heading to the block
  * at D_0013E633 + 0xE9D. */
-void func_L08_00307A98(char *m) {
+void Moby1283Update(char *m) {
     char *d = *(char **)(m + 0x78);
     func_L08_003078B0(m);
     switch (*(unsigned char *)(m + 0x20)) {
@@ -1183,20 +1183,20 @@ void func_L08_00307A98(char *m) {
         break;
     case 1: {
         int v;
-        if (func_L00_00267290(m, d) != 0) func_L01_00279398(2.7f, m);
+        if (func_L00_00267290(m, d) != 0) PlaceMarkerAheadOfMoby(2.7f, m);
         v = *(short *)(d + 0x36);
         if (v == 2) {
             char *t = D_L08_0016016C + (*(int *)(d + 0x48) << 7);
-            func_L00_00286128(t + 0x30, t + 0x70);
+            PauseMenu_SeedSnapshot(t + 0x30, t + 0x70);
             m[0x20] = v;
             func_L08_002E2A10(D_L08_00160058 + (*(int *)(d + 0x50) << 8));
         }
         if (*(short *)(d + 4) == 3) {
-            func_L00_0029A7D0(1);
+            PlayMovieEntryIfIdle(1);
             m[0x20] = 5;
         }
         if (*(short *)(d + 4) == 4) {
-            func_L00_00211908();
+            Hero_OnKilled();
             *(short *)(d + 4) = -1;
         }
         break;
@@ -1204,8 +1204,8 @@ void func_L08_00307A98(char *m) {
     case 2:
         break;
     case 5:
-        func_L00_002512D8((unsigned char)m[0xB0]);
-        func_L00_002618D8(0x1B, 1);
+        SetLevelTriggerDone((unsigned char)m[0xB0]);
+        GiveItem(0x1B, 1);
         memcard_Save(0, -1);
     del:
         DeleteMoby(m);
@@ -1270,13 +1270,13 @@ void func_L08_00307A98(char *m) {
             *(float *)(d + 0x148) = f20 * 0.3f;
         }
         if (gCheats[0] != 0) *(float *)(d + 0xD0) = 2.75f;
-        func_L00_00263950(m, d + 0x60, 0, sx * D_0015EE64, sy * D_0015EE64);
-        func_L00_00263950(m, d + 0xE0, 1, sx * D_0015EE64, sy * D_0015EE64);
+        EaseManipulatorOffsets(m, d + 0x60, 0, sx * D_0015EE64, sy * D_0015EE64);
+        EaseManipulatorOffsets(m, d + 0xE0, 1, sx * D_0015EE64, sy * D_0015EE64);
     }
 }
 
 // Sets the vendor state or closes the active interaction.
-void func_L08_00307FF0(char *moby, int mode) {
+void Moby1283SetMode(char *moby, int mode) {
     char *data = *(char **)(moby + 0x78);
     moby[0x20] = 1;
     if (mode != 0) {
@@ -1295,7 +1295,7 @@ void func_L08_00307FF0(char *moby, int mode) {
     }
     return;
 close:
-    func_L00_00211908();
+    Hero_OnKilled();
 }
 #include "hero.h"
 typedef int u128_p __attribute__((mode(TI)));
@@ -1319,7 +1319,7 @@ extern void func_L00_00264DB8(int, int);
 extern int func_L00_00203F20(int a, int b);
 extern float func_001F9C78(void *a, void *b);
 /* Moby update for a trigger-volume controller; tracks best times and raises Help_Request. */
-void func_L08_00308A00(char *m) {
+void Moby1349Update(char *m) {
     VData *data = *(VData **)(m + 0x78);
     int elapsed;
     int time;
@@ -1415,7 +1415,7 @@ sample_volume:
 }
 extern void func_L00_00264870(int);
 /* per-frame update of a moby that fires a sound event when the game state allows */
-void func_L08_00309998(char *moby) {
+void Moby1553Update(char *moby) {
     int k;
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0:
@@ -1430,7 +1430,7 @@ void func_L08_00309998(char *moby) {
                     k = 0;
                     if (D_L08_0016D0E0.a == 1 || D_L08_0016D0E0.a == 4) k = 3;
                     else if (D_L08_0016D0E0.a == 2 || D_L08_0016D0E0.a == 5) k = 2;
-                    func_L00_00264870((int)D_L08_0016D0E0.objs[k]);
+                    SpawnMoby750Sparks((int)D_L08_0016D0E0.objs[k]);
                 }
             }
         }
@@ -1444,7 +1444,7 @@ extern void func_L08_00280BC8(float *, float *, int, float);
 extern float D_0015EE6C MACRO_ADDR;
 
 // Per-frame update: for each entry, builds a rotated vector from the moby's data and spawns an effect.
-void func_L08_0030A150(char *moby) {
+void Moby1641Update(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float a[4];
     float b[12];
@@ -1475,7 +1475,7 @@ extern int D_L08_001F8788[];
 extern int D_L08_001F87E8_30A278[] __asm__("D_L08_001F87E8");
 
 // Runs eight setup calls over parallel tables, offset by the argument.
-void func_L08_0030A278(int arg) {
+void Moby1649_DrawQuads8(int arg) {
     int i;
     for (i = 7; i >= 0; i--) {
         func_L08_00259040(D_L08_001F8820_30A278, D_L08_001F87A8[7 - i], D_L08_001F4F20_30A278[7 - i], (char *)D_L08_001F8808_30A278 + arg * 8);
@@ -1490,7 +1490,7 @@ extern int D_L08_001F4F08_30A350[] __asm__("D_L08_001F4F08");
 extern long D_L08_00162488_30A350[] __asm__("D_L08_00162488") MACRO_ADDR;
 
 /* Draws six quads from parallel tables, offset by the given index. */
-void func_L08_0030A350(int x) {
+void Moby1649_DrawQuads6(int x) {
     int i;
 
     for (i = 0; i < 6; i++) {
@@ -1507,7 +1507,7 @@ extern short D_L08_00162468;
 extern short D_L08_00162478;
 
 /* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
-void func_L08_0030A428(int x) {
+void Moby1649_DrawQuads2(int x) {
     int i;
     int *a = (int *)&D_L08_00162458;
     int *b = (int *)&D_L08_00162468;
@@ -1531,28 +1531,28 @@ extern int D_L08_00162444 MACRO_ADDR;
 extern int D_L08_00162480 MACRO_ADDR;
 
 // Draws three rows of HUD elements with their colours.
-void func_L08_0030A4F0(void) {
+void Moby1649Draw(void) {
     VU1_addGSregister(0x42, 0x8000000044L);
     VU1_addGSregister(8, 0);
     VU1_addGSregister(0x14, 0xFF9000000260L);
     VU1_addGSregister(0x47, 0x513F1);
-    func_001F7868();
+    Draw_BuildVu1Setup();
     VU1_addGSregister(6, GetEffectTex(0x3A));
     VU1_addGSregister(0x42, (long)*(int *)&D_L08_00162420 << 32 | 0x64);
-    func_L08_0030A278(0);
+    Moby1649_DrawQuads8(0);
     VU1_addGSregister(6, GetEffectTex(0x3B));
     VU1_addGSregister(0x42, (long)((D_L08_00162424 * *(unsigned char *)&D_L08_00162480) >> 8) << 32 | 0x62);
-    func_L08_0030A278(1);
+    Moby1649_DrawQuads8(1);
     VU1_addGSregister(0x42, (long)((D_L08_00162428 * *(unsigned char *)&D_L08_00162480) >> 8) << 32 | 0x68);
-    func_L08_0030A278(2);
+    Moby1649_DrawQuads8(2);
     VU1_addGSregister(6, GetEffectTex(0x3C));
     VU1_addGSregister(0x42, (long)*(int *)&D_L08_00162440 << 32 | 0x48);
-    func_L08_0030A350(0);
+    Moby1649_DrawQuads6(0);
     VU1_addGSregister(0x42, (long)D_L08_00162444 << 32 | 0x48);
-    func_L08_0030A350(1);
+    Moby1649_DrawQuads6(1);
     VU1_addGSregister(6, GetEffectTex(0x3D));
     VU1_addGSregister(0x42, (long)*(int *)&D_L08_00162450 << 32 | 0x48);
-    func_L08_0030A428(0);
+    Moby1649_DrawQuads2(0);
 }
 extern int func_L00_00200290(char *, float);
 extern void func_001F9BF0(void *, void *, void *);
@@ -1575,7 +1575,7 @@ extern short D_L08_00162454;
 extern char D_L08_00167640[];
 
 // UpdateMoby for a pulsing light effect: init on state 0, draw when close enough on state 1
-void func_L08_0030AC70(unsigned char *moby) {
+void Moby1649Update(unsigned char *moby) {
     int i;
     float v[4];
     float w[4];
@@ -1618,9 +1618,9 @@ void func_L08_0030AC70(unsigned char *moby) {
             FastVecSub(w, D_L08_00167640, w);
             d = FastVecLength(w);
             if (d <= 84.0f) {
-                func_L08_002F2760(0);
-                func_L08_002F2618(D_L08_001F8810, 0.52f, 0.62f, 0.06f, &D_L08_00162498[1]);
-                func_L08_002F2760(2);
+                AdvanceScrollOffsets(0);
+                AdvanceWavePhase(D_L08_001F8810, 0.52f, 0.62f, 0.06f, &D_L08_00162498[1]);
+                AdvanceScrollOffsets(2);
                 if (d < 20.0f) {
                     *(unsigned char *)&D_L08_00162480 = 0xFF;
                 } else if (d < 84.0f) {
@@ -1632,7 +1632,7 @@ void func_L08_0030AC70(unsigned char *moby) {
             AdvanceScrollEntry(0);
             AdvanceScrollEntry(0);
             AdvanceScrollEntry(1);
-            AddDrawCallback(func_L08_0030A4F0, moby);
+            AddDrawCallback(Moby1649Draw, moby);
         }
         break;
     }
@@ -1647,7 +1647,7 @@ extern void func_0020D678(void *);
 // Moby state machine: wait, check hit on first probe, then clean up and delete.
 void func_L08_0030D0C0(char *m) {
     int hit = 0;
-    char *r = func_L00_0025B478(m, 0x10000, 0);
+    char *r = MobyGetHitMessage(m, 0x10000, 0);
     switch (*(unsigned char *)(m + 0x20)) {
     case 0:
         m[0x20] = 1;
@@ -1658,9 +1658,9 @@ void func_L08_0030D0C0(char *m) {
         break;
     case 2:
         func_0022ED80(0, 0, (int)m);
-        func_L01_00279790(m);
+        SpawnBreakFxByDistance(m);
         SpawnMobyBurstFx(m, 0x736, 1, 0x737, 1, 1, 2);
-        func_L01_00279E10(m, 0x735);
+        SpawnMobyCopyingPlacement(m, 0x735);
         DeleteMoby(m);
         break;
     }

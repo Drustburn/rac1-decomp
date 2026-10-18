@@ -54,7 +54,7 @@ extern int D_0016100C MACRO_ADDR;
    uses them). Both outputs are 0 and the result -1 when size is over
    0x20000. */
 /* Returns int; the size is unsigned and D_0016100C MACRO_ADDR. */
-int func_001FDF10(unsigned int size, int *out1, int *out2) {
+int GetTailBufferPair(unsigned int size, int *out1, int *out2) {
     if (size > 0x20000) {
         *out1 = 0;
         *out2 = 0;
@@ -156,7 +156,7 @@ static inline s32 map_availability_FDF78(s32 level_index) {
 }
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/assembly/textbin/fun_001fd748.c, draw_level_selection_map. */
-void func_001FDF78(s32 left, s32 right, s32 top, s32 bottom) {
+void DrawLevelSelectMap(s32 left, s32 right, s32 top, s32 bottom) {
     f32 label_direction[4];
     s32 level_index;
     s32 availability;
@@ -358,7 +358,7 @@ void Help_Open(void) {
     idx = ((HelpState *)D_001997D0)->pad[6];
     text = D_0015F780[idx].text;
     FontSetWindow((void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100, 0x168, 0x10, 7);
-    func_001F75D0((void *)win, 0x80FFA888L, text, -1);
+    Font_PrintWindowAlt((void *)win, 0x80FFA888L, text, -1);
 
     screenY = D_0013E604;
     w = win[6];
@@ -562,7 +562,7 @@ void Help_Update(void) {
         } else if (HS.timer >= 4) {
             id = D_0015F780[HS.msg].unk_08;
             if (id != -1 && id == D_001517D0.unk54 - 0x7530 && D_001517D0.unk5A == 3) {
-                func_00216960();
+                Music_ContinueStreamIfReady();
             }
             HS.state = 5;
             HS.timer = 0;
@@ -732,7 +732,7 @@ void Help_Draw(void) {
             text = D_0015F780[((HelpState *)D_001997D0)->pad[6]].text;
             FontSetWindow((void *)win, 0xF0, 0x1E0, 0x2C, 0x1D4, 0x100,
                           ((HelpState *)D_001997D0)->pad[3], 0x10, 3);
-            func_001F75D0((void *)win, col, text, -1);
+            Font_PrintWindowAlt((void *)win, col, text, -1);
         }
         break;
     case 7:

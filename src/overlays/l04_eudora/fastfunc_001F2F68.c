@@ -292,7 +292,7 @@ extern float func_001FA748(float, float);
 extern char D_L04_00174070[];
 
 /* steps a moby's position out of collision and aims it */
-void func_L04_001F39B0(char *a, char *b, char *c, float f) {
+void StepMobyOutOfCollision(char *a, char *b, char *c, float f) {
     int i;
     float v[4];
     char *p = b + 0x10;
@@ -319,10 +319,10 @@ extern void func_L00_0028A5A8(void);
 extern void func_0022C870(void);
 extern void func_00234C98(int, long);
 extern int D_0015EF88 MACRO_ADDR;
-void func_L04_00231860(void) {
+void DrawEudoraSky(void) {
     SetupSkyGifPaging();
     if (D_0015EE84_m == 4) {
-        func_L00_0028AD68();
+        SkyShellsRotateLooped();
     } else {
         UpdateSkyShellsStatic();
     }

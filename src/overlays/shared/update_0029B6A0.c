@@ -11,7 +11,7 @@ extern int func_0020C468(int, int);
 extern void func_00203B18(char *arg0, int idx);
 
 // load a table of 16 offsets relative to the base pointer and register each entry
-void func_L00_0029B6A0(void) {
+void RelocatePackedObjects(void) {
     int i;
     int *p;
     char *base;
@@ -65,7 +65,7 @@ extern u8 D_0013D5C8[];
 
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then every other available item (D_0013D4C0 set, h8 non-zero) not already listed.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/00295100.c, FUN_L00_0029a400. */
-void func_L00_0029B770(s32 skip_unflagged) {
+void VendorBuildItemList(s32 skip_unflagged) {
     s32 count, i, j, value, item, k;
 
     count = 0;
@@ -267,20 +267,20 @@ void VendorOpenMenu(VendorMoby_pv *m) {
     func_0012E528(0x1D);
     music_Pause(0);
     func_0012DDC0();
-    func_L00_0029B770(VP.mode != 0);
+    VendorBuildItemList(VP.mode != 0);
     half = VP.count;
     sel = half / 2;
     if (half < 3) sel = 1;
     VP.cursor = half / 2;
     VP.scroll = (sel - half / 2) * 0x28;
-    func_L00_0023B890();
-    VP.title_text = queue_animation_update(0x12, 0x754E, func_L00_0023A658, func_L00_0023A690,
-                                               func_L00_0023A788, &gBolts, 0x98967F);
+    Hud_ResetState();
+    VP.title_text = queue_animation_update(0x12, 0x754E, HudBoltsInit, HudBoltsUpdate,
+                                               HudBoltsDraw, &gBolts, 0x98967F);
     if (VP.entries[VP.cursor].selected == 1) {
         s32 item = VP.entries[VP.cursor].item;
 
-        VP.item_text = queue_animation_update(0x30, item + 0xEA60, func_L00_0023B0F8,
-                                                  Hud_UpdateCounter, func_L00_0023B140,
+        VP.item_text = queue_animation_update(0x30, item + 0xEA60, HudTileInit,
+                                                  Hud_UpdateCounter, HudWeaponDraw,
                                                   &D_0013D530[item], D_L00_001C43B0[item].hE);
     }
     D_L00_0015F6BC = 1;
@@ -314,9 +314,9 @@ void VendorOpenMenu(VendorMoby_pv *m) {
         func_001F9EC0(&VP.eye, &D_L00_00161120, VP.moby + 0xC0);
         FastVecAdd(&VP.eye, &VP.eye, VP.moby + 0x10);
         VP.look.f[2] = FastAddRots(*(f32 *)(VP.moby + 0x48), 3.1415927f);
-        func_L00_002EBF50(&VP.eye, &VP.look, 1, 0, 0);
-        func_L00_002EBE88(&VP.eye);
-        func_L00_002EBEE0(&VP.look);
+        CameraScript(&VP.eye, &VP.look, 1, 0, 0);
+        CameraScript_SetPosition(&VP.eye);
+        CameraScript_SetLookAt(&VP.look);
     }
     v = &D_L00_00180350;
     func_001F9EC0(v, &D_L00_00161190, VP.moby + 0xC0);
@@ -366,15 +366,15 @@ extern char D_L00_00161130;
 
 /* Leaves the vendor screen: releases two handles, resets state, repositions the hero and restores the game state.
    Adapted from Lombyte (MIT) for PAL: src/overlays/shared/unclassified_00295100.c, FUN_L00_0029ab70. */
-void func_L00_0029BED8(int a) {
+void VendorExit(int a) {
     Vec4A v;
     Vec4A r;
     char *g = (char *)D_L00_001CA7C0;
-    if (*(int *)(g + 0x54) != -1) func_001FFDA0(*(int *)(g + 0x54), 0);
-    if (*(int *)(g + 0x50) != -1) func_001FFDA0(*(int *)(g + 0x50), 0);
+    if (*(int *)(g + 0x54) != -1) Hud_SetBarValueById(*(int *)(g + 0x54), 0);
+    if (*(int *)(g + 0x50) != -1) Hud_SetBarValueById(*(int *)(g + 0x50), 0);
     *(int *)(g + 0x54) = -1;
     *(int *)(g + 0x50) = -1;
-    func_001FFFA0();
+    TickDownCounter();
     D_L00_0015F6BC = 1;
     *(int *)&D_L00_0015F6A8 = 0;
     HeroEnterMoveState(0, 1);
@@ -387,10 +387,10 @@ void func_L00_0029BED8(int a) {
         r.y = 0.0f;
         r.z = FastAddRots(*(float *)(*(char **)(g + 0x1C) + 0x48), 3.1415927f);
         if (a == 0) {
-            func_L00_00217718(&v, &r, 0, 0);
-            func_L00_002EC0C8(2);
+            Hero_ResetToPosition(&v, &r, 0, 0);
+            CameraScript2(2);
         } else {
-            func_L00_00217718(&v, &r, 0, 1);
+            Hero_ResetToPosition(&v, &r, 0, 1);
         }
     }
     {
@@ -1312,7 +1312,7 @@ extern void func_00216960(void);
 extern void func_00122598(s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/00295100.c, FUN_L00_0029ad08. */
-void func_L00_0029C070(void) {
+void VendorStartWeaponDemo(void) {
     Vendor_29a6b0 *g;
     VendorMoby_29a6b0 *moby;
     s32 index, item, offset;
@@ -1321,7 +1321,7 @@ void func_L00_0029C070(void) {
     s32 *selected;
     s16 mode;
 
-    func_L00_002EC0C8(2);
+    CameraScript2(2);
     if ((u16)(D_001517D0.mode - 6) >= 2)
         D_001517D0.mode = 5;
     g = &D_L00_001CA7C0_9C070;
@@ -1352,11 +1352,11 @@ void func_L00_0029C070(void) {
     D_L00_0015F4FC = 0;
     (*(s32 *)&D_L00_0015F500) = 0;
     if (D_0013F450.items[0].item_id != 0 && index != D_0013F450.items[0].item_id)
-        func_L00_00210340(0, 0);
+        Hero_DestroySlotMobys(0, 0);
     D_0013F450.pending_item[0] = D_L00_001CA7C0_9C070.f48;
     if (D_0013F450.pending_item[0] == 0x18)
         D_0013F450.pending_item[0] = 0;
-    func_00205270(D_L00_00179BC0_9C070[D_L00_001CA7C0_9C070.f48].id, -1);
+    LoadMobyClassResources(D_L00_00179BC0_9C070[D_L00_001CA7C0_9C070.f48].id, -1);
     ReadLevelPackedData(item);
     state = &D_001517D0;
     *(s32 *)&state->pad[0x1C] = 0x2734;
@@ -1367,12 +1367,12 @@ void func_L00_0029C070(void) {
         func_00122598(0);
         mode = D_001517D0.mode;
     }
-    func_00216960();
+    Music_ContinueStreamIfReady();
 }
 extern short D_L00_001611C0;
 
 /* resets state and snaps the camera for a new scene */
-void func_L00_0029C2E8(void) {
+void Vendor_ResetScene(void) {
     float v[8];
     char *g;
     char *q;
@@ -1387,8 +1387,8 @@ void func_L00_0029C2E8(void) {
     *(int *)&v[4] = 0;
     *(int *)&v[5] = 0;
     v[6] = FastAddRots(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
-    func_L00_00217718(v, &v[4], 0, 1);
-    func_001FFFA0();
+    Hero_ResetToPosition(v, &v[4], 0, 1);
+    TickDownCounter();
     q = (char *)D_0014171B + 0x100B5;
     if (!(*(unsigned short *)(q + 0x5A) >= 6 && *(unsigned short *)(q + 0x5A) <= 7)) *(short *)(q + 0x5A) = 5;
     func_0012E558(0x1D);
@@ -1475,7 +1475,7 @@ extern void func_0020E340(void *, int, int, int, int);
 #define TB (*(int *)((char *)GG - (-(GG->idx * 0x14)) + 0xD4))
 
 // builds the three UI objects for the current entry
-void func_L00_0029C9E8(void) {
+void Vendor_InitItemDisplay(void) {
     float v[4];
     A *q;
     B *r;
@@ -1490,7 +1490,7 @@ void func_L00_0029C9E8(void) {
     if (k == 0x18) {
         cls = 0x1DF;
     } else {
-        func_00205270(cls, -1);
+        LoadMobyClassResources(cls, -1);
     }
     g1 = (S *)D_L00_001CA7C0;
 #undef GG
@@ -1720,13 +1720,13 @@ void VendorBuyDialogUpdate(void) {
                                 D_0013D530[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item] = D_L00_001C43B0[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item].hE;
                             }
                             n = D_L00_00161F30;
-                            n -= func_L00_002346C0(D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item, n);
+                            n -= AddAmmo(D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item, n);
                             price = (D_L00_001CA7C0_9CDE0.f40 ? D_L00_001C43B0[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item].hA
                                                               : D_L00_001C43B0[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item].h8) * n;
                             ((int *)(D_0013DE6E + 0xA))[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item] += n;
                             func_L00_0029C840(3);
                             gBolts = gBolts - price;
-                            func_L00_0029B770(D_L00_001CA7C0_9CDE0.f40 != 0);
+                            VendorBuildItemList(D_L00_001CA7C0_9CDE0.f40 != 0);
                             set_scrolling_status_message(msg_string(0x4F5F));
                             func_0022ED80(7, 0, D_L00_001CA7C0_9CDE0.cam);
                         } else {
@@ -1741,25 +1741,25 @@ void VendorBuyDialogUpdate(void) {
                                           : D_L00_001C43B0[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item].f0;
                     if (gBolts >= price) {
                         func_L00_0029C840(2);
-                        func_L00_002618D8(D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item, 1);
+                        GiveItem(D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item, 1);
                         D_L00_001CA7C0_9CDE0.f48 = D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item;
                         if (D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item == 0x18) {
                             D_0013E633[0x2E12] = 1;
                         }
                         gBolts = gBolts - price;
-                        func_L00_0029B770(D_L00_001CA7C0_9CDE0.f40 != 0);
-                        if (D_L00_001CA7C0_9CDE0.f50 != -1) func_001FFDA0(D_L00_001CA7C0_9CDE0.f50, 0);
+                        VendorBuildItemList(D_L00_001CA7C0_9CDE0.f40 != 0);
+                        if (D_L00_001CA7C0_9CDE0.f50 != -1) Hud_SetBarValueById(D_L00_001CA7C0_9CDE0.f50, 0);
                         D_L00_001CA7C0_9CDE0.f50 = -1;
                         if (D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].sel == 1) {
                             D_L00_001CA7C0_9CDE0.f50 = queue_animation_update(0x30, D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item + 0xEA60,
-                                                                     func_L00_0023B0F8, Hud_UpdateCounter, func_L00_0023B140,
+                                                                     HudTileInit, Hud_UpdateCounter, HudWeaponDraw,
                                                                      &D_0013D530[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item],
                                                                      D_L00_001C43B0[D_L00_001CA7C0_9CDE0.e[D_L00_001CA7C0_9CDE0.idx].item].hE);
                         } else {
                             if (D_L00_001CA7C0_9CDE0.count - 1 < D_L00_001CA7C0_9CDE0.idx) {
                                 D_L00_001CA7C0_9CDE0.idx = D_L00_001CA7C0_9CDE0.count - 1;
                             }
-                            func_L00_0029C9E8();
+                            Vendor_InitItemDisplay();
                         }
                         set_scrolling_status_message(msg_string(0x4F5F));
                         func_0022ED80(7, 0, D_L00_001CA7C0_9CDE0.cam);

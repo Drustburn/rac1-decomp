@@ -16,9 +16,9 @@ int videoDecCreate(char *dec, unsigned char *data, int size, void *input, void *
     func_0012B918(dec, data, size);
     func_0012BC50(dec, 0, (int)mpegError, 0);
     func_0012BC50(dec, 1, (int)mpegNodata, 0);
-    func_0012BC50(dec, 2, (int)func_0023E4B0, 0);
+    func_0012BC50(dec, 2, (int)Mpeg_StopDma, 0);
     func_0012BC50(dec, 3, (int)mpegRestartVideoDMA, 0);
-    func_0012BC50(dec, 5, (int)func_0023E510, 0);
+    func_0012BC50(dec, 5, (int)Mpeg_GetTimestamp, 0);
     movie_reset(dec);
     viBufCreate(dec + 0x48, input, tags, count, stamps, stampCount);
     return 1;
@@ -226,7 +226,7 @@ extern int func_0023D540(char *);   /* viBufStopDMA */
 
 /* No recovered name. viBufStopDMA on the
  * ViBuf at offset 0xD9090 of the movie state. Returns 1. */
-int func_0023E4B0(void) {
+int Mpeg_StopDma(void) {
     viBufStopDMA(D_0016130C + 0xD9090);
     return 1;
 }
@@ -244,7 +244,7 @@ extern void func_0023DCF0(char *, TimeStamp *);   /* viBufGetTs */
 /* No recovered name. Reads the
  * timestamp of the ViBuf at offset 0xD9090 of the movie state with viBufGetTs and stores it
  * at out+8. Returns 1. */
-int func_0023E510(int unused, char *out) {
+int Mpeg_GetTimestamp(int unused, char *out) {
     TimeStamp ts;
     viBufGetTs(D_0016130C + 0xD9090, &ts);
     *(long *)(out + 8) = ts.first;

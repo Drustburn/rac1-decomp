@@ -16,7 +16,7 @@ void SpawnParticle(void *pos, void *pos2) {
     if (p) {
         float *f = (float *)(p + 0x20);
         qcopy(p + 0x10, pos);
-        *(int *)(p + 4) = func_L00_0025D038(1.0f, 1.0f, 1.0f, 0.6f);
+        *(int *)(p + 4) = PackColorRGBA(1.0f, 1.0f, 1.0f, 0.6f);
         p[9] = func_001FA898_r(4.0f) + 0x40;
         p[1] = 0;
         p[3] = 0x48;

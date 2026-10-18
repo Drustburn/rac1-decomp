@@ -13,17 +13,17 @@ extern void func_L00_002E6CE0(void *);
 extern void func_L00_002EB060(void *);
 extern void func_L00_002E72E8(void *);
 /* Update for the camera moby. */
-void func_L00_002EB0D8(char *m) {
+void CameraType0Update(char *m) {
     char *p = *(char **)(m + 0x70) + 0x1D0;
     *(float *)&D_L00_0015F044 = ((float *)&D_L00_00161E80)[D_0015EED0[5]];
-    func_L00_002E5B68(m);
+    CamAttach_ShiftByHeroDelta(m);
     func_L00_002E74B0(m);
     func_001E9768(m);
-    func_L00_002E6CE0(m);
+    FollowCameraUpdate(m);
     func_001E9768(m, p);
-    func_L00_002EB060(m);
+    FollowCameraBuildView(m);
     func_001E9768(m);
-    func_L00_002E72E8(m);
+    CamObject_Reset(m);
 }
 extern char D_0013E633[] NOT_SDA;
 extern int D_0015EEB3 MACRO_ADDR;
@@ -59,7 +59,7 @@ extern char D_0013F450[];
 extern void *D_L00_00166F04;
 
 /* builds the camera-relative matrix rows of a moby from the camera state */
-void func_L00_002EB280(char *m) {
+void Camera_BuildFollowMatrix(char *m) {
     float a[4];
     float b[4];
     char *g = D_0013F450;
@@ -94,7 +94,7 @@ void func_L00_002EB3A0(p)
 {
     int *q = *(int **)(p + 0x70);
     q[0] = 0; q[2] = 0; q[1] = 0; q[3] = 0; q[4] = 0; q[5] = 0; q[6] = 0;
-    func_L00_002EB280(p);
+    Camera_BuildFollowMatrix(p);
     *(short *)(p + 0x7E) = 0;
 }
 typedef struct { float f[4]; } __attribute__((aligned(16))) V;
@@ -126,7 +126,7 @@ float func_001FA790(float, float);
 int func_L00_001F10E0(void *, int, void *, float);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002e9010.c, FUN_L00_002e9f38. */
-void func_L00_002EB3E8(u8 *o) {
+void CameraType4Update(u8 *o) {
     V up;
     V side;
     V d;
@@ -138,8 +138,8 @@ void func_L00_002EB3E8(u8 *o) {
     if (D_L00_00166D80_EB3E8.s270 == 0 && D_0013F450_EB3E8.b20A5 == 0) D_0013F450_EB3E8.b20A5 = 1;
     t = -D_0013CA40.f108;
     if (t == 0.0f) t = -D_0013CA40.f100;
-    if (t == 0.0f) t = func_001FA888((D_0013CA40.i1A0 >> 15) & 1);
-    if (t == 0.0f) t = -func_001FA888((D_0013CA40.i1A0 >> 13) & 1);
+    if (t == 0.0f) t = IntToFloat((D_0013CA40.i1A0 >> 15) & 1);
+    if (t == 0.0f) t = -IntToFloat((D_0013CA40.i1A0 >> 13) & 1);
     r = FastAbsF(st->a);
     k = (*(float *)&D_L00_00161E90) + ((*(float *)&D_L00_00161E94) - (*(float *)&D_L00_00161E90)) * r;
     st->a = r = func_001EC120_EB3E8(st->a, t, (*(float *)&D_L00_00161E98), (*(float *)&D_L00_00161E9C), (*(float *)&D_L00_00161EA0), &st->va);
@@ -148,8 +148,8 @@ void func_L00_002EB3E8(u8 *o) {
         build_look_at_matrix(o, o, &up, D_0013F450_EB3E8.f14C);
     t = -D_0013CA40.f10C;
     if (t == 0.0f) t = -D_0013CA40.f104;
-    if (t == 0.0f) t = func_001FA888((D_0013CA40.i1A0 >> 12) & 1);
-    if (t == 0.0f) t = -func_001FA888((D_0013CA40.i1A0 >> 14) & 1);
+    if (t == 0.0f) t = IntToFloat((D_0013CA40.i1A0 >> 12) & 1);
+    if (t == 0.0f) t = -IntToFloat((D_0013CA40.i1A0 >> 14) & 1);
     if (D_L00_00166D80_EB3E8.s270 != 0 && D_0013F450_EB3E8.i2090 == 2) t = 0.0f;
     if (D_0015EEDC == 0) t = -t;
     r = FastAbsF(st->b);
@@ -354,7 +354,7 @@ extern char *D_L00_00166F00;
 extern char *func_L00_001EB578(int);
 
 /* Copies a vector into the current object's slot, switching to state 5 first. */
-void func_L00_002EBE88(char *src) {
+void CameraScript_SetPosition(char *src) {
     char *g = D_L00_00166F00;
     char *p;
     if (*(short *)(g + 0x86) != 5)
@@ -364,7 +364,7 @@ void func_L00_002EBE88(char *src) {
     qcopy(*(char **)(p + 0x70) + 0x80, src);
 }
 /* Copies the vector at src into the camera record's state block. */
-void func_L00_002EBEE0(char *src) {
+void CameraScript_SetLookAt(char *src) {
     char *g = D_L00_00166F00;
     char *p;
     if (*(short *)(g + 0x86) != 5)
@@ -381,7 +381,7 @@ u8 *func_L00_001EB578_2ebf50(s32) __asm__("func_L00_001EB578");
 void func_L00_001EB890_2ebf50(u8 *) __asm__("func_L00_001EB890");
 void func_L00_001ED9B0_2ebf50(void *, V_2ebf50 *, V_2ebf50 *) __asm__("func_L00_001ED9B0");
 /* Camera script setup: fills the type-5 moby from two positions, a mode (2 or 3) and two values. Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay_vendor_002e9010.c, FUN_L00_002eaaa0. The helper at +0xFC takes a third argument (the camera vector). */
-void func_L00_002EBF50(V_2ebf50 *pa, V_2ebf50 *pb, s32 mode, s32 w, s32 x) {
+void CameraScript(V_2ebf50 *pa, V_2ebf50 *pb, s32 mode, s32 w, s32 x) {
     u8 *m = func_L00_001EB578_2ebf50(5);
     V_2ebf50 a, b, c, d;
     u8 *n;
@@ -422,7 +422,7 @@ extern void func_001FA480(void *, void *);
 extern char D_0013E633[];
 
 /* camera script command 2: sets the camera object's mode from the command number */
-void func_L00_002EC0C8(int mode) {
+void CameraScript2(int mode) {
     char *g = (char *)&D_L00_00166D80;
     char *obj = *(char **)(g + 0x180);
     float a[4];
@@ -496,7 +496,7 @@ extern float D_L00_00166ED8;
 #define F(p, o) (*(float *)((char *)(p) + (o)))
 
 // advances a camera-like object toward its target state and rebuilds its matrix
-void func_L00_002EC2D0(void *arg) {
+void CameraScript_Update(void *arg) {
     char *m = arg;
     float mtx[16];
     char *d = *(char **)(m + 0x70);
@@ -510,17 +510,17 @@ void func_L00_002EC2D0(void *arg) {
     } else if (t == 2) {
         float u;
         func_001F9908((int *)c);
-        u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / func_001FA888(*(int *)(c + 4));
+        u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / IntToFloat(*(int *)(c + 4));
         LerpVectorCosine(m + 0x30, m + 0x30, b, u);
-        func_L00_00259088((float *)(m + 0x40), (float *)(m + 0x40), (float *)(d + 0x90), u);
+        CosineEaseAngleVec((float *)(m + 0x40), (float *)(m + 0x40), (float *)(d + 0x90), u);
     } else if (t == 3) {
         if (func_001F9908((int *)c) != 0) {
             qcopy(m + 0x30, b);
             qcopy(m + 0x40, d + 0x90);
         } else {
             float t, x, y, diff, z;
-            t = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / func_001FA888(*(int *)(c + 4));
-            func_L00_001ED9B0(d + 0xE8, b, D_0013E633 + 0xE9D);
+            t = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / IntToFloat(*(int *)(c + 4));
+            Camera_UpdatePolarFromPos(d + 0xE8, b, D_0013E633 + 0xE9D);
             x = FastSubRots(F(c, 8), F(c, 0x1C));
             y = FastSubRots(F(b, 0x18), D_L00_00166ED8);
             if ((x > 0.34906584f && y < -0.34906584f) || (x < -0.34906584f && y > 0.34906584f)) {
@@ -533,13 +533,13 @@ void func_L00_002EC2D0(void *arg) {
                 }
                 F(c, 0x1C) += CosineInterpolate(0, diff, t);
             } else {
-                F(c, 0x1C) = func_L00_00258F28(F(c, 0x1C), F(c, 8), t);
+                F(c, 0x1C) = CosineEaseAngle(F(c, 0x1C), F(c, 8), t);
             }
-            F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) * func_L00_00258E58(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
-            F(c, 0x20) = func_L00_00258F28(F(c, 0x20), F(c, 0xC), t);
+            F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) * CubicInterpolate(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
+            F(c, 0x20) = CosineEaseAngle(F(c, 0x20), F(c, 0xC), t);
             LerpVectorCosine(c + 0x30, c + 0x30, D_0013E633 + 0xE9D, t);
-            func_L00_001ED900(m + 0x30, c + 0x1C, c + 0x30);
-            func_L00_00259088((float *)(m + 0x40), (float *)(m + 0x40), (float *)(b + 0x10), t);
+            Camera_Polar3dToPos(m + 0x30, c + 0x1C, c + 0x30);
+            CosineEaseAngleVec((float *)(m + 0x40), (float *)(m + 0x40), (float *)(b + 0x10), t);
         }
     } else {
         if (*(short *)(d + 0x1C) == 1) {
@@ -548,9 +548,9 @@ void func_L00_002EC2D0(void *arg) {
             F(m, 0x38) = Cam_InterpValues(d + 8, F(m, 0x38), F(b, 8), F(d, 0x10), F(d, 0x14), F(d, 0x18));
         }
         if (*(short *)(a + 0x2C) == 1) {
-            F(m, 0x40) = func_L00_001EB6A8(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
-            F(m, 0x44) = func_L00_001EB6A8(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24), F(a, 0x28));
-            F(m, 0x48) = func_L00_001EB6A8(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+            F(m, 0x40) = Camera_SmoothAngle(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+            F(m, 0x44) = Camera_SmoothAngle(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+            F(m, 0x48) = Camera_SmoothAngle(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24), F(a, 0x28));
         }
     }
     func_001FA218(mtx, m + 0x40);
@@ -559,9 +559,9 @@ void func_L00_002EC2D0(void *arg) {
 extern void func_L00_002EC2D0(void *);
 extern void func_L00_001EDA28(void *, float);
 /* Update wrapper: runs the base camera update, then a follow-up call if a flag is set. */
-void func_L00_002EC6C8(char *a) {
+void CameraType5Update(char *a) {
     char *p = *(char **)(a + 0x70) + 0xE0;
-    func_L00_002EC2D0(a);
+    CameraScript_Update(a);
     if (*(int *)(p + 0x40) != 0) {
         a[0x89] = 0;
         MoveCameraToward(a + 0x30, 0.5f);
@@ -569,11 +569,11 @@ void func_L00_002EC6C8(char *a) {
 }
 extern float func_001FA748(float, float);
 /* Orients the moby from its position and the stored target. */
-void func_L00_002EC728(void *arg) {
+void Camera_OrientFromTarget(void *arg) {
     char *a = arg;
     float m[16];
     char *p = *(char **)(a + 0x70) + 0xB0;
-    func_L00_001ED900(a + 0x30, a + 0x50, p);
+    Camera_Polar3dToPos(a + 0x30, a + 0x50, p);
     *(float *)(a + 0x50) = FastAddRots(*(float *)(a + 0x50), *(float *)(p + 0x18));
     *(int *)(a + 0x40) = 0;
     *(float *)(a + 0x44) = FastAddRots(*(float *)(a + 0x54), *(float *)(a + 0x5C));
@@ -588,21 +588,21 @@ extern void func_L00_001EB430(void *);
 extern void func_L00_001FF200(void *);
 extern void func_L00_002EC728(void *);
 /* Sets up a camera moby from the vectors c and b and the value f. */
-void func_L00_002EC7D0(char *a, void *b, void *c, float f) {
+void Camera_SetTargetAndOffset(char *a, void *b, void *c, float f) {
     char *p = *(char **)(a + 0x70);
     char *q = p + 0xB0;
     qcopy(q, c);
     qcopy(p + 0x80, c);
     *(float *)(q + 0x18) = f;
-    func_L00_001EB448(p + 0x14, b, f);
-    func_L00_001EB448(a + 0x50, b, 0.0f);
-    func_L00_001EB430(p);
-    func_L00_001FF200(p + 0x90);
-    func_L00_002EC728(a);
+    CopyRecordAddRot(p + 0x14, b, f);
+    CopyRecordAddRot(a + 0x50, b, 0.0f);
+    ClearFiveWords(p);
+    Vec_ZeroXYZ(p + 0x90);
+    Camera_OrientFromTarget(a);
 }
 /* From Lombyte (MIT), FUN_L00_002eb3b0 (PR #66), adapted to PAL. */
 
-void func_L00_002EC860(void *arg) {
+void Camera_ResetTuning(void *arg) {
     char *p = arg;
     char *m;
     *(int *)(*(char **)(p + 0x70) + 0xF0) = 0;
@@ -622,24 +622,24 @@ void func_L00_002EC860(void *arg) {
     *(float *)(m + 0x30) = 0.07f;
     *(float *)(m + 0x34) = 1.0f;
     *(float *)(m + 0x38) = 0.07f;
-    func_L00_001EB430(m + 0x50);
-    func_L00_001EB430(m);
-    func_L00_001FF200(m + 0x90);
-    func_L00_002EC728(p);
+    ClearFiveWords(m + 0x50);
+    ClearFiveWords(m);
+    Vec_ZeroXYZ(m + 0x90);
+    Camera_OrientFromTarget(p);
     *(short *)(p + 0x7E) = 0;
 }
 /* smooths camera values toward targets and rebuilds the camera matrix */
-void func_L00_002EC930(char *m) {
+void Camera_SmoothToTargets(char *m) {
     char *p = *(char **)(m + 0x70);
     char *q = p + 0xB0;
     float mat[16];
     float t;
     t = FastAddRots(*(float *)(q + 0x18), *(float *)(p + 0x14));
-    *(float *)(m + 0x50) = func_L00_001EB6A8(p, *(float *)(m + 0x50), t, *(float *)(p + 0x28), *(float *)(p + 0x3C), *(float *)(p + 0x50));
-    *(float *)(m + 0x54) = func_L00_001EB6A8(p + 4, *(float *)(m + 0x54), *(float *)(p + 0x18), *(float *)(p + 0x2C), *(float *)(p + 0x40), *(float *)(p + 0x54));
+    *(float *)(m + 0x50) = Camera_SmoothAngle(p, *(float *)(m + 0x50), t, *(float *)(p + 0x28), *(float *)(p + 0x3C), *(float *)(p + 0x50));
+    *(float *)(m + 0x54) = Camera_SmoothAngle(p + 4, *(float *)(m + 0x54), *(float *)(p + 0x18), *(float *)(p + 0x2C), *(float *)(p + 0x40), *(float *)(p + 0x54));
     *(float *)(m + 0x58) = Cam_InterpValues(p + 8, *(float *)(m + 0x58), *(float *)(p + 0x1C), *(float *)(p + 0x30), *(float *)(p + 0x44), *(float *)(p + 0x58));
-    *(float *)(m + 0x5C) = func_L00_001EB6A8(p + 0xC, *(float *)(m + 0x5C), *(float *)(p + 0x20), *(float *)(p + 0x34), *(float *)(p + 0x48), *(float *)(p + 0x5C));
-    *(float *)(m + 0x60) = func_L00_001EB6A8(p + 0x10, *(float *)(m + 0x60), *(float *)(p + 0x24), *(float *)(p + 0x38), *(float *)(p + 0x4C), *(float *)(p + 0x60));
+    *(float *)(m + 0x5C) = Camera_SmoothAngle(p + 0xC, *(float *)(m + 0x5C), *(float *)(p + 0x20), *(float *)(p + 0x34), *(float *)(p + 0x48), *(float *)(p + 0x5C));
+    *(float *)(m + 0x60) = Camera_SmoothAngle(p + 0x10, *(float *)(m + 0x60), *(float *)(p + 0x24), *(float *)(p + 0x38), *(float *)(p + 0x4C), *(float *)(p + 0x60));
     if (*(int *)(p + 0x9C) == 0) {
         *(float *)(p + 0xB0) = Cam_InterpValues(p + 0x90, *(float *)(p + 0xB0), *(float *)(p + 0x80), *(float *)(p + 0xA0), *(float *)(p + 0xA4), *(float *)(p + 0xA8));
         *(float *)(q + 4) = Cam_InterpValues(p + 0x94, *(float *)(q + 4), *(float *)(p + 0x84), *(float *)(p + 0xA0), *(float *)(p + 0xA4), *(float *)(p + 0xA8));
@@ -647,7 +647,7 @@ void func_L00_002EC930(char *m) {
     } else {
         qcopy(q, p + 0x80);
     }
-    func_L00_001ED900(m + 0x30, m + 0x50, q);
+    Camera_Polar3dToPos(m + 0x30, m + 0x50, q);
     *(float *)(m + 0x40) = *(float *)(p + 0xAC);
     *(float *)(m + 0x44) = FastAddRots(*(float *)(m + 0x54), *(float *)(m + 0x5C));
     *(float *)(m + 0x48) = FastAddRots(3.1415927f, *(float *)(m + 0x50));
@@ -667,7 +667,7 @@ extern char D_L00_00166D80_c[] __asm__("D_L00_00166D80") NOT_SDA;
 
 // steps a follow-camera object toward a target moby, easing its angle and position or snapping to a goal
 // Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay_vendor_002e9010.c, FUN_L00_002eb648.
-int func_L00_002ECAF8(char *a, char *t) {
+int Camera_PlaceBehindMoby(char *a, char *t) {
     u128 v[1];
     u128 w[1];
     char *m;
@@ -690,11 +690,11 @@ int func_L00_002ECAF8(char *a, char *t) {
     FastVecAdd(w, t + 0x10, v);
     pw = w;
     if (*(int *)(n + 0x10) == -1) {
-        func_L00_001EB448(c, a + 0x50, 0.0f);
+        CopyRecordAddRot(c, a + 0x50, 0.0f);
         c[2] = 6.0f;
         c[1] = c[3];
         c[3] = 0.0f;
-        func_L00_002EC7D0(a, c, w, 0.0f);
+        Camera_SetTargetAndOffset(a, c, w, 0.0f);
     }
     if (*(int *)(n + 0x10) > 0) goto pos;
     *(float *)(m + 0xAC) = FastAddRots(*(float *)(m + 0xAC), *(float *)(n + 0x18));
@@ -741,30 +741,30 @@ extern char D_L00_001E7B28[];
 extern char D_L00_001E7B40[];
 
 // initialises a moby of type 6 from the given one
-char *func_L00_002ECDE0(char *a) {
+char *Camera_ActivateOnMoby(char *a) {
     char *m = FindCameraById(6);
     char *p;
     char *q;
     D_L00_00166FF0[0] = 0;
     SwitchCamera(m);
-    func_L00_002ECAF8(m, a);
+    Camera_PlaceBehindMoby(m, a);
     p = *(char **)(m + 0x70);
     qcopy(p + 0xB0, p + 0x80);
     q = p + 0x14;
-    func_L00_001EB448(q, D_L00_001E7B10, 0.0f);
-    func_L00_001EB448(m + 0x50, q, 0.0f);
-    func_L00_002EC860(m);
+    CopyRecordAddRot(q, D_L00_001E7B10, 0.0f);
+    CopyRecordAddRot(m + 0x50, q, 0.0f);
+    Camera_ResetTuning(m);
     *(int *)(p + 0x9C) = 1;
-    func_L00_001EB448(p + 0x28, D_L00_001E7B28, 0.0f);
-    func_L00_001EB448(p + 0x3C, D_L00_001E7B40, 0.0f);
-    func_L00_001EB430(p + 0x50);
+    CopyRecordAddRot(p + 0x28, D_L00_001E7B28, 0.0f);
+    CopyRecordAddRot(p + 0x3C, D_L00_001E7B40, 0.0f);
+    ClearFiveWords(p + 0x50);
     return m;
 }
 extern char D_0013E633[];
 extern float func_001F9D10(void *, void *);
 
 /* Sets the moby's state to 2 (and arms the camera-side fields) when the target is nearly in front and close, else to 4. */
-void func_L00_002ECEC8(char *m) {
+void Camera_ChooseFollowState(char *m) {
     char *g = D_0013E633 + 0xE1D;
     char *s = (char *)&D_L00_00166D80;
     char *t = *(char **)(g + 0x2080);
@@ -782,7 +782,7 @@ void func_L00_002ECEC8(char *m) {
 }
 extern char D_0013F450[];
 /* Camera setup from the global block at D_0013F450+0x80. */
-void func_L00_002ECFB0(void *arg) {
+void CameraType6Activate(void *arg) {
     char *a = arg;
     char *g = D_0013F450 + 0x80;
     char *p0 = *(char **)(a + 0x70);
@@ -793,10 +793,10 @@ void func_L00_002ECFB0(void *arg) {
     qcopy(p0 + 0xC0, g + 0x10);
     p = *(char **)(a + 0x70);
     qcopy(p + 0x80, q);
-    func_L00_001EB430(p + 0x14);
+    ClearFiveWords(p + 0x14);
     *(float *)(p + 0x1C) = 4.639999866485596f;
-    func_L00_001EB448(a + 0x50, p + 0x14, 0.0f);
-    func_L00_002EC860(a);
+    CopyRecordAddRot(a + 0x50, p + 0x14, 0.0f);
+    Camera_ResetTuning(a);
 }
 extern int D_0015EE84 MACRO_ADDR;
 extern int func_001F9850(int);
@@ -804,7 +804,7 @@ extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 
 /* Sets up the camera activation moby: tuning floats, then the pose copied from the current camera. */
-void func_L00_002ED088(void *arg) {
+void CameraType7Activate(void *arg) {
     char *m = arg;
     char *g;
     int lvl0 = D_0015EE84;
@@ -904,7 +904,7 @@ void FaceMobyToCamera(char *m) {
         if (*s > 1.0f) *s = 1.0f;
         ang = t * *s;
     } else {
-        ang = func_L00_001EB6A8(s, 0.0f, t, 0.02f, 0.175f, 0.0f);
+        ang = Camera_SmoothAngle(s, 0.0f, t, 0.02f, 0.175f, 0.0f);
     }
     FastVecCross(c, b, m + 0x40);
     build_look_at_matrix(m, m + 0x40, c, ang);
@@ -921,7 +921,7 @@ extern int func_001F9850(int);
 extern void func_00202790(int);
 
 /* camera update: copies the moby's matrix when the camera mode changes */
-void func_L00_002EDB70(char *m) {
+void CameraType7Update(char *m) {
     char *b = D_0013E633 + 0xE1D;
     char *p = *(char **)(m + 0x70) + 0xB8;
     int v = *(int *)(b + 0x2084);
@@ -944,7 +944,7 @@ void func_L00_002EDB70(char *m) {
         qcopy(r, m);
         qcopy(r + 0x10, m + 0x10);
         qcopy(r + 0x20, m + 0x20);
-        func_L00_002ED088(m);
+        CameraType7Activate(m);
         *(int *)(g + 0x2F4) = scale_ticks(0x2D);
     }
 done:
@@ -954,7 +954,7 @@ done:
 }
 extern char D_0013F450[];
 /* Update check that sets state 3 when a global value no longer matches the moby's. */
-void func_L00_002EDC60(char *a) {
+void CameraType7Exit(char *a) {
     char *g = D_0013F450;
     if (*(int *)(g + 0x2284) != *(short *)(a + 0x86) && *(int *)(g + 0x2084) != 6) {
         *(char *)(a + 0x7D) = 0;
@@ -989,7 +989,7 @@ extern s32 func_L00_00260B68_EDC98(void *, s32) __asm__("func_L00_00260B68");
 extern s32 func_L00_0025A778(void *, void *, s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002e9010.c, FUN_L00_002ec7e8. */
-s32 func_L00_002EDC98(A_2ec7e8 *a) {
+s32 Camera_IsHeroInTriggerVolume(A_2ec7e8 *a) {
     O_2ec7e8 *o;
     s32 v17 = 0;
     u16 w;
@@ -1006,9 +1006,9 @@ s32 func_L00_002EDC98(A_2ec7e8 *a) {
     }
     if (o->f0C >= 0 && (v17 || is_point_inside_clip_volume(&gHeroPos[0], o->f0C))) return 1;
     if (o->f4C >= 0 && (v17 || is_point_inside_clip_volume(&gHeroPos[0], o->f4C))) return 1;
-    if (o->f10 >= 0 && (v17 || func_L00_00260AB0(&gHeroPos[0], o->f10))) return 1;
+    if (o->f10 >= 0 && (v17 || IsPointInCylinderVolume(&gHeroPos[0], o->f10))) return 1;
     if (o->f08 >= 0 && (v17 || func_L00_00260B68_EDC98(&gHeroPos[0], o->f08))) return 1;
-    if (o->f14 >= 0 && (v17 || func_L00_0025A778(&gHeroPos[0], D_L00_001B0830[o->f14] + 0x10, *(s32 *)D_L00_001B0830[o->f14]))) return 1;
+    if (o->f14 >= 0 && (v17 || IsPointInPolygon(&gHeroPos[0], D_L00_001B0830[o->f14] + 0x10, *(s32 *)D_L00_001B0830[o->f14]))) return 1;
     return 0;
 }
 typedef float CameraVec[4] __attribute__((aligned(16)));
@@ -1107,10 +1107,10 @@ void Camera_SwingUpdate(char *arg) {
     if (params->type == 6 && FOLLOW_CAM_STATE(((struct UpdateCam *)D_L00_00166F00))->tail.mode != 0) {
         return;
     }
-    if (func_L00_002EDC98((void *)cam) == 0) {
+    if (Camera_IsHeroInTriggerVolume((void *)cam) == 0) {
         goto stop;
     }
-    if (func_L00_002E9870(cam) <= 0) {
+    if (Cam_AcquireLock(cam) <= 0) {
         if (params->timer != 0) {
             params->done = 1;
         }
@@ -1127,7 +1127,7 @@ stop:
             params->done = 1;
         }
         params->timer = 0;
-        func_L00_002E9838(cam);
+        Cam_ReleaseLock(cam);
         return;
     }
     if (params->timer == 0) {
@@ -1171,7 +1171,7 @@ stop:
         reset->unk2C = zero; }
     }
     at_end = 0;
-    total = func_001FA888(scale_ticks(200));
+    total = IntToFloat(scale_ticks(200));
     params->timer++;
     if (params->type == 10) {
         func_L00_002E9B30();
@@ -1204,7 +1204,7 @@ stop:
             params->timer = 1;
         }
     } else if (params->type == 3) {
-        total = func_001FA888(scale_ticks(1));
+        total = IntToFloat(scale_ticks(1));
         if (params->timer > scale_ticks(1)) {
             at_end = 1;
             params->timer = scale_ticks(1);
@@ -1240,9 +1240,9 @@ stop:
     }
     if (params->offset_scale != 0.0f) {
         if (params->type == 6 || params->type == 8) {
-            func_L00_002E99A0(0, params->offset_scale, 0.002f);
+            Cam_SetEyeOffset(0, params->offset_scale, 0.002f);
         } else {
-            func_L00_002E99A0(0, params->offset_scale, 0.005f);
+            Cam_SetEyeOffset(0, params->offset_scale, 0.005f);
         }
     }
     if (params->unk50 != 0.0f) {
@@ -1261,7 +1261,7 @@ stop:
         if (params->timer >= scale_ticks(120)) {
             func_L00_002E9A40(params->lateral_stiffness, params->lateral_damping);
         } else {
-            t = params->timer / func_001FA888(scale_ticks(120));
+            t = params->timer / IntToFloat(scale_ticks(120));
             func_L00_002E9A40(
                 params->start_lateral_stiffness + (params->lateral_stiffness - params->start_lateral_stiffness) * t,
                 params->start_lateral_damping + (params->lateral_damping - params->start_lateral_damping) * t);
@@ -1278,7 +1278,7 @@ extern int D_0015EE84 MACRO_ADDR;
 extern char *D_L00_0015F050 MACRO_ADDR;
 
 // Per-frame check of a linked object's state; runs the handler or clears its flag.
-int func_L00_002EE6E0(char *m) {
+int CameraType17Init(char *m) {
     char *p = *(char **)(D_L00_0015F050 + *(short *)(m + 0x84) * 32 + 0x1C);
     short k;
     if (*(short *)(p + 0x48) == 1 && *(short *)(p + 0x4A) != 0) return 0;
@@ -1306,7 +1306,7 @@ extern int func_L00_00260AB0(void *, int);
 extern int func_L00_00260B68(float *, int);
 
 /* Returns nonzero when an object's path is blocked; otherwise marks the path entry as reached. */
-int func_L00_002EE7F8(void *arg) {
+int Camera_IsHeroInEntryVolume(void *arg) {
     char *a = arg;
     char *g = D_L00_00166F00;
     char *p = *(char **)(D_L00_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
@@ -1325,10 +1325,10 @@ int func_L00_002EE7F8(void *arg) {
         if (is_point_inside_clip_volume(D_0013E633 + 0xE9D, *(int *)(p + 0xC)) != 0) return 1;
     }
     if (*(int *)(p + 0x10) >= 0) {
-        if (func_L00_00260AB0(D_0013E633 + 0xE9D, *(int *)(p + 0x10)) != 0) return 1;
+        if (IsPointInCylinderVolume(D_0013E633 + 0xE9D, *(int *)(p + 0x10)) != 0) return 1;
     }
     if (*(int *)(p + 8) >= 0) {
-        if (func_L00_00260B68((float *)(D_0013E633 + 0xE9D), *(int *)(p + 8)) != 0) return 1;
+        if (IsPointInSphereVolume((float *)(D_0013E633 + 0xE9D), *(int *)(p + 8)) != 0) return 1;
     }
     *(short *)(p + 0x26) = 1;
     return 0;
@@ -1402,8 +1402,8 @@ void Camera_AimUpdate(void *cam_) {
     float angle;
 
     params = *(AimCameraParams_ee **)(D_L00_0015F050 + cam->descriptor_index * 32 + 0x1C);
-    if (func_L00_002EE7F8(cam)) {
-        if (func_L00_002E9870(cam) <= 0) {
+    if (Camera_IsHeroInEntryVolume(cam)) {
+        if (Cam_AcquireLock(cam) <= 0) {
             if (params->timer) {
                 params->done = 1;
             }
@@ -1418,7 +1418,7 @@ void Camera_AimUpdate(void *cam_) {
         params->done = 1;
     }
     params->timer = 0;
-    func_L00_002E9838(cam);
+    Cam_ReleaseLock(cam);
     return;
 run:
     if (params->timer < 2) {
@@ -1486,7 +1486,7 @@ run:
         func_L00_002E9968(params->height, 0.003f);
     }
     if (params->offset_scale != 0.0f) {
-        func_L00_002E99A0(0, params->offset_scale, 0.005f);
+        Cam_SetEyeOffset(0, params->offset_scale, 0.005f);
     }
     if (params->unk28 != 0.0f) {
         func_L00_002E99F0(params->unk28 * 0.017453292f);
@@ -1504,7 +1504,7 @@ int Camera_AimMobyUpdate(char *a) {
     char *p = *(char **)(D_L00_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
     if (*(short *)(p + 0x26) != 0) return 0;
     if (D_L00_0015F6A8 != 0) {
-        if (func_L00_002EE7F8(a) != 0) {
+        if (Camera_IsHeroInEntryVolume(a) != 0) {
             *(short *)(p + 0x26) = 0;
             *(int *)(p + 0x20) = 0;
             return 0;
@@ -1527,7 +1527,7 @@ s32 func_001F9850(s32);
 void func_L00_0028EBF0(s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002e9010.c, FUN_L00_002ed950. */
-void func_L00_002EEE00(u8 *m) {
+void SndInstSphereUpdate(u8 *m) {
     S_2ed950 *s = *(S_2ed950 **)(m + 8);
     f32 d, r;
     if (s->id < 0) return;
@@ -1548,7 +1548,7 @@ void func_L00_002EEE00(u8 *m) {
         s32 h = s->snd;
         if (h != -1) {
             E_2ed950 *e = ((E_2ed950 *)((u8 *)D_0013E650 + (h) * 0x70));
-            if (e->o == m && e->b74) func_L00_0028EBF0(h);
+            if (e->o == m && e->b74) Sound_StopSlot(h);
         }
         s->snd = -1;
     }
@@ -1559,7 +1559,7 @@ extern float func_002140F8(float, float);
 extern int func_002140B0(int);
 
 /* updates a one-shot sound box: checks the listener is inside, then starts the sound */
-void func_L00_002EEF88(char *m) {
+void SndInstBoxOneShotUpdate(char *m) {
     float v[20];
     int *d = *(int **)(m + 8);
     float f = *(float *)(m + 0xC);
@@ -1578,7 +1578,7 @@ void func_L00_002EEF88(char *m) {
     e = (char *)D_0013E633 + 0x1D + d[4] * 0x70;
     if (*(char **)(e + 0x8C) == m && *(unsigned char *)(e + 0x74) != 0) return;
     if (func_001F9908(d + 3)) {
-        d[4] = func_L00_0028F0B0(d[0], 0, (int)m, 0x400);
+        d[4] = Sound_PlayLevelSound(d[0], 0, (int)m, 0x400);
         if (d[4] != -1) {
             v[16] = random_float_between(-1.0f, 1.0f);
             v[17] = random_float_between(-1.0f, 1.0f);

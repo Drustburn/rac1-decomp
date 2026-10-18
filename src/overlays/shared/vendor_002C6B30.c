@@ -339,7 +339,7 @@ extern char D_0013E633_2C73D0[] __asm__("D_0013E633");
  * re-rolls its retreat timer and steers along its path or straight at the target.
  * In the steering arms the goal pointer and the "lost" code (2) are set in each arm: retail loads 2 in
  * both arms and keeps the goal in a saved register across the arm's call. */
-void func_L09_002C73D0(Moby *m) {
+void ChaseEnemyUpdate(Moby *m) {
     char vec[16];
     int flag;
     float a1;
@@ -976,7 +976,7 @@ extern u8 *func_L00_0026E940_08F58(f32, struct Moby *, u32, s32, s32) __asm__("f
 extern void func_L00_00251E30_08F58(struct Moby *) __asm__("func_L00_00251E30");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/00307ba8.c, FUN_L09_00307ba8. */
-struct Moby *func_L09_00308F58(void *owner, Vec4 *pos, Vec4 *vel, s32 life) {
+struct Moby *SpawnEnemyShot(void *owner, Vec4 *pos, Vec4 *vel, s32 life) {
     Vec4 p;
     Vec4 v;
     Vec4 *pp = &p;
@@ -1228,25 +1228,25 @@ extern int D_0015EE84_m __asm__("D_0015EE84") MACRO_ADDR;
 extern char D_0013E633[];
 
 /* ticks down a timer against a hit check, then reacts: either ends or switches to state 2 */
-void func_L09_0030BD98(char *moby, char *d) {
+void Moby_TickHitTimer(char *moby, char *d) {
     int n;
-    char *m = func_L00_0025B478(moby, 0xC30000, 0);
-    func_L00_0025B4D0(moby, m, d + 0x20, 0, &n, 0, 0, 4);
+    char *m = MobyGetHitMessage(moby, 0xC30000, 0);
+    ComputeHitResponse(moby, m, d + 0x20, 0, &n, 0, 0, 4);
     if (n >= 2) {
         float v = *(float *)(d + 0x20) - *(float *)(m + 0x2C);
         *(float *)(d + 0x20) = v;
         if (v > 0.0f) {
             d[0x67] = 0x5A;
-            func_L00_0025E4B0(moby, (short *)(d + 0x60));
+            RerollEffectCounter(moby, (short *)(d + 0x60));
         } else {
             if (D_0015EE84_m == 0xD && FastAbsF(*(float *)(D_0013E633 + 0xEA5) - 248.0f) < 4.0f) {
-                func_L00_002584A8(moby, 0x200, -1);
+                SetDeathBits(moby, 0x200, -1);
             } else {
-                func_L00_002584A8(moby, 0, -1);
+                SetDeathBits(moby, 0, -1);
             }
             moby[0x20] = 2;
             d[0x67] = 0x78;
-            func_L00_0025E4B0(moby, (short *)(d + 0x60));
+            RerollEffectCounter(moby, (short *)(d + 0x60));
         }
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
@@ -1255,11 +1255,11 @@ void func_L09_0030BD98(char *moby, char *d) {
 extern int func_L01_0026EFB8(int, int);
 
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */
-int func_L09_0030BEE8(int unused, char *m) {
+int CountLiveMoby1886Slots(int unused, char *m) {
     int last = -1;
     int i;
     char **slot;
-    m[0x91] = func_L01_0026EFB8(*(int *)(m + 0x94), -1);
+    m[0x91] = MobyGroup_CountNotInState(*(int *)(m + 0x94), -1);
     for (i = 0, slot = (char **)(m + 0xB0); i < 20; i++, slot++) {
         char *o = *slot;
         if (o != 0 && *(short *)(o + 0xA6) == 0x75E &&
@@ -1464,7 +1464,7 @@ extern int func_001F9850(int);
 extern void func_L00_00251E30(void *);
 
 /* Spawns a moby of class 0x75E and initialises its data. */
-char *func_L09_0030C658(int owner, void *pos, void *rot, unsigned char a, unsigned char b) {
+char *SpawnMoby1886(int owner, void *pos, void *rot, unsigned char a, unsigned char b) {
     char *m = (char *)CreateMoby(0x75E);
     if (m) {
         char *d = *(char **)(m + 0x78);
@@ -1489,7 +1489,7 @@ char *func_L09_0030C658(int owner, void *pos, void *rot, unsigned char a, unsign
 }
 extern void func_0020D678(void *);
 
-void func_L09_0030C790(void *moby, char *data)
+void Moby1886_ReleaseOwnerSlot(void *moby, char *data)
 {
     char *other = *(char **)(data + 0x10);
     if (other != 0 && *(short *)(other + 0xA6) == 0x75D &&
@@ -1629,8 +1629,8 @@ void Moby1886Update(struct Moby *moby) {
         if (FastDecTimer(&vars->life) != 0) {
             moby->state = 2;
         }
-        moby->rot.x = func_L00_0025F368(vars->vel.f[0]);
-        moby->rot.y = func_L00_0025F368(vars->vel.f[1]);
+        moby->rot.x = WrapAngle(vars->vel.f[0]);
+        moby->rot.y = WrapAngle(vars->vel.f[1]);
         moby->collision = moby->pclass->collision;
         vars->owner->collision = vars->owner->pclass->collision;
         vars->vel.f[2] -= D_0015EE70 * 9.8f;
@@ -1655,14 +1655,14 @@ void Moby1886Update(struct Moby *moby) {
             held = vars->held;
             if (held == 0 || held->state == 0xFE || held->state == 0xFD || vars->unk1A == 0 ||
                 held->pclass->scale - 0.01f <= held->scale) {
-                func_L09_0030C790(moby, (char *)vars);
+                Moby1886_ReleaseOwnerSlot(moby, (char *)vars);
             }
         }
         break;
     }
     RecordMobyShadow(moby, moby->scale * 0.3f / moby->pclass->scale);
     if (moby->pos.z < 5.0f || moby->pos.z > 500.0f) {
-        func_L09_0030C790(moby, (char *)vars);
+        Moby1886_ReleaseOwnerSlot(moby, (char *)vars);
         return;
     }
     if (moby->pos.x < 5.0f) {

@@ -204,7 +204,7 @@ extern void func_001F9A98(void *dst, void *src, s32 size);
 extern s32 func_001FA898(f32 transition_duration);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/textbin/fun_001ebf10.c, switch_active_camera_record. */
-void func_001EC2B8(struct UpdateCam *next_camera) {
+void Camera_SwitchActive(struct UpdateCam *next_camera) {
 
     struct UpdateCam *previous_camera;
     CameraDescriptorInfo *descriptor;
@@ -470,7 +470,7 @@ int UpdateAllCameras(void) {
     }
 
     if (changed) {
-        func_001EC2B8(cur);
+        Camera_SwitchActive(cur);
     }
     {
         void (*fn0C)(void *) = D_001E8F80_hooks[*(short *)((char *)cur + 0x8C)].fn_0C;
@@ -683,7 +683,7 @@ void Camera_StartBlend(void *arg) {
         int n = ++*(int *)(b + 0x14);
 
         *(int *)(b + 0xC) = func_001F98C0(n);
-        *(float *)(b + 0x10) = 1.0f / func_001FA888(*(int *)(b + 0xC));
+        *(float *)(b + 0x10) = 1.0f / IntToFloat(*(int *)(b + 0xC));
     }
 }
 
@@ -940,9 +940,9 @@ void Camera_UpdateShake(char *arg0, int arg1) {
             *(int *)(arg0 + 0xC) = *(int *)(arg0 + 8);
         }
         func_001F9908((int *)(arg0 + 8));
-        ratio = func_001FA888(*(int *)(arg0 + 8)) / func_001FA888(*(int *)(arg0 + 0xC));
+        ratio = IntToFloat(*(int *)(arg0 + 8)) / IntToFloat(*(int *)(arg0 + 0xC));
         shake = *(float *)arg0
-                * FastCos(FastNormalizeAngle(func_001FA888(*(int *)(arg0 + 8)) * 2.0f))
+                * FastCos(FastNormalizeAngle(IntToFloat(*(int *)(arg0 + 8)) * 2.0f))
                 * ratio * ratio;
         *(float *)(arg0 + 4) = shake;
         if (arg1 == 0) {
@@ -1036,7 +1036,7 @@ extern f32 func_001F9CB8(void *a);
 extern void func_001F9DC0(void *out, void *a, f32 len);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/gameplay/camera/fun_001ed470.c, FUN_001ed470. */
-void func_001ED818(void) {
+void CameraPreUpdate(void) {
     Vec4 dir;
     Vec4 proj;
     struct CamColl *cam;
@@ -1165,7 +1165,7 @@ extern int D_0015F098 MACRO_ADDR;
    0x12E6, 0x12EC, 0x12E4 overrides. Each arm ORs the new mode in itself
    (the constants fold per arm, as in retail), and each block reads
    D_0013F450 through its own local (%hi kept, %lo rebuilt). */
-void func_001EDCE8(void) {
+void Camera_PickDrawModes(void) {
     char *c = D_001871D0;
     char *g = D_0013F450;
     int st;
@@ -1260,8 +1260,8 @@ void UpdateCamera(void) {
     c = D_00187040;
     (*(int *)(c + 0x398))++;
     func_001EDE08();
-    func_001EDCE8();
-    func_001ED818();
+    Camera_PickDrawModes();
+    CameraPreUpdate();
     UpdateAllCameras();
     target = *(char **)(c + 0x180);
     if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {

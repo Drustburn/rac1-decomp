@@ -3,7 +3,7 @@
 #include "include_asm.h"
 
 /* Clears the five words of A. The catalogue cuts this function in three (config/overlays/joined.tsv). */
-void func_L00_001EB430(int *a) {
+void ClearFiveWords(int *a) {
     a[0] = 0;
     a[1] = 0;
     a[2] = 0;
@@ -12,7 +12,7 @@ void func_L00_001EB430(int *a) {
 }
 INCLUDE_ASM("asm/overlays", func_L00_001EB438);
 // Clears the word at offset 0xC of its argument.
-void func_L00_001EB440(int *a) {
+void ClearWordIndex3(int *a) {
     a[3] = 0;
 }
 extern float func_001FA748(float, float);
@@ -20,7 +20,7 @@ extern float func_001FA748(float, float);
 /* Copies a 5-float record, the first element replaced by func_001FA748(src[0], x).
  * Adapted from Lombyte (MIT), FUN_L00_001eb0c8. The catalogue splits the delay slot of the final
  * jr off as func_001EC030, so this function is joined to it (config/overlays/joined.tsv). */
-void func_L00_001EB448(float *d, float *s, float x) {
+void CopyRecordAddRot(float *d, float *s, float x) {
     d[0] = FastAddRots(s[0], x);
     d[1] = s[1];
     d[2] = s[2];

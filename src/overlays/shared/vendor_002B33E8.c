@@ -342,7 +342,7 @@ extern int func_001F9850(int);
 extern int func_0022ED80(int, int, int);
 
 /* Per-frame update of a moby that arms a pickup-style reaction when the player state allows it. */
-void func_L00_002B4340(char *m) {
+void Moby163Update(char *m) {
     int *p;
     char *g;
     char *pad;
@@ -444,7 +444,7 @@ void Moby166Update(char *m) {
         p[0x2C / 4] = b + (p[7] << 8);
         break;
     case 1:
-        r = func_L00_0025B478(m, 0x10000, 0);
+        r = MobyGetHitMessage(m, 0x10000, 0);
         func_001F9908(p + 3);
         if (r != 0 && p[3] == 0) {
             *(unsigned char *)(m + 0xA4) = 0xFF;
@@ -730,7 +730,7 @@ void func_L00_002B4F40(X *x) {
     g->f0C = 1;
 }
 extern char *func_0020D348(int);
-char *func_L00_002B5428(int a) {
+char *Moby167Spawn(int a) {
     char *m = CreateMoby(0xA7);
     if (m != 0) {
         int *p = *(int **)(m + 0x78);
@@ -757,7 +757,7 @@ extern s32 func_L00_0020DB30_4198(s32) __asm__("func_L00_0020DB30");
 extern void func_0020D678_4198(void *) __asm__("func_0020D678");
 extern void func_L00_002B4F40_4198(void *) __asm__("func_L00_002B4F40");
 /* Multi-state update for a timed object: random delays from func_001F9850 pace the stages, which adjust the step and scale fields of its private block and call the shared callback. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_002b2100.c, FUN_L00_002b4198. */
-void func_L00_002B5488(void *p) {
+void Moby167Update(void *p) {
     O_4198 *o = (O_4198 *)p;
     V_4198 *v = o->v;
     s32 flag = 0;
@@ -894,7 +894,7 @@ unsigned char *func_L00_002B5998(int ign, Vec4 *from, float *yaw, float *pitch) 
             continue;
         }
         qcopy(&tp, m + 0x10);
-        r = func_L00_0025D390(m);
+        r = GetFlaggedPvarWord(m);
         if (r != 0) {
             tp.f[2] += *(float *)(r + 0x10);
         } else {
@@ -916,9 +916,9 @@ unsigned char *func_L00_002B5998(int ign, Vec4 *from, float *yaw, float *pitch) 
         e = FastArcSin(FastVecDist(&w, &tp) / (d + d));
         e = e + e;
         if (0.15707964f < e) {
-            r = func_L00_0025D390(m);
+            r = GetFlaggedPvarWord(m);
             if (r != 0) {
-                s = func_001FA888(r[0xA]) * 0.125f;
+                s = IntToFloat(r[0xA]) * 0.125f;
                 t = FastArcSin(s / d);
                 if (s < d) {
                     e -= t;
@@ -1227,7 +1227,7 @@ extern int D_L00_0016023C_m __asm__("D_L00_0016023C") MACRO_ADDR;
 extern int D_L00_0016A0F8;
 
 // Saves the camera parameters into a moby and switches the globals to a fixed screen setup.
-void func_L00_002B69C0(void *m_) {
+void Moby_SaveGlobalsState(void *m_) {
     char *m = (char *)m_;
     char *p;
     float f0, f1, f2, f3;
@@ -1264,7 +1264,7 @@ extern unsigned char D_L00_0015F546;
 extern char D_L00_0016CB40[];
 
 // Loads the stored camera parameters of a moby into the globals and applies the screen setup.
-void func_L00_002B6AE0(int m_, int flag) {
+void Moby_RestoreGlobalsState(int m_, int flag) {
     char *m = (char *)m_;
     char *p;
     float f0, f1, f2, f3;
@@ -1383,14 +1383,14 @@ extern void func_L00_00222B80(int, int);
 extern void func_L00_002B6AE0(int, int);
 extern void func_L00_00204190(void);
 extern void func_0020D678(int);
-void func_L00_002B6E10(int a, int *b) {
+void Moby_EndGadgetControl(int a, int *b) {
     int *p = *(int **)(*(char **)b + 0x78);
     if (p != 0) p[1] = 0;
     *(int *)(D_0013E633 + 0x2DFD) = 0;
-    func_L00_002ECEC8(b[5]);
+    Camera_ChooseFollowState(b[5]);
     b[5] = 0;
     HeroEnterMoveState(0, 1);
-    func_L00_002B6AE0(a, 1);
+    Moby_RestoreGlobalsState(a, 1);
     func_L00_00204190();
     DeleteMoby(a);
     D_L00_00167114 = 0;
@@ -1814,7 +1814,7 @@ int func_L00_002B7EC0_r(char *m, float r) {
     lim = random_integer_below(n > 0 ? n : 1);
     d[5] = 0;
     for (i = 0; (e = D_L00_001ABD80[i]) != 0; i++) {
-        c = func_L00_0025D390(e);
+        c = GetFlaggedPvarWord(e);
         if (c) {
             dist = func_001F9D48(&pos, e + 0x10);
             if (dist < 12.0f) {
@@ -1825,7 +1825,7 @@ int func_L00_002B7EC0_r(char *m, float r) {
                         if (d[5] == lim) {
                             FastVecSub(&q, e + 0x10, m + 0x10);
                             func_L00_001FF4B0(&q, &q, 1.5f);
-                            func_L00_0025AC00(e, (int)m, 0x10000, g + 0x80, &q, 1.0f);
+                            PostHitMessage(e, (int)m, 0x10000, g + 0x80, &q, 1.0f);
                             d[4] = scale_ticks(rand_range(5, 0x2D));
                         }
                         d[5] = d[5] + 1;
@@ -1891,7 +1891,7 @@ extern s32 D_0015EFA4 MACRO_ADDR;
 extern short D_L00_0015F6B0_B8208b SDATA(D_L00_0015F6B0);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/unclassified_002b2100.c, FUN_L00_002b6f10. */
-void func_L00_002B8208(Moby *m)
+void Moby175Update(Moby *m)
 {
     Vars *o;
     s32 v;
@@ -1929,7 +1929,7 @@ void func_L00_002B8208(Moby *m)
     } else {
         o->cnt18 = 0;
     }
-    if (func_L00_0028EB98(m, o->anim) == 0) {
+    if (Sound_IsPlaying(m, o->anim) == 0) {
         b = D_0013CA40[0x1A4 / 4] & D_0013F450_2B8208.w10A0;
         if ((b != 0 || ((D_0013CA40[0x1A0 / 4] & D_0013F450_2B8208.w10A0) != 0 && o->retry >= 0x11)) && D_0013F450_2B8208.b20AC == 0) {
             if (b != 0) {
@@ -1969,7 +1969,7 @@ void func_L00_002B8208(Moby *m)
     a = o->anim;
     if (a != -1) {
         e = D_0013E650 + a * 0x70;
-        if (*(Moby **)(e + 0x88) == m && e[0x74] != 0) func_L00_0028EBF0(a);
+        if (*(Moby **)(e + 0x88) == m && e[0x74] != 0) Sound_StopSlot(a);
     }
     o->retry = 0;
     o->anim = -1;
@@ -1977,7 +1977,7 @@ void func_L00_002B8208(Moby *m)
 L7340:
     if (!((*(s32 *)&D_L00_0015F6B0_B8208b) & 3)) func_L00_002B7EC0(m, o->radius);
 end:
-    if ((s32)(D_0013F450_2B8208.w10B4 ^ 3) != 0) func_L00_002B8690(m);
+    if ((s32)(D_0013F450_2B8208.w10B4 ^ 3) != 0) Moby175SlotsUpdate(m);
 }
 typedef struct { float f; short a; short b; short c; short pad; } E8690;
 extern E8690 D_L00_001DB740_b[10] __asm__("D_L00_001DB740") NOT_SDA;
@@ -1997,7 +1997,7 @@ extern void func_L00_00250800(void *, int, void *);
 extern void func_001F49B0(void (*)(void), void *);
 extern void func_L00_002B8860_b(void) __asm__("func_L00_002B8860");
 /* per-frame update of the ten slot table: spawn one, age the rest, then draw */
-void func_L00_002B8690(Moby *arg) {
+void Moby175SlotsUpdate(Moby *arg) {
     E8690 *p;
     unsigned short av;
 
@@ -2009,7 +2009,7 @@ void func_L00_002B8690(Moby *arg) {
         D_L00_001615A0 = 0;
         r = func_001FA898_r(*(float *)&D_L00_00161584_g / (*(float *)&D_L00_00161588_g * D_0015EE6C));
         *(int *)&D_L00_001615A8_g = r;
-        D_L00_001615AC = 1.0f / func_001FA888(r);
+        D_L00_001615AC = 1.0f / IntToFloat(r);
     }
     if (D_L00_001615A4 == 0) {
         if (func_001F9908(&D_L00_001615A0) != 0) {
@@ -2035,7 +2035,7 @@ void func_L00_002B8690(Moby *arg) {
             else p->f += *(float *)&D_L00_00161588_g * D_0015EE6C;
         }
     }
-    func_L00_00250800(arg, 0, D_L00_001615B0_b);
+    Moby_GetJointWorldPos(arg, 0, D_L00_001615B0_b);
     AddDrawCallback(func_L00_002B8860_b, arg);
 }
 extern int func_001F4868(int);
@@ -2058,7 +2058,7 @@ extern short D_L00_0016158C;
 extern short D_L00_00161590;
 
 /* Draws ten billboard-lit quads around a moby using the table of offsets. */
-void func_L00_002B8860(char *m) {
+void DrawBillboardLitQuads(char *m) {
     struct {
         float v[4][4];
         unsigned int col[4];
@@ -2090,10 +2090,10 @@ void func_L00_002B8860(char *m) {
             FastVecCross(b, a, c);
             func_L00_001FF4B0(b, b, 1.0f);
             FastVecCross(c, b, a);
-            t = func_001FA888(D_L00_001DB740[i].s4) * D_L00_001615AC;
+            t = IntToFloat(D_L00_001DB740[i].s4) * D_L00_001615AC;
             if (t > 1.0f) t = 1.0f;
             s = *(float *)&D_L00_00161598 + (*(float *)&D_L00_00161594 - *(float *)&D_L00_00161598) * t;
-            u = (func_001FA888(*(int *)&D_L00_0016158C) - 0.0f) * t + 0.0f;
+            u = (IntToFloat(*(int *)&D_L00_0016158C) - 0.0f) * t + 0.0f;
             j = func_001FA898_r(u);
             pk.col[3] = (*(int *)&D_L00_00161590 & 0xFFFFFF) | (j << 24);
             pk.col[2] = pk.col[3];
@@ -2137,7 +2137,7 @@ void func_L00_002B9528(unsigned char *m)
         if (h != -1) {
             voice = D_0013E650 + h * 0x70;
             if (*(unsigned char **)(voice + 0x88) == m && voice[0x74])
-                func_L00_0028EBF0(h);
+                Sound_StopSlot(h);
         }
         *(short *)(v + 0x4A) = -1;
         return;
@@ -2212,7 +2212,7 @@ void func_L00_002B9730(char *m) {
             func_L00_001FF500(vec, src, 1.0f);
             vec[2] = 1.0f;
             vec[3] = 5627.9248046875f;
-            func_L00_0025A8C0(buf, (int)m, 0x10000, vec, func_001FA888(q[0x10]) + 1.0f);
+            InitDirectionalHitQuery(buf, (int)m, 0x10000, vec, IntToFloat(q[0x10]) + 1.0f);
             *(unsigned char *)(buf + 0x18) = 5;
             *(unsigned char *)(buf + 0x19) = 1;
             *(unsigned short *)(buf + 0x1A) = *(unsigned short *)(m + 0xA6);
@@ -2231,9 +2231,9 @@ void func_L00_002B9730(char *m) {
                     v2[2] = D_0015EE6C * 4.0f;
                     v2[3] = *(float *)&D_L00_00161610;
                     c1 = FastTweenColor(*(int *)&D_L00_00161614, *(int *)&D_L00_00161618, random_float_between(0.0f, 1.0f));
-                    func_L00_0025D140(c1, q[0x10]);
+                    PermuteColorChannels(c1, q[0x10]);
                     c2 = FastTweenColor(*(int *)&D_L00_0016161C, *(int *)&D_L00_00161620, random_float_between(0.0f, 1.0f));
-                    func_L00_0025D140(c2, q[0x10]);
+                    PermuteColorChannels(c2, q[0x10]);
                     c3 = func_001FA898_r(func_001F9878(random_float_between((float)*(int *)&D_L00_00161624, (float)*(int *)&D_L00_00161628)));
                     c4 = func_001FA898_r(func_001F9878(random_float_between((float)*(int *)&D_L00_00161624, (float)*(int *)&D_L00_00161628)));
                     rand_vec(v3, 0.0f, f20 + f20);
@@ -2254,7 +2254,7 @@ typedef struct {
 } ListSlots8;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/002b2100.c, FUN_L00_002b8798. */
-void func_L00_002B9A90(ListSlots8 *list, s32 val) {
+void SlotList_Add(ListSlots8 *list, s32 val) {
     s32 *p = list->slots;
     s32 i = 0;
     s32 *q;

@@ -10,7 +10,7 @@ extern u8 D_L00_0016A140[];
 void func_L00_001F3AF0(s32, s32, s32, s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/rendering_debug_001f36f8.c, FUN_L00_001f36f8. */
-void func_L00_001F3A78(void) {
+void FlushDebugLines(void) {
     s32 i;
     E001f36f8 *p;
 
@@ -384,7 +384,7 @@ extern char D_L00_00166D80[];
 extern char D_0013E633[];
 
 /* places the camera-follow vector from the angle and offsets, then copies it into the object */
-void func_L00_001F4810(void) {
+void Hero_PlaceOnOrbit(void) {
     char *g = D_L00_00166D80;
     char *c = D_L00_0016C158;
     char *b;
@@ -520,7 +520,7 @@ static __inline__ int flag_offset60(int flags) {
 /* Draws the debug menu: the mode and toggle rows, the camera, display and occlusion modes, the mission line
  * (via the table at D_0014171B + 0xAA35), then the weapon and ammo counters. Waits on the flag at D_L00_00161260
  * before the last section. */
-void func_L00_001F5C60(void) {
+void DebugMenuRender(void) {
     char buf[16];
     int stride;
     char *fmt;
@@ -712,7 +712,7 @@ void func_L00_001F5C60(void) {
         buf[1] = 0;
         buf[0] = debug_menu60.saved_timer;
         Text_Queue(0x1CA, 0x141, 0x80F0F0F0, buf);
-        func_L00_001F3A78();
+        FlushDebugLines();
         while (D_L00_00161260 & 1) {}
     }
 }
@@ -798,7 +798,7 @@ extern int D_L00_0015F6A8 MACRO_ADDR;
 extern int D_L00_0015F4F4 MACRO_ADDR;
 extern unsigned char D_001414F5[] NOT_SDA;
 extern void func_001F3D78(void);
-void func_L00_001F91B0(void) {
+void GameplayRender(void) {
     if (D_L00_0015F6BC == 0 && D_001414F5[0xC] == 0) {
         D_L00_0015F4F4 = 0x100FF;
         if (D_L00_0015F6A8 == 3) D_L00_0015F4F4 = 0x7F;
@@ -809,19 +809,19 @@ extern int func_L00_002016D0(void);
 extern void func_L00_002781D8(int);
 extern void func_001FBE80(void);
 
-void func_L00_001F9248(void) {
+void DebugProfilerRender(void) {
     if (D_L00_0015F6BC == 0) {
-        if (func_L00_002016D0() == 0) {
+        if (GetDebugOverlayMode() == 0) {
             framebuf_appendLargeSetup();
             D_L00_0015F4F4 = 0x100FF;
             DrawDebugProfiler();
         } else {
-            if (func_L00_002016D0() == 3) func_L00_002781D8(1);
+            if (GetDebugOverlayMode() == 3) PauseMenu_DrawPages(1);
         }
         func_001FBE80();
     }
 }
-void func_L00_001F92C0(void) { if (D_L00_0015F6BC == 0) func_L00_002781D8(0); }
+void PageMenuModeRender(void) { if (D_L00_0015F6BC == 0) PauseMenu_DrawPages(0); }
 typedef struct {
     int key;
     int pad[3];
@@ -837,7 +837,7 @@ extern void func_001F4630(int);
 extern void func_L00_001FCC50(void *, int);
 extern void func_001F4748(void);
 
-void func_L00_001F92E8(void) {
+void FadeOverlayRender(void) {
     DbgRec_1F92E8 *p;
     DbgRec_1F92E8 *q;
 
@@ -874,14 +874,14 @@ void func_L00_001F9D40(void *a) {
     func_00122598(0);
     D_L00_0015F4F8 = D_L00_0015F4F8 + 1;
     VU1_initChain();
-    func_L00_002A21A8(a, D_0015EF84, *(int *)((char *)D_0013E15A + 0x4AA) << 11);
+    DownloadFrameBuffer(a, D_0015EF84, *(int *)((char *)D_0013E15A + 0x4AA) << 11);
 }
 extern int func_001F4868(int);
 extern void func_001F6668(void *, void *, void *, void *, void *, int, unsigned char *);
 extern unsigned char D_L00_001C3C10[];
 
 // Draws font text with effect texture 3 and the level 0 font table.
-void func_L00_001FB7F8(void *a, void *b, void *c, void *d, void *e) {
+void DebugFontPrint(void *a, void *b, void *c, void *d, void *e) {
     int mode = GetEffectTex(3);
 
     FontPrint(a, b, c, d, e, mode, D_L00_001C3C10);
@@ -912,11 +912,11 @@ void DrawShadowedLabel(int x, int y, int mode, unsigned char *p, float scale, fl
         break;
     }
     draw_stretchable_ui_frame(l - 0x20, y - 0xE, r - l + 0x40, 0x1C, func_001FA898_r(scale * 112.0f));
-    func_001F65A8();
+    Font_DisableColorCodes();
     c = (int)(alpha * 128.0f) << 24;
     d = c + 0xE0E0E0;
     func_001F68E8_c(l + 1, y - 7, (unsigned int)c, p, -1);
     func_001F68E8_c(l, y - 8, d, p, -1);
-    func_001F6598();
+    Font_EnableColorCodes();
 }
 INCLUDE_ASM("asm/overlays", func_L00_001FCC50);

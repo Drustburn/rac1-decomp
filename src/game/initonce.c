@@ -223,7 +223,7 @@ void InitOnce(void) {
     UpdateViewContext();
     VU1_initChain();
     func_00121490(0);
-    func_0022DBE8();
+    Sound_InitState();
     FastMemSet(D_001942C0, 0x80808080, 0x100);
     func_00122630(buf, 0x3FFB, 1, 0, 0, 0, 8, 8);
     func_00118D80(0);

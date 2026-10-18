@@ -21,7 +21,7 @@ typedef struct {
 } Pkt_23e4c8;
 
 /* Builds the object's tilted frame and emits three batches of four quads offset around it. */
-void func_L00_0023E4C8(char *moby)
+void GlowQuadsDraw(char *moby)
 {
     float q[4][4] __attribute__((aligned(16)));
     Pkt_23e4c8 pk;
@@ -167,7 +167,7 @@ extern int fr_23e008(int) __asm__("func_001F9850");
 extern unsigned char *emit_23e008(float *, int, float, float, float, int, int, int, void *) __asm__("func_L00_00272F00");
 extern int rf_23e008(float) __asm__("func_001FA898");
 /* Spawns a burst of directed particles with randomised speeds from the frame time. Adapted from Lombyte (MIT) for PAL: overlays/shared/unclassified_0023db30.c, FUN_L00_0023e008. */
-void func_L00_0023E9A0(void *p)
+void GlowParticlesSpawn(void *p)
 {
     ti_23e008 dir[1];
     ti_23e008 old[1];
@@ -224,9 +224,9 @@ int AllocPointLight(float *pos, float radius, float intensity, int color) {
     s = D_L00_001805C0 + i * 0x30;
     qcopy(e + 0x10, pos);
     *(float *)(e + 0x1C) = radius;
-    *(float *)(e + 0) = func_001FA888(color & 0xFF) * 0.0078125f;
-    *(float *)(e + 4) = func_001FA888((color >> 8) & 0xFF) * 0.0078125f;
-    *(float *)(e + 8) = func_001FA888((color >> 16) & 0xFF) * 0.0078125f;
+    *(float *)(e + 0) = IntToFloat(color & 0xFF) * 0.0078125f;
+    *(float *)(e + 4) = IntToFloat((color >> 8) & 0xFF) * 0.0078125f;
+    *(float *)(e + 8) = IntToFloat((color >> 16) & 0xFF) * 0.0078125f;
     *(float *)(e + 0xC) = intensity;
     FastMemZero16(s, 0x30);
     *(int *)(s + 0x10) = 1;

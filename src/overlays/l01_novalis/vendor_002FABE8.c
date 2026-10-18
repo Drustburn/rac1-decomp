@@ -48,7 +48,7 @@ void BreakableRockUpdate(DebrisMoby *m) {
     int j;
     float s;
 
-    hit = (DebrisHit *)func_L00_0025B478(m, 0x10000, 0);
+    hit = (DebrisHit *)MobyGetHitMessage(m, 0x10000, 0);
     m->hit_slot = 0xFF;
     if (hit != 0 && hit->force > 0.0f) {
         func_0022ED80(0, 0x10, (int)m);
@@ -104,7 +104,7 @@ void BreakableRockUpdate(DebrisMoby *m) {
             ((void (*)(void *, void *, int, float, int, float, float, float, int))func_L01_002F9908)(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.04f, 0.09f),
                               rand_range(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
-        func_L00_002584A8(m, 0, -1);
+        SetDeathBits(m, 0, -1);
         DeleteMoby(m);
     }
 }
@@ -232,7 +232,7 @@ void *func_L00_0025B478_FB158c(void *, s32, s32) __asm__("func_L00_0025B478");
 void func_0020D678_FB158d(void *) __asm__("func_0020D678");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l01/unclassified_002f9810.c, FUN_L01_002f9d80. */
-void func_L01_002FB158(BurstMoby *self) {
+void ProjectileBreakableUpdate(BurstMoby *self) {
     BurstTarget *t;
     BurstColors colors;
     Vec4 dir;
@@ -472,18 +472,18 @@ void FallingDropUpdate(DropMoby *m) {
     probe.id = m->hA6;
     if (func_001F9908(v->sound) != 0) {
         tmp = m->pos;
-        func_L01_002FB588(m, &tmp, 0, 0.5f, zero);
+        SpawnExplosionEffect(m, &tmp, 0, 0.5f, zero);
         DeleteMoby(m);
     } else if (func_L00_001EFFF0(&prev, pos, 0, v->coll, &probe) != 0) {
         qcopy(pos, D_L01_00174360);
         tmp = m->pos;
-        func_L01_002FB588(m, &tmp, 0, 0.5f, zero);
+        SpawnExplosionEffect(m, &tmp, 0, 0.5f, zero);
         DeleteMoby(m);
     } else {
         half = 0.5f;
         if (func_L00_001F2BE8_2FB898(half, pos, 0x10, v->coll, &probe) != 0) {
             tmp = m->pos;
-            func_L01_002FB588(m, &tmp, 0, half, zero);
+            SpawnExplosionEffect(m, &tmp, 0, half, zero);
             DeleteMoby(m);
         }
     }
@@ -611,7 +611,7 @@ extern unsigned char D_L01_0017C940[];
 extern void func_0020D960(char *, int, void *);
 
 /* Arms the 0x32B mobys' marker record once, while the level flag is 2. */
-void func_L01_002FC058(void) {
+void AttachMarkerManipulators(void) {
     if (D_L01_0015F6A8 == 2 && gCheats[0] != 0) {
         int i;
         for (i = 0; i < D_L01_0016CD60.n; i++) {
@@ -920,12 +920,12 @@ void HingedBridgeUpdate(char *self) {
             if (h != -1) {
                 voice = (char *)D_0013E633_u + 0x1D + h * 0x70;
                 if (*(void **)(voice + 0x88) == self && *(unsigned char *)(voice + 0x74) != 0) {
-                    func_L00_0028EBF0(h);
+                    Sound_StopSlot(h);
                 }
             }
             *(int *)(v + 0x74) = -1;
             self[0x20] = 1;
-        } else if (!func_L00_0028EB98(self, *(int *)(v + 0x74))) {
+        } else if (!Sound_IsPlaying(self, *(int *)(v + 0x74))) {
             *(int *)(v + 0x74) = func_0022ED80(0, 4, (int)self);
         }
         break;
@@ -1014,7 +1014,7 @@ void WaterSurfaceFxUpdate(PMoby *moby) {
         moby->state = 1;
         moby->update_dist = 0xFF;
         moby->pz = moby->pz + 0.5f;
-        func_L01_002B8C00(D_L01_001E3780, 21);
+        RipplePatchesInit(D_L01_001E3780, 21);
         zero = 0.0f;
         D_L01_001E3780[15].i44 = 8;
         D_L01_001E3780[16].f28 = -0.0016f;
@@ -1025,7 +1025,7 @@ void WaterSurfaceFxUpdate(PMoby *moby) {
         D_L01_001E3780[14].f2C = zero;
         D_L01_001E3780[15].f2C = zero;
         D_L01_001E3780[13].f2C = zero;
-        func_L01_002B90A8(1.0f);
+        RescaleFloatTable(1.0f);
         {
             PoolLight *l;
             f32 a;
@@ -1057,7 +1057,7 @@ void WaterSurfaceFxUpdate(PMoby *moby) {
         D_L01_00161350 = D_L01_001E3780;
         D_L01_00161354 = D_L01_001FA980;
         for (m = 0; m < 21; m++) {
-            func_L01_002B8E20(&D_L01_001E3780[m], tex + m * 16);
+            RipplePatch_ToFixedPoint(&D_L01_001E3780[m], tex + m * 16);
         }
         for (n = 0; n < 21; n++) {
             PoolTile *tile = &D_L01_001E3780[n];
@@ -1067,7 +1067,7 @@ void WaterSurfaceFxUpdate(PMoby *moby) {
                 f32 x = tile->x + random_float_between(-6.0f, 6.0f);
                 f32 y = tile->y + random_float_between(-6.0f, 6.0f);
 
-                func_L01_002B9440(x, y, 2.0f, 0.2f, tiles, 21);
+                Ripple_DisturbDefault(x, y, 2.0f, 0.2f, tiles, 21);
             }
         }
         break;
@@ -1111,15 +1111,15 @@ void WaterSurfaceFxUpdate(PMoby *moby) {
                 D_L01_00161286[0] = 0x90;
             }
         }
-        func_L01_002B9198(D_L01_001E3780, 21);
-        ((int (*)(void (*)(void), void *))AddDrawCallback)(func_L01_002FE498, moby);
+        RippleSimClock(D_L01_001E3780, 21);
+        ((int (*)(void (*)(void), void *))AddDrawCallback)(Moby751Draw, moby);
         if (found == 0 || found == 6) {
             pool_drip_timer--;
             if (pool_drip_timer <= 0) {
                 qcopy(&v, &D_L01_001FA910[random_integer_below(5)]);
                 v.x = v.x + random_float_between(-0.15f, 0.15f);
                 v.y = v.y + random_float_between(-0.15f, 0.15f);
-                func_L01_003010A8(&v, 0.2f);
+                SpawnDripMoby(&v, 0.2f);
                 pool_drip_timer = rand_range(300, 1200);
             }
         }
@@ -1131,7 +1131,7 @@ void WaterSurfaceFxUpdate(PMoby *moby) {
             p.x = random_float_between(-0.6f, 0.6f) + 177.0f;
             p.y = f * -11.0f + 176.0f + random_float_between(-0.1f, 0.1f);
             p.z = 39.0f;
-            func_L01_00288A48(&p, &v, 1.0f, random_float_between(0.4f, 0.5f));
+            PartType57Spawn(&p, &v, 1.0f, random_float_between(0.4f, 0.5f));
             v.x = 0.0f;
             v.y = 0.0f;
             v.z = 0.0f;
@@ -1140,7 +1140,7 @@ void WaterSurfaceFxUpdate(PMoby *moby) {
                     p.x = random_float_between(-0.6f, 0.6f) + 178.0f;
                     p.y = f * -11.0f + 176.0f + random_float_between(-0.1f, 0.1f);
                     p.z = random_float_between(-0.2f, 0.0f) + 39.0f;
-                    func_L01_002888C8(&p, &v, random_float_between(4.0f, 10.0f));
+                    PartType56Spawn(&p, &v, random_float_between(4.0f, 10.0f));
                 }
             }
         }
@@ -1167,7 +1167,7 @@ void BreakablePotUpdate(char *m) {
     SV4 rot;
 
     flag = 0;
-    hit = func_L00_0025B478(m, 0x10000, 0);
+    hit = MobyGetHitMessage(m, 0x10000, 0);
     switch (*(unsigned char *)(m + 0x20)) {
     case 0:
         m[0x20] = 1;
@@ -1182,7 +1182,7 @@ void BreakablePotUpdate(char *m) {
         break;
     case 2:
         func_0022ED80(0, 0, (int)m);
-        func_L01_00279790(m);
+        SpawnBreakFxByDistance(m);
         s = *(float *)(m + 0x2C) / *(float *)(*(char **)(m + 0x24) + 0x24);
         i = 0;
         do {
@@ -1194,17 +1194,17 @@ void BreakablePotUpdate(char *m) {
             off.z = 0.0f;
             FastVecAdd(&off, &off, m + 0x10);
             off.z += s * 1.2f;
-            func_L00_00265050(m, 0x719, (float *)&off, &rot, 0, 0, D_L01_0015F660, D_L01_0015F660, 0.0f, D_L01_0015F660);
+            SpawnBreakFragment(m, 0x719, (float *)&off, &rot, 0, 0, D_L01_0015F660, D_L01_0015F660, 0.0f, D_L01_0015F660);
             i++;
         } while (i < 4);
-        func_L01_00279E10(m, 0x718);
+        SpawnMobyCopyingPlacement(m, 0x718);
         DeleteMoby(m);
         break;
     }
 }
 extern char D_L01_001FBF40[];
 /* The moby comes in $a0 and goes on to the delete, untouched. */
-void func_L01_002FFF00(void *moby) {
+void DrawScrollingLayers4Callback(void *moby) {
     DefaultVtbl_DeleteMoby(moby);
     DrawScrollingLayers(4, D_L01_001FBF40);
 }
@@ -1266,12 +1266,12 @@ void PulsingMeshUpdate(void *arg) {
             }
         }
     }
-    s = FastSin((func_001FA888(D_L01_0015F6B0 & 0x3F) - 32.0f) * 0.09817477f);
+    s = FastSin((IntToFloat(D_L01_0015F6B0 & 0x3F) - 32.0f) * 0.09817477f);
     s = s * 0.5f + 0.5f;
     for (g = 3; g >= 0; g--) {
         D_L01_001FBF40_FFF30[g].glow = s;
     }
-    func_001F49B0_FFF30(func_L01_002FFF00, arg);
+    func_001F49B0_FFF30(DrawScrollingLayers4Callback, arg);
 }
 typedef struct { float f[4]; } V __attribute__((aligned(16)));
 typedef struct { V home; float t; float radius; } HoverVars;
@@ -1362,7 +1362,7 @@ typedef int u128b __attribute__((mode(TI)));
 // Breakable prop update: when hit, spawns a burst of debris sparks then replaces itself.
 void Moby778Update(char *m) {
     char *d = *(char **)(m + 0x78);
-    char *t = func_L00_0025B478(m, 0x10000, 0);
+    char *t = MobyGetHitMessage(m, 0x10000, 0);
     *(unsigned char *)(m + 0xA4) = 0xFF;
     if (t != 0 && 0.0f < *(float *)(t + 0x2C)) {
         float v[4];
@@ -1395,13 +1395,13 @@ void Moby778Update(char *m) {
             a = random_float_between(125000.0f, 175000.0f);
             PartType22Spawn(v, w, 0x207F7F7F, 0x272727, a, scale_ticks(rand_range(0x2D, 0x3C)));
         }
-        func_L01_00300E68(m);
+        SpawnMoby30B(m);
         DeleteMoby(m);
     }
 }
 extern void func_L00_00251E30(void *, int);
 
-char *func_L01_00300E68(char *owner) {
+char *SpawnMoby30B(char *owner) {
     char *moby = CreateMoby(0x30B);
     if (moby != 0) {
         char *data;
@@ -1440,7 +1440,7 @@ void SmokeEmitterUpdate(char *self) {
     int i;
 
     v = *(int **)(self + 0x78);
-    if (func_L00_0028EB98(self, *v) == 0) {
+    if (Sound_IsPlaying(self, *v) == 0) {
         *v = func_0022ED80(0, 4, (int)self);
     }
     for (i = 0; i < 2; i++) {
@@ -1461,7 +1461,7 @@ extern float func_002140F8(float,float);
 extern void func_L00_00251E30_spawn(void *) __asm__("func_L00_00251E30");
 extern float D_0015EE70_s __asm__("D_0015EE70") MACRO_ADDR;
 /* Spawns a scaled class-0x313 drip with position and randomized motion. */
-char *func_L01_003010A8(void *position,float scale) {
+char *SpawnDripMoby(void *position,float scale) {
  char *m=CreateMoby(0x313);
  if(m) {
   char *data=*(char **)(m+0x78);
@@ -1520,7 +1520,7 @@ void FallingChunkUpdate(char *m) {
             at[0] = *(float *)(m + 0x10);
             at[1] = *(float *)(m + 0x14);
             at[2] = D_L01_00174368_s;
-            o = func_L00_002D9340(at, 2.0f);
+            o = Moby775Spawn(at, 2.0f);
             if (o != 0) {
                 o[0x23] = 0x70;
             }
@@ -1608,10 +1608,10 @@ extern int func_L00_0025A208(int *, int, int, int);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
 
 /* creates a moby from the owner's template and initialises its data */
-char *func_L01_00303700(char *owner) {
+char *SpawnTemplateMoby(char *owner) {
     char *moby = 0;
     char *data;
-    func_L00_0025A208((int *)&moby, **(int **)(owner + 0x78), 0, 0);
+    GroupMobyIter_Start((int *)&moby, **(int **)(owner + 0x78), 0, 0);
     data = *(char **)(moby + 0x78);
     ((unsigned char *)moby)[0x30] = 0x80;
     *(short *)(moby + 0x32) = 0x80;
@@ -1636,7 +1636,7 @@ extern char *func_L00_0025B478(void *, int, int);
 extern void func_0020D678(void *);
 
 void Moby1042Update(void *arg) {
-    char *item = func_L00_0025B478(arg, 0x10000, 0);
+    char *item = MobyGetHitMessage(arg, 0x10000, 0);
     if (item != 0 && *(float *)(item + 0x2C) > 0.0f) {
         DeleteMoby(arg);
     }
@@ -1649,13 +1649,13 @@ extern float func_001FA888(int);
 extern float func_001F9FA8(float);
 
 /* draw callback: pulses three colour entries from a sine of the frame counter */
-void func_L01_0030AFD0(void *moby) {
+void DrawPulsingScrollingLayers(void *moby) {
     float *p;
     float v;
     int i;
     DefaultVtbl_DeleteMoby(moby);
     DrawScrollingLayers(3, D_L01_00203040);
-    v = FastSin((func_001FA888(D_L01_0015F6B0 & 0x3F) - 32.0f) * 0.09817477f) * 0.5f + 0.5f;
+    v = FastSin((IntToFloat(D_L01_0015F6B0 & 0x3F) - 32.0f) * 0.09817477f) * 0.5f + 0.5f;
     p = (float *)(D_L01_00203040 + 0x11C);
     for (i = 2; i >= 0; i--) {
         *p = v;
@@ -1669,7 +1669,7 @@ void Moby1225Update(unsigned char *moby) {
     int value = 0xFF;
     *(short *)(moby + 0x32) = value;
     moby[0x30] = value;
-    AddDrawCallback((void *)func_L01_0030AFD0, moby);
+    AddDrawCallback((void *)DrawPulsingScrollingLayers, moby);
 }
 typedef struct { u16 count; u16 unk2; u32 level_mask; } UStat_30C090;
 typedef struct { u16 id; u16 pad; s32 v; } HRec_30C090;
@@ -1790,7 +1790,7 @@ void HelpHintDirectorUpdate(Moby *moby) {
         for (m2 = D_L01_00160064; m2 != 0; m2 = m2->next) {
             if (m2->oclass == 0x326 && FastVecDist(&m2->pos, &D_0013F450.motion.pos) < 10.0f && D_L01_00179910.state == 0 &&
                 D_L01_00179910.cur == -1 && D_00141A68[1].id == 0 && D_00141A68[2].id == 0 &&
-                D_00141948[13].count == 0 && func_L00_002D95D8(m2) == 0) {
+                D_00141948[13].count == 0 && IsMobyState1(m2) == 0) {
                 if (D_0013F450.health.hp < gMaxNanotech) {
                     if (D_00141948[13].count < 0xFFFF) {
                         D_00141948[13].count++;
@@ -1801,7 +1801,7 @@ void HelpHintDirectorUpdate(Moby *moby) {
                     }
                     D_00141948[13].level_mask = D_00141948[13].level_mask | (1 << D_0015EE84_2FBBD8) | 0x80000000;
                     Help_Request(1, 1);
-                } else if (func_L01_00276680(255.0f, m2) != 0) {
+                } else if (IsBSphereVisibleScaled(255.0f, m2) != 0) {
                     Help_Request(2, 2);
                 }
             }
@@ -2013,22 +2013,22 @@ void Moby1546Update(struct Moby *moby) {
                 } else if (fx_cutscene_D568.scene == 2) {
                     target = 2;
                 }
-                func_L00_00264870(fx_cutscene_D568.slot[target]);
+                SpawnMoby750Sparks(fx_cutscene_D568.slot[target]);
             }
             if (fx_cutscene_D568.scene == 1) {
                 if (fx_cutscene_D568.frame >= scale_ticks(472) && fx_cutscene_D568.frame <= scale_ticks(537) &&
                     fx_cutscene_D568.slot[0] != 0) {
-                    func_L00_00250800(fx_cutscene_D568.slot[0], 1, &a);
-                    e = func_L00_00272770(random_float_between(0.5f, 2.0f), random_integer_below(2) ? 2.0f : -2.0f, &a, (char *)D_L01_0015F660,
+                    Moby_GetJointWorldPos(fx_cutscene_D568.slot[0], 1, &a);
+                    e = PartType46Spawn(random_float_between(0.5f, 2.0f), random_integer_below(2) ? 2.0f : -2.0f, &a, (char *)D_L01_0015F660,
                                         &a.f[2]);
                     if (e != 0) {
                         *(short *)(e + 0xA) = scale_ticks(60);
                     }
                 }
                 if (fx_cutscene_D568.scene == 1 && fx_cutscene_D568.frame == scale_ticks(472) && fx_cutscene_D568.slot[0] != 0) {
-                    func_L00_00250800(fx_cutscene_D568.slot[0], 1, &a);
+                    Moby_GetJointWorldPos(fx_cutscene_D568.slot[0], 1, &a);
                     {
-                        char *burst = func_L00_002D9340(&a, 3.0f);
+                        char *burst = Moby775Spawn(&a, 3.0f);
 
                         if (burst != 0) {
                             burst[0x23] = 0x70;
@@ -2052,7 +2052,7 @@ void Moby1546Update(struct Moby *moby) {
                     if (fx_cutscene_D568.frame >= scale_ticks(850) && fx_cutscene_D568.frame <= scale_ticks(1160)) {
                         color = 0x7F204080;
                         for (node = 1; node < 7; node++) {
-                            func_L00_00250800(m, node, &a);
+                            Moby_GetJointWorldPos(m, node, &a);
                             for (j = 0; j < 2; j++) {
                                 spread = random_integer_below(16);
                                 s = PartType23Spawn(&a, 0.1f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spread : -spread,
@@ -2079,7 +2079,7 @@ void Moby1546Update(struct Moby *moby) {
                 m = fx_cutscene_D568.slot[2];
                 if (m != 0) {
                     a.q = 0;
-                    func_L00_00250800(m, 5, &b);
+                    Moby_GetJointWorldPos(m, 5, &b);
                     if (fx_cutscene_D568.frame >= 2) {
                         FastVecSub(&a, &b, &D_L01_00162100);
                         qcopy(&D_L01_00162100, &b);
@@ -2094,8 +2094,8 @@ void Moby1546Update(struct Moby *moby) {
                         func_L00_0025F4A8(m, &c, &d, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
                     AddDrawCallback(DrawEnvMappedObject, m);
-                    func_L00_00250800(m, 1, &c);
-                    func_L00_00250800(m, 2, &d);
+                    Moby_GetJointWorldPos(m, 1, &c);
+                    Moby_GetJointWorldPos(m, 2, &d);
                     FastVecSub(&c, &c, &a);
                     FastVecSub(&d, &d, &a);
                     FastVecScale(&a, &a, 0.25f);
@@ -2117,7 +2117,7 @@ void Moby1813Update(char *moby) {
     int flag;
 
     flag = 0;
-    hit = func_L00_0025B478(moby, 0x10000, 0);
+    hit = MobyGetHitMessage(moby, 0x10000, 0);
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0:
         moby[0x20] = 1;
@@ -2132,9 +2132,9 @@ void Moby1813Update(char *moby) {
         break;
     case 2:
         func_0022ED80(0, 0, (int)moby);
-        func_L01_00279790(moby);
-        func_L00_00265050(moby, 0x717, (float *)(moby + 0x10), moby + 0x40, 0, 0, D_L01_0015F660, D_L01_0015F660, 0.0f, D_L01_0015F660);
-        func_L01_00279E10(moby, 0x718);
+        SpawnBreakFxByDistance(moby);
+        SpawnBreakFragment(moby, 0x717, (float *)(moby + 0x10), moby + 0x40, 0, 0, D_L01_0015F660, D_L01_0015F660, 0.0f, D_L01_0015F660);
+        SpawnMobyCopyingPlacement(moby, 0x718);
         DeleteMoby(moby);
         break;
     }
@@ -2189,13 +2189,13 @@ extern float D_L01_00208430[];
 extern int D_L01_00208410[];
 
 /* Draw callback: sets up draw state, then draws five shapes from parallel tables. */
-void func_L01_003104B8(void) {
+void DrawEnvMappedShapes(void) {
     int i;
     VU1_addGSregister(6, GetEffectTex(0x28));
     VU1_addGSregister(0x42, 0x2000000064L);
     VU1_addGSregister(8, 0);
     VU1_addGSregister(0x14, 0xFF9000000260L);
-    func_001F7868();
+    Draw_BuildVu1Setup();
     for (i = 4; i >= 0; i--) {
         ProjectEnvMapUVs(D_L01_00203160[4 - i], D_L01_002083F8[4 - i], D_L01_002083C8[4 - i], D_L01_002083E0[4 - i], D_L01_00208430);
         func_L00_001FDE48(D_L01_00203160[4 - i], (int)D_L01_002083C8[4 - i], D_L01_00208410[4 - i], D_L01_00208430, 1);
@@ -2236,7 +2236,7 @@ void Moby1848Update(ScrollMoby *m) {
         if (D_L01_001621A0_105E0[1] < -1.0f) {
             D_L01_001621A0_105E0[1] += 1.0f;
         }
-        AddDrawCallback(func_L01_003104B8, m);
+        AddDrawCallback(DrawEnvMappedShapes, m);
         break;
     }
 }

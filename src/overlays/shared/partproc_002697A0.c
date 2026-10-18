@@ -89,7 +89,7 @@ extern void *D_L00_001B2200_2697A0[] __asm__("D_L00_001B2200");
 /* Registers the particle-type callbacks in the 81-entry table D_L00_001B2200. Entries 7, 17 and 63 are the
  * identical copies at 0x26B2B8 (of func_L00_0026AB10), 0x26D268 (an empty function, func_001E9768's code) and
  * 0x274750 (of func_L00_0026FEE8), named by their own addresses as retail stores them. */
-void func_L00_002697A0(void) {
+void RegisterPartTypes(void) {
     D_L00_001B2200_2697A0[0] = func_L00_00269BE8_2697A0;
     D_L00_001B2200_2697A0[1] = func_L00_00269E88_2697A0;
     D_L00_001B2200_2697A0[2] = func_L00_0026A130_2697A0;

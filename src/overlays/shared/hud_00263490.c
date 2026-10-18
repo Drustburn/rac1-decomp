@@ -26,7 +26,7 @@ void func_L05_00263490(HudElemX *e) {
     for (; i >= 0; i--) {
         *p-- = -1;
     }
-    func_L00_00236610(e);
+    Hud_SetupCounterDigits(e);
 }
 extern float func_00214D28(float *p, float target, float maxstep);
 extern int func_001FA898_r(float) __asm__("func_001FA898");
@@ -225,7 +225,7 @@ int ChallengeHudDraw(char *a) {
     }
     if (u[2] != 0) {
         func_00116248_002670A0(buf, D_L05_0015F940, D_L05_0015FB8C * 0x168);
-        f20 = func_001FA888(u[1]);
+        f20 = IntToFloat(u[1]);
         r = scale_ticks(*(int *)&D_L05_0015F95C);
         f12 = f20 / (float)r;
         if (u[2] == 1 || u[2] == 3) {
@@ -312,14 +312,14 @@ int ChallengeHudDraw(char *a) {
     Hud_AlignElement(a, &xa, &xb);
     s16 = (*(int *)(a + 0x74) * 0xDD) / *(int *)(a + 0x8) + 0x1B;
     id = GetIconFrame(0x7558, 1);
-    func_L00_0023C058(id, xa, xb, s16, 0x40, 0x80);
+    HudSpriteSubRect(id, xa, xb, s16, 0x40, 0x80);
     id2 = GetIconFrame(0x7558, 0);
     HudSprite(id2, xa, xb, 0x100, 0x40, 0x80);
     E = D_0013E633 + 0xE1D;
     t = (unsigned char)E[0x8AE];
     if (scale_ticks(0x78) < t) {
         r3 = scale_ticks(0x3C);
-        f0 = func_001FA888(D_L05_0015F6B0 % r3) / (float)r3;
+        f0 = IntToFloat(D_L05_0015F6B0 % r3) / (float)r3;
         f0 = FastSin(f0 * 6.283180236816406f - 3.141590118408203f);
         r3 = FastTweenColor(*(int *)&D_L05_0015F98C, *(int *)&D_L05_0015F990, f0 * 0.5f + 0.5f);
         func_00116248_002670A0(buf, func_001FE540_002670A0(0x531F));
@@ -333,9 +333,9 @@ extern int D_L05_0015FA58 MACRO_ADDR;
 extern int D_L05_0015FA54 MACRO_ADDR;
 extern short D_L05_0015FA50;
 // Releases the held hud element if any, clears a flag and bumps a counter.
-void func_L05_00264C88(void) {
+void Hud_ReleaseHeldElement(void) {
     if (D_L05_0015FA58 != -1) {
-        func_001FFDA0(D_L05_0015FA58, 0);
+        Hud_SetBarValueById(D_L05_0015FA58, 0);
         D_L05_0015FA58 = -1;
     }
     D_L05_0015FA54 = 0;

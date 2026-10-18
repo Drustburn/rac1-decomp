@@ -38,7 +38,7 @@ extern float D_0015EE6C MACRO_ADDR;
 extern float func_001FA790(float, float);
 extern void func_001F99B0(void *, int, int);
 
-void func_L00_001FE9C8(void) {
+void UpdateEffectSlots(void) {
     int i;
     P *p = D_L00_0016EB40;
     for (i = 15; i >= 0; i--, p++) {

@@ -472,7 +472,7 @@ LINKER_REMNANT("asm/remnants/text", func_001FFD98);
 /* Stores arg1 into +0x24 of the record whose +0x64 is arg0, and into
    +0x04 when its +0x68 is 0. Indexing the extern array at each access,
    not through a cached base pointer, gives retail's per-access %lo. */
-void func_001FFDA0(int arg0, int arg1) {
+void Hud_SetBarValueById(int arg0, int arg1) {
     int i;
     for (i = 0; i < 13; i++) {
         if (D_00199C60[i].unk64 == arg0) {
@@ -512,7 +512,7 @@ LINKER_REMNANT("asm/remnants/text", func_001FFF08);
 
 extern short D_0015F9D0;   /* SDA (gp -0x7330) */
 
-void func_001FFFA0(void) {
+void TickDownCounter(void) {
     int v = *(int *)&D_0015F9D0;
     if (v != 0) {
         *(int *)&D_0015F9D0 = v - 1;

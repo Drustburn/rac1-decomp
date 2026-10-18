@@ -62,9 +62,9 @@ void OpenVendorScreen(char *m, int lvl) {
     *(int *)(s + 4) = 0;
     *(char **)(s + 0x28) = m;
     sc = s + 0xC0;
-    func_L00_0023B890();
+    Hud_ResetState();
     HelpPopup_Cancel();
-    func_L01_0023D688(100, 1);
+    Hero_SetMoveState(100, 1);
     g[0x20AC] = 1;
     g[0x20A5] = 1;
     HeroSetObjectFlags();
@@ -84,9 +84,9 @@ void OpenVendorScreen(char *m, int lvl) {
     D_L01_0015F4FC = 1.0f;
     D_L01_0016124C = n;
     *(int *)&D_L01_0015F500 = 0;
-    func_L00_00210340(0, 0);
+    Hero_DestroySlotMobys(0, 0);
     *(int *)(g + 0x20B8) = lvl;
-    func_00205270(D_L01_00179FC0[lvl].f10, -1);
+    LoadMobyClassResources(D_L01_00179FC0[lvl].f10, -1);
     ReadLevelPackedData(r);
     q = (char *)D_0014171B + 0x100B5;
     *(int *)(q + 0x1C) = 0x2734;
@@ -97,6 +97,6 @@ void OpenVendorScreen(char *m, int lvl) {
     }
     c2 = D_L01_0016CD60;
     g2 = D_0013E633 + 0xE1D;
-    func_L00_00207948(*(int *)(c2 + 0x17C), *(int *)(g2 + 0x2080));
-    func_00216960();
+    TintEffectFromMobyColor(*(int *)(c2 + 0x17C), *(int *)(g2 + 0x2080));
+    Music_ContinueStreamIfReady();
 }

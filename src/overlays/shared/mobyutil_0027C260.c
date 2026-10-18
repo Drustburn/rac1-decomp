@@ -10,7 +10,7 @@ extern void func_002153E8(void *, void *);
 extern char *D_L12_00160058 MACRO_ADDR;
 
 // Transforms an array of n 0x30-byte entries into the space of a moby, skipping empty slots.
-void func_L12_0027C260(char *moby, char *arr, int n) {
+void TransformChildrenToParentSpace(char *moby, char *arr, int n) {
     float m0[12];
     float m1[16];
     float m2[16];

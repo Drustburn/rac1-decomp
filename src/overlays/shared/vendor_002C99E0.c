@@ -36,7 +36,7 @@ extern char *D_L11_00160064 MACRO_ADDR;
 typedef int u128 __attribute__((mode(TI)));
 
 // Finds the best-scoring moby of class 5 in range of a position, by distance and aim cone.
-char *func_L11_00309A40(float *pos, float *aim, float r1, float r2, float maxd) {
+char *FindBestAimMobyClass5(float *pos, float *aim, float r1, float r2, float maxd) {
     char *best = 0;
     char *q;
     char *p = D_L11_00160064;
@@ -176,7 +176,7 @@ void func_L11_00309DA0(struct Moby *moby) {
     target = vars->target;
     if (target == 0 || target->state == 0xFE || target->state == 0xFD ||
         FastVecDist(&target->pos, look) > 3.0f)
-        vars->target = (struct Moby *)func_L11_00309A40((float *)&moby->pos, (float *)&moby->rot, 0.2617994f, 0.2617994f, 60.0f);
+        vars->target = (struct Moby *)FindBestAimMobyClass5((float *)&moby->pos, (float *)&moby->rot, 0.2617994f, 0.2617994f, 60.0f);
     if (vars->target != 0) {
         copy_xyz_089d0(vars->target_pos, (float *)&vars->target->pos);
         speed = FastVecLength(vars);
@@ -209,7 +209,7 @@ void func_L11_00309DA0(struct Moby *moby) {
         DeleteMoby(moby);
         return;
     }
-    func_L00_0025A890(1.0f, &hit, moby, 0x10000);
+    InitHitQuery(1.0f, &hit, moby, 0x10000);
     hit.oclass = moby->oclass;
     if (func_L00_001EFFF0(old, &moby->pos, 0, vars->owner, &hit)) {
         for (i = 0; i < 5; i++) {
@@ -239,7 +239,7 @@ extern float func_L00_001FF860(float, float);
 extern void func_L00_001FF4B0(void *, void *, float);
 
 /* spawns a streak moby aimed along a direction with the given size and colour */
-char *func_L11_0030A318(int owner, float *dir, float *pos, float size, float len, float z) {
+char *SpawnStreakMoby(int owner, float *dir, float *pos, float size, float len, float z) {
     char *m = CreateMoby(0x3F9);
     if (m != 0) {
         char *p = *(char **)(m + 0x78);
@@ -308,7 +308,7 @@ void FireballUpdate(char *m) {
     FastVecScale(v, d, *(float *)&D_L11_00161E60);
     PartType27Spawn((char *)p, (char *)v, c, scale_ticks(*(int *)&D_L11_00161E58), (float)*(int *)&D_L11_00161E5C);
     FastVecAdd(pos, pos, d);
-    func_L00_0025A8C0(hit, m, 0x10000, *(float *)(d + 0x20), d);
+    InitDirectionalHitQuery(hit, m, 0x10000, *(float *)(d + 0x20), d);
     if (func_L00_001EFFF0(old, pos, 0, *(void **)(d + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
@@ -396,14 +396,14 @@ void Moby1034Update(struct PMoby *moby) {
     func_L00_001FF4B0(&velocity, &velocity, random_float_between(0.1f, 0.2f) * D_0015EE6C);
     func_L00_001FF4B0(&offset, &data->step, -random_float_between(D_0015EE6C * 0.1f, D_0015EE6C));
     FastVecAdd(&velocity, &velocity, &offset);
-    func_L00_00272158(&moby->pos, &velocity, scale_ticks(6), 0x7f, 0xb0b0b0,
+    PartType44Spawn(&moby->pos, &velocity, scale_ticks(6), 0x7f, 0xb0b0b0,
                3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     texture = D_L11_001B2D80;
     for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *p;
         func_L00_001FF4B0(&offset, &data->step, random_float_between(fraction, fraction + 0.33333334f) * data->speed);
         FastVecAdd(&offset, &offset, &moby->pos);
-        p = func_L00_00272158(&offset, &velocity, scale_ticks(60), 0x7f, 0x606060, 3, 40000.0f,
+        p = PartType44Spawn(&offset, &velocity, scale_ticks(60), 0x7f, 0x606060, 3, 40000.0f,
                        1000.0f, 1.0f, -0.0002f, 0.0f);
         if (p != 0) {
             unsigned char *texture_pixels = *(unsigned char **)(texture + 0x5c);
@@ -425,9 +425,9 @@ void Moby1034Update(struct PMoby *moby) {
         moby->rot.y = -func_L00_001FF860(func_001F9D48(pos, &data->target->pos), data->target->pos.z - moby->pos.z);
         qcopy(&data->target_pos, &data->target->pos);
     } else {
-        func_L00_0025CE58(&moby->rot.z, &data->turn_speed, moby->rot.z, D_0015EE70 * 251.32741f,
+        SteerAngleWithVelocity(&moby->rot.z, &data->turn_speed, moby->rot.z, D_0015EE70 * 251.32741f,
                D_0015EE70 * 251.32741f, D_0015EE6C * 2513.2742f);
-        func_L00_0025CE58(&moby->rot.y, &data->turn_speed, moby->rot.y, D_0015EE70 * 251.32741f,
+        SteerAngleWithVelocity(&moby->rot.y, &data->turn_speed, moby->rot.y, D_0015EE70 * 251.32741f,
                D_0015EE70 * 251.32741f, D_0015EE6C * 2513.2742f);
         data->target = 0;
     }
@@ -438,7 +438,7 @@ void Moby1034Update(struct PMoby *moby) {
         DeleteMoby(moby);
         return;
     }
-    func_L00_00250800(moby, 1, &spray);
+    Moby_GetJointWorldPos(moby, 1, &spray);
     if (func_L00_001EFFF0(&previous_pos, &spray, 0, data->collision, 0)) {
         func_L00_0025F4A8(moby, data, D_L11_001748E0, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
                 -1, 20.0f, 0, 1, -1, 0);
@@ -531,7 +531,7 @@ void DrawWaterSheet(Moby *moby) {
     VU1_addGSregister(0x14, 0xFF9000000260L);
     VU1_addGSregister(0x47, 0x513F1);
     VU1_addGSregister(6, GetEffectTex(0x16));
-    func_001F7868();
+    Draw_BuildVu1Setup();
     a.x = 1.0f;
     a.y = 0.0f;
     a.z = 0.0f;
@@ -565,8 +565,8 @@ void DrawWaterSheet(Moby *moby) {
     FastVecSub(&d1, &c[3], &c[2]);
     t = 10.0f;
     for (i = 0; i < 12; i += 2) {
-        float f = func_001FA888(i) / 10.0f;
-        int col = FastTweenColor(d->f0, d->f4, func_001FA888(i) / t);
+        float f = IntToFloat(i) / 10.0f;
+        int col = FastTweenColor(d->f0, d->f4, IntToFloat(i) / t);
         FastVecScale(&v0, &d0, f);
         D_L11_001DA0D8[i] = col;
         D_L11_001DA5E0[i].u = 0.0f;
@@ -821,7 +821,7 @@ extern char D_L11_001DAB40[];
 extern int D_L11_00160058_m __asm__("D_L11_00160058") MACRO_ADDR;
 
 // For each index in the moby's list, copy its z to the entry and to the table slot the entry points at.
-void func_L11_0030FB58(char *moby) {
+void Group_CopyZToTableSlots(char *moby) {
     short *p = D_L11_001AC540[*(unsigned char *)(moby + 0x21)];
     int base = D_L11_00160058_m;
     do {
@@ -963,7 +963,7 @@ void Moby1179Update(Lock_3102C8 *moby)
     }
 }
 /* Recognize the active vendor object state. */
-int func_L11_00310738(char *moby) {
+int IsMoby1179Active(char *moby) {
     if (*(short *)(moby + 0xA6) == 0x49B &&
         ((unsigned char *)moby)[0x20] == 2) {
         return 1;
@@ -1007,8 +1007,8 @@ void func_L11_00311F98(short *pts, int n, float x0, float y0, unsigned int col, 
     D_L11_00161240 += 0x10;
     o = (unsigned long *)D_L11_00161240;
     for (i = 0; i < n; i++) {
-        x = truncate_float_to_s32((func_001FA888(pts[i * 2]) * scale + x0) * 16.0f);
-        y = truncate_float_to_s32((func_001FA888(pts[i * 2 + 1]) * scale + y0) * 16.0f);
+        x = truncate_float_to_s32((IntToFloat(pts[i * 2]) * scale + x0) * 16.0f);
+        y = truncate_float_to_s32((IntToFloat(pts[i * 2 + 1]) * scale + y0) * 16.0f);
         o[i] = (unsigned long)(x + D_0013E600[4] - 8) | ((unsigned long)(y + D_0013E600[5] - 8) << 16) | ((unsigned long)col << 32);
     }
     D_L11_00161240 += ((n + 1) / 2) * 16;
@@ -1171,7 +1171,7 @@ extern short D_L11_00162288;
 extern short D_L11_00162298;
 
 // Spawns two rounds of scaled particle trails from three offset copies of a moby's point.
-void func_L11_00312780(void *m, char *t) {
+void SpawnParticleTrails(void *m, char *t) {
     int i;
     for (i = 1; i < 3; i++) {
         float vel[4];
@@ -1188,14 +1188,14 @@ void func_L11_00312780(void *m, char *t) {
         } else if (scale < 0.35f) {
             scale = 0.35f;
         }
-        func_L00_00250800(m, i, pos);
+        Moby_GetJointWorldPos(m, i, pos);
         pos[3] = 0.0f;
         qcopy(a, pos);
         qcopy(b, pos);
         qcopy(c, pos);
-        func_L00_00260958(a, *(float *)(t + 0xC4) * 0.02f + 0.02f);
-        func_L00_00260958(b, *(float *)(t + 0xC4) * 0.02f + 0.02f);
-        func_L00_00260958(c, *(float *)(t + 0xC4) * 0.01f + 0.02f);
+        JitterVector(a, *(float *)(t + 0xC4) * 0.02f + 0.02f);
+        JitterVector(b, *(float *)(t + 0xC4) * 0.02f + 0.02f);
+        JitterVector(c, *(float *)(t + 0xC4) * 0.01f + 0.02f);
         vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015EE6C) * scale;
         PartType74Spawn(m, a, vel, &D_L11_00162258, 1);
         vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015EE6C) * scale;
@@ -1203,9 +1203,9 @@ void func_L11_00312780(void *m, char *t) {
         vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 4.0f) * D_0015EE6C) * scale;
         PartType74Spawn(m, c, vel, &D_L11_00162278, 1);
         if (*(float *)(t + 0xC4) > 0.5f) {
-            func_L00_00260958(a, *(float *)(t + 0xC4) * 0.02f + 0.01f);
-            func_L00_00260958(b, *(float *)(t + 0xC4) * 0.02f + 0.01f);
-            func_L00_00260958(c, *(float *)(t + 0xC4) * 0.01f + 0.01f);
+            JitterVector(a, *(float *)(t + 0xC4) * 0.02f + 0.01f);
+            JitterVector(b, *(float *)(t + 0xC4) * 0.02f + 0.01f);
+            JitterVector(c, *(float *)(t + 0xC4) * 0.01f + 0.01f);
             vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 2.0f) * D_0015EE6C) * scale;
             PartType74Spawn(m, a, vel, &D_L11_00162258, 1);
             vel[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(t + 0xC4) * 3.0f) * D_0015EE6C) * scale;
@@ -1279,7 +1279,7 @@ extern int func_L00_001F10E0(float, void *, int, void *);
 /* Collectable crate: when hit, updates the totals (count, best time, levels mask, a level-11 bonus) and breaks open. */
 void CollectableCrateUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
-    char *info = func_L00_0025B478(m, 0x330000, 0);
+    char *info = MobyGetHitMessage(m, 0x330000, 0);
     char *g;
     ((unsigned char *)m)[0xA4] = 0xFF;
     g = D_0013E633 + 0xE1D;
@@ -1425,7 +1425,7 @@ extern int D_L11_00217A00[];
 extern Pair8 D_L11_001626B8[] MACRO_ADDR;
 
 // Fills 5 rows of a three-column table and hands each row to two builders.
-void func_L11_0031FCC8(int a) {
+void PlaceLevelEffectPieces(int a) {
     int i;
     for (i = 0; i < 5; i++) {
         func_L08_00259040(D_L11_00217A30, D_L11_002179D0[i], D_L11_00215528[i], &D_L11_001626B8[a]);

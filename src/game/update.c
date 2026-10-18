@@ -399,10 +399,10 @@ void func_002391E8(Moby *m) {
         }
         break;
     case 4:
-        if (func_00215B18(m, (((s32 *)&D_00161130))[D_001E66C0_391E8.pick]) != 0 &&
+        if (IsFrameWithinWindow(m, (((s32 *)&D_00161130))[D_001E66C0_391E8.pick]) != 0 &&
             D_001611B4 != 0) {
             D_001611B4 = 0;
-            func_00216960();
+            Music_ContinueStreamIfReady();
         }
         if (m->anim_flags & 2) {
             if (m->prev_seq != 2) {
@@ -413,10 +413,10 @@ void func_002391E8(Moby *m) {
         }
         break;
     case 5:
-        if (func_00215B18(m, (((s32 *)&D_00161138))[D_001E66C0_391E8.pick]) != 0 &&
+        if (IsFrameWithinWindow(m, (((s32 *)&D_00161138))[D_001E66C0_391E8.pick]) != 0 &&
             D_001611B4 != 0) {
             D_001611B4 = 0;
-            func_00216960();
+            Music_ContinueStreamIfReady();
         }
         if (m->anim_flags & 2) {
             if (m->prev_seq != 2) {
@@ -427,10 +427,10 @@ void func_002391E8(Moby *m) {
         }
         break;
     case 6:
-        if (func_00215B18(m, (((s32 *)&D_00161140))[D_001E66C0_391E8.pick]) != 0 &&
+        if (IsFrameWithinWindow(m, (((s32 *)&D_00161140))[D_001E66C0_391E8.pick]) != 0 &&
             D_001611B4 != 0) {
             D_001611B4 = 0;
-            func_00216960();
+            Music_ContinueStreamIfReady();
         }
         if (m->anim_flags & 2) {
             if (m->prev_seq != 2) {

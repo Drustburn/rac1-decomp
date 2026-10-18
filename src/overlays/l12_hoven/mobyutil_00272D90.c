@@ -18,7 +18,7 @@ s32 SteerAheadOfHeading(struct Moby *m, void *ctl) {
     qcopy(&ahead, &m->pos);
     ahead.f[0] += FastCos(m->rot.z) * 100.0f;
     ahead.f[1] += FastSin(m->rot.z) * 100.0f;
-    return func_L00_00259B88(m, ctl, &ahead, &out, 1.0f);
+    return MobySteerToward(m, ctl, &ahead, &out, 1.0f);
 }
 extern float func_001F9B88(float);
 extern float func_001F9D10(void *, void *);
@@ -45,7 +45,7 @@ extern void func_001FA480(void *, void *);
 extern void func_00214F78(void *);
 extern void func_0020EEE8(void *);
 
-void func_L12_0027C9B8(unsigned char *parent, unsigned char *child, int mode) {
+void Moby_AttachChildToVertex(unsigned char *parent, unsigned char *child, int mode) {
     char workspace[0x40];
     MobyTransformScaledVertex(parent, mode, workspace);
     qcopy(child + 0x10, workspace + 0x30);
@@ -63,7 +63,7 @@ void func_L12_0027C9B8(unsigned char *parent, unsigned char *child, int mode) {
 extern char *D_L12_001B0C30[];
 
 // Fills in the per-segment lengths of path record number idx.
-void func_L12_0027CA68(int idx) {
+void Path_ComputeOpenSegmentLengths(int idx) {
     char *p;
     int i;
     if (idx == -1) return;

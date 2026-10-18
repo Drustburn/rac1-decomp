@@ -17,14 +17,14 @@ extern int func_001F9908_r(int *) __asm__("func_001F9908");
 extern void func_L00_002703E8(void *, void *, int, int);
 
 /* while the countdown value is ready, scatter a spawn by the camera's offset and reroll the delay */
-void func_L00_002E1660(char *m) {
+void DriftParticleEmit(char *m) {
     char *d = *(char **)(m + 0x78);
     float a[4];
     float b[4];
     char *pad;
     float f;
     if (func_001F9908_r((int *)(d + 4))) {
-        func_L00_00250800(m, 0, a);
+        Moby_GetJointWorldPos(m, 0, a);
         f = random_float_between(D_0015EE6C, D_0015EE6C * 3.0f);
         func_L00_001FF4B0(b, m + 0xD0, -f);
         pad = D_0013E633 + 0xE1D;
@@ -69,7 +69,7 @@ void func_L00_002E17F0(char *a) {
     if (*(unsigned char *)(a + 0x20) == 4) {
         D_L00_0015F504 = 0;
         *(int *)&D_L00_0015F4FC = 0;
-        func_L00_002EC0C8(3);
+        CameraScript2(3);
     }
     if (*(int *)(D_0013F450 + 0x208C) == 0x13) {
         HeroEnterMoveState(0, 1);
@@ -111,7 +111,7 @@ extern void func_L00_002512D8(s32);
 extern void func_0020BFC8(s32, s32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002df730.c, FUN_L00_002e03a0. */
-void func_L00_002E1850(M_2e03a0_2e03a0 *m) {
+void Moby1290Update(M_2e03a0_2e03a0 *m) {
     P_2e03a0_2e03a0 *p = m->p;
     char *g;
     E_2e03a0_2e03a0 *e;
@@ -121,7 +121,7 @@ void func_L00_002E1850(M_2e03a0_2e03a0 *m) {
     m->ang = FastAddRots(m->ang, D_0015EE6C * 1.5707964f);
     switch (m->state) {
     case 0:
-        func_L00_002D80A0(m);
+        DriftingSprites_Init(m);
         if (p->fa_2e03a0 == -1) STUB_printf(D_L00_001EA530, m->h);
         if (D_0013D5C8[7]) {
             STUB_printf(D_L00_001EA558);
@@ -138,7 +138,7 @@ void func_L00_002E1850(M_2e03a0_2e03a0 *m) {
             g -= 0x80;
             if (FastAbsF(m->z - *(f32 *)(g + 0x88)) < 2.0f && *(s32 *)(g + 0x22A8)) {
                 m->fl |= 0x41;
-                if (p->fa_2e03a0 != -1) func_L00_00299B68(p->fa_2e03a0);
+                if (p->fa_2e03a0 != -1) StartCutscene(p->fa_2e03a0);
                 else STUB_printf(D_L00_001EA530, m->h);
                 m->state = 2;
             }
@@ -149,7 +149,7 @@ void func_L00_002E1850(M_2e03a0_2e03a0 *m) {
         STUB_printf(D_L00_00161C90);
         ShowBanner(0x232A, -1);
         D_L00_0015F720 = 0xB4;
-        func_L00_002618D8(7, 1);
+        GiveItem(7, 1);
         if (D_00141C08[0] == 0) Help_Request(0x2328, 0x34);
         if (p->b != -1) {
             D_L00_001BA960.arr[(*(E_2e03a0_2e03a0 * *)&D_L00_00160098)[p->b].h] = (*(E_2e03a0_2e03a0 * *)&D_L00_00160098)[p->b].b0 + 2;
@@ -159,7 +159,7 @@ void func_L00_002E1850(M_2e03a0_2e03a0 *m) {
         } else {
             STUB_printf(D_L00_001EA580, m->h);
         }
-        if (m->b0 != 0xFF) func_L00_002512D8(m->b0);
+        if (m->b0 != 0xFF) SetLevelTriggerDone(m->b0);
         D_00141510[0] = 7;
         m->state = 3;
         break;
@@ -187,7 +187,7 @@ typedef struct {
 } FxData;
 
 /* Scrolls the four hue values of a moby's effect and spawns a coloured streak for each. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay_vendor_002df730.c, FUN_L00_002e0788. */
-void func_L00_002E1C38(char *p) {
+void HueStreakFxUpdate(char *p) {
     float v[8];
     FxData *m = *(FxData **)(p + 0x78);
     float *a;
@@ -214,11 +214,11 @@ void func_L00_002E1C38(char *p) {
             m->t[j] = scale_ticks(255);
         }
         t++;
-        g = func_001FA888(scale_ticks(255) - m->t[j]);
+        g = IntToFloat(scale_ticks(255) - m->t[j]);
         g = g / (float)scale_ticks(255);
         c = FastTweenColor(0x4040FFFF, 0x1040FFFF, FastAbsF(0.5f - g));
         k = func_001FA898_r(*a++);
-        func_L00_00273E08(m->c[j], v, c, k, 0x35, 1, 2, 0);
+        PartType59Spawn(m->c[j], v, c, k, 0x35, 1, 2, 0);
         j++;
         FastVecAdd(v, v, &v[4]);
     }
@@ -236,7 +236,7 @@ extern s32_2e1f28 D_L00_00161D48[] MACRO_ADDR;
 extern s32_2e1f28 D_L00_00161D58[] MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002df730.c, FUN_L00_002e1f28. */
-s32_2e1f28 func_L00_002E33D8(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
+s32_2e1f28 EffectSlot_Alloc(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
     s32_2e1f28 i, j;
     for (i = 0; i < 3; i++) {
         if (D_L00_00161D58[i] == id) return 1;
@@ -265,7 +265,7 @@ extern int D_L00_00161D08[];
 extern int D_L00_00161D58[];
 
 // releases the slot owning the given id and its two handles; returns 1 if found
-int func_L00_002E34F0(int id) {
+int EffectSlot_Free(int id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
         if (D_L00_00161D58[i] == id) {
@@ -289,7 +289,7 @@ extern int D_L00_00161D08[] MACRO_ADDR;
 extern int D_L00_00161D18[] MACRO_ADDR;
 extern int D_L00_00161D58[] MACRO_ADDR;
 /* Frees one slot: clears its two state words and releases its two handles. MACRO_ADDR arrays, as the NTSC decomp declares them. */
-void func_L00_002E35A8(int i) {
+void EffectSlot_FreeAt(int i) {
     int v;
     v = D_L00_00161D08[i];
     D_L00_00161CC8[i] = 0;
@@ -309,7 +309,7 @@ extern B002E3640 D_L00_001E7070[];
 extern Q002E3640 D_L00_001E7130[];
 extern void func_001F9A98(void *, void *, int);
 /* Finds the slot holding handle id, advances its state word and stores the 0x40-byte matrix and the vector for it. */
-int func_L00_002E3640(int id, void *src, void *v) {
+int EffectSlot_Update(int id, void *src, void *v) {
     int i;
     for (i = 0; i < 3; i++) {
         if (id == D_L00_00161D58[i]) {
@@ -550,7 +550,7 @@ extern void func_L00_002E4838(int, int);
 extern void func_L00_002E4138(int, int, void *, int, int, int);
 
 /* Scrolls and draws the two panes of each active slot (3 slots). */
-void func_L00_002E3FA0(char *m) {
+void EffectSlot_DrawPanes(char *m) {
     int *d = *(int **)(m + 0x78);
     int i;
     VU1_addGSregister(0x47, 0x51001);
@@ -567,8 +567,8 @@ void func_L00_002E3FA0(char *m) {
         func_L00_002E4838(D_L00_00161D58[i], i);
         a = d[1] + 0x28;
         b = d[0] + 0x28;
-        func_L00_002E4138(a, b, &D_L00_001E7190[k], 0x80, 0x40, i);
-        func_L00_002E4138(a, b, &D_L00_001E7190[k1], 0x30, 0x10, i);
+        DrawSlotBlendQuads(a, b, &D_L00_001E7190[k], 0x80, 0x40, i);
+        DrawSlotBlendQuads(a, b, &D_L00_001E7190[k1], 0x30, 0x10, i);
     }
 }
 typedef struct {
@@ -589,7 +589,7 @@ extern float func_L00_00258E58(float, float, float, float, float);
 
 /* Builds the two blend quads from the slot tables and draws them along the
    19-step trail in a2. */
-void func_L00_002E4138(int a0, int a1, void *a2, int a3, int a4, int a5)
+void DrawSlotBlendQuads(int a0, int a1, void *a2, int a3, int a4, int a5)
 {
     Quad_2e4138 q[2];
     Vec4 va, vb;
@@ -706,7 +706,7 @@ void func_L00_002E4138(int a0, int a1, void *a2, int a3, int a4, int a5)
         qcopy(&q[0].corner[1], &q[0].corner[3]);
         qcopy(&q[1].corner[0], &q[1].corner[2]);
         qcopy(&q[1].corner[1], &q[1].corner[3]);
-        f = func_L00_00258E58(-1.0f, z, 1.0f, z, func_001FA888(i) / func_001FA888(20));
+        f = CubicInterpolate(-1.0f, z, 1.0f, z, IntToFloat(i) / IntToFloat(20));
         e = D_L00_00161D48_f[a5];
         q[0].uv[0].u = e + z;
         q[0].uv[0].v = z;
@@ -885,7 +885,7 @@ extern float func_001F9D10(void *, void *);
 extern float func_001F9CB8(void *);
 
 // Grass moby update: plays an animation when the player is near and leaves.
-void func_L00_002E5158(char *m) {
+void GrassUpdate(char *m) {
     if (FastVecDist(D_0013E633 + 0xE9D, m + 0x10) < 1.0f) {
         if (FastVecLength(D_0013E633 + 0xE9D + 0x80) > D_0015EE6C + D_0015EE6C) {
             if (*(unsigned char *)(m + 0x53) != 1) {
@@ -914,7 +914,7 @@ extern char D_L00_0015F660[] MACRO_ADDR;
 extern float D_L00_00173F80[] NOT_SDA;
 
 /* Update of an effect-group moby: state machine over its life, then it steers a sprite along its path and bounces it off surfaces. */
-void func_L00_002E5238(char *m) {
+void FxGroupUpdate(char *m) {
     char *d = *(char **)(m + 0x78);
     float a20[4];
     float a30[12];
@@ -943,7 +943,7 @@ void func_L00_002E5238(char *m) {
         func_001F9EC0(a20, d + 0x20, m + 0xC0);
         FastVecAdd(a20, a20, m + 0x10);
         if (*(int *)(d + 0x34) & 2) {
-            func_L00_00260460(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
+            SpawnExplosionFxSwapped(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
         } else {
             float h = *(float *)(d + 0x2C) * 0.5f;
             func_L00_0025F4A8(m, D_L00_0015F660, a20, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
@@ -991,7 +991,7 @@ void func_L00_002E5238(char *m) {
 }
 extern char D_0013E633[];
 // copies a vector out of the game block into the second argument
-void func_L00_002E5618(char *a, void *out) {
+void Cam_GetHeroPosition(char *a, void *out) {
     qcopy(out, D_0013E633 + 0xE9D);
 }
 typedef struct { float f[4]; } __attribute__((aligned(16))) VQ;
@@ -1033,7 +1033,7 @@ extern int func_L00_001EE530(VS *, float);
 int func_L00_002E5740(VS *a) {
     VS v;
     v = *a;
-    return func_L00_001EE530(&v, 0.0f) != 0;
+    return FindVolumeInGrid(&v, 0.0f) != 0;
 }
 typedef float VQ_2E5770[4] __attribute__((aligned(16)));
 extern char D_L00_00166F10[];
@@ -1049,10 +1049,10 @@ int func_L00_002E5770(void *out, int flag) {
     char *g = D_L00_00166F10;
 
     if (*(short *)(base + 0x30C) == 0) {
-        func_L00_002E5618(*(char **)(g - 0x10), out);
+        Cam_GetHeroPosition(*(char **)(g - 0x10), out);
         return 1;
     }
-    func_L00_002E5618(*(char **)(g - 0x10), a);
+    Cam_GetHeroPosition(*(char **)(g - 0x10), a);
     f = *(float *)(base + 0x2DC);
     if (f >= 30.0f || flag == 0) {
         FastVecScale(d, g + 0x30, 0.2f);
@@ -1079,7 +1079,7 @@ extern void func_001F9BC0(void *);
 extern char D_L00_00166F10[];
 
 /* initialises a moby's matrix block from the global camera frame */
-void func_L00_002E58E0(char *m) {
+void CamAttach_Init(char *m) {
     float a[4];
     float b[4];
     float c[4];
@@ -1122,11 +1122,11 @@ extern float func_001F9FC0(float);
 extern char D_L00_00166F10[];
 
 /* angle between a direction and an axis, signed */
-float func_L00_002E5A30(char *a, float f) {
+float Cam_SignedAngleToAxis(char *a, float f) {
     float v0[4], v1[4], v2[4], v3[4];
     float r, len;
     char *g = D_L00_00166F10;
-    func_L00_002E5618(a, v0);
+    Cam_GetHeroPosition(a, v0);
     FastVecScale(v1, g + 0x20, f);
     FastVecAdd(v1, v1, v0);
     FastVecSub(v2, v1, (float *)(a + 0x30));
@@ -1147,7 +1147,7 @@ float func_L00_002E5A30(char *a, float f) {
 typedef struct { int a[4]; } Vq4 __attribute__((aligned(16)));
 extern char D_L00_00166F10[] NOT_SDA;
 // adds the fixed offset vector into a moby's matrix rows and updates its camera-follow fields
-void func_L00_002E5B68(char *a) {
+void CamAttach_ShiftByHeroDelta(char *a) {
     Vq4 t;
     Vq4 v1, v2;
     char *b = D_L00_00166F10;
@@ -1193,11 +1193,11 @@ extern void func_001F9C30(void *, void *, float);
 extern void func_L00_002E5618(char *, void *);
 extern void func_001F9BD8(void *, void *, void *);
 extern float func_001F9C78(void *, void *);
-void func_L00_002E5D50(void *out, float f) {
+void Cam_ProjectOntoAxis(void *out, float f) {
     Vq t0, t1;
     char *b = (char *)&D_L00_00166F00 + 0x10;
     FastVecScale(&t0, b + 0x20, f);
-    func_L00_002E5618(D_L00_00166F00, &t1);
+    Cam_GetHeroPosition(D_L00_00166F00, &t1);
     FastVecAdd(&t0, &t0, &t1);
     FastVecScale(out, b + 0x30, FastVecDot(b + 0x30, &t0));
 }
@@ -1239,7 +1239,7 @@ typedef struct {
 } CamAttach;
 
 /* camera attach mode transitions: picks the next state from the player's state and arms its timers */
-void func_L00_002E5DE0(char *m) {
+void CamAttach_UpdateMode(char *m) {
     char *d = *(char **)(m + 0x70);
     CamAttach *e = (CamAttach *)(d + 0x40);
     char *q;
@@ -1252,21 +1252,21 @@ void func_L00_002E5DE0(char *m) {
             e->prev = e->state;
             e->state = 1;
             e->timer = D_L00_00161E0C;
-            e->invTimer = 1.0f / func_001FA888(e->timer);
+            e->invTimer = 1.0f / IntToFloat(e->timer);
         } else {
             char *p1 = D_0013E633 + 0xE1D;
             if (*(int *)(p1 + 0x2084) == 0xF && D_L00_00166FEC == 0.0f) {
                 e->prev = e->state;
                 e->state = 3;
                 e->moveTimer = scale_ticks(*(int *)&D_L00_00161E1C);
-                e->invMove = 1.0f / func_001FA888(e->moveTimer);
+                e->invMove = 1.0f / IntToFloat(e->moveTimer);
                 e->timer = D_L00_00161E20;
-                inv = 1.0f / func_001FA888(e->timer);
+                inv = 1.0f / IntToFloat(e->timer);
                 e->dist = *(float *)&D_L00_00161E28;
                 e->hit = 0;
                 x = *(float *)&D_L00_00161E28;
                 e->invTimer = inv;
-                func_L00_002E5D50(e->v30, x);
+                Cam_ProjectOntoAxis(e->v30, x);
                 qcopy(e->v20, e->v10);
             } else {
                 char *p2 = D_0013E633 + 0xE1D;
@@ -1274,21 +1274,21 @@ void func_L00_002E5DE0(char *m) {
                     e->prev = e->state;
                     e->state = 8;
                     e->timer = D_L00_00161E30;
-                    e->invTimer = 1.0f / func_001FA888(e->timer);
+                    e->invTimer = 1.0f / IntToFloat(e->timer);
                 } else {
                     char *p3 = D_0013E633 + 0xE1D;
                     if (*(int *)(p3 + 0x2084) == 0xB && D_L00_00166FEC == 0.0f) {
                         e->prev = e->state;
                         e->state = 6;
                         e->moveTimer = scale_ticks(*(int *)&D_L00_00161E10);
-                        e->invMove = 1.0f / func_001FA888(e->moveTimer);
+                        e->invMove = 1.0f / IntToFloat(e->moveTimer);
                         e->timer = D_L00_00161E20;
-                        inv = 1.0f / func_001FA888(e->timer);
+                        inv = 1.0f / IntToFloat(e->timer);
                         e->dist = *(float *)&D_L00_00161E18;
                         e->hit = 0;
                         x = *(float *)&D_L00_00161E18;
                         e->invTimer = inv;
-                        func_L00_002E5D50(e->v30, x);
+                        Cam_ProjectOntoAxis(e->v30, x);
                         qcopy(e->v20, e->v10);
                     } else {
                         char *p4 = D_0013E633 + 0xE1D;
@@ -1296,14 +1296,14 @@ void func_L00_002E5DE0(char *m) {
                             e->prev = e->state;
                             e->state = 5;
                             e->moveTimer = scale_ticks(*(int *)&D_L00_00161E2C);
-                            e->invMove = 1.0f / func_001FA888(e->moveTimer);
+                            e->invMove = 1.0f / IntToFloat(e->moveTimer);
                             e->timer = D_L00_00161E30;
-                            inv = 1.0f / func_001FA888(e->timer);
+                            inv = 1.0f / IntToFloat(e->timer);
                             e->dist = *(float *)&D_L00_00161E38;
                             e->hit = 0;
                             x = *(float *)&D_L00_00161E38;
                             e->invTimer = inv;
-                            func_L00_002E5D50(e->v30, x);
+                            Cam_ProjectOntoAxis(e->v30, x);
                             qcopy(e->v20, e->v10);
                         } else {
                             char *p5 = D_0013E633 + 0xE1D;
@@ -1311,7 +1311,7 @@ void func_L00_002E5DE0(char *m) {
                                 e->prev = e->state;
                                 e->state = 2;
                                 e->timer = D_L00_00161E08;
-                                e->invTimer = 1.0f / func_001FA888(e->timer);
+                                e->invTimer = 1.0f / IntToFloat(e->timer);
                             }
                         }
                     }
@@ -1325,7 +1325,7 @@ void func_L00_002E5DE0(char *m) {
         e->prev = e->state;
         e->state = 9;
         e->moveTimer = scale_ticks(*(int *)&D_L00_00161E3C);
-        r = 1.0f / func_001FA888(e->moveTimer);
+        r = 1.0f / IntToFloat(e->moveTimer);
         y = *(float *)&D_L00_00161E4C;
         e->hit = 0;
         e->timer = 0;
@@ -1333,7 +1333,7 @@ void func_L00_002E5DE0(char *m) {
         e->invTimer = 1.0f;
         e->dist = y;
         e->invMove = r;
-        func_L00_002E5D50(e->v30, x);
+        Cam_ProjectOntoAxis(e->v30, x);
         qcopy(e->v20, e->v10);
         return;
     }
@@ -1349,14 +1349,14 @@ void func_L00_002E5DE0(char *m) {
             e->prev = e->state;
             e->state = 6;
             e->moveTimer = scale_ticks(*(int *)&D_L00_00161E10);
-            e->invMove = 1.0f / func_001FA888(e->moveTimer);
+            e->invMove = 1.0f / IntToFloat(e->moveTimer);
             e->timer = D_L00_00161E20;
-            inv = 1.0f / func_001FA888(e->timer);
+            inv = 1.0f / IntToFloat(e->timer);
             e->dist = *(float *)&D_L00_00161E18;
             e->hit = 0;
             x = *(float *)&D_L00_00161E18;
             e->invTimer = inv;
-            func_L00_002E5D50(e->v30, x);
+            Cam_ProjectOntoAxis(e->v30, x);
             qcopy(e->v20, e->v10);
             return;
         }
@@ -1364,7 +1364,7 @@ void func_L00_002E5DE0(char *m) {
             e->prev = e->state;
             e->state = 1;
             e->timer = scale_ticks(*(int *)&D_L00_00161E24);
-            e->invTimer = 1.0f / func_001FA888(e->timer);
+            e->invTimer = 1.0f / IntToFloat(e->timer);
             return;
         }
     }
@@ -1373,12 +1373,12 @@ void func_L00_002E5DE0(char *m) {
             e->prev = 4;
             e->state = 1;
             e->timer = scale_ticks(*(int *)&D_L00_00161E24);
-            e->invTimer = 1.0f / func_001FA888(e->timer);
+            e->invTimer = 1.0f / IntToFloat(e->timer);
         } else {
             e->prev = 4;
             e->state = 0;
             e->timer = scale_ticks(*(int *)&D_L00_00161E24);
-            e->invTimer = 1.0f / func_001FA888(e->timer);
+            e->invTimer = 1.0f / IntToFloat(e->timer);
         }
         return;
     }
@@ -1386,14 +1386,14 @@ void func_L00_002E5DE0(char *m) {
         e->prev = e->state;
         e->state = 6;
         e->moveTimer = scale_ticks(*(int *)&D_L00_00161E10);
-        e->invMove = 1.0f / func_001FA888(e->moveTimer);
+        e->invMove = 1.0f / IntToFloat(e->moveTimer);
         e->timer = D_L00_00161E20;
-        inv = 1.0f / func_001FA888(e->timer);
+        inv = 1.0f / IntToFloat(e->timer);
         e->dist = *(float *)&D_L00_00161E18;
         e->hit = 0;
         x = *(float *)&D_L00_00161E18;
         e->invTimer = inv;
-        func_L00_002E5D50(e->v30, x);
+        Cam_ProjectOntoAxis(e->v30, x);
         qcopy(e->v20, e->v10);
         return;
     }
@@ -1401,28 +1401,28 @@ void func_L00_002E5DE0(char *m) {
         e->prev = e->state;
         e->state = 8;
         e->timer = D_L00_00161E30;
-        e->invTimer = 1.0f / func_001FA888(e->timer);
+        e->invTimer = 1.0f / IntToFloat(e->timer);
         return;
     }
     if (e->state == 8 && *(int *)(D_0013E633 + 0x2EA1) != 0xC) {
         e->prev = e->state;
         e->state = 0;
         e->timer = scale_ticks(*(int *)&D_L00_00161E34);
-        e->invTimer = 1.0f / func_001FA888(e->timer);
+        e->invTimer = 1.0f / IntToFloat(e->timer);
         return;
     }
     if (e->state == 6 && *(int *)(D_0013E633 + 0x2EA1) != 0xB) {
         e->prev = e->state;
         e->state = 0;
         e->timer = scale_ticks(*(int *)&D_L00_00161E24);
-        e->invTimer = 1.0f / func_001FA888(e->timer);
+        e->invTimer = 1.0f / IntToFloat(e->timer);
         return;
     }
     if ((e->state == 3 || e->state == 5) && *(int *)(D_0013E633 + 0x2EA9) != 4) {
         e->prev = e->state;
         e->state = 0;
         e->timer = scale_ticks(*(int *)&D_L00_00161E24);
-        e->invTimer = 1.0f / func_001FA888(e->timer);
+        e->invTimer = 1.0f / IntToFloat(e->timer);
         return;
     }
     if (e->state == 9) {
@@ -1439,7 +1439,7 @@ void func_L00_002E5DE0(char *m) {
             e->prev = e->state;
             e->state = 1;
             e->timer = scale_ticks(*(int *)&D_L00_00161E24);
-            r = 1.0f / func_001FA888(e->timer);
+            r = 1.0f / IntToFloat(e->timer);
             t = *(int *)&D_L00_00161DF4;
             e->invTimer = r;
             q = *(char **)(m + 0x70);
@@ -1452,21 +1452,21 @@ void func_L00_002E5DE0(char *m) {
         e->prev = e->state;
         e->state = 0xA;
         e->timer = D_L00_00161E48;
-        e->invTimer = 1.0f / func_001FA888(e->timer);
+        e->invTimer = 1.0f / IntToFloat(e->timer);
         return;
     }
     if (e->state == 0xA && FastDecTimer(&e->moveTimer)) {
         e->prev = e->state;
         e->state = 0;
         e->timer = scale_ticks(*(int *)&D_L00_00161E24);
-        e->invTimer = 1.0f / func_001FA888(e->timer);
+        e->invTimer = 1.0f / IntToFloat(e->timer);
         return;
     }
     if (e->state == 5 && *(int *)(D_0013E633 + 0x2EA1) == 0x10) {
         e->prev = e->state;
         e->state = 0;
         e->timer = scale_ticks(*(int *)&D_L00_00161E34);
-        e->invTimer = 1.0f / func_001FA888(e->timer);
+        e->invTimer = 1.0f / IntToFloat(e->timer);
     }
 }
 extern short D_L00_00161DE0;
@@ -1480,7 +1480,7 @@ extern int func_001F9938(void *);
 extern int func_L00_002E5770_r(void *, int) __asm__("func_L00_002E5770");
 
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
-void func_L00_002E6498(char *m, float *v2) {
+void CamAttach_EasePose(char *m, float *v2) {
     float cam[4];
     float tmp[4];
     char *d;
@@ -1494,7 +1494,7 @@ void func_L00_002E6498(char *m, float *v2) {
     int flag;
     g = D_L00_00166F10;
     d = *(char **)(m + 0x70);
-    func_L00_002E5618(m, cam);
+    Cam_GetHeroPosition(m, cam);
     pad = D_0013E633 + 0xE1D;
     e = d + 0x40;
     if (*(int *)(pad + 0x2084) == 0x77) {
@@ -1517,13 +1517,13 @@ void func_L00_002E6498(char *m, float *v2) {
         padb = D_0013E633 + 0xE1D;
         if (*(int *)(padb + 0x2084) == 0x11 ||
             (*(short *)(padb + 0x41E) != 0 && *(float *)(padb + 0x2DC) > 0.2f &&
-             ((y = func_L00_002E5A30(m, *(float *)(e + 0xB0))) < *(float *)&D_L00_00161DE0 ||
+             ((y = Cam_SignedAngleToAxis(m, *(float *)(e + 0xB0))) < *(float *)&D_L00_00161DE0 ||
               *(float *)&D_L00_00161DDC < y))) {
             int v;
             *(unsigned char *)(e + 0xC4) = 1;
             v = *(unsigned short *)&D_L00_00161E0C;
             *(short *)(e + 0xC6) = v;
-            *(float *)(e + 0xC8) = 1.0f / func_001FA888((short)v);
+            *(float *)(e + 0xC8) = 1.0f / IntToFloat((short)v);
         }
         padc = D_0013E633 + 0xE1D;
         flag = 0;
@@ -1590,7 +1590,7 @@ void func_L00_002E6498(char *m, float *v2) {
                 *(unsigned char *)(e + 0xC4) = 4;
                 v = *(unsigned short *)&D_L00_00161E24;
                 *(short *)(e + 0xC6) = v;
-                *(float *)(e + 0xC8) = 1.0f / func_001FA888((short)v);
+                *(float *)(e + 0xC8) = 1.0f / IntToFloat((short)v);
             }
         }
         break;
@@ -1617,14 +1617,14 @@ void func_L00_002E6498(char *m, float *v2) {
 }
 extern float func_001EC120(void *, float, float, float, float, float);
 
-void func_L00_002E6A68(char *m, float *out, float *in, float a, float b, float c) {
+void Cam_InterpVec3(char *m, float *out, float *in, float a, float b, float c) {
     char *p = *(char **)(m + 0x70);
     out[0] = Cam_InterpValues(p + 0xE0, out[0], in[0], a, b, c);
     out[1] = Cam_InterpValues(p + 0xE4, out[1], in[1], a, b, c);
     out[2] = Cam_InterpValues(p + 0xE8, out[2], in[2], a, b, c);
 }
 // Combines two vectors by mode: mode 1 adds a copied base vector, others add the moby's +0x40 vector; returns 0 for modes 3-7.
-int func_L00_002E6B28(char *m, void *a, void *b, int k) {
+int Cam_CombineOffsetsByMode(char *m, void *a, void *b, int k) {
     int r = 1;
     char *p = *(char **)(m + 0x70) + 0x40;
     float buf[4];
@@ -1650,7 +1650,7 @@ int func_L00_002E6B28(char *m, void *a, void *b, int k) {
         FastVecAdd(b, a, p);
         break;
     case 1:
-        func_L00_002E5618(m, buf);
+        Cam_GetHeroPosition(m, buf);
         FastVecAdd(b, a, buf);
         break;
     case 2:
@@ -1679,7 +1679,7 @@ void func_L00_002E6BE0(char *m, float *in) {
         q[0xC5] = q[0xC4];
     }
     s = (float)*(short *)(q + 0xC6) * *(float *)(q + 0xC8);
-    func_L00_002E6B28(m, in, v, *(unsigned char *)(q + 0xC4));
+    Cam_CombineOffsetsByMode(m, in, v, *(unsigned char *)(q + 0xC4));
     t = *(unsigned char *)(q + 0xC4);
     if (t == 3 || t == 5 || t == 6 || t == 7 || t == 1) {
         x = *(float *)&D_L00_00161E00 + (*(float *)&D_L00_00161DF8 - *(float *)&D_L00_00161E00) * s;
@@ -1688,7 +1688,7 @@ void func_L00_002E6BE0(char *m, float *in) {
         x = *(float *)&D_L00_00161DF8;
         y = *(float *)&D_L00_00161DFC;
     }
-    func_L00_002E6A68(m, (float *)(q + 0x90), v, x, y, 0.0f);
+    Cam_InterpVec3(m, (float *)(q + 0x90), v, x, y, 0.0f);
 }
 typedef struct Q_2E6CE0 {
     float v0[4];
@@ -1733,7 +1733,7 @@ extern int D_L00_00161DF0_2E6CE0 SDATA(D_L00_00161DF0);
 extern float D_L00_00161DA8_2E6CE0 SDATA(D_L00_00161DA8);
 
 /* Updates the follow camera of a moby: eases its offset vectors, then places the eye, clipped against collision. */
-void func_L00_002E6CE0(char *m) {
+void FollowCameraUpdate(char *m) {
     float a[4], b[4], c[4], d[4], e[4], f[4], g[4], h[4], w[4], u[4], v[4];
     char *gl = D_L00_00166F10_2E6CE0;
     char *p = *(char **)(m + 0x70);
@@ -1845,7 +1845,7 @@ typedef struct { char pad0[0x70]; unsigned char *cam; } CamObject_2E72E8;
 float cam_interp_values(void *, float, float, float, float, float) __asm__("func_001EC120");
 
 void func_L00_002E72E8(unsigned char *moby) __asm__("func_L00_002E72E8");
-void func_L00_002E72E8(unsigned char *moby)
+void CamObject_Reset(unsigned char *moby)
 {
     unsigned char *init, *cam, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
     CamSpring_2E72E8 *spring_reset;
@@ -2019,7 +2019,7 @@ void func_L00_002E74B0(O_y *o) {
     }
     if (hero74.vehicle_mode == 2) {
         if (s->i10 < 2) {
-            func_L00_002E99A0(0, g68, 0.005f);
+            Cam_SetEyeOffset(0, g68, 0.005f);
             func_L00_002E9900(g6C, 0.003f, 1);
             func_L00_002E9968(g70, 0.003f);
         }
@@ -2047,7 +2047,7 @@ void func_L00_002E74B0(O_y *o) {
             x = &player_camera_y[0];
             x->i260++;
             if (scale_ticks(400) < x->i260) x->i260 = scale_ticks(400);
-            f = func_001FA888(x->i260) / func_001FA888(scale_ticks(400));
+            f = IntToFloat(x->i260) / IntToFloat(scale_ticks(400));
             func_L00_002E9E20((s32)(x->p25C + 0x10), f * 0.20943952f, 0.0f);
         }
     }
@@ -2056,7 +2056,7 @@ void func_L00_002E74B0(O_y *o) {
     if (n > 0) {
         lp = (s32 *)D_L00_00178000;
         for (i = 0; i < n; lp++, i++) {
-            e = func_L00_0025D390(*lp);
+            e = GetFlaggedPvarWord(*lp);
             if (e != 0 && (f32)e[0xD] != 0.0f) {
                 s->i10 = 1;
                 break;
@@ -2100,12 +2100,12 @@ void func_L00_002E74B0(O_y *o) {
         func_L00_002E9AF8();
         k = ++m->h16;
         if (scale_ticks(0x1E) < k) m->h16 = scale_ticks(0x1E);
-        f = func_001FA888(m->h16) / func_001FA888(scale_ticks(0x1E));
+        f = IntToFloat(m->h16) / IntToFloat(scale_ticks(0x1E));
         func_L00_002E9A40((g58 - 0.015f) * f + 0.015f, 0.2f);
         g40 = 0.0f;
     } else if (m->h14 != 0) {
         FastDecTimer(&m->h14);
-        f = func_001FA888(m->h14) / func_001FA888(scale_ticks(0x2D));
+        f = IntToFloat(m->h14) / IntToFloat(scale_ticks(0x2D));
         f *= -0.75f;
         f += 0.75f;
         g40 = f;
@@ -2123,7 +2123,7 @@ extern void func_001F9EC0(void *, void *, void *);
 extern float func_001F9D48(void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
 // camera type 0 snap: puts the camera behind the hero, pulls it in along the line of sight, then builds its axes
-void func_L00_002E7B68(int snap) {
+void CamType0InitSnap(int snap) {
     char *cams = D_L00_00166D80;
     char *cam = *(char **)(cams + 0x180);
     char *track = cams + 0x190; /* the followed hero: position at 0, up vector at 0x30 */
@@ -2231,7 +2231,7 @@ extern void func_001F9BF0_E80A8(void *, void *, void *) __asm__("func_001F9BF0")
 
 /* Resets the camera rig state from the moby position when idle.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/vendor/002e5e38.c, FUN_L00_002e6bf8. */
-void func_L00_002E80A8(char *m) {
+void Cam_ResetRigFromMoby(char *m) {
     float dn[4];
     float t[4];
     char *d;
@@ -2428,7 +2428,7 @@ extern void func_L00_002E58E0_2E8210(Moby_2E8210 *) __asm__("func_L00_002E58E0")
 extern void func_L00_002E7B68_2E8210(int) __asm__("func_L00_002E7B68");
 
 /* Initialises the type-0 camera: fills its data blocks and seeds the first position. */
-void func_L00_002E8210(Moby_2E8210 *m) {
+void CamType0Init(Moby_2E8210 *m) {
     CamA_2E8210 *a;
     CamB_2E8210 *b;
     Cam_2E8210 *c;
@@ -2838,7 +2838,7 @@ extern float func_001F9C78(void *a, void *b);
 
 /* Only for arg1==1: true when arg2 is past the edge plane
    (D_L00_00173F60 - arg2) . (arg0->+0x70 + 0x130) < 0. */
-int func_L00_002E8E78(void *arg0, int arg1, float *arg2) {
+int Cam_IsPastEdgePlane(void *arg0, int arg1, float *arg2) {
     V diff;
     char *ptr2;
 
@@ -3062,8 +3062,8 @@ dec:
             BH_2e7d20(0x3A) = 0;
         }
     }
-    f = func_001FA888(BH_2e7d20(0x34));
-    BF_2e7d20(0x30) = CosineInterpolate(0.0f, BF_2e7d20(0x30), f / func_001FA888(scale_ticks(2000)));
+    f = IntToFloat(BH_2e7d20(0x34));
+    BF_2e7d20(0x30) = CosineInterpolate(0.0f, BF_2e7d20(0x30), f / IntToFloat(scale_ticks(2000)));
     goto move;
 slow:
     s = BH_2e7d20(0x34);
@@ -3087,20 +3087,20 @@ move:
     if (CAST_func_L00_002E5740(D_L00_00173F60_x.v20)) {
         goto clear;
     }
-    if (D_L00_00173F60_x.p18 != 0 && func_L00_0025F410(D_L00_00173F60_x.p18)) {
+    if (D_L00_00173F60_x.p18 != 0 && IsMobyClass500To540(D_L00_00173F60_x.p18)) {
         CAST_func_001F9BF0(&v20, (u8 *)D_L00_00173F60_x.p18 + 0x10, D_L00_00166EC0_x);
         v20.i[2] = 0;
         func_L00_001FF4B0(&v20, &v20, 1.0f);
         v20.f[3] = 5627.9248046875f;
-        func_L00_0025A8C0(&w, D_0013F450_x.p2080, 0x800000, &v20, 20.0f);
+        InitDirectionalHitQuery(&w, D_0013F450_x.p2080, 0x800000, &v20, 20.0f);
         w.b18 = 3;
         w.b19 = 3;
         w.h1A = *(u16 *)(D_0013F450_x.p2080 + 0xA6);
-        func_L00_0025AAC0(D_L00_00173F60_x.p18, &w);
+        PostHitMessageFromRecord(D_L00_00173F60_x.p18, &w);
     }
     BI_2e7d20(0x4C)++;
     if (BI_2e7d20(0x4C) >= scale_ticks(0x1E)) {
-        func_L00_001ED600();
+        CameraResetBehindHero();
     }
     goto fin;
 clear:
@@ -3121,7 +3121,7 @@ typedef struct { u8 pad[0x220]; s32 cur; } Owner_2E9838;
 typedef struct { u8 pad[0x70]; Owner_2E9838 *p; u8 pad2[0x86 - 0x74]; s16 f86; } Vendor_2E9838;
 extern Vendor_2E9838 *D_L00_00166F00_2E9838 __asm__("D_L00_00166F00");
 /* -1 when the vendor's +0x86 is set, else 1 after clearing its owner's +0x220 when that equals id, else 0. Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/vendor/002df730.c, FUN_L00_002e8388. */
-s32 func_L00_002E9838(s32 id) {
+s32 Cam_ReleaseLock(s32 id) {
     Vendor_2E9838 *t = D_L00_00166F00_2E9838;
     if (t->f86 != 0) {
         return -1;
@@ -3150,7 +3150,7 @@ typedef struct {
     char pad00[0x84];
     short f84;
 } O842e83c0;
-int func_L00_002E9870(int arg1, int arg2) {
+int Cam_AcquireLock(int arg1, int arg2) {
     void *a = D_L00_00166F00;
     C842e83c0 *cur;
     u8 x;
@@ -3212,7 +3212,7 @@ extern char *D_L00_001690C0;
 
 /* Sets the follow camera's offset (relative to its current one if add) and scale, unless the camera is locked.
    Adapted from Lombyte (MIT) for PAL: src/overlays/shared/gameplay/vendor/002df730.c, FUN_L00_002e84f0. */
-void func_L00_002E99A0(int add, float a, float b) {
+void Cam_SetEyeOffset(int add, float a, float b) {
     char *p = D_L00_00166F00;
     if (*(short *)(p + 0x86) == 0) {
         char *q = *(char **)(p + 0x70) + 0x40;
@@ -3276,7 +3276,7 @@ extern float func_L00_00258E58(float a, float b, float c, float d, float t);
 extern float func_001F9B88(float);
 
 /* Measures the signed angle between two offsets of an object's data relative to an axis, and (within the limit) stores a scaled blend in the object's data. */
-float func_L00_002E9B60(char *a0, float *a1, float lim) {
+float Cam_SignedAngleBetweenOffsets(char *a0, float *a1, float lim) {
     float b0[4];
     float b1[4];
     float b2[4];
@@ -3322,7 +3322,7 @@ float func_L00_002E9B60(char *a0, float *a1, float lim) {
     if (t > 1.0f) {
         t = 1.0f;
     }
-    *(float *)(q + 0x1C) = func_L00_00258E58(-1.0f, 0.0f, 1.0f, 0.0f, t) * sign;
+    *(float *)(q + 0x1C) = CubicInterpolate(-1.0f, 0.0f, 1.0f, 0.0f, t) * sign;
     return r;
 }
 extern float func_L00_002E9B60(char *, float *, float);
@@ -3332,7 +3332,7 @@ void func_L00_002E9DC8(void *a, float x, float y) {
     if (*(short *)(p + 0x86) == 0) {
         if (x != 0.0f) {
             *(float *)(*(char **)(p + 0x70) + 0x1BC) = x;
-            func_L00_002E9B60(p, a, y);
+            Cam_SignedAngleBetweenOffsets(p, a, y);
         }
     }
 }
@@ -3432,7 +3432,7 @@ extern short D_L00_00161D8C;
 extern short D_L00_00161D94;
 
 /* steers the hero heading and pitch towards a stick input. Adapted from Lombyte (MIT) for PAL: overlays/shared/gameplay_vendor_002df730.c, FUN_L00_002e8bb8. */
-void func_L00_002EA068(int mi, float a, float b) {
+void Cam_SteerHeadingFromStick(int mi, float a, float b) {
     char *m = (char *)mi;
     char *d = *(char **)(m + 0x70);
     char *g = D_L00_00166F10;
@@ -3607,7 +3607,7 @@ void func_L00_002EA4C0(int a_) {
                 x = x + x;
                 t = x * 0.2617994f + t;
             }
-            h = func_L00_001EB6A8(q20 + 0x18, *(float *)(q20 + 0x14), t, 0.005f, 0.2f, 0.0f);
+            h = Camera_SmoothAngle(q20 + 0x18, *(float *)(q20 + 0x14), t, 0.005f, 0.2f, 0.0f);
             *(float *)(q20 + 0x14) = h;
             e = FastSubRots(e, h);
             if (1.2217305f < e) {
@@ -3621,8 +3621,8 @@ void func_L00_002EA4C0(int a_) {
     }
     if (*(short *)q20 != 0) {
         FastDecTimer(q20);
-        e2 = func_001FA888(*(short *)q20);
-        h2 = e2 / func_001FA888(scale_ticks(*(int *)&D_L00_00161DF4));
+        e2 = IntToFloat(*(short *)q20);
+        h2 = e2 / IntToFloat(scale_ticks(*(int *)&D_L00_00161DF4));
         func_001F9C08(h2, p, p, p + 0x40);
         func_L00_001FF4B0(p, p, 1.0f);
     }
@@ -3682,7 +3682,7 @@ extern float func_L00_001EB6A8(void *, float, float, float, float, float);
 extern void func_002156E0(void *, void *, void *, float);
 
 /* Aims a camera rig at its target: updates yaw/pitch smoothing and clamps roll. */
-void func_L00_002EABD0(int arg) {
+void Cam_AimAtTarget(int arg) {
     char *m = (char *)arg;
     char *d = *(char **)(m + 0x70);
     float t0[4];
@@ -3713,7 +3713,7 @@ void func_L00_002EABD0(int arg) {
     y = FastArcSin(e1 / x);
     h = FastVecDot(p140, up);
     r = FastArcSin(h / bc);
-    i = func_L00_001EB6A8(d + 0x154, r, y, *(float *)&D_L00_00161DCC, *(float *)&D_L00_00161DD0, 0.0f);
+    i = Camera_SmoothAngle(d + 0x154, r, y, *(float *)&D_L00_00161DCC, *(float *)&D_L00_00161DD0, 0.0f);
     FastVecScale(t0, up, e1);
     FastVecSub(t1, p130, t0);
     FastVecScale(t2, up, h);
@@ -3722,7 +3722,7 @@ void func_L00_002EABD0(int arg) {
     x = FastVecLength(t1);
     x = x * FastVecLength(t3);
     r = 1.5707964f - FastArcSin(e / x);
-    x = func_L00_001EB6A8(d + 0x150, 0.0f, r, *(float *)&D_L00_00161DC4, *(float *)&D_L00_00161DC8, 0.0f);
+    x = Camera_SmoothAngle(d + 0x150, 0.0f, r, *(float *)&D_L00_00161DC4, *(float *)&D_L00_00161DC8, 0.0f);
     FastVecCross(t4, t3, up);
     s = (FastVecDot(t4, t1) >= 0.0f) ? 1.0f : -1.0f;
     base2 = D_L00_00166F10;
@@ -3778,14 +3778,14 @@ extern void func_L00_002E91D0(int);
 extern void func_L00_002EABD0(int);
 extern void func_L00_002E9828(int);
 extern void func_L00_002EA4C0(int);
-void func_L00_002EB060(int a) {
+void FollowCameraBuildView(int a) {
     float v[2];
     func_L00_002EAF50(a);
     func_L00_002EA3F0(a);
     func_L00_002E9E60(a, &v[0], &v[1]);
-    func_L00_002EA068(a, v[0], v[1]);
+    Cam_SteerHeadingFromStick(a, v[0], v[1]);
     func_L00_002E91D0(a);
-    func_L00_002EABD0(a);
+    Cam_AimAtTarget(a);
     func_L00_002E9828(a);
     func_L00_002EA4C0(a);
 }

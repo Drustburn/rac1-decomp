@@ -20,7 +20,7 @@ extern void func_00233AB8(void *);
 extern void func_001F49B0(void (*)(void *), void *);
 
 /* Register the level draw callback for the target moby in state four. */
-void func_L07_002664F0(void) {
+void RegisterEnvMapDrawCallback(void) {
     if (D_0015EE84 == 7 && D_L07_0016C960.state == 4 &&
         D_L07_0016C960.moby != 0 &&
         D_L07_0016C960.moby->class_id == 0x214) {

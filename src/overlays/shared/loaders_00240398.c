@@ -170,7 +170,7 @@ extern int D_L00_00173F40_a[] __asm__("D_L00_00173F40");
 extern const int *D_L00_0015F6F8 SDATA(D_L00_0015F6F8);
 
 // Relocates the collision header's offsets into pointers.
-void func_L00_002420C0(char *p) {
+void CollInit(char *p) {
     const int *q;
     int i;
     int *e;
@@ -564,11 +564,11 @@ char *LoadLevelGameplay(int arg0) {
     func_001160C8(0x4D2);
     if (D_0015EE80 != 0) {
         if (D_0015EE60 == 1.0f) {
-            func_L00_002623D0(1);
+            SetUpdateModeTiming(1);
         }
     } else {
         if (D_0015EE60 != 1.0f) {
-            func_L00_002623D0(0);
+            SetUpdateModeTiming(0);
         }
     }
     D_L00_00173F40.f4 = D_L00_00174000;
@@ -817,7 +817,7 @@ char *LoadLevelGameplay(int arg0) {
                 float d;
 
                 inst->f17 = truncate_float_to_s32(*D_L00_001BC3C0[cls]->f1C);
-                d = func_001FA888(inst->f17) + 24.0f;
+                d = IntToFloat(inst->f17) + 24.0f;
                 if (inst->f10 < d) {
                     inst->f10 = d;
                 }
@@ -946,7 +946,7 @@ char *LoadLevelGameplay(int arg0) {
 
                 func_L00_001FF040(e, p, 0x90);
                 p += 0x90;
-                func_L00_0028F230((short *)e);
+                Sound_LookupTableEntry((short *)e);
             }
         } else {
             D_0013E650.fD94 = 0;
@@ -994,7 +994,7 @@ char *LoadLevelGameplay(int arg0) {
             if (flags != 0) {
                 tmp = D_0015EE84; /* read before the test: see the group loop */
                 if (flags & 0x10) {
-                    vis = func_L00_00286068(tmp, uid);
+                    vis = BoltTally_FindSlot(tmp, uid);
                 } else {
                     vis = 0xFF;
                 }
@@ -1110,7 +1110,7 @@ char *LoadLevelGameplay(int arg0) {
                 func_0020E340(m, m->unk80, 0, 0, 0);
                 (*(int *)&m->spawn_frame) = upd;
                 if (*(int *)p != -1) {
-                    func_L00_0024B1B0((int)m, *(int *)p);
+                    SetPlanetTableEntry((int)m, *(int *)p);
                 }
                 count++;
             }
@@ -1490,7 +1490,7 @@ char *LoadLevelGameplay(int arg0) {
             if (D_L00_00160600 != 0) {
                 for (m = D_L00_00160098; m->state != 0xFF; m++) {
                     if (m->oclass == D_L00_00160608[D_0013E130.f26]) {
-                        func_L00_0028FB78((char *)m);
+                        Ship_Register((char *)m);
                         MobySetAnimation(m, 1, 0);
                         break;
                     }
@@ -1505,7 +1505,7 @@ char *LoadLevelGameplay(int arg0) {
             m->pos.y = ship[1];
             m->pos.z = ship[2];
             rot = ship[3];
-            (*(void **)&m->update) = func_L00_0028F458;
+            (*(void **)&m->update) = EnvMappedPickupUpdate;
             m->draw_dist = 0xFF;
             m->rot.z = rot;
             m->update_dist = 0x10;
@@ -1513,7 +1513,7 @@ char *LoadLevelGameplay(int arg0) {
             MobySetAnimation(m, 1, 0);
             func_L00_00251E30(m);
             D_0013E130.f0 = m;
-            func_L00_0024B1B0((int)m, 0);
+            SetPlanetTableEntry((int)m, 0);
         }
     }
     if (D_L00_0015F6E0 != 0 && hdr->f8C != 0) {
@@ -1665,12 +1665,12 @@ char *LoadLevelGameplay(int arg0) {
         D_L00_0016C158[7] = 0;
     }
     func_L00_001F8750();
-    func_L00_00205278();
+    HeroInit();
     HeroResetTuning();
     Camera_InitSlots();
-    func_L00_001ED428();
+    Camera_UpdateFrame();
     pad_resetState();
-    func_001F6598();
+    Font_EnableColorCodes();
     D_L00_001B0AF0[0] = 0;
     D_L00_001B0B30[0] = 0;
     D_L00_001B0BB0[0] = 0;
@@ -1802,7 +1802,7 @@ void func_00217748_45FE0b(s32) __asm__("func_00217748");
 void func_001F4E08_45FE0b(s32) __asm__("func_001F4E08");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/world_animation_002454c8.c, FUN_L00_00245610. */
-void func_L00_00245FE0(s32 i, s32 p) {
+void LoadAnimTable(s32 i, s32 p) {
     s32 n;
     s32 *e;
     if (D_0015EE80 == 0) {

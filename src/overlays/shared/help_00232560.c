@@ -14,7 +14,7 @@ extern int func_001F9850(int);
    sequences and starts one on each object (func_00213DE0). Each
    sequence is read into a local before the func_001F9850 call, as
    retail holds it in a saved register across it. */
-void func_L00_00232560(void) {
+void HeroPickFidget(void) {
     char *base = D_0013F450;
     char *a = *(char **)(base + 0x1180);
     char *b = *(char **)(base + 0x1184);
@@ -53,16 +53,16 @@ extern short D_L00_0015F798;
    of -1. Stores the entry's seq in *OUT and returns 1, or stores 0 and
    returns 0. Mode 4's table is assigned first and cleared when the mode,
    held in a local, differs: retail's addiu / movn select. */
-int func_L00_00232608(int key, int *out) {
+int LookupSequenceForKey(int key, int *out) {
     SeqEntry *tbl;
     int i;
 
-    if (func_L00_0020DB30(3) == 2) {
+    if (Hero_GetSlotModuleId(3) == 2) {
         tbl = D_L00_0017BCF0;
-    } else if (func_L00_0020DB30(3) == 3) {
+    } else if (Hero_GetSlotModuleId(3) == 3) {
         tbl = D_L00_0017BCD0;
     } else {
-        int mode = func_L00_0020DB30(3);
+        int mode = Hero_GetSlotModuleId(3);
         tbl = (SeqEntry *)&D_L00_0015F798;
         if (mode != 4) {
             tbl = 0;
@@ -89,7 +89,7 @@ int func_L00_00232608(int key, int *out) {
    as the last func_00213DE0 argument. The pair are
    two scalars next to the spilled ID, which gives retail's 0x80 frame;
    the block pointer is re-formed for each stage, as retail does. */
-void func_L00_002326D0(int id, int arg, float t) {
+void HeroSetPairedSequences(int id, int arg, float t) {
     char *base = D_0013F450;
     char *blk2;
     char *blk3;
@@ -118,7 +118,7 @@ void func_L00_002326D0(int id, int arg, float t) {
     }
     blk2 = D_0013F450;
     ok = 1;
-    if (*(int *)(blk2 + 0x208C) == 0 && func_L00_00232608(*(unsigned char *)(a + 0x53), &id) != 0) {
+    if (*(int *)(blk2 + 0x208C) == 0 && LookupSequenceForKey(*(unsigned char *)(a + 0x53), &id) != 0) {
         if (id == 0) {
             ok = 0;
         }
@@ -128,7 +128,7 @@ void func_L00_002326D0(int id, int arg, float t) {
     }
     seq = scale_ticks(7);
     blk3 = D_0013F450;
-    if (*(int *)(blk3 + 0x2090) == 8 && func_L00_0020DB30(3) == 2) {
+    if (*(int *)(blk3 + 0x2090) == 8 && Hero_GetSlotModuleId(3) == 2) {
         seq = scale_ticks(0x13);
     }
     if (*(unsigned char *)(a + 0x53) != 1) {
@@ -156,12 +156,12 @@ int HeroPickRandomSequence(int id, int *key, int *arg) {
 
     count = 0;
     want = func_L00_002056D0(id);
-    if (func_L00_0020DB30(3) == 2) {
+    if (Hero_GetSlotModuleId(3) == 2) {
         tbl = D_L00_0017BCF0;
-    } else if (func_L00_0020DB30(3) == 3) {
+    } else if (Hero_GetSlotModuleId(3) == 3) {
         tbl = D_L00_0017BCD0;
     } else {
-        int mode = func_L00_0020DB30(3);
+        int mode = Hero_GetSlotModuleId(3);
         tbl = (SeqEntry *)&D_L00_0015F798;
         if (mode != 4) {
             tbl = 0;
@@ -191,7 +191,7 @@ extern char D_0013F450[];
    copies the float at +0xA90 to field 0x58 of both objects at +0x1180 and
    +0x1184 that exist. The pair goes in a two-int stack array (&buf[1] is
    retail's `ori $6, $sp, 4`). */
-void func_L00_00232980(void) {
+void HeroSyncPairAnimSpeed(void) {
     char *base = D_0013F450;
     int buf[2];
 
@@ -213,7 +213,7 @@ void func_L00_00232980(void) {
 }
 extern short *D_001416CC;
 /* searches a terminated key/value list */
-int func_L00_00232A18(int key, int *out) {
+int LookupShortKeyPair(int key, int *out) {
     short *base = D_001416CC;
     short *p;
     if (!base) return 0;
@@ -240,14 +240,14 @@ extern int func_001F9850(int);
    starts the sequence func_L00_00232A18 picks for A0; if none is ready and
    the animation has a previous sequence (+0x53), restarts sequence 0.
    Retail reloads the animation pointer at each use. */
-void func_L00_00232A78(int a0, int a1, float a2) {
+void HeroPlayMappedSequence(int a0, int a1, float a2) {
     char *base = D_0013F450;
     int buf[4];
     int ok;
 
     if (*(void **)(base + 0x2278) != 0) {
         if (*(int *)(base + 0x227C) != 0) {
-            ok = func_L00_00232A18(a0, buf);
+            ok = LookupShortKeyPair(a0, buf);
             if (ok != 0) {
                 MobyBlendAnimation(*(void **)(base + 0x2278), buf[0], a1, (int)a2);
             } else if (*(unsigned char *)(*(char **)(base + 0x2278) + 0x53) != 0) {
@@ -259,12 +259,12 @@ void func_L00_00232A78(int a0, int a1, float a2) {
 /* With the animation at D_0013F450 + 0x2278 set and enabled (+0x227C),
    and a sequence ready for the current id (func_L00_00232A18), copies
    the float at +0xA90 to the animation's field 0x58. */
-void func_L00_00232B20(void) {
+void HeroSyncMappedSpeed(void) {
     char *base = D_0013F450;
     int buf[4];
 
     if (*(void **)(base + 0x2278) != 0 && *(int *)(base + 0x227C) != 0
-        && func_L00_00232A18(*(unsigned char *)(*(char **)(base + 0x2080) + 0x53), buf) != 0) {
+        && LookupShortKeyPair(*(unsigned char *)(*(char **)(base + 0x2080) + 0x53), buf) != 0) {
         *(float *)(*(char **)(base + 0x2278) + 0x58) = *(float *)(base + 0xA90);
     }
 }
@@ -298,7 +298,7 @@ typedef struct {
    sequence byte 0x51 into both sequence slots, then looks each slot's id
    up in its bank of the model. The typed structs give retail's
    base-first index adds, which byte offsets turn round. */
-void func_L00_00232B78(void) {
+void HeroSyncSecondaryAnim(void) {
     char *base = D_0013F450;
     AnimState *obj = *(AnimState **)(base + 0x2278);
 
@@ -327,7 +327,7 @@ extern void func_L00_00211F68(void);
 extern void func_L00_00232A78(int, int, float);
 
 /* Starts animation sequence A0 (slot byte A1) over time T on the object at +0x2080 of the game block. */
-void func_L00_00232C10(int a0, int a1, float t) {
+void HeroStartAnim(int a0, int a1, float t) {
     char *g2;
     char *g3;
     char *g1 = D_0013E633 + 0xE1D;
@@ -346,7 +346,7 @@ void func_L00_00232C10(int a0, int a1, float t) {
             a0 = 0x31;
         }
     }
-    slot = func_L00_002506D0(obj);
+    slot = SlotTable_Insert(obj);
     if (slot >= 0) {
         func_L00_00252D20(obj, slot | 0x300);
         func_00118D80(0);
@@ -374,7 +374,7 @@ void func_L00_00232C10(int a0, int a1, float t) {
         *(int *)(g2 + 0xAA4) = 0;
         *(float *)(obj + 0x54) = 0.0f;
     }
-    func_L00_00232EA8();
+    HeroClearQueuedSequence();
     g3 = D_0013E633 + 0xE1D;
     o = a0 * 4;
     *(unsigned char *)(obj + 0x7C) = *(unsigned char *)(*(int *)(*(int *)(obj + 0x24) + o + 0x48) + 0x11);
@@ -383,18 +383,18 @@ void func_L00_00232C10(int a0, int a1, float t) {
         t = *(int *)((char *)&D_L00_0015F7C0 + *(int *)(g3 + 0xAA0) * 4);
     }
     if (*(unsigned char *)(g3 + 0x20A4) == 0) {
-        func_L00_002326D0(a0, a1, t);
+        HeroSetPairedSequences(a0, a1, t);
     }
-    func_L00_00211F68();
+    Hero_ClearSpeedTargets();
     if (*(int *)(g3 + 0x2278) != 0) {
-        func_L00_00232A78(a0, a1, t);
+        HeroPlayMappedSequence(a0, a1, t);
     }
 }
 
 /* Starts sequence SEQ of bank BANK on the animation at D_0013F450 +
    0x2080: SEQ in slot 0, the next one (clamped to the bank's last) in
    slot 1, both slots on BANK, time 0x54 reset, then func_0020D6D0. */
-void func_L00_00232DF8(int bank, int seq) {
+void HeroStartSequenceInBank(int bank, int seq) {
     AnimState *obj = *(AnimState **)(D_0013F450 + 0x2080);
     int last;
 
@@ -413,7 +413,7 @@ void func_L00_00232DF8(int bank, int seq) {
    is valid and SEQ is below the count of the current animation's bank.
    The base pointer is a local inside the test, as retail forms it only
    there. */
-void func_L00_00232E60(int bank, int seq) {
+void HeroQueueSequence(int bank, int seq) {
     if (bank >= 0) {
         char *base = D_0013F450;
         AnimState *obj = *(AnimState **)(base + 0x2080);
@@ -426,7 +426,7 @@ void func_L00_00232E60(int bank, int seq) {
 }
 extern char D_0013E633[];
 // resets two fields in the global game block
-void func_L00_00232EA8(void) {
+void HeroClearQueuedSequence(void) {
     char *b = D_0013E633 + 0xE1D;
     *(int *)(b + 0xAB0) = -1;
     *(int *)(b + 0xAB8) = 0;
@@ -488,7 +488,7 @@ f32 func_L00_00233410(f32 a, f32 b, f32 c) {
             }
         }
         if (c > 0.0f) {
-            if (func_L00_0025A5D8(&o[0], &o[1], b * -0.5f, (&D_0013F450_33410)->vE0.f[2] - b * -0.5f, (&D_0013F450_33410)->v80.f[2] - c) > 0
+            if (SolveQuadratic(&o[0], &o[1], b * -0.5f, (&D_0013F450_33410)->vE0.f[2] - b * -0.5f, (&D_0013F450_33410)->v80.f[2] - c) > 0
                 && o[0] > 0.0f) {
                 return o[0];
             }
@@ -510,7 +510,7 @@ f32 func_L00_00233410(f32 a, f32 b, f32 c) {
             z = func_L00_002342F8_33410(&(&D_0013F450_33410)->vE0) - nb;
             x = func_L00_002342F8_33410(&(&D_0013F450_33410)->v80);
             y = func_L00_002342F8_33410(&D_L00_00173F60);
-            if (func_L00_0025A5D8(&o[2], &o[3], nb, z, x - y) > 0
+            if (SolveQuadratic(&o[2], &o[3], nb, z, x - y) > 0
                 && o[2] > 0.0f) {
                 return o[2];
             }
@@ -535,7 +535,7 @@ f32 func_L00_00233410(f32 a, f32 b, f32 c) {
             z = func_L00_002342F8_33410(&(&D_0013F450_33410)->vE0) - nb;
             x = func_L00_002342F8_33410(&(&D_0013F450_33410)->v80);
             y = func_L00_002342F8_33410(&D_L00_00173F60);
-            if (func_L00_0025A5D8(&o[4], &o[5], nb, z, x - y) > 0
+            if (SolveQuadratic(&o[4], &o[5], nb, z, x - y) > 0
                 && o[4] > 0.0f) {
                 return o[4];
             }
@@ -708,7 +708,7 @@ typedef struct {
    then back about z. The rotation source is named from the symbol and
    the base after it, which gives retail's base derived from that
    address. */
-float func_L00_00233B50(void) {
+float HeroGetHeading(void) {
     char *base;
     float m[16] __attribute__((aligned(16)));
     float dir[4] __attribute__((aligned(16)));
@@ -768,7 +768,7 @@ extern void func_L00_001FF4B0(void *, void *, float);
    in state 0x3E with the short at +0x30E clear, else by +H along the
    vector at +0x290. That one is named from the symbol, not the base
    local: retail forms it with its own lui. */
-void func_L00_00233D50(float *dst, float *src, float h) {
+void HeroMoveDownAlongNormal(float *dst, float *src, float h) {
     char *base = D_0013F450;
     float d[4] __attribute__((aligned(16)));
 
@@ -827,8 +827,8 @@ void LocalToWorldPoint(float *out, float x, float y, float z) {
 // Wrapper that negates float argument
 void func_L00_00233D50(float *dst, float *src, float h);
 
-void func_L00_00233F68(float *dst, float *src, float h) {
-    func_L00_00233D50(dst, src, -h);
+void HeroMoveUpAlongNormal(float *dst, float *src, float h) {
+    HeroMoveDownAlongNormal(dst, src, -h);
 }
 
 /* Moves SRC by R into DST along the current animation's heading (+0x48
@@ -836,7 +836,7 @@ void func_L00_00233F68(float *dst, float *src, float h) {
    (R cos, R sin) added to a copy; in modes 1 and 2 as (R, 0, 0) taken
    through the rotation func_001FA218 builds from its angles (+0x40). The
    switch gives retail's case tree. */
-void func_L00_00233F88(float *dst, float *src, float r) {
+void HeroMoveAlongHeading(float *dst, float *src, float r) {
     char *base = D_0013F450;
     float m[16] __attribute__((aligned(16)));
     float off[4] __attribute__((aligned(16)));
@@ -866,7 +866,7 @@ void func_L00_00233F88(float *dst, float *src, float r) {
    (0, 0, DZ) taken through the rotation func_001FA218 builds from the
    angles at +0x40 of the object at +0x2080. The switch gives retail's
    case tree. */
-void func_L00_00234090(float *dst, float *src, float dz) {
+void HeroOffsetAlongViewZ(float *dst, float *src, float dz) {
     char *base = D_0013F450;
     float m[16] __attribute__((aligned(16)));
     float off[4] __attribute__((aligned(16)));
@@ -895,7 +895,7 @@ extern void func_001F9BF0(void *, void *, void *);
    mode 0 (D_0013F450 + 0x20B3) z is zeroed; in mode 1 the normal is the
    vector at +0x270 scaled to unit length (func_L00_001FF4B0), in mode 2
    the one at +0x290 as is. DST = SRC - dot(n, SRC) n. */
-void func_L00_00234150(float *dst, float *src) {
+void HeroRemoveNormalComponent(float *dst, float *src) {
     char *base = D_0013F450;
     float n[4] __attribute__((aligned(16)));
 
@@ -946,7 +946,7 @@ float ViewXyLength(float *v) {
    product of V with (0, 0, 1) taken through the rotation func_001FA218
    builds from the angles at +0x40 of the object at +0x2080; other modes
    give 0. The switch gives retail's case tree. */
-float func_L00_002342F8(float *v) {
+float HeroGetViewZ(float *v) {
     char *base = D_0013F450;
     float m[16] __attribute__((aligned(16)));
     float axis[4] __attribute__((aligned(16)));
@@ -971,7 +971,7 @@ float func_L00_002342F8(float *v) {
    +0x0. Either way DST's z becomes Z. Written as a switch: retail's
    bltz / slti 3 range test is gcc's case tree, which an if chain folds
    to one sltu. */
-void func_L00_002343A0(float *dst, float *src, float z) {
+void HeroPlacePointZ(float *dst, float *src, float z) {
     char *base = D_0013F450;
 
     switch (*(unsigned char *)(base + 0x20B3)) {
@@ -993,7 +993,7 @@ extern void func_L00_001FF500(float *, float *, float);
    xy to length Z (func_L00_001FF500): in view mode 0 (D_0013F450 +
    0x20B3) directly, in modes 1 and 2 between the transforms by the
    matrices at +0x40 and +0x0. The switch gives retail's case tree. */
-void func_L00_00234420(float *dst, float *src, float z) {
+void HeroScalePointXY(float *dst, float *src, float z) {
     char *base = D_0013F450;
 
     switch (*(unsigned char *)(base + 0x20B3)) {
@@ -1026,15 +1026,15 @@ float JumpApexHeight(float *pos, float *vel, int *steps, float step) {
     switch (*(unsigned char *)(D_0013F450 + 0x20B3)) {
     case 0:
         n = truncate_float_to_s32(vel[2] / step);
-        a = func_001FA888(n);
-        r = pos[2] + vel[2] * a - func_001FA888((n * n + n) >> 1) * step;
+        a = IntToFloat(n);
+        r = pos[2] + vel[2] * a - IntToFloat((n * n + n) >> 1) * step;
         if (steps != 0) {
             *steps = n;
         }
         return r;
     case 1:
     case 2:
-        k = truncate_float_to_s32(func_L00_002342F8(vel) / step);
+        k = truncate_float_to_s32(HeroGetViewZ(vel) / step);
         if (steps != 0) {
             *steps = k;
         }
@@ -1082,7 +1082,7 @@ int TakeAmmo(int id, int amount) {
     return 1;
 }
 INCLUDE_ASM("asm/overlays", func_L00_00234674);
-int func_L00_002346C0(int a, int b) {
+int AddAmmo(int a, int b) {
     int *p = &D_0013D530[a];
     unsigned short *q = (unsigned short *)((char *)D_L00_001C43B0 + a * 0x18);
     int v = *p + b;
@@ -1113,7 +1113,7 @@ extern void func_L00_00222B80(int, int);
    state 0x65 (func_L00_00222B80). The copy goes to the symbol's address
    and the base is named after it, which gives retail's base derived back
    from the copy's address; the stores are in reverse. */
-void func_L00_00234768(float *pos, int arg, float t) {
+void HeroSetTargetAndEnterMove(float *pos, int arg, float t) {
     char *base;
     int state;
 
@@ -1328,7 +1328,7 @@ extern int func_L00_002630A8(int, void *, void *, float);
 void func_L00_00235040(void) {
     char *base = D_0013F450;
 
-    if (func_L00_002630A8(*(short *)(base + 0x22DA), base + 0x80, base + 0x80, *(float *)(base + 0x234)) != 0) {
+    if (PushPointOutsidePathAxis(*(short *)(base + 0x22DA), base + 0x80, base + 0x80, *(float *)(base + 0x234)) != 0) {
         *(short *)(base + 0x1F6) = 4;
     }
 }
@@ -1347,7 +1347,7 @@ void func_0020D960(void *, s32, void *);
 void func_L00_001FFED8(void *, s32, f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_00231d08.c, FUN_L00_00234808. */
-void func_L00_00235088(void) {
+void HeroPulseAttachmentColors(void) {
     char *m0, *m1, *m2;
     f32 k;
     s32 a, b;
@@ -1389,7 +1389,7 @@ extern void func_L00_0020FC18(void);
 extern void func_L00_00235088(void);
 
 /* in state 2 or 6: flag the matching mobys, update, then clear bit 0 of three mobys */
-void func_L00_002352D0(int a0) {
+void HeroUpdateAttachments(int a0) {
     char *d;
     char *base;
     char *o;
@@ -1405,7 +1405,7 @@ void func_L00_002352D0(int a0) {
         }
         HeroComputeAttachMatrices(a0);
         func_L00_0020FC18();
-        func_L00_00235088();
+        HeroPulseAttachmentColors();
         base = D_0013F450;
         t = *(char **)(base + 0x11D0);
         if (t != 0) {
@@ -1429,7 +1429,7 @@ extern float func_001FA748(float, float);
 extern int func_001FA8A8(int, int, float);
 
 // Sets up the hero's camera-shake/glow object: clamps a scale, scales attached objects and sets a colour from a wobble.
-void func_L00_002353B8(char *obj) {
+void HeroAttachManipulators(char *obj) {
     float f20 = *(float *)&D_0015EF14;
     char *s0;
     char *q;
@@ -1479,7 +1479,7 @@ void func_L00_002353B8(char *obj) {
     q2 = D_0013E633 + 0xE1D;
     t = FastSin(*(float *)(q2 + 0x1628));
     *(int *)(obj + 0x90) = FastTweenColor(c1, c0, t * 0.5f + 0.5f);
-    func_L00_002352D0((int)obj);
+    HeroUpdateAttachments((int)obj);
 }
 extern void func_0020DAF8(int, int, void *);
 extern void func_001FA480(void *, void *);
@@ -1495,7 +1495,7 @@ extern char D_L00_0015F788[];
    others D_L00_0015F788 with 0), then clears +0x50 / +0x54 and points
    +0x68 / +0x6C at D_L00_0017C780. The four tail stores are in the order
    decomp-permuter found for retail's schedule. */
-void func_L00_00235608(int id, char *moby) {
+void PlaceMobyFromMatrix(int id, char *moby) {
     float m[16] __attribute__((aligned(16)));
 
     MobyTransformScaledVertex(id, 4, m);
@@ -1503,9 +1503,9 @@ void func_L00_00235608(int id, char *moby) {
     func_001FA480(moby + 0xC0, m);
     func_0020EEE8(moby);
     if (*(short *)(moby + 0xA6) == 0x1B1) {
-        func_L00_00209940(D_L00_0017A708, D_L00_0017C780, *(void **)(moby + 0x24), 6, id);
+        HeroItemPoseFromRatchet(D_L00_0017A708, D_L00_0017C780, *(void **)(moby + 0x24), 6, id);
     } else {
-        func_L00_00209940(D_L00_0015F788, D_L00_0017C780, *(void **)(moby + 0x24), 0, id);
+        HeroItemPoseFromRatchet(D_L00_0015F788, D_L00_0017C780, *(void **)(moby + 0x24), 0, id);
     }
     *(char **)(moby + 0x68) = D_L00_0017C780;
     *(int *)(moby + 0x54) = 0;
@@ -1533,7 +1533,7 @@ void func_L00_002356D0(void) {
     if (FastAbsF(*(float *)(base + 0x88) - h) > 0.3f) {
         return;
     }
-    func_L00_00234768((float *)(base + 0x80), 1, *(float *)(base + 0x98));
+    HeroSetTargetAndEnterMove((float *)(base + 0x80), 1, *(float *)(base + 0x98));
     qcopy(base + 0x80, v);
 }
 extern char D_001416F8[];
@@ -1545,6 +1545,6 @@ extern int func_001FFB38_p(int, int, void *, void *, void *, void *, int) __asm_
 /* Registers HUD bank 1 (func_001FFB38, id 0x7535) with the three level
    callbacks and the data at D_001416F8. func_001FFB38 is declared with
    int parameters in hud.c; the alias passes pointers. */
-void func_L00_00235790(void) {
-    func_001FFB38_p(1, 0x7535, HudHealthInit, func_L00_00239FC0, func_L00_0023A1A0, D_001416F8, 8);
+void Hud_RegisterHealthBank(void) {
+    func_001FFB38_p(1, 0x7535, HudHealthInit, HudHealthUpdate, HudHealthDraw, D_001416F8, 8);
 }

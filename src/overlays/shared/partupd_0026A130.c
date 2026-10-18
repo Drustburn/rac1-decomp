@@ -28,8 +28,8 @@ void PartType02Update(char *m) {
         *(volatile int *)0x10000000 = 0;
         load_display_text_resource_entry(v, (int *)q);
         FastVecAdd(m + 0x10, m + 0x10, v);
-        t = func_001FA888(*(short *)(m + 0xA));
-        t = t / func_001FA888(*(short *)(q + 0x10));
+        t = IntToFloat(*(short *)(m + 0xA));
+        t = t / IntToFloat(*(short *)(q + 0x10));
         *(int *)(m + 4) = FastTweenColor(*(int *)(q + 8) & 0xFFFFFF, *(int *)(q + 8), 1.0f - t);
         *(float *)(m + 0xC) = *(short *)(q + 0x16) * 1000;
         if (FastDecTimer(m + 0xA)) {
@@ -39,8 +39,8 @@ void PartType02Update(char *m) {
     } else if (*(short *)(q + 0x12) != 0) {
         load_display_text_resource_entry(a, (int *)q);
         load_display_text_resource_entry(b, (int *)(m + 0x24));
-        t = func_001FA888(*(short *)(m + 0xA));
-        t = t / func_001FA888(*(short *)(q + 0x12));
+        t = IntToFloat(*(short *)(m + 0xA));
+        t = t / IntToFloat(*(short *)(q + 0x12));
         func_001F9C08(v, b, a, t);
         FastVecAdd(m + 0x10, m + 0x10, v);
         *(float *)(m + 0xC) = ((float)(*(short *)(q + 0x16) - *(short *)(q + 0x18)) * t +
@@ -55,8 +55,8 @@ void PartType02Update(char *m) {
         load_display_text_resource_entry(v, (int *)(m + 0x24));
         FastVecAdd(m + 0x10, m + 0x10, v);
         c = *(int *)(q + 0xC) & 0xFFFFFF;
-        t = func_001FA888(*(short *)(m + 0xA));
-        t = t / func_001FA888(*(short *)(q + 0x14));
+        t = IntToFloat(*(short *)(m + 0xA));
+        t = t / IntToFloat(*(short *)(q + 0x14));
         *(int *)(m + 4) = FastTweenColor(c, *(int *)(q + 0xC), t);
         *(float *)(m + 0xC) = *(short *)(q + 0x18) * 1000;
         if (FastDecTimer(m + 0xA)) {
@@ -137,9 +137,9 @@ after:
     }
     if (d < 8.0f || d > 96.0f) goto kill;
     if (d < 16.0f) {
-        k = func_001FA898_r(func_001FA888(k) * (d - 8.0f) * 0.125f);
+        k = func_001FA898_r(IntToFloat(k) * (d - 8.0f) * 0.125f);
     } else if (d > 80.0f) {
-        k = func_001FA898_r(func_001FA888(k) * (96.0f - d) * 0.0625f);
+        k = func_001FA898_r(IntToFloat(k) * (96.0f - d) * 0.0625f);
     }
     *(int *)(m + 4) = (k << 24) | (*(int *)(m + 4) & 0xFFFFFF);
     if (FastDecTimer(m + 0xA)) {
@@ -194,13 +194,13 @@ extern float D_0015EE60 MACRO_ADDR;
 void PartType04Update(char *m) {
     char *p = m + 0x20;
     int t = *(int *)(p + 0x1C);
-    float f = func_001FA888(*(short *)(p + 0x18) * (t - *(short *)(m + 0xA)) / t + *(short *)(p + 0x1A));
+    float f = IntToFloat(*(short *)(p + 0x18) * (t - *(short *)(m + 0xA)) / t + *(short *)(p + 0x1A));
     float g = D_0015EE60 * -0.019999981f + 1.0f;
     *(float *)(m + 0xC) = f * 1000.0f;
     FastVecScale(p, p, g);
     FastVecAdd(m + 0x10, m + 0x10, p);
     m[8]++;
-    *(int *)(m + 4) = DefaultVtbl_DeleteMoby(*(int *)(p + 0x14), *(int *)(p + 0x10), (float)*(short *)(m + 0xA) / func_001FA888(*(int *)(p + 0x1C)));
+    *(int *)(m + 4) = DefaultVtbl_DeleteMoby(*(int *)(p + 0x14), *(int *)(p + 0x10), (float)*(short *)(m + 0xA) / IntToFloat(*(int *)(p + 0x1C)));
     if (FastDecTimer(m + 0xA)) KillPart(m);
 }
 extern int D_L00_001B2414;
@@ -222,7 +222,7 @@ void PartType05Spawn(void *pos, unsigned char c0, unsigned char c1, unsigned cha
             p[8] = 0;
             p[2] = **(unsigned char **)&D_L00_001B2414;
             *(int *)(p + 0x20) = tgt;
-            q[1] = a / func_001FA888(tgt);
+            q[1] = a / IntToFloat(tgt);
         }
     }
 }
@@ -267,7 +267,7 @@ void PartType08Spawn(void *pos, void *vel, int color, int tag, int life, float s
             qcopy(q, vel);
             *(short *)(p + 0xA) = life;
             *(int *)(q + 0x18) = life;
-            *(float *)(q + 0x1C) = size / func_001FA888(life);
+            *(float *)(q + 0x1C) = size / IntToFloat(life);
             *(int *)(q + 0x10) = color;
             *(int *)(q + 0x14) = tag;
         }
@@ -283,7 +283,7 @@ void PartType08Update(char *m) {
         return;
     }
     *(float *)(m + 0xC) += *(float *)(p + 0x1C);
-    *(int *)(m + 4) = FastTweenColor(*(int *)(p + 0x14), *(int *)(p + 0x10), (float)*(short *)(m + 0xA) / func_001FA888(*(int *)(p + 0x18)));
+    *(int *)(m + 4) = FastTweenColor(*(int *)(p + 0x14), *(int *)(p + 0x10), (float)*(short *)(m + 0xA) / IntToFloat(*(int *)(p + 0x18)));
     if (*(short *)(m + 0xA) < scale_ticks(6)) {
         int a = *(unsigned char *)(m + 7);
         *(int *)(m + 4) = (*(int *)(m + 4) & 0xFFFFFF) | ((*(short *)(m + 0xA) * a / scale_ticks(6)) << 24);
@@ -433,10 +433,10 @@ void PartType11Update(char *m) {
         }
         if (!(p[0x19] & 4)) {
             float x = *(float *)(p + 0x1C);
-            float A = func_001FA888((unsigned char)p[0x1B]);
+            float A = IntToFloat((unsigned char)p[0x1B]);
             float B = (A * 8.0f - A * 3.0f * x) / (x * 8.0f * x + x * 8.0f);
             float C = (A * 3.0f + B * 8.0f * x) / (x * -8.0f);
-            float F = func_001FA888(*(short *)(m + 0xA));
+            float F = IntToFloat(*(short *)(m + 0xA));
             float s = func_001F9B50(B * B - C * 4.0f * (A - F));
             float r2 = (-B + s) / (C + C);
             float r1 = (-B - s) / (C + C);
@@ -574,9 +574,9 @@ unsigned char *PartType12Spawn(void *pos, void *vel, unsigned char flags, float 
         motion[0x1F] = flags;
         if (flags & 4) {
             *(short *)(particle + 0xA) = *(short *)(particle + 0xA) * (D_0013E620[0x10] + 2) / 2;
-            func_L00_0025D140(*(int *)(particle + 4), D_0013E620[0x10]);
-            func_L00_0025D140(*(unsigned *)(motion + 0x14), D_0013E620[0x10]);
-            func_L00_0025D140(*(unsigned *)(motion + 0x18), D_0013E620[0x10]);
+            PermuteColorChannels(*(int *)(particle + 4), D_0013E620[0x10]);
+            PermuteColorChannels(*(unsigned *)(motion + 0x14), D_0013E620[0x10]);
+            PermuteColorChannels(*(unsigned *)(motion + 0x18), D_0013E620[0x10]);
         }
         motion[0x1D] = particle[0xA];
     }
@@ -608,14 +608,14 @@ void PartType12Update(unsigned char *m) {
     float ratio;
     m[8] = m[8] + p[0x1E];
     if (p[0x1F] & 4) {
-        w = func_001FA888(D_0013E15A[0x4D6]) * 0.5f + w;
+        w = IntToFloat(D_0013E15A[0x4D6]) * 0.5f + w;
     }
     FastVecAdd(m + 0x10, m + 0x10, p);
     r = -FastVecLength(p);
     ApproachWithVelocity((float *)(m + 0x30), &r, 0.0f, 0.0f, *(float *)&D_L00_001602A8 * D_0015EE70, r);
     func_L00_001FF4B0(p, p, -r);
     *(float *)(m + 0x18) = *(float *)(m + 0x18) + *(float *)&D_L00_001602AC * D_0015EE6C;
-    ratio = func_001FA888(*(short *)(m + 0xA)) / func_001FA888(p[0x1D]);
+    ratio = IntToFloat(*(short *)(m + 0xA)) / IntToFloat(p[0x1D]);
     if (p[0x1F] & 1) {
         float lo = *(float *)&D_L00_0016029C * w;
         *(float *)(m + 0xC) = ((*(float *)&D_L00_00160298 - lo) * ratio + lo) * 210000.0f;
@@ -625,8 +625,8 @@ void PartType12Update(unsigned char *m) {
     }
     *(int *)(m + 4) = FastTweenColor(*(int *)(p + 0x18), *(int *)(p + 0x14), ratio);
     if (*(short *)(m + 0xA) < scale_ticks(15)) {
-        float q = func_001FA888(*(short *)(m + 0xA));
-        float t = q / func_001FA888(scale_ticks(10));
+        float q = IntToFloat(*(short *)(m + 0xA));
+        float t = q / IntToFloat(scale_ticks(10));
         *(int *)(m + 4) = FastTweenColor(*(int *)(m + 4) & 0xFFFFFF, *(int *)(m + 4), t);
     }
     if (*(float *)(m + 0x10) < 2.0f || *(float *)(m + 0x10) > 1021.0f ||
@@ -1061,7 +1061,7 @@ void PartType20Update(M_26c860 *m) {
         func_001F9EE8(&b, &a, &mat);
         FastVecSub(&m->v10, &m->v10, &b);
         r->f1C += D_0015EE60 * 0.06001f;
-        func_L00_00250800(r->p18, 0, &c);
+        Moby_GetJointWorldPos(r->p18, 0, &c);
         FastVecSub(&a, &c, &m->v10);
         func_L00_001FF4B0(&a, &a, r->f1C);
         FastVecAdd(&m->v10, &m->v10, &a);
@@ -1073,7 +1073,7 @@ void PartType20Update(M_26c860 *m) {
         a.w = zero;
         func_001F9EE8(&b, &a, &mat);
         FastVecAdd(&m->v10, &m->v10, &b);
-        if (zero < func_L00_0025D288(&c, r->p18 + 0xC0, &m->v10, 1)) { KillPart(m); return; }
+        if (zero < GetLocalAxisCoord(&c, r->p18 + 0xC0, &m->v10, 1)) { KillPart(m); return; }
     }
     r->f4 += D_0015EE60 * 0.011f * r->fC;
     if (r->f4 <= 0.0f || FastDecTimer(&m->hA)) {
@@ -1136,8 +1136,8 @@ void PartType21Update(char *m) {
         KillPart(m);
     } else {
         p = m + 0x10;
-        *(float *)(m + 0xC) = func_001FA888(*(short *)(m + 0xA)) * *(float *)(s + 0x1C) / func_001FA888(*(short *)(s + 0x18));
-        *(int *)(m + 4) = DefaultVtbl_DeleteMoby(*(int *)(s + 0x14), *(int *)(s + 0x10), func_001FA888(*(short *)(m + 0xA)) / func_001FA888(*(short *)(s + 0x18)));
+        *(float *)(m + 0xC) = IntToFloat(*(short *)(m + 0xA)) * *(float *)(s + 0x1C) / IntToFloat(*(short *)(s + 0x18));
+        *(int *)(m + 4) = DefaultVtbl_DeleteMoby(*(int *)(s + 0x14), *(int *)(s + 0x10), IntToFloat(*(short *)(m + 0xA)) / IntToFloat(*(short *)(s + 0x18)));
         FastVecAdd(p, p, s);
         *(float *)(s + 8) -= D_0015EE64 * 0.001f;
         qcopy(&a, p);
@@ -1178,7 +1178,7 @@ void PartType22Spawn(void *pos, void *vel, int c, int d, int e, float x) {
         m[2] = *D_L00_001B2458;
         *(short *)(m + 0xA) = e;
         *(short *)(p + 0x18) = e;
-        *(float *)(p + 0x1C) = (x - *(float *)(m + 0xC)) / func_001FA888(e);
+        *(float *)(p + 0x1C) = (x - *(float *)(m + 0xC)) / IntToFloat(e);
         *(int *)(p + 0x10) = c;
         *(int *)(p + 0x14) = d;
         qcopy(p, vel);
@@ -1246,14 +1246,14 @@ void PartType23Update(char *m) {
             KillPart(m);
             return;
         }
-        s = func_001FA888(p[0xB]);
+        s = IntToFloat(p[0xB]);
         x = func_001FA898_r((float)p[0xA] * ((float)*(short *)(m + 0xA) / s) + 0.0f);
         *(int *)(m + 4) = (x << 24) | (*(int *)p & 0xFFFFFF);
     } else if (t == 3) {
         float f;
         FastDecTimer(m + 0xA);
-        f = func_001FA888(p[0xB] - *(short *)(m + 0xA));
-        f = f / func_001FA888(scale_ticks(0x1E));
+        f = IntToFloat(p[0xB] - *(short *)(m + 0xA));
+        f = f / IntToFloat(scale_ticks(0x1E));
         if (f > 1.0f) {
             f = 1.0f;
         }
@@ -1295,7 +1295,7 @@ void PartType24Update(char *m) {
     }
     if (1.0f < t) v[3] = 1.0f;
     c = *(int *)(m + 4) & 0xFFFFFF;
-    f = func_001FA888((*(unsigned unsigned char **)(m + 0x20))[7]);
+    f = IntToFloat((*(unsigned unsigned char **)(m + 0x20))[7]);
     *(int *)(m + 4) = c | (func_001FA898_r((f * (v[4] * 0.00390625f) + v[3]) * 256.0f) << 24);
 }
 extern int func_L00_0025D038(float, float, float, float);
@@ -1312,12 +1312,12 @@ void PartType25Spawn(char *pos, char *vel, int flag) {
         qcopy(p + 0x10, pos);
         if (flag == 0) {
             one = 1.0f;
-            *(int *)(p + 4) = func_L00_0025D038(one, one, one, 0.6f);
+            *(int *)(p + 4) = PackColorRGBA(one, one, one, 0.6f);
             u[4] = one;
             u[5] = one;
             u[6] = one;
         } else {
-            *(int *)(p + 4) = func_L00_0025D038(1.0f, 1.0f, 1.0f, 0.6f);
+            *(int *)(p + 4) = PackColorRGBA(1.0f, 1.0f, 1.0f, 0.6f);
             u[4] = -1.0f;
             u[5] = -1.0f;
             u[6] = -1.0f;
@@ -1394,7 +1394,7 @@ void PartType25Update(PartP *p) {
     if (b < 0.0f) b = 0.0f;
     s->a += dt * 0.0f;
     if (s->a < 0.0f) s->a = 0.0f;
-    p->x4 = func_L00_0025D038(r, g, b, s->a);
+    p->x4 = PackColorRGBA(r, g, b, s->a);
     if (neg > 0) {
         s->r = -r;
         s->g = -g;
@@ -1425,7 +1425,7 @@ char *PartType26Spawn(char *src, int col, int w, int v, float x) {
         if ((short)v == -1) {
             qcopy(m + 0x10, src + 0x10);
         } else {
-            func_L00_00250800(*(void **)(m + 0x20), (short)v, a);
+            Moby_GetJointWorldPos(*(void **)(m + 0x20), (short)v, a);
             FastVecSub(b, D_L00_00166EC0, a);
             func_L00_001FF4B0(b, b, 0.4f);
             FastVecAdd(m + 0x10, a, b);
@@ -1460,7 +1460,7 @@ void PartType26Update(char *m) {
         qcopy(m + 0x10, *(char **)p + 0x10);
         return;
     }
-    func_L00_00250800(*(char **)p, *(short *)(p + 6), a);
+    Moby_GetJointWorldPos(*(char **)p, *(short *)(p + 6), a);
     FastVecSub(b, D_L00_00166EC0, a);
     func_L00_001FF4B0(b, b, 0.4f);
     FastVecAdd(m + 0x10, a, b);
@@ -1684,7 +1684,7 @@ void PartType29Update(P_26e3a8 *p) {
     p->w4 = (p->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->f4 * 256.0f) << 24);
     e->f14 += (1.0f - e->f14) * (D_0015EE60_6F248b * 0.175f);
     if (e->hE != -1) {
-        func_L00_00250800(e->m, e->hE, a);
+        Moby_GetJointWorldPos(e->m, e->hE, a);
         FastVecSub(v, D_L00_00166EC0_6F248, a);
         func_L00_001FF4B0(v, v, e->f14);
         FastVecAdd(p->pos, a, v);
@@ -1846,7 +1846,7 @@ void *PartType32Spawn(void *arg0) {
         *(float *)(q + 0x18) = 1.0f;
         qcopy(p + 0x10, (char *)arg0 + 0x10);
 
-        *(int *)(p + 4) = func_L00_0025D038(1.0f, 1.0f, 1.0f, *(float *)(q + 4));
+        *(int *)(p + 4) = PackColorRGBA(1.0f, 1.0f, 1.0f, *(float *)(q + 4));
         p[9] = (char)(func_001FA898_r(4.0f) + 0x40);
         p[1] = 0;
         p[3] = 0x48;
@@ -1893,7 +1893,7 @@ void PartType32Update(char *m) {
         if (p[6] < 0.0f) {
             p[6] = 0.0f;
         }
-        col = func_L00_0025D038(p[4], p[5], p[6], p[1]);
+        col = PackColorRGBA(p[4], p[5], p[6], p[1]);
         t = D_0015EE60 * 0.0011f;
         *(int *)(m + 4) = col;
         p[3] = p[3] + t;
@@ -2066,7 +2066,7 @@ void PartType35Update(char *m) {
         FastVecAdd(&tmp, q, b);
         if (func_L00_001EFFF0(q, &tmp, 2, 0, 0)) {
             if (CollType() == 0) {
-                func_L00_00272488(&D_L00_00173F60, 0, -1, 0.2f, 5250.0f);
+                PartType45Spawn(&D_L00_00173F60, 0, -1, 0.2f, 5250.0f);
             }
             KillPart(m);
             return;
@@ -2079,7 +2079,7 @@ void PartType35Update(char *m) {
         lim = *(float *)(D_0013E633 + 0x110D);
         if (*(float *)(m + 0x18) < lim) {
             *(float *)(m + 0x18) = lim;
-            func_L00_00272488(q, 0, -1, 0.2f, 5250.0f);
+            PartType45Spawn(q, 0, -1, 0.2f, 5250.0f);
             KillPart(m);
             return;
         }
@@ -2090,7 +2090,7 @@ void PartType35Update(char *m) {
             if (CollType() != 0) {
                 int *d = D_L00_00173F40;
                 *(float *)((char *)d + 0x28) += 0.05f;
-                func_L00_00275040(d + 8, -1, 0.25f, 3150.0f);
+                PartType66Spawn(d + 8, -1, 0.25f, 3150.0f);
             }
             KillPart(m);
             return;
@@ -2221,7 +2221,7 @@ void *PartType40Spawn(char *a, char *b, unsigned char c, int d) {
 
         qcopy(p + 0x10, a);
         qcopy(q, b);
-        *(int *)(p + 4) = func_L00_0025D038(0.7f, 0.7f, 0.7f, 0.08f);
+        *(int *)(p + 4) = PackColorRGBA(0.7f, 0.7f, 0.7f, 0.08f);
         p[9] = (char)(func_001FA898_r(4.0f) + 0x40);
         p[1] = 0;
         p[3] = 0x44;
@@ -2401,7 +2401,7 @@ void PartType40Update(Moby_26ff10 *p) {
         kk2 = 8.0f / (d * 0.443f);
         p->f0C = p->f0C + 260000.0f / (f32)kk2 * d;
     }
-    f = func_001FA888(pv->f14);
+    f = IntToFloat(pv->f14);
     {
         f32 d = D_0015EE60;
         f32 kk;
@@ -2426,7 +2426,7 @@ void PartType40Update(Moby_26ff10 *p) {
     if (fm & 1) g = 1.0f;
     if (fm & 8) {
         pv->z = pv->z + D_0015EE64 * 0.008f;
-        f = func_001FA888(pv->f16);
+        f = IntToFloat(pv->f16);
         pv->t = pv->t + g * (D_0015EE60 * -0.01f) / f;
     } else {
         pv->t = pv->t + g * (D_0015EE60 * -0.01f);
@@ -2453,7 +2453,7 @@ void *PartType42Spawn(char *a, char *b, unsigned char c, int d) {
 
         qcopy(p + 0x10, a);
         qcopy(q, b);
-        *(int *)(p + 4) = func_L00_0025D038(0.7f, 0.7f, 0.7f, 0.08f);
+        *(int *)(p + 4) = PackColorRGBA(0.7f, 0.7f, 0.7f, 0.08f);
         p[9] = (char)(func_001FA898_r(4.0f) + 0x40);
         p[1] = 0;
         p[3] = 0x44;
@@ -2575,7 +2575,7 @@ void PartType42Update(M_270948 *m) {
     } else {
         m->fC += 260000.0f / (f32)(s32)(8.0f / (D_0015EE60_717E8b * 0.443f)) * D_0015EE60_717E8b;
     }
-    s = func_001FA888(e->h14);
+    s = IntToFloat(e->h14);
     { f32 d = (f32)(s32)(8.0f / (D_0015EE60_717E8b * 0.443f));
     a = 0.08f / d * D_0015EE60_717E8b * (s / d) + 0.08f; }
     if (a < 0.0f) a = 0.0f;
@@ -2592,7 +2592,7 @@ void PartType42Update(M_270948 *m) {
     if (f2 & 1) s = 1.0f;
     if (f2 & 8) {
         e->v.f[2] += D_0015EE64 * 0.008f;
-        e->x10 += s * (D_0015EE60_717E8b * -0.01f) / func_001FA888(e->h16);
+        e->x10 += s * (D_0015EE60_717E8b * -0.01f) / IntToFloat(e->h16);
     } else {
         e->x10 += s * (D_0015EE60_717E8b * -0.01f);
     } }
@@ -2613,21 +2613,21 @@ void PartType43Update(unsigned char *p) {
         KillPart(p);
         return;
     }
-    f = func_001FA888(t);
-    f = f / func_001FA888(*(short *)(q + 0x18));
+    f = IntToFloat(t);
+    f = f / IntToFloat(*(short *)(q + 0x18));
     f = 1.0f - f;
-    r = func_001FA898_r(func_001FA888(q[0x14]) + f * -0.001f);
-    g = func_001FA898_r(func_001FA888(q[0x15]) + f * -0.0011f);
-    b = func_001FA898_r(func_001FA888(q[0x16]) + f * -0.00111f);
+    r = func_001FA898_r(IntToFloat(q[0x14]) + f * -0.001f);
+    g = func_001FA898_r(IntToFloat(q[0x15]) + f * -0.0011f);
+    b = func_001FA898_r(IntToFloat(q[0x16]) + f * -0.00111f);
     if (*(short *)(p + 0xA) < scale_ticks(0x1E)) {
-        f = func_001FA888(*(short *)(p + 0xA));
-        f = f / func_001FA888(scale_ticks(0x1E));
-        x = func_001FA888(q[0x17]);
+        f = IntToFloat(*(short *)(p + 0xA));
+        f = f / IntToFloat(scale_ticks(0x1E));
+        x = IntToFloat(q[0x17]);
         a = func_001FA898_r(x * f);
     } else {
-        f = func_001FA888(*(short *)(p + 0xA) - scale_ticks(0x1E));
-        f = f / func_001FA888(*(short *)(q + 0x18) - scale_ticks(0x1E));
-        x = func_001FA888(q[0x17]);
+        f = IntToFloat(*(short *)(p + 0xA) - scale_ticks(0x1E));
+        f = f / IntToFloat(*(short *)(q + 0x18) - scale_ticks(0x1E));
+        x = IntToFloat(q[0x17]);
         f = 1.0f - f;
         a = func_001FA898_r(x * f);
     }

@@ -458,14 +458,14 @@ float MobyGetFrameValue(Moby *m) {
         fd = m->prevFrameData;
     }
     if (*(float *)((char *)m + 0x54) == 0.0f) {
-        return func_001FA888(*(short *)(fd + 4)) * 0.0625f;
+        return IntToFloat(*(short *)(fd + 4)) * 0.0625f;
     }
     if (m->seq != m->prevSeq || m->frame > m->prevFrame) {
-        return func_001FA888(*(short *)(fd + 4)) * 0.0625f + *(float *)((char *)m + 0x54);
+        return IntToFloat(*(short *)(fd + 4)) * 0.0625f + *(float *)((char *)m + 0x54);
     } else {
         int prev = m->prevFrameData;
-        float a = func_001FA888(*(short *)(fd + 4)) * (1.0f - *(float *)((char *)m + 0x54));
-        return (a + func_001FA888(*(short *)(prev + 4)) * *(float *)((char *)m + 0x54)) * 0.0625f;
+        float a = IntToFloat(*(short *)(fd + 4)) * (1.0f - *(float *)((char *)m + 0x54));
+        return (a + IntToFloat(*(short *)(prev + 4)) * *(float *)((char *)m + 0x54)) * 0.0625f;
     }
 }
 __asm__(".section .text\n\tnop\n");
@@ -524,7 +524,7 @@ void DetachManipulator(void *arg0, void *arg1) {
 
 extern int D_001B2F40[];
 
-int func_0020DA68(int v) {
+int AnimSlot_Register(int v) {
     int i = 0;
     int *p = D_001B2F40;
     do {
@@ -538,7 +538,7 @@ int func_0020DA68(int v) {
     return -1;
 }
 
-void func_0020DAB0(void) {
+void AnimSlot_ReleaseStale(void) {
     int sentinel = 0xFF;
     char **p = (char **)D_001B2F40;
     int i = 0xF;
@@ -694,7 +694,7 @@ extern float D_001CAE00[] NOT_SDA;
 extern float func_001F9F90(float);
 extern float func_001F9FA8(float);
 
-void func_0020DE20(void) {
+void UpdateLightDirection(void) {
     float buf[4];
     float a;
 
@@ -719,7 +719,7 @@ extern void func_001F2558(void *, int);
    a temporary that is advanced in place (t += 0x10): that breaks CSE's
    p == t equivalence, which is what keeps retail's `daddu $16,$2,$0`
    copy. `p = D_00161000; D_00161000 += 0x10;` is 4 bytes short. */
-void func_0020DEB0(void) {
+void SpliceShadowDma(void) {
     int *p;
     int t;
 
@@ -739,7 +739,7 @@ void func_0020DEB0(void) {
     ((int *)D_00160040)[2] = 0;
     ((int *)D_00160040)[3] = 0;
     func_00228A58();
-    func_00228860(D_001C8A00);
+    SubmitGraphicsSetupStream(D_001C8A00);
     ((int *)D_00161000)[0] = 0x20000000;
     ((int *)D_00161000)[1] = D_00160040 + 0x10;
     ((int *)D_00161000)[2] = 0;
@@ -854,7 +854,7 @@ void DrawMobysCleanUp(void) {
     }
     func_001F2558(D_0015FFF0, 3);
     if (D_0018A3B0[10] != 0 && D_00160040 != 0) {
-        func_0020DEB0();
+        SpliceShadowDma();
     }
 }
 

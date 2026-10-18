@@ -20,7 +20,7 @@ extern void func_L00_00211908(void);
 #define GF(o) (*(float *)(g + (o)))
 
 // per-frame update of the state flags for the current action, and the sound/effect that goes with it
-void func_L05_0023A638(void) {
+void HeroL05_ProcessContactType(void) {
     char *g = D_0013F450;
     unsigned char keep = GB(0x12ED);
     int s = GH(0x12E0);
@@ -66,7 +66,7 @@ void func_L05_0023A638(void) {
         if (GW(0x2084) != 0x7B) {
             if (coll_sphere(GF(0x234) + 0.03f, g + 0xD0, 2, 0)) {
                 if (CollType() == 0xB) {
-                    func_L05_0024D680(0x7B, 1);
+                    Hero_TryMoveStateL05(0x7B, 1);
                     return;
                 }
             }
@@ -113,7 +113,7 @@ void func_L05_0023A638(void) {
     if (GB(0x12E3) != 0 && GW(0x300) != 0) {
         int v = GW(0x208C);
         if (v != 0x10 && v != 0x14 && v != 7) {
-            func_L05_0024D680(0x31, 1);
+            Hero_TryMoveStateL05(0x31, 1);
             return;
         }
     }
@@ -123,12 +123,12 @@ void func_L05_0023A638(void) {
     if (GB(0x12E5) != 0) {
         if (GW(0x300) != 0) {
             if (!(GW(0x2084) == 0x3C && GH(0x41E) == 0)) {
-                func_L00_0020BFA8();
+                ResetHelpStateIfMode3();
                 if (GW(0x22A8) != 0) {
-                    func_L05_0024D680(0x3C, 1);
+                    Hero_TryMoveStateL05(0x3C, 1);
                     return;
                 }
-                func_L05_0024D680(0x7C, 1);
+                Hero_TryMoveStateL05(0x7C, 1);
                 return;
             }
         }
@@ -139,8 +139,8 @@ void func_L05_0023A638(void) {
     if (GB(0x12EC) != 0 && GW(0x2084) != 0x7F) {
         if (FastAbsF(GF(0x2F0) - (GF(0x88) + 0.25f)) < 1.0f
             && GF(0x2F0) - GF(0x88) > 0.0f && GF(0x108) < 0.0f) {
-            func_L00_0020BFA8();
-            func_L05_0024D680(0x7F, 1);
+            ResetHelpStateIfMode3();
+            Hero_TryMoveStateL05(0x7F, 1);
             return;
         }
     }
@@ -151,12 +151,12 @@ void func_L05_0023A638(void) {
         if (FastAbsF(GF(0x2F4) - (GF(0x88) + 0.25f)) < 1.0f
             && GF(0x2F4) - GF(0x88) > 0.0f) {
             if ((GW(0x2084) != 0x69 || GH(0x41E) != 0) && GF(0x108) < 0.0f) {
-                func_L00_0020BFA8();
+                ResetHelpStateIfMode3();
                 if (GW(0x22A8) != 0) {
-                    func_L05_0024D680(0x68, 1);
+                    Hero_TryMoveStateL05(0x68, 1);
                     return;
                 }
-                func_L05_0024D680(0x7B, 1);
+                Hero_TryMoveStateL05(0x7B, 1);
                 return;
             }
         }
@@ -168,11 +168,11 @@ void func_L05_0023A638(void) {
         if (FastAbsF(GF(0x2F4) - (GF(0x88) + 0.25f)) < 1.0f
             && GF(0x2F4) - GF(0x88) > 0.0f && GF(0x108) < 0.0f) {
             if ((unsigned)(GB(0x20A4) - 1) < 2) {
-                func_L00_00211908();
+                Hero_OnKilled();
                 return;
             }
-            func_L00_0020BFA8();
-            func_L05_0024D680(0x7B, 1);
+            ResetHelpStateIfMode3();
+            Hero_TryMoveStateL05(0x7B, 1);
             return;
         }
     }
@@ -260,7 +260,7 @@ typedef struct {
 extern HS D_L05_00174340;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l05/ui_help_00239fc0.c, FUN_L05_002402a8. */
-void func_L05_00240968(void) {
+void HeroL05_GroundProbe(void) {
     Vec4 v0, v10, v20, v30, v40, v50, v60;
     f32 f;
     s32 r;
@@ -291,7 +291,7 @@ void func_L05_00240968(void) {
     if (D_0013F450_40968.xI208c == 2) {
         g = D_0013F450_40968.xF234 * 2.9f;
     }
-    func_L00_00212D70(&v10, &v0, k, g, -48.0f);
+    Hero_BuildProbeEndpoints(&v10, &v0, k, g, -48.0f);
     if (func_L00_001EFFF0(&v10, &v0, 2, D_0013F450_40968.xI2080, 0) == 0) {
         goto tail;
     }
@@ -337,13 +337,13 @@ void func_L05_00240968(void) {
         goto d1;
     }
     if (D_L05_00174340.i18 != 0) {
-        if (func_L00_0025F410(D_L05_00174340.i18)) {
+        if (IsMobyClass500To540(D_L05_00174340.i18)) {
             D_0013F450_40968.xH30a = 1;
             if ((u32)(D_0013F450_40968.xI208c - 0x15) < 2) {
                 func_L00_00233D50_40968((u8 *)&D_L05_00174340.v20, (u8 *)&D_L05_00174340.v20, 1.0f);
             }
         }
-        p = func_L00_0025D390(D_L05_00174340.i18);
+        p = GetFlaggedPvarWord(D_L05_00174340.i18);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             D_0013F450_40968.xH30a = 1;
         }
@@ -486,9 +486,9 @@ int Camera_MoveWithCollision(int mode) {
         int c = *(unsigned char *)(a + 0x20B3);
         if (c != 0 || *(short *)(a + 0x1F8) != 0) {
             if (c == 1 || *(short *)(a + 0x1F8) != 0 || (unsigned)(m - 0x15) < 2) {
-                func_L00_00234090(tmp, tmp, 0.6f);
+                HeroOffsetAlongViewZ(tmp, tmp, 0.6f);
             } else {
-                func_L00_00233D50(tmp, tmp, -*(float *)(a + 0x224));
+                HeroMoveDownAlongNormal(tmp, tmp, -*(float *)(a + 0x224));
             }
         } else {
             tmp[2] = *(float *)(a + 0x224);
@@ -596,11 +596,11 @@ void Hero_MoveAndCollide(void) {
             if (limit < length) func_L00_001FF4B0(position, position, limit);
         }
         limited_velocity = (float *)(D_0013E633 + 0xEFD);
-        magnitude = func_L00_002342F8(limited_velocity);
+        magnitude = HeroGetViewZ(limited_velocity);
         limit = -*(float *)((char *)limited_velocity + 0x1FC);
         if (magnitude < limit) {
             if (limit > 0.0f) limit = 0.0f;
-            func_L00_002343A0(limited_velocity, limited_velocity, limit);
+            HeroPlacePointZ(limited_velocity, limited_velocity, limit);
         }
     } else if (player->state.control_mode == 22) {
         qcopy(work.f, position);
@@ -644,12 +644,12 @@ void Hero_MoveAndCollide(void) {
     contact_player->wall_hit = 0;
     contact_player->coll_hit_moby = 0;
     if (FastVecLength((char *)position + 0x70) <= 0.0001f) {
-        func_L00_00213E60();
-        func_L05_00240968();
+        Hero_ResolveCollision();
+        HeroL05_GroundProbe();
         FastVecSub((char *)position + 0x80, position, previous.f);
-        func_L00_002136A8();
+        Hero_SnapStepUp();
     } else {
-        func_L05_00240968();
+        HeroL05_GroundProbe();
     }
     delta = (float *)(D_0013E633 + 0xF2D);
     new_position = (float *)((char *)delta - 0x90);
@@ -664,15 +664,15 @@ void Hero_MoveAndCollide(void) {
     if (magnitude < 0.0f) magnitude = 0.0f;
     func_L00_001FF4B0(delta, velocity, magnitude);
     qcopy(work.f, velocity);
-    func_L00_00234150(work.f, work.f);
-    func_L00_00234150(horizontal, horizontal);
+    HeroRemoveNormalComponent(work.f, work.f);
+    HeroRemoveNormalComponent(horizontal, horizontal);
     func_L00_001FF4B0(horizontal, horizontal, 1.0f);
     magnitude = FastVecDot(horizontal, work.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
     func_L00_001FF4B0(horizontal, work.f, magnitude);
     qcopy(plane.f, velocity);
-    func_L00_00234420(plane.f, plane.f, 0.0f);
-    func_L00_00234420(vertical, vertical, 0.0f);
+    HeroScalePointXY(plane.f, plane.f, 0.0f);
+    HeroScalePointXY(vertical, vertical, 0.0f);
     func_L00_001FF4B0(vertical, vertical, 1.0f);
     magnitude = FastVecDot(vertical, plane.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
@@ -681,7 +681,7 @@ void Hero_MoveAndCollide(void) {
     motion_player->motion.speed_xy = FastVecLength(delta);
     motion_player->motion.unk164 = func_001F9CE8(delta);
     work.q = *(Q *)delta;
-    motion_player->motion.unk168 = func_L00_00213A08(work.f);
+    motion_player->motion.unk168 = Hero_ProjectOnHeading(work.f);
     if (motion_player->motion.unk168 < 0.0f) motion_player->motion.unk168 = 0.0f;
     qcopy(work.f, new_position);
     contact = (float *)((char *)delta - 0x20);
@@ -693,10 +693,10 @@ void Hero_MoveAndCollide(void) {
         saved = motion_player->motion.platform_delta.f[3];
         clear_u64_value(contact);
         motion_player->motion.platform_delta.f[3] = saved;
-        func_L00_00213E60();
-        func_L05_00240968();
+        Hero_ResolveCollision();
+        HeroL05_GroundProbe();
         FastVecSub(external, new_position, previous.f);
-        func_L00_002136A8();
+        Hero_SnapStepUp();
     }
     FastVecSub((char *)delta + 0x30, new_position, work.f);
     motion_player->motion.platform_carry.f[3] = motion_player->motion.platform_delta.f[3];

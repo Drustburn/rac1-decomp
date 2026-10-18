@@ -172,7 +172,7 @@ extern int D_00160000 MACRO_ADDR;
 /* Looks arg0 up in the {key, a, b} table D_001E8F00 (ended by key -1).
    D_00160000 is read at every use, not cached in a local: CSE then
    reproduces retail's load order and its surviving register copy. */
-void func_00213BB8(int arg0) {
+void SetMobyClassEntry(int arg0) {
     char *m = D_001B3580[D_00160000];
     int i = 0;
 
@@ -259,7 +259,7 @@ void MobyBlendAnimation(MobyAnim *arg0, int arg1, int arg2, int arg3) {
     if (*(float *)((char *)arg0 + 0x54) > 0.025f ||
         *(int *)((char *)arg0 + 0x60) != 0 ||
         *(int *)((char *)arg0 + 0x64) != 0) {
-        slot = func_0020DA68((int)arg0);
+        slot = AnimSlot_Register((int)arg0);
         if (slot >= 0) {
             func_0020FC38(arg0, slot | 0x300);
             qcopy(D_001B2F80 + slot * 0x10, (char *)arg0 + 0xF0);
@@ -275,7 +275,7 @@ void MobyBlendAnimation(MobyAnim *arg0, int arg1, int arg2, int arg3) {
     arg0->prevSeq = arg1;
     func_0020D6D0_a(arg0);
     *(float *)((char *)arg0 + 0x58) = 1.0f;
-    scale = 1.0f / func_001FA888(arg3);
+    scale = 1.0f / IntToFloat(arg3);
     *(float *)((char *)arg0 + 0x54) = 0.0f;
     arg0->unk70 = (unsigned char)(arg0->unk70 & 0xFD);
     arg0->unk5C = scale;
@@ -303,7 +303,7 @@ void MobyBlendAnimationEx(MobyAnim *arg0, int arg1, int arg2, int arg3, int arg4
     if (*(float *)((char *)arg0 + 0x54) > 0.025f ||
         *(int *)((char *)arg0 + 0x60) != 0 ||
         *(int *)((char *)arg0 + 0x64) != 0 || (arg4 & 4)) {
-        slot = func_0020DA68((int)arg0);
+        slot = AnimSlot_Register((int)arg0);
         if (slot >= 0) {
             flags = (arg4 & 1) ? (slot | 0x100) : slot;
             func_0020FC38(arg0, (arg4 & 2) ? (flags | 0x200) : flags);
@@ -320,7 +320,7 @@ void MobyBlendAnimationEx(MobyAnim *arg0, int arg1, int arg2, int arg3, int arg4
     arg0->prevSeq = arg1;
     func_0020D6D0_a(arg0);
     *(float *)((char *)arg0 + 0x58) = 1.0f;
-    scale = 1.0f / func_001FA888(arg3);
+    scale = 1.0f / IntToFloat(arg3);
     *(float *)((char *)arg0 + 0x54) = 0.0f;
     arg0->unk70 = (unsigned char)(arg0->unk70 & 0xFD);
     arg0->unk5C = scale;
@@ -626,7 +626,7 @@ LINKER_REMNANT("asm/remnants/text", func_00215038);
 
 /* A goto into the first `return 0` gives retail's backward beqz; the two
    nops before it are short-loop padding (tools/ps2eeas_nops.py). */
-int func_00215048(char *arg0) {
+int Moby_GetPvarFirstWord(char *arg0) {
     if (arg0 == 0) {
     ret0:
         return 0;
@@ -638,7 +638,7 @@ int func_00215048(char *arg0) {
 }
 
 /* func_00215048 for the +0x10 field. */
-int func_00215078(char *arg0) {
+int Moby_GetPvarWord4(char *arg0) {
     if (arg0 == 0) {
     ret0:
         return 0;
@@ -869,7 +869,7 @@ extern int D_0015EE80 MACRO_ADDR;
 
 /* The EE80 flag is written first in each arm. Its float store lands in
    a delay slot, where check_macro_slots.py makes it $gp-relative. */
-void func_002157C0(int pal) {
+void SetVideoModeTiming(int pal) {
     if (pal == 0) {
         D_0015EE80 = 0;
         D_0015EE60 = 1.0f;
@@ -902,7 +902,7 @@ extern int func_001FA898_r(float) __asm__("func_001FA898");
    float4 to bytes): its largest absolute component sets a scale n,
    rounded (func_001FA898) from max * 10000 / 63 and clamped to 1..255,
    which goes in w; x, y, z become v / (n / 10000) + 127. */
-void func_002158E8(float *v, int *out) {
+void PackVectorScaled(float *v, int *out) {
     float buf[4];
     float a = FastAbsF(v[0]);
     float b = FastAbsF(v[1]);
@@ -974,7 +974,7 @@ float round_float_to_decimal_places(int arg0, float arg1) {
 extern float func_0020D830(void);
 extern float func_00215A98(int, float);
 
-int func_00215B18(char *arg0, float arg1) {
+int IsFrameWithinWindow(char *arg0, float arg1) {
     float now = MobyGetFrameValue();
     float a = round_float_to_decimal_places(4, now - arg1);
     float b = round_float_to_decimal_places(4, *(float *)(arg0 + 0x58) * *(float *)(arg0 + 0x5C));

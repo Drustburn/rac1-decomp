@@ -364,7 +364,7 @@ extern void func_00238688(void *);
 extern char D_001E3500[];
 extern char D_001E4700[];
 
-void func_00236BB0(void) {
+void LightTieBuffers(void) {
     LightTies(D_001E3500);
     LightTies(D_001E4700);
 }

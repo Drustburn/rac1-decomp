@@ -265,7 +265,7 @@ void FollowTargetAlongPath(char *m) {
         }
         if (((unsigned char *)m)[0x20] == 2) {
             if (d[2] < *(int *)pth - 1) {
-                int k = func_L09_00295880(m, pth, m + 0x10, d[2], 1, D_0015EE60 * 0.25f);
+                int k = AdvancePathIndexByDistance(m, pth, m + 0x10, d[2], 1, D_0015EE60 * 0.25f);
                 d[2] = k;
                 ((float *)d)[3] = FastVecDist(m + 0x10, pth + (k * 16 + 0x10));
             } else {
@@ -291,7 +291,7 @@ void func_L13_0030D2A8(unsigned char *moby)
         break;
     case 1:
         if (D_L13_0015F6A8 == 2 && D_L13_0016CBE0.state == 2) {
-            func_L00_00264870(D_L13_0016CBE0.target);
+            SpawnMoby750Sparks(D_L13_0016CBE0.target);
         }
         break;
     }
@@ -302,7 +302,7 @@ void func_0020D678(void *obj);
 
 /* Records the classes of the tracked mobys, then removes this moby once too few of them are left.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l13/gameplay/vendor/003058a8.c, FUN_L13_0030be60. */
-void func_L13_0030D318(struct Moby *m) {
+void WatchMobysUpdate(struct Moby *m) {
     int *d = (int *)m->pvars;
     if (m->state == 0) {
         int *ids = d + 4;
@@ -346,7 +346,7 @@ void func_L13_0030D318(struct Moby *m) {
 extern char *func_0020D348(int);
 extern void func_L00_00251E30(void *);
 
-char *func_L13_0030D468(char *owner, void *position, float scale) {
+char *Moby1632Spawn(char *owner, void *position, float scale) {
     char *moby = CreateMoby(0x660);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
@@ -371,7 +371,7 @@ extern char *func_L00_0025B478(void *, int, int);
 extern void func_L00_0025AAC0(void *, void *);
 
 /* updates the moby: deletes it when its owner is gone, else copies the owner's effect data and marks it */
-void func_L13_0030D528(char *moby) {
+void Moby1632Update(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *owner = *(char **)(data + 0x60);
     char *p;
@@ -381,7 +381,7 @@ void func_L13_0030D528(char *moby) {
         DeleteMoby(moby);
         return;
     }
-    p = func_L00_0025B478(moby, -1, 0);
+    p = MobyGetHitMessage(moby, -1, 0);
     if (p != 0) {
         qcopy(buf, p + 0x10);
         *(int *)(buf + 0x10) = *(int *)(p + 0x20);
@@ -391,7 +391,7 @@ void func_L13_0030D528(char *moby) {
         *(short *)(buf + 0x1A) = *(short *)(p + 0x2A);
         *(float *)(buf + 0x1C) = *(float *)(p + 0x2C);
         *(int *)(buf + 0x20) = *(int *)(p + 0x30);
-        func_L00_0025AAC0(*(void **)(data + 0x60), buf);
+        PostHitMessageFromRecord(*(void **)(data + 0x60), buf);
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
 }
@@ -401,7 +401,7 @@ extern float func_002140F8(float, float);
 extern float D_0015EE6C MACRO_ADDR;
 
 // Creates an effect moby at a position and seeds its random wobble data.
-char *func_L13_0030D600(void *a, void *b, int c, int d) {
+char *Moby1634Spawn(void *a, void *b, int c, int d) {
     unsigned char *m = (unsigned char *)CreateMoby(0x662);
     if (m != 0) {
         char *data;
@@ -551,14 +551,14 @@ void Moby1634Update(char *moby)
         return;
     }
     if (*(short *)(data + 0x18) < *(short *)(data + 0x1A) / 4) {
-        f20 = func_001FA888(*(short *)(data + 0x18));
-        *(float *)(moby + 0x2C) = *(float *)(data + 0x1C) * f20 / func_001FA888(*(short *)(data + 0x1A) / 4);
+        f20 = IntToFloat(*(short *)(data + 0x18));
+        *(float *)(moby + 0x2C) = *(float *)(data + 0x1C) * f20 / IntToFloat(*(short *)(data + 0x1A) / 4);
     }
     if (FastDecTimer(data + 0x18) != 0) {
         DeleteMoby(moby);
     } else if (((unsigned char *)moby)[0xBC] == 1) {
         if (func_L00_001EFFF0(buf, moby + 0x10, 2, *(int *)(D_0013E633 + 0x2E9D), 0)) {
-            func_L10_002E51A8(moby);
+            SpawnPartType52Near(moby);
             DeleteMoby(moby);
         }
     }
@@ -589,8 +589,8 @@ void Moby1805Update(void *moby) {
         return;
     }
     data = *(char **)(m + 0x78);
-    item = func_L00_0025B478(moby, 0x10000, 0);
-    func_L00_0025B4D0(moby, item, data + 0x20, 0, &st, 0, 0, 4);
+    item = MobyGetHitMessage(moby, 0x10000, 0);
+    ComputeHitResponse(moby, item, data + 0x20, 0, &st, 0, 0, 4);
     switch (((unsigned char *)m)[0x20]) {
     case 0:
         m[0x20] = 1;
@@ -605,7 +605,7 @@ void Moby1805Update(void *moby) {
             } else {
                 *(float *)(data + 0x20) = a - b;
                 ((unsigned char *)data)[0x67] = 0xFA;
-                func_L00_0025E4B0(moby, (short *)p);
+                RerollEffectCounter(moby, (short *)p);
             }
             ((unsigned char *)m)[0xA4] = 0xFF;
         }
@@ -613,7 +613,7 @@ void Moby1805Update(void *moby) {
         break;
     case 2: {
         if (((unsigned char *)m)[0x21] != 0xFF) {
-            int r = func_L01_0026EFB8(((unsigned char *)m)[0x21], -1);
+            int r = MobyGroup_CountNotInState(((unsigned char *)m)[0x21], -1);
             if (r == 1) {
                 unsigned char *t = (unsigned char *)(D_0013D50F + 1);
                 if (t[0x16] == 0) {
@@ -624,16 +624,16 @@ void Moby1805Update(void *moby) {
             }
         }
         func_0022ED80(0, 0, (int)moby);
-        func_L01_00279790(moby);
+        SpawnBreakFxByDistance(moby);
             D_0014C290[D_0015EE84][(short)*(unsigned short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
             D_L13_001BAAE0[(short)*(unsigned short *)(m + 0xB2) >> 5] |= 1 << (*(unsigned short *)(m + 0xB2) & 0x1F);
         for (n = 0; n < 2; n++) {
             for (k = 0x709; k < 0x70D; k++) {
                 qzero(tmp);
-                func_L00_00260958(tmp, 1.5f);
+                JitterVector(tmp, 1.5f);
                 tmp[2] += 1.7f;
                 FastVecAdd(tmp, tmp, m + 0x10);
-                func_L00_00265050(m, k, tmp, m + 0x40, 0, 0, D_L13_0015F660, D_L13_0015F660, 0.0f, D_L13_0015F660);
+                SpawnBreakFragment(m, k, tmp, m + 0x40, 0, 0, D_L13_0015F660, D_L13_0015F660, 0.0f, D_L13_0015F660);
             }
         }
         func_L00_0025F4A8(moby, m + 0x10, 0, 0.0f, 0.0f, 0xA, 3, 0x10, 6.0f, 3.0f, 9.0f, 0, 1.1f, 15.0f, 1, 3, -1, 0);

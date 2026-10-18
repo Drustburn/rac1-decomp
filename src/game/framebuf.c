@@ -523,7 +523,7 @@ void Framebuf_DrawAlphaRect(int x0, int y0, int x1, int y1, int w, int h, unsign
     int ax, ay, bx, by;
     int hw, hh;
 
-    func_00234C50(0x13000000);
+    Dma_AppendVifCode(0x13000000);
     VU1_addGSregister(0x42, 0x64);
     ax = (x0 << 4) + 0x8000;
     ay = (y0 << 4) + 0x8000;
@@ -558,7 +558,7 @@ void Framebuf_DrawAlphaRect(int x0, int y0, int x1, int y1, int w, int h, unsign
     }
     D_00161000 += 0x18;
     VU1_addGSregister(0x42, 0x8000000044L);
-    func_00234C50(0x13000000);
+    Dma_AppendVifCode(0x13000000);
 }
 
 LINKER_REMNANT("asm/remnants/text", func_001FBC78);

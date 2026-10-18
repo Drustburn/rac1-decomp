@@ -36,7 +36,7 @@ extern void func_L00_00217570(int, int);
 extern void func_L00_002091D8(void);
 extern void func_L00_0025805C(void *);
 
-void func_L15_001FFED0(void) {
+void HeroL15_FrameUpdate(void) {
     unsigned char *b0, *b1, *b2, *b3, *b4, *b5, *b6;
     unsigned char *moby;
     unsigned int copy[4] __attribute__((aligned(16)));
@@ -45,30 +45,30 @@ void func_L15_001FFED0(void) {
     float pulse;
 
     func_L00_00232EF0();
-    func_L00_00211D28();
-    func_L15_00204AC0();
-    func_L15_0021D7A8();
+    Hero_UpdateMotionInput();
+    Hero_UpdateAimFlags();
+    HeroL15_UpdateStateTransitions();
     b0 = D_0013E633 + 0xE1D;
     if (b0[0x20A4] == 0)
         return;
-    func_L00_00217698();
-    func_L00_00205B00();
+    Hero_TickReleaseTimers();
+    SettleAllHeldObjects();
     if (b0[0x20A4] == 0)
         return;
-    func_L00_00209088();
-    func_L00_00208260();
+    SyncHelpScreenMoby();
+    UpdateRampUpDown();
     CameraShakeUpdate();
     func_L00_00248EF8(b0 + 0x80);
 
     if (b0[0x20A4] == 2) {
         if (gCheats[3] != 0)
             D_L15_0017C0EC = (*(float *)&D_0015EF18) * 1.4f;
-        func_L00_00205FF0();
-        func_L00_00206808();
+        UpdateHelperMoby();
+        SyncCompanionMoby();
         {
         unsigned char *m = *(unsigned char **)(b0 + 0x2080);
         if (((*(unsigned short *)(m + 0x34) ^ 1) & 1) != 0) {
-            func_L00_00250800(m, 6, copy);
+            Moby_GetJointWorldPos(m, 6, copy);
             qcopy(b0 + 0x1D80, copy);
             QueueHeroDraw();
         }
@@ -85,7 +85,7 @@ void func_L15_001FFED0(void) {
             period = scale_ticks(0x32);
         else if (*(short *)(b1 + 0x22E0) == 1)
             period = scale_ticks(0x5A);
-        pulse = FastSin((((float)(D_L15_0015F6B0 % period) / func_001FA888(period)) * 2.0f) * 3.1415927f + -3.1415927f);
+        pulse = FastSin((((float)(D_L15_0015F6B0 % period) / IntToFloat(period)) * 2.0f) * 3.1415927f + -3.1415927f);
         red = truncate_float_to_s32(pulse * 20.0f) + 0x32;
         green = truncate_float_to_s32(pulse * 70.0f) + 0xB4;
         blue = truncate_float_to_s32(pulse * 10.0f);
@@ -105,7 +105,7 @@ void func_L15_001FFED0(void) {
         for (i = 0; i < 3; i++)
         {
             b4 = D_0013E633 + 0xE1D;
-            func_L00_00250800(*(void **)(b4 + 0x2080), i, b4 + 0x1D50 + i * 16);
+            Moby_GetJointWorldPos(*(void **)(b4 + 0x2080), i, b4 + 0x1D50 + i * 16);
         }
         alpha = 0x30;
         b4 = D_0013E633 + 0xE1D;
@@ -116,7 +116,7 @@ void func_L15_001FFED0(void) {
             red = mb[0x90];
         }
         if (*(short *)(b4 + 0x22DE) != 0)
-            alpha = truncate_float_to_s32((func_001FA888(*(short *)(b4 + 0x22DE)) / func_001FA888(0x12)) * (float)alpha);
+            alpha = truncate_float_to_s32((IntToFloat(*(short *)(b4 + 0x22DE)) / IntToFloat(0x12)) * (float)alpha);
         *(unsigned int *)(b4 + 0x22E4) = (alpha << 24) | (blue << 16) | (green << 8) | red;
         QueueHeroDraw();
         *(short *)(b4 + 0x22E0) = 0;
@@ -124,7 +124,7 @@ void func_L15_001FFED0(void) {
             int pending = *(int *)(b4 + 0x20B8);
             if (pending != 0 && pending != 0x1F) {
                 if (*(short *)(b4 + 0x22DE) == 0) {
-                    func_L00_00217570(0x19, 0);
+                    Hero_PlayActiveSound(0x19, 0);
                     *(short *)(b4 + 0x22DE) = 0x12;
                     *(short *)(b4 + 0x22DC) = 1;
                 }
@@ -133,14 +133,14 @@ void func_L15_001FFED0(void) {
                 *(int *)(b5 + 0x20B8) = 0;
                 if (b5[0x12E7] != 0 && *(int *)(b5 + 0x300) != 0 && gHaveMorphORay[7] != 0 &&
                     *(short *)(b5 + 0x22DE) == 0) {
-                    func_L00_00217570(0x19, 0);
+                    Hero_PlayActiveSound(0x19, 0);
                     *(short *)(b5 + 0x22DE) = 0x12;
                     *(short *)(b5 + 0x22DC) = 1;
                 }
             }
         }
     }
-    func_L00_002091D8();
+    Hero_SteerAimAndProbe();
     b6 = D_0013E633 + 0xE1D;
     func_L00_0025805C(*(void **)(b6 + 0x2080));
 }
@@ -155,7 +155,7 @@ void Help_ShowIndexedPrompt(void) {
     if (index >= 0 && *(D_0013E15A + 0x4C6 + index) != 0) {
         int first = *(int *)(base + 0x1090);
         if (first != 0) {
-            func_L00_00207948(first, *(int *)(base + 0x2080));
+            TintEffectFromMobyColor(first, *(int *)(base + 0x2080));
         }
     }
 }
@@ -170,7 +170,7 @@ extern void clear_u64_value(void *);
 typedef int u128 __attribute__((mode(TI)));
 
 // Per-frame update of the camera-attached moby position.
-void func_L15_00200D70(void) {
+void HeroL15_UpdateAttachedMobyBob(void) {
     unsigned char *base = D_0013E633 + 0xE1D;
     if (*(int *)(base + 0x2084) == 0x6B && *(short *)(base + 0x8BC) == 0) {
         char *m;
@@ -210,11 +210,11 @@ void Help_Reset(void) {
     if (base[0x20A4] == 2) {
         int v = *(short *)(base + 0x1634);
         if (v != -1) {
-            func_001FFDA0(v, 0);
+            Hud_SetBarValueById(v, 0);
             *(short *)(base + 0x1634) = -1;
         }
     }
-    func_L00_00205B50();
+    UpdateHeldObjectTable();
     b = D_0013E633 + 0xE1D;
     p = *(int *)(b + 0xA84);
     b[0x20A4] = 0;
@@ -233,9 +233,9 @@ void Help_Reset(void) {
     qcopy(m + 0x10, b + 0x80);
     *(int *)(m + 0x98) = 0;
     *(float *)(b + 0xA94) = 1.0f;
-    func_L00_00232EA8();
+    HeroClearQueuedSequence();
     if (*(int *)(b + 0x2084) != 100 || (D_L15_0015F6A8 != 2 && D_L15_0015F6A8 != 6)) {
-        func_L15_00217348(0, 1);
+        HeroQuartu_TrySetMoveState(0, 1);
     }
 }
 typedef struct {
@@ -284,7 +284,7 @@ f32 func_00214D28(f32, f32, f32 *);
 void func_L00_0025C918(f32 *, f32 *, f32, f32, f32, f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_001ff938.c, FUN_L15_00209450. */
-void func_L15_00209A88(void) {
+void HeroL15_UpdateMoveBlendTargets(void) {
     switch (D_0013F450.b20A4) {
     case 0:
         D_0013F450.f228 = 0.8f;
@@ -319,7 +319,7 @@ void func_L15_00209A88(void) {
         P_209450 *b = (P_209450 *)((u8 *)q - 0x220);
         ApproachValue(b->f228, D_0015EE60 * 0.02f, q);
         ApproachValue(b->f22C, D_0015EE60 * 0.02f, q + 1);
-        func_L00_0025C918(q + 5, q + 6, b->f230, D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.0f);
+        Spring(q + 5, q + 6, b->f230, D_0015EE64 * 0.02f, D_0015EE64 * 0.3f, D_0015EE6C * 4.0f);
     }
 }
 extern char D_0013F4D0[];
@@ -335,7 +335,7 @@ extern int func_L00_001EFFF0(void *, void *, int, int, int);
 extern int func_L00_001F3958(void);
 extern float func_L00_001FF860(float, float);
 // Steers the hero's aim vectors toward the current target and snaps momentum to it when close enough.
-void func_L15_0020A960(int arg) {
+void HeroL15_SlideAlongWall(int arg) {
     float a[4] __attribute__((aligned(16)));
     float c[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
@@ -513,7 +513,7 @@ typedef struct {
 extern HS D_L15_001744C0_0ADD8 __asm__("D_L15_001744C0");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_001fe778.c, FUN_L15_0020a7a0. */
-void func_L15_0020ADD8(void) {
+void HeroL15_ResetMotionState(void) {
     Vec4 v0, v10, v20, v30, v40, v50, v60;
     f32 f;
     s32 r;
@@ -545,7 +545,7 @@ void func_L15_0020ADD8(void) {
     if (D_0013F450_0ADD8.xI208c == 2) {
         g = D_0013F450_0ADD8.xF234 * 2.9f;
     }
-    func_L00_00212D70(&v10, &v0, k, g, -48.0f);
+    Hero_BuildProbeEndpoints(&v10, &v0, k, g, -48.0f);
     if (func_L00_001EFFF0(&v10, &v0, 2, D_0013F450_0ADD8.xI2080, 0) == 0) {
         goto tail;
     }
@@ -581,10 +581,10 @@ void func_L15_0020ADD8(void) {
         goto d1;
     }
     if (D_L15_001744C0_0ADD8.i18 != 0) {
-        if (func_L00_0025F410(D_L15_001744C0_0ADD8.i18)) {
+        if (IsMobyClass500To540(D_L15_001744C0_0ADD8.i18)) {
             D_0013F450_0ADD8.xH30a = 1;
         }
-        p = func_L00_0025D390(D_L15_001744C0_0ADD8.i18);
+        p = GetFlaggedPvarWord(D_L15_001744C0_0ADD8.i18);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             D_0013F450_0ADD8.xH30a = 1;
         }
@@ -722,7 +722,7 @@ void HeroFrameUpkeep(void) {
     s32 n8;
 
     if (D_0013F450_16568.unk20AD == 0) {
-        func_L00_00216D40();
+        Hero_EaseCameraOffsets();
     }
     D_0013F450_16568.state_timer++;
     D_0013F450_16568.unk19C++;
@@ -787,7 +787,7 @@ void HeroFrameUpkeep(void) {
                 ((struct Moby *)D_0013F450_16568.unkA8C)->glow_color = 0;
                 ((struct Moby *)D_0013F450_16568.unkA8C)->spawn_frame = D_0013F450_16568.moby->spawn_frame;
                 func_L00_00251E30(D_0013F450_16568.unkA8C);
-                func_L00_002110C0(3, 0x53, D_0013F450_16568.unkA8C);
+                Hero_BeginObjectControl(3, 0x53, D_0013F450_16568.unkA8C);
             }
         }
     }
@@ -798,7 +798,7 @@ void HeroFrameUpkeep(void) {
         func_001F9908(&D_L15_00179F70[i].w0);
     }
     D_0013F450_16568.unk22B8 = 9999.0f;
-    if (D_0013F450_16568.air_frames.s != 0 && func_L00_002342F8(&D_0013F450_16568.motion.velocity) < 0.0f) {
+    if (D_0013F450_16568.air_frames.s != 0 && HeroGetViewZ(&D_0013F450_16568.motion.velocity) < 0.0f) {
         if (D_0013F450_16568.unk21B4 != 0x20) goto skip;
         clear_u64_value(&sum);
         n8 = 8;
@@ -819,7 +819,7 @@ void HeroFrameUpkeep(void) {
     }
     D_0013F450_16568.unk1E2 = 0;
 skip:
-    func_L00_002222F0();
+    Hero_PushOffSupportCenter();
     if (D_0013F450_16568.vehicle_mode == 2) {
         LocalToWorldPoint(&D_0013F450_16568.motion.unkD0, 0.0f, 0.0f, 4.0f);
         D_0013F450_16568.reach_distance = 15.0f;
@@ -844,15 +844,15 @@ skip:
         }
     }
     if (D_0013F450_16568.motion.pos.f[2] < 1.0f) {
-        func_L00_00211908();
+        Hero_OnKilled();
     }
 }
 
 /* Select the message associated with the current help mode. */
 void Help_SelectMessage(void) {
     switch (D_0013E633[0x2EC1]) {
-    case 0: func_L15_00217348(0, 1); break;
-    case 2: func_L15_00217348(0x5A, 1); break;
-    case 3: func_L15_00217348(0x53, 1); break;
+    case 0: HeroQuartu_TrySetMoveState(0, 1); break;
+    case 2: HeroQuartu_TrySetMoveState(0x5A, 1); break;
+    case 3: HeroQuartu_TrySetMoveState(0x53, 1); break;
     }
 }

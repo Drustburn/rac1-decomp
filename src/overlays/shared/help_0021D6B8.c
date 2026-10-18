@@ -17,7 +17,7 @@ extern char D_0013F450_1D6B8[] __asm__("D_0013F450");
 extern int func_L00_0020DB30(int);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/0021d0a0.c, FUN_L06_0021d0a0. */
-int func_L06_0021D6B8(int a) {
+int Hero_GetModuleAnimId(int a) {
     char *g = (char *)D_0013F450_1D6B8;
     switch (*(unsigned char *)(g + 0x20A4)) {
     case 1:
@@ -44,7 +44,7 @@ int func_L06_0021D6B8(int a) {
         }
     }
     {
-        int i = func_L00_0020DB30(0);
+        int i = Hero_GetSlotModuleId(0);
         return D_L06_0017A340[i].v;
     }
 }
@@ -131,7 +131,7 @@ typedef struct {
 } GS_E7B8;
 
 /* Hero frame update for the help/panel states: runs the update chain; in state 1 keeps two companion mobys (0x4B4 and 0x47A) placed on the hero and tints them, in state 3 pulses the hero tint and drives the fade colour and sound trigger. */
-void func_L06_0021E7B8(void) {
+void HeroL06_UpdateFrame(void) {
     int h2, v2, t;
     int v, h, i, r16, r17, r18, c20, color;
     int ca, cb, col;
@@ -142,23 +142,23 @@ void func_L06_0021E7B8(void) {
     float rm[16];
 
     func_L00_00232EF0();
-    func_L00_00211D28();
+    Hero_UpdateMotionInput();
     func_L06_00223630();
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 1) {
         HeroLedgeProbe();
         CameraLeanFromPad();
     }
-    func_L06_0023BBE8();
+    HeroL06_UpdateStateTransitions();
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 0) return;
-    func_L00_00217698();
-    func_L00_00205B00();
+    Hero_TickReleaseTimers();
+    SettleAllHeldObjects();
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 0) return;
-    func_L00_00209088();
-    func_L00_00208260();
+    SyncHelpScreenMoby();
+    UpdateRampUpDown();
     CameraShakeUpdate();
     if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->b20A4 == 1) {
         D_L06_0017C0DC = D_0015EEF0[10];
-        func_L00_00205FF0();
+        UpdateHelperMoby();
         if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 == 0) {
             ((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 = (char *)CreateMoby(0x4B4);
             if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 != 0) {
@@ -176,7 +176,7 @@ void func_L06_0021E7B8(void) {
             }
         }
         if ((*(unsigned short *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x34) ^ 1) & 1) {
-            func_L00_00250800(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 7, buf);
+            Moby_GetJointWorldPos(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, 7, buf);
             qcopy(((GS_E7B8 *)(D_0013E633 + 0xE1D))->a1D80, buf);
             QueueHeroDraw();
             if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->m1624 != 0) {
@@ -276,7 +276,7 @@ skip:
         } else if (h == 1) {
             v = scale_ticks(0x5A);
         }
-        f0 = func_001FA888(v);
+        f0 = IntToFloat(v);
         ang = (float)(D_L06_0015F6B0 % v) / f0;
         ang = ang + ang;
         ang = ang * 3.14159274f;
@@ -295,7 +295,7 @@ skip:
         }
         *(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90) = FastTweenColor(*(int *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90), color, 0.1f);
         for (i = 0; i < 3; i++) {
-            func_L00_00250800(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, i, ((GS_E7B8 *)(D_0013E633 + 0xE1D))->a1D50 + i * 0x10);
+            Moby_GetJointWorldPos(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080, i, ((GS_E7B8 *)(D_0013E633 + 0xE1D))->a1D50 + i * 0x10);
         }
         c20 = 0x30;
         r18 = *(unsigned char *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x92);
@@ -303,8 +303,8 @@ skip:
         r16 = *(unsigned char *)(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080 + 0x90);
         h2 = ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22DE;
         if (h2 != 0) {
-            f20 = func_001FA888(h2);
-            f20 = f20 / func_001FA888(0x12);
+            f20 = IntToFloat(h2);
+            f20 = f20 / IntToFloat(0x12);
             c20 = truncate_float_to_s32(f20 * (float)c20);
         }
         ((GS_E7B8 *)(D_0013E633 + 0xE1D))->c22E4 = (c20 << 24) | (r18 << 16) | (r17 << 8) | r16;
@@ -314,7 +314,7 @@ skip:
             v2 = ((GS_E7B8 *)(D_0013E633 + 0xE1D))->i20B8;
             if (v2 != 0 && v2 != 0x1F) {
                 if (((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22DE == 0) {
-                    func_L00_00217570(0x19, 0);
+                    Hero_PlayActiveSound(0x19, 0);
                     ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22DE = 0x12;
                     ((GS_E7B8 *)(D_0013E633 + 0xE1D))->s22DC = 1;
                 }
@@ -324,14 +324,14 @@ skip:
                 g->i20B8 = 0;
                 if (e != 0 && g->i300 != 0 && *(unsigned char *)(gHaveMorphORay + 7) != 0 &&
                     g->s22DE == 0) {
-                    func_L00_00217570(0x19, 0);
+                    Hero_PlayActiveSound(0x19, 0);
                     g->s22DE = 0x12;
                     g->s22DC = 1;
                 }
             }
         }
     }
-    func_L00_002091D8();
+    Hero_SteerAimAndProbe();
     func_L00_0025805C(((GS_E7B8 *)(D_0013E633 + 0xE1D))->p2080);
 }
 extern unsigned char D_0013F450[];
@@ -343,7 +343,7 @@ extern void func_L00_00232EA8(void);
 extern void func_L06_00235E08(int, int);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_0021d0a0.c, FUN_L06_00227cf8. */
-void func_L06_00228390(void) {
+void Hero_EndObjectControl(void) {
     unsigned char *g = D_0013F450;
     unsigned char *m;
     if (g[0x20A4] == 1) {
@@ -360,7 +360,7 @@ void func_L06_00228390(void) {
     }
     {
     unsigned char *g2 = D_0013F450;
-    func_L00_00205B50();
+    UpdateHeldObjectTable();
     g2[0x20A4] = 0;
     m = *(unsigned char **)(g2 + 0xA84);
     if (m) {
@@ -379,9 +379,9 @@ void func_L06_00228390(void) {
         *(int *)(o + 0x98) = 0;
     }
     *(float *)(g2 + 0xA94) = 1.0f;
-    func_L00_00232EA8();
+    HeroClearQueuedSequence();
     if (*(int *)(g2 + 0x2084) != 100 || (D_L06_0015F6A8 != 2 && D_L06_0015F6A8 != 6)) {
-        func_L06_00235E08(0, 1);
+        HeroL06_TrySetMoveState(0, 1);
     }
     }
 }
@@ -402,7 +402,7 @@ extern float func_L00_001FF860(float, float);
 typedef struct { char pad[0x98]; float ang; } G98;
 
 // Builds two view-offset vectors from a stored position and the camera angle, tests them against the level, and possibly realigns the aim vector.
-void func_L06_00229868(int arg) {
+void HeroL06_ProbeGroundSupport(int arg) {
     char *p = (char *)D_0013E633 + 0xE1D;
     Vec4f a0;
     Vec4f u;
@@ -521,7 +521,7 @@ extern s32 func_L00_001F34F0(void *, f32);
 extern void func_L00_001FF4B0(void *, void *, f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/0021d0a0.c, FUN_L06_0022a1d0. */
-s32 func_L06_0022A868(s32 mode) {
+s32 HeroL06_ResolveCollisionStep(s32 mode) {
     Vec4 old;
     Vec4 v;
     Vec4 w;
@@ -541,9 +541,9 @@ s32 func_L06_0022A868(s32 mode) {
     if (D_0013F450_2A868.w208C != 0x11) {
         if (D_0013F450_2A868.b20B3 != 0 || D_0013F450_2A868.h1F8 != 0) {
             if (D_0013F450_2A868.b20B3 == 1 || D_0013F450_2A868.h1F8 != 0) {
-                func_L00_00234090(&v, &v, 0.6f);
+                HeroOffsetAlongViewZ(&v, &v, 0.6f);
             } else {
-                func_L00_00233D50(&v, &v, -D_0013F450_2A868.f224);
+                HeroMoveDownAlongNormal(&v, &v, -D_0013F450_2A868.f224);
             }
         } else {
             v.f[2] = D_0013F450_2A868.f224;
@@ -632,7 +632,7 @@ extern void func_L00_00233EE0(void *, f32, f32, f32);
 extern void func_L00_00211908(void);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui/help/0021d0a0.c, FUN_L06_002348d0. */
-void func_L06_00235038(void) {
+void HeroL06_UpdateTimers(void) {
     Vec4 sum;
     Vec4 d;
     struct Moby *m;
@@ -641,7 +641,7 @@ void func_L06_00235038(void) {
     s32 n8;
 
     if (D_0013F450_35038.unk20AD == 0) {
-        func_L00_00216D40();
+        Hero_EaseCameraOffsets();
     }
     D_0013F450_35038.state_timer++;
     D_0013F450_35038.unk19C++;
@@ -691,7 +691,7 @@ void func_L06_00235038(void) {
     if (D_0013F450_35038.unk22DE != 0 && FastDecTimer(&D_0013F450_35038.unk22DE) != 0 &&
         D_0013F450_35038.health.hp != 0 && (*(s32 *)&D_L06_0015F6A8_35038) == 0) {
         if (D_0013F450_35038.vehicle_mode == 3) {
-            func_L06_00228390();
+            Hero_EndObjectControl();
             if (PadPressedWithin(0x80, scale_ticks(0x12), 0)) {
                 D_0013F450_35038.unk20A6 = 1;
             }
@@ -706,7 +706,7 @@ void func_L06_00235038(void) {
                 ((struct Moby *)D_0013F450_35038.unkA8C)->glow_color = 0;
                 ((struct Moby *)D_0013F450_35038.unkA8C)->spawn_frame = D_0013F450_35038.moby->spawn_frame;
                 func_L00_00251E30(D_0013F450_35038.unkA8C);
-                func_L01_00231960(3, 0x53, D_0013F450_35038.unkA8C);
+                HeroStartScene(3, 0x53, D_0013F450_35038.unkA8C);
             }
         }
     }
@@ -714,7 +714,7 @@ void func_L06_00235038(void) {
         func_001F9908(&D_L06_0017A170[i].w0);
     }
     D_0013F450_35038.unk22B8 = 9999.0f;
-    if (D_0013F450_35038.air_frames.s != 0 && func_L00_002342F8(&D_0013F450_35038.motion.velocity) < 0.0f) {
+    if (D_0013F450_35038.air_frames.s != 0 && HeroGetViewZ(&D_0013F450_35038.motion.velocity) < 0.0f) {
         if (D_0013F450_35038.unk21B4 != 0x20) goto skip;
         clear_u64_value(&sum);
         n8 = 8;
@@ -735,7 +735,7 @@ void func_L06_00235038(void) {
     }
     D_0013F450_35038.unk1E2 = 0;
 skip:
-    func_L00_002222F0();
+    Hero_PushOffSupportCenter();
     if (D_0013F450_35038.vehicle_mode == 1) {
         LocalToWorldPoint(&D_0013F450_35038.motion.unkD0, 0.0f, 0.0f, 0.4f);
         D_0013F450_35038.reach_distance = 2.125f;
@@ -760,16 +760,16 @@ skip:
         }
     }
     if (D_0013F450_35038.motion.pos.f[2] < 1.0f) {
-        func_L00_00211908();
+        Hero_OnKilled();
     }
 }
 
 // Dispatches on a mode byte and calls func_L06_00235E08 with a matching id.
-void func_L06_00239CD0(void) {
+void HeroL06_SetStateFromMode(void) {
     switch (D_0013E633[0x2EC1]) {
-    case 0: func_L06_00235E08(0, 1); break;
-    case 1: func_L06_00235E08(0x43, 1); break;
-    case 3: func_L06_00235E08(0x53, 1); break;
+    case 0: HeroL06_TrySetMoveState(0, 1); break;
+    case 1: HeroL06_TrySetMoveState(0x43, 1); break;
+    case 3: HeroL06_TrySetMoveState(0x53, 1); break;
     }
 }
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
@@ -793,7 +793,7 @@ extern f32 func_L00_002345B0(void *);
 extern s32 func_L00_0025A5D8(f32 *, f32 *, f32, f32, f32);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/ui_help_00242950.c, FUN_L06_00242950. */
-f32 func_L06_002431A0(f32 a, f32 b, f32 c) {
+f32 HeroL06_PredictLanding(f32 a, f32 b, f32 c) {
     f32 t[4];
     Vec4 v;
     Vec4 t1;
@@ -817,7 +817,7 @@ f32 func_L06_002431A0(f32 a, f32 b, f32 c) {
             }
         }
         if (c > 0.0f) {
-            if (func_L00_0025A5D8(&o[0], &o[1], b * -0.5f, (&D_0013F450_431A0)->vE0.f[2] - b * -0.5f,
+            if (SolveQuadratic(&o[0], &o[1], b * -0.5f, (&D_0013F450_431A0)->vE0.f[2] - b * -0.5f,
                                        (&D_0013F450_431A0)->v80.f[2] - c) > 0 &&
                 o[0] > 0.0f) {
                 return o[0];
@@ -837,10 +837,10 @@ f32 func_L06_002431A0(f32 a, f32 b, f32 c) {
         if (func_L00_001EFFF0(&(&D_0013F450_431A0)->v80, t, 0xd24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
-            z = func_L00_002342F8(&(&D_0013F450_431A0)->vE0) - nb;
-            x = func_L00_002342F8(&(&D_0013F450_431A0)->v80);
-            y = func_L00_002342F8(&D_L06_001746E0);
-            if (func_L00_0025A5D8(&o[2], &o[3], nb, z, x - y) > 0 && o[2] > 0.0f) {
+            z = HeroGetViewZ(&(&D_0013F450_431A0)->vE0) - nb;
+            x = HeroGetViewZ(&(&D_0013F450_431A0)->v80);
+            y = HeroGetViewZ(&D_L06_001746E0);
+            if (SolveQuadratic(&o[2], &o[3], nb, z, x - y) > 0 && o[2] > 0.0f) {
                 return o[2];
             }
         }
@@ -861,10 +861,10 @@ f32 func_L06_002431A0(f32 a, f32 b, f32 c) {
         if (func_L00_001EFFF0(&(&D_0013F450_431A0)->v80, t, 0xd24, 0, 0) != 0) {
             f32 nb;
             nb = b * -0.5f;
-            z = func_L00_002342F8(&(&D_0013F450_431A0)->vE0) - nb;
-            x = func_L00_002342F8(&(&D_0013F450_431A0)->v80);
-            y = func_L00_002342F8(&D_L06_001746E0);
-            if (func_L00_0025A5D8(&o[4], &o[5], nb, z, x - y) > 0 && o[4] > 0.0f) {
+            z = HeroGetViewZ(&(&D_0013F450_431A0)->vE0) - nb;
+            x = HeroGetViewZ(&(&D_0013F450_431A0)->v80);
+            y = HeroGetViewZ(&D_L06_001746E0);
+            if (SolveQuadratic(&o[4], &o[5], nb, z, x - y) > 0 && o[4] > 0.0f) {
                 return o[4];
             }
         }

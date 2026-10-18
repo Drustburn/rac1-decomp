@@ -72,7 +72,7 @@ extern PadSlots D_001A01F0_slots __asm__("D_001A01F0");
 extern int D_001A01F0[];
 extern int *D_001602E0;
 
-int func_002071A8(int x1, int y1) {
+int Menu_IsPointInFixedQuad(int x1, int y1) {
     return menu_pointIsClockwise(x1, y1, 0xD3, 0xDB, 0x129, 0xF9);
 }
 
@@ -699,7 +699,7 @@ void Menu_ReadSector(int arg0) {
     }
     n = func_001FAA28((void *)arg0, 0x800, D_001A01F0[5], D_001A01F0[3]);
     if (n == -1) {
-        func_00208860((void *)arg0);
+        CondenseBitmapTo1bpp((void *)arg0);
     }
     if (D_0013D668[D_0015EE84] < n) {
         D_0013D668[D_0015EE84] = n;
@@ -710,7 +710,7 @@ extern int D_001A0218[] NOT_SDA;
 extern void func_00208458(void *, unsigned char *, int);
 extern void func_00208688(void *, unsigned char *);
 
-void func_002083E0(void *arg0, unsigned char *arg1, int arg2) {
+void UnpackOcclusionMap(void *arg0, unsigned char *arg1, int arg2) {
     /* func_00209040 is empty in retail and takes no arguments; $4/$5/$6
        still hold our own incoming arguments across it, which is why retail
        saves them into $16-$18 rather than reloading. */
@@ -721,7 +721,7 @@ void func_002083E0(void *arg0, unsigned char *arg1, int arg2) {
     if (*arg1 & 1) {
         DecodeOcclusionMap(arg0, arg1, arg2);
     } else {
-        func_00208688(arg0, arg1);
+        ExpandBitmapTo4bpp(arg0, arg1);
     }
 }
 
@@ -810,7 +810,7 @@ void DecodeOcclusionMap(void *dst, unsigned char *ctrl, int spans) {
    per source row). The first bit is a plain store over the zeroed entry
    (retail's store-in-delay-slot), and the row buffer is filled through
    a block-local pointer, which gives retail's separate buffer copies. */
-void func_00208688(void *dst, unsigned char *src) {
+void ExpandBitmapTo4bpp(void *dst, unsigned char *src) {
     unsigned int table[256];
     unsigned int rowbuf[16];
     int i, j, row;
@@ -875,7 +875,7 @@ extern unsigned char *D_001A01FC;
    stack) are summed, and a column with 8 or more set bits becomes a
    set bit, packed eight columns to a byte. The first byte is then
    flagged with 0x02 and bit 0 cleared. */
-void func_00208860(void *arg0) {
+void CondenseBitmapTo1bpp(void *arg0) {
     unsigned char *dst = arg0;
     int acc[128];
     NibbleBits bits;
@@ -977,7 +977,7 @@ extern OrientEntry D_0019EA70[];
    D_0015EE84"; anything out of [0,0x13) collapses to row 0. Row 6 with
    the +100 variant blends against fixed constants instead of the
    generic per-row formula. */
-void func_00208C38(float *out0, float *out1, int arg2, float arg3, float arg4) {
+void WorldToMapCoords(float *out0, float *out1, int arg2, float arg3, float arg4) {
     int idx;
     int flag = 0;
 
@@ -1023,7 +1023,7 @@ extern void func_00201640(int, int, int, int, long, int);
 extern int func_00200198(int, int);
 extern void func_002008B8(int, int, int, int, int, int);
 
-void func_00208D38(int left, int top, int right, int bottom) {
+void DrawMapMarkers(int left, int top, int right, int bottom) {
     float nx;
     float ny;
     int n = D_001A01F0[0x2C];
@@ -1033,7 +1033,7 @@ void func_00208D38(int left, int top, int right, int bottom) {
         int sx;
         int sy;
 
-        func_00208C38(&nx, &ny, D_0015EE84, m->x, m->y);
+        WorldToMapCoords(&nx, &ny, D_0015EE84, m->x, m->y);
         sx = left + (int)((float)(right - left) * nx);
         sy = top + (int)((float)(bottom - top) * ny);
         if (sx < -0x199 || sy < -0x199 || sx >= 0x219A || sy >= 0x1B9A) {
@@ -1069,7 +1069,7 @@ extern char D_0013D6B8[];
    D_0015EE84's objects in D_00199578 into the 16-byte slots at
    D_0013D6B8; the index range is D_001E06B8[i]..[i + 1]. Binding the
    two bases to locals in retail's order orders their %hi halves. */
-void func_00208FA0(void) {
+void Map_CopyObjectPositions(void) {
     int i = D_0015EE84;
     if ((unsigned int)i < 0x13) {
         int start = D_001E06B8[i];

@@ -81,7 +81,7 @@ void StartLevel(int level) {
         char *g = D_001941C0;
         t = *(int *)(g + 0x1C);
     }
-    func_0023B670(b, a, t + 0x100000, t + 0x400000, 0);
+    Movie_Play(b, a, t + 0x100000, t + 0x400000, 0);
     func_00120F30(0);
     func_00122598(0);
     func_00120858(0, 0);
@@ -191,7 +191,7 @@ extern void func_00233308_E99D8(void) __asm__("func_00233308");
    The slot stores are in this order on purpose: the last store through each table, the last
    one of the bank value and the two globals are what the scheduler moves to the front.
    Adapted from Lombyte (MIT) for PAL: src/textbin/world/startlevel.c, startlevel. */
-void func_001E99D8(void) {
+void GameBootSequence(void) {
     LevelHeader_E99D8 *hdr;
     LevelChunk_E99D8 *tbl;
     s32 n;

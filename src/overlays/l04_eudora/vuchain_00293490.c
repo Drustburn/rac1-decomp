@@ -119,8 +119,8 @@ void InitTwoLeggedRig(struct Moby *moby, LegRig_p *rig) {
             STUB_printf(D_L04_001DB660, i, moby->oclass);
             func_001F9978();
         }
-        rig->anims[i]->start = func_L04_00242868(moby->class_slot, rig->anims[i]->id);
-        rig->anims[i]->len = func_L04_002428C8(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
+        rig->anims[i]->start = Anim_GetStartTime(moby->class_slot, rig->anims[i]->id);
+        rig->anims[i]->len = Anim_GetEndTime(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
         if (rig->anims[i]->len != 0.0f) {
             for (j = 0; j < 2; j++) {
                 rig->anims[i]->phase[1].span[j] = rig->anims[i]->phase[1].from[j] <= rig->anims[i]->phase[1].to[j]
@@ -167,7 +167,7 @@ void InitTwoLeggedRig(struct Moby *moby, LegRig_p *rig) {
 extern int func_L00_002A2680(int *a, char *b);
 
 // Finds the entry of arg1's 13-pointer table whose first word equals arg0's byte at 0x52, then calls on it or returns a byte.
-int func_L04_00293990(char *arg0, char *arg1) {
+int LegRig_GetAnimMode(char *arg0, char *arg1) {
     int **p = (int **)(arg1 + 0x70);
     int *found = 0;
     int i;
@@ -176,7 +176,7 @@ int func_L04_00293990(char *arg0, char *arg1) {
         if (*e == (int)(unsigned char)arg0[0x52]) found = e;
     }
     if (found == 0) return (unsigned char)arg1[0xB6];
-    return func_L00_002A2680(found, arg1);
+    return GetFootPhaseMask(found, arg1);
 }
 
 typedef struct {
@@ -220,7 +220,7 @@ extern float func_L00_001FF860_2939E8(float, float) __asm__("func_L00_001FF860")
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00174040");
 
 /* Steers a moby from the arg block: height and push terms, returns 2 when the tilt is past pi/4. */
-int func_L04_002939E8(StMoby_2939E8 *m, Steer_2939E8 *a)
+int HoverMobySteer(StMoby_2939E8 *m, Steer_2939E8 *a)
 {
     float push[4];
     float dir[4];
@@ -401,7 +401,7 @@ extern void func_001FA588(float *, float *, float *);
 extern f32 D_0015EE60 MACRO_ADDR;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l04/runtime/dma/002922d0.c, FUN_L04_00292d48. */
-void func_L04_00293F08(struct Moby *moby, LegRig_93F08 *rig, int flags) {
+void LegRig_UpdateLegAngles(struct Moby *moby, LegRig_93F08 *rig, int flags) {
     float joint[16];
     float tilt[4];
     float twist;
@@ -422,16 +422,16 @@ void func_L04_00293F08(struct Moby *moby, LegRig_93F08 *rig, int flags) {
             leg->lower_turn);
         base_yaw = FastSubRots(heading, twist);
         if (rig->unkB7 == 0 || (flags & mask) == 0) {
-            leg->upper_turn = func_L00_00259148(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
+            leg->upper_turn = SpringTurn(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
                                            D_0015EE60 * 0.034906585f);
-            leg->lower_turn = func_L00_00259148(leg->lower_turn, 0.0f, &rig->legs[i].lower_turn_speed, 0.1f, 0.1f,
+            leg->lower_turn = SpringTurn(leg->lower_turn, 0.0f, &rig->legs[i].lower_turn_speed, 0.1f, 0.1f,
                                            D_0015EE60 * 0.034906585f);
         } else {
             if (rig->unkB7 == 13)
-                leg->upper_turn = func_L00_00259148(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
+                leg->upper_turn = SpringTurn(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
                                                D_0015EE60 * 0.034906585f);
             else
-                leg->upper_turn = func_L00_00259148(leg->upper_turn, twist * 0.5f, &rig->legs[i].upper_turn_speed, 0.1f,
+                leg->upper_turn = SpringTurn(leg->upper_turn, twist * 0.5f, &rig->legs[i].upper_turn_speed, 0.1f,
                                                0.1f, D_0015EE60 * 0.034906585f);
             leg->lower_turn = FastSubRots(twist, leg->upper_turn);
             leg->lower_turn_speed = 0.0f;
@@ -500,21 +500,21 @@ int LegWalkerUpdate(char *m, char *s, float speed, float ang, float accel) {
     if (*(unsigned char *)(m + 0x52) != 0xFF) {
         t = MobyGetFrameValue((struct Moby *)m);
     } else {
-        t = func_001FA888(*(unsigned char *)(m + 0x51)) + func_L04_00242868(*(unsigned char *)(m + 0x22), *(unsigned char *)(m + 0x53));
+        t = IntToFloat(*(unsigned char *)(m + 0x51)) + Anim_GetStartTime(*(unsigned char *)(m + 0x22), *(unsigned char *)(m + 0x53));
     }
     flags = func_L04_00293990_96938(m, s, t);
     if (*(unsigned short *)(s + 0xEE) & 4) {
-        *(float *)(m + 0x48) = func_L00_00259148(*(float *)(m + 0x48), *(float *)(s + 0x6C), (float *)(s + 0xC8),
+        *(float *)(m + 0x48) = SpringTurn(*(float *)(m + 0x48), *(float *)(s + 0x6C), (float *)(s + 0xC8),
                                                  *(float *)(s + 0xCC), *(float *)(s + 0xD0), *(float *)(s + 0xD4));
     } else if (flags & 0xF) {
-        *(float *)(m + 0x48) = func_L00_00259148(*(float *)(m + 0x48), ang, (float *)(s + 0xC8),
+        *(float *)(m + 0x48) = SpringTurn(*(float *)(m + 0x48), ang, (float *)(s + 0xC8),
                                                  *(float *)(s + 0xCC), *(float *)(s + 0xD0), *(float *)(s + 0xD4));
     } else {
-        *(float *)(m + 0x48) = func_L00_00259148(*(float *)(m + 0x48), ang, (float *)(s + 0xC8),
+        *(float *)(m + 0x48) = SpringTurn(*(float *)(m + 0x48), ang, (float *)(s + 0xC8),
                                                  0.0f, *(float *)(s + 0xD0) + *(float *)(s + 0xD0), *(float *)(s + 0xD4));
     }
     func_L04_00293F08_96938(m, s, flags, ang);
-    *(float *)(m + 0x44) = func_L00_00259148(*(float *)(m + 0x44), *(float *)(s + 0xB8), (float *)(s + 0xBC),
+    *(float *)(m + 0x44) = SpringTurn(*(float *)(m + 0x44), *(float *)(s + 0xB8), (float *)(s + 0xBC),
                                              0.005f, 0.01f, D_0015EE60 * 0.017453292f);
 
     ((int *)buf)[0] = *(unsigned char *)(s + 0xF0);
@@ -697,7 +697,7 @@ extern float func_001F9B88(float);
 extern int func_L04_00293990_96FA8(struct Moby *m, LegRig *rig, float t) __asm__("func_L04_00293990");
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l04/runtime/dma/002922d0.c, FUN_L04_00295de8. */
-void func_L04_00296FA8(struct Moby *m, LegRig *rig) {
+void LegRig_Init(struct Moby *m, LegRig *rig) {
     int joints[6];
     float mtx[4][4];
     float t;
@@ -725,8 +725,8 @@ void func_L04_00296FA8(struct Moby *m, LegRig *rig) {
     if (m->seq != 0xFF) {
         t = MobyGetFrameValue(m);
     } else {
-        t = func_001FA888(m->prev_frame);
-        t += func_L04_00242868(m->class_slot, m->prev_seq);
+        t = IntToFloat(m->prev_frame);
+        t += Anim_GetStartTime(m->class_slot, m->prev_seq);
     }
     rig->mode = 5;
     rig->speed = 0.0f;

@@ -7,7 +7,7 @@ INCLUDE_ASM("asm/overlays", func_L00_001FEFE0);
 INCLUDE_ASM("asm/overlays", func_L00_001FF040);
 INCLUDE_ASM("asm/overlays", func_L00_001FF088);
 INCLUDE_ASM("asm/overlays", func_L00_001FF0B0);
-void func_L00_001FF200(s64 *v) {
+void Vec_ZeroXYZ(s64 *v) {
     v[0] = 0;
     __asm__ volatile ("nop");
     ((s32 *)v)[2] = 0;
@@ -43,7 +43,7 @@ extern float func_001FA790(float, float);
 extern float func_001FA748(float, float);
 extern float func_001F9B88(float);
 
-float func_L00_002004C0(float a, float b, float c) {
+float RotateTowardAngle(float a, float b, float c) {
     float r = FastSubRots(b, a);
     if (!(r > 0.0f)) {
         c = -c;
