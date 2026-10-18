@@ -400,7 +400,82 @@ void func_0022F4A0(int arg0) {
 
 LINKER_REMNANT("asm/remnants/text", func_0022F4C0);
 
-INCLUDE_ASM("asm/nonmatchings/text", func_0022F4C8);
+typedef struct { float f[4]; } __attribute__((aligned(16))) QuadOffset_2F4C8;
+
+typedef struct {
+    QuadOffset_2F4C8 positions[4];   /* 0x00 */
+    u32 colors[4];                   /* 0x40 */
+    f32 texture_coordinates[4][2];   /* 0x50 */
+    u64 reserved;                    /* 0x70 */
+    u64 texture;                     /* 0x78 */
+    u64 texture_state;               /* 0x80 */
+    u64 primitive;                   /* 0x88 */
+} GeometryQuad_2F4C8;
+
+typedef struct {
+    char *player;                    /* 0x00 */
+    u8 pad4[0x22];
+    s16 content_variant;             /* 0x26 */
+} LevelRenderState_2F4C8;
+
+extern LevelRenderState_2F4C8 level_render_state_2F4C8 __asm__("D_0013E130");
+extern f32 quad_uvs_2F4C8[4][2] __asm__("D_001D9C20") NOT_SDA;
+extern QuadOffset_2F4C8 quad_positions_2F4C8[8] __asm__("D_001D9C40") NOT_SDA;
+extern QuadOffset_2F4C8 quad_positions_variant1_2F4C8[2] __asm__("D_001D9CC0") NOT_SDA;
+extern QuadOffset_2F4C8 quad_positions_variant2_2F4C8[2] __asm__("D_001D9CE0") NOT_SDA;
+extern QuadOffset_2F4C8 quad_corners_2F4C8[10] __asm__("D_001D9D00") NOT_SDA;
+extern short D_001605C0_2F4C8 __asm__("D_001605C0");
+
+void func_001F9C30_2F4C8(float, void *, void *) __asm__("func_001F9C30");
+void func_001F9BD8_2F4C8(void *, void *, void *) __asm__("func_001F9BD8");
+void func_001F9EC0_2F4C8(void *, void *, void *) __asm__("func_001F9EC0");
+long func_001F4868_2F4C8(int) __asm__("func_001F4868");
+int func_002140B0_2F4C8(int) __asm__("func_002140B0");
+float func_001FA888_2F4C8(int) __asm__("func_001FA888");
+void func_001F7EF8_2F4C8(void *, int, int) __asm__("func_001F7EF8");
+
+/* Resident effect quads: picks the row table by level_render_state's
+   content_variant, builds a textured GS quad, and for each row of
+   D_001605C0[variant] scales the four corners by the object's brightness
+   and the row size, offsets them by the row, the player's matrix and the
+   object position, and draws the quad.
+   Adapted from Lombyte (MIT): src/gameplay/fun_0022e1b0.c, FUN_0022e1b0. */
+void func_0022F4C8(unsigned char *m) {
+    GeometryQuad_2F4C8 quad;
+    QuadOffset_2F4C8 v;
+    QuadOffset_2F4C8 *tbl;
+    int i, j, k;
+
+    tbl = quad_positions_2F4C8;
+    if (level_render_state_2F4C8.content_variant == 1) tbl = quad_positions_variant1_2F4C8;
+    else if (level_render_state_2F4C8.content_variant == 2) tbl = quad_positions_variant2_2F4C8;
+    quad.texture = func_001F4868_2F4C8(5);
+    quad.texture_state = 0xFF9000000260L;
+    quad.primitive = 0x8000000048L;
+    quad.reserved = 0;
+    for (j = 0; j < 4; j++) {
+        quad.texture_coordinates[j][0] = quad_uvs_2F4C8[j][0];
+        quad.texture_coordinates[j][1] = quad_uvs_2F4C8[j][1];
+    }
+    func_001F9C30_2F4C8(0.0009765625f, &v, m);
+    for (i = 0; i < ((int *)&D_001605C0_2F4C8)[level_render_state_2F4C8.content_variant]; i++) {
+        int c = m[0xBC];
+        unsigned int col;
+        float s;
+        if (*(short *)(m + 0xB2)) c += func_002140B0_2F4C8(*(short *)(m + 0xB2));
+        s = func_001FA888_2F4C8(c) * (tbl[i].f[3] / 40.0f);
+        col = (c << 24) | 0x2058B0;
+        if (*(short *)(m + 0xA6) == 0x215) col = (c << 24) | 0x308000;
+        for (k = 0; k < 4; k++) {
+            quad.colors[k] = col;
+            func_001F9C30_2F4C8(s, &quad.positions[k], &quad_corners_2F4C8[k]);
+            func_001F9BD8_2F4C8(&quad.positions[k], &quad.positions[k], &tbl[i]);
+            func_001F9EC0_2F4C8(&quad.positions[k], &quad.positions[k], level_render_state_2F4C8.player + 0xC0);
+            func_001F9BD8_2F4C8(&quad.positions[k], &quad.positions[k], &v);
+        }
+        func_001F7EF8_2F4C8(&quad, 0, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/text", func_0022F738);
 
