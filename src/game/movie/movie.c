@@ -9,7 +9,7 @@ extern char *D_0016130C MACRO_ADDR;
 extern char *movie_gp_base SDATA(D_0016130C);
 extern int func_00118BA0(int,int);
 extern int func_0023BB90(int,int,int);
-extern void func_0023B740(void*,void*,void*);
+extern int func_0023B740(char*,char*,int*);
 extern void func_0023BE38(void);
 /* No recovered name. Sets movie globals, runs initialization and playback, then clears them. */
 int Movie_Play(int a,int b,int c,char *state,int e) {
@@ -29,7 +29,152 @@ int Movie_Play(int a,int b,int c,char *state,int e) {
     D_0016130C=0;
     return 0;
 }
-INCLUDE_ASM("asm/nonmatchings/text", func_0023B740);
+extern int D_00161318 MACRO_ADDR;
+extern int D_0015EFD8 MACRO_ADDR;
+extern int D_0015EFA0 MACRO_ADDR;
+extern int D_0015EF20 MACRO_ADDR;
+extern int D_0015EE84 MACRO_ADDR;
+/* pad state at D_0013CA40: two words read at 0x1A0/0x1A4 */
+typedef struct MvPad {
+    char pad0[0x1A0];
+    int f1A0;
+    int f1A4;
+} __attribute__((aligned(16))) MvPad;
+extern MvPad D_0013CA40;
+/* global block at D_0013E650: word at 0x5C */
+typedef struct MvGlobals {
+    char pad0[0x5C];
+    int f5C;
+} __attribute__((aligned(16))) MvGlobals;
+extern MvGlobals D_0013E650;
+extern void func_00118D80(int);
+extern int func_00122598(int);
+extern void func_00218908(void);
+extern void func_0023E040(char *);
+extern int func_0023CD30(char *, int *);
+extern int func_0023CE30(int *, int, int, int);
+extern int func_0023CD60(char *, int);
+extern void func_0023BF70(void);
+extern void func_0023BB40(void);
+extern int func_0023CDA8(char *, int *);
+extern int func_0012AD10(char *, int, int, char *, int);
+extern int func_0023CDF0(char *, int);
+extern int func_0023E5C8(char *);
+extern void func_0023C960(int);
+extern void func_0023C088(char *);
+extern int func_0023E050(char *);
+extern int func_0023E0D8(char *);
+extern int func_0023E1B0(char *);
+extern void func_0023C9B0(void);
+extern void func_0023C0E0(char *);
+extern void func_0012E348(int, int);
+extern void func_0012DDC0(void);
+
+/* No recovered name. Playback loop: feeds file data (*file bytes) through the
+ * read buffer at `rb` into the video decoder `vd`, starts audio and display once
+ * the output buffer fills, aborts on a pad combination, then drains the decoder.
+ * D_00161314 records the step reached. Returns 1 if aborted. */
+int func_0023B740(char *vd, char *rb, int *file) {
+    int aborted = 0;
+    int started = 0;
+    int left = *file;
+    int toread;
+    int space;
+    int got;
+    int avail;
+    int used;
+    int put;
+    int get;
+
+    D_00161314 = 3;
+    func_00118D80(0);
+    toread = left;
+    func_00118D80(2);
+    func_00122598(0);
+    D_00161314 = 4;
+
+    while (left >= 5 && func_0023E050(vd) != 3) {
+        int hit;
+
+        D_00161314 = 5;
+        D_00161318++;
+        func_00218908();
+        D_00161314 = 6;
+        if (D_0015EFD8 != -1) {
+            D_00161314 = 7;
+            if (D_0015EFD8 == 2 && D_0013CA40.f1A4 != 0) {
+                hit = 1;
+            } else if ((D_0015EFA0 || D_0015EF20 || D_0015EFD8 || D_0015EE84 <= 0)
+                       && (D_0013CA40.f1A4 & 0x800)) {
+                hit = 1;
+            } else if ((D_0013CA40.f1A0 & 0xF) == 0xF && (D_0013CA40.f1A4 & 0x800)) {
+                hit = 1;
+            } else {
+                hit = 0;
+            }
+            if (hit) {
+                aborted = 1;
+                func_0023E040(D_0016130C + 0xD9048);
+            }
+            D_00161314 = 8;
+        }
+        D_00161314 = 9;
+        space = func_0023CD30(rb, &put);
+        D_00161314 = 10;
+        if (toread > 0 && space > 0xFFFF) {
+            D_00161314 = 11;
+            got = func_0023CE30(file, put, 0x10000, 0);
+            D_00161314 = 12;
+            func_0023CD60(rb, got);
+            toread -= got;
+            D_00161314 = 13;
+        }
+        D_00161314 = 14;
+        func_0023BF70();
+        D_00161314 = 15;
+        func_0023BB40();
+        D_00161314 = 16;
+        avail = func_0023CDA8(rb, &get);
+        D_00161314 = 17;
+        if (avail > 0) {
+            int size = *(int *)(rb + 0x50008);
+
+            D_00161314 = 18;
+            used = func_0012AD10(vd, get, avail, rb, size);
+            D_00161314 = 19;
+            func_0023CDF0(rb, used);
+            left -= used;
+            D_00161314 = 20;
+        }
+        D_00161314 = 21;
+        func_0023BF70();
+        D_00161314 = 22;
+        if (!started && func_0023E5C8(D_0016130C + 0xD9168) && func_0023BB60()) {
+            D_00161314 = 23;
+            started = 1;
+            func_0023C960(1);
+            D_00161314 = 24;
+            func_0023C088(D_0016130C + 0xD9100);
+            D_00161314 = 25;
+        }
+    }
+
+    while (!func_0023E0D8(vd)) {
+        func_0023BF70();
+        func_0023BB40();
+    }
+    while (!func_0023E1B0(vd) && func_0023E050(vd) != 3) {
+        func_0023BF70();
+        func_0023BB40();
+    }
+    func_0023C9B0();
+    func_0023C0E0(D_0016130C + 0xD9100);
+    func_0012E348(5, D_0013E650.f5C);
+    func_0012DDC0();
+    D_00161314 = 0;
+    D_00161318 = 0;
+    return aborted;
+}
 extern int func_00118BC0(int);
 
 /* switchThread -- calls func_00118BC0(1). */
