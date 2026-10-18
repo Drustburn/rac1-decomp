@@ -1,16 +1,16 @@
 {
  "measures": {
-  "fuzzy_match_percent": 95.18632506386065,
+  "fuzzy_match_percent": 95.18913238949229,
   "total_code": "3712772",
-  "matched_code": "3509672",
-  "matched_code_percent": 94.52969371671624,
+  "matched_code": "3509856",
+  "matched_code_percent": 94.53464958257604,
   "total_functions": 5118,
-  "matched_functions": 4854,
-  "matched_functions_percent": 94.84173505275498,
-  "complete_code": "1170196",
-  "complete_code_percent": 31.518121769933625,
+  "matched_functions": 4858,
+  "matched_functions_percent": 94.91989058225869,
+  "complete_code": "1230980",
+  "complete_code_percent": 33.15528128309522,
   "total_units": 141,
-  "complete_units": 105,
+  "complete_units": 106,
   "total_data": "699072",
   "matched_data": "3216",
   "matched_data_percent": 0.46003845097500684,
@@ -18368,13 +18368,13 @@
   {
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 89.37427016528018,
+    "fuzzy_match_percent": 89.38119134319706,
     "total_code": "1200628",
-    "matched_code": "1058080",
-    "matched_code_percent": 88.12721342497426,
+    "matched_code": "1058192",
+    "matched_code_percent": 88.13654187641801,
     "total_functions": 1980,
-    "matched_functions": 1804,
-    "matched_functions_percent": 91.11111111111111,
+    "matched_functions": 1807,
+    "matched_functions_percent": 91.26262626262626,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -23370,7 +23370,7 @@
     {
      "name": "func_L00_0024B960",
      "size": "32",
-     "fuzzy_match_percent": 90.32,
+     "fuzzy_match_percent": 100.0,
      "address": "396248",
      "metadata": {
       "virtual_address": "2406752"
@@ -23379,7 +23379,7 @@
     {
      "name": "func_L00_0024B980",
      "size": "40",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "396280",
      "metadata": {
       "virtual_address": "2406784"
@@ -23397,7 +23397,7 @@
     {
      "name": "func_L00_0024B9B4",
      "size": "40",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "396332",
      "metadata": {
       "virtual_address": "2406836"
@@ -38239,17 +38239,17 @@
   {
    "name": "Level 04: Eudora",
    "measures": {
-    "fuzzy_match_percent": 99.96523427217689,
+    "fuzzy_match_percent": 100.0,
     "total_code": "60784",
-    "matched_code": "60712",
-    "matched_code_percent": 99.88154777573045,
+    "matched_code": "60784",
+    "matched_code_percent": 100.0,
     "total_functions": 57,
-    "matched_functions": 56,
-    "matched_functions_percent": 98.24561403508773,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 57,
+    "matched_functions_percent": 100.0,
+    "complete_code": "60784",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -38669,7 +38669,7 @@
     {
      "name": "func_L04_002E2B48",
      "size": "72",
-     "fuzzy_match_percent": 70.65,
+     "fuzzy_match_percent": 100.0,
      "address": "981984",
      "metadata": {
       "virtual_address": "3025736"
@@ -38767,7 +38767,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/overlays/l04_eudora",
     "progress_categories": [
      "level_code",
@@ -49792,15 +49792,15 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 95.60098477783924,
+    "fuzzy_match_percent": 95.60419469879045,
     "total_code": "3247108",
-    "matched_code": "3079888",
-    "matched_code_percent": 94.85018668920159,
+    "matched_code": "3080072",
+    "matched_code_percent": 94.8558532700483,
     "total_functions": 3429,
-    "matched_functions": 3232,
-    "matched_functions_percent": 94.2548848060659,
-    "complete_code": "927080",
-    "complete_code_percent": 28.55094440961003
+    "matched_functions": 3236,
+    "matched_functions_percent": 94.37153689122194,
+    "complete_code": "987864",
+    "complete_code_percent": 30.422887073666782
    }
   },
   {
@@ -49837,13 +49837,13 @@
    "id": "common",
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 89.37427016528018,
+    "fuzzy_match_percent": 89.38119134319706,
     "total_code": "1200628",
-    "matched_code": "1058080",
-    "matched_code_percent": 88.12721342497426,
+    "matched_code": "1058192",
+    "matched_code_percent": 88.13654187641801,
     "total_functions": 1980,
-    "matched_functions": 1804,
-    "matched_functions_percent": 91.11111111111111,
+    "matched_functions": 1807,
+    "matched_functions_percent": 91.26262626262626,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49852,15 +49852,15 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 99.25407100973379,
+    "fuzzy_match_percent": 99.25510361205583,
     "total_code": "2046480",
-    "matched_code": "2021808",
-    "matched_code_percent": 98.7944177319104,
+    "matched_code": "2021880",
+    "matched_code_percent": 98.79793596810133,
     "total_functions": 1449,
-    "matched_functions": 1428,
-    "matched_functions_percent": 98.55072463768116,
-    "complete_code": "927080",
-    "complete_code_percent": 45.30120010945624
+    "matched_functions": 1429,
+    "matched_functions_percent": 98.61973775017253,
+    "complete_code": "987864",
+    "complete_code_percent": 48.271373284859855
    }
   },
   {
@@ -49927,15 +49927,15 @@
    "id": "level_04",
    "name": "Level 04: Eudora",
    "measures": {
-    "fuzzy_match_percent": 99.96523427217689,
+    "fuzzy_match_percent": 100.0,
     "total_code": "60784",
-    "matched_code": "60712",
-    "matched_code_percent": 99.88154777573045,
+    "matched_code": "60784",
+    "matched_code_percent": 100.0,
     "total_functions": 57,
-    "matched_functions": 56,
-    "matched_functions_percent": 98.24561403508773,
-    "complete_code": "0",
-    "complete_code_percent": 0.0
+    "matched_functions": 57,
+    "matched_functions_percent": 100.0,
+    "complete_code": "60784",
+    "complete_code_percent": 100.0
    }
   },
   {

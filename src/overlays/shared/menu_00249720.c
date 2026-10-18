@@ -240,14 +240,32 @@ void CardMenu_AdvanceOnCardStatus(void) {
     }
 }
 INCLUDE_ASM("asm/overlays", func_L00_0024B940);
-INCLUDE_ASM("asm/overlays", func_L00_0024B960);
+extern int D_L00_0015F688 MACRO_ADDR;
+void func_L00_0024B960(void) {
+    int flags;
+    if (*(int *)(D_0013D355 + 0x57) != -2) {
+        D_0015EFB0 = 3;
+        return;
+    }
+    flags = D_0015EFB4;
+    if (flags & 0x20) {
+        D_0015EFB4 = flags ^ 0x20;
+        if (D_L00_0015F688 != 0) {
+            D_0015EFB0 = 0x17;
+            return;
+        }
+        D_0015EFB0 = 5;
+        return;
+    }
+    if (flags & 8) {
+        D_0015EFB4 = flags ^ 8;
+        D_0015EFB0 = 7;
+    }
+}
 INCLUDE_ASM("asm/overlays", func_L00_0024B980);
 extern int D_0015EFB0 MACRO_ADDR;
 
-// Stores constant to gp-relative address
-void CardMenu_SetStateFive(void) {
-    *(int *)&D_0015EFB0 = 5;
-}
+INCLUDE_ASM("asm/overlays", func_L00_0024B9A8);
 INCLUDE_ASM("asm/overlays", func_L00_0024B9B4);
 /* Sets the menu state from the status of the card record at D_0013D355 + 0x3B. */
 void SetMenuStateFromCardStatus(void) {

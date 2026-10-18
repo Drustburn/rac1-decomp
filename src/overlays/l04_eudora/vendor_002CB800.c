@@ -1434,15 +1434,18 @@ void DriftSparkMoby_Update(struct MobyP *moby) {
 #undef vector_length_xy
 #undef random_int_between
 #undef collision_line
-INCLUDE_ASM("asm/overlays", func_L04_002E2B48);
-// Return float constant
-float func_L04_002E2B90(void) {
-    return -2.55f;
-}
-// Return float constant
-float func_L04_002E2BA4(void) {
+float func_L04_002E2B48(char *moby) {
+    switch (*(short *)(moby + 0xA6)) {
+    case 0x44D:
+    case 0x5FC:
+        return 1.3f;
+    case 0x5FB:
+        return -2.55f;
+    }
     return -2.05f;
 }
+INCLUDE_ASM("asm/overlays", func_L04_002E2B90);
+INCLUDE_ASM("asm/overlays", func_L04_002E2BA4);
 typedef struct { int owner; float height; int timer; } CollectData2BB8;
 typedef struct { char pad[0x18]; float height; char pad1[4]; unsigned char state; char pad2[0x57]; CollectData2BB8 *data; char pad3[0x2a]; short oclass; char pad4[0xa]; unsigned short id; char pad5[0x4c]; } CollectMoby2BB8;
 extern int func_L00_0028EF68(int i, int a1, int v, int k);
