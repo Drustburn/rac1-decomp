@@ -298,9 +298,6 @@ void func_L08_002EB770(char *m)
     }
 }
 typedef u32 u128 __attribute__((mode(TI), aligned(16)));
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
 extern s32 func_L00_0028EB98(struct Moby *, s32);
 extern s32 func_0022ED80_EB980(s32, s32, struct Moby *) __asm__("func_0022ED80");
 extern f32 func_001FA748(f32, f32);
@@ -521,98 +518,11 @@ void func_L08_002F2A08(unsigned char *moby) {
 }
 extern f32 D_0015EE6C MACRO_ADDR;
 typedef u32 u128_F5980 __attribute__((mode(TI), aligned(16)));
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4f_F5980;
 typedef union {
     u128_F5980 q;
     f32 f[4];
     s32 i[4];
 } Vec4_F5980;
-struct Manip;
-struct GifEntry;
-struct AnimSeq;
-struct MobyClass_F5980 {
-    u8 pad_0[0xC];
-    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
-    u8 pad_D[3];
-    u32 collision; /* collision data; copied into Moby.collision when a moby is (re)classed */
-    u8 pad_14[0x8];
-    void *retarget_table; /* retarget table: word table, indexed id * 4 + 4 (0024eec0) */
-    struct GifEntry *gifs; /* patched by patch_moby_gifs */
-    f32 scale; /* default draw scale: copied into Moby.scale, divides it */
-    s32 sound_defs; /* sound definitions, 0x20 bytes each */
-    void **callbacks; /* function-pointer table, called with the moby */
-    u8 pad_30[0x14];
-    u16 flags; /* initial Moby.flags */
-    s16 type; /* class type; 5 (a creature) is tested by targeting code */
-    struct AnimSeq *seqs[1]; /* animation sequences, indexed by Moby.seq */
-};
-struct Moby_F5980 {
-    Vec4f_F5980 bsphere;
-    Vec4f_F5980 pos;
-    u8 state; /* >= 0xFE: dead, waiting to respawn */
-    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
-    u8 class_slot; /* class slot: pclass = D_L00_00197300[class_slot] (crate_update) */
-    u8 alpha; /* 0x80 by default; 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
-    struct MobyClass_F5980 *pclass;
-    struct Moby_F5980 *next;
-    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
-    u8 update_dist; /* update distance; 0xFF (always) or 0x7F for beams, set by spawners */
-    u8 visible; /* drawn last frame; set to 1 by spawners */
-    s16 draw_dist; /* draw distance; 0xFF (0x7F for beams), set by spawners */
-    u16 flags;
-    u16 occlusion; /* occlusion bits; 0x7F80 set by spawners */
-    u64 spawn_frame; /* frame count at which it may respawn */
-    Vec4f_F5980 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
-    u8 frame; /* animation frame */
-    u8 prev_frame; /* frame index in prev_seq */
-    u8 seq; /* animation sequence id */
-    u8 prev_seq;
-    f32 anim_time;
-    f32 anim_speed;
-    u8 pad5C[8];
-    struct Manip *manips;
-    void *cur_frame_data;
-    void *prev_frame_data;
-    u8 anim_flags;
-    u8 unk71; /* set to 0xFF when a moby changes class */
-    u8 unk72;
-    u8 unk73;
-    void (*update)(struct Moby_F5980 *moby);
-    u8 *pvars;
-    u8 unk7C;
-    u8 sound_slot; /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
-    u8 anim_trigger_count;
-    u8 shadow_range; /* shadow range in units of 1024; 0x17 from FUN_L09_002c5990 near D_L09_00166F40 */
-    u8 pad80[6];
-    s16 unk86;
-    u8 pad88[8];
-    s32 glow_color; /* glow colour (class header + 0x40) */
-    u32 collision; /* collision data, from the class header (MobyClass.collision) */
-    s32 collision_disable; /* per-primitive collision disable bits; 1 while a carrier holds the moby (FUN_L00_002c7a58) */
-    u8 pad9C[8];
-    u8 hit_slot; /* hit-message slot (0xFF: none) */
-    u8 padA5;
-    s16 oclass;
-    u8 padA8[8];
-    u8 mission; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
-    u8 padB1;
-    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
-    s16 unkB4;
-    u8 padB6[2];
-    void *parent; /* 0xB8: spawner (bolt source record); its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
-    u8 command; /* external command byte */
-    u8 padBD[3];
-    Vec4f_F5980 rot_row0; /* 0xC0: rows of the matrix built from rot (FUN_001fa030) */
-    Vec4f_F5980 rot_row1;
-    Vec4f_F5980 rot_row2;
-    u8 padF0[0x10];
-};
-struct Moby_F5980;
 typedef struct {
     s32 count;
     u8 pad4[0xC];
@@ -628,7 +538,7 @@ typedef struct {
 } SwarmPathFollower;
 extern char D_0013F4D0[];
 extern f32 D_L08_0015F660[] MACRO_ADDR;
-extern s32 func_L00_0025B478_F5980(struct Moby_F5980 *, s32, s32) __asm__("func_L00_0025B478");
+extern s32 func_L00_0025B478_F5980(struct Moby *, s32, s32) __asm__("func_L00_0025B478");
 extern f32 func_001F9D48(void *, void *);
 extern f32 func_L00_001FF860(f32, f32);
 extern f32 func_001F9D10(void *, void *);
@@ -636,14 +546,14 @@ extern void func_001F9BC0(void *);
 extern void func_L00_001FF4B0(void *, void *, f32);
 extern s32 func_001F9850(s32);
 extern f32 func_00214D28(void *, f32, f32);
-extern void func_0020D678_F5980(struct Moby_F5980 *) __asm__("func_0020D678");
-extern void func_0022ED80_F5980(s32, s32, struct Moby_F5980 *) __asm__("func_0022ED80");
-extern void func_L00_002592B0(struct Moby_F5980 *, f32, f32 *, f32, f32, f32);
+extern void func_0020D678_F5980(struct Moby *) __asm__("func_0020D678");
+extern void func_0022ED80_F5980(s32, s32, struct Moby *) __asm__("func_0022ED80");
+extern void func_L00_002592B0(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void func_L00_0025F4A8(char *, void *, char *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, u8);
 extern short D_L08_00162000;
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l08/gameplay/entities/002e9b70.c, FUN_L08_002f44c0. */
-void func_L08_002F5980(struct Moby_F5980 *moby)
+void func_L08_002F5980(struct Moby *moby)
 {
     SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
     Vec4_F5980 point;
@@ -663,7 +573,7 @@ void func_L08_002F5980(struct Moby_F5980 *moby)
     case 1: {
         s32 active = func_L00_0025B478_F5980(moby, 0x330000, 0);
         distance = func_001F9D48(&moby->pos, D_0013F4D0);
-        if ((distance < 2.0f && *(s32 *)(D_0013F4D0 + 0x2004) == 0x42) || *(struct Moby_F5980 **)(D_0013F4D0 + 0x1bc) == moby) {
+        if ((distance < 2.0f && *(s32 *)(D_0013F4D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F4D0 + 0x1bc) == moby) {
             func_0022ED80_F5980(0, 0, moby);
             func_L00_0025F4A8(moby, D_L08_0015F660, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);

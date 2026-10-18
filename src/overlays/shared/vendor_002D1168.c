@@ -556,14 +556,6 @@ void func_L00_002D3330(M2d1e80 *m) {
     if (m->vis) func_001F49B0_2d3330(func_L00_002D2E60_2d3330, m);
 }
 typedef int u128_2D3608 __attribute__((mode(TI)));
-typedef struct Moby_2D3608 {
-    char pad0[0x48];
-    float yaw;
-    char pad4C[4];
-    struct Moby_2D3608 *target;
-    char pad54[0x24];
-    float *data;
-} Moby_2D3608;
 
 typedef struct Hit_2D3608 {
     char pad0[0x18];
@@ -600,13 +592,13 @@ extern int func_L00_001EFFF0_2D3608(void *, void *, int, int, int) __asm__("func
 extern void func_L00_002C8680_2D3608(float *pos, float *tgt, float *output, float speed, float unused, float range) __asm__("func_L00_002C8680");
 
 /* Same camera step as func_L00_002C88A8, writing the following vector in the target data. */
-void func_L00_002D3608(int collision_arg, Moby_2D3608 *carrier, float *position)
+void func_L00_002D3608(int collision_arg, Moby *carrier, float *position)
 {
     Vec_2D3608 anchor;
     Mat3_2D3608 rotation;
     Mat_2D3608 inverse;
     Vec_2D3608 direction, aim, launch, origin_copy, endpoint;
-    Moby_2D3608 *target;
+    Moby *target;
     float *output;
     float value, distance, heading, vertical, pitch, length, fall_time;
     int hit;
@@ -616,9 +608,9 @@ void func_L00_002D3608(int collision_arg, Moby_2D3608 *carrier, float *position)
     *(u128_2D3608 *)anchor_ptr = *(u128_2D3608 *)position;
     func_001FA480_2D3608(rotation, D_L00_00166D80_2D3608);
     func_001FA4A0_2D3608(inverse, rotation);
-    target = carrier->target;
+    target = (*(struct Moby **)&carrier->frame);
     if (target == 0) return;
-    output = target->data;
+    output = (float *)target->pvars;
     *(u128_2D3608 *)direction = 0;
     direction[0] = 1.0f;
     func_001F9EC0_2D3608(direction, direction, D_0013E633_2D3608 + 0x145D);
@@ -638,7 +630,7 @@ void func_L00_002D3608(int collision_arg, Moby_2D3608 *carrier, float *position)
             launch[2] = 1.0f;
             func_001F9EE8_2D3608(launch, launch, inverse);
             hit = 0;
-            func_001FA790_2D3608(((Moby_2D3608 *)h->moby)->yaw, func_L00_001FF860_2D3608(launch[0], launch[1]));
+            func_001FA790_2D3608(((Moby *)h->moby)->rot.z, func_L00_001FF860_2D3608(launch[0], launch[1]));
             heading = func_L00_001FF860_2D3608(launch[0], launch[1]);
             pitch = func_L00_001FF860_2D3608(func_001F9CE8_2D3608(launch), launch[2]);
             if (0.593411922f < pitch) pitch = 0.593411922f;
