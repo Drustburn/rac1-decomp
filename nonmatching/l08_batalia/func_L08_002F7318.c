@@ -1,16 +1,16 @@
 /* NON_MATCHING func_L08_002F7318 -- src/overlays/l08_batalia/vendor_002EAF48.c
- * Best so far: BYTES 368/4676 (92.1% of the bytes match), checked 2026-10-19.
+ * Best so far: BYTES 225/4676 (95.2% of the bytes match), checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   - the whole decl block lives INSIDE the j loop (p18) and the `if (data->nx)` wrapper is removed: the for-loop 
- *   comes first and the hoisted invariants follow it. With the wrapper kept (p12) the guard is duplicated (+8 byte
- *   - waveform: moving `drop=z0*x; drop+=z1*(1.0f-x);` after the angle1 line (p21) puts theta's mul in the jal del
- *   Remaining (all in p21): (1) spill-slot numbering of the fp+const pseudos (retail point,edge,rot,puff_timer,...
- *   vs ours right_step,left,point,edge,rot,...,step,left_step) -> many lw/sw offset diffs; (2) prologue scheduling
- *   &moby->rotation (moby+0x40, spilled at 0x270) first, before lbu nx/ny; (3) waveform float regs: retail drop=f2
- *   (just before angle0 call), noise=f26/shape=f24; ours drop mul scheduled before the noise call; (4) a3/f12 orde
- *   Failed: do-while for j loop (hoists quad vertex addrs, 4700), named rot local (low frame slot), p16 etc.
+ *   Best: p41.c = BYTES 225/4676 (272 changed lines of 1169), was p21 368. Waveform block now matches retail instr
+ *   (f22 wave, f23 drop, f26 noise, f24 shape): p18 structure with `drop=z0*x+z1*(1.0f-x);` as ONE expression at t
+ *   (after `wave+=`), not two statements. p40 (two statements, z1 term first) = 253; swapped single expr p42 = 253
+ *   Tried without effect: p43 size/life decl order (particle call delay slot), p44/p45 reorder of float decl lists
+ *   p46 block-local rot pointer (identical output), p34/p35 block-local drop/shape (no gain), mixed declarations (
+ *   Remaining: (1) spill-slot numbering (retail A0,B0,rot,puff_timer,int,floats,fraction,step,left_step,right_step
+ *   first) -- accounts for most lw/sw offset diffs; (2) prologue schedule (retail issues lw 0x1E4 / moby+0x40 firs
+ *   `daddu a2,a1` and jal 2F7258 delay slot order; (4) particle45 call: retail puts `mov.s f12,f20` before `daddu 
  */
 #include "common.h"
 typedef float V45[4] __attribute__((aligned(16)));
@@ -165,10 +165,9 @@ void func_L08_002F7318(M45 *moby) {
                 float noise=func_L08_002F7258(x,(char*)data);
                 float angle0,angle1,shape,drop,a,b,normal_angle0,normal_angle1;
                 wave+=noise*data->noise_u+row_noise*data->noise_v+bias*data->noise_bias;
+                drop=z0*x+z1*(1.0f-x);
                 angle0=func_L00_0025F368(wave+phase0+data->wave_u*x+data->wave2_v*y);
                 angle1=func_L00_0025F368(wave+phase1+data->wave_v*y+data->wave2_u*x);
-                drop=z0*x;
-                drop+=z1*(1.0f-x);
                 shape=func_001F9FA8(theta);
                 shape=func_001F9B50(shape);
                 drop*=shape;
