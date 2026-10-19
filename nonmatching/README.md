@@ -5,7 +5,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 
 | Function | Directory | Size | Best so far | Bytes matching |
 |---|---|---|---|---|
-| [`func_L00_001EAD88`](shared/func_L00_001EAD88.c) | shared | 96 | BYTES 2/1044 | 99.8% |
 | [`func_L00_002C12B0`](shared/func_L00_002C12B0.c) | shared | 5996 | BYTES 12/5996 | 99.8% |
 | [`func_L00_00232EF0`](shared/func_L00_00232EF0.c) | shared | 1312 | BYTES 4/1312 | 99.7% |
 | [`func_L00_002D1E68`](shared/func_L00_002D1E68.c) | shared | 2664 | BYTES 9/2664 | 99.7% |

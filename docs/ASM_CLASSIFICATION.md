@@ -125,3 +125,11 @@ converts in place in `$f12` where every ee-gcc truncation picks its own scratch 
 Also listed then: func_00125380 (Sony libvu0's `_sceVu0ecossin`, a stand-alone asm routine taking
 its input in `$vf6`/`$7`) and func_001F7DD8 (drawquad: MMI packing, a never-taken `bnez $0`,
 hand-placed nops), the same shape as its level copies listed upstream.
+
+On 2026-10-19, twelve more level functions were listed by hand: the VU0 leaf helpers of the
+level copies of fastfunc (`shared/fastfunc_001FEF78.c` and level 6's `fastfunc_002172B0.c`) and
+func_L00_00251468. Each has a VU0 instruction in a branch or `jr` delay slot, or `$at` as a
+working register: func_L00_001FF240, 001FF270, 001FF2C8, 001FF2F8, 001FF328, 001FF4B0,
+001FF500, 001FF610, 001FFCF8, 00200210, 00251468 and func_L06_002172B0.
+Then func_L00_001FF3E0 (`mtc1` in the `jr` delay slot, `$4` as scratch) and func_L00_001FFDD0 (an
+empty `jr` slot after four `sqc2`, which the assembler fills in any compiled copy).
