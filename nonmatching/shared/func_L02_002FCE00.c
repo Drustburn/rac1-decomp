@@ -2,11 +2,10 @@
  * Best so far: SIZE ours 2236 / retail 2244, checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
- * Lead note 2026-10-19: build-sn opus/p9 reaches the right size (BYTES 70/2244) only by reading the entity base
- *   through a second extern alias of D_L02_00160058 so cse1 cannot merge it with the loop's load; retail instead
- *   keeps one lw and copies the base (daddu a1,a0). Not staged: find the natural form that makes that copy.
+ * Lead note 2026-10-19: the 8 missing bytes are the first block's base/id copies (lw a0 + daddu a1,a0; daddu a3).
+ *   Only a second extern alias of D_L02_00160058 (build-sn opus/p9) keeps cse1 from merging the first block into
+ *   the loop, which cannot land; a base local in the loop merges it (2208). Natural form still unknown.
  * What the last attempts found:
- *   p1: fail block moved mid-tail via gotos
  *   p2 decl reorder no effect; p3 drop t: worse; p4 tm: no change; p5 separate 'hit' var for post-speed s18 flag: 
  *   p6 decl swap no change; p7 (v/id copies+base var) restructured loop worse (2220); p8 base var: cse collapses c
  *   p10 loop uses array index: same; p11 alias+v: worse; p12 for(;;)break: size 2208; p13 v/id copies no alias: cr
@@ -14,6 +13,7 @@
  *   p23-p31: count block variants. `s->count = s->count + 1; if (s->count >= s19)` reproduces retail's count block
  *   Best: p9.c = BYTES 70/2244 (needs a second extern alias of D_L02_00160058 for the first block, which stops cse
  *   Fail block placement fixed in p1+ (gotos put fail between zoom 3.36 and zoom 8.0 paths).
+ *   Round 2 (from p5, no alias): p32 e=base;e+=off, p33 base+idx both blocks, p41 base local inside if/do-while: a
  */
 typedef struct {
     float speed;
@@ -91,14 +91,16 @@ void func_L02_002FCE00_r(Moby_2FCE00 *m) {
         unsigned short *p = D_L02_001AC140_2FCE00[s->list];
         Ent_2FCE00 *e;
         unsigned short id;
+        unsigned int v;
         if (p == 0) goto fail;
         id = *p;
         e = (Ent_2FCE00 *)((char *)D_L02_00160058_2FCE00 + ((*p & 0x7FFF) << 8));
         while (e->state < 0) {
             if ((short)id < 0) goto fail;
             p++;
-            id = *p;
-            e = (Ent_2FCE00 *)((char *)D_L02_00160058_2FCE00 + ((*p & 0x7FFF) << 8));
+            v = *p;
+            e = (Ent_2FCE00 *)((char *)D_L02_00160058_2FCE00 + ((v & 0x7FFF) << 8));
+            id = v;
         }
         ent = e;
     } else {
