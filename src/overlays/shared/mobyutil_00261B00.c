@@ -729,7 +729,7 @@ void SpawnImpactSparks(V *v) {
     k = (D_L00_0015FD64 - D_L00_0015FD60) * 0.00390625f;
     t = *v;
     f = SampleHeightMap(&t) + k;
-    b = &D_L00_00166D80;
+    b = &gCameraLvl;
     t.f[2] = f;
     if (f < b->pos.f[2] + 5.0f) {
         u = t;

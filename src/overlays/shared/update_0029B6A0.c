@@ -244,9 +244,9 @@ void VendorOpenMenu(VendorMoby_pv *m) {
     if (m == 0) {
         m = CreateMoby(0xB);
         *(s16 *)((char *)m + 0x32) = 0x40;
-        *(f32 *)((char *)m + 0x10) = D_L00_00166D80.x + *(f32 *)&D_L00_00161120;
-        *(f32 *)((char *)m + 0x14) = D_L00_00166D80.y;
-        *(f32 *)((char *)m + 0x18) = D_L00_00166D80.z - D_L00_00161128;
+        *(f32 *)((char *)m + 0x10) = gCameraLvl.x + *(f32 *)&D_L00_00161120;
+        *(f32 *)((char *)m + 0x14) = gCameraLvl.y;
+        *(f32 *)((char *)m + 0x18) = gCameraLvl.z - D_L00_00161128;
         clear_u64_value(&m->rot);
         m->rot.f[2] = 3.1415927f;
         func_L00_00251E30(m);
@@ -294,7 +294,7 @@ void VendorOpenMenu(VendorMoby_pv *m) {
         FadeToBlack(4);
     }
     HelpPopup_Cancel();
-    *(f32 *)&D_L00_0015F4FC = 1.0f;
+    *(f32 *)&gFadeLvl = 1.0f;
     *(s32 *)((char *)&D_L00_0015F6BC - 0x14) = 5;
     *(s32 *)&D_L00_0015F500 = 0;
     HeroEnterMoveState(100, 1);
@@ -1349,7 +1349,7 @@ void VendorStartWeaponDemo(void) {
     D_L00_0016C960.x58 = D_L00_00173F00.x4 + offset;
     D_L00_0016C960.x5c = D_L00_00173F00.x8 + offset;
     item = D_L00_001CA320[index];
-    D_L00_0015F4FC = 0;
+    gFadeLvl = 0;
     (*(s32 *)&D_L00_0015F500) = 0;
     if (D_0013F450.items[0].item_id != 0 && index != D_0013F450.items[0].item_id)
         Hero_DestroySlotMobys(0, 0);

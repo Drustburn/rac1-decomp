@@ -607,7 +607,7 @@ char *LoadLevelGameplay(int arg0) {
     func_0020C468(D_0015EF4C_422D8[1], hdr);
     func_00118D80(0);
     FastMemSet(&D_0013F450, 0, 0x2310);
-    FastMemSet(D_L00_00166D80, 0, 0x3A0);
+    FastMemSet(gCameraLvl, 0, 0x3A0);
     FastMemSet(D_L00_0018EEC0, 0, 0x180);
     func_001160C8(0x4D2);
     if (D_0015EE80 != 0) {
@@ -952,26 +952,26 @@ char *LoadLevelGameplay(int arg0) {
         int n = *(int *)p;
         int i;
 
-        D_L00_0015F050 = (Cuboid_422D8 *)mem;
+        gCameraDefsLvl = (Cuboid_422D8 *)mem;
         p += 0x10;
-        D_L00_0015F054 = n;
+        gCameraDefCountLvl = n;
         mem += n << 5;
         if (n != 0) {
-            FastMemSet(D_L00_0015F050, 0, n << 5);
+            FastMemSet(gCameraDefsLvl, 0, n << 5);
         }
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
-        for (i = 0; i < D_L00_0015F054; i++) {
-            D_L00_0015F050[i].fC = *(int *)p;
+        for (i = 0; i < gCameraDefCountLvl; i++) {
+            gCameraDefsLvl[i].fC = *(int *)p;
             p += 4;
-            D_L00_0015F050[i].f0 = ((float *)p)[0];
-            D_L00_0015F050[i].f4 = ((float *)p)[1];
-            D_L00_0015F050[i].f8 = ((float *)p)[2];
+            gCameraDefsLvl[i].f0 = ((float *)p)[0];
+            gCameraDefsLvl[i].f4 = ((float *)p)[1];
+            gCameraDefsLvl[i].f8 = ((float *)p)[2];
             p += 0xC;
-            D_L00_0015F050[i].f10 = ((float *)p)[0];
-            D_L00_0015F050[i].f14 = ((float *)p)[1];
-            D_L00_0015F050[i].f18 = ((float *)p)[2];
+            gCameraDefsLvl[i].f10 = ((float *)p)[0];
+            gCameraDefsLvl[i].f14 = ((float *)p)[1];
+            gCameraDefsLvl[i].f18 = ((float *)p)[2];
             p += 0xC;
-            D_L00_0015F050[i].f1C = *(int *)p;
+            gCameraDefsLvl[i].f1C = *(int *)p;
             p += 4;
         }
     }
@@ -1178,16 +1178,16 @@ char *LoadLevelGameplay(int arg0) {
         int i;
         Moby *m;
 
-        for (i = 0; i < D_L00_0015F054; i++) {
-            int k = D_L00_0015F050[i].f1C;
+        for (i = 0; i < gCameraDefCountLvl; i++) {
+            int k = gCameraDefsLvl[i].f1C;
 
             if (k < 0) {
-                D_L00_0015F050[i].f1C = 0;
+                gCameraDefsLvl[i].f1C = 0;
             } else {
                 int size = tbl[k].f4;
                 char *src = pv + tbl[k].f0;
 
-                D_L00_0015F050[i].f1C = (int)mem;
+                gCameraDefsLvl[i].f1C = (int)mem;
                 FastMemCopy(mem, src, size);
                 tbl[k].f0 = (int)mem;
                 mem += size;
@@ -1694,7 +1694,7 @@ char *LoadLevelGameplay(int arg0) {
                 q += 2;
             }
         }
-        D_L00_0016C158[7] = 2;
+        gDebugFreeCamLvl[7] = 2;
     } else {
         Moby *m;
         TieInst_422D8 *t;
@@ -1710,7 +1710,7 @@ char *LoadLevelGameplay(int arg0) {
         for (i = 0; i < D_L00_00161010; i++) {
             D_L00_0016100C[i].f3A = 0x7F80;
         }
-        D_L00_0016C158[7] = 0;
+        gDebugFreeCamLvl[7] = 0;
     }
     Level_ResetGameplayGlobals();
     HeroInit();

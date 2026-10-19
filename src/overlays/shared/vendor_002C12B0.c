@@ -442,7 +442,7 @@ void Moby192Update(struct Moby *moby) {
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
-    func_001FA480(basis, D_L00_00166D80);
+    func_001FA480(basis, gCameraLvl);
     func_001FA4A0(matrix, basis);
     if (vars == 0)
         return;

@@ -2611,8 +2611,8 @@ void HeroL00_UpdateStateTransitions(void) {
                         int fr;
 
                         D_0013F450.unk418 = scale_ticks(1);
-                        D_L00_00166D80.f160 = 0.15f;
-                        D_L00_00166D80.f168 = scale_ticks(0x1E);
+                        gCameraLvl.f160 = 0.15f;
+                        gCameraLvl.f168 = scale_ticks(0x1E);
                         fr = truncate_float_to_s32(D_0013F450.unk448) + 3;
                         if (D_0013F450.anim_frame < D_0013F450.unk444) {
                             HeroStartAnim(moby[0x53], fr, scale_ticks(6));

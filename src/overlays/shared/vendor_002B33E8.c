@@ -363,7 +363,7 @@ void Moby163Update(char *m) {
             int w = *(int *)(g + 0x2084);
             if (w != 0x72 && w != 0x65 && w != 0x32) {
                 int x;
-                g2 = D_L00_00166D80;
+                g2 = gCameraLvl;
                 x = *(int *)(g2 + 0x180);
                 if (x == 0 || *(short *)(x + 0x86) != 5) {
                     if (*(int *)(g + 0x300) != 0) {

@@ -1205,8 +1205,8 @@ void LaunchGadgetMoby(void) {
             }
         }
         if (!has_target) {
-            D_0013F450_15A90.aim_yaw = D_L00_00166D80[0x158 / 4];
-            D_0013F450_15A90.aim_pitch = FastAddRots(-D_L00_00166D80[0x154 / 4], 0.12217305f);
+            D_0013F450_15A90.aim_yaw = gCameraLvl[0x158 / 4];
+            D_0013F450_15A90.aim_pitch = FastAddRots(-gCameraLvl[0x154 / 4], 0.12217305f);
         }
     }
     item = D_0013F450_15A90.items[0].moby;
@@ -1231,9 +1231,9 @@ void LaunchGadgetMoby(void) {
     clear_u64_value(dir);
     func_001FA1F8(mat, dir);
     if (aimed) {
-        dir[0] = D_L00_00166D80[0x150 / 4];
-        dir[1] = D_L00_00166D80[0x154 / 4];
-        dir[2] = D_L00_00166D80[0x158 / 4];
+        dir[0] = gCameraLvl[0x150 / 4];
+        dir[1] = gCameraLvl[0x154 / 4];
+        dir[2] = gCameraLvl[0x158 / 4];
         func_001FA1F8(cam_mat, dir);
         func_001FA4F0(mat, cam_mat, mat);
     } else {

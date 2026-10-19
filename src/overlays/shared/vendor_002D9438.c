@@ -770,7 +770,7 @@ void SuckCannon_GetAimOrigin(char *m, float *a, float *b, float *c) {
     Moby_GetJointWorldPos(m, 0, c);
     g = D_0013E633 + 0xE1D;
     if (*(int *)(g + 0x2084) == 1 || *(int *)(g + 0x2084) == 0x1E) {
-        char *s = D_L00_00166D80;
+        char *s = gCameraLvl;
         v[1] = 0;
         v[0] = 1.2f;
         *a = *(float *)(s + 0x158);
@@ -1158,7 +1158,7 @@ void SuckCannonUpdate(M40 *self) {
             (data->target && ((u8)data->target->state&0x80))) data->target=0;
         if (hero40.camera_mode==1) HeroEnterMoveState(30,1);
         if (hero40.camera_mode==30 && (hero40.moby->flags&1) && !hero40.disabled) {
-            char *camera=D_L00_00166D80;
+            char *camera=gCameraLvl;
             V40 *eye;
             Hit40 *hit;
             work.aim.velocity.q=0;
@@ -1221,7 +1221,7 @@ void SuckCannonUpdate(M40 *self) {
             M40 *best,*m;
             float yaw,pitch,limit;
             work.fire.velocity.q=0;
-            func_001FA480(&work.fire.rotation,D_L00_00166D80);
+            func_001FA480(&work.fire.rotation,gCameraLvl);
             func_001FA4A0(&work.fire.inverse,&work.fire.rotation);
             if(hero40.camera_mode==30 && (hero40.moby->flags&1)) {
                 work.fire.tmp.q=0;
@@ -1233,7 +1233,7 @@ void SuckCannonUpdate(M40 *self) {
                 work.fire.tmp.f.y=0.3f;
                 work.fire.tmp.f.z=1.0f;
                 func_001F9EE8(&work.fire.launch,&work.fire.tmp,&work.fire.inverse);
-                FastVecAdd(&work.fire.launch,&work.fire.launch,D_L00_00166D80+0x140);
+                FastVecAdd(&work.fire.launch,&work.fire.launch,gCameraLvl+0x140);
             } else {
                 work.fire.tmp.q=0;
                 work.fire.tmp.f.x=frame_scale40*0.4462f;

@@ -1265,11 +1265,11 @@ void DrawDebugProfiler(void) {
             if (D_001873D4 != 0) {
                 emit_rgba_draw_packet(D_001611C0_F3D78[0], D_001611C1_F3D78[0], D_001611C2_F3D78[0], D_001611C3_F3D78[0]);
             }
-            if (D_0015F53C > 0.0f) {
-                if (D_0015F53C > 1.0f) {
-                    D_0015F53C = 1.0f;
+            if (gFade > 0.0f) {
+                if (gFade > 1.0f) {
+                    gFade = 1.0f;
                 }
-                emit_rgba_draw_packet(0, 0, 0, func_001FA898_r(D_0015F53C * 128.0f));
+                emit_rgba_draw_packet(0, 0, 0, func_001FA898_r(gFade * 128.0f));
             }
             if (D_0015F540 > 0.0f) {
                 if (D_0015F540 > 1.0f) {
