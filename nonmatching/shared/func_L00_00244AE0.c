@@ -225,7 +225,7 @@ s32 func_L00_00244AE0(s32 load_core, s32 checkpoint) {
         if(G_L00_00161014>0) { entry=offset_list; do { mode=texture_mode_244AE0(entry->mode); tfrag_classes_244AE0[i]=G_L00_0015F50C+entry->offset+(mode<<28); i++; entry++; } while(i<G_L00_00161014); }
         next=base+decoded;
         moby_offsets=(ClassOffset_244AE0 *)((char *)h+h->f3C);
-        count_small_244AE0=h->f38;
+        G_L00_00160088=h->f38; /* the word the loop below reads, by its name: stored as count_small_244AE0 (another declaration of D_L00_00160088) the compiler read the count before the store and skipped the moby classes; fcheck same on level 0's call after this, 2026-10-19 */
         offset_list=moby_offsets;
         i1=0; if(G_L00_00160088>0) { entry=moby_offsets; do { mode=texture_mode_244AE0(entry->mode); moby_classes_244AE0[i1]=G_L00_0015F50C+entry->offset+(mode<<28); entry++; i1++; } while(i1<G_L00_00160088); }
         copy_244AE0(moby_offsets_244AE0,moby_offsets,G_L00_00160088*16);
