@@ -297,7 +297,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L12_003061E0`](functional/func_L12_003061E0.c) | functional | 1708 | ? | - |
 | [`func_L12_0030A880`](l12_hoven/func_L12_0030A880.c) | l12_hoven | 152 | SIZE ours 144 / retail 152 | - |
 | [`func_L14_00316E60`](functional/func_L14_00316E60.c) | functional | 880 | ? | - |
-| [`func_L15_002D7C00`](functional/func_L15_002D7C00.c) | functional | 4012 | ? | - |
+| [`func_L15_002D7C00`](shared/func_L15_002D7C00.c) | shared | 4012 | SIZE ours 3996 / retail 4012 | - |
 | [`func_L16_002D0B28`](functional/func_L16_002D0B28.c) | functional | 56 | ? | - |
 | [`func_L18_002D9C90`](functional/func_L18_002D9C90.c) | functional | 24 | ? | - |
 | [`func_L18_002FDCC4`](functional/func_L18_002FDCC4.c) | functional | 92 | ? | - |
