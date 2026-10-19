@@ -7,6 +7,8 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 |---|---|---|---|---|
 | [`func_L00_001EAD88`](shared/func_L00_001EAD88.c) | shared | 96 | BYTES 2/1044 | 99.8% |
 | [`func_L00_002C12B0`](shared/func_L00_002C12B0.c) | shared | 5996 | BYTES 12/5996 | 99.8% |
+| [`func_L00_00232EF0`](shared/func_L00_00232EF0.c) | shared | 1312 | BYTES 4/1312 | 99.7% |
+| [`func_L00_002D1E68`](shared/func_L00_002D1E68.c) | shared | 2664 | BYTES 9/2664 | 99.7% |
 | [`func_L15_002C6950`](l15_quartu/func_L15_002C6950.c) | l15_quartu | 4816 | BYTES 26/4816 | 99.5% |
 | [`func_L12_00304038`](functional/func_L12_00304038.c) | functional | 724 | BYTES 4/724 | 99.5% |
 | [`func_L00_0026ABC0`](shared/func_L00_0026ABC0.c) | shared | 1780 | BYTES 26/1780 | 98.5% |
@@ -214,7 +216,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_00203F08`](functional/func_L00_00203F08.c) | functional | 24 | ? | - |
 | [`func_L00_0020E3B8`](functional/func_L00_0020E3B8.c) | functional | 1596 | ? | - |
 | [`func_L00_0020FC18`](shared/func_L00_0020FC18.c) | shared | 1828 | SIZE ours 1776 / retail 1828 | - |
-| [`func_L00_00232EF0`](shared/func_L00_00232EF0.c) | shared | 1312 | SIZE ours 1288 / retail 1312 | - |
 | [`func_L00_00237B90`](functional/func_L00_00237B90.c) | functional | 1300 | ? | - |
 | [`func_L00_00248EF8`](shared/func_L00_00248EF8.c) | shared | 1808 | SIZE ours 1804 / retail 1808 | - |
 | [`func_L00_0024DFC4`](functional/func_L00_0024DFC4.c) | functional | 96 | ? | - |
@@ -256,7 +257,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_002BA7C8`](shared/func_L00_002BA7C8.c) | shared | 5292 | SIZE ours 5284 / retail 5292 | - |
 | [`func_L00_002C9DC8`](shared/func_L00_002C9DC8.c) | shared | 2288 | SIZE ours 2248 / retail 2288 | - |
 | [`func_L00_002CF808`](shared/func_L00_002CF808.c) | shared | 3776 | SIZE ours 3804 / retail 3776 | - |
-| [`func_L00_002D1E68`](shared/func_L00_002D1E68.c) | shared | 2664 | SIZE ours 2656 / retail 2664 | - |
 | [`func_L00_002D2E60`](shared/func_L00_002D2E60.c) | shared | 1228 | SIZE ours 1244 / retail 1228 | - |
 | [`func_L00_002D6610`](shared/func_L00_002D6610.c) | shared | 868 | SIZE ours 876 / retail 868 | - |
 | [`func_L00_002DACC0`](shared/func_L00_002DACC0.c) | shared | 1464 | SIZE ours 1460 / retail 1464 | - |
