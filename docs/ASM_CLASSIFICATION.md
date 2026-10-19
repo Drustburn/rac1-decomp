@@ -117,3 +117,11 @@ Two marked functions are left out for now: func_L00_002569F8 and func_L00_002578
 together are the level programs' copy of MobyProc (5,152 bytes, as `func_00212658` is). The
 native port replaces the executable's MobyProc with its own code, but not yet this copy (its
 `no_c.tsv` says it needs C), so it stays an `INCLUDE_ASM` stub until the port runs it.
+
+On 2026-10-19, the last five fastfunc.o functions were listed: the VU0 helpers
+func_001F9B50, func_001F9F90, func_001F9FA8 and func_001F9FC0 (`qmtc2`/`vcallms`/`vsqrt` with
+`$at` scratch and hand-placed nops), and func_001FA898, a float-to-int helper that
+converts in place in `$f12` where every ee-gcc truncation picks its own scratch register.
+Also listed then: func_00125380 (Sony libvu0's `_sceVu0ecossin`, a stand-alone asm routine taking
+its input in `$vf6`/`$7`) and func_001F7DD8 (drawquad: MMI packing, a never-taken `bnez $0`,
+hand-placed nops), the same shape as its level copies listed upstream.

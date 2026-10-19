@@ -2,7 +2,6 @@
 # Each does what the retail function does without matching its bytes; the matching build never reads it.
 # Files under nonmatching/functional/ are C written for the port only (no matching attempt behind them).
 # name	file
-func_00125358	nonmatching/core/func_00125358.c
 func_001F9878	nonmatching/game/func_001F9878.c
 func_001F98B0	nonmatching/game/func_001F98B0.c
 func_001F98C0	nonmatching/game/func_001F98C0.c
@@ -104,7 +103,6 @@ func_L00_0020E3B8	nonmatching/functional/func_L00_0020E3B8.c
 func_00115248	nonmatching/functional/func_00115248.c
 func_00116810	nonmatching/functional/func_00116810.c
 func_0012DA28	nonmatching/functional/func_0012DA28.c
-func_001F7E98	nonmatching/functional/func_001F7E98.c
 func_001F9BC8	nonmatching/functional/func_001F9BC8.c
 func_001FA460	nonmatching/functional/func_001FA460.c
 func_001FA6C0	nonmatching/functional/func_001FA6C0.c
@@ -237,8 +235,6 @@ func_0011BC80	nonmatching/functional/func_0011BC80.c
 func_0011D4E0	nonmatching/functional/func_0011D4E0.c
 func_001208E8	nonmatching/functional/func_001208E8.c
 func_00123EC0	nonmatching/functional/func_00123EC0.c
-func_001252A0	nonmatching/functional/func_001252A0.c
-func_00125300	nonmatching/functional/func_00125300.c
 func_001265C8	nonmatching/functional/func_001265C8.c
 func_00126640	nonmatching/functional/func_00126640.c
 func_001266D8	nonmatching/functional/func_001266D8.c

@@ -47,10 +47,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_001208E8`](functional/func_001208E8.c) | functional | 0 | ? | - |
 | [`func_00121DC8`](functional/func_00121DC8.c) | functional | 0 | ? | - |
 | [`func_00123EC0`](functional/func_00123EC0.c) | functional | 0 | ? | - |
-| [`func_001252A0`](functional/func_001252A0.c) | functional | 0 | ? | - |
-| [`func_00125300`](functional/func_00125300.c) | functional | 0 | ? | - |
 | [`func_00125328`](functional/func_00125328.c) | functional | 0 | ? | - |
-| [`func_00125358`](core/func_00125358.c) | core | 0 | ? | - |
 | [`func_00125F88`](functional/func_00125F88.c) | functional | 0 | ? | - |
 | [`func_001265C8`](functional/func_001265C8.c) | functional | 0 | ? | - |
 | [`func_00126640`](functional/func_00126640.c) | functional | 0 | ? | - |
@@ -80,7 +77,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_001EE9F8`](functional/func_001EE9F8.c) | functional | 0 | ? | - |
 | [`func_001EFD70`](functional/func_001EFD70.c) | functional | 0 | ? | - |
 | [`func_001F0F00`](functional/func_001F0F00.c) | functional | 0 | ? | - |
-| [`func_001F7E98`](functional/func_001F7E98.c) | functional | 96 | ? | - |
 | [`func_001F9840`](game/func_001F9840.c) | game | 0 | ? | - |
 | [`func_001F9850`](functional/func_001F9850.c) | functional | 40 | ? | - |
 | [`func_001F9878`](game/func_001F9878.c) | game | 16 | ? | - |
