@@ -956,8 +956,6 @@ extern float D_L06_001DB3B0[];
 extern float D_L06_001DB320[];
 extern char D_0014171B[];
 
-#define P (D_0013E633 + 0xE1D)
-#define B (D_0014171B + 0x34D)
 #define FLD(base, off, T) (((struct { char _p[off]; T v; } *)(base))->v)
 /* Moby class 1035 update (level 06): 0 init, 1 update, 2 spawn an entry, 3 delete. */
 void func_L06_002F78A0(char *m) {
@@ -1027,8 +1025,8 @@ void func_L06_002F78A0(char *m) {
             func_001F9BF0(V.matrix[1], V.matrix[1], V.matrix[3]);
             func_L00_0025A8C0(V.sh.local[0], m, 0x10001, 5.0f, V.matrix[2]);
             func_L00_001EFFF0(V.matrix[0], V.matrix[1], 0, m, V.sh.local[0]);
-            if (FLD(B, 0x158, unsigned short) == 0 && *(short *)(d + 0x16) == 0
-                && D_L06_001746D8 == FLD(P, 0x2080, char *)) {
+            if (FLD((D_0014171B + 0x34D), 0x158, unsigned short) == 0 && *(short *)(d + 0x16) == 0
+                && D_L06_001746D8 == FLD((D_0013E633 + 0xE1D), 0x2080, char *)) {
                 short t = *(short *)(d + 0x14) + 1;
                 *(short *)(d + 0x14) = t;
                 *(short *)(d + 0x16) = func_001F9850(30);
@@ -1053,21 +1051,21 @@ void func_L06_002F78A0(char *m) {
             func_001F9BF0(V.matrix[1], V.matrix[1], V.matrix[3]);
             func_L00_0025A8C0(V.sh.local[0], m, 0x10001, 5.0f, V.matrix[2]);
             func_L00_001EFFF0(V.matrix[0], V.matrix[1], 0, m, V.sh.local[0]);
-            if (FLD(B, 0x158, unsigned short) == 0 && *(short *)(d + 0x16) == 0
-                && D_L06_001746D8 == FLD(P, 0x2080, char *)) {
+            if (FLD((D_0014171B + 0x34D), 0x158, unsigned short) == 0 && *(short *)(d + 0x16) == 0
+                && D_L06_001746D8 == FLD((D_0013E633 + 0xE1D), 0x2080, char *)) {
                 short t = *(short *)(d + 0x14) + 1;
                 *(short *)(d + 0x14) = t;
                 *(short *)(d + 0x16) = func_001F9850(30);
             }
-            if (FLD(P, 0x23C, int) == (int)m) {
-                func_001F9BF0(V.sh.c.delta, (char *)&FLD(P, 0x80, int), pos);
+            if (FLD((D_0013E633 + 0xE1D), 0x23C, int) == (int)m) {
+                func_001F9BF0(V.sh.c.delta, (char *)&FLD((D_0013E633 + 0xE1D), 0x80, int), pos);
                 dt = func_001F9C78(V.sh.c.delta, m + 0xC0);
                 if (0.0f < dt)
                     func_L00_001FF4B0(V.sh.local[0], m + 0xC0, 1.0f);
                 else
                     func_L00_001FF4B0(V.sh.local[0], m + 0xC0, -1.0f);
-                func_L00_0025AAC0(FLD(P, 0x2080, void *), V.sh.local[0]);
-                if (FLD(B, 0x158, unsigned short) == 0 && *(short *)(d + 0x16) == 0) {
+                func_L00_0025AAC0(FLD((D_0013E633 + 0xE1D), 0x2080, void *), V.sh.local[0]);
+                if (FLD((D_0014171B + 0x34D), 0x158, unsigned short) == 0 && *(short *)(d + 0x16) == 0) {
                     short t = *(short *)(d + 0x14) + 1;
                     *(short *)(d + 0x14) = t;
                     *(short *)(d + 0x16) = func_001F9850(30);
@@ -1079,7 +1077,7 @@ void func_L06_002F78A0(char *m) {
         if (*(float *)(d + 0x18) != 0.0f)
             func_001F49B0(func_L06_002F8200, m);
         /* L7E0C */
-        if (FLD(B, 0x158, unsigned short) == 0) {
+        if (FLD((D_0014171B + 0x34D), 0x158, unsigned short) == 0) {
             if (*(short *)(d + 0x16) == 0) {
                 char *r = func_L00_0025B478(m, 0x330000, 0);
                 if (r != 0) {
@@ -1126,17 +1124,17 @@ void func_L06_002F78A0(char *m) {
             }
             func_0022ED80(1, 0, (int)m);
             if (ok16) {
-                unsigned short hh = FLD(B, 0x158, unsigned short);
+                unsigned short hh = FLD((D_0014171B + 0x34D), 0x158, unsigned short);
                 if (hh <= 0xFFFE)
-                    FLD(B, 0x158, short) = hh + 1;
+                    FLD((D_0014171B + 0x34D), 0x158, short) = hh + 1;
             }
             {
                 int q = func_001F9850(D_0015EFA4) / 600;
-                if ((int)FLD(B, 0x15A, unsigned short) < q) {
+                if ((int)FLD((D_0014171B + 0x34D), 0x15A, unsigned short) < q) {
                     int q2 = func_001F9850(D_0015EFA4) / 600;
-                    FLD(B, 0x15A, short) = q2;
+                    FLD((D_0014171B + 0x34D), 0x15A, short) = q2;
                 }
-                FLD(B, 0x15C, int) = FLD(B, 0x15C, int) | (1 << D_0015EE84) | 0x80000000;
+                FLD((D_0014171B + 0x34D), 0x15C, int) = FLD((D_0014171B + 0x34D), 0x15C, int) | (1 << D_0015EE84) | 0x80000000;
             }
         }
         return;
@@ -1186,8 +1184,7 @@ void func_L06_002F78A0(char *m) {
     }
 }
 
-#undef P
-#undef B
+#undef FLD
 typedef u32 u128_F8200 __attribute__((mode(TI), aligned(16)));
 extern void func_001FA1C0(void *, float);
 extern void func_001FA540(void *, void *, void *);
