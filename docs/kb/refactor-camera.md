@@ -342,3 +342,45 @@ views of the same memory in draw.c (`CameraBlock`, `SceneG`), pause.c
 vendor_002E1660.c (`Moby_2E8210`). The camera-type functions (`Camera3_Update`,
 `CameraType5Update`, ...) read `Camera.type_data` and the state buffer;
 their layouts are the next header section.
+
+## 9. Next
+
+What the pilot cost, measured: the designer (reads the code, writes
+`camera.h`, the plan and the task briefs) used about 354k tokens; the three
+Haiku workers that converted the files used about 100k, 214k and 248k. Every
+step was checked by the full build (every function exact, image equal to
+retail) and `overlay_file_check.py`.
+
+Lessons:
+
+- Haiku does well on one or two bounded tasks per run (one function, one
+  table, one file with its checklist). It stalls on long per-file chains
+  where each edit depends on the last build; split those into separate runs.
+- The design is where the effort goes. With the header, the naming rules
+  and the access-path rules (section 6) written down first, the workers had
+  little left to decide.
+- The sub-block pointer rule (section 6, rule 2) is the one that cost bytes
+  every time it was skipped: code that reached a sub-block through its own
+  symbol keeps a pointer to it, and a pointer is not replaced by
+  `gCamera.field`.
+- A rename pass over a tree that other people are naming collides with
+  their names (here `Camera_StepFade`, `Camera_UpdateModeFlags`,
+  `Camera_SelectActive` and `CameraScript_ResetObject` against the
+  `Camera_UpdateFade`, `Camera_PickCollisionMasksLvl`, `UpdateAllCamerasLvl`
+  and `Camera_ReleaseCurrent` used here); rebase before a wave and keep
+  `names_local.tsv` as the one source.
+
+Candidate next systems, each with the same method (design first, then
+workers on bounded tasks, full build after every task):
+
+1. **Hero** (the state block, the per-state functions, the pad/velocity
+   fields; include/hero.h is the start): the largest reader population after the camera.
+2. **Mobys** (`Moby` and the pvar layouts per class): most numerous, and
+   `Moby` already has a header to extend.
+3. **HUD** (the draw lists, counters, the menu records).
+4. **Weapons / gadgets** (the gadget table, ammo, the per-gadget update
+   functions).
+
+For each: map the symbols and users first (as section 1-3 did for the
+camera), write the header and the plan, convert the three or four densest
+files as the pilot, then fan out.
