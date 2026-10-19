@@ -20,3 +20,4 @@ src/overlays/shared/hud_00235960.c -fno-sched-interblock
 src/overlays/l12_hoven/vendor_002EDAA0.c -fno-sched-interblock
 src/game/framebuf.c -fno-rerun-loop-opt
 src/overlays/shared/fastfunc_001FEF78.c -fno-rerun-loop-opt
+src/overlays/l14_oltanis/vendor_002FF358.c -fno-sched-interblock
