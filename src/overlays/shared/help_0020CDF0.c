@@ -3203,7 +3203,88 @@ void Hero_ScaleMotion(float s) {
     f = (float *)(p - 0x100);
     f[0x194 / 4] = f[0x194 / 4] * s;
 }
-INCLUDE_ASM("asm/overlays", func_L00_00214520);
+typedef int Q_14520 __attribute__((mode(TI)));
+
+extern void func_L00_00233F88(void *, void *, float);
+static inline char *hero_14520(void) { return (char *)D_0013E633 + 0xE1D; }
+
+/* Moves the camera toward its follow point, faster when the hero heads away from it; modes 1/2 ease the camera instead. */
+void func_L00_00214520(float step) {
+    char *g = (char *)D_0013E633 + 0xE1D;
+    float v[4];
+    float w[4];
+    float x;
+    float a, s, t, l1, l2;
+    char *p;
+    switch (((unsigned char *)g)[0x20B3]) {
+    case 0:
+        a = *(float *)(g + 0x180);
+        s = *(float *)(g + 0x190);
+        if (*(int *)(g + 0x208C) == 4) {
+            if (*(short *)(hero_14520() + 0x30A) == 0 && *(short *)(hero_14520() + 0x4A4) != 0 && ((unsigned char *)hero_14520())[0x257] != 0) {
+                s = D_0015EE6C * 2.1f;
+            }
+        }
+        {
+            if (*(short *)(hero_14520() + 0x30A) != 0) {
+                char *h2 = (char *)D_0013E633 + 0xE1D;
+                if (*(int *)(h2 + 0x2084) == 0xE && D_0015EE6C < s) s = D_0015EE6C;
+            }
+        }
+        {
+            char *h3 = (char *)D_0013E633 + 0xE1D;
+            v[0] = func_001F9F90(a) * s;
+            v[1] = func_001F9FA8(a) * s;
+            v[2] = *(float *)(h3 + 0xE8);
+            t = -(*(float *)(h3 + 0xE0) * v[0] + *(float *)(h3 + 0xE4) * v[1]);
+            l1 = func_001F9CE8(v);
+            l2 = func_001F9CE8(h3 + 0xE0);
+            if (l1 == 0.0f) {
+                t = 0.0f;
+            } else if (l2 == 0.0f) {
+                t = 0.0f;
+            } else {
+                t /= l1;
+                t /= l2;
+            }
+        }
+        {
+            char *h4 = (char *)D_0013E633 + 0xE1D;
+            t = t + 1.0f;
+            t *= 1.5f;
+            if (*(int *)(h4 + 0x2084) == 0x81) {
+                if (1.7f < t) t = 1.7f;
+                if (t < 1.0f) t = 1.0f;
+            } else {
+                if (3.0f < t) t = 3.0f;
+                if (t < 1.0f) t = 1.0f;
+            }
+        }
+        p = (char *)D_0013F530;
+        step *= t;
+        func_001F9BF0(v, v, (float *)p);
+        if (step < func_001F9CE8(v)) func_L00_001FF500(v, v, step);
+        func_001F9BD8(p, p, v);
+        qcopy(p + 0x50, p);
+        *(Q_14520 *)w = *(Q_14520 *)(p + 0x840);
+        t = func_L00_00213A08(w);
+        {
+            char *q = p - 0xE0;
+            *(float *)(q + 0x194) = *(float *)(q + 0x168) - t;
+        }
+        break;
+    case 1:
+    case 2:
+    {
+        char *v = (char *)D_0013F530;
+        x = func_L00_00234250((float *)v);
+        func_00214D28(&x, ((struct { char pad[0xB0]; float f; } *)v)->f, step);
+        func_L00_00234420((float *)v, (float *)v, 0.0f);
+        func_L00_00233F88(v, v, x);
+        break;
+    }
+    }
+}
 extern void func_L00_002343A0(float *dst, float *src, float z);
 extern float func_001F9B50(float);
 
