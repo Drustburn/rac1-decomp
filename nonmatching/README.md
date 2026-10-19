@@ -35,7 +35,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_001191E0`](functional/func_001191E0.c) | functional | 0 | ? | - |
 | [`func_00119288`](functional/func_00119288.c) | functional | 0 | ? | - |
 | [`func_00119678`](functional/func_00119678.c) | functional | 0 | ? | - |
-| [`func_00119EA8`](functional/func_00119EA8.c) | functional | 0 | ? | - |
 | [`func_0011AC48`](functional/func_0011AC48.c) | functional | 0 | ? | - |
 | [`func_0011AD70`](functional/func_0011AD70.c) | functional | 0 | ? | - |
 | [`func_0011BC80`](functional/func_0011BC80.c) | functional | 0 | ? | - |
@@ -44,7 +43,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_0011EF28`](functional/func_0011EF28.c) | functional | 0 | ? | - |
 | [`func_0011F4F8`](functional/func_0011F4F8.c) | functional | 0 | ? | - |
 | [`func_001208E8`](functional/func_001208E8.c) | functional | 0 | ? | - |
-| [`func_00121750`](core/func_00121750.c) | core | 0 | ? | - |
 | [`func_00121DC8`](functional/func_00121DC8.c) | functional | 0 | ? | - |
 | [`func_00123EC0`](functional/func_00123EC0.c) | functional | 0 | ? | - |
 | [`func_001252A0`](functional/func_001252A0.c) | functional | 0 | ? | - |
@@ -73,7 +71,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_0012A418`](functional/func_0012A418.c) | functional | 0 | ? | - |
 | [`func_0012A718`](functional/func_0012A718.c) | functional | 0 | ? | - |
 | [`func_0012A7E8`](functional/func_0012A7E8.c) | functional | 0 | ? | - |
-| [`func_0012AAA8`](core/func_0012AAA8.c) | core | 0 | ? | - |
 | [`func_0012C608`](functional/func_0012C608.c) | functional | 0 | ? | - |
 | [`func_0012DA28`](functional/func_0012DA28.c) | functional | 0 | ? | - |
 | [`func_0012DB68`](functional/func_0012DB68.c) | functional | 0 | ? | - |
