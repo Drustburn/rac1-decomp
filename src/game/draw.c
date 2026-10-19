@@ -295,14 +295,14 @@ extern int D_001601BC MACRO_ADDR;
 extern int D_0015F598 MACRO_ADDR;
 extern void func_001F3140(void);
 
-/* UpdateFog(int): copies the fog preset (the fixed D_001611C4 when
+/* UpdateFog(void): copies the fog preset (the fixed D_001611C4 when
    D_001873D4 is set, else the current D_0015F584) into the draw context
    at D_0018CE00+0x218, sets the mode word D_001601BC (0x40000 or
    0x1F4000), runs UpdateViewContext (func_001F3140) and clears
    D_0015F598. The presets and the two words it writes are MACRO_ADDR:
    retail reads each field with the one-register macro, and the mode
    word's store fits the branch delay slot ($gp-relative there). */
-void UpdateFog(int arg0) {
+void UpdateFog(void) {
     if (D_001873D4 != 0) {
         D_0018CE00[0x8C] = D_001611C4.r;
         D_0018CE00[0x8D] = D_001611C4.g;
@@ -1693,14 +1693,14 @@ extern int *D_00161000 MACRO_ADDR;
 extern int D_0015F538 MACRO_ADDR;
 extern char D_0013CED0[];
 
-/* FadeToBlack(frames, color): `frames` VU1 chains, each drawing a
+/* FadeToBlack(frames): `frames` VU1 chains, each drawing a
    full-screen quad (D_0013CED0's GS packet) with its alpha ramped down
-   from 0x80 by (n << 7) / (n + 1) of the count still to go; `color` is
-   not read. Each chain is bracketed by func_00234AC8/func_00122598 and a
+   from 0x80 by (n << 7) / (n + 1) of the count still to go. It takes no
+   colour: retail writes $a1 before it reads it. Each chain is bracketed by func_00234AC8/func_00122598 and a
    D_0015F538 bump. func_00122598 (sceGsSyncV) returns int: declared that
    way, the bump's temporary moves to $v1 as in retail. D_0015F538 is
    MACRO_ADDR so each bump reloads it in one register. */
-void FadeToBlack(int frames, unsigned int color) {
+void FadeToBlack(int frames) {
     int n;
     int q;
 
