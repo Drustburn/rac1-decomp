@@ -244,5 +244,4 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L12_0030A880`](l12_hoven/func_L12_0030A880.c) | l12_hoven | 152 | SIZE ours 144 / retail 152 | - |
 | [`func_L14_00303430`](functional/func_L14_00303430.c) | functional | 1424 | ? | - |
 | [`func_L14_00316E60`](l14_oltanis/func_L14_00316E60.c) | l14_oltanis | 880 | SIZE ours 864 / retail 880 | - |
-| [`func_L15_002A4318`](functional/func_L15_002A4318.c) | functional | 1184 | ? | - |
 | [`func_L15_002D7C00`](functional/func_L15_002D7C00.c) | functional | 4012 | ? | - |

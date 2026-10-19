@@ -2368,7 +2368,134 @@ void Moby78Update(unsigned char *moby) {
         break;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L15_002A4318);
+typedef int Q_2A4318 __attribute__((mode(TI)));
+typedef struct {
+    Q_2A4318 corner[4];
+    int col[4];
+    float uv[4][2];
+    long unk70, tex, unk80, unk88;
+} Quad_2A4318;
+extern short D_L15_00161558;
+extern short D_L15_00161560;
+extern short D_L15_00161568;
+extern short D_L15_00161570;
+extern int D_L15_0015F4F8 MACRO_ADDR;
+extern int D_L15_001CE4B0[];
+extern float D_L15_001CE4D0[][2];
+extern int D_L15_001CE510[][2];
+extern float D_L15_001CE550[][2];
+extern Q_2A4318 D_L15_001CE570[];
+extern Q_2A4318 D_L15_001CE5B0[];
+extern void func_001FA460(void *, void *);
+extern float func_001F9F90(float);
+#define tex_2A4318 ((long (*)(int))func_001F4868)
+
+void func_L15_002A4318(unsigned char *moby) {
+    Quad_2A4318 first, second;
+    float transform[12] __attribute__((aligned(16)));
+    float position[4] __attribute__((aligned(16)));
+    int *data = *(int **)(moby + 0x78);
+    int pass, corner, axis, component;
+    float *transformPointer;
+    float *firstUv1, *firstUv3, *secondUv0, *secondUv1;
+    int nextPass;
+    int passOffset;
+    float *secondUv2, *secondUv3;
+    Q_2A4318 *secondVertices;
+    float (*firstUv)[2];
+
+    func_001FA460(transform, moby + 0xC0);
+    qcopy(position, moby + 0x10);
+    position[3] = 1.0f;
+    first.tex = tex_2A4318(0x2C);
+    first.unk80 = 0xFF9000000260L;
+    first.unk70 = 0;
+    second.tex = tex_2A4318(0x2C);
+    secondVertices = second.corner;
+    firstUv = first.uv;
+    secondUv0 = second.uv[0];
+    firstUv1 = first.uv[1];
+    secondUv1 = second.uv[1];
+    secondUv2 = second.uv[2];
+    firstUv3 = first.uv[3];
+    secondUv3 = second.uv[3];
+    second.unk70 = 0;
+    second.unk80 = 0xFF9000000260L;
+    second.col[3] = 0;
+    second.col[1] = 0;
+    for (corner = 0; corner < 4; corner++) {
+        qcopy(&first.corner[corner], &D_L15_001CE5B0[corner]);
+        qcopy(&secondVertices[corner], &D_L15_001CE570[corner]);
+    }
+    for (pass = 0; pass < 6; pass = nextPass) {
+        int parity = pass & 1;
+        first.unk88 = (long)*(int *)(&D_L15_00161558 + parity * 2) | (long)*(int *)(&D_L15_00161560 + parity * 2) << 2 |
+                (long)*(int *)(&D_L15_00161568 + parity * 2) << 4 | (long)*(int *)(&D_L15_00161570 + parity * 2) << 6 | 0x8000000000L;
+        second.unk88 = (long)*(int *)(&D_L15_00161558 + parity * 2) | (long)*(int *)(&D_L15_00161560 + parity * 2) << 2 |
+                (long)*(int *)(&D_L15_00161568 + parity * 2) << 4 | (long)*(int *)(&D_L15_00161570 + parity * 2) << 6 | 0x8000000000L;
+        if (data[5] != 0) {
+            second.col[2] = func_001FA8A8(D_L15_001CE4B0[pass], 0, (float)data[5] / 60.0f);
+            second.col[0] = second.col[2];
+            first.col[3] = second.col[2];
+            first.col[2] = second.col[2];
+            first.col[1] = second.col[2];
+            first.col[0] = second.col[2];
+        } else {
+            second.col[2] = D_L15_001CE4B0[pass];
+            second.col[0] = second.col[2];
+            first.col[3] = second.col[2];
+            first.col[2] = second.col[2];
+            first.col[1] = second.col[2];
+            first.col[0] = second.col[2];
+        }
+        corner = 0;
+        passOffset = pass * 8;
+        nextPass = pass + 1;
+        for (; corner < 4; corner++) {
+            float *uv = (float *)(corner * 8 + (unsigned int)firstUv);
+            float *frequency = (float *)((char *)D_L15_001CE4D0 + passOffset);
+            int waveform = passOffset;
+            int base = corner * 8;
+            axis = 1;
+            do {
+                int limit, value;
+                float angle, delta;
+                float step;
+                float radians;
+                axis--;
+                limit = func_001FA898(*frequency * 360.0f);
+                angle = func_001FA888(D_L15_0015F4F8 % limit) / *frequency - 180.0f;
+                frequency++;
+                value = *(int *)((char *)D_L15_001CE510 + waveform);
+                waveform += 4;
+                radians = 0.017453292f;
+                step = 0.125f;
+                if (value != 0) {
+                    angle = func_001F9F90(angle * radians);
+                } else {
+                    angle = func_001F9FA8(angle * radians);
+                }
+                delta = angle * step;
+                *uv++ = *(float *)((char *)D_L15_001CE550 + base) + delta;
+                base += 4;
+            } while (axis >= 0);
+        }
+        for (component = 0; component < 2; component++) {
+            float step = (float)component * 0.125f;
+            secondUv0[component] = firstUv1[component];
+            secondUv1[component] = firstUv1[component] + step;
+            secondUv2[component] = firstUv3[component];
+            secondUv3[component] = firstUv3[component] + step;
+        }
+        transformPointer = transform;
+        func_L00_001FD1D8(&first, transformPointer, 0);
+        func_L00_001FD1D8(secondVertices, transformPointer, 0);
+        for (corner = 0; corner < 4; corner++) {
+            ((float *)&first.corner[corner])[0] += 0.1f;
+            ((float *)&secondVertices[corner])[0] += 0.1f;
+        }
+    }
+}
 extern short D_0015EE84;
 typedef struct {
     u8 pad[0x454];
