@@ -17,12 +17,12 @@ void CameraType0Update(char *m) {
     char *p = *(char **)(m + 0x70) + 0x1D0;
     *(float *)&D_L00_0015F044 = ((float *)&D_L00_00161E80)[D_0015EED0[5]];
     CamAttach_ShiftByHeroDelta(m);
-    func_L00_002E74B0(m);
-    func_001E9768(m);
+    CameraType0_HeroTweaks(m);
+    Profile_Mark(m);
     FollowCameraUpdate(m);
-    func_001E9768(m, p);
+    Profile_Mark(m, p);
     FollowCameraBuildView(m);
-    func_001E9768(m);
+    Profile_Mark(m);
     CamObject_Reset(m);
 }
 extern char D_0013E633[] NOT_SDA;
@@ -300,7 +300,7 @@ void Camera_FirstPersonInit(char *cam) {
     h->f1 = 0.05f;
     h->f0 = 0.05f;
     func_L00_002EB3A0(cam);
-    if (h->p != 0) func_0022ED80(0, 0, h->p);
+    if (h->p != 0) Moby_PlaySound(0, 0, h->p);
 }
 extern unsigned char D_0013E633_2EBCC0[] __asm__("D_0013E633");
 extern float func_001F9C78(void *, void *);
@@ -428,7 +428,7 @@ void CameraScript2(int mode) {
     float a[4];
     float b[4];
     float mx[16];
-    func_L00_001EB7C8();
+    CameraScript_ResetObject();
     if (mode == 0) {
         char *p = obj + 0x30;
         char *t = D_0013E633 + 0xEAD;
@@ -1224,10 +1224,10 @@ stop:
     }
     if (params->distance != 0.0f) {
         if (params->type == 6 || params->type == 8) {
-            func_L00_002E9900(0, params->distance, 0.002f);
+            Cam_SetDistanceGoal(0, params->distance, 0.002f);
             func_L00_002E9940(params->distance + 1.36f);
         } else {
-            func_L00_002E9900(0, params->distance, 0.003f);
+            Cam_SetDistanceGoal(0, params->distance, 0.003f);
             func_L00_002E9AD0();
         }
     }
@@ -1479,7 +1479,7 @@ run:
         params->timer = scale_ticks(200);
     }
     if (params->distance != 0.0f) {
-        func_L00_002E9900(0, params->distance, 0.003f);
+        Cam_SetDistanceGoal(0, params->distance, 0.003f);
         func_L00_002E9AD0();
     }
     if (params->height != 0.0f) {

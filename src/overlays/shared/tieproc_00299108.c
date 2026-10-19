@@ -392,7 +392,7 @@ void EndCutscene(void) {
     int i;
     if ((unsigned short)(h->x5a - 6) >= 2) h->x5a = 5;
     D_L00_0015F6BC = 1;
-    func_002348B8();
+    VuChain_SetLevelOffset();
     FadeToBlack(12);
     ResetFrameCounters();
     D_L00_00167114 = D_L00_0016C960_c.x4b;
@@ -413,7 +413,7 @@ void EndCutscene(void) {
     }
     p = D_0013E633 + 0xE9D;
     HeroEnterMoveState(0, 1);
-    g = func_00214358(p, 0, 0.5f);
+    g = ProbeGroundHeight(p, 0, 0.5f);
     if (2.0f < g) {
         p -= 0x80;
         if (FastAbsF(*(float *)(p + 0x88) - g) < 4.5f) *(float *)(p + 0x88) = g;
@@ -422,7 +422,7 @@ void EndCutscene(void) {
     b[0x20A5] = 0;
     HeroClearObjectFlags();
     if (D_L00_0016C960_c.x4a) {
-        f = func_00214358(D_L00_0016C960_c.v, 0, 0.5f);
+        f = ProbeGroundHeight(D_L00_0016C960_c.v, 0, 0.5f);
         if (2.0f < f && FastAbsF(D_L00_0016C960_c.v[2] - f) < 2.0f) D_L00_0016C960_c.v[2] = f;
         Hero_ResetToPosition(D_L00_0016C970, D_L00_0016C970 + 0x10, 0, 1);
     }
@@ -438,7 +438,7 @@ void EndCutscene(void) {
         D_L00_00179200.b = 0;
         DialogNode_Update(a, b, 1);
     }
-    func_L00_002666C8(scale_ticks(30));
+    Music_SetActiveTrackValue(scale_ticks(30));
 }
 extern void func_001F9CA0(void *, void *, void *);
 extern void func_L00_001FF4B0(void *, void *, float);
@@ -692,15 +692,15 @@ void CutsceneModeUpdate(void) {
         func_00213C78();
         SoundRunEntryCallbacks();
     }
-    func_001E9768(D_L00_001610B8_9A300, 3);
+    Profile_Mark(D_L00_001610B8_9A300, 3);
     if ((D_L00_0016C158_9A300.update_flags & 1) || ((D_L00_0016C158_9A300.update_flags & 0x10) && (D_0013CBE4 & 0x200))) {
         Hero_UpdateWithBoundsCheck();
     }
-    func_001E9768(D_L00_001610C8_9A300, 7);
+    Profile_Mark(D_L00_001610C8_9A300, 7);
     if ((D_L00_0016C158_9A300.update_flags & 4) || ((D_L00_0016C158_9A300.update_flags & 0x10) && (D_0013CBE4 & 0x200))) {
         UpdateParts();
     }
-    func_001E9768(D_L00_001610D8_9A300, 5);
+    Profile_Mark(D_L00_001610D8_9A300, 5);
     cs = &D_L00_0016C960_9A300;
     fade = D_L00_0015F4FC_9A300 - 0.34f;
     cs->f34++;
@@ -759,9 +759,9 @@ void CutsceneModeUpdate(void) {
             }
         }
     }
-    func_001E9768(D_L00_001610E8_9A300, 8);
+    Profile_Mark(D_L00_001610E8_9A300, 8);
     sound_update();
-    func_001E9768(D_L00_001610F8_9A300, 6);
+    Profile_Mark(D_L00_001610F8_9A300, 6);
     UpdateAllPointLights();
     UpdateLightDirection();
     if ((D_L00_0016C158_9A300.update_flags & 2) || ((D_L00_0016C158_9A300.update_flags & 0x10) && (D_0013CBE4 & 0x200))) {
@@ -910,7 +910,68 @@ void StartMovie(int sector, int size, int arg2) {
         func_001F9978();
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_0029AB38);
+extern int D_L00_00161118 MACRO_ADDR;
+extern void func_00123168(void *);
+extern void func_0012F308(void);
+extern void func_00122818(void *, int, int, int, int, int, int, int);
+extern void func_00122AD8(void *, int);
+extern void func_00216A90(int, int, int);
+
+void func_L00_0029AB38(void) {
+    char sp[0x70] __attribute__((aligned(16)));
+    int source, destination, big, small, i, j;
+    AB *cb;
+
+    D_L00_0015F6BC = 1;
+    func_00122598(0);
+    ((void (*)(int, int))func_00120858)(0, 0);
+    func_00123168(func_0012F308);
+    destination = D_L00_00161118;
+    source = D_0015EF78_29A940[4];
+    big = D_0015EE80 != 0 ? 0xE : 0xD;
+    small = D_0015EE80 != 0 ? 0xE : 0x11;
+    i = 0;
+    while (i < big) {
+        func_00122818(sp, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
+        i++;
+        source += 0x10000;
+        func_00118D80(0);
+        func_00122AD8(sp, destination);
+        destination += 0xc000;
+        ((void (*)(int, int))func_00120858)(0, 0);
+    }
+    source = D_0015EF78_29A940[0];
+    j = 0;
+    while (j < small) {
+        func_00122818(sp, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
+        j++;
+        source += 0x4000;
+        func_00118D80(0);
+        func_00122AD8(sp, destination);
+        destination += 0x4000;
+        ((void (*)(int, int))func_00120858)(0, 0);
+    }
+    if (D_0015EFD8 == 2)
+        D_0015EFD8 = 0;
+    func_001F4E08(4);
+    {
+        char *hh = (char *)D_0014171B + 0x100B5;
+        func_00216A90(*(short *)(hh + 0x38), 1, 0x400);
+    }
+    D_L00_0015F6A8 = 0;
+    cb = &D_L00_00179200;
+    if (cb->a != 0) {
+        Fl *a = cb->a;
+        void *b = cb->b;
+        cb->a = 0;
+        cb->b = 0;
+        func_00217AE8(a, b, 1);
+    }
+    {
+        char *q = D_0013E633 + 0x1D;
+        q[0x6B] |= 0x10;
+    }
+}
 extern char D_0013D390[];
 extern void func_00118D80(int);
 extern void func_0022EFE8(void);
@@ -990,7 +1051,7 @@ void ExitSlideshowMode(void) {
     D_L00_0015F6A8 = 0;
     D_L00_0015F6BC = 1;
     D_L00_0015F4FC = 0;
-    func_002348B8();
+    VuChain_SetLevelOffset();
 }
 extern void func_L00_0029AF70(void);
 extern void func_0022DD68(void);

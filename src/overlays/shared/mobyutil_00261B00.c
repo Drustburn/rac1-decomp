@@ -61,7 +61,7 @@ void WanderSteer(char *moby, char *d, float a, float b) {
     v[0] = v[0] + FastCos(*(float *)(moby + 0x48)) * *(float *)(d + 0x14);
     v[1] = v[1] + FastSin(*(float *)(moby + 0x48)) * *(float *)(d + 0x14);
     r = MoveKeepingOverGround(moby, pos, v, 0, a, *(float *)(d + 0x10), b, 0.5235988f);
-    *(float *)(moby + 0x18) = func_00214358(pos, 0, 0.5f);
+    *(float *)(moby + 0x18) = ProbeGroundHeight(pos, 0, 0.5f);
     dist = func_001F9D48(pos, d);
     if (r == 0 || *(float *)(d + 0x1C) < dist) {
         *(float *)(d + 0x24) = func_L00_001FF860(*(float *)(d + 0) - *(float *)(moby + 0x10), *(float *)(d + 4) - *(float *)(moby + 0x14));

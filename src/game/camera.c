@@ -94,7 +94,7 @@ void Camera_handleCollWithHero(void *arg0) {
 
     if (*(short *)((char *)arg0 + 0x86) == 0) {
         if (*(void **)(c + 0xC4) == 0) {
-            *(int *)(c + 0xC4) = func_001E97C8(c - 0x50);
+            *(int *)(c + 0xC4) = NullMobyUpdate(c - 0x50);
         }
     } else {
         if (*(void **)(c + 0xC4) != 0) {
@@ -639,10 +639,10 @@ void Camera_StartBlend(void *arg) {
         sub = r[3];
         if (sub == 0) {
             qcopy(r + 0x50, arg0 + 0x30);
-            func_00215328(r + 0x60, arg0);
+            Matrix_ToQuatCopyBack(r + 0x60, arg0);
         } else if (sub == 2) {
             qcopy(r + 0xC0, arg0 + 0x30);
-            func_00215328(r + 0xD0, arg0);
+            Matrix_ToQuatCopyBack(r + 0xD0, arg0);
             Camera_CaptureOrientation();
         } else {
             char *g = D_0013F450;
@@ -652,7 +652,7 @@ void Camera_StartBlend(void *arg) {
             func_001F9DC0(local2, *(char **)(g + 0x2080) + 0xE0, 1.0f);
             Camera_Pos2Polar3d((float *)(r + 0x70), arg0 + 0x30, *(char **)(r - 0xF0) + 0x30,
                           local0, local1, local2);
-            func_00215328(r + 0xB0, arg0);
+            Matrix_ToQuatCopyBack(r + 0xB0, arg0);
             qcopy(r + 0xD0, r + 0xB0);
         }
     } else {
@@ -723,7 +723,7 @@ int Camera_StepBlend(void *arg0, void *arg1) {
     if (*(int *)(st + 0x14) == 0) {
         qcopy(D_00187180, cam + 16);
     }
-    func_00215328(m, to);
+    Matrix_ToQuatCopyBack(m, to);
     rot = cam + 20;
     t = CosineInterpolate(0.0f, 1.0f, cam[0]);
     func_001FA5C8(rot, cam + 8, m, t);
@@ -870,8 +870,8 @@ int Camera_UpdateTowardTarget(void *arg0, void *arg1) {
     FastVecCross(D_00187390 + 0x10, D_00187390, D_0013F6E0);
     func_001F9DC0(D_00187390 + 0x10, D_00187390 + 0x10, -1.0f);
     FastVecCross(D_00187390 + 0x20, D_00187390 + 0x10, D_00187390);
-    func_00215328(b + 24, D_00187390);
-    func_00215328(b + 16, D_00187390);
+    Matrix_ToQuatCopyBack(b + 24, D_00187390);
+    Matrix_ToQuatCopyBack(b + 16, D_00187390);
     func_001F9908((int *)(b + 3));
     return 0;
 }
@@ -1213,7 +1213,7 @@ extern float D_0015F53C MACRO_ADDR;
 
 /* D_0015F53C is a MACRO_ADDR float: $gp-relative in the delay slots,
    lui $1 in the body. */
-void func_001EDE08(void) {
+void Camera_StepFade(void) {
     char *c = D_00187040;
     float a = *(float *)(c + 0x258);
 
@@ -1259,7 +1259,7 @@ void UpdateCamera(void) {
     }
     c = D_00187040;
     (*(int *)(c + 0x398))++;
-    func_001EDE08();
+    Camera_StepFade();
     Camera_PickDrawModes();
     CameraPreUpdate();
     UpdateAllCameras();

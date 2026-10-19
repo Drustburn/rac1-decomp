@@ -194,7 +194,55 @@ void CollInit(char *p) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_00242120);
+extern float func_001FA888(int);
+extern int func_001FA898(float);
+extern int func_00120778(float);
+extern int func_001E9730();
+extern char D_L00_001E89C0[];
+
+struct SortEnt {
+    float key;
+    float val;
+};
+
+/* build a table of (key, value) pairs from 0x20-byte records, sort it by value, and emit each */
+void func_L00_00242120(int *p, int n) {
+    struct SortEnt arr[512];
+    int i, j, k, sorted;
+
+    for (i = 0; i < n; i++, p += 8) {
+        arr[i].key = (float)p[1];
+        if (p[0] == 0) {
+            arr[i].val = 0;
+        } else {
+            if (p[8] != 0) {
+                arr[i].val = func_001FA888(p[8] - p[0]) * 0.0009765625f;
+            } else {
+                arr[i].val = func_001FA888(p[0x10] - p[0]) * 0.0009765625f;
+            }
+            arr[i + 1].key = -1.0f;
+            arr[i + 1].val = 0;
+        }
+    }
+    do {
+        sorted = 1;
+        for (j = 0; j < n; j++) {
+            if (arr[j].val < arr[j + 1].val) {
+                float t0 = arr[j].key;
+                float t1 = arr[j].val;
+                sorted = 0;
+                arr[j].key = arr[j + 1].key;
+                arr[j].val = arr[j + 1].val;
+                arr[j + 1].key = t0;
+                arr[j + 1].val = t1;
+            }
+        }
+    } while (!sorted);
+    for (k = 0; k < n; k++) {
+        int a = func_001FA898(arr[k].key);
+        func_001E9730(D_L00_001E89C0, a, func_00120778(arr[k].val));
+    }
+}
 typedef struct {
     int f0;
     int f4;
@@ -1075,7 +1123,7 @@ char *LoadLevelGameplay(int arg0) {
                 h = *(float *)p;
                 p += 4;
                 if (a != 0) {
-                    float z = func_00214358(&m->pos.x, 0, 0.5f);
+                    float z = ProbeGroundHeight(&m->pos.x, 0, 0.5f);
 
                     if (0.0f < z) {
                         m->pos.z = z + h;
@@ -1664,7 +1712,7 @@ char *LoadLevelGameplay(int arg0) {
         }
         D_L00_0016C158[7] = 0;
     }
-    func_L00_001F8750();
+    Level_ResetGameplayGlobals();
     HeroInit();
     HeroResetTuning();
     Camera_InitSlots();
