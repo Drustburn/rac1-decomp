@@ -6,7 +6,6 @@
 #
 #   src/path/file.c  -flag ...
 
-src/game/movie/disp.c                        -mno-split-addresses
 src/overlays/l15_quartu/vendor_002F9FF8.c    -fno-force-mem
 src/overlays/l16_kalebo3/vendor_002A50F0.c   -fno-sched-interblock
 src/overlays/l18_veldin2/vendor_002FAEF8.c   -mno-split-addresses
