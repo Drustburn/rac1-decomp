@@ -15,8 +15,8 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_002D8898`](shared/func_L00_002D8898.c) | shared | 2052 | BYTES 34/2052 | 98.3% |
 | [`func_L00_0024A798`](shared/func_L00_0024A798.c) | shared | 288 | BYTES 7/288 | 97.6% |
 | [`func_L00_0024A60C`](shared/func_L00_0024A60C.c) | shared | 76 | BYTES 2/76 | 97.4% |
+| [`func_L07_00319230`](l07_umbris/func_L07_00319230.c) | l07_umbris | 4044 | BYTES 124/4044 | 96.9% |
 | [`func_001F10C8`](game/func_001F10C8.c) | game | 0 | BYTES 153/4932 | 96.9% |
-| [`func_L07_00319230`](l07_umbris/func_L07_00319230.c) | l07_umbris | 4044 | BYTES 126/4044 | 96.9% |
 | [`func_L00_001F4918`](shared/func_L00_001F4918.c) | shared | 4932 | BYTES 169/4932 | 96.6% |
 | [`func_L08_002F7318`](l08_batalia/func_L08_002F7318.c) | l08_batalia | 4676 | BYTES 225/4676 | 95.2% |
 | [`func_L00_002C9DC8`](shared/func_L00_002C9DC8.c) | shared | 2288 | BYTES 230/2288 | 90.0% |
