@@ -6,7 +6,7 @@ void func_001F9E10(float *dst, float *src, float len) {
         dst[0] = 0.0f;
         dst[1] = 0.0f;
     } else {
-        float k = len / sqrtf(sq);
+        float k = len / __builtin_sqrtf(sq);
         dst[0] = x * k;
         dst[1] = y * k;
     }

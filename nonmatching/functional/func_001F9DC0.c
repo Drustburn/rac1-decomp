@@ -9,7 +9,7 @@ void func_001F9DC0(void *dst, void *src, float len) {
         d[1] = 0.0f;
         d[2] = 0.0f;
     } else {
-        float k = len / sqrtf(sq);
+        float k = len / __builtin_sqrtf(sq);
         d[0] = x * k;
         d[1] = y * k;
         d[2] = z * k;
