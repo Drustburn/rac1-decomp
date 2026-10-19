@@ -539,7 +539,7 @@ extern float D_0015EE6C MACRO_ADDR;
 extern char D_L12_001672C0[];
 
 /* Moby update for an animated electric-arc effect. */
-void ElectricArcUpdate(struct Moby *moby) {
+void func_L12_00304038(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float cycle = (*(float *)&D_L12_00161E78) + (*(float *)&D_L12_00161E7C) * D_0015EE6C;
     int strip;
@@ -563,14 +563,14 @@ void ElectricArcUpdate(struct Moby *moby) {
                     float length;
                     float index;
                     float rate;
-                    clear_u64_value(points);
+                    func_001F9BC0(points);
                     vector_count_float = (float)*(int *)(data + 0x232c);
                     length = *(float *)(data + 0x2324);
                     index = (float)i;
                     rate = (*(float *)&D_L12_00161E80) * D_0015EE6C;
                     points[3] = 1.0f;
                     points[0] = index * (length / vector_count_float);
-                    rand_vec(intermediate + i * 4, 0.0f, rate);
+                    func_L00_00258DB0(intermediate + i * 4, 0.0f, rate);
                     points += 4;
                     i++;
                 } while (i < *(int *)(data + 0x232c));
@@ -579,9 +579,9 @@ void ElectricArcUpdate(struct Moby *moby) {
             if (count < *(int *)(data + 0x232c) - 1) {
                 points = (float *)(data + strip * 0x460 + 0x1190);
                 do {
-                    FastVecAdd(points, intermediate_storage[count - 1], intermediate_storage[count]);
-                    FastVecAdd(points, points, intermediate_storage[count + 1]);
-                    FastVecScale(points, points, 0.333f);
+                    func_001F9BD8(points, intermediate_storage[count - 1], intermediate_storage[count]);
+                    func_001F9BD8(points, points, intermediate_storage[count + 1]);
+                    func_001F9C30(points, points, 0.333f);
                     count++;
                     points += 4;
                 } while (count < *(int *)(data + 0x232c) - 1);
@@ -591,12 +591,12 @@ void ElectricArcUpdate(struct Moby *moby) {
             for (i = 1; i < *(int *)(data + 0x232c) - 1; i++) {
                 float *point = (float *)(data + strip * 0x460 + i * 16);
                 float *delta = (float *)(data + strip * 0x460 + 0x1190 + i * 16 - 16);
-                FastVecAdd(point, point, delta);
+                func_001F9BD8(point, point, delta);
             }
         }
     }
-    if (FastVecDist(&moby->pos, D_L12_001672C0) < 48.0f)
-        AddDrawCallback(DrawRingQuads, moby);
+    if (func_001F9D10(&moby->pos, D_L12_001672C0) < 48.0f)
+        func_001F49B0(func_L12_00303CA8, moby);
 }
 typedef struct Data_304310 {
     char pad0[0x2300];

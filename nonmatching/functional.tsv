@@ -92,12 +92,10 @@ func_0020EEE8	nonmatching/functional/func_0020EEE8.c
 func_L00_00248EF8	nonmatching/game/func_L00_00248EF8.c
 func_L00_002D2E60	nonmatching/game/func_L00_002D2E60.c
 func_L00_001FF328	nonmatching/game/func_L00_001FF328.c
-func_L00_0024A60C	nonmatching/shared/func_L00_0024A60C.c
 func_L00_00251358	nonmatching/shared/func_L00_00251358.c
 func_L00_0026ABC0	nonmatching/shared/func_L00_0026ABC0.c
 func_L00_002C12B0	nonmatching/shared/func_L00_002C12B0.c
 func_L02_002FCE00	nonmatching/shared/func_L02_002FCE00.c
-func_L00_00277208	nonmatching/functional/func_L00_00277208.c
 func_L00_002A62D0	nonmatching/functional/func_L00_002A62D0.c
 func_L15_002D7C00	nonmatching/functional/func_L15_002D7C00.c
 func_L00_002DACC0	nonmatching/functional/func_L00_002DACC0.c
@@ -112,7 +110,6 @@ func_001FA460	nonmatching/functional/func_001FA460.c
 func_001FA6C0	nonmatching/functional/func_001FA6C0.c
 func_0023C910	nonmatching/functional/func_0023C910.c
 func_L00_001EFFE8	nonmatching/functional/func_L00_001EFFE8.c
-func_L00_001F3980	nonmatching/functional/func_L00_001F3980.c
 func_L00_001F39B0	nonmatching/functional/func_L00_001F39B0.c
 func_L00_001FEF78	nonmatching/functional/func_L00_001FEF78.c
 func_L00_001FF088	nonmatching/functional/func_L00_001FF088.c
@@ -145,7 +142,6 @@ func_L01_002F0728	nonmatching/shared/func_L01_002F0728.c
 func_L03_00251AC8	nonmatching/shared/func_L03_00251AC8.c
 func_L00_0025D6F0	nonmatching/functional/func_L00_0025D6F0.c
 func_L00_002D1E68	nonmatching/functional/func_L00_002D1E68.c
-func_L00_00261B00	nonmatching/functional/func_L00_00261B00.c
 func_L00_0025A8E8	nonmatching/functional/func_L00_0025A8E8.c
 func_001F9BB0	nonmatching/functional/func_001F9BB0.c
 func_001F9E58	nonmatching/functional/func_001F9E58.c
@@ -173,7 +169,6 @@ func_001FA898	nonmatching/functional/func_001FA898.c
 func_001FA8A8	nonmatching/functional/func_001FA8A8.c
 func_L06_00303858	nonmatching/l06_blarg/func_L06_00303858.c
 func_L08_002F7318	nonmatching/functional/func_L08_002F7318.c
-func_L12_00304038	nonmatching/functional/func_L12_00304038.c
 func_L00_001F4918	nonmatching/shared/func_L00_001F4918.c
 func_L00_00251328	nonmatching/functional/func_L00_00251328.c
 func_L00_0025BCF8	nonmatching/shared/func_L00_0025BCF8.c
