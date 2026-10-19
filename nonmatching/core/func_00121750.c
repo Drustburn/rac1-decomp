@@ -1,3 +1,4 @@
+/* fcheck: unchecked (never called in fcheck's capture run of the title, menu and level 0; OpenRAC tools/fcheck_gate.py, 2026-10-18). */
 /* sceCdRead: queue one CD/DVD read request (lba, sectors, buffer, mode)
  * in the request block at D_001314C0 and start it through the RPC
  * func_0011B4C8. Returns 1 when the RPC was accepted, 0 otherwise.

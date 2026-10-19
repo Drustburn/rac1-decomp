@@ -5,6 +5,7 @@
  * What the last attempts found:
  *   Camera 19 activate (960 bytes): zeroes the path table at P+0x58/0x68, makes two passes of distances over the l
  *   Left to fix: retail keeps cam in $s7 and spills m to 0($sp); ours does the reverse and uses blezl where retail
+ *   fcheck: unchecked (level/overlay function; fcheck runs boot-executable functions only; OpenRAC tools/fcheck_gate.py, 2026-10-18).
  */
 extern int func_001F9850(int);
 extern float func_L00_001FF860(float, float);

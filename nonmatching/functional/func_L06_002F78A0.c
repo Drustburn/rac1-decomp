@@ -1,4 +1,4 @@
-/* functional: medium. Blarg ring-gate moby update: state 0 initialises; state 1 spins it (func_L06_002F8430), probes two collision swept segments for the hero, bumps a hit counter, and when all four child mobys are done switches to state 2 (releases voice, records best time/flags); state 2 spawns 9 x 20 sparks and goes to state 3; state 3 removes it. Not runnable in capture; checked statically/by reading only. */
+/* functional: medium. fcheck: unchecked (level/overlay function; fcheck runs boot-executable functions only; OpenRAC tools/fcheck_gate.py, 2026-10-18). Blarg ring-gate moby update: state 0 initialises; state 1 spins it (func_L06_002F8430), probes two collision swept segments for the hero, bumps a hit counter, and when all four child mobys are done switches to state 2 (releases voice, records best time/flags); state 2 spawns 9 x 20 sparks and goes to state 3; state 3 removes it. Not runnable in capture; checked statically/by reading only. */
 extern unsigned char D_0013E633_78A0[] __asm__("D_0013E633");
 extern unsigned char D_0014171B_78A0[] __asm__("D_0014171B");
 extern float D_0015EE6C_78A0 __asm__("D_0015EE6C");

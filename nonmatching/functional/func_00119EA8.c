@@ -1,4 +1,4 @@
-/* functional: high. Same arithmetic as the assembly; shift counts are masked to 6 bits as dsllv/dsrlv do (the -1 count for exponent -1 is shift 63 in retail), and the result is the low 32 bits sign-extended. Only the tail's instruction order differs from retail. */
+/* functional: high. fcheck: unchecked (never called in fcheck's capture run of the title, menu and level 0; OpenRAC tools/fcheck_gate.py, 2026-10-18). Same arithmetic as the assembly; shift counts are masked to 6 bits as dsllv/dsrlv do (the -1 count for exponent -1 is shift 63 in retail), and the result is the low 32 bits sign-extended. Only the tail's instruction order differs from retail. */
 int func_00119EA8(unsigned long x) {
     long e;
     int r;
