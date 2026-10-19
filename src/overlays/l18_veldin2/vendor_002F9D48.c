@@ -1331,9 +1331,10 @@ void Moby1906JointGlowDraw(unsigned char *moby) {
         }
     }
 }
+extern int func_L00_002DCDA8_pos(void *, void *, void *) __asm__("func_L00_002DCDA8");
 /* Runs func_L00_002DCDA8 on the moby and switches state 7 accordingly; returns its result. */
-int Moby1906HitCheck(char *a) {
-    int r = CarriedMoby_StepGrab(a);
+int Moby1906HitCheck(char *a, void *pos, void *target) {
+    int r = func_L00_002DCDA8_pos(a, pos, target);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 7) a[0x20] = 2;
     } else {

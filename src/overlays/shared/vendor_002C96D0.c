@@ -758,8 +758,9 @@ void MorphorayChickenUpdate(Moby *m) {
     }
 }
 extern int func_L00_002DCDA8(void *);
-int Moby_SetStateFromCheck(char *a) {
-    int r = CarriedMoby_StepGrab(a);
+extern int func_L00_002DCDA8_CC210(void *, void *, void *) __asm__("func_L00_002DCDA8");
+int Moby_SetStateFromCheck(char *a, void *p, void *t) {
+    int r = func_L00_002DCDA8_CC210(a, p, t);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 5) a[0x20] = 1;
     } else {

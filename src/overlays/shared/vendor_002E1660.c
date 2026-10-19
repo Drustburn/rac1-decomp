@@ -68,7 +68,7 @@ extern void func_L00_00222B80(int, int);
 void func_L00_002E17F0(char *a) {
     if (*(unsigned char *)(a + 0x20) == 4) {
         D_L00_0015F504 = 0;
-        *(int *)&D_L00_0015F4FC = 0;
+        *(int *)&gFadeLvl = 0;
         CameraScript2(3);
     }
     if (*(int *)(D_0013F450 + 0x208C) == 0x13) {
@@ -995,7 +995,7 @@ void Cam_GetHeroPosition(char *a, void *out) {
     qcopy(out, D_0013E633 + 0xE9D);
 }
 typedef struct { float f[4]; } __attribute__((aligned(16))) VQ;
-extern int func_L00_001EE530_q(VQ *) __asm__("func_L00_001EE530");
+extern int func_L00_001EE530_q(VQ *, float) __asm__("func_L00_001EE530");
 extern void func_001F9BF0(float *, float *, float *);
 extern void func_001F9C30(void *, void *, float);
 extern void func_001F9BD8(void *, void *, void *);
@@ -1012,7 +1012,7 @@ int func_L00_002E5630(VQ *p, float r) {
     float l, inv;
     int *q;
     a = *p;
-    q = (int *)func_L00_001EE530_q(&a);
+    q = (int *)func_L00_001EE530_q(&a, r);
     if (q != 0) {
     e = (char *)D_L00_001601B4 + (q[5] << 7);
     c = e + 0x30;
@@ -2124,7 +2124,7 @@ extern float func_001F9D48(void *, void *);
 extern void func_001F9CA0(void *, void *, void *);
 // camera type 0 snap: puts the camera behind the hero, pulls it in along the line of sight, then builds its axes
 void CamType0InitSnap(int snap) {
-    char *cams = D_L00_00166D80;
+    char *cams = gCameraLvl;
     char *cam = *(char **)(cams + 0x180);
     char *track = cams + 0x190; /* the followed hero: position at 0, up vector at 0x30 */
     char *data = *(char **)(cam + 0x70);
@@ -2883,7 +2883,7 @@ int Cam_ResolveWallCollision(char *m) {
     while (i < func_001FA898_r(*(float *)(s18 + 0x40) - 1.0f)) {
         if (i > 0 && Cam_IsInsideVolume((VS *)v1) == 0) {
             char *base = D_0013E633 + 0xE1D;
-            if (func_L00_001F10E0_b(v1, D_L00_0015F05C, *(void **)(base + 0x2080), f20) != 0 &&
+            if (func_L00_001F10E0_b(v1, gCamSphereMaskLvl, *(void **)(base + 0x2080), f20) != 0 &&
                 func_L00_002E8E78_f(m, i, v1, f20) == 0) {
                 qcopy(t, D_L00_00173F60);
                 qcopy(u, v1);
@@ -3081,7 +3081,7 @@ move:
     if (D_0015EE84_x == 0xD && D_0013F450_x.i2084 == 0x7B) {
         goto clear;
     }
-    if (!CAST_func_L00_001EFFF0((x + 0x90), &v10, *(int *)&D_L00_0015F058, D_0013F450_x.p2080, 0)) {
+    if (!CAST_func_L00_001EFFF0((x + 0x90), &v10, *(int *)&gCamLineMaskLvl, D_0013F450_x.p2080, 0)) {
         goto clear;
     }
     if (CAST_func_L00_002E5740(D_L00_00173F60_x.v20)) {
@@ -3167,7 +3167,7 @@ int Cam_AcquireLock(int arg1, int arg2) {
     if (cur->f220 == arg1) {
         return 1;
     }
-    tab = (u32)D_L00_0015F050;
+    tab = (u32)gCameraDefsLvl;
     x = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)cur->f220)->f84 * 0x20 + 0x1C) + 0x1C);
     y = *(u8 *)(*(u32 *)(tab + ((O842e83c0 *)(u32)arg1)->f84 * 0x20 + 0x1C) + 0x1C);
     if (x < y) {

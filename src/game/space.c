@@ -640,11 +640,11 @@ void DrawSpaceFlightFrame(void) {
                             func_001F4868_305A0(3), rotation_angle);
     }
     DoGifPaging();
-    if (D_0015F53C > 0.0f) {
-        if (D_0015F53C > 1.0f) {
-            D_0015F53C = 1.0f;
+    if (gFade > 0.0f) {
+        if (gFade > 1.0f) {
+            gFade = 1.0f;
         }
-        emit_rgba_draw_packet(0, 0, 0, func_001FA898_305A0(D_0015F53C * 128.0f));
+        emit_rgba_draw_packet(0, 0, 0, func_001FA898_305A0(gFade * 128.0f));
     }
     VU1_syncChain(0x10);
     PatchMobyGifs();

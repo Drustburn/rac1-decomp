@@ -1411,7 +1411,7 @@ void DrawGlowRings(char *m) {
         FastVecAdd(dir, dir, step);
     }
 }
-extern float func_0020D830(void);
+extern float func_0020D830(void *);
 extern float func_001F9F90(float);
 extern void func_001F9BD8(void *, void *, void *);
 extern void func_001F9BC0(void *);
@@ -1434,7 +1434,7 @@ void func_L01_00309BB8(char *m) {
     char *t;
     char *g;
     if (*(unsigned char *)(m + 0x52) == 1) {
-        f = MobyGetFrameValue();
+        f = MobyGetFrameValue(m);
     } else {
         f = 170.0f;
     }

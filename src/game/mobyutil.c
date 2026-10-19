@@ -1214,11 +1214,11 @@ float round_float_to_decimal_places(int arg0, float arg1) {
     return arg1 / scale;
 }
 
-extern float func_0020D830(void);
+extern float func_0020D830(char *);
 extern float func_00215A98(int, float);
 
 int IsFrameWithinWindow(char *arg0, float arg1) {
-    float now = MobyGetFrameValue();
+    float now = MobyGetFrameValue(arg0);
     float a = round_float_to_decimal_places(4, now - arg1);
     float b = round_float_to_decimal_places(4, *(float *)(arg0 + 0x58) * *(float *)(arg0 + 0x5C));
 

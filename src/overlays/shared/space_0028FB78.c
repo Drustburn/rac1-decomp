@@ -87,7 +87,7 @@ void EnterShipMode(int a) {
     u = D_L00_0016128C - 0x60000;
     D_L00_0016C960_s.x58 = D_L00_00173F00_s.x4 + u;
     D_L00_0016C960_s.x5c = D_L00_00173F00_s.x8 + u;
-    D_L00_0015F4FC = 1.0f;
+    gFadeLvl = 1.0f;
     D_L00_0015F6A8 = 6;
     D_L00_0016128C = u;
     D_L00_0015F500 = 0;
@@ -180,7 +180,7 @@ void ShipTravelTo(int dest) {
     int *q;
     D_L00_0015F6B8[1] = 1;
     D_L00_0015F6A8 = 6;
-    D_L00_0015F4FC = 1.0f;
+    gFadeLvl = 1.0f;
     D_L00_0015F500 = 0;
     *(int *)(g + 0x20) = 0;
     *(short *)(g + 0x24) = -1;
@@ -239,7 +239,7 @@ out:
 in:
     D_0013E130_901A8.x24 = -1;
     D_L00_0015F6A8 = 6;
-    D_L00_0015F4FC = 1.0f;
+    gFadeLvl = 1.0f;
     D_0013E130_901A8.x20 = 0;
     VuChain_SetLevelOffset();
     u = D_L00_0016128C_901A8 - 0x60000;

@@ -329,7 +329,7 @@ void Moby_FollowCameraSightLine(char *moby) {
     float b[4];
     float d;
     char *x;
-    char *g = (char *)&D_L00_00166D80;
+    char *g = (char *)&gCameraLvl;
     char *cam = *(char **)(g + 0x180);
 
     if (cam != 0) {

@@ -107,17 +107,26 @@ void func_00119E70(int c) {
     }
 }
 
-/* |d| to int for the float printer (func_00119F38 passes the soft-float
-   double's bits): exponent e = biased exponent - 1075; 0 below 2^-53,
-   9999 from 2^13 up; otherwise the 53-bit mantissa shifted into place,
-   right shifts keeping two guard bits and rounding up when both are set.
-   Exact only if the final `(int)` truncation's dsra is moved into the
-   `j $31` slot (see RESULT.md): retail's compiler did that, ours leaves
-   the slot to the assembler, which pads it with a nop. */
-/* The parameter doubles as the mantissa and the exponent is computed
-   in place. It ends in the same int truncation as func_0012AAA8, with
-/* func_00119EA8: matched only with the truncation's last instruction moved into the return slot by a removed step (docs/BUILD_FIDELITY.md, "Removed"). */
-INCLUDE_ASM("asm/nonmatchings/core_text", func_00119EA8);
+/* Float printer: extract the exponent and hidden mantissa bit, retain two
+   guard bits when shifting right, and round up when both are set.
+   Uses the target compiler's 64-bit long and R5900 shift semantics. */
+int func_00119EA8(unsigned long bits) {
+    long exponent = (long)((bits << 1) >> 53);
+    exponent -= 1075;
+    if (exponent < -53) return 0;
+    if (exponent >= 13) return 9999;
+    bits = (bits << 12) >> 12;
+    bits |= 1UL << 52;
+    if (exponent < 0) {
+        exponent = -exponent;
+        bits >>= (int)(exponent - 2);
+        if ((bits & 3) == 3) bits = (bits >> 2) + 1;
+        else bits >>= 2;
+    } else {
+        bits <<= (int)exponent;
+    }
+    return (int)bits;
+}
 
 extern void *D_0012FD00;
 extern long func_0011E6D8(double);

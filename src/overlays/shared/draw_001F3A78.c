@@ -385,8 +385,8 @@ extern char D_0013E633[];
 
 /* places the camera-follow vector from the angle and offsets, then copies it into the object */
 void Hero_PlaceOnOrbit(void) {
-    char *g = D_L00_00166D80;
-    char *c = D_L00_0016C158;
+    char *g = gCameraLvl;
+    char *c = gDebugFreeCamLvl;
     char *b;
     float t = FastAddRots(*(float *)(g + 0x158), *(float *)(c + 0x88));
     char *m;
@@ -843,11 +843,11 @@ void FadeOverlayRender(void) {
 
     if (D_L00_0015F6BC == 0) {
         UploadToGs(D_L00_0015F700[2]);
-        if (0.0f < D_L00_0015F4FC) {
-            if (1.0f < D_L00_0015F4FC) {
-                D_L00_0015F4FC = 1.0f;
+        if (0.0f < gFadeLvl) {
+            if (1.0f < gFadeLvl) {
+                gFadeLvl = 1.0f;
             }
-            emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(D_L00_0015F4FC * 128.0f));
+            emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(gFadeLvl * 128.0f));
         }
         ResetGsRegisters();
         ((int (*)(int))SetupGifPaging)(0);

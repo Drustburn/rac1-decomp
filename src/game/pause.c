@@ -3921,7 +3921,7 @@ int Pause_UpdateItemPreview(char *arg0) {
         char *o = func_00226720_a(want);
 
         if (o != 0) {
-            char *t = D_00187040;
+            char *t = gCamera;
 
             *(char **)(arg0 + 0x44) = o;
             *(short *)(o + 0x34) = 0;
@@ -4641,7 +4641,7 @@ int Menu_SpawnMarkerMoby(void *arg0) {
     char *t;
 
     if (o != 0) {
-        t = D_00187040;
+        t = gCamera;
         *(char **)((char *)arg0 + 0x44) = o;
         *(short *)(o + 0x34) = 0;
         *(float *)(o + 0x10) = *(float *)(t + 0x140) + 8.0f;
@@ -4825,7 +4825,7 @@ extern void func_001F6CF8_c(int, int, long, char *, int) __asm__("func_001F6CF8"
    copy). */
 int DrawGBsShipMenu__maybe(char *arg0) {
     char buf[0x100];
-    char *t = D_00187040;
+    char *t = gCamera;
     char *o = *(char **)(arg0 + 0x44);
     int count;
 
@@ -6329,7 +6329,7 @@ int ToggleList_PadInput(char *arg0) {
     if (*(int *)(arg0 + 0x3C) != 0) {
         int t = *(int *)(arg0 + 0x3C) - 1;
         *(int *)(arg0 + 0x3C) = t;
-        D_0015F53C = (float)(t < 5 ? t : 4) * 0.25f;
+        gFade = (float)(t < 5 ? t : 4) * 0.25f;
         return 0;
     }
     if (!sel) {
@@ -8401,7 +8401,7 @@ int GadgetMenu_Init(char *arg0) {
         q--;
     }
     if (m != 0) {
-        char *cam = D_00187040;
+        char *cam = gCamera;
         char *g;
 
         *(char **)(arg0 + 0x44) = m;

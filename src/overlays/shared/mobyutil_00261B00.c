@@ -589,12 +589,11 @@ void LissajousOffsetUpdate(float *o, float *a, float *b, float r, float l1, floa
     *a = FastAddRots(*a, l1);
     *b = FastAddRots(*b, l2);
 }
-extern void func_00215C00(void *);
-/* Adds b to the vector from func_00215C00 and stores the sum in a. */
-void AddSphericalOffset(void *a, void *b) {
+extern void func_00215C00_x(void *, float, float, float) __asm__("func_00215C00");
+void AddSphericalOffset(void *a, void *b, float r, float y, float z) {
     typedef float W[4] __attribute__((aligned(16)));
     W v;
-    BuildSphericalOffset(v);
+    func_00215C00_x(v, r, y, z);
     FastVecAdd(a, v, b);
 }
 extern void func_L00_00264DB8(int arg0, int arg1);
@@ -730,7 +729,7 @@ void SpawnImpactSparks(V *v) {
     k = (D_L00_0015FD64 - D_L00_0015FD60) * 0.00390625f;
     t = *v;
     f = SampleHeightMap(&t) + k;
-    b = &D_L00_00166D80;
+    b = &gCameraLvl;
     t.f[2] = f;
     if (f < b->pos.f[2] + 5.0f) {
         u = t;

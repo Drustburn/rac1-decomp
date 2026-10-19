@@ -455,7 +455,7 @@ float Target_ScoreCandidate(void *o_v, float yaw, float range, float ylim, float
     m = a;
     p = FastDiffRots(func_L00_001FF860(func_001F9D48(v, o + 0x10), *(float *)(o + 0x18) - v[2]), 0.0f);
     if (*(int *)(g + 0x2084) == 1 || *(int *)(g + 0x2084) == 0x1E) {
-        char *c = D_L00_00166D80;
+        char *c = gCameraLvl;
         float b = FastDiffRots(func_L00_001FF860(*(float *)(o + 0x10) - *(float *)(c + 0x140), *(float *)(o + 0x14) - *(float *)(c + 0x144)), *(float *)(c + 0x158));
         p = FastDiffRots(func_L00_001FF860(func_001F9D48(c + 0x140, o + 0x10), *(float *)(o + 0x18) - *(float *)(c + 0x148)), -*(float *)(c + 0x154));
         m = p;
@@ -1088,7 +1088,7 @@ float Matrix3_SumAbsDiff(float *a, float *b) {
     return s;
 }
 extern short D_L00_0015F774;
-extern void func_001FA480();
+extern void func_001FA480(void *, void *);
 extern void func_00214F78(void *);
 extern void func_001F9BC0(void *);
 extern float func_L00_0020F750(float *a, float *b);
@@ -1099,7 +1099,7 @@ extern void func_002153E8(void *, void *);
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
 
 /* Advances the 16-slot history ring, scores slots against each other and averages the agreeing ones into arg+0x40. */
-void Hero_AverageOrientationHistory(char *arg) {
+void Hero_AverageOrientationHistory(char *arg, void *mat) {
     V4_F7F8 vv[4];
     float fa[16];
     int ri;
@@ -1111,7 +1111,7 @@ void Hero_AverageOrientationHistory(char *arg) {
 
     {
     char *b = D_0013E633 + 0xE1D;
-    func_001FA480(D_0013E633 + 0xE1D + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    func_001FA480(D_0013E633 + 0xE1D + 0x12F0 + *(int *)(b + 0x21B8) * 0x30, mat);
     normalize_vector_triplet(D_0013E633 + 0xE1D + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
 
     *(int *)(b + 0x21B8) = (*(int *)(b + 0x21B8) + 1) % 16;

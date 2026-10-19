@@ -211,7 +211,7 @@ unsigned char *Level_ParseObjectTables(LevelHeaderE9EC8 *hdr)
 
     p = D_001941D8;
     ((void (*)(void *, int, int))FastMemSet)(D_0013F450, 0, 0x2310);
-    ((void (*)(void *, int, int))FastMemSet)(D_00187040, 0, 0x3A0);
+    ((void (*)(void *, int, int))FastMemSet)(gCamera, 0, 0x3A0);
     ((void (*)(void *, int, int))FastMemSet)(D_001AADC0, 0, 0x180);
     if (D_0015EE80 != 0) {
         if (D_0015EE60 == 1.0f) {
@@ -497,7 +497,7 @@ unsigned char *Level_ParseObjectTables(LevelHeaderE9EC8 *hdr)
         D_00160F8C[i0].x3A = 0x7F80;
     }
     {
-        char *st = (char *)D_0018C418;
+        char *st = (char *)gDebugFreeCam;
 
         *(int *)(st + 0x1C) = 0;
     }
@@ -505,7 +505,7 @@ unsigned char *Level_ParseObjectTables(LevelHeaderE9EC8 *hdr)
     pad_resetState();
     Font_EnableColorCodes();
     D_0015F6F0 = 0;
-    D_0015F53C = 1.0f;
+    gFade = 1.0f;
     return p;
 }
 
@@ -1100,7 +1100,7 @@ extern s32 func_001F4748();
 extern u64 func_001F4868();
 extern s32 func_001F4A00();
 extern s32 func_001F55C0();
-extern s32 func_001F5800();
+extern void func_001F5800();
 extern s32 func_001FA898(f32);
 extern s32 func_001FB530();
 extern s32 func_001FB848();
@@ -1109,19 +1109,19 @@ extern s32 func_0020DAB0();
 extern s32 func_0020DD48();
 extern s32 func_0020E2B0();
 extern void func_00218B10();
-extern s32 func_0021A610();
+extern void func_0021A610();
 extern s32 func_00229D48();
-extern s32 func_00229E50();
+extern void func_00229E50();
 extern s32 func_0022B8F8();
 extern s32 func_00234620();
-extern s32 func_002346C0();
+extern void func_002346C0();
 extern s32 func_002347F0();
 extern s32 func_00234AC8();
 extern s32 func_00234C98_EB7C0() __asm__("func_00234C98");
 extern void func_00234F40();
 extern s32 func_002362B0();
 extern s32 func_00236A98();
-extern s32 func_00236BE0();
+extern void func_00236BE0();
 extern s32 func_00238688();
 void func_001EB7C0(s32 *arg0);
 
@@ -1182,11 +1182,11 @@ void Transition_DefaultDraw(s32 *arg0)
                       (long)(D_0015F054 << 24 | 0x808080), GetEffectTex(n + 4));
     }
     DoGifPaging();
-    if (D_0015F53C > 0.0f) {
-        if (D_0015F53C > 1.0f) {
-            D_0015F53C = 1.0f;
+    if (gFade > 0.0f) {
+        if (gFade > 1.0f) {
+            gFade = 1.0f;
         }
-        emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(D_0015F53C * 128.0f));
+        emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(gFade * 128.0f));
     }
     VU0_loadMicroProgram(D_00100AE0);
     func_00118D80(0);

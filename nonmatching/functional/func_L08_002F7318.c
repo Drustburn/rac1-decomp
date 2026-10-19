@@ -1,3 +1,4 @@
+/* fcheck: unchecked (level/overlay function; fcheck runs boot-executable functions only; OpenRAC tools/fcheck_gate.py, 2026-10-18). */
 /* functional: port copy of nonmatching/l08_batalia/func_L08_002F7318.c (the near miss stays as it
    is for matching). The grid V45[ny+1][nx+1], an array whose two lengths both vary, is the same
    bytes from __builtin_alloca: the port translates that and not the array. It is in no loop, so the

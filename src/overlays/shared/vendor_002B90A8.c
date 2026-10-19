@@ -40,7 +40,7 @@ void RippleSimStep(char *base, int n) {
         *(int *)&D_L01_00161298 = b;
     }
 }
-extern void func_L01_002B90E8_2B9198(void) __asm__("func_L01_002B90E8");
+extern void func_L01_002B90E8_2B9198(char *, int) __asm__("func_L01_002B90E8");
 extern void func_L01_00262D28(char *, char *, char *, float);
 extern float D_L01_001CAF80[];
 extern short D_L01_001612A0;
@@ -50,7 +50,7 @@ extern short D_L01_001612A4;
 void RippleSimClock(char *p, int n) {
     if (1.0f - D_L01_001CAF80[8] <= *(float *)&D_L01_001612A4) {
         *(float *)&D_L01_001612A4 = D_L01_001CAF80[8];
-        func_L01_002B90E8_2B9198();
+        func_L01_002B90E8_2B9198(p, n);
         *(int *)&D_L01_001612A0 = *(int *)&D_L01_0016129C;
     } else {
         *(int *)&D_L01_001612A0 = 2;
@@ -119,8 +119,10 @@ void RippleUpdateUV(float *m) {
 extern void func_L00_002A5158(void *, int, int);
 
 /* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002b7ef0.c, FUN_L01_002b8288. */
-void Ripple_DisturbDefault(void *a, int b) {
-    RippleDisturb(a, b, 0);
+extern void func_L00_002A5158_pt(float, float, float, float, void *, int, int) __asm__("func_L00_002A5158");
+
+void Ripple_DisturbDefault(float x, float y, float z, float w, void *a, int b) {
+    func_L00_002A5158_pt(x, y, z, w, a, b, 0);
 }
 extern float D_L01_001CAF80[];
 
@@ -1945,7 +1947,7 @@ extern int func_L00_0025D6F0(void *, void *);
 extern int func_L00_00262BC0(int, void *, void *, void *);
 extern void func_L00_0025AC00_EF078(void *, void *, int, void *, void *, float) __asm__("func_L00_0025AC00");
 extern int func_L00_002DDEA0(void *, void *);
-extern int func_L00_002584A8(void *, int, int);
+extern void func_L00_002584A8(void *, int, int);
 extern int func_00215B18(float, void *);
 extern int func_00215570(void *, int);
 extern void func_0022ED80(int, int, char *);
@@ -2674,12 +2676,11 @@ void EmitMobyBurstParticles(unsigned char *moby, f32 *mode) {
       } while (i < D_L01_00161A7C_0B48);
     }
 }
-extern int func_L00_002DCDA8(void *);
+extern int func_L00_002DCDA8_pt(void *, void *, void *) __asm__("func_L00_002DCDA8");
 
-// Updates the state when the vendor predicate permits it.
-int Moby_EnterGrabbedState(unsigned char *moby)
+int Moby_EnterGrabbedState(unsigned char *moby, void *pos, void *target)
 {
-    int value = CarriedMoby_StepGrab(moby);
+    int value = func_L00_002DCDA8_pt(moby, pos, target);
     if (value != 0) {
         if (*(short *)(moby + 0xA6) != 0x362) {
             return 0;
@@ -2693,9 +2694,9 @@ int Moby_EnterGrabbedState(unsigned char *moby)
     }
     return value;
 }
-extern int func_L00_002DCFD0(void *);
-int Moby_HoldStateIfFound(char *a) {
-    int r = PlaceCarriedMoby(a);
+extern int func_L00_002DCFD0_pt(void *, void *) __asm__("func_L00_002DCFD0");
+int Moby_HoldStateIfFound(char *a, void *v) {
+    int r = func_L00_002DCFD0_pt(a, v);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 14) a[0x20] = 1;
     } else {
@@ -2733,8 +2734,9 @@ s32 ClaimExpiredTimerSlot(s32 *values, s32 count, s32 offset) {
     }
     return index;
 }
-int Moby_HoldStateIfGrabbed(char *a) {
-    int r = CarriedMoby_StepGrab(a);
+extern int func_L00_002DCDA8_pt(void *, void *, void *) __asm__("func_L00_002DCDA8");
+int Moby_HoldStateIfGrabbed(char *a, void *pos, void *target) {
+    int r = func_L00_002DCDA8_pt(a, pos, target);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 7) a[0x20] = 1;
     } else {

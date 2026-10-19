@@ -1582,15 +1582,15 @@ void UpdateRampUpDown(void) {
     if (*(int *)&D_L00_0015F760 != 0) {
         int s = *(int *)&D_L00_0015F764;
         if (s == 0) {
-            ApproachValue((float *)&D_L00_0015F4FC, 1.0f, *(float *)&D_L00_0015F75C);
-            if (*(float *)&D_L00_0015F4FC == 1.0f) {
+            ApproachValue((float *)&gFadeLvl, 1.0f, *(float *)&D_L00_0015F75C);
+            if (*(float *)&gFadeLvl == 1.0f) {
                 *(int *)&D_L00_0015F764 = 1;
             }
         } else if (s == 1) {
             *(int *)&D_L00_0015F764 = 2;
         } else if (s == 2) {
-            ApproachValue((float *)&D_L00_0015F4FC, 0.0f, *(float *)&D_L00_0015F75C);
-            if (*(float *)&D_L00_0015F4FC == 0.0f) {
+            ApproachValue((float *)&gFadeLvl, 0.0f, *(float *)&D_L00_0015F75C);
+            if (*(float *)&gFadeLvl == 0.0f) {
                 *(int *)&D_L00_0015F760 = 0;
             }
         }

@@ -275,9 +275,10 @@ void func_L02_002CCD18(char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0x40;
     }
 }
+extern int func_L00_002DCDA8_pt(void *, void *, void *) __asm__("func_L00_002DCDA8");
 /* Calls func_L00_002DCDA8(a) and sets state 9 from its result; returns the result. */
-int Moby_UpdateState9FromCheck(char *a) {
-    int r = CarriedMoby_StepGrab(a);
+int Moby_UpdateState9FromCheck(char *a, void *pos, void *target) {
+    int r = func_L00_002DCDA8_pt(a, pos, target);
     if (r == 0) {
         if (*(unsigned char *)(a + 0x20) == 9) a[0x20] = 1;
     } else {
@@ -606,6 +607,7 @@ extern float func_001FA748(float, float);
 extern float func_001FA790(float, float);
 extern char D_0013E633[];
 extern float D_0015EE6C MACRO_ADDR;
+extern void func_L00_00250800(void *, int, void *);
 
 // Steer the camera yaw toward a target angle, clamped to a per-frame limit.
 void PullHeroToMoby(char *moby) {

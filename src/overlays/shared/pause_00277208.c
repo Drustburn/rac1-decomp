@@ -916,7 +916,7 @@ int PauseMenu_SetupHelperMoby(char *h) {
     *(int *)(h + 0x34) = 0;
     if (m != 0) {
         char *d;
-        char *g = D_L00_00166D80;
+        char *g = gCameraLvl;
         *(char **)(h + 0x44) = m;
         *(short *)(m + 0x34) = 0;
         *(float *)(m + 0x10) = *(float *)(g + 0x140) + 2.2f;

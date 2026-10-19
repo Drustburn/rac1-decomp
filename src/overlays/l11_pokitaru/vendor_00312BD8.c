@@ -2106,12 +2106,15 @@ int IsEnemyBusyState(struct Moby *m) {
     if (s == 20 || s == 11 || s == 18 || s == 12) return 1;
     return 0;
 }
-extern int func_L00_002DCDA8(void *);
+struct Manip;
+struct GifEntry;
+struct AnimSeq;
+extern int func_L00_002DCDA8(void *, void *, void *);
 
 /* Grabbed check: while held, park the moby in state 0x14 (remembering its state) unless it cannot be grabbed; restore the saved state once released.
    Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/l11/gameplay/vendor/00315968.c, FUN_L11_00316160. */
-int Moby_ParkIfGrabbed(struct Moby *moby) {
-    int r = CarriedMoby_StepGrab(moby);
+int Moby_ParkIfGrabbed(struct Moby *moby, void *position, void *target) {
+    int r = func_L00_002DCDA8(moby, position, target);
     if (r != 0) {
         if (moby->state == 2 || moby->state == 4 || moby->state == 5 || moby->state == 6 ||
             moby->state == 0xE || moby->state == 0xF || moby->state == 0x10 || moby->state == 0x14) {
@@ -2129,9 +2132,9 @@ int Moby_ParkIfGrabbed(struct Moby *moby) {
 }
 extern void *func_L00_002DCFD0(void *);
 
-/* Wrapper over func_L00_002DCFD0 that forces state 0x14 while it finds something and restores the old state afterwards. */
-void *Moby_ParkStateOnFind(unsigned char *arg) {
-    void *found = PlaceCarriedMoby(arg);
+extern void *func_L00_002DCFD0_pos(void *, void *) __asm__("func_L00_002DCFD0");
+void *Moby_ParkStateOnFind(unsigned char *arg, void *pos) {
+    void *found = func_L00_002DCFD0_pos(arg, pos);
     if (found != 0) {
         unsigned char state = arg[0x20];
         if (state != 0x14) {

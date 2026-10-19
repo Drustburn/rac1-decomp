@@ -164,10 +164,10 @@ void InitTwoLeggedRig(struct Moby *moby, LegRig_p *rig) {
     rig->mode = 5;
     STUB_printf(D_L04_001DB6F0, 0x250);
 }
-extern int func_L00_002A2680(int *a, char *b);
+extern int func_L00_002A2680_t(int *a, float v) __asm__("func_L00_002A2680");
 
 // Finds the entry of arg1's 13-pointer table whose first word equals arg0's byte at 0x52, then calls on it or returns a byte.
-int LegRig_GetAnimMode(char *arg0, char *arg1) {
+int LegRig_GetAnimMode(char *arg0, char *arg1, float t) {
     int **p = (int **)(arg1 + 0x70);
     int *found = 0;
     int i;
@@ -176,7 +176,7 @@ int LegRig_GetAnimMode(char *arg0, char *arg1) {
         if (*e == (int)(unsigned char)arg0[0x52]) found = e;
     }
     if (found == 0) return (unsigned char)arg1[0xB6];
-    return GetFootPhaseMask(found, arg1);
+    return func_L00_002A2680_t(found, t);
 }
 
 typedef struct {
