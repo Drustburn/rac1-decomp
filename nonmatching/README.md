@@ -257,7 +257,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_002A62D0`](functional/func_L00_002A62D0.c) | functional | 1896 | ? | - |
 | [`func_L00_002B8AE8`](shared/func_L00_002B8AE8.c) | shared | 2624 | SIZE ours 2684 / retail 2624 | - |
 | [`func_L00_002BA7C8`](shared/func_L00_002BA7C8.c) | shared | 5292 | SIZE ours 5284 / retail 5292 | - |
-| [`func_L00_002D2E60`](shared/func_L00_002D2E60.c) | shared | 1228 | SIZE ours 1244 / retail 1228 | - |
+| [`func_L00_002D2E60`](game/func_L00_002D2E60.c) | game | 1228 | ? | - |
 | [`func_L00_002D6610`](shared/func_L00_002D6610.c) | shared | 868 | SIZE ours 876 / retail 868 | - |
 | [`func_L00_002DACC0`](shared/func_L00_002DACC0.c) | shared | 1464 | SIZE ours 1460 / retail 1464 | - |
 | [`func_L00_002DF410`](shared/func_L00_002DF410.c) | shared | 4220 | SIZE ours 4216 / retail 4220 | - |
