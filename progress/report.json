@@ -1,16 +1,16 @@
 {
  "measures": {
-  "fuzzy_match_percent": 97.87966224432971,
+  "fuzzy_match_percent": 97.88903327577869,
   "total_code": "3713572",
-  "matched_code": "3602592",
-  "matched_code_percent": 97.01150267182109,
+  "matched_code": "3602940",
+  "matched_code_percent": 97.02087370327006,
   "total_functions": 5123,
-  "matched_functions": 5042,
-  "matched_functions_percent": 98.41889517860629,
-  "complete_code": "1826968",
-  "complete_code_percent": 49.19705340303083,
+  "matched_functions": 5043,
+  "matched_functions_percent": 98.43841499121608,
+  "complete_code": "1962068",
+  "complete_code_percent": 52.835060152327735,
   "total_units": 141,
-  "complete_units": 118,
+  "complete_units": 119,
   "total_data": "699072",
   "matched_data": "3656",
   "matched_data_percent": 0.5229790350636272,
@@ -39517,17 +39517,17 @@
   {
    "name": "Level 06: Blarg Station (Nebula G34)",
    "measures": {
-    "fuzzy_match_percent": 99.74241302738712,
+    "fuzzy_match_percent": 100.0,
     "total_code": "135100",
-    "matched_code": "134752",
-    "matched_code_percent": 99.74241302738712,
+    "matched_code": "135100",
+    "matched_code_percent": 100.0,
     "total_functions": 88,
-    "matched_functions": 87,
-    "matched_functions_percent": 98.86363636363636,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 88,
+    "matched_functions_percent": 100.0,
+    "complete_code": "135100",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -40136,7 +40136,7 @@
     {
      "name": "func_L06_00303858",
      "size": "348",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "970016",
      "metadata": {
       "virtual_address": "3160152"
@@ -40324,7 +40324,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/overlays/l06_blarg",
     "progress_categories": [
      "level_code",
@@ -49837,15 +49837,15 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 98.45574565692343,
+    "fuzzy_match_percent": 98.46646018015177,
     "total_code": "3247928",
-    "matched_code": "3165532",
-    "matched_code_percent": 97.46312110366979,
+    "matched_code": "3165880",
+    "matched_code_percent": 97.47383562689814,
     "total_functions": 3431,
-    "matched_functions": 3374,
-    "matched_functions_percent": 98.33867677062081,
-    "complete_code": "1565080",
-    "complete_code_percent": 48.18702877649997
+    "matched_functions": 3375,
+    "matched_functions_percent": 98.36782279218886,
+    "complete_code": "1700180",
+    "complete_code_percent": 52.34660374244749
    }
   },
   {
@@ -49897,15 +49897,15 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 99.81160965173643,
+    "fuzzy_match_percent": 99.82860764909881,
     "total_code": "2047300",
-    "matched_code": "2038992",
-    "matched_code_percent": 99.59419723538319,
+    "matched_code": "2039340",
+    "matched_code_percent": 99.61119523274557,
     "total_functions": 1451,
-    "matched_functions": 1442,
-    "matched_functions_percent": 99.37973811164714,
-    "complete_code": "1565080",
-    "complete_code_percent": 76.44605089630245
+    "matched_functions": 1443,
+    "matched_functions_percent": 99.4486560992419,
+    "complete_code": "1700180",
+    "complete_code_percent": 83.04498607922629
    }
   },
   {
@@ -50002,15 +50002,15 @@
    "id": "level_06",
    "name": "Level 06: Blarg Station (Nebula G34)",
    "measures": {
-    "fuzzy_match_percent": 99.74241302738712,
+    "fuzzy_match_percent": 100.0,
     "total_code": "135100",
-    "matched_code": "134752",
-    "matched_code_percent": 99.74241302738712,
+    "matched_code": "135100",
+    "matched_code_percent": 100.0,
     "total_functions": 88,
-    "matched_functions": 87,
-    "matched_functions_percent": 98.86363636363636,
-    "complete_code": "0",
-    "complete_code_percent": 0.0
+    "matched_functions": 88,
+    "matched_functions_percent": 100.0,
+    "complete_code": "135100",
+    "complete_code_percent": 100.0
    }
   },
   {
