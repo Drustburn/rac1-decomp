@@ -1,16 +1,16 @@
 /* NON_MATCHING func_L08_002F7318 -- src/overlays/l08_batalia/vendor_002EAF48.c
- * Best so far: SIZE ours 4668 / retail 4676, checked 2026-10-09.
+ * Best so far: BYTES 368/4676 (92.1% of the bytes match), checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   ## Final round
- *   # func_L08_002F7318 — animated grid / effects
- *   Retail: 4,676 bytes. Best candidate: `best.c` = p23, SIZE 4,668 / 4,676. No source edits. 26 of 30 trials. Cla
- *   Stopped because p23, p24 and p25 produced identical compiler instructions **and branch graph**, checked with b
- *   The full C reconstruction covers noise updates, texture animation, rotated grid generation, UV arrays, quad dr
- *   Still mismatched: early scheduling, hoisted pointer spill order above 0x250, inner waveform drop/shape allocat
- *   `p23.align.txt` is the fully relocated comparison using overlay level 8. Earlier p0/p4/p5 alignment experiment
- *   No progress regeneration, commits or nonmatching edits. Lead can re-stage if useful.
+ *   - the whole decl block lives INSIDE the j loop (p18) and the `if (data->nx)` wrapper is removed: the for-loop 
+ *   comes first and the hoisted invariants follow it. With the wrapper kept (p12) the guard is duplicated (+8 byte
+ *   - waveform: moving `drop=z0*x; drop+=z1*(1.0f-x);` after the angle1 line (p21) puts theta's mul in the jal del
+ *   Remaining (all in p21): (1) spill-slot numbering of the fp+const pseudos (retail point,edge,rot,puff_timer,...
+ *   vs ours right_step,left,point,edge,rot,...,step,left_step) -> many lw/sw offset diffs; (2) prologue scheduling
+ *   &moby->rotation (moby+0x40, spilled at 0x270) first, before lbu nx/ny; (3) waveform float regs: retail drop=f2
+ *   (just before angle0 call), noise=f26/shape=f24; ours drop mul scheduled before the noise call; (4) a3/f12 orde
+ *   Failed: do-while for j loop (hoists quad vertex addrs, 4700), named rot local (low frame slot), p16 etc.
  */
 #include "common.h"
 typedef float V45[4] __attribute__((aligned(16)));
@@ -165,10 +165,10 @@ void func_L08_002F7318(M45 *moby) {
                 float noise=func_L08_002F7258(x,(char*)data);
                 float angle0,angle1,shape,drop,a,b,normal_angle0,normal_angle1;
                 wave+=noise*data->noise_u+row_noise*data->noise_v+bias*data->noise_bias;
-                drop=z0*x;
-                drop+=z1*(1.0f-x);
                 angle0=func_L00_0025F368(wave+phase0+data->wave_u*x+data->wave2_v*y);
                 angle1=func_L00_0025F368(wave+phase1+data->wave_v*y+data->wave2_u*x);
+                drop=z0*x;
+                drop+=z1*(1.0f-x);
                 shape=func_001F9FA8(theta);
                 shape=func_001F9B50(shape);
                 drop*=shape;
@@ -201,25 +201,27 @@ void func_L08_002F7318(M45 *moby) {
         {
         int i;
         for (i=0;i<data->ny;i++) {
-            if (data->nx) {
-            int row_offset=i*row_bytes,next_offset=(i+1)*row_bytes;
-            V45 *row=(V45*)(points+row_offset),*next_row=(V45*)(points+next_offset);
             int j;
             for (j=0;j<data->nx;j++) {
-                quad.uv[0]=u[j]; quad.uv[1]=v[i];
-                quad.uv[2]=u[j+1]; quad.uv[3]=v[i];
-                quad.uv[4]=u[j]; quad.uv[5]=v[i+1];
-                quad.uv[6]=u[j+1]; quad.uv[7]=v[i+1];
-                func_001F9BD8(&quad.vertex[0],&row[j],&moby->position);
+                int j1=j+1;
+                int i1=i+1;
+                float *vi=&v[i],*vi1=&v[i1];
+                Quad45 *q=&quad;
+                int row_offset=i*row_bytes,next_offset=i1*row_bytes;
+                V45 *row=(V45*)(points+row_offset),*next_row=(V45*)(points+next_offset);
+                quad.uv[0]=u[j]; quad.uv[1]=*vi;
+                quad.uv[2]=u[j1]; quad.uv[3]=*vi;
+                quad.uv[4]=u[j]; quad.uv[5]=*vi1;
+                quad.uv[6]=u[j1]; quad.uv[7]=*vi1;
+                func_001F9BD8(&q->vertex[0],&row[j],&moby->position);
                 func_001F9BD8(&quad.vertex[1],&row[j+1],&moby->position);
                 func_001F9BD8(&quad.vertex[2],&next_row[j],&moby->position);
                 func_001F9BD8(&quad.vertex[3],&next_row[j+1],&moby->position);
                 quad.color[0]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+(j)*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                quad.color[1]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+(j+1)*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                quad.color[1]=((alpha/func_001FA898_r(*(float*)(points+(row_offset+j1*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
                 quad.color[2]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+(j)*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                quad.color[3]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+(j+1)*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
-                func_L00_001FD1D8(&quad,0,0);
-            }
+                quad.color[3]=((alpha/func_001FA898_r(*(float*)(points+(next_offset+j1*sizeof(V45))+12)))<<24)|(data->blue<<16)|(data->green<<8)|data->red;
+                func_L00_001FD1D8(q,0,0);
             }
         }
         }
