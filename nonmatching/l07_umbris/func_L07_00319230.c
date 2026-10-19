@@ -1,17 +1,16 @@
 /* NON_MATCHING func_L07_00319230 -- src/overlays/l07_umbris/vendor_00313D28.c
- * Best so far: BYTES 126/4044 (96.9% of the bytes match), checked 2026-10-14.
+ * Best so far: BYTES 124/4044 (96.9% of the bytes match), checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   - entry block: order of `addiu $s5,$sp,0x80` / `addiu $s2,$sp,0x90`; loop-2 preheader copies (load order, $a0/
- *   - loop 3: reload register for the constant 24 ($v0 in retail), second spawn's result in $v1 and its store orde
- *   CB04/CB10 temporaries, one bc1f that comes out bc1fl (delay slot annulled because of the register choice).
- *   ## equiv (tools/equiv.py p12.c --show): NEAR, one item
- *   retail only: jal func_L00_002688A8 a2=#c8 / ours only: jal func_L00_002688A8 a2=#20cb04
- *   func_L00_002688A8 takes one argument (`extern void func_L00_002688A8(void *)`, a0 = the spark moby). $a2 is no
- *   argument: in retail it still holds 200 from `addiu $6,$0,0xC8 ; sh $6,0xA($2)` (moby->life = 200) earlier in t
- *   block, in ours it holds the &D_L07_0020CB04 temporary. A stale scratch register, not a value passed: non-seman
- *   fcheck: unchecked (level/overlay function; fcheck runs boot-executable functions only; OpenRAC tools/fcheck_gate.py, 2026-10-18).
+ *   1. Entry: `addiu $s5,$sp,0x80` / `addiu $s2,$sp,0x90` emitted in the other order (same registers).
+ *   2. Loop-2 preheader: $a0/$a2 swapped for the copies of v70/vD0/vF0 (0x41c..0x468).
+ *   3. k-loop: the constant 24 (k*24) sits in $a2/$a0 in ours, $v0 in retail (the same pseudo in 3 blocks), q (spa
+ *   in $a0 instead of $v1, one bc1fl instead of bc1f (follows from the reg choice), and the spill slot of kn (k+1)
+ *   0x180 in ours, 0x18C in retail: kn must get a regno after the loop-3 copies (0x180..0x188) and before the gcse
+ *   hoisted address pseudos (0x190..); an explicit early kn lands below the copies, a late/loop.c-made one above
+ *   everything. No wording found that lands in between. The `k++` form generates the same instructions as retail
+ *   except for that slot (w3), so the slot order is the whole k+1 difference.
  */
 typedef struct {
     short idx;
@@ -264,8 +263,8 @@ float func_L07_00319230(void *moby, void *anchor) {
                     tail = &q->tail;
                     tail->mode = 2;
                     nspawn++;
-                    tail->tint = 0x7F;
                     tail->fade = -0x38;
+                    tail->tint = 0x7F;
                 }
                 D_L07_0020CB00_319230[k].idx = j;
                 D_L07_0020CB00_319230[k].f4 = 0.0f;

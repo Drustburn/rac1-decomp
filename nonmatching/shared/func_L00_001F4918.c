@@ -1,17 +1,16 @@
 /* NON_MATCHING func_L00_001F4918 -- src/overlays/shared/draw_001F3A78.c
- * Best so far: BYTES 169/4932 (96.6% of the bytes match), checked 2026-10-09.
+ * Best so far: BYTES 164/4932 (96.7% of the bytes match), checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   $s0; ctx high in $s2 shared with the x4 block, ctx in $s1; x4 block reloads x and y (no forwarding).
- *   staged (view=&ctx in both arms): ctx high in arms (wrong). q3/q4 (o=&options in arms): options high in arms
- *   (right) but y forwarded into the x4 block and ctx in $s0. q5/q6 (both pointers in arms): both highs in arms, +
- *   3. case 10: retail tests the loaded byte in $v0 and builds the value in $a1 (bnez; daddu $a1,0 in slot;
- *   addiu $a1,0xFF). Every form with a separate test pseudo becomes movz (c10a..e, n, p); forms that keep a branch
- *   test the value's own pseudo (lbu $a1) (q2, c10i..m) or do not fold (~*p: nor+andi, c10f/g/h/o).
- *   4. case 3: 0x18 constant and D_L00_001C43B0 address swapped ($a0/$a1) (local alloc order).
- *   5. second func_00116248 call of case 5: arg setup order (t0/t1/a0 before a1/a2 in ours).
- *   fcheck: unchecked (level/overlay function; fcheck runs boot-executable functions only; OpenRAC tools/fcheck_gate.py, 2026-10-18).
+ *   SIZE 4924. c8B (`view=&ctx` declared before the arms): lo's stay separate, y reloaded, but hi is hoisted befor
+ *   branch and copied to $s2 (BYTES 212). w0 (view in arms): `move $18,$2` extra insn.
+ *   diag_alias.c (twin's `ctx2` second declaration; NOT valid under the no-alias rule): 154/4932 - still has a sec
+ *   `lui` for the x4 block, so even the alias does not reach retail's shape (one hi, two lo). Needs a mechanism th
+ *   keeps `high(ctx)` shared but not `lo_sum`; not found in plain C.
+ *   - Case 10 (c10a/b/d: separate test pseudo `old`, `?:`, s32): all become movz (SIZE 4924). Not solved.
+ *   - Second func_00116248 call: p1 (p load after call) 177, p3 (one shared p) 173: worse. Retail order of the arg
+ *   setup (a1,a2,a4,a5,a0 with `lw $s2` in the slot) vs ours (a5,a4,a0,a1,a2). Not solved.
  */
 #include "common.h"
 
@@ -253,7 +252,7 @@ void func_L00_001F4918(void) {
         if (debug_menu_1F4918.item < 13) {
             s32 id=((u8 *)&weapon_ids_1F4918)[debug_menu_1F4918.item];
             value=(s32 *)(ammo_1F4918 + 0x21) + id;
-            limit=D_L00_001C43B0_1F4918[id].limit;
+            limit=((Weapon_1F4918 *)((char *)D_L00_001C43B0_1F4918 + id * 0x18))->limit;
         } else value=&D_0015EE98_1F4918;
         if (input_1F4918.keys.word.held & 8) {
             if (input_1F4918.keys.word.pressed & 0x40) *value += 60;

@@ -1,16 +1,16 @@
 /* NON_MATCHING func_L15_002C6950 -- src/overlays/l15_quartu/vendor_0029C1D0.c
- * Best so far: BYTES 26/4816 (99.5% of the bytes match), checked 2026-10-14.
+ * Best so far: BYTES 6/4816 (99.9% of the bytes match), checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   (free regalloc probes on the p12 shape: ternary/reordered-prototype forms fix pos/v90 priority but lose the cr
- *   Stopped: same differences after many changes. Best: p14.c, BYTES 26/4816.
- *   Left (26 bytes, all in case 2's heading block): retail calls func_L00_001FF860 from both branches of
- *   `seg+1 < n-8` and cross-jumps the call; with that source (p12) the allocator swaps pos (m+0x10) and &v90
- *   between $fp/$s7 (truncated priorities 940 vs 937) and the d+0xD0/d+0x110 spill slots. With the single-call
- *   form (p14) the two sub.s feeding $f12/$f13 use other temporaries, and one store/addiu pair is swapped.
- *   equiv.py p14.c: FUNCTIONAL. Note: sp+0x70/0x74 are goal.target/goal.mode inside the 0x50-byte goal struct
- *   filled by func_L00_00260D30/00260FB0 (not an uninitialised local).
+ *   What mattered (w9 -> w12, 26 -> 6): keep the single call with dx/dy, but write the per-arm values as two state
+ *   so the sub result shares the register of one operand:
+ *   arm 1: dx = pt.x; dy = pt.y; dx -= pos.x; dy -= pos.y;
+ *   arm 2: float gx = goal.x; float gy = goal.y; dx = pos.x; dy = pos.y; dx = gx - dx; dy = gy - dy;
+ *   Best: w12.c (w15/w16/w17 equal, 6 bytes).
+ *   Remaining 6 bytes: after jal func_L00_00259148, retail has `swc1 $f0,0x48($s4)` then `addiu $s0,$sp,0x80`; our
+ *   swapped (sched2 tie: addiu s0 = &v80 feeds the next call's arg move and gets higher priority). Tried: a = fn; 
+ *   call inline in the block (w15), `if (len > speed)` (w16), local rz temp (w17): no change. Declaring v90 before
  */
 typedef struct HMoby_6950 HMoby_6950;
 struct HMoby_6950 {
@@ -105,7 +105,7 @@ extern float func_001FA888(int);
 extern int func_L00_0025A778(void *, void *, int);
 extern float func_L00_00259148(float *vel, float cur, float target, float k, float d, float max);
 extern float func_001F9CB8(void *);
-extern void func_L15_002C62A8(void *, void *, void *);
+extern void func_L15_002C7C20(char *);
 extern void func_L00_00250800(void *, int, void *);
 extern float func_L15_002C65D8_h(void *, void *, HGoal_6950) __asm__("func_L15_002C65D8");
 extern int func_001F9938(void *);
@@ -300,11 +300,17 @@ void func_L15_002C6950(HMoby_6950 *m) {
             float dx;
             float dy;
             if (seg + 1 < path->n - 8) {
-                dx = path->pt[seg + 1].f[0] - m->pos.f[0];
-                dy = path->pt[seg + 1].f[1] - m->pos.f[1];
+                dx = path->pt[seg + 1].f[0];
+                dy = path->pt[seg + 1].f[1];
+                dx -= m->pos.f[0];
+                dy -= m->pos.f[1];
             } else {
-                dx = goal.pos.f[0] - m->pos.f[0];
-                dy = goal.pos.f[1] - m->pos.f[1];
+                float gx = goal.pos.f[0];
+                float gy = goal.pos.f[1];
+                dx = m->pos.f[0];
+                dy = m->pos.f[1];
+                dx = gx - dx;
+                dy = gy - dy;
             }
             a = func_L00_001FF860(dx, dy);
         }
