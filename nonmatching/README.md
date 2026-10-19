@@ -13,6 +13,7 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_002D8898`](shared/func_L00_002D8898.c) | shared | 2052 | BYTES 34/2052 | 98.3% |
 | [`func_L00_0024A798`](shared/func_L00_0024A798.c) | shared | 288 | BYTES 7/288 | 97.6% |
 | [`func_L00_0024A60C`](shared/func_L00_0024A60C.c) | shared | 76 | BYTES 2/76 | 97.4% |
+| [`func_001F10C8`](game/func_001F10C8.c) | game | 0 | BYTES 153/4932 | 96.9% |
 | [`func_L07_00319230`](l07_umbris/func_L07_00319230.c) | l07_umbris | 4044 | BYTES 126/4044 | 96.9% |
 | [`func_L00_001F4918`](shared/func_L00_001F4918.c) | shared | 4932 | BYTES 169/4932 | 96.6% |
 | [`func_L00_00236F38`](shared/func_L00_00236F38.c) | shared | 1384 | BYTES 99/1384 | 92.8% |
@@ -78,7 +79,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_001EE9F8`](functional/func_001EE9F8.c) | functional | 0 | ? | - |
 | [`func_001EFD70`](functional/func_001EFD70.c) | functional | 0 | ? | - |
 | [`func_001F0F00`](functional/func_001F0F00.c) | functional | 0 | ? | - |
-| [`func_001F10A0`](functional/func_001F10A0.c) | functional | 0 | ? | - |
 | [`func_001F7070`](game/func_001F7070.c) | game | 1264 | ? | - |
 | [`func_001F7E98`](functional/func_001F7E98.c) | functional | 96 | ? | - |
 | [`func_001F9840`](game/func_001F9840.c) | game | 0 | ? | - |

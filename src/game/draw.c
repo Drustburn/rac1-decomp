@@ -93,7 +93,9 @@ __asm__(".section .text\n\tnop\n");
 
 LINKER_REMNANT("asm/remnants/text", func_001F1088);
 
-INCLUDE_ASM("asm/nonmatchings/text", func_001F10A0);
+LINKER_REMNANT("asm/remnants/text", func_001F10A0);
+
+INCLUDE_ASM("asm/nonmatchings/text", func_001F10C8);
 
 LINKER_REMNANT("asm/remnants/text", func_001F2410);
 
