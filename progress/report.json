@@ -1,16 +1,16 @@
 {
  "measures": {
-  "fuzzy_match_percent": 95.73973824775393,
+  "fuzzy_match_percent": 95.77404934526932,
   "total_code": "3713588",
-  "matched_code": "3531728",
-  "matched_code_percent": 95.10284931984916,
+  "matched_code": "3536920",
+  "matched_code_percent": 95.24266019816953,
   "total_functions": 5121,
-  "matched_functions": 4902,
-  "matched_functions_percent": 95.72349150556532,
-  "complete_code": "1237020",
-  "complete_code_percent": 33.31064189134605,
+  "matched_functions": 4904,
+  "matched_functions_percent": 95.76254637766061,
+  "complete_code": "1309596",
+  "complete_code_percent": 35.264978236681074,
   "total_units": 141,
-  "complete_units": 109,
+  "complete_units": 110,
   "total_data": "699072",
   "matched_data": "3656",
   "matched_data_percent": 0.5229790350636272,
@@ -40318,17 +40318,17 @@
   {
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 98.244360670194,
+    "fuzzy_match_percent": 100.0,
     "total_code": "72576",
-    "matched_code": "67384",
-    "matched_code_percent": 92.84611992945327,
+    "matched_code": "72576",
+    "matched_code_percent": 100.0,
     "total_functions": 80,
-    "matched_functions": 78,
-    "matched_functions_percent": 97.5,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 80,
+    "matched_functions_percent": 100.0,
+    "complete_code": "72576",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -40775,7 +40775,7 @@
     {
      "name": "func_L07_00313D28",
      "size": "1148",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "710840",
      "metadata": {
       "virtual_address": "3226920"
@@ -40919,7 +40919,7 @@
     {
      "name": "func_L07_00319230",
      "size": "4044",
-     "fuzzy_match_percent": 96.88,
+     "fuzzy_match_percent": 100.0,
      "address": "732608",
      "metadata": {
       "virtual_address": "3248688"
@@ -41053,7 +41053,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/overlays/l07_umbris",
     "progress_categories": [
      "level_code",
@@ -49819,15 +49819,15 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 96.0899204292706,
+    "fuzzy_match_percent": 96.12915075703648,
     "total_code": "3247928",
-    "matched_code": "3097280",
-    "matched_code_percent": 95.36171984108022,
+    "matched_code": "3102472",
+    "matched_code_percent": 95.52157560142959,
     "total_functions": 3431,
-    "matched_functions": 3250,
-    "matched_functions_percent": 94.72457009618186,
-    "complete_code": "988684",
-    "complete_code_percent": 30.440453113492662
+    "matched_functions": 3252,
+    "matched_functions_percent": 94.78286213931798,
+    "complete_code": "1061260",
+    "complete_code_percent": 32.67498540608043
    }
   },
   {
@@ -49879,15 +49879,15 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 99.41873788892688,
+    "fuzzy_match_percent": 99.48097463000049,
     "total_code": "2047300",
-    "matched_code": "2026692",
-    "matched_code_percent": 98.99340594929907,
+    "matched_code": "2031884",
+    "matched_code_percent": 99.24700825477458,
     "total_functions": 1451,
-    "matched_functions": 1434,
-    "matched_functions_percent": 98.82839421088904,
-    "complete_code": "988684",
-    "complete_code_percent": 48.29209202364089
+    "matched_functions": 1436,
+    "matched_functions_percent": 98.96623018607856,
+    "complete_code": "1061260",
+    "complete_code_percent": 51.83705368045719
    }
   },
   {
@@ -49999,15 +49999,15 @@
    "id": "level_07",
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 98.244360670194,
+    "fuzzy_match_percent": 100.0,
     "total_code": "72576",
-    "matched_code": "67384",
-    "matched_code_percent": 92.84611992945327,
+    "matched_code": "72576",
+    "matched_code_percent": 100.0,
     "total_functions": 80,
-    "matched_functions": 78,
-    "matched_functions_percent": 97.5,
-    "complete_code": "0",
-    "complete_code_percent": 0.0
+    "matched_functions": 80,
+    "matched_functions_percent": 100.0,
+    "complete_code": "72576",
+    "complete_code_percent": 100.0
    }
   },
   {

@@ -14,6 +14,7 @@ src/overlays/shared/camera_001ED6D8.c        -fno-force-mem
 src/overlays/shared/vendor_002E9D78.c        -fno-schedule-insns
 src/overlays/shared/vendor_00303430.c        -fno-sched-spec
 src/overlays/l14_oltanis/ribbons_002E0538.c   -fno-gcse
+src/overlays/l07_umbris/effect_00313D28.c     -mno-split-addresses
 # func_L00_00207220 (voice-slot pruner) needs it; the file's other functions build the same either way
 src/overlays/shared/help_00203E98.c    -fno-sched-interblock
 src/overlays/shared/hud_00235960.c -fno-sched-interblock
