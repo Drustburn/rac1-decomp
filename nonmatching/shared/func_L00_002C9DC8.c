@@ -1,16 +1,16 @@
 /* NON_MATCHING func_L00_002C9DC8 -- src/overlays/shared/vendor_002C96D0.c
- * Best so far: BYTES 599/2288 (73.8% of the bytes match), checked 2026-10-19.
+ * Best so far: BYTES 230/2288 (90.0% of the bytes match), checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   1FF240 call and as "carry - 0x40" for the &displacement argument of the settle test. That keeps carry live nex
- *   hero, so the GPR set matches retail (q s0, carry s7, hero/base split, D_0013F450 high part in fp).
- *   Left in p29: v s1 (retail s2), m s2 (s3), &m->pos s3 (s1), hero s4 (s6), &a s5 (s4), &e s6 (s5).
- *   regalloc.py on p29: v (.596) now outranks m (.559) as in retail, but pos is a low-priority global (.155) so it
- *   after v and m; in retail it is before them (s1). hero (261, 3 refs) outranks a and e; retail has it last becau
- *   its range is longer (retail reads ground_moby through the hero register s6 at the first test after the join, o
- *   reloads through the fp high part).
- *   - p30 (&m->pos instead of pos in the two branches): identical output to p29.
+ *   - p41 (BEST): p37 + the settle test written (t16 = (s16)timer, func_001F9850(240) < t16) with a separate s32 t
+ *   sll/sra come out in place in s0 like retail. Everything through the end of case 2 and the settle code matches
+ *   except the two lines below.
+ *   - Left: (1) collision_point: retail keeps the 3F70/3F60 base pointer in s0 (a2 = s0 + 0x10/0x20); ours holds i
+ *   (not call-crossing, so call-clobbered). Declaring it at function scope (p44) does not change it.
+ *   (2) case 3 class-0xBA count loop: retail has p in v1, count in a0, a1 = 0xF0 and a2 = 0xBA hoisted, and a plai
+ *   bnel / addiu in the delay slot; ours if-converts count++ into xori/movn (p42 continue-form, p43 && form, p45 m
+ *   variable: no change).
  */
 typedef struct {
     Vec4 vel;                 /* 0x00: velocity per step */
@@ -50,6 +50,7 @@ void func_L00_002C9DC8(struct Moby *m) {
     struct Moby *p;
     s32 count;
     s32 timer;
+    s32 t16;
 
     if (!m) return;
     v = (BombVars_2C9DC8 *)m->pvars;
@@ -94,7 +95,7 @@ void func_L00_002C9DC8(struct Moby *m) {
         f32 half = 0.5f;
         u8 *collision_point;
         u8 *carry;
-        Vec4 *pos;
+        struct Hero *hero;
         f = func_001FA888_2C9DC8(D_0013E633_2C9DC8[1]) + 1.0f;
         {
             f32 g2 = m->pclass->scale;
@@ -106,11 +107,10 @@ void func_L00_002C9DC8(struct Moby *m) {
             func_L00_0026FBC8_2C9DC8(m);
         }
         v->vel.f[2] -= D_0015EE70_2C9820 * 9.0f;
-        pos = &m->pos;
-        func_001F9BD8_2C9820(&d, pos, v);
+        func_001F9BD8_2C9820(&d, &m->pos, v);
         carry = (u8 *)&D_0013F450_C9820.motion.platform_carry;
-        func_L00_001FF240_2C9DC8(&q, pos, carry);
-        qcopy_nc(&e, pos);
+        func_L00_001FF240_2C9DC8(&q, &m->pos, carry);
+        qcopy_nc(&e, &m->pos);
         t = D_0015EE60_2C9DC8 * 0.15f * m->scale;
         e.f[2] -= t / m->pclass->scale;
         qcopy_nc(&a, &d);
@@ -118,9 +118,10 @@ void func_L00_002C9DC8(struct Moby *m) {
         a.f[2] -= t;
         qcopy_nc(&q, &d);
         q.f[2] += f * 0.2f;
-        if (func_L00_001F10E0_2C9DC8(f * 0.3f, &q, 4, D_0013F450_C9820.moby)) {
+        hero = (struct Hero *)(carry - 0x140);
+        if (func_L00_001F10E0_2C9DC8(f * 0.3f, &q, 4, hero->moby)) {
             collision_point = D_L00_00173F70_2C9DC8;
-            qcopy_nc(pos, collision_point);
+            qcopy_nc(&m->pos, collision_point);
             m->pos.z -= f * 0.2f;
             collision_point += 0x10;
             h = 0.01f;
@@ -129,11 +130,11 @@ void func_L00_002C9DC8(struct Moby *m) {
             g = func_001F9CB8_2C9DC8(v);
             if (g < D_0015EE60_2C9DC8 * h) goto settle;
         } else {
-            if (!func_L00_001EFFF0_C9820(&e, &a, 0, D_0013F450_C9820.moby, 0)) {
+            if (!func_L00_001EFFF0_C9820(&e, &a, 0, hero->moby, 0)) {
                 goto collision_miss;
             }
             collision_point = D_L00_00173F60_2C9DC8;
-            qcopy_nc(pos, collision_point);
+            qcopy_nc(&m->pos, collision_point);
             m->pos.z += (D_0015EE60_2C9DC8 * 0.15f * m->scale) / m->pclass->scale;
             collision_point += 0x20;
             h = 0.01f;
@@ -142,15 +143,15 @@ void func_L00_002C9DC8(struct Moby *m) {
             g = func_001F9CB8_2C9DC8(v);
             if (g < D_0015EE60_2C9DC8 * h) goto settle;
         }
-        if (D_0013F450_C9820.ground_moby) {
-            if (func_L00_0025D390_C9820((int)D_0013F450_C9820.ground_moby)) {
+        if (hero->ground_moby) {
+            if (func_L00_0025D390_C9820((int)hero->ground_moby)) {
                 g = func_001F9CB8_2C9DC8(v);
                 if (g < D_0015EE60_2C9DC8 * h + func_001F9CB8_2C9DC8(carry - 0x40)) {
 settle:
                     timer = (u16)v->timer + 1;
                     v->timer = timer;
                     if (!D_L00_00173F40_C9820.moby || D_L00_00173F40_C9820.unk1C > 0 ||
-                        (timer = (s16)timer, func_001F9850_2C9820(240) < timer)) {
+                        (t16 = (s16)timer, func_001F9850_2C9820(240) < t16)) {
                         m->state = 3;
                         v->timer = 0;
                     }
@@ -159,11 +160,11 @@ settle:
             if (D_0013F450_C9820.ground_moby && func_L00_0025D390_C9820((int)D_0013F450_C9820.ground_moby))
                 func_001F9BD8_2C9820(v, v, &D_0013F450_C9820.motion.displacement);
         }
-        func_001F9BD8_2C9820(pos, pos, v);
+        func_001F9BD8_2C9820(&m->pos, &m->pos, v);
         func_L00_002C93D8_2C9DC8(m);
         break;
 collision_miss:
-        qcopy_nc(pos, &d);
+        qcopy_nc(&m->pos, &d);
         return;
     }
     case 3: {
