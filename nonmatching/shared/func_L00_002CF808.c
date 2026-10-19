@@ -1,12 +1,15 @@
 /* NON_MATCHING func_L00_002CF808 -- src/overlays/shared/vendor_002C96D0.c
- * Best so far: BYTES 983/3776 (74.0% of the bytes match), checked 2026-10-19.
+ * Best so far: BYTES 965/3776 (74.4% of the bytes match), checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   2026-10-19: drone (class 479) update from the NTSC decomp's drone_update sketch. Right size once the hero's drone
- *   roster is read as fixed offsets from D_0013F450 and the roster loop indexes slots[k] / exclusions[count] (loop
- *   strength reduction then matches). Left: saved-register choices (target s1 vs s3, distance f23 vs f20, the
- *   effect pointer kept in s7 vs s1) and the delay-slot placement of category = 0 in the state 2 hit checks.
+ *   2026-10-19 (lead, by hand): p0 SIZE 3752 -> p3 BYTES 1427 (roster read as fixed offsets from D_0013F450 via a
+ *   padded view struct) -> p10 (roster loop as slots[k]/exclusions[count]: strength reduction reproduces retail's
+ *   a0/a1/a2 loop) -> p13 BYTES 984 (random % 3 folded into one local) -> p22 BYTES 965 (block-local temporaries f
+ *   every per-state moby/float, so they stay in caller-saved regs like retail). Left: FE/FD constants in fp/s7 in
+ *   state 3 (ours rematerialises 0xFE in the hit check), effect pointer copied to s7, delay placement of category 
+ *   in the state 2 hit check (retail threads the first null test past the class read), mov.s f13 order in the two
+ *   func_L00_0025F4A8 calls, second rotation call's argument order.
  */
 typedef struct {
     Vec4 position;            /* 0x00: movement this frame */
@@ -247,18 +250,16 @@ state2:
         }
         qcopy(&collision_data[0], &m->pos);
         if (func_L00_001F10E0_2CF808(0.2f, &collision_data[0], 0, m)) {
-            struct Moby *hm;
-            category = 0;
+            struct Moby *hm, *hm2, *hm3;
             hm = (struct Moby *)D_L00_00173F40_C9820.moby;
             if (hm && hm->oclass == 0 && hm->state != 0xFE && hm->state != 0xFD)
                 goto update_rotations;
-            hm = (struct Moby *)D_L00_00173F40_C9820.moby;
-            if (hm) {
-                category = 0;
-                if (hm->pclass) category = *(u8 *)((u8 *)hm->pclass + 0x46);
-            }
-            hm = (struct Moby *)D_L00_00173F40_C9820.moby;
-            if (hm && hm->state != 0xFE && hm->state != 0xFD &&
+            category = 0;
+            hm2 = (struct Moby *)D_L00_00173F40_C9820.moby;
+            if (hm2 && hm2->pclass)
+                category = *(u8 *)((u8 *)hm2->pclass + 0x46);
+            hm3 = (struct Moby *)D_L00_00173F40_C9820.moby;
+            if (hm3 && hm3->state != 0xFE && hm3->state != 0xFD &&
                 (category == 5 || category == 7 || category == 8)) {
                 func_L00_0025A890_2CF808(1.0f, scratch.effect, m, 0x10000);
                 func_L00_001FF500_2CF808(scratch.effect, &v->position, 1.0f);
@@ -285,11 +286,12 @@ state2:
         }
 update_rotations:
         func_001F9BF0_2CF808(&v->position, &m->pos, &old_pos);
-        distance = func_L00_001FF860_2CF808(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
-        f = func_001F9D48_2CF808(&old_pos, &m->pos);
-        f = -func_L00_001FF860_2CF808(f, m->pos.z - old_pos.f[2]);
-        m->rot.z = func_L00_00259148_2CF808(&v->yaw_velocity, m->rot.z, distance, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f);
-        m->rot.y = func_L00_00259148_2CF808(&v->pitch_velocity, m->rot.y, f, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f);
+        {
+            f32 yaw = func_L00_001FF860_2CF808(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
+            f32 pitch = -func_L00_001FF860_2CF808(func_001F9D48_2CF808(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
+            m->rot.z = func_L00_00259148_2CF808(&v->yaw_velocity, m->rot.z, yaw, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f);
+            m->rot.y = func_L00_00259148_2CF808(&v->pitch_velocity, m->rot.y, pitch, D_0015EE70_2CF808 * 6.2831855f, D_0015EE70_2CF808 * 3.1415927f, D_0015EE6C_2CF808 * 6.2831855f);
+        }
         goto update_effects;
     }
 state3:
@@ -301,9 +303,7 @@ state3:
         m->collision = pclass->collision;
         func_L00_002CF328_2CF808(m);
         target = v->target;
-        if (target == 0 || target->oclass != v->target_oclass || target->state == 0xFE || target->state == 0xFD)
-            goto clear_target;
-        {
+        if (target != 0 && target->oclass == v->target_oclass && target->state != 0xFE && target->state != 0xFD) {
             char *h = func_L00_0025D390_2CF808(target);
             qcopy(&target_pos, &v->target->pos);
             if (h != 0)
@@ -317,11 +317,11 @@ state3:
             qcopy(&v->offset, &target_pos);
             qcopy(&collision_data[0], &m->pos);
             if (func_L00_001F10E0_2CF808(0.25f, &collision_data[0], 0, m)) {
-                other = (struct Moby *)D_L00_00173F40_C9820.moby;
-                if (!other || other->state == 0xFE || other->state == 0xFD || other != v->target || other->oclass == 0) {
+                struct Moby *hm = (struct Moby *)D_L00_00173F40_C9820.moby;
+                if (!hm || hm->state == 0xFE || hm->state == 0xFD || hm != v->target || hm->oclass == 0) {
                     qcopy(&m->pos, &D_L00_00173F70_2CF808);
                 } else {
-                    s32 cat2 = other->pclass ? *(u8 *)((u8 *)other->pclass + 0x46) : 0;
+                    s32 cat2 = hm->pclass ? *(u8 *)((u8 *)hm->pclass + 0x46) : 0;
                     func_L00_0025A890_2CF808(1.0f, scratch.effect, m, 0x10000);
                     func_L00_001FF500_2CF808(scratch.effect, &v->position, 1.0f);
                     *(f32 *)(scratch.effect + 8) = 1.0f;
@@ -346,12 +346,11 @@ state3:
                 }
             }
         }
-        goto state3_rotations;
-clear_target:
-        m->state = 2;
-        v->target_oclass = -1;
-        v->target = 0;
-state3_rotations:
+        else {
+            m->state = 2;
+            v->target_oclass = -1;
+            v->target = 0;
+        }
         m->rot.z = func_L00_001FF860_2CF808(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
         m->rot.y = -func_L00_001FF860_2CF808(func_001F9D48_2CF808(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
         goto update_effects;
