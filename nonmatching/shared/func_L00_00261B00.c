@@ -1,281 +1,218 @@
 /* NON_MATCHING func_L00_00261B00 -- src/overlays/shared/mobyutil_00261B00.c
- * Best so far: SIZE ours 2284 / retail 2252, checked 2026-10-09.
+ * Best so far: SIZE ours 2240 / retail 2252, checked 2026-10-19.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   Per-moby effect update: sets up three 16-byte vectors from the moby's 0x10 vector, runs a two-loop count split
- *   Stopped at size: ours 2148 bytes vs retail 2252 (about 26 instructions short). The shortfall is in the unit-de
- *   Also not reproduced: retail's dead re-test of the unit sum at the start of the body (same sum as the check bef
+ *   CAUTION (lead): p30 holds the moby[0xB0] byte in an otherwise dead int to drop one moby reference so `large`
+ *   wins $fp; that is scratch-variable reuse and must not land as is. Find a legitimate way to lower moby's priority.
+ *   the beqz delay slot as retail.
+ *   - float crossings[2] declared after path (not first): spill slots land at 0x78.. as retail.
+ *   - Nested 001FA888 call inside the printf argument: string address held in $s1 across both calls as retail.
+ *   - Decrement of the pile counter after the call in each arm (`call(...); large--;`): cross-jump then merges the
+ *   the last arm as retail (p29, 2260 -> 2240). `int large = 0, small = 0, medium = 0` swaps s6/s7 to retail's.
+ *   - Remaining (p30): retail b_large is $s4 and single $s3 (ours reversed; b_large pri .245 beats single .175, so
+ *   more references or b_large fewer); retail's extra copies (`daddu s4,s1` for &position, mpos in $s5, B0 index c
+ *   count*5 as sll/addu; `3 < count` made no difference (slt vs slti still from hoisting of a constant); one extra
  */
-extern void func_001F9BC0(void *);
-extern unsigned char *func_L00_0025D390(int);
-extern int func_002140B0(int);
-extern int func_001F9850(int);
-extern int func_001E9730();
-extern float func_001FA888(int);
-extern int func_00120778(float);
-extern float func_00214158(void);
-extern float func_001F9F90(float);
-extern float func_002140F8(float, float);
-extern float func_001F9FA8(float);
-extern void func_L00_001FF4B0(void *, void *, float);
-extern void func_001F9BD8(void *, void *, void *);
-extern int func_L00_0025A5D8(float *, float *, float, float, float);
-extern void func_001F9C30(void *, void *, float);
-extern int func_L00_00262BC0(int, void *, void *, void *);
-extern void func_001F9BF0(void *, void *, void *);
-extern void func_L00_002A86D8(void *, void *, void *, int, int, int);
-extern int D_L00_0015F678 MACRO_ADDR;
-extern unsigned char D_L00_0015FD48[];
-extern int D_0015EFA0 MACRO_ADDR;
-extern int D_0015EF20 MACRO_ADDR;
-extern int D_0015EF28 MACRO_ADDR;
-extern int D_0015EF24[] MACRO_ADDR;
-extern float D_0015EE6C MACRO_ADDR;
-extern float D_0015EE70 MACRO_ADDR;
-extern char *D_L00_001B0830[];
+extern int D_L00_0015F678_261B00 __asm__("D_L00_0015F678") MACRO_ADDR;
+extern unsigned char D_L00_0015FD48_261B00[] __asm__("D_L00_0015FD48");
+extern int D_0015EFA0_261B00 __asm__("D_0015EFA0") MACRO_ADDR;
+extern int D_0015EF20_261B00 __asm__("D_0015EF20") MACRO_ADDR;
+extern int D_0015EF28_261B00 __asm__("D_0015EF28") MACRO_ADDR;
+extern int D_0015EF2C_261B00 __asm__("D_0015EF2C") MACRO_ADDR;
+extern float D_0015EE6C_261B00 __asm__("D_0015EE6C") MACRO_ADDR;
+extern float D_0015EE70_261B00 __asm__("D_0015EE70") MACRO_ADDR;
+extern char *D_L00_001B0830_261B00[] __asm__("D_L00_001B0830");
 extern char D_L00_00160160[];
 extern char D_L00_00160170[];
 extern char D_L00_00160180[];
+extern void func_001F9BC0_261B00(void *) __asm__("func_001F9BC0");
+extern char *func_L00_0025D390_261B00(char *) __asm__("func_L00_0025D390");
+extern int func_002140B0_261B00(int) __asm__("func_002140B0");
+extern int func_001F9850_261B00(int) __asm__("func_001F9850");
+extern void func_001E9730_261B00(char *, ...) __asm__("func_001E9730");
+extern float func_001FA888_261B00(int) __asm__("func_001FA888");
+extern long func_00120778_261B00(float) __asm__("func_00120778");
+extern float func_00214158_261B00(void) __asm__("func_00214158");
+extern float func_001F9F90_261B00(float) __asm__("func_001F9F90");
+extern float func_001F9FA8_261B00(float) __asm__("func_001F9FA8");
+extern float func_002140F8_261B00(float, float) __asm__("func_002140F8");
+extern void func_L00_001FF4B0_261B00(void *, void *, float) __asm__("func_L00_001FF4B0");
+extern void func_001F9BD8_261B00(void *, void *, void *) __asm__("func_001F9BD8");
+extern void func_001F9BF0_261B00(void *, void *, void *) __asm__("func_001F9BF0");
+extern void func_001F9C30_261B00(void *, void *, float) __asm__("func_001F9C30");
+extern int func_L00_0025A5D8_261B00(float, float, float, float *, float *) __asm__("func_L00_0025A5D8");
+extern int func_L00_00262BC0_261B00(int, void *, void *, void *) __asm__("func_L00_00262BC0");
+extern void func_L00_002A86D8_261B00(void *, void *, void *, int, int, int) __asm__("func_L00_002A86D8");
 
-/* Per-moby effect update: builds a short vector set from the moby's
-   0x10 vector and calls the helper chain for each queued unit. */
-void func_L00_00261B00(char *a, int b, int c, int flags, int idx)
-{
-    float s0[4], s10[4], s20[4], s30[4], s40[4], s50[4], s60[4];
-    float s70[2];
-    int f84 = 0;
-    int n, k, w, sum, m, rv;
-    int c4, c5, c6, c8, c10, c11, c12, c13, c14, c15, c16, c17, c20, c22, c23, c30;
-    unsigned char *r;
-    char *p;
-    float f0, f12, f13, f14, f20, f21;
+/* Drops bolts from MOBY: picks a count between LOWER and UPPER (doubled in the bonus modes, scaled by the level's
+   bolt rate when the moby is a crate the player may be farming), splits it into 50/20/5/1 bolt mobys (at most three
+   piles when FLAGS has bit 3), and throws each pile from the moby with a random velocity, aimed at path PATH_INDEX
+   when one is given, through func_L00_002A86D8. */
+void func_L00_00261B00(char *moby, int lower, int upper, int flags, int path_index) {
+    Vec4 base, position, velocity, offset, adjusted, difference, quarter;
+    float time;
+    float scale;
+    int large = 0, small = 0, medium = 0, single;
+    int count, multiplier;
+    int remaining;
+    int near_large, near_medium, near_small, near_single;
+    int far_large, far_medium, far_small, far_single;
+    int near_value, far_value, gated;
+    char *path;
+    float crossings[2];
 
-    c22 = 0;
-    c23 = 0;
-    c30 = 0;
-    func_001F9BC0(s0);
-    if (!(flags & 0x20)) {
-        if (*(unsigned char *)(a + 0xB0) != 0xFF
-            && (unsigned)(*(unsigned short *)(a + 0xA6) - 0x1F4) >= 0x29) {
-            D_L00_0015F678 = (D_L00_0015FD48[*(unsigned char *)(a + 0xB0)] ^ 0xFF) == 0;
-        }
+    func_001F9BC0_261B00(&base);
+    if (!(flags & 0x20) && (remaining = (unsigned char)moby[0xB0]) != 0xFF &&
+        (unsigned int)((unsigned short)*(unsigned short *)(moby + 0xA6) - 500) > 40) {
+        D_L00_0015F678_261B00 = D_L00_0015FD48_261B00[remaining] == 0xFF;
     }
-    if (D_L00_0015F678) {
-        f84 = !(flags & 0x20);
+    gated = 0;
+    if (D_L00_0015F678_261B00) {
+        int bit = flags & 0x20;
+        gated = bit == 0;
     }
-    if (flags == 0) {
+    if (!flags || (!lower && !upper))
         return;
-    }
-    if (b == 0 && c == 0) {
-        return;
-    }
     if (flags & 4) {
-        r = func_L00_0025D390((int)a);
-        if (r) {
-            *(int __attribute__((mode(TI))) *)s0 = *(int __attribute__((mode(TI))) *)(r + 0x20);
-        }
+        path = func_L00_0025D390_261B00(moby);
+        if (path)
+            qcopy(&base, path + 0x20);
     }
-    if (b <= 0) {
-        b = 1;
-    }
-    n = func_002140B0(c - b + 1) + b;
-    if (D_0015EFA0 || D_0015EF20) {
-        n <<= 1;
-    }
-    if (n < 0x1F4) {
-        if (f84 && D_0015EF28) {
-            m = (int)((float)func_001F9850(0x3C) * 60.0f) * D_0015EF24[2] / D_0015EF24[1];
-            if (D_0015EFA0 || D_0015EF20) {
-                m /= 2;
+    if (lower < 1)
+        lower = 1;
+    count = func_002140B0_261B00(upper - lower + 1) + lower;
+    if (D_0015EFA0_261B00 || D_0015EF20_261B00)
+        count *= 2;
+    if (count < 500 && gated && D_0015EF28_261B00) {
+        multiplier = (int)((float)func_001F9850_261B00(60) * 60.0f) * D_0015EF2C_261B00 / D_0015EF28_261B00;
+        if (D_0015EFA0_261B00 || D_0015EF20_261B00)
+            multiplier /= 2;
+        if (multiplier < 150) {
+            if (multiplier < 91) {
+                func_001E9730_261B00(D_L00_00160160);
+                count *= 5;
+            } else {
+                lower = 190;
+                lower -= multiplier;
+                func_001E9730_261B00(D_L00_00160170, lower / 20);
+                count *= lower / 20;
             }
-            if (m < 0x96) {
-                if (m < 0x5B) {
-                    func_001E9730(D_L00_00160160);
-                    n *= 5;
-                } else {
-                    b = (0xBE - m) / 20;
-                    func_001E9730(D_L00_00160170, b);
-                    n *= b;
-                }
-                if (D_0015EFA0) {
-                    if (n > 0x3E8) n = 0x3E8;
-                } else {
-                    if (n > 0x1F4) n = 0x1F4;
-                }
-            } else if (m >= 0x12D) {
-                if (m >= 0x160) {
-                    func_001E9730(D_L00_00160180, 0x3FB99999A0000000LL);
-                    n /= 10;
-                } else {
-                    b = 0x168 - m;
-                    f20 = func_001FA888(b);
-                    rv = func_00120778(f20 / 20.0f);
-                    func_001E9730(D_L00_00160180, rv);
-                    b = b / 80;
-                    n *= b;
-                }
-                if (n <= 0) {
-                    n = 1;
-                }
+            if (D_0015EFA0_261B00) {
+                if (count > 1000) count = 1000;
+            } else if (count > 500) count = 500;
+        } else if (multiplier >= 301) {
+            if (multiplier >= 352) {
+                func_001E9730_261B00(D_L00_00160180, (long)0x3FB99999A0000000);
+                count /= 10;
+            } else {
+                int span = 360 - multiplier;
+                func_001E9730_261B00(D_L00_00160180, func_00120778_261B00(func_001FA888_261B00(span) / 20.0f));
+                count *= span / 80;
             }
+            if (count < 1) count = 1;
         }
     }
-    k = n;
-    if (n >= 0x12C) {
+    remaining = count;
+    if (count >= 300) {
         do {
-            k -= 50;
-            c30++;
-        } while (k >= 0x12C);
+            remaining -= 50;
+            large++;
+        } while (remaining >= 300);
     }
-    while (k >= 0xC8) {
-        k -= 20;
-        c22++;
-    }
-    if (k >= 0x1E) {
-        do {
-            k -= 25;
-            c22++;
-            c23++;
-        } while (k >= 0x1E);
-    }
-    if (k >= 7) {
-        do {
-            k -= 5;
-            c23++;
-        } while (k >= 7);
-    }
-    sum = c30 + c22 + c23 + k;
-    if (sum >= 4 && (flags & 8)) {
-        c17 = 0;
-        c14 = 0;
-        c13 = 0;
-        c16 = 3;
-        c15 = 3;
-        c10 = 0;
-        c12 = 0;
-        c20 = 0;
-        c11 = 0x96;
-        c5 = 0;
-        if (n < 0x96) {
-            c6 = 0x96;
-            c4 = 0;
-            do {
-                if (c16) {
-                    c6 -= 50;
-                    c16--;
-                    c4 += 20;
-                    c13++;
-                } else if (c13) {
-                    c4 -= 20;
-                    c13--;
-                    c5 += 5;
-                    c14++;
-                } else if (c14) {
-                    c5 -= 5;
-                    c14--;
-                    c17++;
-                }
-                c11 = c6 + c4 + c5 + c17;
-                if (!(n < c11)) {
-                    break;
-                }
-            } while (c11 >= 4);
-        }
-        c5 = 3;
-        if (3 < n) {
-            c6 = c12 * 20;
-            c8 = c20 * 50;
-            c4 = c10 * 5;
-            do {
-                if (c15) {
-                    c15--;
-                    c4 += 5;
-                    c10++;
-                } else if (c10) {
-                    c4 -= 5;
-                    c10--;
-                    c6 += 20;
-                    c12++;
-                } else if (c12) {
-                    c6 -= 20;
-                    c12--;
-                    c8 += 50;
-                    c20++;
-                }
-                c5 = c8 + c6 + c4 + c15;
-            } while (c5 < n && c5 < 0x96);
-        }
-        if ((c11 - n) < (n - c5)) {
-            k = c17;
-            c23 = c14;
-            c22 = c13;
-            c30 = c16;
-        } else {
-            k = c15;
-            c23 = c10;
-            c22 = c12;
-            c30 = c20;
-        }
-    }
-    while (k || c23 || c22 || c30) {
-        *(int __attribute__((mode(TI))) *)s10 = *(int __attribute__((mode(TI))) *)(a + 0x10);
-        s10[2] = s10[2] + 0.5f;
-        f21 = func_00214158();
-        f20 = func_001F9F90(f21);
-        f0 = func_002140F8(0.0f, 3.0f) * D_0015EE6C;
-        f20 = f20 * f0;
-        s20[0] = f20;
-        f20 = func_001F9FA8(f21);
-        f0 = func_002140F8(0.0f, 3.0f) * D_0015EE6C;
-        f20 = f20 * f0;
-        s20[1] = f20;
-        s20[2] = 0.0f;
-        f0 = func_002140F8(3.7f, 6.0f) * D_0015EE6C;
-        s20[2] = f0;
-        s30[0] = s20[0];
-        s30[1] = s20[1];
-        s30[2] = 0.0f;
-        func_L00_001FF4B0(s30, s30, 0.5f);
-        func_001F9BD8(s10, s10, s30);
-        if (idx >= 0) {
-            f12 = D_0015EE70 * 10.8f * -0.5f;
-            f13 = s20[2] - f12;
-            p = D_L00_001B0830[idx];
-            f14 = s10[2] - *(float *)(p + 0x18);
-            f20 = 120.0f;
-            rv = func_L00_0025A5D8(s70, s70 + 1, f12, f13, f14);
-            if (1.0f <= (float)rv) {
-                if (0.0f < s70[0]) {
-                    if (s70[0] < f20) {
-                        f20 = s70[0];
+    for (; remaining >= 200; remaining -= 20) medium++;
+    for (; remaining >= 30; remaining -= 25) { medium++; small++; }
+    for (; remaining >= 7; remaining -= 5) small++;
+    single = remaining;
+    if (large + medium + small + single > 3 && (flags & 8)) {
+        int a_single = 0, a_small = 0, a_medium = 0, a_large = 3;
+        int b_large = 0, b_medium = 0, b_small = 0, b_single = 3;
+        near_value = 150;
+        far_value = 3;
+        if (single + small + medium + large > 3) {
+            if (count < 150) {
+                int value_large = 150, value_medium = 0, value_small = 0, value_single = 0;
+                do {
+                    if (a_large) {
+                        value_large -= 50; a_large--; value_medium += 20; a_medium++;
+                    } else if (a_medium) {
+                        value_medium -= 20; a_medium--; value_small += 5; a_small++;
+                    } else if (a_small) {
+                        value_small -= 5; a_small--; a_single++;
                     }
-                }
+                    near_value = value_large + value_medium + value_small + a_single;
+                } while (count < near_value && near_value > 3);
             }
-            func_001F9C30(s40, s20, f20);
-            func_001F9BD8(s40, s40, a + 0x10);
-            rv = func_L00_00262BC0(idx, a + 0x10, s40, s50);
-            func_001F9BF0(s40, s50, s10);
-            s40[2] = 0.0f;
-            func_L00_001FF4B0(s60, s40, 0.25f);
-            func_001F9BF0(s40, s40, s60);
-            func_001F9C30(s40, s40, 1.0f / f20);
-            s20[0] = s40[0];
-            s20[1] = s40[1];
+            if (3 < count) {
+                int value_large = b_large * 50, value_medium = b_medium * 20, value_small = b_small * 5;
+                do {
+                    if (b_single) {
+                        b_single--; value_small += 5; b_small++;
+                    } else if (b_small) {
+                        value_small -= 5; b_small--; value_medium += 20; b_medium++;
+                    } else if (b_medium) {
+                        value_medium -= 20; b_medium--; value_large += 50; b_large++;
+                    }
+                    far_value = value_large + value_medium + value_small + b_single;
+                } while (far_value < count && far_value < 150);
+            }
         }
-        func_001F9BD8(s20, s20, s0);
-        if (c30) {
-            c30--;
-            func_L00_002A86D8(a, s10, s20, flags, 50, f84);
-        } else if (c22) {
-            c22--;
-            func_L00_002A86D8(a, s10, s20, flags, 20, f84);
-        } else if (c23) {
-            c23--;
-            func_L00_002A86D8(a, s10, s20, flags, 5, f84);
+        if (near_value - count < count - far_value) {
+            single = a_single; small = a_small; medium = a_medium; large = a_large;
         } else {
-            k--;
-            func_L00_002A86D8(a, s10, s20, flags, 1, f84);
+            single = b_single; small = b_small; medium = b_medium; large = b_large;
         }
     }
+    goto check_units;
+    do {
+        char *mpos = moby + 0x10;
+        qcopy(&position, mpos);
+        position.f[2] += 0.5f;
+        time = func_00214158_261B00();
+        scale = func_001F9F90_261B00(time);
+        velocity.f[0] = scale * (func_002140F8_261B00(0.0f, 3.0f) * D_0015EE6C_261B00);
+        scale = func_001F9FA8_261B00(time);
+        velocity.f[1] = scale * (func_002140F8_261B00(0.0f, 3.0f) * D_0015EE6C_261B00);
+        velocity.f[2] = 0.0f;
+        velocity.f[2] = func_002140F8_261B00(3.7f, 6.0f) * D_0015EE6C_261B00;
+        offset.f[0] = velocity.f[0];
+        offset.f[1] = velocity.f[1];
+        offset.f[2] = 0.0f;
+        func_L00_001FF4B0_261B00(&offset, &offset, 0.5f);
+        func_001F9BD8_261B00(&position, &position, &offset);
+        if (path_index >= 0) {
+            float t2;
+            float half = D_0015EE70_261B00 * 10.8f * -0.5f;
+            t2 = 120.0f;
+            if ((float)func_L00_0025A5D8_261B00(half, velocity.f[2] - half,
+                position.f[2] - *(float *)(D_L00_001B0830_261B00[path_index] + 0x18),
+                &crossings[0], &crossings[1]) >= 1.0f && crossings[0] > 0.0f && crossings[0] < 120.0f)
+                t2 = crossings[0];
+            func_001F9C30_261B00(&adjusted, &velocity, t2);
+            func_001F9BD8_261B00(&adjusted, &adjusted, mpos);
+            func_L00_00262BC0_261B00(path_index, mpos, &adjusted, &difference);
+            func_001F9BF0_261B00(&adjusted, &difference, &position);
+            adjusted.f[2] = 0.0f;
+            func_L00_001FF4B0_261B00(&quarter, &adjusted, 0.25f);
+            func_001F9BF0_261B00(&adjusted, &adjusted, &quarter);
+            func_001F9C30_261B00(&adjusted, &adjusted, 1.0f / t2);
+            velocity.f[0] = adjusted.f[0];
+            velocity.f[1] = adjusted.f[1];
+        }
+        func_001F9BD8_261B00(&velocity, &velocity, &base);
+        if (large) {
+            func_L00_002A86D8_261B00(moby, &position, &velocity, flags, 50, gated);
+            large--;
+        } else if (medium) {
+            func_L00_002A86D8_261B00(moby, &position, &velocity, flags, 20, gated);
+            medium--;
+        } else if (small) {
+            func_L00_002A86D8_261B00(moby, &position, &velocity, flags, 5, gated);
+            small--;
+        } else {
+            func_L00_002A86D8_261B00(moby, &position, &velocity, flags, 1, gated);
+            single--;
+        }
+check_units:;
+    } while (single || small || medium || large);
 }
