@@ -2388,7 +2388,6 @@ extern Q_2A4318 D_L15_001CE570[];
 extern Q_2A4318 D_L15_001CE5B0[];
 extern void func_001FA460(void *, void *);
 extern float func_001F9F90(float);
-#define tex_2A4318 ((long (*)(int))func_001F4868)
 
 void func_L15_002A4318(unsigned char *moby) {
     Quad_2A4318 first, second;
@@ -2407,10 +2406,10 @@ void func_L15_002A4318(unsigned char *moby) {
     func_001FA460(transform, moby + 0xC0);
     qcopy(position, moby + 0x10);
     position[3] = 1.0f;
-    first.tex = tex_2A4318(0x2C);
+    first.tex = ((long (*)(int))func_001F4868)(0x2C);
     first.unk80 = 0xFF9000000260L;
     first.unk70 = 0;
-    second.tex = tex_2A4318(0x2C);
+    second.tex = ((long (*)(int))func_001F4868)(0x2C);
     secondVertices = second.corner;
     firstUv = first.uv;
     secondUv0 = second.uv[0];
