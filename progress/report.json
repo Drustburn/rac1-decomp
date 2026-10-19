@@ -1,16 +1,16 @@
 {
  "measures": {
-  "fuzzy_match_percent": 97.80432749136413,
+  "fuzzy_match_percent": 97.80857619100449,
   "total_code": "3713588",
-  "matched_code": "3594904",
-  "matched_code_percent": 96.80406119364883,
+  "matched_code": "3599872",
+  "matched_code_percent": 96.93784016966879,
   "total_functions": 5121,
-  "matched_functions": 5003,
-  "matched_functions_percent": 97.69576254637767,
-  "complete_code": "1576540",
-  "complete_code_percent": 42.45328237812057,
+  "matched_functions": 5005,
+  "matched_functions_percent": 97.73481741847296,
+  "complete_code": "1814396",
+  "complete_code_percent": 48.858300920834516,
   "total_units": 141,
-  "complete_units": 113,
+  "complete_units": 115,
   "total_data": "699072",
   "matched_data": "3656",
   "matched_data_percent": 0.5229790350636272,
@@ -43756,17 +43756,17 @@
   {
    "name": "Level 12: Hoven",
    "measures": {
-    "fuzzy_match_percent": 99.88076561029182,
+    "fuzzy_match_percent": 100.0,
     "total_code": "127480",
-    "matched_code": "127328",
-    "matched_code_percent": 99.88076561029182,
+    "matched_code": "127480",
+    "matched_code_percent": 100.0,
     "total_functions": 75,
-    "matched_functions": 74,
-    "matched_functions_percent": 98.66666666666667,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 75,
+    "matched_functions_percent": 100.0,
+    "complete_code": "127480",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -44411,7 +44411,7 @@
     {
      "name": "func_L12_0030A880",
      "size": "152",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "902232",
      "metadata": {
       "virtual_address": "3188864"
@@ -44446,7 +44446,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/overlays/l12_hoven",
     "progress_categories": [
      "level_code",
@@ -46690,17 +46690,17 @@
   {
    "name": "Level 15: Quartu",
    "measures": {
-    "fuzzy_match_percent": 99.99476407914764,
+    "fuzzy_match_percent": 100.0,
     "total_code": "110376",
-    "matched_code": "105560",
-    "matched_code_percent": 95.63673262303399,
+    "matched_code": "110376",
+    "matched_code_percent": 100.0,
     "total_functions": 49,
-    "matched_functions": 48,
-    "matched_functions_percent": 97.95918367346938,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 49,
+    "matched_functions_percent": 100.0,
+    "complete_code": "110376",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -46859,7 +46859,7 @@
     {
      "name": "func_L15_002C6950",
      "size": "4816",
-     "fuzzy_match_percent": 99.88,
+     "fuzzy_match_percent": 100.0,
      "address": "794256",
      "metadata": {
       "virtual_address": "2910544"
@@ -47146,7 +47146,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/overlays/l15_quartu",
     "progress_categories": [
      "level_code",
@@ -49819,15 +49819,15 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 98.40001900288429,
+    "fuzzy_match_percent": 98.40487684456059,
     "total_code": "3247928",
-    "matched_code": "3158816",
-    "matched_code_percent": 97.25634312090662,
+    "matched_code": "3163784",
+    "matched_code_percent": 97.40930217664923,
     "total_functions": 3431,
-    "matched_functions": 3349,
-    "matched_functions_percent": 97.61002623141941,
-    "complete_code": "1327224",
-    "complete_code_percent": 40.86371372764421
+    "matched_functions": 3351,
+    "matched_functions_percent": 97.66831827455552,
+    "complete_code": "1565080",
+    "complete_code_percent": 48.18702877649997
    }
   },
   {
@@ -49879,15 +49879,15 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 99.80351219655157,
+    "fuzzy_match_percent": 99.81121889317637,
     "total_code": "2047300",
-    "matched_code": "2034016",
-    "matched_code_percent": 99.35114541102917,
+    "matched_code": "2038984",
+    "matched_code_percent": 99.59380647682313,
     "total_functions": 1451,
-    "matched_functions": 1439,
-    "matched_functions_percent": 99.17298414886285,
-    "complete_code": "1327224",
-    "complete_code_percent": 64.82801738875592
+    "matched_functions": 1441,
+    "matched_functions_percent": 99.31082012405238,
+    "complete_code": "1565080",
+    "complete_code_percent": 76.44605089630245
    }
   },
   {
@@ -50074,15 +50074,15 @@
    "id": "level_12",
    "name": "Level 12: Hoven",
    "measures": {
-    "fuzzy_match_percent": 99.88076561029182,
+    "fuzzy_match_percent": 100.0,
     "total_code": "127480",
-    "matched_code": "127328",
-    "matched_code_percent": 99.88076561029182,
+    "matched_code": "127480",
+    "matched_code_percent": 100.0,
     "total_functions": 75,
-    "matched_functions": 74,
-    "matched_functions_percent": 98.66666666666667,
-    "complete_code": "0",
-    "complete_code_percent": 0.0
+    "matched_functions": 75,
+    "matched_functions_percent": 100.0,
+    "complete_code": "127480",
+    "complete_code_percent": 100.0
    }
   },
   {
@@ -50119,15 +50119,15 @@
    "id": "level_15",
    "name": "Level 15: Quartu",
    "measures": {
-    "fuzzy_match_percent": 99.99476407914764,
+    "fuzzy_match_percent": 100.0,
     "total_code": "110376",
-    "matched_code": "105560",
-    "matched_code_percent": 95.63673262303399,
+    "matched_code": "110376",
+    "matched_code_percent": 100.0,
     "total_functions": 49,
-    "matched_functions": 48,
-    "matched_functions_percent": 97.95918367346938,
-    "complete_code": "0",
-    "complete_code_percent": 0.0
+    "matched_functions": 49,
+    "matched_functions_percent": 100.0,
+    "complete_code": "110376",
+    "complete_code_percent": 100.0
    }
   },
   {

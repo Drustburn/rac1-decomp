@@ -157,6 +157,16 @@ What that meant for the nine functions that had per-function flags
 The two split-off shared files are new units of one function each in the
 progress report; the level ones stay in their level's unit.
 
+Later functions matched the same way (2026-10-19):
+
+| Function | Flag | Its old file with the flag | Now |
+|---|---|---|---|
+| func_L12_00309730 | none (its file has `-fno-sched-interblock`) | 10 of 27 change | its own file, `l12_hoven/vendor_00309730.c` |
+| func_L14_00303430 | `-fno-sched-spec` | func_L14_00300130 changes | its own file, `shared/vendor_00303430.c` |
+| func_L14_002E0538 | `-fno-gcse` | 18 of 36 change | its own file, `l14_oltanis/ribbons_002E0538.c` |
+| func_L07_00313D28 | `-mno-split-addresses` | 11 change | its own file, `l07_umbris/effect_00313D28.c` |
+| func_L12_0030A880 (`l12_hoven/vendor_002EDAA0.c`) | `-fno-thread-jumps` | 27 of 27 exact | the file has the flag |
+
 ## Removed, 2026-10-07
 
 Four steps changed what the compiler emitted, which no retail tool did.

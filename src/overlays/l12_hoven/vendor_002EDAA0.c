@@ -2449,7 +2449,43 @@ void CutsceneVolumeTriggerUpdate(char *moby) {
         }
     }
 }
-INCLUDE_ASM("asm/overlays", func_L12_0030A880);
+typedef struct {
+    char pad0[0x30];
+    int current;
+    char pad34[0x144];
+    char *mobys[4];
+} Level12MobyList;
+extern Level12MobyList D_L12_0016CD60;
+extern void func_L00_00264870(int);
+
+static inline unsigned char func_L12_pick(int cur) {
+    if (cur == 1) return 2;
+    return 0;
+}
+
+void func_L12_0030A880(unsigned char *moby) {
+    Level12MobyList *list;
+    Level12MobyList *l2;
+    int cur;
+    int k;
+    switch (moby[0x20]) {
+    case 0:
+        moby[0x30] = 0xFF;
+        moby[0x20] = 1;
+        break;
+    case 1:
+        if (D_L12_0015F6A8 == 2) {
+            list = &D_L12_0016CD60;
+            cur = list->current;
+            if (cur == 1 || cur == 7) {
+                k = func_L12_pick(cur);
+                l2 = &D_L12_0016CD60;
+                func_L00_00264870((int)l2->mobys[k]);
+            }
+        }
+        break;
+    }
+}
 extern void func_0022ED80(int, int, int);
 extern void func_L01_00279790(void *);
 extern void func_L00_00264EA8(void *, int, int, int, int, int, int);

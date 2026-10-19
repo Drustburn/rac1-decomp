@@ -5,7 +5,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 
 | Function | Directory | Size | Best so far | Bytes matching |
 |---|---|---|---|---|
-| [`func_L15_002C6950`](l15_quartu/func_L15_002C6950.c) | l15_quartu | 4816 | BYTES 6/4816 | 99.9% |
 | [`func_L00_001EAD88`](shared/func_L00_001EAD88.c) | shared | 96 | BYTES 2/1044 | 99.8% |
 | [`func_L00_002C12B0`](shared/func_L00_002C12B0.c) | shared | 5996 | BYTES 12/5996 | 99.8% |
 | [`func_L00_00232EF0`](shared/func_L00_00232EF0.c) | shared | 1312 | BYTES 4/1312 | 99.7% |
@@ -288,7 +287,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L12_002677B4`](functional/func_L12_002677B4.c) | functional | 216 | ? | - |
 | [`func_L12_00304750`](functional/func_L12_00304750.c) | functional | 464 | ? | - |
 | [`func_L12_003061E0`](functional/func_L12_003061E0.c) | functional | 1708 | ? | - |
-| [`func_L12_0030A880`](l12_hoven/func_L12_0030A880.c) | l12_hoven | 152 | SIZE ours 144 / retail 152 | - |
 | [`func_L14_00316E60`](functional/func_L14_00316E60.c) | functional | 880 | ? | - |
 | [`func_L15_002D7C00`](shared/func_L15_002D7C00.c) | shared | 4012 | SIZE ours 3996 / retail 4012 | - |
 | [`func_L16_002D0B28`](functional/func_L16_002D0B28.c) | functional | 56 | ? | - |
