@@ -245,7 +245,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L00_0024E798`](game/func_L00_0024E798.c) | game | 352 | ? | - |
 | [`func_L00_0024EBF8`](game/func_L00_0024EBF8.c) | game | 40 | ? | - |
 | [`func_L00_0024EC20`](functional/func_L00_0024EC20.c) | functional | 28 | ? | - |
-| [`func_L00_0024F048`](functional/func_L00_0024F048.c) | functional | 12 | ? | - |
 | [`func_L00_00251328`](shared/func_L00_00251328.c) | shared | 48 | SIZE ours 52 / retail 48 | - |
 | [`func_L00_00251358`](shared/func_L00_00251358.c) | shared | 48 | SIZE ours 44 / retail 48 | - |
 | [`func_L00_00251388`](game/func_L00_00251388.c) | game | 64 | ? | - |
