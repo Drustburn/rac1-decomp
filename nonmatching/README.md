@@ -244,7 +244,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L01_00262FE8`](functional/func_L01_00262FE8.c) | functional | 848 | ? | - |
 | [`func_L01_00263338`](functional/func_L01_00263338.c) | functional | 656 | ? | - |
 | [`func_L01_002635C8`](functional/func_L01_002635C8.c) | functional | 312 | ? | - |
-| [`func_L01_002F0728`](shared/func_L01_002F0728.c) | shared | 296 | SIZE ours 292 / retail 296 | - |
 | [`func_L01_002F6540`](shared/func_L01_002F6540.c) | shared | 3984 | SIZE ours 3980 / retail 3984 | - |
 | [`func_L02_002100E8`](functional/func_L02_002100E8.c) | functional | 48 | ? | - |
 | [`func_L02_00250720`](functional/func_L02_00250720.c) | functional | 824 | ? | - |

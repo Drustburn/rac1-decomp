@@ -34278,7 +34278,7 @@
     {
      "name": "func_L01_002F0728",
      "size": "296",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "1071520",
      "metadata": {
       "virtual_address": "3082024"
