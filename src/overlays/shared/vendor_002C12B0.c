@@ -7,7 +7,460 @@
 #include "hero.h"
 #include "moby.h"
 
-INCLUDE_ASM("asm/overlays", func_L00_002C12B0);
+typedef int OvlQuad_2C12B0 __attribute__((mode(TI)));
+typedef union {
+    OvlQuad_2C12B0 q;
+    f32 f[4];
+    s32 i[4];
+} OvlVec4_2C12B0;
+typedef struct {
+    u8 pad0[0x18];
+    s32 moby;                      /* 0x18: 0 when no moby was hit */
+    s32 unk1C;
+    union {
+        OvlQuad_2C12B0 q;
+        f32 f[4];
+    } point;                       /* 0x20 */
+    u8 pad30[0x10];                /* 0x30: position after push-out */
+    f32 normal_x;                  /* 0x40 */
+    f32 normal_y;
+    f32 normal_z;
+} CollisionHit_2C12B0;
+typedef struct { char pad0[10]; unsigned char radius; char padB[5]; float height; } AimInfo_2C12B0;
+typedef struct {
+    OvlVec4_2C12B0 target,velocity,previous_position;
+    int timer,age;
+    struct Moby *target_moby,*last;
+    float turn_velocity,movement_speed,unknown48;
+    int unknown4C;
+    float f50,f54,f58,turn_rate;
+    struct Moby *owner;
+    float angle;
+    unsigned char mode;
+} DoomBotVars_2C12B0;
+typedef struct {
+    OvlVec4_2C12B0 target;
+    float vertical_speed,horizontal_speed,heading,gravity,radius,launch_frame,landing_lead;
+    unsigned char anim2C,anim2D,anim2E,mode2F;
+    float turn_velocity,speed,rate,max;
+} DoomBotJump_2C12B0;
+typedef struct {
+    char pad0[0x1EC0]; int damage;
+    float f1EC4,f1EC8,f1ECC,turn_velocity,movement_velocity;
+    int f1ED8;
+    float turn_k,turn_d,turn_max,yawlim;
+    char pad1EEC[4]; float f1EF0; char pad1EF4[8];
+    float move_k,move_d,move_max;
+    int f1F08; char pad1F0C[4]; DoomBotJump_2C12B0 config;
+    char pad1F50[0x130]; struct Moby *moby;
+} DoomBotParams_2C12B0;
+extern struct Hero hero_2C12B0 __asm__("D_0013F450");
+extern u8 item_text_variant_2C12B0[40] __asm__("D_0013E620");
+extern s32 level_mode_2C12B0 __asm__("D_L00_0015F6A8") MACRO_ADDR;
+extern f32 frame_scale_2C12B0 __asm__("D_0015EE60") MACRO_ADDR;
+extern f32 frame_time_sq_2C12B0 __asm__("D_0015EE70") MACRO_ADDR;
+extern CollisionHit_2C12B0 coll_hit_2C12B0 __asm__("D_L00_00173F40") NOT_SDA;
+extern char D_L00_00178000[], D_L00_001E9EC8[], D_L00_001E9EF0[];
+extern int find_moby_hit_2C12B0(void *,int,int) __asm__("func_L00_0025B478");
+extern f32 fast_vec_dist_2C12B0(void *,void *) __asm__("func_001F9D10");
+extern f32 vector_distance_xy_2C12B0(void *,void *) __asm__("func_001F9D48");
+extern f32 fast_arc_tan_2C12B0(f32,f32) __asm__("func_L00_001FF860");
+extern s32 truncate_float_to_s32_2C12B0(f32) __asm__("func_001FA898");
+extern s32 random_integer_below_2C12B0(s32) __asm__("func_002140B0");
+extern void *memset_2C12B0(void *,int,unsigned int) __asm__("func_001153FC");
+extern void debug_print_2C12B0(char *) __asm__("func_001E9730");
+extern void mark_moby_for_removal_2C12B0(void *) __asm__("func_0020D678");
+extern s32 fast_dec_timer_2C12B0(s32 *) __asm__("func_001F9908");
+extern void clamp_vector_length_2C12B0(void *,void *,f32) __asm__("func_L00_001FF548");
+extern f32 probe_ground_height_2C12B0(void *,s32,f32) __asm__("func_00214358");
+extern int suck_get_aim_height_2C12B0(char *) __asm__("func_L00_0025D390");
+extern int coll_sphere_2C12B0(void *,float,int,void *) __asm__("func_L00_001F10E0");
+extern s32 collision_line_2C12B0(void *,void *,s32,void *,s32) __asm__("func_L00_001EFFF0");
+extern void spawn_explosion_2C12B0(float,void *,void *,int,float,float,int,int,int,float,float,float,float,int,int,int,int,int) __asm__("func_L00_0025F4A8");
+extern int collect_mobies_in_sphere_2C12B0(void *,float,int,void *,void *) __asm__("func_L00_001F2BE8");
+extern void send_blast_hits_2C12B0(void *,void *,void *,int,void *,int,int,int,float,float,float) __asm__("func_L00_0025BA50");
+extern int allocate_voice_for_target_entry_2C12B0(int,int,void *) __asm__("func_0022ED80");
+extern int func_L00_001FF5B0_2C12B0(float,void *,void *) __asm__("func_L00_001FF5B0");
+extern void func_L00_002BFE98_2C12B0(char *) __asm__("func_L00_002BFE98");
+extern void func_L00_002BFED0_2C12B0(char *) __asm__("func_L00_002BFED0");
+extern void func_L00_002BFF08_2C12B0(char *) __asm__("func_L00_002BFF08");
+extern void func_L00_002BFF50_2C12B0(char *) __asm__("func_L00_002BFF50");
+extern int func_L00_002BFDB8_2C12B0(char *,int,void *) __asm__("func_L00_002BFDB8");
+extern void func_L00_00261478_2C12B0(void *,int,void *,void *,void *,void *) __asm__("func_L00_00261478");
+extern int func_L00_00259B08_2C12B0(void *,void *,int,int,float,float) __asm__("func_L00_00259B08");
+extern void func_L00_002592B0_2C12B0(void *,float *,float,float,float,float) __asm__("func_L00_002592B0");
+extern struct Moby *func_L00_002C0098_2C12B0(void *,void *,void *,void *,int) __asm__("func_L00_002C0098");
+extern float func_L00_002C0358_2C12B0(void *,void *,float,float,float,float,float,void *,void *,float) __asm__("func_L00_002C0358");
+extern int func_L00_002C0CF8_2C12B0(void *,void *,void *,int) __asm__("func_L00_002C0CF8");
+extern void func_L00_002C0BB8_2C12B0(void *,void *,void *) __asm__("func_L00_002C0BB8");
+extern int func_L00_002C11D0_2C12B0(void *) __asm__("func_L00_002C11D0");
+extern int func_L00_0025C498_2C12B0(void *,void *) __asm__("func_L00_0025C498");
+extern int func_L00_0025A060_2C12B0(void *,void *,void *,void *) __asm__("func_L00_0025A060");
+extern void fast_vec_add_2C12B0(void *,void *,void *) __asm__("func_001F9BD8");
+extern void fast_vec_sub_2C12B0(void *,void *,void *) __asm__("func_001F9BF0");
+extern void fast_vec_scale_2C12B0(void *,void *,f32) __asm__("func_001F9C30");
+extern f32 fast_vec_length_2C12B0(void *) __asm__("func_001F9CB8");
+extern void fast_vec_normalize_2C12B0(void *,void *,f32) __asm__("func_L00_001FF4B0");
+extern f32 fast_cos_2C12B0(f32) __asm__("func_001F9F90");
+extern f32 fast_sin_2C12B0(f32) __asm__("func_001F9FA8");
+extern f32 absolute_float_2C12B0(f32) __asm__("func_001F9B88");
+extern f32 convert_integer_to_float_2C12B0(s32) __asm__("func_001FA888");
+extern f32 fast_difference_between_rotations_2C12B0(f32,f32) __asm__("func_001FA850");
+extern int scale_game_frames_2C12B0(int) __asm__("func_001F9850");
+extern void blend_moby_animation_2C12B0(void *,int,int,int) __asm__("func_00213DE0");
+extern float random_float_between_2C12B0(float,float) __asm__("func_002140F8");
+
+/* Agent of Doom update (UpdateMoby_186): movement, target selection, jumps and detonation. Adapted from Lombyte
+   (GPL-3.0) for PAL: src/overlays/shared/gameplay/entities/trespasser.c, doom_bot_update (FUN_L00_002bffa8), which
+   carries this file's earlier near miss (nonmatching/shared/func_L00_002C12B0.c, BYTES 12/5996) to a match. PAL
+   calls the level copies of the vector helpers and func_001F9850 for the frame scaling where the US build calls
+   FUN_001f96f8 (func_001F98C0 here). */
+void func_L00_002C12B0(struct Moby *moby) {
+    enum {
+        DOOM_BOT_INITIALIZE = 0,
+        DOOM_BOT_ALIGN_TO_TARGET = 6,
+        DOOM_BOT_EXECUTE_JUMP = 7,
+        DOOM_BOT_COLLISION_RECOVERY_FALL = 8,
+        DOOM_BOT_DETONATE = 11,
+        DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION = 12,
+        DOOM_BOT_INITIAL_FALL = 14,
+        DOOM_BOT_RESET_TO_INITIALIZE = 15
+    };
+    OvlVec4_2C12B0 scratch[4];
+    float clearance;
+    DoomBotVars_2C12B0 *data;
+    struct Moby *target;
+    AimInfo_2C12B0 *aim;
+    float scale,speed,z,height,reach,angle,distance;
+    int blocked,move_flags,count,result;
+    unsigned char old_state;
+    if (!moby || !(data=(DoomBotVars_2C12B0 *)moby->pvars)) return;
+    if (level_mode_2C12B0==2) { moby->flags|=0x41; return; }
+    moby->flags &= 0xFFBE;
+    if (moby->pos.x<2.0f || moby->pos.x>1021.0f ||
+        moby->pos.y<2.0f || moby->pos.y>1021.0f ||
+        moby->pos.z<2.0f || moby->pos.z>1021.0f) { mark_moby_for_removal_2C12B0(moby); return; }
+    if (find_moby_hit_2C12B0(moby,0x800001,0)) moby->state=11;
+    scale=convert_integer_to_float_2C12B0(item_text_variant_2C12B0[0x14])+1.0f;
+    moby->scale += (moby->pclass->scale*scale-moby->scale)*0.05f;
+    speed=convert_integer_to_float_2C12B0(item_text_variant_2C12B0[0x14])*0.5f+1.0f;
+    if (moby->seq==0 || moby->seq==6 || moby->seq==7)
+        moby->anim_speed=speed/scale;
+    else moby->anim_speed=1.0f;
+    if (moby->state!=11) {
+        int damage=truncate_float_to_s32_2C12B0(scale*183.296f)+1;
+        DoomBotParams_2C12B0 *hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+        hp->damage=damage;
+        hp->f1EF0=0;
+        hp->f1EC4=scale*0.198f+0.02f;
+        if (moby->state==0) {
+            float frame,turn;
+            memset_2C12B0(&hp->config,0,64);
+            frame=frame_scale_2C12B0;
+            hp->f1ECC=hp->f1EC8=scale*0.25f;
+            data->movement_speed=frame*0.2f;
+            turn=scale*0.01f*frame;
+            data->turn_velocity=turn;
+            hp->turn_d=0.3f; hp->turn_max=2.7f;
+            hp->turn_k=turn; hp->f1ED8=0;
+            data->turn_rate=frame*0.066f*speed;
+            hp->config.anim2C=2; hp->config.anim2D=3; hp->config.anim2E=4;
+            hp->yawlim=3.1415927f;
+            hp->move_d=frame*0.01f;
+            hp->move_k=frame*0.02f;
+            hp->move_max=frame*0.045f;
+            hp->config.gravity=frame_time_sq_2C12B0*29.7f;
+            hp->config.radius=scale*0.1f;
+            hp->config.launch_frame=7.5f; hp->config.landing_lead=11.5f;
+            hp->config.speed=frame*0.02f;
+            hp->config.rate=frame*0.01f;
+            hp->config.max=frame*0.045f;
+            data->target_moby=0; moby->state=14; data->timer=0;
+            data->turn_rate=frame_scale_2C12B0*0.1f*speed;
+            func_L00_002BFE98_2C12B0((char*)data);
+            func_L00_002BFF08_2C12B0((char*)data);
+            if (moby->prev_seq!=5) blend_moby_animation_2C12B0(moby,5,0,scale_game_frames_2C12B0(5));
+        }
+        if (moby->state==13) {
+            if (!data->owner || data->owner->state==0xFE || data->owner->state==0xFD ||
+                moby->pos.x<2.0f || moby->pos.x>1021.0f ||
+                moby->pos.y<2.0f || moby->pos.y>1021.0f ||
+                moby->pos.z<2.0f || moby->pos.z>1021.0f) { mark_moby_for_removal_2C12B0(moby); return; }
+            return;
+        }
+        data->age++;
+        if (scale_game_frames_2C12B0(3600)<data->age) moby->state=11;
+        fast_dec_timer_2C12B0(&data->timer);
+        qcopy(&data->previous_position,&moby->pos);
+        if (func_L00_002BFDB8_2C12B0((char*)moby,5,0)) {
+            if (coll_hit_2C12B0.moby && coll_hit_2C12B0.unk1C<0 && (((struct Moby *)coll_hit_2C12B0.moby)->flags&0x1000) &&
+                ((struct Moby *)coll_hit_2C12B0.moby)->pclass && ((struct Moby *)coll_hit_2C12B0.moby)->pclass->type==5) {
+                moby->state=11;
+            } else if (!coll_hit_2C12B0.moby || coll_hit_2C12B0.unk1C<0) {
+                z=moby->pos.z;
+                qcopy_nc(&moby->pos,coll_hit_2C12B0.pad30);
+                if (absolute_float_2C12B0(moby->pos.z-z)>0.6f) moby->pos.z=z+0.01f;
+                qcopy(&data->velocity,&coll_hit_2C12B0.normal_x);
+                clamp_vector_length_2C12B0(&data->velocity,&data->velocity,frame_scale_2C12B0*0.05f);
+                func_L00_001FF5B0_2C12B0(frame_scale_2C12B0*0.05f,&data->velocity,&data->velocity);
+                moby->state=8;
+                if (data->target_moby) { data->last=data->target_moby; data->timer+=500; }
+                if (moby->prev_seq!=5) blend_moby_animation_2C12B0(moby,5,0,scale_game_frames_2C12B0(5));
+            }
+        }
+        if (moby->pos.z<0.1f) { mark_moby_for_removal_2C12B0(moby); return; }
+        if (data->timer>=4001) moby->state=11;
+    }
+    if (probe_ground_height_2C12B0(&moby->pos,0,0.5f)!=0 && coll_hit_2C12B0.moby)
+        func_L00_00261478_2C12B0(moby,coll_hit_2C12B0.moby,&moby->pos,&moby->rot,&moby->pos,&moby->rot);
+    switch (moby->state) {
+    case DOOM_BOT_INITIALIZE:
+        debug_print_2C12B0(D_L00_001E9EC8); moby->state=1; break;
+    case DOOM_BOT_COLLISION_RECOVERY_FALL: {
+        DoomBotParams_2C12B0 *hp;
+        fast_vec_add_2C12B0(&scratch[0],&moby->pos,&data->velocity);
+        data->velocity.f[2]-=frame_time_sq_2C12B0*9.0f;
+        func_L00_002BFE98_2C12B0((char*)data);
+        hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+        blocked=func_L00_00259B08_2C12B0(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
+        if (blocked) { data->velocity.f[2]=0; fast_vec_scale_2C12B0(&data->velocity,&data->velocity,0.5f); }
+        func_L00_001FF5B0_2C12B0(frame_scale_2C12B0*0.05f,&data->velocity,&data->velocity);
+        if (moby->anim_flags&2) {
+            if (!blocked) { if (moby->prev_seq!=5) blend_moby_animation_2C12B0(moby,5,0,scale_game_frames_2C12B0(5)); }
+            else moby->state=2;
+        }
+        goto Falling;
+    }
+    case 1: case 9: case 10:
+        if (moby->anim_flags&2) moby->state=2;
+        goto Contact;
+    case 2: case 3: case 4: case 5: {
+        target=data->target_moby;
+        if (target && target->state!=0xFE && target->state!=0xFD) {
+            height=target->pos.z;
+            aim=(AimInfo_2C12B0 *)suck_get_aim_height_2C12B0((char *)data->target_moby); reach=speed;
+            if (aim) { reach=speed+convert_integer_to_float_2C12B0(aim->radius)*0.125f; height+=aim->height; }
+            if (fast_vec_dist_2C12B0(&moby->pos,&data->target_moby->pos)<reach && coll_sphere_2C12B0(&moby->pos,speed,1,moby)) {
+                moby->state=11; break;
+            }
+            if (vector_distance_xy_2C12B0(&moby->pos,&data->target_moby->pos)<reach*0.5f &&
+                absolute_float_2C12B0(height-(moby->pos.z+speed*0.1f))<reach*0.5f) {
+                func_L00_002BFF08_2C12B0((char*)data);
+                func_L00_002C0BB8_2C12B0(moby,&((DoomBotParams_2C12B0*)&hero_2C12B0)->config,&data->target_moby->pos);
+                func_L00_002BFF50_2C12B0((char*)data);
+                qcopy(data,&data->target_moby->pos);
+                data->turn_rate=frame_scale_2C12B0*0.066f*speed;
+                if (moby->prev_seq!=0) blend_moby_animation_2C12B0(moby,0,0,scale_game_frames_2C12B0(2));
+                moby->state=6;
+            }
+        }
+        qcopy(&scratch[0],&moby->pos);
+        scratch[0].f[2]+=scale*0.3f;
+        if (random_integer_below_2C12B0(4)==0) data->target_moby=func_L00_002C0098_2C12B0(moby,&scratch[0],&moby->rot,data->last,1);
+        data->turn_rate=frame_scale_2C12B0*0.1f*speed;
+        moby->state=4;
+        if (!data->target_moby) {
+            angle=random_float_between_2C12B0(-3.1415927f,3.1415927f);
+            if (random_integer_below_2C12B0(4)==0) {
+                float step_height=scale*0.35f;
+                float range=4.0f;
+                float radius=convert_integer_to_float_2C12B0(((DoomBotParams_2C12B0*)&hero_2C12B0)->damage)*0.0009765625f;
+                data->angle=func_L00_002C0358_2C12B0(moby,&moby->pos,angle,1.84799564f,range,step_height,4.0f,0,&clearance,radius);
+            }
+            else clearance=5.0f;
+        }
+        if (data->target_moby && data->target_moby!=((DoomBotParams_2C12B0*)&hero_2C12B0)->moby &&
+            (!data->target_moby || data->target_moby->state==0xFE || data->target_moby->state==0xFD || !data->target_moby->pclass ||
+             data->target_moby->pclass->type!=5 || !(data->target_moby->flags&0x1000))) {
+            data->target_moby=0; moby->state=2;
+            data->turn_rate=frame_scale_2C12B0*0.0273f*speed;
+            break;
+        }
+        old_state=moby->state;
+        if (!data->target_moby) {
+            moby->state=5;
+            if (moby->prev_seq!=6) blend_moby_animation_2C12B0(moby,6,0,scale_game_frames_2C12B0(10));
+            data->turn_rate=frame_scale_2C12B0*0.0273f*speed;
+        } else {
+            if (random_integer_below_2C12B0(4)==0 && func_L00_002C0CF8_2C12B0(moby,data,&data->target_moby->pos,1)) {
+                qcopy(data,&data->target_moby->pos);
+                data->turn_rate=frame_scale_2C12B0*0.066f*speed;
+                if (moby->prev_seq!=0) blend_moby_animation_2C12B0(moby,0,0,scale_game_frames_2C12B0(2));
+                moby->state=6; break;
+            }
+            distance=vector_distance_xy_2C12B0(&moby->pos,&data->target_moby->pos);
+            { DoomBotParams_2C12B0 *hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+            if (data->target_moby==hp->moby) {
+                moby->state=5;
+                if ((moby->anim_flags&2) && moby->prev_seq!=6) blend_moby_animation_2C12B0(moby,6,0,scale_game_frames_2C12B0(0));
+                data->turn_rate=frame_scale_2C12B0*0.0273f*speed;
+            }
+            }
+            if (!(distance<8.0f) && distance>20.0f) {
+                moby->state=5;
+                if (moby->prev_seq!=0) blend_moby_animation_2C12B0(moby,0,0,scale_game_frames_2C12B0(10));
+                data->turn_rate=frame_scale_2C12B0*0.0273f*speed;
+            } else {
+                moby->state=4;
+                if (moby->prev_seq!=7) blend_moby_animation_2C12B0(moby,7,0,scale_game_frames_2C12B0(10));
+                data->turn_rate=frame_scale_2C12B0*0.1f*speed;
+            }
+            if (random_integer_below_2C12B0(4)==0) {
+                DoomBotParams_2C12B0 *hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+                Vec4f *target_pos=&data->target_moby->pos;
+                float range=4.0f;
+                float radius=convert_integer_to_float_2C12B0(hp->damage)*0.0009765625f;
+                data->angle=func_L00_002C0358_2C12B0(moby,&moby->pos,moby->rot.z,
+                    1.84799564f,range,0.35f,4.0f,target_pos,&clearance,radius);
+            }
+            else clearance=5.0f;
+        }
+        if (moby->state==4 && old_state==5) {
+            moby->state=12;
+            if (moby->prev_seq!=1) blend_moby_animation_2C12B0(moby,1,0,scale_game_frames_2C12B0(10));
+            goto Contact;
+        }
+        data->target.f[1]=moby->pos.y+fast_sin_2C12B0(data->angle)*5.0f;
+        data->target.f[0]=moby->pos.x+fast_cos_2C12B0(data->angle)*5.0f;
+        data->target.f[2]=moby->pos.z+1.0f;
+        func_L00_002BFE98_2C12B0((char*)data);
+        { DoomBotParams_2C12B0 *hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+        func_L00_002592B0_2C12B0(moby,&data->movement_speed,data->angle,hp->move_k,hp->move_d,hp->move_max);
+        }
+        fast_vec_scale_2C12B0(&scratch[3],&data->velocity,5.0f);
+        scratch[3].f[2]=0;
+        qcopy(&scratch[1],&moby->pos);
+        scratch[1].f[2]+=scale*0.15f;
+        fast_vec_add_2C12B0(&scratch[2],&scratch[1],&scratch[3]);
+        if (!collision_line_2C12B0(&scratch[1],&scratch[2],6,moby,0) || coll_hit_2C12B0.moby==(s32)data->target_moby ||
+            (coll_hit_2C12B0.moby && ((struct Moby *)coll_hit_2C12B0.moby)->pclass && ((struct Moby *)coll_hit_2C12B0.moby)->pclass->type==5)) {
+            z=moby->pos.z;
+            move_flags=func_L00_0025A060_2C12B0(moby,&((DoomBotParams_2C12B0*)&hero_2C12B0)->damage,data,&data->velocity);
+            if (absolute_float_2C12B0(moby->pos.z-z)>1.0f) {
+                moby->pos.z=z;
+                if (func_L00_002BFDB8_2C12B0((char*)moby,5,0)) {
+                    qcopy(&moby->pos,coll_hit_2C12B0.pad30);
+                    if (absolute_float_2C12B0(moby->pos.z-z)>1.0f) moby->pos.z=z;
+                }
+            }
+        } else {
+            clearance=0; move_flags=2;
+            data->velocity.f[0]=moby->pos.x-data->target.f[0];
+            data->velocity.f[1]=moby->pos.y-data->target.f[1];
+            data->velocity.f[2]=0.01f;
+            fast_vec_normalize_2C12B0(&data->velocity,&data->velocity,0.1f);
+        }
+        func_L00_002BFED0_2C12B0((char*)data);
+        if ((move_flags&2) || clearance<4.0f) {
+            if (func_L00_002C0CF8_2C12B0(moby,data,data,0)) {
+                data->turn_rate=frame_scale_2C12B0*0.066f*speed;
+                if (moby->prev_seq!=0) blend_moby_animation_2C12B0(moby,0,0,scale_game_frames_2C12B0(2));
+                moby->state=6; goto Contact;
+            }
+            if (data->target_moby) { data->last=data->target_moby; data->timer+=500; }
+            data->velocity.f[0]=moby->pos.x-data->target.f[0];
+            data->velocity.f[1]=moby->pos.y-data->target.f[1];
+            data->velocity.f[2]=0.01f;
+            fast_vec_normalize_2C12B0(&data->velocity,&data->velocity,0.1f);
+            moby->state=8;
+            if (moby->prev_seq!=5) blend_moby_animation_2C12B0(moby,5,0,scale_game_frames_2C12B0(5));
+            break;
+        }
+        goto Contact;
+    }
+    case DOOM_BOT_ALIGN_TO_TARGET: {
+        float heading=fast_arc_tan_2C12B0(data->target.f[0]-moby->pos.x,data->target.f[1]-moby->pos.y);
+        float *velocity;
+        DoomBotParams_2C12B0 *hp;
+        func_L00_002BFE98_2C12B0((char*)data);
+        velocity=&((DoomBotParams_2C12B0*)&hero_2C12B0)->movement_velocity;
+        hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+        func_L00_002592B0_2C12B0(moby,velocity,heading,2.0f*hp->move_k,0.5f*hp->move_d,2.0f*hp->move_max);
+        func_L00_002BFED0_2C12B0((char*)data);
+        if (fast_difference_between_rotations_2C12B0(moby->rot.z,heading)<0.08726646f) {
+            blend_moby_animation_2C12B0(moby,hp->config.anim2C,0,scale_game_frames_2C12B0(3));
+            moby->state=7;
+        }
+        goto Contact;
+    }
+    case DOOM_BOT_EXECUTE_JUMP:
+        z=moby->pos.z;
+        func_L00_002BFF08_2C12B0((char*)data);
+        result=func_L00_0025C498_2C12B0(moby,&((DoomBotParams_2C12B0*)&hero_2C12B0)->config);
+        if (result==4) {
+            moby->state=result;
+            if (moby->prev_seq!=7) blend_moby_animation_2C12B0(moby,7,0,scale_game_frames_2C12B0(3));
+            data->turn_rate=frame_scale_2C12B0*0.1f*speed;
+        }
+        func_L00_002BFF50_2C12B0((char*)data);
+        absolute_float_2C12B0(moby->pos.z-z);
+        goto Contact;
+    case DOOM_BOT_DETONATE: {
+        if (!(moby->pos.x<2.0f) && !(moby->pos.x>1021.0f) &&
+            !(moby->pos.y<2.0f) && !(moby->pos.y>1021.0f) &&
+            !(moby->pos.z<2.0f) && !(moby->pos.z>1021.0f)) {
+            qcopy(&scratch[1],&moby->pos);
+            scratch[2].q=0; scratch[2].f[2]=1.0f; scratch[2].f[3]=1.0f;
+            spawn_explosion_2C12B0(0.0f,moby,&scratch[2],(int)&moby->pos,0.0f,2.0f*speed,5,2,4,speed,9.0f,1.0f,15.0f,-1,1,5,-1,item_text_variant_2C12B0[0x14]);
+            scratch[1].f[2]+=scale*0.5f;
+            count=collect_mobies_in_sphere_2C12B0(&moby->pos,speed,0x15,moby,0);
+            scratch[3].q=*(OvlQuad_2C12B0 *)&moby->pos;
+            send_blast_hits_2C12B0(moby,&scratch[3],D_L00_00178000,count,0,0x10000,2,3,3.0f,1.0f,1.0f);
+            if (item_text_variant_2C12B0[0x14]) allocate_voice_for_target_entry_2C12B0(4,0,moby); else allocate_voice_for_target_entry_2C12B0(0,0,moby);
+        }
+    }
+    mark_moby_for_removal_2C12B0(moby);
+    return;
+    case DOOM_BOT_WAIT_FOR_TRANSITION_ANIMATION:
+        if (moby->anim_flags&2) {
+            moby->state=4;
+            if (moby->prev_seq!=7) blend_moby_animation_2C12B0(moby,7,0,scale_game_frames_2C12B0(10));
+            data->turn_rate=frame_scale_2C12B0*0.1f*speed;
+        }
+        break;
+    case 13:
+        debug_print_2C12B0(D_L00_001E9EF0); break;
+    case DOOM_BOT_INITIAL_FALL: {
+        DoomBotParams_2C12B0 *hp;
+        fast_vec_add_2C12B0(&scratch[1],&moby->pos,&data->velocity);
+        if (coll_sphere_2C12B0(&moby->pos,scale*0.5f,1,moby) && coll_hit_2C12B0.moby && ((struct Moby *)coll_hit_2C12B0.moby)->oclass==186) {
+            fast_vec_sub_2C12B0(&scratch[1],coll_hit_2C12B0.pad30,&moby->pos);
+            distance=fast_vec_length_2C12B0(&scratch[1]);
+            scratch[1].f[2]=0;
+            fast_vec_normalize_2C12B0(&scratch[1],&scratch[1],distance*1.1f);
+            fast_vec_add_2C12B0(&moby->pos,&moby->pos,&scratch[1]);
+        }
+        data->velocity.f[2]-=frame_time_sq_2C12B0*9.0f;
+        func_L00_002BFE98_2C12B0((char*)data);
+        hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+        blocked=func_L00_00259B08_2C12B0(moby,&data->velocity,hp->damage,0,scale*0.7f,hp->f1EF0)&2;
+        if (blocked) { data->velocity.f[2]=0; fast_vec_scale_2C12B0(&data->velocity,&data->velocity,0.5f); }
+        clamp_vector_length_2C12B0(&data->velocity,&data->velocity,frame_scale_2C12B0*0.05f);
+        if (!blocked) { if (moby->prev_seq!=5) blend_moby_animation_2C12B0(moby,5,0,scale_game_frames_2C12B0(5)); }
+        else moby->state=2;
+    }
+    /* Fakematch: the do-while(0) splits the scheduling region. */
+Falling: do {
+        float direction=fast_arc_tan_2C12B0(data->velocity.f[0],data->velocity.f[1]);
+        DoomBotParams_2C12B0 *hp=(DoomBotParams_2C12B0*)&hero_2C12B0;
+        func_L00_002592B0_2C12B0(moby,&data->turn_velocity,direction,
+            hp->turn_k,hp->turn_d,hp->turn_max);
+        /* Fakematch: no-op update of data; it depends on the a1 setup, so a1 is scheduled before a0. */
+        data=(DoomBotVars_2C12B0*)((int)data|((unsigned char)(int)data>>8));
+    } while (0);
+        func_L00_002BFED0_2C12B0((char*)data);
+Contact:
+        /* Fakematch: the zero term keeps data live so combine keeps the no-op update above. */
+        moby->state=func_L00_002C11D0_2C12B0(moby)|((unsigned char)(int)data>>8);
+        break;
+    case DOOM_BOT_RESET_TO_INITIALIZE: moby->state=0; break;
+    default: moby->state=0; break;
+    }
+    if (moby->pos.x<2.0f || moby->pos.x>1021.0f ||
+        moby->pos.y<2.0f || moby->pos.y>1021.0f ||
+        moby->pos.z<2.0f || moby->pos.z>1021.0f) mark_moby_for_removal_2C12B0(moby);
+    return;
+}
 extern unsigned char D_0013A5E0[] NOT_SDA;
 extern unsigned char D_0013E633[] NOT_SDA;
 extern void func_L00_002C2A80(void *);
