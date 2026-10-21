@@ -1,21 +1,21 @@
 {
  "measures": {
-  "fuzzy_match_percent": 98.53641965893718,
+  "fuzzy_match_percent": 98.5765966531379,
   "total_code": "3713568",
-  "matched_code": "3635852",
-  "matched_code_percent": 97.90724176856328,
+  "matched_code": "3637344",
+  "matched_code_percent": 97.947418762764,
   "total_functions": 5124,
-  "matched_functions": 5064,
-  "matched_functions_percent": 98.82903981264637,
-  "complete_code": "2051884",
-  "complete_code_percent": 55.25370748563107,
+  "matched_functions": 5065,
+  "matched_functions_percent": 98.84855581576893,
+  "complete_code": "2062708",
+  "complete_code_percent": 55.5451791915484,
   "total_units": 141,
-  "complete_units": 123,
+  "complete_units": 124,
   "total_data": "699072",
   "matched_data": "3852",
   "matched_data_percent": 0.5510162043394672,
-  "complete_data": "2900",
-  "complete_data_percent": 0.4148356678568159
+  "complete_data": "2932",
+  "complete_data_percent": 0.4194131648814428
  },
  "units": [
   {
@@ -10955,17 +10955,17 @@
   {
    "name": "game/loaders",
    "measures": {
-    "fuzzy_match_percent": 86.21581670362158,
+    "fuzzy_match_percent": 100.0,
     "total_code": "10824",
-    "matched_code": "9332",
-    "matched_code_percent": 86.21581670362158,
+    "matched_code": "10824",
+    "matched_code_percent": 100.0,
     "total_functions": 22,
-    "matched_functions": 21,
-    "matched_functions_percent": 95.45454545454545,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 22,
+    "matched_functions_percent": 100.0,
+    "complete_code": "10824",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -11097,7 +11097,7 @@
     {
      "name": "func_00204340",
      "size": "1492",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "6296",
      "metadata": {
       "virtual_address": "2114368"
@@ -11168,7 +11168,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/game/loaders.c",
     "progress_categories": [
      "executable",
@@ -49826,20 +49826,20 @@
    "id": "executable",
    "name": "Executable",
    "measures": {
-    "fuzzy_match_percent": 96.75374320296191,
+    "fuzzy_match_percent": 97.07415965845152,
     "total_code": "465644",
-    "matched_code": "450528",
-    "matched_code_percent": 96.75374320296191,
+    "matched_code": "452020",
+    "matched_code_percent": 97.07415965845152,
     "total_functions": 1692,
-    "matched_functions": 1675,
-    "matched_functions_percent": 98.99527186761229,
-    "complete_code": "351704",
-    "complete_code_percent": 75.53066290986247,
+    "matched_functions": 1676,
+    "matched_functions_percent": 99.05437352245863,
+    "complete_code": "362528",
+    "complete_code_percent": 77.8551855065243,
     "total_data": "699072",
     "matched_data": "3852",
     "matched_data_percent": 0.5510162043394672,
-    "complete_data": "2900",
-    "complete_data_percent": 0.4148356678568159
+    "complete_data": "2932",
+    "complete_data_percent": 0.4194131648814428
    }
   },
   {
@@ -49861,15 +49861,15 @@
    "id": "game",
    "name": "Executable game code",
    "measures": {
-    "fuzzy_match_percent": 96.6800787152546,
+    "fuzzy_match_percent": 97.00776610324348,
     "total_code": "455312",
-    "matched_code": "440196",
-    "matched_code_percent": 96.6800787152546,
+    "matched_code": "441688",
+    "matched_code_percent": 97.00776610324348,
     "total_functions": 1658,
-    "matched_functions": 1641,
-    "matched_functions_percent": 98.97466827503015,
-    "complete_code": "341372",
-    "complete_code_percent": 74.97540148293918
+    "matched_functions": 1642,
+    "matched_functions_percent": 99.03498190591074,
+    "complete_code": "352196",
+    "complete_code_percent": 77.35267245317496
    }
   },
   {
