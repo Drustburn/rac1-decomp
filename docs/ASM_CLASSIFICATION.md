@@ -83,6 +83,18 @@ On 2026-10-19, 23 more were listed: the remaining fastfunc.o scalar helpers
 address, mid-function jump), func_0023C910 (labelled hand-written: `ei` and a
 mid-function `.align`) and memcmp func_001151B4 (MMI `pxor`/`pcpyud`).
 
+On 2026-10-21, memcpy func_00115248, memmove func_001152F8 and memset
+func_001153FC were listed. Their code uses no instruction a compiler could not
+emit (`lq`/`sq`, `ld`/`sd`, byte loops), so the disassembler does not mark them,
+but the SDK's own `libc.a` (in the toolchain, `ee/lib/libc.a`) says where they
+came from: the debug section of each member names its source file, and
+`memcpy.o`, `memmove.o` and `memset.o` were assembled from
+`newlib/libc/machine/r5900/memcpy.S`, `memmove.S` and `memset.S`. The members
+already listed as original assembly read the same way (`memcmp.o`, `strlen.o`,
+`strcpy.o`, `strncpy.o`: `r5900/*.S`), while the libc functions matched in C
+name C files (`mallocr.o`: `stdlib/mallocr.c`, `mbtowc_r.o`:
+`stdlib/mbtowc_r.c`). The members' code is retail's, byte for byte.
+
 ### Hand-written level functions
 
 Level code also has functions written as assembly. `config/overlays/handwritten_asm.txt`
