@@ -291,7 +291,6 @@ Each file is the best attempt so far at a level function that isn't exact yet.
 | [`func_L02_00250C78`](functional/func_L02_00250C78.c) | functional | 836 | ? | - |
 | [`func_L02_002FCE00`](shared/func_L02_002FCE00.c) | shared | 2244 | SIZE ours 2236 / retail 2244 | - |
 | [`func_L05_002D28D0`](functional/func_L05_002D28D0.c) | functional | 1960 | ? | - |
-| [`func_L05_0030D678`](functional/func_L05_0030D678.c) | functional | 908 | ? | - |
 | [`func_L06_00216B38`](functional/func_L06_00216B38.c) | functional | 940 | ? | - |
 | [`func_L06_002172B0`](functional/func_L06_002172B0.c) | functional | 8 | ? | - |
 | [`func_L06_003089B8`](functional/func_L06_003089B8.c) | functional | 1740 | ? | - |
