@@ -3062,7 +3062,254 @@ void ParticleFieldUpdate(P *p) {
         return;
     }
 }
-INCLUDE_ASM("asm/overlays", func_L00_002D8898);
+typedef struct {
+    float x, y, z, w;
+} V_2D8898;
+typedef struct {
+    s16 start; /* 00 */
+    s16 count; /* 02 */
+    int idx;   /* 04 */
+    char pad08[0x18];
+    float unk20, unk24, unk28; /* 20 24 28 */
+    s16 h2C, h2E;        /* 2C 2E */
+    int x30, x34;        /* 30 34 */
+    int col;             /* 38 */
+    u8 c0, c1, c2;       /* 3C 3D 3E */
+    u8 pad3F;
+    s16 extra;  /* 40 */
+    s16 flag42; /* 42 */
+    float f44, f48, f4C, f50;
+    int texture;      /* 54 */
+    int mesh_texture; /* 58 */
+    u8 mesh_alpha, mesh_red, mesh_green, mesh_blue; /* 5C..5F */
+} Q_2D8898;
+typedef struct {
+    V_2D8898 v0, v1, v2;
+    float pos[3];
+    float w;
+    u8 pad[0x40];
+} T_2D8898;
+typedef struct {
+    u8 pad0[4];
+    int x04;
+    u8 pad08[2];
+    u8 b0A;
+    u8 b0B;
+} E2_2D8898;
+typedef struct {
+    u8 pad0[3];
+    u8 b03;
+    u8 pad4[6];
+    s16 h0A;
+    u8 pad0C[0x14];
+    E2_2D8898 sub;
+} E_2D8898;
+typedef struct {
+    u8 pad[0x10];
+    V_2D8898 pos;
+    u8 state;
+    u8 pad21[0xF];
+    u8 b30;
+    u8 pad31[0x47];
+    Q_2D8898 *q;
+} P_2D8898;
+struct GeometryQuad_2D8898 {
+    Vec4 positions[4];             /* 0x00 */
+    u32 colors[4];                 /* 0x40 */
+    f32 texture_coordinates[4][2]; /* 0x50 */
+    union {
+        u64 value;
+        volatile u64 ordered;
+    } reserved;                    /* 0x70 */
+    u64 texture;                   /* 0x78 */
+    u64 texture_state;             /* 0x80 */
+    u64 primitive;                 /* 0x88 */
+};
+extern float D_L00_001D05E0_2D8898[] __asm__("D_L00_001D05E0");
+extern float D_L00_001D18A0_2D8898[] __asm__("D_L00_001D18A0");
+extern float D_L00_001D34C0_2D8898[] __asm__("D_L00_001D34C0");
+extern float D_L00_001D4780_2D8898[] __asm__("D_L00_001D4780");
+extern s16 D_L00_001D63A0_2D8898[] __asm__("D_L00_001D63A0");
+extern u8 D_L00_001D3010_2D8898[] __asm__("D_L00_001D3010");
+extern s16 D_L00_001D6D00_2D8898[] __asm__("D_L00_001D6D00");
+extern float D_L00_0016143C_2D8898 __asm__("D_L00_0016143C") MACRO_ADDR;
+extern float D_L00_0016144C_2D8898 __asm__("D_L00_0016144C") MACRO_ADDR;
+extern float D_L00_00161454_2D8898 __asm__("D_L00_00161454") MACRO_ADDR;
+extern int D_L00_001E16D0_2D8898[][4] __asm__("D_L00_001E16D0");
+extern float D_L00_001E1610_2D8898[][4] __asm__("D_L00_001E1610");
+extern float D_L00_001E1790_2D8898[] __asm__("D_L00_001E1790");
+extern float D_L00_001E1794_2D8898[] __asm__("D_L00_001E1794");
+extern float D_L00_001E14F0_2D8898[][4] __asm__("D_L00_001E14F0");
+extern float D_L00_001E1530_2D8898[] __asm__("D_L00_001E1530");
+extern float D_L00_001E1550_2D8898[][4] __asm__("D_L00_001E1550");
+extern float D_L00_001E1730_2D8898[] __asm__("D_L00_001E1730");
+extern float D_L00_001E1734_2D8898[] __asm__("D_L00_001E1734");
+extern V_2D8898 D_L00_001CBAE0_2D8898[] __asm__("D_L00_001CBAE0");
+extern u8 D_L00_001D2B60_2D8898[] __asm__("D_L00_001D2B60");
+extern s16 D_L00_001D5A40_2D8898[] __asm__("D_L00_001D5A40");
+extern T_2D8898 * D_L00_001601AC_2D8898 __asm__("D_L00_001601AC") MACRO_ADDR;
+extern V_2D8898 D_L00_00166EC0_2D8898 __asm__("D_L00_00166EC0");
+extern unsigned short D_L00_00161450_2D8898 SDATA(D_L00_00161450);
+extern int D_L00_00161A68_2D8898 SDATA(D_L00_00161A68);
+extern float D_L00_00161A6C_2D8898 SDATA(D_L00_00161A6C);
+extern u8 D_L00_00161A70_2D8898[4] SDATA(D_L00_00161A70);
+extern u8 D_L00_00161A78_2D8898[8] SDATA(D_L00_00161A78);
+extern f32 frame_scale_2D8898 __asm__("D_0015EE60") MACRO_ADDR;
+extern void func_L00_002D90A0_2D8898(P_2D8898 *, int) __asm__("func_L00_002D90A0");
+extern f32 convert_integer_to_float_2D8898(s32) __asm__("func_001FA888");
+extern int fast_dec_timer_s16_2D8898(void *) __asm__("func_001F9938");
+extern void fast_draw_quad_real_2D8898(void *, int, int) __asm__("func_L00_001FD1D8");
+extern void fast_vec_cross_2D8898(void *, void *, void *) __asm__("func_001F9CA0");
+extern void fast_vec_normalize_2D8898(void *, void *, f32) __asm__("func_L00_001FF4B0");
+extern void fast_vec_scale_2D8898(void *, void *, f32) __asm__("func_001F9C30");
+extern void fast_vec_sub_2D8898(void *, void *, void *) __asm__("func_001F9BF0");
+extern s32 random_integer_below_2D8898(s32) __asm__("func_002140B0");
+extern void transform_vector_2D8898(void *, void *, void *) __asm__("func_001F9EE8");
+extern int truncate_float_to_s32_2D8898(float) __asm__("func_001FA898");
+extern void vu1_add_g_sregister_2D8898(s32, s64) __asm__("func_00234C98");
+extern s64 get_effect_texture_2D8898(s32) __asm__("func_001F4868");
+
+/* Draw callback of the smoke/fire particle spawner (registered by the update above with AddDrawCallback): draws
+   the live particles of its range in the level's particle pool as camera-facing quads, then the spawner's own
+   mesh. Adapted from Lombyte (GPL-3.0) for PAL: src/overlays/shared/gameplay/entities/veldin_ship.c,
+   FUN_L00_002d73e8, which carries this file's earlier near miss (nonmatching/shared/func_L00_002D8898.c) to a
+   match. The pool pointer D_L00_001601AC and the floats D_L00_0016143C/4C/54 are MACRO_ADDR (retail loads them
+   through the lui macro). The file declares the function as a void(void) callback, hence the alias. */
+void func_L00_002D8898_r(P_2D8898 *spawner) __asm__("func_L00_002D8898");
+void func_L00_002D8898_r(P_2D8898 *spawner) {
+    Vec4 position, up;
+    Vec4 facing[4], flipped[4];
+    struct GeometryQuad_2D8898 quad;
+    Q_2D8898 *q = spawner->q;
+    T_2D8898 *volume;
+    int mesh_alpha, mesh_color, end;
+    Vec4 *transform;
+    int alpha, i, k, j, index, l;
+    float width, height, phase, one;
+    float *vertex;
+    Vec4 *front;
+    int (*rows)[4];
+
+    mesh_alpha = q->mesh_alpha << 24;
+    mesh_color = q->mesh_blue << 16 | q->mesh_green << 8 | q->mesh_red;
+    volume = &D_L00_001601AC_2D8898[q->idx];
+    end = q->start + q->count + q->extra;
+    qcopy(&position, &spawner->pos);
+    up.q = 0;
+    position.f[3] = 1.0f;
+    up.f[2] = 1.0f;
+    fast_vec_sub_2D8898(&facing[0], &D_L00_00166EC0_2D8898, &position);
+    fast_vec_normalize_2D8898(&facing[0], &facing[0], 1.0f);
+    fast_vec_cross_2D8898(&facing[1], &facing[0], &up);
+    fast_vec_normalize_2D8898(&facing[1], &facing[1], 1.0f);
+    fast_vec_cross_2D8898(&facing[2], &facing[1], &facing[0]);
+    qcopy(&facing[3], &position);
+    /* Fakematch: the do-while(0) gives flipped's address s1 and facing's s2 as retail does. */
+    do {
+        fast_vec_scale_2D8898(&flipped[0], &facing[0], -1.0f);
+        fast_vec_cross_2D8898(&flipped[1], &flipped[0], &up);
+        fast_vec_normalize_2D8898(&flipped[1], &flipped[1], 1.0f);
+        fast_vec_cross_2D8898(&flipped[2], &flipped[1], &flipped[0]);
+        qcopy(&flipped[3], &facing[3]);
+    } while (0);
+    /* Fakematch: called as returning int (the draw above needs the s64 prototype) so
+     * the texture is sign-extended into the quad as retail does. */
+    quad.texture = ((int (*)(int))get_effect_texture_2D8898)(q->texture + 0x28);
+    quad.texture_state = 0xFF9000000260L;
+    quad.primitive = 0x8000000048L;
+    quad.reserved.value = 0;
+    vu1_add_g_sregister_2D8898(0x4A, 0);
+    vu1_add_g_sregister_2D8898(0x47, 0x51001);
+    /* Fakematch: the front copy gives the GCSE copy of facing's address a source with
+     * no s2 preference, so the final loop's pointers rotate as retail. */
+    front = facing;
+    for (i = q->start; i < end; i++) {
+        phase = D_L00_001D34C0_2D8898[i] - D_L00_001D4780_2D8898[i] * frame_scale_2D8898;
+        D_L00_001D34C0_2D8898[i] = phase;
+        transform = D_L00_001D2B60_2D8898[i] ? flipped : front;
+        if (phase <= -8.0f) {
+            D_L00_001D34C0_2D8898[i] = phase + 8.0f;
+        }
+        transform_vector_2D8898(&transform[3], &D_L00_001CBAE0_2D8898[i], volume);
+        width = D_L00_001D05E0_2D8898[i];
+        height = D_L00_001D18A0_2D8898[i];
+        if (D_L00_001D3010_2D8898[i]) {
+            /* Fakematch: reading the index table through rows sets its address ahead of the
+             * primitive constant, which then takes v1 as retail. */
+            rows = D_L00_001E16D0_2D8898;
+            quad.primitive = 0x8000000044L;
+            one = 1.0f;
+            for (k = 2; k < 4; k++) {
+                for (j = 0; j < 4; j++) {
+                    index = rows[k][j];
+                    vertex = D_L00_001E1610_2D8898[index];
+                    quad.positions[j].f[0] = vertex[0];
+                    quad.positions[j].f[1] = vertex[1] * width;
+                    quad.positions[j].f[2] = vertex[2] * height;
+                    quad.positions[j].f[3] = one;
+                    transform_vector_2D8898(&quad.positions[j], &quad.positions[j], transform);
+                    quad.texture_coordinates[j][0] = D_L00_001E1794_2D8898[index * 2] + D_L00_001D34C0_2D8898[i];
+                    quad.texture_coordinates[j][1] = D_L00_001E1790_2D8898[index * 2];
+                    quad.colors[j] = mesh_alpha * D_L00_00161A78_2D8898[index] | mesh_color;
+                }
+                fast_draw_quad_real_2D8898(&quad, 0, 0);
+            }
+        } else {
+            if (D_L00_001D5A40_2D8898[i]) {
+                fast_dec_timer_s16_2D8898(&D_L00_001D5A40_2D8898[i]);
+                alpha = truncate_float_to_s32_2D8898((1.0f - convert_integer_to_float_2D8898(D_L00_001D5A40_2D8898[i]) * D_L00_0016144C_2D8898) * D_L00_00161A6C_2D8898);
+            } else if (D_L00_001D63A0_2D8898[i]) {
+                if (fast_dec_timer_s16_2D8898(&D_L00_001D63A0_2D8898[i])) {
+                    func_L00_002D90A0_2D8898(spawner, i);
+                    alpha = 0;
+                    D_L00_001D2B60_2D8898[i] = random_integer_below_2D8898(2);
+                } else {
+                    alpha = truncate_float_to_s32_2D8898(convert_integer_to_float_2D8898(D_L00_001D63A0_2D8898[i]) * D_L00_00161454_2D8898 * D_L00_00161A6C_2D8898);
+                }
+            } else {
+                if (fast_dec_timer_s16_2D8898(&D_L00_001D6D00_2D8898[i])) {
+                    D_L00_001D63A0_2D8898[i] = D_L00_00161450_2D8898;
+                }
+                alpha = D_L00_00161A68_2D8898;
+            }
+            alpha <<= 24;
+            quad.primitive = 0x8000000048L;
+            one = 1.0f;
+            for (l = 0; l < 4; l++) {
+                quad.positions[l].f[0] = D_L00_001E14F0_2D8898[l][0];
+                quad.positions[l].f[1] = D_L00_001E14F0_2D8898[l][1] * width;
+                quad.positions[l].f[2] = D_L00_001E14F0_2D8898[l][2] * height;
+                quad.positions[l].f[3] = one;
+                quad.texture_coordinates[l][0] = D_L00_001E1530_2D8898[l * 2] - D_L00_001D34C0_2D8898[i];
+                quad.texture_coordinates[l][1] = D_L00_001E1530_2D8898[l * 2 + 1];
+                quad.colors[l] = alpha * D_L00_00161A70_2D8898[l] | q->col;
+                transform_vector_2D8898(&quad.positions[l], &quad.positions[l], transform);
+            }
+            fast_draw_quad_real_2D8898(&quad, 0, 0);
+        }
+    }
+    quad.texture = ((int (*)(int))get_effect_texture_2D8898)(q->mesh_texture + 0x28);
+    quad.primitive = 0x8000000044L;
+    qcopy(&facing[3], volume->pos);
+    facing[3].f[2] -= q->f50;
+    if (q->flag42 == 0) {
+        for (k = 0; k < 6; k++) {
+            for (j = 0; j < 4; j++) {
+                index = D_L00_001E16D0_2D8898[k][j];
+                vertex = D_L00_001E1550_2D8898[index];
+                quad.positions[j].f[0] = vertex[0];
+                quad.positions[j].f[1] = vertex[1] * q->f48;
+                quad.positions[j].f[2] = vertex[2] * q->f4C;
+                quad.positions[j].f[3] = 1.0f;
+                transform_vector_2D8898(&quad.positions[j], &quad.positions[j], facing);
+                quad.texture_coordinates[j][0] = D_L00_001E1734_2D8898[index * 2] + D_L00_0016143C_2D8898;
+                quad.texture_coordinates[j][1] = D_L00_001E1730_2D8898[index * 2];
+                quad.colors[j] = D_L00_00161A78_2D8898[index] * 0xFF000000 | mesh_color;
+            }
+            fast_draw_quad_real_2D8898(&quad, 0, 0);
+        }
+    }
+}
 extern f32 func_002140F8_2D90A0(f32, f32) __asm__("func_002140F8");
 typedef struct {
     s16 start; /* 00 */
