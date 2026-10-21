@@ -1,16 +1,16 @@
 {
  "measures": {
-  "fuzzy_match_percent": 87.7166944460633,
+  "fuzzy_match_percent": 88.18496656543483,
   "total_code": "3706344",
-  "matched_code": "3235732",
-  "matched_code_percent": 87.30252777400047,
+  "matched_code": "3263480",
+  "matched_code_percent": 88.05119006762459,
   "total_functions": 5109,
-  "matched_functions": 4951,
-  "matched_functions_percent": 96.90741828146409,
-  "complete_code": "431328",
-  "complete_code_percent": 11.637559816358115,
+  "matched_functions": 4974,
+  "matched_functions_percent": 97.35760422783324,
+  "complete_code": "503904",
+  "complete_code_percent": 13.595715886059146,
   "total_units": 140,
-  "complete_units": 98
+  "complete_units": 99
  },
  "units": [
   {
@@ -18454,13 +18454,13 @@
   {
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 92.77381581960478,
+    "fuzzy_match_percent": 92.88358695798591,
     "total_code": "1187792",
-    "matched_code": "1096504",
-    "matched_code_percent": 92.31447930277355,
+    "matched_code": "1103208",
+    "matched_code_percent": 92.87888788609453,
     "total_functions": 1939,
-    "matched_functions": 1898,
-    "matched_functions_percent": 97.88550799381125,
+    "matched_functions": 1903,
+    "matched_functions_percent": 98.14337287261475,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -22880,7 +22880,7 @@
     {
      "name": "func_L00_00244AE0",
      "size": "4264",
-     "fuzzy_match_percent": 99.98,
+     "fuzzy_match_percent": 100.0,
      "address": "371056",
      "metadata": {
       "virtual_address": "2382456"
@@ -27623,7 +27623,7 @@
     {
      "name": "func_L00_00286128",
      "size": "440",
-     "fuzzy_match_percent": 99.32,
+     "fuzzy_match_percent": 100.0,
      "address": "638456",
      "metadata": {
       "virtual_address": "2649856"
@@ -31331,7 +31331,7 @@
     {
      "name": "func_L16_002D4C78",
      "size": "1296",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "960416",
      "metadata": {
       "virtual_address": "2971816"
@@ -33941,7 +33941,7 @@
     {
      "name": "func_L02_002EEA90",
      "size": "592",
-     "fuzzy_match_percent": 99.83,
+     "fuzzy_match_percent": 100.0,
      "address": "1066296",
      "metadata": {
       "virtual_address": "3077696"
@@ -34544,7 +34544,7 @@
     {
      "name": "func_L07_002F9438",
      "size": "112",
-     "fuzzy_match_percent": 97.32,
+     "fuzzy_match_percent": 100.0,
      "address": "1109736",
      "metadata": {
       "virtual_address": "3121136"
@@ -37335,13 +37335,13 @@
   {
    "name": "Level 03: Kerwan",
    "measures": {
-    "fuzzy_match_percent": 83.13376344802319,
+    "fuzzy_match_percent": 83.13626219898079,
     "total_code": "120092",
-    "matched_code": "99716",
-    "matched_code_percent": 83.03300802717916,
+    "matched_code": "99840",
+    "matched_code_percent": 83.13626219898079,
     "total_functions": 75,
-    "matched_functions": 73,
-    "matched_functions_percent": 97.33333333333333,
+    "matched_functions": 74,
+    "matched_functions_percent": 98.66666666666667,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -37846,7 +37846,7 @@
     {
      "name": "func_L03_002DDD78",
      "size": "124",
-     "fuzzy_match_percent": 97.58,
+     "fuzzy_match_percent": 100.0,
      "address": "883552",
      "metadata": {
       "virtual_address": "3008816"
@@ -40152,17 +40152,17 @@
   {
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 99.99586033950617,
+    "fuzzy_match_percent": 100.0,
     "total_code": "72576",
-    "matched_code": "72428",
-    "matched_code_percent": 99.7960758377425,
+    "matched_code": "72576",
+    "matched_code_percent": 100.0,
     "total_functions": 80,
-    "matched_functions": 79,
-    "matched_functions_percent": 98.75,
-    "complete_code": "0",
-    "complete_code_percent": 0.0,
+    "matched_functions": 80,
+    "matched_functions_percent": 100.0,
+    "complete_code": "72576",
+    "complete_code_percent": 100.0,
     "total_units": 1,
-    "complete_units": 0
+    "complete_units": 1
    },
    "functions": [
     {
@@ -40348,7 +40348,7 @@
     {
      "name": "func_L07_0030E820",
      "size": "148",
-     "fuzzy_match_percent": 97.97,
+     "fuzzy_match_percent": 100.0,
      "address": "688080",
      "metadata": {
       "virtual_address": "3208152"
@@ -40887,7 +40887,7 @@
     }
    ],
    "metadata": {
-    "complete": false,
+    "complete": true,
     "source_path": "src/overlays/l07_umbris",
     "progress_categories": [
      "level_code",
@@ -45309,13 +45309,13 @@
   {
    "name": "Level 14: Oltanis",
    "measures": {
-    "fuzzy_match_percent": 80.9208075820325,
+    "fuzzy_match_percent": 84.58107677604333,
     "total_code": "150672",
-    "matched_code": "121804",
-    "matched_code_percent": 80.84050122119571,
+    "matched_code": "127440",
+    "matched_code_percent": 84.58107677604333,
     "total_functions": 135,
-    "matched_functions": 127,
-    "matched_functions_percent": 94.07407407407408,
+    "matched_functions": 134,
+    "matched_functions_percent": 99.25925925925925,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -46126,7 +46126,7 @@
     {
      "name": "func_L14_002F2880",
      "size": "152",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "868576",
      "metadata": {
       "virtual_address": "3093552"
@@ -46135,7 +46135,7 @@
     {
      "name": "func_L14_002FCEA8",
      "size": "1740",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "911112",
      "metadata": {
       "virtual_address": "3136088"
@@ -46144,7 +46144,7 @@
     {
      "name": "func_L14_002FD578",
      "size": "756",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "912856",
      "metadata": {
       "virtual_address": "3137832"
@@ -46180,7 +46180,7 @@
     {
      "name": "func_L14_002FE038",
      "size": "1888",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "915608",
      "metadata": {
       "virtual_address": "3140584"
@@ -46279,7 +46279,7 @@
     {
      "name": "func_L14_003047F8",
      "size": "124",
-     "fuzzy_match_percent": 97.58,
+     "fuzzy_match_percent": 100.0,
      "address": "942168",
      "metadata": {
       "virtual_address": "3167144"
@@ -46315,7 +46315,7 @@
     {
      "name": "func_L14_00306BE0",
      "size": "736",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "951360",
      "metadata": {
       "virtual_address": "3176336"
@@ -46441,7 +46441,7 @@
     {
      "name": "func_L14_00309C48",
      "size": "240",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "963752",
      "metadata": {
       "virtual_address": "3188728"
@@ -46551,13 +46551,13 @@
   {
    "name": "Level 15: Quartu",
    "measures": {
-    "fuzzy_match_percent": 78.69440719127188,
+    "fuzzy_match_percent": 79.25622530718765,
     "total_code": "110356",
-    "matched_code": "86844",
-    "matched_code_percent": 78.69440719127188,
+    "matched_code": "87464",
+    "matched_code_percent": 79.25622530718765,
     "total_functions": 49,
-    "matched_functions": 47,
-    "matched_functions_percent": 95.91836734693878,
+    "matched_functions": 48,
+    "matched_functions_percent": 97.95918367346938,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -46846,7 +46846,7 @@
     {
      "name": "func_L15_002ECAA8",
      "size": "620",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "949240",
      "metadata": {
       "virtual_address": "3069536"
@@ -47019,13 +47019,13 @@
   {
    "name": "Level 16: Kalebo III",
    "measures": {
-    "fuzzy_match_percent": 78.14323286677349,
+    "fuzzy_match_percent": 80.00544151878836,
     "total_code": "132316",
-    "matched_code": "103396",
-    "matched_code_percent": 78.14323286677349,
+    "matched_code": "105860",
+    "matched_code_percent": 80.00544151878836,
     "total_functions": 98,
-    "matched_functions": 95,
-    "matched_functions_percent": 96.93877551020408,
+    "matched_functions": 97,
+    "matched_functions_percent": 98.9795918367347,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -47719,7 +47719,7 @@
     {
      "name": "func_L16_002E7C70",
      "size": "2248",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "908000",
      "metadata": {
       "virtual_address": "3049632"
@@ -47746,7 +47746,7 @@
     {
      "name": "func_L16_002E8680",
      "size": "216",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "910576",
      "metadata": {
       "virtual_address": "3052208"
@@ -47928,13 +47928,13 @@
   {
    "name": "Level 17: Drek's Fleet",
    "measures": {
-    "fuzzy_match_percent": 72.9203992833376,
+    "fuzzy_match_percent": 78.20720643858601,
     "total_code": "140652",
-    "matched_code": "102564",
-    "matched_code_percent": 72.9203992833376,
+    "matched_code": "110000",
+    "matched_code_percent": 78.20720643858601,
     "total_functions": 62,
-    "matched_functions": 58,
-    "matched_functions_percent": 93.54838709677419,
+    "matched_functions": 61,
+    "matched_functions_percent": 98.38709677419355,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -48169,7 +48169,7 @@
     {
      "name": "func_L17_002ED498",
      "size": "1620",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "960872",
      "metadata": {
       "virtual_address": "3072080"
@@ -48205,7 +48205,7 @@
     {
      "name": "func_L17_002EEB08",
      "size": "3860",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "966616",
      "metadata": {
       "virtual_address": "3077824"
@@ -48385,7 +48385,7 @@
     {
      "name": "func_L17_002F4210",
      "size": "1956",
-     "fuzzy_match_percent": 0.0,
+     "fuzzy_match_percent": 100.0,
      "address": "988896",
      "metadata": {
       "virtual_address": "3100104"
@@ -48513,13 +48513,13 @@
   {
    "name": "Level 18: Veldin (return)",
    "measures": {
-    "fuzzy_match_percent": 82.4534097450658,
+    "fuzzy_match_percent": 82.46042351973684,
     "total_code": "155648",
-    "matched_code": "123732",
-    "matched_code_percent": 79.4947574013158,
+    "matched_code": "128348",
+    "matched_code_percent": 82.46042351973684,
     "total_functions": 124,
-    "matched_functions": 120,
-    "matched_functions_percent": 96.7741935483871,
+    "matched_functions": 123,
+    "matched_functions_percent": 99.19354838709677,
     "complete_code": "0",
     "complete_code_percent": 0.0,
     "total_units": 1,
@@ -49087,7 +49087,7 @@
     {
      "name": "func_L18_002EC290",
      "size": "2904",
-     "fuzzy_match_percent": 99.97,
+     "fuzzy_match_percent": 100.0,
      "address": "884072",
      "metadata": {
       "virtual_address": "3067464"
@@ -49465,7 +49465,7 @@
     {
      "name": "func_L18_002FABE0",
      "size": "792",
-     "fuzzy_match_percent": 99.87,
+     "fuzzy_match_percent": 100.0,
      "address": "943800",
      "metadata": {
       "virtual_address": "3127192"
@@ -49492,7 +49492,7 @@
     {
      "name": "func_L18_002FB318",
      "size": "920",
-     "fuzzy_match_percent": 99.02,
+     "fuzzy_match_percent": 100.0,
      "address": "945648",
      "metadata": {
       "virtual_address": "3129040"
@@ -49675,15 +49675,15 @@
    "id": "level_code",
    "name": "Level code",
    "measures": {
-    "fuzzy_match_percent": 87.2591968081296,
+    "fuzzy_match_percent": 87.79507927803755,
     "total_code": "3238728",
-    "matched_code": "2815640",
-    "matched_code_percent": 86.93659980090949,
+    "matched_code": "2843388",
+    "matched_code_percent": 87.79335591009804,
     "total_functions": 3407,
-    "matched_functions": 3327,
-    "matched_functions_percent": 97.65189316113883,
-    "complete_code": "209328",
-    "complete_code_percent": 6.4632781758764555
+    "matched_functions": 3350,
+    "matched_functions_percent": 98.32697387731142,
+    "complete_code": "281904",
+    "complete_code_percent": 8.704157928668293
    }
   },
   {
@@ -49720,13 +49720,13 @@
    "id": "common",
    "name": "Shared level code",
    "measures": {
-    "fuzzy_match_percent": 92.77381581960478,
+    "fuzzy_match_percent": 92.88358695798591,
     "total_code": "1187792",
-    "matched_code": "1096504",
-    "matched_code_percent": 92.31447930277355,
+    "matched_code": "1103208",
+    "matched_code_percent": 92.87888788609453,
     "total_functions": 1939,
-    "matched_functions": 1898,
-    "matched_functions_percent": 97.88550799381125,
+    "matched_functions": 1903,
+    "matched_functions_percent": 98.14337287261475,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49735,15 +49735,15 @@
    "id": "levels",
    "name": "Level-specific code",
    "measures": {
-    "fuzzy_match_percent": 84.06542560079886,
+    "fuzzy_match_percent": 84.84808887259281,
     "total_code": "2050936",
-    "matched_code": "1719136",
-    "matched_code_percent": 83.82202077490473,
+    "matched_code": "1740180",
+    "matched_code_percent": 84.84808887259281,
     "total_functions": 1468,
-    "matched_functions": 1429,
-    "matched_functions_percent": 97.34332425068119,
-    "complete_code": "209328",
-    "complete_code_percent": 10.20646183011074
+    "matched_functions": 1447,
+    "matched_functions_percent": 98.56948228882834,
+    "complete_code": "281904",
+    "complete_code_percent": 13.745138804916389
    }
   },
   {
@@ -49795,13 +49795,13 @@
    "id": "level_03",
    "name": "Level 03: Kerwan",
    "measures": {
-    "fuzzy_match_percent": 83.13376344802319,
+    "fuzzy_match_percent": 83.13626219898079,
     "total_code": "120092",
-    "matched_code": "99716",
-    "matched_code_percent": 83.03300802717916,
+    "matched_code": "99840",
+    "matched_code_percent": 83.13626219898079,
     "total_functions": 75,
-    "matched_functions": 73,
-    "matched_functions_percent": 97.33333333333333,
+    "matched_functions": 74,
+    "matched_functions_percent": 98.66666666666667,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49855,15 +49855,15 @@
    "id": "level_07",
    "name": "Level 07: Umbris",
    "measures": {
-    "fuzzy_match_percent": 99.99586033950617,
+    "fuzzy_match_percent": 100.0,
     "total_code": "72576",
-    "matched_code": "72428",
-    "matched_code_percent": 99.7960758377425,
+    "matched_code": "72576",
+    "matched_code_percent": 100.0,
     "total_functions": 80,
-    "matched_functions": 79,
-    "matched_functions_percent": 98.75,
-    "complete_code": "0",
-    "complete_code_percent": 0.0
+    "matched_functions": 80,
+    "matched_functions_percent": 100.0,
+    "complete_code": "72576",
+    "complete_code_percent": 100.0
    }
   },
   {
@@ -49960,13 +49960,13 @@
    "id": "level_14",
    "name": "Level 14: Oltanis",
    "measures": {
-    "fuzzy_match_percent": 80.9208075820325,
+    "fuzzy_match_percent": 84.58107677604333,
     "total_code": "150672",
-    "matched_code": "121804",
-    "matched_code_percent": 80.84050122119571,
+    "matched_code": "127440",
+    "matched_code_percent": 84.58107677604333,
     "total_functions": 135,
-    "matched_functions": 127,
-    "matched_functions_percent": 94.07407407407408,
+    "matched_functions": 134,
+    "matched_functions_percent": 99.25925925925925,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49975,13 +49975,13 @@
    "id": "level_15",
    "name": "Level 15: Quartu",
    "measures": {
-    "fuzzy_match_percent": 78.69440719127188,
+    "fuzzy_match_percent": 79.25622530718765,
     "total_code": "110356",
-    "matched_code": "86844",
-    "matched_code_percent": 78.69440719127188,
+    "matched_code": "87464",
+    "matched_code_percent": 79.25622530718765,
     "total_functions": 49,
-    "matched_functions": 47,
-    "matched_functions_percent": 95.91836734693878,
+    "matched_functions": 48,
+    "matched_functions_percent": 97.95918367346938,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -49990,13 +49990,13 @@
    "id": "level_16",
    "name": "Level 16: Kalebo III",
    "measures": {
-    "fuzzy_match_percent": 78.14323286677349,
+    "fuzzy_match_percent": 80.00544151878836,
     "total_code": "132316",
-    "matched_code": "103396",
-    "matched_code_percent": 78.14323286677349,
+    "matched_code": "105860",
+    "matched_code_percent": 80.00544151878836,
     "total_functions": 98,
-    "matched_functions": 95,
-    "matched_functions_percent": 96.93877551020408,
+    "matched_functions": 97,
+    "matched_functions_percent": 98.9795918367347,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -50005,13 +50005,13 @@
    "id": "level_17",
    "name": "Level 17: Drek's Fleet",
    "measures": {
-    "fuzzy_match_percent": 72.9203992833376,
+    "fuzzy_match_percent": 78.20720643858601,
     "total_code": "140652",
-    "matched_code": "102564",
-    "matched_code_percent": 72.9203992833376,
+    "matched_code": "110000",
+    "matched_code_percent": 78.20720643858601,
     "total_functions": 62,
-    "matched_functions": 58,
-    "matched_functions_percent": 93.54838709677419,
+    "matched_functions": 61,
+    "matched_functions_percent": 98.38709677419355,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }
@@ -50020,13 +50020,13 @@
    "id": "level_18",
    "name": "Level 18: Veldin (return)",
    "measures": {
-    "fuzzy_match_percent": 82.4534097450658,
+    "fuzzy_match_percent": 82.46042351973684,
     "total_code": "155648",
-    "matched_code": "123732",
-    "matched_code_percent": 79.4947574013158,
+    "matched_code": "128348",
+    "matched_code_percent": 82.46042351973684,
     "total_functions": 124,
-    "matched_functions": 120,
-    "matched_functions_percent": 96.7741935483871,
+    "matched_functions": 123,
+    "matched_functions_percent": 99.19354838709677,
     "complete_code": "0",
     "complete_code_percent": 0.0
    }

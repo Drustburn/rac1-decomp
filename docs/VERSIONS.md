@@ -109,11 +109,22 @@ context its object did not have (docs/BUILD_FIDELITY.md applies unchanged).
     bash tools/docker/run.sh python tools/version_src.py try --version jp func_X cand.c   # one candidate
     bash tools/docker/run.sh python tools/version_clone.py --version jp                   # no model
 
-`tools/version_clone.py` writes version-specific C without a model: where a version's instructions
-differ from the primary's only in immediates (a 50 Hz count against a 60 Hz one, a field offset),
-it replaces the matching literals of the shared C and keeps a candidate only when it is EXACT
-(the method `tools/overlay_variants.py clone` uses for level variants). On 2026-10-21 it gave 64
-definitions for PAL v1.00 and 71 for NTSC-J; the rest differ in more than numbers.
+`tools/version_clone.py` writes version-specific C without a model. It compiles and relocates the
+shared C for the version as the check does and explains every word that differs, when the sizes
+agree, by two kinds of edit: an immediate that is not relocated (a 50 Hz count against a 60 Hz
+one, a field offset) takes the new value in every literal that spells the old one (the method
+`tools/overlay_variants.py clone` uses for level variants); a relocated field that reaches another
+address here (a call to a function this version changed or added, a table that moved) renames the
+symbol it names, in that definition only, to the one at the version's address, with the replaced
+symbol's declaration. Code and data only a version has are named `func_<TAG>_...` and
+`D_<TAG>_...` (`E1`, `J`) and resolve to the version's own address. A candidate is kept only when
+it is EXACT. It runs one function per worker, each worker with its own Wine prefix
+(`RAC1_WINEPREFIXES`), and `--shard I/N` splits the list across machines.
+
+On 2026-10-21 it gave 76 definitions for PAL v1.00 and 94 for NTSC-J. What is left
+(`differs` and `refs` in `config/versions/<K>/map.tsv`) changed size between the releases or
+differs in more than numbers and names: 181 functions of PAL v1.00 and 64 of NTSC-J, listed there
+for later work.
 
 ## Keeping the versions in step
 
@@ -150,7 +161,7 @@ itself, with its own compilers and tools; this repository adds only the glue:
 `tools/build_ntsc.sh` runs the submodule's own entry points on Linux (its `setup.sh --elf`,
 `make elf`, `make overlays`), taking the executable from `baserom/us/SCUS_971.99` and the disc image
 from `baserom/SCUS_971.99.iso`; its header lists the settings for a host without system Wine. On
-2026-10-21, at 0d5b2b0c, it ends in `PASS: reconstructed boot ELF matches retail` and
+2026-10-21, at e437eef7, it ends in `PASS: reconstructed boot ELF matches retail` and
 `PASS: all 3001 overlay functions in C match retail`. CI runs the submodule's
 `scripts/gen_progress_report.py` and uploads its report as `SCUS_971.99_report`.
 
@@ -166,8 +177,8 @@ them: a pull request on its repository) and "from the NTSC decomp" (matched ther
 | Version | Functions finished | Code finished |
 | --- | --- | --- |
 | `SCES_509.16` (PAL v2.00) | 5,073 of 5,124 | 98.38% (3,653,460 of 3,713,568 bytes) |
-| `SCES_509.16_v1` (PAL v1.00) | 4,827 of 5,097 | 76.55% (2,827,680 of 3,693,748 bytes) |
-| `SCPS_150.37` (NTSC-J v1.02) | 4,951 of 5,109 | 87.30% (3,235,732 of 3,706,344 bytes) |
+| `SCES_509.16_v1` (PAL v1.00) | 4,839 of 5,097 | 76.82% (2,837,556 of 3,693,748 bytes) |
+| `SCPS_150.37` (NTSC-J v1.02) | 4,974 of 5,109 | 88.05% (3,263,480 of 3,706,344 bytes) |
 | `SCUS_971.99` (NTSC-U v1.00, the NTSC decomp's own count) | 4,218 of 4,244 | 98.72% (3,502,500 of 3,547,932 bytes) |
 
 The code share of PAL v1.00 and NTSC-J trails their function share: the functions still to do

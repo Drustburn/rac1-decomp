@@ -1255,7 +1255,7 @@ func_00216270	src/game/music.c	match	boot:00214F18	32	100.00
 func_00216290	src/game/music.c	match	boot:00214F38	212	100.00
 func_00216368	src/game/music.c	match	boot:00215010	232	100.00
 func_00216450	src/game/music.c	match	boot:002150F8	212	100.00
-func_00216528	src/game/music.c	refs	boot:002151D0	248	99.60
+func_00216528	src/versions/pal_v1/game/music/func_00216528.c	match	boot:002151D0	248	100.00
 func_00216620	src/game/music.c	match	boot:002152C8	204	100.00
 func_002166F0	src/game/music.c	match	boot:00215398	204	100.00
 func_002167C0	src/game/music.c	match	boot:00215468	412	100.00
@@ -2561,7 +2561,7 @@ func_L00_00284EA0	-	joined	00:002835E8	20	100.00
 func_L00_00284EB8	src/overlays/shared/pause_00277208.c	match	00:00283600	56	100.00
 func_L00_00285698	src/overlays/shared/pause_00277208.c	match	00:00283DB8	140	100.00
 func_L00_00286068	src/overlays/shared/pause_00277208.c	match	00:00284738	108	100.00
-func_L00_00286128	src/overlays/shared/pause_00277208.c	refs	00:002847F8	440	99.32
+func_L00_00286128	src/versions/pal_v1/overlays/shared/pause_00277208/func_L00_00286128.c	match	00:002847F8	440	100.00
 func_L00_002862E0	src/overlays/shared/pause_00277208.c	match	00:002849B0	436	100.00
 func_L00_00286498	src/overlays/shared/pause_00277208.c	match	00:00284B68	48	100.00
 func_L00_002864CC	-	joined	00:00284B9C	16	100.00
@@ -2628,7 +2628,7 @@ func_L00_0029AB38	src/overlays/shared/tieproc_00299108.c	match	00:00299170	480	1
 func_L00_0029AD18	src/versions/pal_v1/overlays/shared/tieproc_00299108/func_L00_0029AD18.c	match	00:00299350	188	100.00
 func_L00_0029ADD8	src/overlays/shared/tieproc_00299108.c	match	00:00299410	404	100.00
 func_L00_0029AF70	src/overlays/shared/tieproc_00299108.c	match	00:002995A8	72	100.00
-func_L00_0029AFB8	src/overlays/shared/tieproc_00299108.c	differs	00:002995F0	756	0.00
+func_L00_0029AFB8	src/versions/pal_v1/overlays/shared/tieproc_00299108/func_L00_0029AFB8.c	match	00:002995F0	756	100.00
 func_L00_0029B6A0	src/overlays/shared/update_0029B6A0.c	match	00:00299CD8	204	100.00
 func_L00_0029B770	src/overlays/shared/update_0029B6A0.c	match	00:00299DA8	684	100.00
 func_L00_0029BA20	src/overlays/shared/update_0029B6A0.c	differs	00:0029A058	1216	0.00
@@ -3158,7 +3158,7 @@ func_L01_002F7558	src/overlays/l01_novalis/vendor_002BA898.c	match	01:002F5AB0	4
 func_L01_002F7700	src/overlays/shared/vendor_002F7700.c	match	01:002F5C58	1400	100.00
 func_L01_002F7C78	src/overlays/l01_novalis/vendor_002BA898.c	match	01:002F61D0	400	100.00
 func_L01_002F7E08	src/overlays/shared/vendor_002F7700.c	match	01:002F6360	3316	100.00
-func_L01_002F8B00	src/overlays/l01_novalis/vendor_002BA898.c	differs	01:002F7058	2716	0.00
+func_L01_002F8B00	src/versions/pal_v1/overlays/l01_novalis/vendor_002BA898/func_L01_002F8B00.c	match	01:002F7058	2716	100.00
 func_L01_002F95A0	src/overlays/l01_novalis/vendor_002BA898.c	match	01:002F7AF8	156	100.00
 func_L01_002F9640	src/overlays/l01_novalis/vendor_002BA898.c	match	01:002F7B98	708	100.00
 func_L01_002F9908	src/overlays/shared/vendor_002F7700.c	match	01:002F7E60	484	100.00
@@ -3349,7 +3349,7 @@ func_L02_002EE0A0	src/overlays/shared/vendor_002A5218.c	match	02:002EC598	228	10
 func_L02_002EE188	src/overlays/shared/vendor_002A5218.c	match	02:002EC680	200	100.00
 func_L02_002EE250	src/versions/pal_v1/overlays/shared/vendor_002A5218/func_L02_002EE250.c	match	02:002EC748	1544	100.00
 func_L02_002EE858	src/overlays/shared/vendor_002A5218.c	match	02:002ECD50	564	100.00
-func_L02_002EEA90	src/overlays/shared/vendor_002A5218.c	refs	02:002ECF88	592	99.83
+func_L02_002EEA90	src/versions/pal_v1/overlays/shared/vendor_002A5218/func_L02_002EEA90.c	match	02:002ECF88	592	100.00
 func_L02_002EFCC8	src/versions/pal_v1/overlays/l02_aridia/vendor_002E21F8/func_L02_002EFCC8.c	match	02:002EE1C0	1932	100.00
 func_L02_002F0458	src/overlays/l02_aridia/vendor_002E21F8.c	match	02:002EE950	2516	100.00
 func_L02_002F3398	src/overlays/shared/vendor_002A5218.c	match	02:002F1890	248	100.00
@@ -3444,7 +3444,7 @@ func_L03_002DC920	src/overlays/l03_kerwan/vendor_002CB280.c	match	03:002DAE88	21
 func_L03_002DD158	src/versions/pal_v1/overlays/l03_kerwan/vendor_002CB280/func_L03_002DD158.c	match	03:002DB6C0	1408	100.00
 func_L03_002DD6D8	src/overlays/shared/vendor_00292AC0.c	match	03:002DBC40	112	100.00
 func_L03_002DD840	src/overlays/shared/vendor_00292AC0.c	match	03:002DBDA8	1304	100.00
-func_L03_002DDD78	src/overlays/shared/vendor_00292AC0.c	refs	03:002DC2E0	124	97.58
+func_L03_002DDD78	src/versions/pal_v1/overlays/shared/vendor_00292AC0/func_L03_002DDD78.c	match	03:002DC2E0	124	100.00
 func_L03_002DDDF8	src/overlays/shared/vendor_00292AC0.c	match	03:002DC360	48	100.00
 func_L03_002DDE28	-	joined	03:002DC390	16	100.00
 func_L03_002DDE38	-	joined	03:002DC3A0	100	100.00
@@ -3847,7 +3847,7 @@ func_L07_002B3050	-	asm	07:002B1770	20	100.00
 func_L07_002CE470	src/overlays/l07_umbris/vendor_002CE470.c	match	07:002CCBD8	1472	100.00
 func_L07_002CECE8	src/overlays/l07_umbris/vendor_002CE470.c	match	07:002CD450	1576	100.00
 func_L07_002F6F20	src/overlays/l07_umbris/vendor_002CE470.c	match	07:002F54C8	1320	100.00
-func_L07_002F9438	src/overlays/shared/vendor_002F9438.c	refs	07:002F7980	112	97.32
+func_L07_002F9438	src/versions/pal_v1/overlays/shared/vendor_002F9438/func_L07_002F9438.c	match	07:002F7980	112	100.00
 func_L07_002FD198	src/overlays/l07_umbris/vendor_002CE470.c	match	07:002FB6E0	52	100.00
 func_L07_0030C320	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030A868	188	100.00
 func_L07_0030C3E0	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030A928	1336	100.00
@@ -3860,7 +3860,7 @@ func_L07_0030D8E8	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030BE30	20
 func_L07_0030E100	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030C648	36	100.00
 func_L07_0030E128	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030C670	580	100.00
 func_L07_0030E370	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030C8B8	1168	100.00
-func_L07_0030E820	src/overlays/l07_umbris/vendor_002CE470.c	refs	07:0030CD68	148	97.97
+func_L07_0030E820	src/versions/pal_v1/overlays/l07_umbris/vendor_002CE470/func_L07_0030E820.c	match	07:0030CD68	148	100.00
 func_L07_0030E8B8	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030CE00	1748	100.00
 func_L07_0030EF90	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030D4D8	316	100.00
 func_L07_0030F0D0	src/overlays/l07_umbris/vendor_002CE470.c	match	07:0030D618	1008	100.00
@@ -4631,7 +4631,7 @@ func_L14_00302C80	src/overlays/shared/vendor_002B2A28.c	match	14:003011A8	1516	1
 func_L14_00303270	src/overlays/shared/vendor_002B2A28.c	match	14:00301798	444	100.00
 func_L14_00303430	src/overlays/shared/vendor_00303430.c	match	14:00301958	1424	100.00
 func_L14_003039C0	src/overlays/shared/vendor_002B2A28.c	match	14:00301EE8	1056	100.00
-func_L14_003047F8	src/overlays/l14_oltanis/vendor_002FF358.c	refs	14:00302D20	124	97.58
+func_L14_003047F8	src/versions/pal_v1/overlays/l14_oltanis/vendor_002FF358/func_L14_003047F8.c	match	14:00302D20	124	100.00
 func_L14_00304E68	src/overlays/shared/vendor_002B2A28.c	match	14:00303390	336	100.00
 func_L14_00306890	src/overlays/l14_oltanis/vendor_002FF358.c	match	14:00304DB8	504	100.00
 func_L14_00306A88	src/overlays/l14_oltanis/vendor_002FF358.c	match	14:00304FB0	128	100.00
@@ -5017,7 +5017,7 @@ func_L18_002EB5E8	src/overlays/l18_veldin2/vendor_002A8400.c	match	18:002E9B28	9
 func_L18_002EB988	src/overlays/l18_veldin2/vendor_002A8400.c	match	18:002E9EC8	612	100.00
 func_L18_002EBBF0	src/overlays/l18_veldin2/vendor_002A8400.c	match	18:002EA130	1236	100.00
 func_L18_002EC0C8	src/overlays/l18_veldin2/vendor_002A8400.c	match	18:002EA608	452	100.00
-func_L18_002EC290	src/overlays/l18_veldin2/vendor_002A8400.c	refs	18:002EA7D0	2904	99.97
+func_L18_002EC290	src/versions/pal_v1/overlays/l18_veldin2/vendor_002A8400/func_L18_002EC290.c	match	18:002EA7D0	2904	100.00
 func_L18_002ED520	src/overlays/l18_veldin2/vendor_002A8400.c	match	18:002EBA60	696	100.00
 func_L18_002F0F78	src/overlays/l18_veldin2/vendor_002A8400.c	match	18:002EF4B8	1192	100.00
 func_L18_002F1420	src/overlays/l18_veldin2/vendor_002A8400.c	match	18:002EF960	36	100.00
@@ -5059,10 +5059,10 @@ func_L18_002F90A0	src/overlays/l18_veldin2/vendor_002F8F38.c	match	18:002F7570	1
 func_L18_002F94B0	src/overlays/l18_veldin2/vendor_002F8F38.c	match	18:002F7980	1544	100.00
 func_L18_002F9AB8	src/overlays/l18_veldin2/vendor_002F8F38.c	match	18:002F7F88	656	100.00
 func_L18_002F9D48	src/overlays/l18_veldin2/vendor_002F9D48.c	match	18:002F8218	3732	100.00
-func_L18_002FABE0	src/overlays/l18_veldin2/vendor_002F9D48.c	refs	18:002F90B0	792	99.87
+func_L18_002FABE0	src/versions/pal_v1/overlays/l18_veldin2/vendor_002F9D48/func_L18_002FABE0.c	match	18:002F90B0	792	100.00
 func_L18_002FAEF8	src/overlays/l18_veldin2/vendor_002FAEF8.c	match	18:002F93C8	392	100.00
 func_L18_002FB080	src/overlays/l18_veldin2/vendor_002F9D48.c	match	18:002F9550	660	100.00
-func_L18_002FB318	src/overlays/l18_veldin2/vendor_002F9D48.c	refs	18:002F97E8	920	99.02
+func_L18_002FB318	src/versions/pal_v1/overlays/l18_veldin2/vendor_002F9D48/func_L18_002FB318.c	match	18:002F97E8	920	100.00
 func_L18_002FB6B0	src/overlays/l18_veldin2/vendor_002F9D48.c	match	18:002F9B80	464	100.00
 func_L18_002FBAA0	src/overlays/l18_veldin2/vendor_002F9D48.c	match	18:002F9F70	228	100.00
 func_L18_002FBB88	src/overlays/l18_veldin2/vendor_002F9D48.c	match	18:002FA058	352	100.00
