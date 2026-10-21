@@ -851,6 +851,13 @@ there. In parentheses, Lombyte's name.
 - `src/overlays/shared/vendor_002D9438.c`: `func_L00_002DACC0` (`FUN_L00_002d9810`)
 - `src/overlays/shared/vendor_002EB0D8.c`: `func_L00_002ED320` (`FUN_L00_002ebe70`)
 
+Two more were adapted the same way on 2026-10-21, also from Lombyte's C at `0d5b2b0c` and so under the
+GPL-3.0. Both keep a `do { } while (0)` block of Lombyte's that steers the scheduler. In parentheses,
+Lombyte's name.
+
+- `src/overlays/shared/vendor_002C12B0.c`: `func_L00_002C12B0` (`doom_bot_update`)
+- `src/overlays/shared/vendor_002D1168.c`: `func_L00_002D8898` (`FUN_L00_002d73e8`)
+
 `include/hero.h` (the hero and the records inside it) and `include/vector.h` (the 16-byte vector) are
 adapted from Lombyte's `include/rnc/gameplay/hero.h` and `include/rnc/math/vector.h` at 42adb529, while
 Lombyte was MIT licensed. `include/pad.h` (the controller state) is adapted from its
