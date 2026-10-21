@@ -95,6 +95,14 @@ already listed as original assembly read the same way (`memcmp.o`, `strlen.o`,
 name C files (`mallocr.o`: `stdlib/mallocr.c`, `mbtowc_r.o`:
 `stdlib/mbtowc_r.c`). The members' code is retail's, byte for byte.
 
+The same day func_0011AE1C was listed: the 4-byte `jr $31` after the listed
+sceSifWriteBackDCache (func_0011AD70) is that function's last word. In the
+SDK's `libkernl.a`, `sifcmd.o` gives sceSifWriteBackDCache a symbol size of
+176 bytes (0x698..0x748, retail 0x11AD70..0x11AE20, the next member being
+sifrpc.o's sceSifInitRpc at func_0011AE20), with the hand-written local labels
+`loop1`, `eight`, `loop8` and `last`; `last:` is the `jr $31; nop` at 0x11AE14,
+and the stray `jr $31` follows it inside the function.
+
 ### Hand-written level functions
 
 Level code also has functions written as assembly. `config/overlays/handwritten_asm.txt`

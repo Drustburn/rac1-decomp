@@ -287,3 +287,4 @@ text/func_001F7DD8
 core_text/func_00115248
 core_text/func_001152F8
 core_text/func_001153FC
+core_text/func_0011AE1C
