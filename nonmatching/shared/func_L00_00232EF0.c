@@ -11,6 +11,13 @@
  *   from the assignment's value (p10) and a local load before the loop (p6, size) do not move it. A pointer local 
  *   the +inf (p11) changes the frame. What would unblock it: a way to number the zero's pseudo before the +inf's
  *   without changing the two stores' order.
+ *   2026-10-21: the cause is the +inf's REG_EQUIV. Retail's D_L00_0015F7E8 is this function's constant-pool
+ *   literal: written 1.0f / 0.0f, GCC loads it from $LC0 (.rdata, .word 0x7f800000) with a REG_EQUAL of the constant,
+ *   local-alloc makes it REG_EQUIV and doubles its live length (update_equiv_regs), as it does for the hoisted 0.0f,
+ *   so the zero (shorter) is allocated first: lwc1 $f23 / mtc1 $zero,$f22, retail's registers (checked in the
+ *   compiler's output). With the extern, only the zero is doubled and the +inf wins $f22. Blocker: the overlay build
+ *   cannot place a function's .rdata literal (tools/fix_jump_tables.py refuses it); a placement like the jump
+ *   tables' (.rodata.<retail label> at D_L00_0015F7E8, and its counterpart in each level) would land it.
  */
 #include "moby.h"
 typedef struct {

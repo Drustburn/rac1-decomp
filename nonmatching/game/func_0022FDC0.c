@@ -1,316 +1,344 @@
-/* One pass of the space loader (text 0x22FDC0). Steps the fade in D_0015F53C,
-   counts frames and steps in D_0018CC20, copies the object list's frame
-   vectors from the D_0013E130 slots, and calls the loader helpers. */
-extern void sl_E97B0(void) __asm__("func_001E97B0");
-extern void sl_E97A8(void) __asm__("func_001E97A8");
-extern void sl_E448(int, int, int, int, int, int, int, void *) __asm__("func_0012E448");
-extern void sl_0520(int) __asm__("func_00205220");
-extern void sl_9C30(void *, void *, float) __asm__("func_001F9C30");
-extern void sl_9BD8(void *, void *, void *) __asm__("func_001F9BD8");
-extern float sl_FA888(int) __asm__("func_001FA888");
-extern void sl_D678(void *) __asm__("func_0020D678");
-extern void sl_D6D0(void *) __asm__("func_0020D6D0");
-extern void sl_DAF8(void *, int, void *) __asm__("func_0020DAF8");
-extern void sl_ED48(void *) __asm__("func_0020ED48");
-extern float sl_F53C __asm__("D_0015F53C");
-extern float sl_67FC __asm__("D_00160504");
-extern int sl_EE84 __asm__("D_0015EE84");
-extern int sl_EE5C __asm__("D_0015EE5C");
-extern short sl_EF4A __asm__("D_0015EF4A");
-extern short sl_7DB8 __asm__("D_0015EF48");
-extern unsigned char sl_DE4B[] __asm__("D_0013DE4B");
-extern unsigned char sl_DE48[] __asm__("D_0013DE48");
-extern char sl_A[] __asm__("D_0018CC20");
-extern char sl_B[] __asm__("D_0013E130");
-extern char sl_C[] __asm__("D_0018CE00");
-extern char sl_CD98[] __asm__("D_0018CD98");
-extern char sl_E70[] __asm__("D_001D9E70");
-extern char sl_ED8[] __asm__("D_001D9ED8");
-extern char sl_EC0[] __asm__("D_001D9EC0");
-extern char sl_DC0[] __asm__("D_001D9DC0");
-extern char sl_E6C0[] __asm__("D_0013E6C0");
-extern char sl_1941C0[] __asm__("D_001941C0");
-extern char sl_560[] __asm__("D_00160560");
-extern char sl_6700[] __asm__("D_00160600");
-extern char sl_6710[] __asm__("D_001605F0");
-extern char sl_6720[] __asm__("D_001605E0");
+/* NON_MATCHING func_0022FDC0 -- src/game/space.c
+ * Best so far: BYTES 438/2012 (same size; 78% of the bytes match), checked 2026-10-21.
+ * Ported from Lombyte's match of the US build (src/gameplay/state/update_level_gameplay_frame.c,
+ * update_level_gameplay_frame), which uses another compiler (a rebuilt 2.9-ee-991111b), with PAL's
+ * symbols and this build's addressing: D_0015EF4A as D_0015EF48[1] through a 4-byte MACRO_ADDR
+ * alias (an offset keeps the store out of the branch-likely slot, the size keeps it off $gp),
+ * D_00160560 sized so it stays off $gp, the two C names of D_0018CC20 as in Lombyte.
+ * What is left is register allocation: retail keeps %hi(D_0018CC20) in $s3 and %hi(D_0013E130) in
+ * $s7 (shared with `subframe` later), &render_sequence in $s1 across func_001F99B0; ours ranks
+ * them differently ($s4/$s3/$s2), which shifts every saved register and the archive loop's
+ * temporaries. A permuter run (25 min) found nothing natural: reading current_vu_chain into a
+ * local before the history resets moves 18 registers but costs 8 bytes (a saved register).
+ */
+typedef unsigned int u128_FDC0 __attribute__((mode(TI)));
+typedef union {
+    u128_FDC0 quadword;
+    f32 components[4];
+} Vector4_FDC0;
+typedef struct {
+    Vector4_FDC0 rows[4];
+} Matrix4x4_FDC0;
 
+typedef struct {
+    u8 pad00[0xC];
+    u8 count; /* 0x0C */
+    u8 pad0D[0x24 - 0x0D];
+    f32 base_scale; /* 0x24 */
+    u8 pad28[0x48 - 0x28];
+    s32 frames[1]; /* 0x48 */
+} RenderModel_FDC0;
+
+typedef struct {
+    u8 pad00[0x10];
+    u8 position[0x14];        /* 0x10 */
+    RenderModel_FDC0 *model;  /* 0x24 */
+    u8 pad28[4];
+    f32 fade; /* 0x2C */
+    u8 pad30[2];
+    s16 selected_index; /* 0x32 */
+    u16 flags;          /* 0x34 */
+    u8 pad36[0x50 - 0x36];
+    u8 state_a; /* 0x50 */
+    u8 state_b;
+    u8 selected_a;
+    u8 selected_b;
+    f32 blend; /* 0x54 */
+    u8 pad58[0x68 - 0x58];
+    u8 *frame_data_a; /* 0x68 */
+    u8 *frame_data_b; /* 0x6C */
+    u8 pad70;
+    u8 cached_selector;
+    u8 opacity;
+    u8 pad73[5];
+    u8 *animation_positions; /* 0x78 */
+} LevelRenderObject_FDC0;
+
+typedef struct {
+    u8 pad00[0x34];
+    s32 time;           /* 0x34 */
+    s32 frame;          /* 0x38 */
+    s32 sequence_frame; /* 0x3C */
+    s16 end;            /* 0x40 */
+    u8 pad42[2];
+    s16 count; /* 0x44 */
+    u8 pad46[0x58 - 0x46];
+    s32 source_begin;                   /* 0x58 */
+    s32 source_end;                     /* 0x5C */
+    s32 prepared_frames[0x46];          /* 0x60 */
+    LevelRenderObject_FDC0 *objects[1]; /* 0x178 */
+} LevelGameplayState_FDC0;
+
+typedef struct {
+    u8 pad00[0x50];
+    s32 history_index; /* 0x50 */
+    s32 history_count; /* 0x54 */
+    s32 mode;          /* 0x58 */
+    s32 state;         /* 0x5C */
+    u8 pad60[0xC0 - 0x60];
+    Vector4_FDC0 primary_history_positions[32];   /* 0xC0 */
+    Vector4_FDC0 secondary_history_positions[32]; /* 0x2C0 */
+} LevelRenderState_FDC0;
+
+typedef struct {
+    u8 pad00[0xB0];
+    f32 projection_scale;
+} LevelProjectionState_FDC0;
+
+typedef struct {
+    s32 offset;
+    s32 available;
+} RenderArchiveEntry_FDC0;
+
+typedef struct {
+    u8 pad00[4];
+    s32 data_offset; /* 0x04 */
+    u8 pad08[0x50 - 0x08];
+    s32 scene_offsets[5]; /* 0x50 */
+} RenderArchiveTable_FDC0;
+
+typedef struct {
+    u8 pad00[4];
+    s32 source_begin_offset;
+    s32 source_end_offset;
+    u8 pad0C[8];
+    RenderArchiveTable_FDC0 *archive_table; /* 0x14 */
+} LevelRenderArchive_FDC0;
+
+typedef struct {
+    u32 w0;
+    u32 w1;
+} ColorPair_FDC0;
+
+extern s32 current_level_FDC0 __asm__("D_0015EE84") MACRO_ADDR;
+extern u8 level_available_FDC0[20] __asm__("D_0013DE48") NOT_SDA;
+extern LevelRenderState_FDC0 level_render_state_FDC0 __asm__("D_0013E130");
+extern u8 voice_volume_records_FDC0[] __asm__("D_0013E6C0") MACRO_ADDR;
+extern s32 sound_bank_handle_FDC0 __asm__("D_0015EE5C") MACRO_ADDR;
+extern s16 D_0015EF48_FDC0 SDATA(D_0015EF48);
+extern s16 D_0015EF48_macro_FDC0[2] __asm__("D_0015EF48") MACRO_ADDR;
+extern f32 D_0015F53C MACRO_ADDR;
+extern s32 space_load_in_progress_FDC0 __asm__("D_0015F6FC") MACRO_ADDR;
+extern f32 D_00160504_FDC0 __asm__("D_00160504") MACRO_ADDR;
+extern u8 D_00160560_FDC0[16] __asm__("D_00160560");
+extern s32 D_001605E0_FDC0 SDATA(D_001605E0);
+extern s32 D_001605F0_FDC0 SDATA(D_001605F0);
+extern s32 D_00160600_FDC0 SDATA(D_00160600);
+extern s32 current_vu_chain_FDC0 __asm__("D_0016100C");
+extern LevelGameplayState_FDC0 render_sequence_FDC0 __asm__("D_0018CC20");
+/* A second name for render_sequence: the fade loop takes its own lui/addiu (docs/DECOMP_PROGRESS.md,
+   "Two C names on one asm symbol defeat address CSE"). */
+extern LevelGameplayState_FDC0 render_sequence_lui_FDC0 __asm__("D_0018CC20");
+extern LevelRenderObject_FDC0 *D_0018CD98_FDC0[] __asm__("D_0018CD98");
+extern LevelProjectionState_FDC0 view_context_FDC0 __asm__("D_0018CE00");
+extern LevelRenderArchive_FDC0 D_001941C0_FDC0 __asm__("D_001941C0");
+extern ColorPair_FDC0 warp_trail_colors_FDC0[] __asm__("D_001D9DC0");
+extern u128_FDC0 D_001D9E70_FDC0[] __asm__("D_001D9E70");
+extern f32 D_001D9EC0_FDC0[] __asm__("D_001D9EC0");
+extern f32 cam_mode_min_fov_FDC0[] __asm__("D_001D9ED8");
+
+extern void fill_transfer_words_FDC0(void *, s32, s32) __asm__("func_001F99B0");
+extern void read_global_table_entry_FDC0(void) __asm__("func_0012EC30");
+extern void snd_flush_sound_commands_FDC0(void) __asm__("func_0012DDC0");
+extern void snd_play_sound_FDC0(s32, s32, s32, s32, s32, s32, s32, void *) __asm__("func_0012E448");
+extern void snd_reset_state_FDC0(void) __asm__("func_0012EC40");
+extern void noop_callback_h_FDC0(void) __asm__("func_001E97A8");
+extern void noop_callback_i_FDC0(void) __asm__("func_001E97B0");
+extern void update_view_context_FDC0(void) __asm__("func_001F3140");
+extern s32 scale_ticks_FDC0(s32) __asm__("func_001F98C0");
+extern u32 fast_mem_copy_FDC0(void *, void *, s32) __asm__("func_001F9A98");
+extern void add_vectors_FDC0(void *, void *, void *) __asm__("func_001F9BD8");
+extern void scale_vector_FDC0(void *, void *, f32) __asm__("func_001F9C30");
+extern f32 int_to_float_FDC0(s32) __asm__("func_001FA888");
+extern void parse_space_scene_chunk_FDC0(s32) __asm__("func_00205220");
+extern void mark_moby_for_removal_FDC0(LevelRenderObject_FDC0 *) __asm__("func_0020D678");
+extern void update_moby_animation_state_FDC0(LevelRenderObject_FDC0 *) __asm__("func_0020D6D0");
+extern void calculate_object_transform_FDC0(LevelRenderObject_FDC0 *, s32, void *) __asm__("func_0020DAF8");
+extern void refresh_moby_spatial_bounds_FDC0(LevelRenderObject_FDC0 *) __asm__("func_0020ED48");
+extern void build_object_rotation_matrix_FDC0(void) __asm__("func_0022F128");
+extern s32 rand_FDC0(void) __asm__("func_001160D8");
+
+/* One frame of the space flight between planets: steps the fade and the sequence's frame and time counters,
+   starts the flight sound on the first frame, and when the sequence ends releases its objects and picks the
+   next flight mode and its scene from the render archive (or, after the last one, flags the load as done);
+   then places the camera and, for every object of the sequence, interpolates its position between two frames
+   of its path twice per frame, records the bone positions in the trail history and fades the warp trail out
+   over the last 0x38 ticks. Adapted from Lombyte (GPL-3.0): src/gameplay/state/update_level_gameplay_frame.c,
+   update_level_gameplay_frame (US 0x22EAA8). */
 void func_0022FDC0(void) {
-    float v0[4], v1[4], v2[4], v3[4], v4[4], v5[4];
-    char *A = sl_A;
-    char *B = sl_B;
-    char *C = sl_C;
-    char *obj, *P, *W, *W0, *W1, *base, *p5, *p16, *X, *cur, *ent, *Qp, *P2;
-    char *p19, *p20, *p;
-    int *tbl;
-    int t, v, k, i, idx, idx1, idx16, n34, a34, a40, a44, r, j, c, par, e, A38;
-    unsigned int dbits;
-    union { unsigned int u; float f; } cv;
-    float f0, f1, f2, f12, f20;
+    Vector4_FDC0 first_position;
+    Vector4_FDC0 second_position;
+    Matrix4x4_FDC0 first_transform;
+    Matrix4x4_FDC0 second_transform;
+    u16 transform_count;
+    LevelRenderObject_FDC0 *object;
+    LevelRenderObject_FDC0 *expired_object;
+    s32 mode_advance;
+    RenderModel_FDC0 *model;
+    RenderArchiveTable_FDC0 *archive_table;
+    u8 *archive_data;
+    RenderArchiveEntry_FDC0 *archive_entry;
+    s32 expired_object_index;
+    s32 prepared_frame_index;
+    s32 payload_offset;
+    u8 *frame_offsets;
+    s32 *current_frame_pointer;
+    s32 *next_frame_pointer;
+    s32 subframe;
+    s32 color_index;
+    s32 fill_index;
+    s32 history_slot;
+    s32 next_frame_payload;
+    s32 current_frame_payload;
+    s32 frame;
+    u8 *animation_positions;
+    s32 current_frame;
+    s32 next_frame;
+    f32 blend;
+    f32 scale;
+    s32 object_index;
 
-    sl_E97B0();
-    f0 = sl_F53C - 0.25f;
-    sl_F53C = f0;
-    if (f0 < 0.0f) {
-        sl_F53C = 0.0f;
+    noop_callback_i_FDC0();
+    D_0015F53C -= 0.25f;
+    render_sequence_FDC0.frame++;
+    render_sequence_FDC0.time++;
+    if (D_0015F53C < 0.0f) {
+        D_0015F53C = 0.0f;
     }
-    *(int *)(A + 0x38) += 1;
-    *(int *)(A + 0x34) += 1;
-    n34 = *(int *)(A + 0x34);
-
-    if (n34 == 1) {
-        e = sl_EE84;
-        if (e != 0 && (e != 1 || sl_DE4B[0] != 0)) {
-            func_0012EC30();
-            sl_E448(sl_EE5C, *(int *)(B + 0x58), 0x400, 0, 0, 0, 0, sl_E6C0);
-            func_0012EC40();
-            func_0012DDC0();
-        }
+    if (render_sequence_FDC0.time == 1 && current_level_FDC0 != 0 &&
+        (current_level_FDC0 != 1 || level_available_FDC0[3] != 0)) {
+        read_global_table_entry_FDC0();
+        snd_play_sound_FDC0(sound_bank_handle_FDC0, level_render_state_FDC0.mode, 0x400, 0, 0, 0, 0,
+                            voice_volume_records_FDC0);
+        snd_reset_state_FDC0();
+        snd_flush_sound_commands_FDC0();
     }
-
-    a40 = *(short *)(A + 0x40);
-    a34 = *(int *)(A + 0x34);
-    if (a34 < a40) {
-        if (*(int *)(A + 0x38) >= 0x60) {
-            *(int *)(A + 0x3C) += 1;
-            sl_0520(*(int *)(A + 0x3C));
-        }
-        goto L_FC;
-    }
-
-    a44 = *(short *)(A + 0x44);
-    if (a44 > 0) {
-        i = 0;
-        do {
-            obj = *(char **)(A + 0x178 + 4 * i);
-            if (obj != 0) {
-                P = *(char **)(obj + 0x24);
-                ((unsigned char *)P)[0xC] = (unsigned char)(((unsigned char *)P)[0xC] - 1);
-                P = *(char **)(obj + 0x24);
-                *(int *)(P + 0x48 + 4 * ((unsigned char *)P)[0xC]) = 0;
-                sl_D678(obj);
+    if (render_sequence_FDC0.time >= render_sequence_FDC0.end) {
+        for (expired_object_index = 0; expired_object_index < render_sequence_FDC0.count;
+             expired_object_index++) {
+            expired_object = render_sequence_FDC0.objects[expired_object_index];
+            if (expired_object != 0) {
+                expired_object->model->count--;
+                expired_object->model->frames[expired_object->model->count] = 0;
+                mark_moby_for_removal_FDC0(expired_object);
             }
-            i++;
-        } while (i < *(short *)(A + 0x44));
-    }
-
-    /* L_FF38 */
-    e = sl_EE84;
-    if (e != 0 && (e != 1 || sl_DE4B[0] != 0)) {
-        if (sl_7DB8 < 3) {
-            *(int *)(B + 0x5C) = 0;
         }
-    }
-
-    /* L_FF70 */
-    if (*(int *)(B + 0x5C) >= 2) {
-        goto L_B4;
-    }
-    if (*(int *)(B + 0x5C) == 0) {
-        r = func_001160D8();
-        *(int *)(B + 0x58) = (*(int *)(B + 0x58) + ((r >> 16) % 3) + 1) & 3;
-    } else {
-        *(int *)(B + 0x58) = 4;
-    }
-    /* L_FFBC */
-    *(int *)(B + 0x50) = 0;
-    *(int *)(B + 0x54) = 0;
-    *(int *)(B + 0x5C) = *(int *)(B + 0x5C) + 1;
-    {
-        int *s = (int *)sl_6720;
-        int *d = (int *)sl_6710;
-        d[0] = s[0];
-        d[1] = s[1];
-        d[2] = s[2];
-        d[3] = s[3];
-    }
-    func_001F99B0(A, 0, 0x1C0);
-
-    P2 = sl_1941C0;
-    idx = *(int *)(B + 0x58);
-    Qp = *(char **)(P2 + 0x14);
-    *(int *)(A + 0x58) = *(int *)(P2 + 0x4) + D_0016100C;
-    *(int *)(A + 0x5C) = *(int *)(P2 + 0x8) + D_0016100C;
-    ent = Qp + 0x50 + 4 * idx;
-    t = *(int *)ent;
-    base = Qp + *(int *)(Qp + 0x4);
-    X = base + t;
-    if (*(int *)(X + 4) != 0) {
-        tbl = (int *)(A + 0x60);
-        cur = X;
-        v = *(int *)X;
-        k = 0;
-        for (;;) {
-            k++;
-            cur += 8;
-            v += 0x800;
-            *(char **)(A + 0x60 + 4 * (k - 1)) = X + v;
-            if (k >= 0x46) {
-                break;
-            }
-            if (*(int *)(cur + 4) == 0) {
-                break;
-            }
-            v = *(int *)cur;
+        if (current_level_FDC0 != 0 && (current_level_FDC0 != 1 || level_available_FDC0[3] != 0) &&
+            D_0015EF48_FDC0 < 3) {
+            level_render_state_FDC0.state = 0;
         }
-        (void)tbl;
+        if (level_render_state_FDC0.state < 2) {
+            if (level_render_state_FDC0.state == 0) {
+                mode_advance = (rand_FDC0() >> 16) % 3 + 1;
+                level_render_state_FDC0.mode = (level_render_state_FDC0.mode + mode_advance) & 3;
+            } else {
+                level_render_state_FDC0.mode = 4;
+            }
+            level_render_state_FDC0.history_index = 0;
+            level_render_state_FDC0.history_count = 0;
+            level_render_state_FDC0.state++;
+            qcopy(&D_001605F0_FDC0, &D_001605E0_FDC0);
+            fill_transfer_words_FDC0(&render_sequence_FDC0, 0, 0x1C0);
+            render_sequence_FDC0.source_begin = D_001941C0_FDC0.source_begin_offset + current_vu_chain_FDC0;
+            render_sequence_FDC0.source_end = D_001941C0_FDC0.source_end_offset + current_vu_chain_FDC0;
+            archive_table = D_001941C0_FDC0.archive_table;
+            archive_data = (u8 *)archive_table + archive_table->data_offset;
+            archive_entry = (RenderArchiveEntry_FDC0 *)(archive_data +
+                                                        archive_table->scene_offsets[level_render_state_FDC0.mode]);
+            for (prepared_frame_index = 0; prepared_frame_index < 0x46 && archive_entry->available != 0;
+                 prepared_frame_index++, archive_entry++) {
+                payload_offset = archive_entry->offset + 0x800;
+                render_sequence_FDC0.prepared_frames[prepared_frame_index] =
+                    (s32)(archive_data + archive_table->scene_offsets[level_render_state_FDC0.mode]) +
+                    payload_offset;
+            }
+            parse_space_scene_chunk_FDC0(0);
+        } else {
+            if (D_0015EF48_macro_FDC0[1] != 0) {
+                D_0015EF48_macro_FDC0[1] = 0;
+            }
+            space_load_in_progress_FDC0 = 1;
+            return;
+        }
+    } else if (render_sequence_FDC0.frame >= 0x60) {
+        parse_space_scene_chunk_FDC0(++render_sequence_FDC0.sequence_frame);
     }
-    /* L_A4 */
-    sl_0520(0);
-
-L_FC:
-    func_0022F128();
-    idx = *(int *)(B + 0x58);
-    f1 = ((float *)sl_ED8)[idx];
-    f0 = *(float *)(C + 0xB0);
-    if (f0 < f1) {
-        *(float *)(C + 0xB0) = f1;
+    build_object_rotation_matrix_FDC0();
+    if (view_context_FDC0.projection_scale < cam_mode_min_fov_FDC0[level_render_state_FDC0.mode]) {
+        view_context_FDC0.projection_scale = cam_mode_min_fov_FDC0[level_render_state_FDC0.mode];
     }
-    func_001F3140();
-    f20 = 1.0f;
-    if (*(int *)(B + 0x58) == 4) {
-        a40 = *(short *)(A + 0x40);
-        a34 = *(int *)(A + 0x34);
-        f1 = (float)a40;
-        f0 = (float)(a40 - a34);
-        f20 = f0 / f1;
-        sl_9C30(v0, sl_6700, f20);
-        sl_9BD8(sl_6710, sl_6710, v0);
+    update_view_context_FDC0();
+    scale = 1.0f;
+    if (level_render_state_FDC0.mode == 4) {
+        scale = (f32)(render_sequence_FDC0.end - render_sequence_FDC0.time) / (f32)render_sequence_FDC0.end;
+        scale_vector_FDC0(&first_position, &D_00160600_FDC0, scale);
+        add_vectors_FDC0(&D_001605F0_FDC0, &D_001605F0_FDC0, &first_position);
     }
-    idx = *(int *)(B + 0x58);
-    p16 = sl_E70 + (idx << 4);
-    r = func_001F98C0(0x78);
-    a34 = *(int *)(A + 0x34);
-    f12 = (float)(a34 - r) * 20.0f;
-    f12 = f12 * f20;
-    sl_9C30(sl_560, p16, f12);
-
-    idx = *(int *)(B + 0x58);
-    f0 = ((float *)sl_EC0)[idx];
-    a44 = *(short *)(A + 0x44);
-    sl_67FC = f0;
-    if (a44 <= 0) {
-        goto L_560;
-    }
-
-    i = 0;
-    do {
-        obj = *(char **)(sl_CD98 + 4 * i);
-        k = 0;
-        do {
-            P = *(char **)(obj + 0x24);
-            A38 = *(int *)(A + 0x38);
-            idx = A38 >> 1;
-            idx1 = idx + 1;
-            c = ((unsigned char *)P)[0xC] - 1;
-            p5 = P + 4 * c;
-            W = *(char **)(p5 + 0x48);
-            par = A38 & 1;
-            W1 = *(char **)(W + 0x1C + 4 * idx1);
-            W0 = *(char **)(W + 0x1C + 4 * idx);
-            p20 = W1 + 0x10;
-            p19 = W0 + 0x10;
-            f0 = sl_FA888(par);
-            f2 = (float)k;
-            idx16 = idx << 4;
-            f12 = 1.0f;
-            f0 = f0 * 0.5f;
-            f2 = f2 * 0.25f;
-            base = *(char **)(obj + 0x78);
-            f0 = f0 + f2;
-            f12 = f12 - f0;
-            *(float *)(obj + 0x54) = f0;
-            sl_9C30(v0, base + idx16, f12);
-            sl_9C30(v1, base + 16 * idx1, *(float *)(obj + 0x54));
-            sl_9BD8(obj + 0x10, v0, v1);
-            ((unsigned char *)obj)[0x52] = 2;
-            ((unsigned char *)obj)[0x53] = 2;
-            ((unsigned char *)obj)[0x50] = 0;
-            sl_D6D0(obj);
-            func_001F9A98(*(char **)(obj + 0x68) + 0x10, p19, 0x20);
-            func_001F9A98(*(char **)(obj + 0x6C) + 0x10, p20, 0x20);
-            ((unsigned char *)obj)[0x72] = 0xFF;
-            ((unsigned char *)obj)[0x71] = 0xFF;
-            ((unsigned char *)obj)[0x51] = 0;
-            *(short *)(obj + 0x32) = 0x1FF;
-            sl_ED48(obj);
-            P = *(char **)(obj + 0x24);
-            ((unsigned char *)obj)[0x52] = (unsigned char)(((unsigned char *)P)[0xC] - 1);
-            ((unsigned char *)obj)[0x53] = (unsigned char)(((unsigned char *)P)[0xC] - 1);
-            sl_DAF8(obj, 1, v2);
-            sl_DAF8(obj, 2, v4);
-            {
-                int b50 = (*(int *)(B + 0x50) + 1) & 0x1F;
-                int b54 = *(int *)(B + 0x54);
-                *(int *)(B + 0x50) = b50;
-                if (b54 < 0x20) {
-                    *(int *)(B + 0x54) = b54 + 1;
+    scale_vector_FDC0(D_00160560_FDC0, &D_001D9E70_FDC0[level_render_state_FDC0.mode],
+                      (f32)(render_sequence_FDC0.time - scale_ticks_FDC0(0x78)) * 20.0f * scale);
+    D_00160504_FDC0 = D_001D9EC0_FDC0[level_render_state_FDC0.mode];
+    for (object_index = 0; object_index < render_sequence_FDC0.count; object_index++) {
+        object = D_0018CD98_FDC0[object_index];
+        for (subframe = 0; subframe < 2; subframe++) {
+            frame = render_sequence_FDC0.frame;
+            current_frame = frame >> 1;
+            next_frame = current_frame + 1;
+            model = object->model;
+            frame_offsets = (u8 *)model->frames[model->count - 1] + 0x1C;
+            current_frame_pointer = (s32 *)(frame_offsets + current_frame * 4);
+            next_frame_pointer = (s32 *)(frame_offsets + next_frame * 4);
+            current_frame_payload = *current_frame_pointer + 0x10;
+            next_frame_payload = *next_frame_pointer + 0x10;
+            blend = int_to_float_FDC0(frame & 1) * 0.5f + (f32)subframe * 0.25f;
+            object->blend = blend;
+            animation_positions = object->animation_positions;
+            scale_vector_FDC0(&first_position, animation_positions + current_frame * 16, 1.0f - blend);
+            scale_vector_FDC0(&second_position, animation_positions + next_frame * 16, object->blend);
+            transform_count = 2;
+            add_vectors_FDC0(object->position, &first_position, &second_position);
+            object->selected_a = 2;
+            object->selected_b = transform_count;
+            object->state_a = 0;
+            object->state_b = 0;
+            update_moby_animation_state_FDC0(object);
+            fast_mem_copy_FDC0(object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
+            fast_mem_copy_FDC0(object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
+            object->opacity = 0xFF;
+            object->selected_index = 0x1FF;
+            object->cached_selector = 0xFF;
+            refresh_moby_spatial_bounds_FDC0(object);
+            object->selected_a = object->model->count - 1;
+            object->selected_b = object->model->count - 1;
+            calculate_object_transform_FDC0(object, 1, &first_transform);
+            calculate_object_transform_FDC0(object, 2, &second_transform);
+            level_render_state_FDC0.history_index = (level_render_state_FDC0.history_index + 1) & 0x1F;
+            if (level_render_state_FDC0.history_count < 0x20) {
+                level_render_state_FDC0.history_count++;
+            }
+            history_slot = level_render_state_FDC0.history_index;
+            qcopy(&level_render_state_FDC0.primary_history_positions[history_slot], &first_transform.rows[3]);
+            qcopy(&level_render_state_FDC0.secondary_history_positions[history_slot], &second_transform.rows[3]);
+            if (level_render_state_FDC0.mode == 4) {
+                if (current_level_FDC0 == 0 || (current_level_FDC0 == 1 && level_available_FDC0[3] == 0)) {
+                    object->flags |= 1;
+                    level_render_state_FDC0.history_count = 0;
                 }
-            }
-            j = *(int *)(B + 0x50);
-            {
-                int *s = (int *)v3;
-                int *d = (int *)(B + 0xC0 + 16 * j);
-                d[0] = s[0];
-                d[1] = s[1];
-                d[2] = s[2];
-                d[3] = s[3];
-            }
-            {
-                int *s = (int *)v5;
-                int *d = (int *)(B + 0x2C0 + 16 * j);
-                d[0] = s[0];
-                d[1] = s[1];
-                d[2] = s[2];
-                d[3] = s[3];
-            }
-            if (*(int *)(B + 0x58) == 4) {
-                e = sl_EE84;
-                if (e == 0 || (e == 1 && sl_DE48[3] == 0)) {
-                    *(unsigned short *)(obj + 0x34) = (unsigned short)(*(unsigned short *)(obj + 0x34) | 1);
-                    *(int *)(B + 0x54) = 0;
-                }
-                a40 = *(short *)(A + 0x40);
-                a34 = *(int *)(A + 0x34);
-                if (a40 - 0x38 < a34) {
-                    cv.u = 0x3C924925u;
-                    f2 = cv.f;
-                    f1 = (float)(a40 - a34);
-                    f1 = f1 * f2;
-                    f0 = *(float *)(*(char **)(obj + 0x24) + 0x24);
-                    f0 = f0 * f1;
-                    *(float *)(obj + 0x2C) = f0;
-                    dbits = ((unsigned int)(a40 - a34)) << 24;
-                    p = sl_DC0;
-                    j = 2;
-                    do {
-                        *(unsigned int *)p = (*(unsigned int *)p & 0x00FFFFFFu) | dbits;
-                        j--;
-                        p += 8;
-                    } while (j >= 0);
+                if (render_sequence_FDC0.time > render_sequence_FDC0.end - 0x38) {
+                    object->fade = object->model->base_scale *
+                                   ((f32)(render_sequence_FDC0.end - render_sequence_FDC0.time) * 0.017857144f);
+                    for (color_index = 0; color_index < 3; color_index++) {
+                        warp_trail_colors_FDC0[color_index].w0 =
+                            (warp_trail_colors_FDC0[color_index].w0 & 0xFFFFFF) |
+                            ((render_sequence_lui_FDC0.end - render_sequence_FDC0.time) << 24);
+                    }
                 } else {
-                    p = sl_DC0;
-                    j = 2;
-                    do {
-                        *(unsigned int *)p = (*(unsigned int *)p & 0x00FFFFFFu) | 0x38000000u;
-                        j--;
-                        p += 8;
-                    } while (j >= 0);
+                    for (fill_index = 0; fill_index < 3; fill_index++) {
+                        warp_trail_colors_FDC0[fill_index].w0 =
+                            (warp_trail_colors_FDC0[fill_index].w0 & 0xFFFFFF) | 0x38000000;
+                    }
                 }
             }
-            k++;
-        } while (k < 2);
-        i++;
-    } while (i < *(short *)(A + 0x44));
-
-L_560:
-    sl_E97A8();
-    return;
-
-L_B4:
-    if (sl_EF4A != 0) {
-        sl_EF4A = 0;
+        }
     }
-    D_0015F6FC = 1;
-    return;
+    noop_callback_h_FDC0();
 }

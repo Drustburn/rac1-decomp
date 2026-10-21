@@ -1,533 +1,471 @@
 /* NON_MATCHING func_L01_002F6540 -- src/overlays/shared/vendor_002B90A8.c
- * Best so far: SIZE ours 3980 / retail 3984, checked 2026-10-19.
+ * Best so far: BYTES 12/3984 (99.7% of the bytes match), checked 2026-10-21.
  * Not built into anything: the retail assembly stays in the source file
  * until a candidate is EXACT (docs/NONMATCHING.md). Start from this one.
  * What the last attempts found:
- *   - reaction-timer switch: default and the not-expired exits `goto dispatch`, the `rec->react = ...` assignment 
- *   - `if (dir >= 0 ? idx == cnt - 1 : idx == 0) cur = 0;` (one shared store).
- *   - f20 split into lim / spd / tilt / yaw (each set once): local-alloc then gives $f20 to tilt/yaw and the const
- *   - vB0 = vC0 = X (inner store first) and i94 stored before flags: store order matches.
- *   Remaining differences in p25:
- *   1. case 13/17 (movz): retail emits li v1,2 / andi / li a0,1 / move a2 / movz / jal / move a1 (a1 in the delay 
- *   2. debris block (t != 0): retail sets $t2 = -1 before the compare chain (delay slot of the first beq) and leav
- *   3. debris pointer registers: retail pos=$s1, &w[1]=$s0, &w[0]=$s2 loaded through $a0 first; ours pos=$s0 (loca
+ *   2026-10-21: Lombyte's near miss (gunship_follow_path) ported to PAL names; BYTES 12/3984. Left: one block,
+ *   the case 13/17 call func_0022ED80((rand100 & 1) ? 1 : 2, 0, m). Retail loads $a2 = m before $a1 = 0 (so $a1 lands
+ *   in the jal slot) and `addiu $v1,2` before `andi $v0,1`. sched1 breaks those ties by register weight, then luid:
+ *   retail's $a2 source must die at the load, i.e. be a pseudo of its own, not m's (a copy the permuter put on the
+ *   case 9 path only gave BYTES 7/3984 with it in $s6). A local copy, an inline helper parameter, a local for the
+ *   sound id or r, `% 2`, `!= 0`, swapped arms, the int-returning prototype (merges the case 0 tail: SIZE 3968) do not.
  */
-/* functional: medium. fcheck: unchecked (level/overlay function; fcheck runs boot-executable functions only; OpenRAC tools/fcheck_gate.py, 2026-10-18). Same reads, writes, calls and arguments in the same order as retail (no COP2/VU0 code; the lq/sq pairs are plain 16-byte copies, the jump table is a switch); the two divisions by a record float are guarded so that a zero divisor gives FLT_MAX as on the PS2; differs otherwise only in compiler choices. */
-/* Level 1 (Novalis) per-frame update of a moby that follows a path (a "rail" mover with a state record
- * rec = m[0x78]; its follower state is rec+0x60, "pf": pf[0] = current point, pf[4] direction, pf[5] mode,
- * pf[0x10] the point list (count then 16-byte points), pf[0x14] the path index into D_L01_001B0C30). Called from the
- * level's moby update and from the Kerwan/Eudora ones. m[0x20] is its state:
- *  - 0: pick the path point list, move along it (func_L01_0028C690/C848/C958 steps, speed rec+0xFC, wobble
- *    rec+0x124/0x128/0x12C), set the facing m[0x44]/m[0x48], position m[0x10], spawn the tracked child mobys
- *    (rec+0x140..) and go to 3 while the hurt timer rec+0x11C is positive, else to 1;
- *  - 1: the follow state proper: advance by rec+0xF0, smooth the facing and roll/pitch with func_L00_00259148, and,
- *    when the moby is not the "special" kind, tilt them to the motion; collect the children (rec+0x120 bit mask); on the
- *    level kinds 3 and 9 throw debris (func_L00_0025F4A8) and run the death countdown rec+0x13A;
- *  - 2: leave to 0, freeing the effect slot rec+0x11E; 3: wait for the timer rec+0x11C then back to 1.
- * Before that: the group (m[0x21]) is put in state 3 when none of its members can see (func_L01_00276680), the
- * classes 0x33/0x46A/0x473/0x474 get the effect slot rec+0x11E, and classes 0x33, 0x3C, 0x4A and 0x40, 0x44 run the two reaction timers
- * rec+0x138 (jump table jtbl_L01_0020B700). "special" = func_L01_00276680 returned -1 (only for class != 0x336). */
-typedef int Q_2F6540 __attribute__((mode(TI)));
-typedef union { Q_2F6540 q; float f[4]; } U_2F6540;
+typedef unsigned int Q6540 __attribute__((mode(TI), aligned(16)));
+typedef union { Q6540 q; f32 f[4]; struct { f32 x, y, z, w; } v; } QVec_6540;
 
-extern int D_L01_00161B90_2F6540 __asm__("D_L01_00161B90") MACRO_ADDR;
-extern int D_0015EE84_2F6540 __asm__("D_0015EE84") MACRO_ADDR;
-extern int D_L01_0015F6B0_2F6540 __asm__("D_L01_0015F6B0") MACRO_ADDR;
-extern char D_L01_001672C0_2F6540[] __asm__("D_L01_001672C0");
-extern char D_L01_0020B6D0_2F6540[] __asm__("D_L01_0020B6D0");
-extern char *D_L01_001B0C30_2F6540[] __asm__("D_L01_001B0C30");
-
-extern float D_0015EE60_2F6540 __asm__("D_0015EE60") MACRO_ADDR;
-extern float D_0015EE6C_2F6540 __asm__("D_0015EE6C") MACRO_ADDR;
-extern float D_0015EE70_2F6540 __asm__("D_0015EE70") MACRO_ADDR;
-extern int D_L01_001607F0_2F6540 __asm__("D_L01_001607F0") MACRO_ADDR;
-
-extern float func_001FA888_2F6540(int) __asm__("func_001FA888");
-extern int func_L01_00276680_2F6540(char *, float) __asm__("func_L01_00276680");
-extern int func_L00_0025A208_2F6540(int *, int, int, int) __asm__("func_L00_0025A208");
-extern int func_L00_0025A2F0_2F6540(int *, int, int, int) __asm__("func_L00_0025A2F0");
-extern int func_001F9850_2F6540(int) __asm__("func_001F9850");
-extern int func_L00_0028EB98_2F6540(void *, int) __asm__("func_L00_0028EB98");
-extern int func_0022ED80_2F6540(int, int, void *) __asm__("func_0022ED80");
-extern int func_001F9938_2F6540(void *) __asm__("func_001F9938");
-extern float func_001F9D10_2F6540(void *, void *) __asm__("func_001F9D10");
-extern int func_002140B0_2F6540(int) __asm__("func_002140B0");
-extern int func_L00_00258BC8_2F6540(int, int) __asm__("func_L00_00258BC8");
-extern int func_001FA898_2F6540(float) __asm__("func_001FA898");
-extern void func_001E9730_2F6540(char *, int, int) __asm__("func_001E9730");   /* STUB_printf: returns nothing */
-extern float func_002140F8_2F6540(float, float) __asm__("func_002140F8");
-extern float func_L00_001FF860_2F6540(float, float) __asm__("func_L00_001FF860");
-extern void func_L01_0028C1D8_2F6540(char *) __asm__("func_L01_0028C1D8");
-extern int func_L01_0028C2D8_2F6540(void *, void *, float) __asm__("func_L01_0028C2D8");
-extern void func_L01_0028C690_2F6540(void *, int *, int, float, float) __asm__("func_L01_0028C690");
-extern float func_001F9CE8_2F6540(void *) __asm__("func_001F9CE8");
-extern void func_L01_002F6418_2F6540(char *, void *) __asm__("func_L01_002F6418");
-extern float func_00214158_2F6540(void) __asm__("func_00214158");
-extern void func_L01_0028C958_2F6540(void *, int, void *, float, float) __asm__("func_L01_0028C958");
-extern void func_L00_00250800_2F6540(void *, int, void *) __asm__("func_L00_00250800");
-extern void func_001F9BF0_2F6540(void *, void *, void *) __asm__("func_001F9BF0");
-extern void func_L00_001FF4B0_2F6540(void *, void *, float) __asm__("func_L00_001FF4B0");
-extern void func_L00_0028EBF0_2F6540(int) __asm__("func_L00_0028EBF0");
-extern int func_L01_0028C640_2F6540(void *) __asm__("func_L01_0028C640");
-extern int func_L01_0028C5F0_2F6540(void *, int) __asm__("func_L01_0028C5F0");
-extern float func_001F9FA8_2F6540(float) __asm__("func_001F9FA8");
-extern float func_001F9F90_2F6540(float) __asm__("func_001F9F90");
-extern float func_001FA748_2F6540(float, float) __asm__("func_001FA748");
-extern float func_001FA790_2F6540(float, float) __asm__("func_001FA790");
-extern void func_L01_0028C848_2F6540(float, void *, void *, void *, void *, void *) __asm__("func_L01_0028C848");
-extern void func_001F9BC0_2F6540(void *) __asm__("func_001F9BC0");
-extern float func_L00_00259148_2F6540(float, float, float, float, float, void *) __asm__("func_L00_00259148");
-extern float func_L00_0025F368_2F6540(float) __asm__("func_L00_0025F368");
-extern void func_L01_00280428_2F6540(void *, void *) __asm__("func_L01_00280428");
-extern char *func_L00_0025B478_2F6540(void *, int, int) __asm__("func_L00_0025B478");
-extern void func_001F9C30_2F6540(void *, void *, float) __asm__("func_001F9C30");
-extern void func_001F9BD8_2F6540(void *, void *, void *) __asm__("func_001F9BD8");
-extern void func_L00_0025F4A8_2F6540(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("func_L00_0025F4A8");
-
-
-typedef union { Q_2F6540 q; float f[4]; } V_2F6540;
 typedef struct {
-    int cur;
-    signed char dir;
-    unsigned char mode;
-    char pad6[2];
-    int i8;
-    float dist;
-    V_2F6540 *list;
-    int path;
-    float ang;
-    int i1c;
-} PF_2F6540;
+    s32 count;
+    u8 pad4[0xC];
+    QVec_6540 node[1];
+} PathNodes_6540;
+
 typedef struct {
-    char pad0[0x60];
-    PF_2F6540 pf;
-    char pad80[0x10];
-    V_2F6540 v90, vA0, vB0, vC0, vD0, vE0;
-    float prog, spdA, spdB, spdC;
-    float rollRate;
-    int rollSt;
-    float turnRate;
-    int turnSt;
-    float lenD, rollK, pitchK;
-    short hurt, slot;
-    unsigned char bits, tick;
-    short tilt;
-    float wob, wobRate, wobPh, r130, r134;
-    short react, death, rtA, rtB;
-    int kid[4];
-} Rec_2F6540;
+    s32 idx;
+    s8 dir;
+    u8 state;
+    u8 pad6[2];
+    s32 unk8;
+    f32 dist;
+    PathNodes_6540 *nodes;
+    s32 path_id;
+    f32 heading;
+    s32 unk1C;
+} PathCursor_6540;
+
 typedef struct {
-    char pad0[0x70];
-    int flags;
-    char pad74[0xC];
-    V_2F6540 v80;
-} Kid_2F6540;
+    u8 pad0[0x60];
+    PathCursor_6540 path;          /* 0x60 */
+    QVec_6540 unk80;               /* 0x80 */
+    QVec_6540 unk90;               /* 0x90 */
+    QVec_6540 unkA0;               /* 0xA0 */
+    QVec_6540 unkB0;               /* 0xB0 */
+    QVec_6540 unkC0;               /* 0xC0 */
+    QVec_6540 unkD0;               /* 0xD0 */
+    QVec_6540 unkE0;               /* 0xE0 */
+    f32 unkF0;
+    f32 unkF4;
+    f32 unkF8;
+    f32 unkFC;
+    f32 unk100;
+    f32 unk104;
+    f32 unk108;
+    f32 unk10C;
+    f32 unk110;
+    f32 unk114;
+    f32 unk118;
+    s16 unk11C;
+    s16 unk11E;
+    u8 unk120;
+    u8 unk121;
+    s16 unk122;
+    f32 unk124;
+    f32 unk128;
+    f32 unk12C;
+    f32 unk130;
+    f32 unk134;
+    s16 unk138;
+    s16 unk13A;
+    s16 unk13C;
+    s16 unk13E;
+    s32 unk140[4];
+} Vars_6540;
+
 typedef struct {
-    char pad0[0x10];
-    int v10;
-} Meta_2F6540;
-typedef struct Moby_2F6540 {
-    char pad0[0x10];
-    V_2F6540 pos;
-    unsigned char state, group, pad22, alpha;
-    Meta_2F6540 *meta;
-    char pad28[4];
-    float scale;
-    unsigned char b30;
-    char pad31;
-    short s32;
-    unsigned short flags;
-    char pad36[10];
-    V_2F6540 rot;
-    char pad50[0x28];
-    Rec_2F6540 *rec;
-    char pad7C[0x18];
-    int i94;
-    char pad98[0xC];
-    unsigned char a4;
-    char padA5;
-    short cls;
-    char padA8[0x58];
-} Moby_2F6540;
+    u8 pad0[0x70];
+    s32 unk70;
+    u8 pad74[0xC];
+    QVec_6540 unk80;
+} ChildVars_6540;
 
-extern Moby_2F6540 *D_L01_00160058_2F6540 __asm__("D_L01_00160058") MACRO_ADDR;
-extern char D_0013E633_2F6540[] __asm__("D_0013E633");
+typedef struct {
+    u8 pad0[0x28];
+    u16 kind;
+} HitInfo_6540;
 
 
-void func_L01_002F6540(Moby_2F6540 *m) {
-    int special;
-    Rec_2F6540 *rec = m->rec;
-    PF_2F6540 *pf;
-    Moby_2F6540 *iter;
-    int state;
-    int cls;
-    V_2F6540 dir;
-    V_2F6540 zero;
-    V_2F6540 old[2];
-    V_2F6540 w[5];
+extern void func_0022ED80_v_6540(int, int, char *) __asm__("func_0022ED80");
+extern f32 func_001FA888_6540(s32) __asm__("func_001FA888");
+extern s32 func_L01_00276680_6540(struct Moby *, f32) __asm__("func_L01_00276680");
+extern s32 func_L00_0025A208_6540(struct Moby **, s32, s32, s32) __asm__("func_L00_0025A208");
+extern s32 func_L00_0025A2F0_6540(struct Moby **, struct Moby *, s32, s32) __asm__("func_L00_0025A2F0");
+extern s32 func_001F9850_6540(s32) __asm__("func_001F9850");
+extern s32 func_L00_0028EB98_6540(struct Moby *, s32) __asm__("func_L00_0028EB98");
+extern s32 func_001F9938_6540(s16 *) __asm__("func_001F9938");
+extern f32 func_001F9D10_6540(void *, void *) __asm__("func_001F9D10");
+extern s32 func_002140B0_6540(s32) __asm__("func_002140B0");
+extern s32 func_L00_00258BC8_6540(s32, s32) __asm__("func_L00_00258BC8");
+extern s32 func_001FA898_6540(f32) __asm__("func_001FA898");
+extern s32 func_001E9730_6540(const char *, ...) __asm__("func_001E9730");
+extern f32 func_002140F8_6540(f32, f32) __asm__("func_002140F8");
+extern void func_L01_0028C1D8_6540(PathCursor_6540 *) __asm__("func_L01_0028C1D8");
+extern s32 func_L01_0028C2D8_6540(void *, PathNodes_6540 *, f32) __asm__("func_L01_0028C2D8");
+extern f32 func_L00_001FF860_6540(f32, f32) __asm__("func_L00_001FF860");
+extern void func_L01_0028C690_6540(QVec_6540 *, PathCursor_6540 *, s32, f32, f32) __asm__("func_L01_0028C690");
+extern f32 func_001F9CE8_6540(void *) __asm__("func_001F9CE8");
+extern f32 func_00214158_6540(void) __asm__("func_00214158");
+extern f32 func_L01_0028C958_6540(f32, f32, PathCursor_6540 *, s32, struct Moby *) __asm__("func_L01_0028C958");
+extern void func_L00_00250800_6540(struct Moby *, s32, QVec_6540 *) __asm__("func_L00_00250800");
+extern void func_001F9BF0_6540(void *, void *, void *) __asm__("func_001F9BF0");
+extern void func_L00_001FF4B0_6540(void *, void *, f32) __asm__("func_L00_001FF4B0");
+extern void func_L00_0028EBF0_6540(s32) __asm__("func_L00_0028EBF0");
+extern s32 func_L01_0028C640_6540(PathCursor_6540 *) __asm__("func_L01_0028C640");
+extern s32 func_L01_0028C5F0_6540(PathCursor_6540 *, s32) __asm__("func_L01_0028C5F0");
+extern f32 func_001F9FA8_6540(f32) __asm__("func_001F9FA8");
+extern f32 func_001F9F90_6540(f32) __asm__("func_001F9F90");
+extern f32 func_001FA748_6540(f32, f32) __asm__("func_001FA748");
+extern f32 func_001FA790_6540(f32, f32) __asm__("func_001FA790");
+extern void func_L01_0028C848_6540(f32, QVec_6540 *, QVec_6540 *, QVec_6540 *, QVec_6540 *, QVec_6540 *) __asm__("func_L01_0028C848");
+extern f32 func_L00_00259148_6540(f32 *, f32, f32, f32, f32, f32) __asm__("func_L00_00259148");
+extern f32 func_L00_0025F368_6540(f32) __asm__("func_L00_0025F368");
+extern void func_001F9BC0_6540(void *) __asm__("func_001F9BC0");
+extern void func_L01_00280428_6540(QVec_6540 *, QVec_6540 *) __asm__("func_L01_00280428");
+extern void func_001F9C30_6540(void *, void *, f32) __asm__("func_001F9C30");
+extern void func_001F9BD8_6540(void *, void *, void *) __asm__("func_001F9BD8");
+extern void func_L00_0025F4A8_6540(struct Moby *, QVec_6540 *, QVec_6540 *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("func_L00_0025F4A8");
+extern int play_sound_6540(int, int, void *) __asm__("func_0022ED80");
+extern void func_L01_002F6418_6540(char *, float *) __asm__("func_L01_002F6418");
+extern char * func_L00_0025B478_6540(void *, int, int) __asm__("func_L00_0025B478");
+extern s32 gunships_off_6540 SDATA(D_L01_00161B90);
+extern f32 frame_scale_6540 __asm__("D_0015EE60") MACRO_ADDR;
+extern f32 frame_time_6540 __asm__("D_0015EE6C") MACRO_ADDR;
+extern f32 frame_time_sq_6540 __asm__("D_0015EE70") MACRO_ADDR;
+extern s32 current_level_6540 __asm__("D_0015EE84") MACRO_ADDR;
+extern void * last_update_6540 __asm__("D_L01_001607F0") MACRO_ADDR;
+extern char * mobys_6540 __asm__("D_L01_00160058") MACRO_ADDR;
+extern char target_pos_6540[] __asm__("D_L01_001672C0");
+extern char * paths_6540[] __asm__("D_L01_001B0C30");
+extern char path_warning_6540[] __asm__("D_L01_0020B6D0");
+extern char voice_pool_6540[] __asm__("D_0013E650");
+extern s32 level_frame_count_6540 __asm__("D_L01_0015F6B0") MACRO_ADDR;
 
-    float lim;
-    float spd;
-    float tilt;
-    float yaw;
-    float f24;
-    float s;
+/* Gunship path follower (shared by the levels that fly gunships). Adapted from Lombyte (GPL-3.0) for PAL:
+   src/overlays/shared/gameplay/entities/novalis_elevator.c, gunship_follow_path (FUN_L01_002f5168), itself a
+   near miss there. PAL calls the level copies of atan2 and normalize, func_001F9850 for the frame scaling and
+   func_L00_0028EBF0 to stop a voice; D_L01_001607F0 is stored with the lui $at macro (MACRO_ADDR). */
+void func_L01_002F6540(struct Moby *m) {
+    QVec_6540 d20;
+    QVec_6540 zero;
+    QVec_6540 rot40;
+    QVec_6540 pos50;
+    QVec_6540 off[4];
+    QVec_6540 dA0;
+    struct Moby *it;
+    Vars_6540 *v;
+    PathCursor_6540 *p;
+    s32 frozen;
+    s32 i;
+    s32 never = 0;
+    f32 path_speed;
+    f32 f24;
 
     zero.q = 0;
-    special = 0;
-    if (m->cls != 0x336) {
-        special = (func_L01_00276680_2F6540((char *)m, func_001FA888_2F6540(m->s32)) == -1);
+    frozen = 0;
+    v = (Vars_6540 *)m->pvars;
+    if (m->oclass != 0x336) {
+        frozen = func_L01_00276680_6540(m, func_001FA888_6540(m->draw_dist)) == -1;
     }
-    if (rec == 0) {
+    if (v == 0 || gunships_off_6540 != 0) {
         return;
     }
-    if (D_L01_00161B90_2F6540 != 0) {
-        return;
-    }
-    pf = &rec->pf;
-
-    /* the group of the moby: when none of its members is allowed, all go to state 3 */
+    p = &v->path;
     if (m->group != 0xFF && m->state != 0 && m->state != 3) {
-        int ok = 0;
-        func_L00_0025A208_2F6540((int *)&iter, m->group, 0, 0);
-        if (iter == m) {
-            Moby_2F6540 *o;
-            goto grp_test;
-            for (;;) {
-                func_L00_0025A2F0_2F6540((int *)&iter, (int)iter, 0, 0);
-            grp_test:
-                o = iter;
-                if (o == 0) {
-                    break;
-                }
-                if (func_L01_00276680_2F6540((char *)o, func_001FA888_2F6540(o->s32)) != -1) {
-                    ok = 1;
-                    break;
-                }
-            }
-            if (!ok) {
-                func_L00_0025A208_2F6540((int *)&iter, m->group, 0, 0);
-                if (iter != 0) {
-                    do {
-                        Moby_2F6540 *o2 = iter;
-                        Rec_2F6540 *r2 = o2->rec;
-                        o2->state = 3;
-                        r2->hurt = func_001F9850_2F6540(5);
-                        func_L00_0025A2F0_2F6540((int *)&iter, (int)iter, 0, 0);
-                    } while (iter != 0);
+        s32 bad = 0;
+        func_L00_0025A208_6540(&it, m->group, 0, 0);
+        if (it == m) {
+            goto check;
+            do {
+                func_L00_0025A2F0_6540(&it, it, 0, 0);
+            check:
+                if (it == 0)
+                    goto done;
+            } while (func_L01_00276680_6540(it, func_001FA888_6540(it->draw_dist)) == -1);
+            bad = 1;
+        done:
+            if (bad == 0) {
+                func_L00_0025A208_6540(&it, m->group, 0, 0);
+                while (it != 0) {
+                    Vars_6540 *iv = (Vars_6540 *)it->pvars;
+                    bad = 3;
+                    it->state = bad;
+                    iv->unk11C = func_001F9850_6540(5);
+                    func_L00_0025A2F0_6540(&it, it, 0, 0);
                 }
             }
         }
     }
-
-    cls = m->cls;
-    if (cls == 0x33 || cls == 0x46A || cls == 0x473 || cls == 0x474) {
-        if ((D_L01_0015F6B0_2F6540 & 7) == (((int)m >> 8) & 7)
-            && rec->death <= 0
-            && m->state != 0
-            && func_L00_0028EB98_2F6540(m, rec->slot) == 0) {
-            rec->slot = func_0022ED80_2F6540(0, 4, m);
-        }
+    if ((m->oclass == 0x33 || m->oclass == 0x46A || m->oclass == 0x473 || m->oclass == 0x474)
+        && (level_frame_count_6540 & 7) == (((s32)m >> 8) & 7) && v->unk13A <= 0 && m->state != 0
+        && func_L00_0028EB98_6540(m, v->unk11E) == 0) {
+        v->unk11E = play_sound_6540(0, 4, m);
     }
-
-    switch ((short)(m->cls - 0x33)) {
+    switch ((s16)(m->oclass - 0x33)) {
     case 0:
     case 9:
-    case 0x17:
-        if (rec->react != -1) {
-            if (func_001F9938_2F6540(&rec->react) == 0) {
-                goto dispatch;
-            }
-            if (func_001F9D10_2F6540(&m->pos, D_L01_001672C0_2F6540) < 30.0f) {
-                func_0022ED80_2F6540(1, 0, m);
-            }
+    case 23:
+        if (v->unk138 != -1) {
+            if (!func_001F9938_6540(&v->unk138))
+                break;
+            if (func_001F9D10_6540(&m->pos, target_pos_6540) < 30.0f)
+                play_sound_6540(1, 0, m);
         }
+        v->unk138 = func_001F9850_6540(func_L00_00258BC8_6540(v->unk13C, v->unk13C + v->unk13E));
         break;
     case 13:
     case 17:
-        if (rec->react != -1) {
-            if (func_001F9938_2F6540(&rec->react) == 0) {
-                goto dispatch;
-            }
-            func_0022ED80_2F6540((func_002140B0_2F6540(100) & 1) ? 1 : 2, 0, m);
+        if (v->unk138 != -1) {
+            if (!func_001F9938_6540(&v->unk138))
+                break;
+            func_0022ED80_v_6540((func_002140B0_6540(100) & 1) ? 1 : 2, 0, (char *)m);
         }
+        v->unk138 = func_001F9850_6540(func_L00_00258BC8_6540(v->unk13C, v->unk13C + v->unk13E));
         break;
-    default:
-        goto dispatch;
     }
-    rec->react = func_001F9850_2F6540(func_L00_00258BC8_2F6540(rec->rtA, rec->rtA + rec->rtB));
 
-dispatch:
-    state = m->state;
-    switch (state) {
-    case 0: {
-        int pid = pf->path;
-        if (pid != -1) {
-            int *p = (int *)D_L01_001B0C30_2F6540[pid];
-            if (func_001F9D10_2F6540(p + 4, p + (*p << 2)) < 0.5f) {
-                *p = *p - 1;
-            }
+    switch (m->state) {
+    case 0:
+        if (p->path_id != -1) {
+            PathNodes_6540 *pn = (PathNodes_6540 *)paths_6540[p->path_id];
+            if (func_001F9D10_6540(&pn->node[0], &pn->node[pn->count - 1]) < 0.5f)
+                pn->count--;
         } else {
-            func_001E9730_2F6540(D_L01_0020B6D0_2F6540, m->cls,
-                                 func_001FA898_2F6540((float)(((int)m - (int)D_L01_00160058_2F6540) >> 8)));
+            func_001E9730_6540(path_warning_6540, m->oclass, func_001FA898_6540((f32)(m - (struct Moby *)mobys_6540)));
         }
-        m->b30 = 0xFF;
-        rec->slot = -1;
-        lim = 500.0f;
-        if (lim < rec->r130) {
-            rec->r130 = func_002140F8_2F6540(-1.0f, 1.0f) * rec->r130 / 1000.0f;
-        }
-        if (lim < rec->r134) {
-            rec->r134 = func_002140F8_2F6540(-1.0f, 1.0f) * rec->r134 / 1000.0f;
-        }
-        if (pf->path == -1) {
+        m->update_dist = 0xFF;
+        v->unk11E = -1;
+        if (500.0f < v->unk130)
+            v->unk130 = func_002140F8_6540(-1.0f, 1.0f) * v->unk130 / 1000.0f;
+        if (500.0f < v->unk134)
+            v->unk134 = func_002140F8_6540(-1.0f, 1.0f) * v->unk134 / 1000.0f;
+        if (p->path_id == -1) {
             m->state = 2;
             return;
         }
-        rec->tick = (((int)m - (int)D_L01_00160058_2F6540) >> 8) / 2 % 7;
-        func_L01_0028C1D8_2F6540((char *)pf);
-        if (pf->mode == 0) {
-            if (!(pf->cur > 0)) {
-                int idx = func_L01_0028C2D8_2F6540(&m->pos, pf->list, 0.0f);
-                pf->cur = idx;
-                if (pf->dir >= 0 ? idx == *(int *)pf->list - 1 : idx == 0) {
-                    pf->cur = 0;
-                }
+        v->unk121 = (m - (struct Moby *)mobys_6540) / 2 % 7;
+        func_L01_0028C1D8_6540(p);
+        if (p->state == 0) {
+            if (p->idx <= 0) {
+                s32 r = func_L01_0028C2D8_6540(&m->pos, p->nodes, 0.0f);
+                p->idx = r;
+                if ((p->dir >= 0 && r == p->nodes->count - 1) || (p->dir < 0 && r == 0))
+                    p->idx = 0;
             }
-            pf->dist = func_001F9D10_2F6540(&m->pos, &pf->list[pf->cur + 1]);
-            {
-                V_2F6540 *p = &pf->list[pf->cur];
-                pf->ang = func_L00_001FF860_2F6540(p[1].f[0] - m->pos.f[0], p[1].f[1] - m->pos.f[1]);
-            }
-            pf->mode = 2;
-            pf->i8 = 0;
-            pf->i1c = 0;
+            p->dist = func_001F9D10_6540(&m->pos, &p->nodes->node[p->idx]);
+            p->heading = func_L00_001FF860_6540(p->nodes->node[p->idx].v.x - m->pos.x,
+                                      p->nodes->node[p->idx].v.y - m->pos.y);
+            p->state = 2;
+            p->unk8 = 0;
+            p->unk1C = 0;
         }
-        rec->vE0.q = pf->list[pf->cur + 1].q;
-        rec->prog = 1.0f;
-        func_L01_0028C690_2F6540(&rec->vA0, (int *)pf, 0, rec->spdA, rec->spdB);
-        rec->vB0.q = rec->vC0.q = pf->list[pf->cur + 1].q;
-        *(int *)&m->rot.f[0] = 0;
-        s = func_001F9CE8_2F6540(&rec->vA0);
-        m->rot.f[1] = -func_L00_001FF860_2F6540(s, rec->vA0.f[2]);
-        m->rot.f[2] = func_L00_001FF860_2F6540(rec->vA0.f[0] - zero.f[0], rec->vA0.f[1] - zero.f[1]);
-        rec->rollSt = 0;
-        rec->turnSt = 0;
-        m->pos.q = rec->vE0.q;
-        func_L01_002F6418_2F6540((char *)m, &m->pos);
-        rec->tick = 7;
-        s = rec->wobPh;
-        if (6.2831855f < s) {
-            rec->wobPh = s * 0.017453292f;
-        } else if (!(rec->wob == 0.0f) && s == -1.0f) {
-            rec->wobPh = func_00214158_2F6540();
+        v->unkE0.q = (p->nodes->node + p->idx)->q;
+        v->unkF0 = 1.0f;
+        func_L01_0028C690_6540(&v->unkA0, p, 0, v->unkF4, v->unkF8);
+        v->unkB0.q = v->unkC0.q = (p->nodes->node + p->idx)->q;
+        *(s32 *)&m->rot.x = 0;
+        m->rot.y = -func_L00_001FF860_6540(func_001F9CE8_6540(&v->unkA0), v->unkA0.v.z);
+        m->rot.z = func_L00_001FF860_6540(v->unkA0.v.x - zero.v.x, v->unkA0.v.y - zero.v.y);
+        v->unk104 = 0;
+        v->unk10C = 0;
+        *(u128 *)&m->pos = v->unkE0.q;
+        func_L01_002F6418_6540((char *)m, (float *)&m->pos);
+        v->unk121 = 7;
+        if (6.2831855f < v->unk12C) {
+            v->unk12C = v->unk12C * 0.017453292f;
+        } else if (v->unk124 != 0.0f && v->unk12C == -1.0f) {
+            v->unk12C = func_00214158_6540();
         }
-        rec->vD0.q = rec->vC0.q;
-        func_L01_0028C958_2F6540(pf, rec->bits & 0x20, m, rec->spdA, rec->spdB);
-        if ((rec->bits & 0x1E) != 0 && (rec->bits & 1) == 0) {
-            int i;
+        v->unkD0.q = v->unkC0.q;
+        func_L01_0028C958_6540(v->unkF4, v->unkF8, p, v->unk120 & 0x20, m);
+        if ((v->unk120 & 0x1E) && !(v->unk120 & 1)) {
+            s32 i;
             for (i = 0; i < 4; i++) {
-                if (rec->bits & (2 << i)) {
-                    int id = rec->kid[i];
-                    if (id != -1) {
-                        Moby_2F6540 *o = D_L01_00160058_2F6540 + id;
-                        if (o != 0) {
-                            Kid_2F6540 *r = (Kid_2F6540 *)o->rec;
-                            if (r != 0) {
-                                r->flags = r->flags | 0x1000;
-                                func_L00_00250800_2F6540(m, i, &w[i]);
-                                func_001F9BF0_2F6540(&w[4], &w[i], &m->pos);
-                                func_L00_001FF4B0_2F6540(&w[4], &w[4], 1.0f);
-                                o->pos.q = w[i].q;
-                                r->v80.q = w[4].q;
-                            }
-                        }
-                    }
-                }
+                struct Moby *c;
+                ChildVars_6540 *cv;
+                if (!(v->unk120 & (2 << i)) || v->unk140[i] == -1)
+                    continue;
+                c = (struct Moby *)mobys_6540 + v->unk140[i];
+                if (c == 0 || (cv = (ChildVars_6540 *)c->pvars) == 0)
+                    continue;
+                cv->unk70 |= 0x1000;
+                func_L00_00250800_6540(m, i, &off[i]);
+                func_001F9BF0_6540(&dA0, &off[i], &m->pos);
+                func_L00_001FF4B0_6540(&dA0, &dA0, 1.0f);
+                *(u128 *)&c->pos = off[i].q;
+                cv->unk80.q = dA0.q;
             }
         }
-        if (rec->hurt > 0) {
+        if (v->unk11C > 0) {
             m->state = 3;
             return;
         }
-        if (D_0015EE84_2F6540 == 3 || D_0015EE84_2F6540 == 9) {
-            rec->death = 0;
-        }
+        if (current_level_6540 == 3 || current_level_6540 == 9)
+            v->unk13A = 0;
         m->state = 1;
         return;
-    }
+
     case 2:
-        if (pf->path == -1) {
+        if (p->path_id == -1)
             return;
-        }
         m->state = 0;
-        {
-            int fs = rec->slot;
-            if (fs != -1) {
-                char *fent = D_0013E633_2F6540 + 0x1D + fs * 0x70;
-                if (*(int *)(fent + 0x88) == (int)m && *(unsigned char *)(fent + 0x74) != 0) {
-                    func_L00_0028EBF0_2F6540(fs);
-                }
-            }
-            rec->slot = -1;
+        if (v->unk11E != -1) {
+            u8 *e = (u8 *)voice_pool_6540 + v->unk11E * 0x70;
+            if (*(struct Moby **)(e + 0x88) == m && e[0x74] != 0)
+                func_L00_0028EBF0_6540(v->unk11E);
         }
+        v->unk11E = -1;
         return;
+
     case 3:
-        if (func_001F9938_2F6540(&rec->hurt) != 0) {
-            rec->hurt = 0;
+        if (func_001F9938_6540(&v->unk11C)) {
+            v->unk11C = 0;
             m->state = 1;
         }
         return;
+
     case 1:
         break;
+
     default:
         return;
     }
 
-    /* state 1 */
-    old[0].q = m->rot.q;
-    old[1].q = m->pos.q;
-    if (1.0f <= rec->prog) {
-        int idx;
-        rec->prog = rec->prog - 1.0f;
-        idx = func_L01_0028C640_2F6540(pf);
-        rec->v90.q = rec->vA0.q;
-        func_L01_0028C690_2F6540(&rec->vA0, (int *)pf, 1, rec->spdA, rec->spdB);
-        rec->vB0.q = rec->vC0.q;
-        idx = func_L01_0028C5F0_2F6540(pf, idx + 1);
-        rec->vC0.q = pf->list[idx + 1].q;
-    }
-    s = func_001F9FA8_2F6540(rec->wobPh);
-    spd = rec->spdC + rec->wob * D_0015EE60_2F6540 * s * D_0015EE60_2F6540;
-    f24 = spd / rec->vB0.f[3];
-    rec->wobPh = func_001FA748_2F6540(rec->wobPh, rec->wobRate * D_0015EE60_2F6540 * 0.017453292f);
-    rec->vE0.q = rec->vD0.q;
-    func_L01_0028C848_2F6540(rec->prog + f24, &rec->vD0, &rec->vB0, &rec->vC0, &rec->v90, &rec->vA0);
-    if (!(rec->bits & 0x40)) {
-        float f5 = func_001F9D10_2F6540(&rec->vE0, &rec->vD0);
-        if (f5 != 0.0f) {
-            f24 = f24 * (spd / f5);
-            func_L01_0028C848_2F6540(rec->prog + f24, &rec->vD0, &rec->vB0, &rec->vC0, &rec->v90, &rec->vA0);
-        }
-    }
-    if (!special) {
-        float f5;
-        tilt = (float)rec->tilt * 0.017453292f;
-        func_001FA790_2F6540(m->rot.f[2], tilt); /* result not used by retail */
-        s = func_L00_001FF860_2F6540(rec->vD0.f[0] - rec->vE0.f[0], rec->vD0.f[1] - rec->vE0.f[1]);
-        s = func_001FA748_2F6540(s, tilt);
-        s = func_001FA790_2F6540(s, m->rot.f[2]);
-        f5 = 1.0f / rec->lenD;
-        yaw = s * (f5 * D_0015EE60_2F6540);
-        m->rot.f[2] = func_001FA748_2F6540(yaw, m->rot.f[2]);
-        func_001F9BF0_2F6540(&dir, &rec->vD0, &rec->vE0);
-        s = func_001F9CE8_2F6540(&dir);
-        s = func_L00_001FF860_2F6540(s, dir.f[2]);
-        m->rot.f[1] = func_L00_00259148_2F6540(
-            m->rot.f[1], -s,
-            rec->turnRate * 10.0f * 0.017453292f * D_0015EE70_2F6540,
-            rec->turnRate * 5.0f * 0.017453292f * D_0015EE70_2F6540,
-            rec->turnRate * 0.017453292f * D_0015EE6C_2F6540, &rec->turnSt);
-        s = func_L00_0025F368_2F6540(yaw * rec->rollK);
-        s = func_001FA790_2F6540(m->rot.f[0], s);
-        s = func_L00_0025F368_2F6540(s * rec->pitchK);
-        m->rot.f[0] = func_L00_00259148_2F6540(
-            m->rot.f[0], s,
-            rec->rollRate * 10.0f * 0.017453292f * D_0015EE70_2F6540,
-            rec->rollRate * 5.0f * 0.017453292f * D_0015EE70_2F6540,
-            rec->rollRate * 0.017453292f * D_0015EE6C_2F6540, &rec->rollSt);
-    } else {
-        func_001F9BC0_2F6540(&m->rot);
-        m->rot.f[2] = func_L00_001FF860_2F6540(rec->vD0.f[0] - rec->vE0.f[0], rec->vD0.f[1] - rec->vE0.f[1]);
-    }
-    rec->prog = rec->prog + f24;
-    m->pos.q = rec->vE0.q;
-    if (!special) {
-        func_L01_002F6418_2F6540((char *)m, &m->pos);
-    }
-
-    if ((rec->bits & 0x1F) != 0) {
-        int i;
-        int j = 0;
-        for (i = 0; i < 5; i++) {
-            if ((rec->bits >> i) & 1) {
-                func_L00_00250800_2F6540(m, j, &w[0]);
-                j++;
-                func_001F9BF0_2F6540(&w[1], &w[0], &m->pos);
-                if (!(rec->bits & 1)) {
-                    int id = rec->kid[i - 1];
-                    if (id != -1) {
-                        Moby_2F6540 *o = D_L01_00160058_2F6540 + id;
-                        if (o != 0) {
-                            Kid_2F6540 *r = (Kid_2F6540 *)o->rec;
-                            if (r != 0) {
-                                func_L00_001FF4B0_2F6540(&w[1], &w[1], 1.0f);
-                                r->flags = r->flags | 0x1000;
-                                o->pos.q = w[0].q;
-                                r->v80.q = w[1].q;
-                            }
-                        }
-                    }
-                } else if (rec->tick == 0) {
-                    func_L00_001FF4B0_2F6540(&w[1], &w[1], func_002140F8_2F6540(0.016f, 0.031f) * D_0015EE60_2F6540);
-                    func_L01_00280428_2F6540(&w[0], &w[1]);
-                    func_L00_001FF4B0_2F6540(&w[1], &w[1], func_002140F8_2F6540(0.016f, 0.031f) * D_0015EE60_2F6540);
-                    func_L01_00280428_2F6540(&w[0], &w[1]);
-                }
-            }
-        }
-        if (rec->tick == 0) {
-            rec->tick = func_001F9850_2F6540(7);
-        }
-        rec->tick = rec->tick - 1;
-    }
-
-    if (D_0015EE84_2F6540 != 3 && D_0015EE84_2F6540 != 9) {
-        return;
+    rot40.q = *(u128 *)&m->rot;
+    pos50.q = *(u128 *)&m->pos;
+    if (1.0f <= v->unkF0) {
+        s32 n;
+        v->unkF0 -= 1.0f;
+        n = func_L01_0028C640_6540(p);
+        v->unk90.q = v->unkA0.q;
+        func_L01_0028C690_6540(&v->unkA0, p, 1, v->unkF4, v->unkF8);
+        v->unkB0.q = v->unkC0.q;
+        v->unkC0.q = (p->nodes->node + func_L01_0028C5F0_6540(p, n + 1))->q;
     }
     {
-        char *t = func_L00_0025B478_2F6540(m, 0x210000, 0);
-        if (t == 0 || *(unsigned short *)(t + 0x28) != 0x102) {
-            if (t != 0) {
-                func_001F9BC0_2F6540(&w[0]);
-                if (m->cls == 0x33) {
-                    w[0].f[0] = func_001F9F90_2F6540(m->rot.f[2]) * -2.747f;
-                    w[0].f[1] = func_001F9FA8_2F6540(m->rot.f[2]) * -2.747f;
-                    w[0].f[2] = 0.0f;
-                }
-                func_001F9BF0_2F6540(&w[2], &m->pos, &old[1]);
-                w[1].q = w[2].q;
-                func_001F9C30_2F6540(&w[1], &w[1], 0.5f);
-                func_001F9BD8_2F6540(&w[0], &w[0], &m->pos);
-                rec->death = func_001F9850_2F6540(0x258);
-                cls = m->cls;
-                func_L00_0025F4A8_2F6540(m, &w[1], &w[0], 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f,
-                                         (cls == 0x532 || cls == 0x53B || cls == 0x53C) ? 1 : -1, 15.0f,
-                                         1, 1, -1, 0);
-            }
+        f32 s = func_001F9FA8_6540(v->unk12C);
+        path_speed = v->unkFC + v->unk124 * frame_scale_6540 * s * frame_scale_6540;
+        f24 = path_speed / v->unkB0.v.w;
+        v->unk12C = func_001FA748_6540(v->unk12C, v->unk128 * frame_scale_6540 * 0.017453292f);
+    }
+    v->unkE0.q = v->unkD0.q;
+    func_L01_0028C848_6540(v->unkF0 + f24, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
+    if (!(v->unk120 & 0x40)) {
+        f32 dd = func_001F9D10_6540(&v->unkE0, &v->unkD0);
+        if (dd != 0.0f) {
+            f24 = f24 * (path_speed / dd);
+            func_L01_0028C848_6540(v->unkF0 + f24, &v->unkD0, &v->unkB0, &v->unkC0, &v->unk90, &v->unkA0);
         }
     }
-    D_L01_001607F0_2F6540 = (int)func_L01_002F6540;
-    m->a4 = 0xFF;
-    if (rec->death == 0) {
-        return;
+    if (!frozen) {
+        f32 k = 0.017453292f;
+        f32 a;
+        f32 turn;
+        f32 lim = (f32)v->unk122 * k;
+        func_001FA790_6540(m->rot.z, lim);
+        a = func_L00_001FF860_6540(v->unkD0.v.x - v->unkE0.v.x, v->unkD0.v.y - v->unkE0.v.y);
+        a = func_001FA748_6540(a, lim);
+        a = func_001FA790_6540(a, m->rot.z);
+        turn = a * (1.0f / v->unk110 * frame_scale_6540);
+        m->rot.z = func_001FA748_6540(turn, m->rot.z);
+        func_001F9BF0_6540(&d20, &v->unkD0, &v->unkE0);
+        a = -func_L00_001FF860_6540(func_001F9CE8_6540(&d20), d20.v.z);
+        m->rot.y = func_L00_00259148_6540(&v->unk10C, m->rot.y, a,
+                                            v->unk108 * 10.0f * k * frame_time_sq_6540,
+                                            v->unk108 * 5.0f * k * frame_time_sq_6540,
+                                            v->unk108 * k * frame_time_6540);
+        a = func_L00_0025F368_6540(turn * v->unk114);
+        a = func_001FA790_6540(m->rot.x, a);
+        a = func_L00_0025F368_6540(a * v->unk118);
+        m->rot.x = func_L00_00259148_6540(&v->unk104, m->rot.x, a,
+                                            v->unk100 * 10.0f * k * frame_time_sq_6540,
+                                            v->unk100 * 5.0f * k * frame_time_sq_6540,
+                                            v->unk100 * k * frame_time_6540);
+    } else {
+        func_001F9BC0_6540(&m->rot);
+        m->rot.z = func_L00_001FF860_6540(v->unkD0.v.x - v->unkE0.v.x, v->unkD0.v.y - v->unkE0.v.y);
     }
-    if (func_001F9938_2F6540(&rec->death) != 0 && special) {
-        m->i94 = m->meta->v10;
+    v->unkF0 += f24;
+    *(u128 *)&m->pos = v->unkE0.q;
+    if (!frozen)
+        func_L01_002F6418_6540((char *)m, (float *)&m->pos);
+    if (v->unk120 & 0x1F) {
+        s32 n2 = 0;
+        s32 i;
+        for (i = 0; i < 5; i++) {
+            if (!((v->unk120 >> i) & 1))
+                continue;
+            func_L00_00250800_6540(m, n2, &off[0]);
+            n2++;
+            func_001F9BF0_6540(&off[1], &off[0], &m->pos);
+            if (!(v->unk120 & 1)) {
+                struct Moby *c;
+                ChildVars_6540 *cv;
+                if (v->unk140[i - 1] == -1)
+                    continue;
+                c = (struct Moby *)mobys_6540 + v->unk140[i - 1];
+                if (c == 0 || (cv = (ChildVars_6540 *)c->pvars) == 0)
+                    continue;
+                func_L00_001FF4B0_6540(&off[1], &off[1], 1.0f);
+                cv->unk70 |= 0x1000;
+                *(u128 *)&c->pos = off[0].q;
+                cv->unk80.q = off[1].q;
+            } else if (v->unk121 == 0) {
+                func_L00_001FF4B0_6540(&off[1], &off[1], func_002140F8_6540(0.016f, 0.031f) * frame_scale_6540);
+                func_L01_00280428_6540(&off[0], &off[1]);
+                func_L00_001FF4B0_6540(&off[1], &off[1], func_002140F8_6540(0.016f, 0.031f) * frame_scale_6540);
+                func_L01_00280428_6540(&off[0], &off[1]);
+            }
+        }
+        if (v->unk121 == 0)
+            v->unk121 = func_001F9850_6540(7);
+        v->unk121--;
+    }
+    if (current_level_6540 != 3 && current_level_6540 != 9)
+        return;
+    {
+        HitInfo_6540 *hit = (HitInfo_6540 *)func_L00_0025B478_6540(m, 0x210000, 0);
+        if (hit != 0 && hit->kind != 0x102) {
+            QVec_6540 *src;
+            s32 k;
+            QVec_6540 *dir;
+            func_001F9BC0_6540(&off[0]);
+            if (m->oclass == 0x33) {
+                off[0].v.x = func_001F9F90_6540(m->rot.z) * -2.7470f;
+                off[0].v.y = func_001F9FA8_6540(m->rot.z) * -2.7470f;
+                *(s32 *)&off[0].v.z = 0;
+            }
+            src = (QVec_6540 *)&m->pos;
+            func_001F9BF0_6540(&off[2], src, &pos50);
+            off[1].q = off[2].q;
+            func_001F9C30_6540(&off[1], &off[1], 0.5f);
+            func_001F9BD8_6540(&off[0], &off[0], src);
+            v->unk13A = func_001F9850_6540(600);
+            dir = &off[1];
+            /* Fakematch: the never-taken call keeps gcse from propagating &off[1] into the call, so dir
+               gets a1 before the class tests and &off[1] gets s0, as in retail. */
+            if (never)
+                dir = (QVec_6540 *)func_001F9850_6540(0);
+            k = -1;
+            if (m->oclass == 0x532 || m->oclass == 0x53B || m->oclass == 0x53C)
+                k = 1;
+            func_L00_0025F4A8_6540(m, dir, &off[0], 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, k, 15.0f, 1,
+                             1, -1, 0);
+        }
+    }
+    last_update_6540 = (void *)func_L01_002F6540;
+    m->hit_slot = 0xFF;
+    if (v->unk13A == 0)
+        return;
+    if (func_001F9938_6540(&v->unk13A) && frozen) {
+        m->collision = ((u32 *)m->pclass)[4];
         m->flags = (m->flags & 0xFFBE) | 0x1000;
         return;
     }
-    m->i94 = 0;
-    m->flags = m->flags | 0x41;
-    {
-        int fs = rec->slot;
-        if (fs != -1) {
-            char *fent = D_0013E633_2F6540 + 0x1D + fs * 0x70;
-            if (*(int *)(fent + 0x88) == (int)m && *(unsigned char *)(fent + 0x74) != 0) {
-                func_L00_0028EBF0_2F6540(fs);
-            }
-        }
-        rec->slot = -1;
+    m->collision = 0;
+    m->flags |= 0x41;
+    if (v->unk11E != -1) {
+        u8 *e = (u8 *)voice_pool_6540 + v->unk11E * 0x70;
+        if (*(struct Moby **)(e + 0x88) == m && e[0x74] != 0)
+            func_L00_0028EBF0_6540(v->unk11E);
     }
-    m->flags = m->flags & 0xEFFF;
+    v->unk11E = -1;
+    m->flags &= 0xEFFF;
 }
