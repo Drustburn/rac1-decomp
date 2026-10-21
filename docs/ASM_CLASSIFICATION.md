@@ -83,6 +83,26 @@ On 2026-10-19, 23 more were listed: the remaining fastfunc.o scalar helpers
 address, mid-function jump), func_0023C910 (labelled hand-written: `ei` and a
 mid-function `.align`) and memcmp func_001151B4 (MMI `pxor`/`pcpyud`).
 
+On 2026-10-21, memcpy func_00115248, memmove func_001152F8 and memset
+func_001153FC were listed. Their code uses no instruction a compiler could not
+emit (`lq`/`sq`, `ld`/`sd`, byte loops), so the disassembler does not mark them,
+but the SDK's own `libc.a` (in the toolchain, `ee/lib/libc.a`) says where they
+came from: the debug section of each member names its source file, and
+`memcpy.o`, `memmove.o` and `memset.o` were assembled from
+`newlib/libc/machine/r5900/memcpy.S`, `memmove.S` and `memset.S`. The members
+already listed as original assembly read the same way (`memcmp.o`, `strlen.o`,
+`strcpy.o`, `strncpy.o`: `r5900/*.S`), while the libc functions matched in C
+name C files (`mallocr.o`: `stdlib/mallocr.c`, `mbtowc_r.o`:
+`stdlib/mbtowc_r.c`). The members' code is retail's, byte for byte.
+
+The same day func_0011AE1C was listed: the 4-byte `jr $31` after the listed
+sceSifWriteBackDCache (func_0011AD70) is that function's last word. In the
+SDK's `libkernl.a`, `sifcmd.o` gives sceSifWriteBackDCache a symbol size of
+176 bytes (0x698..0x748, retail 0x11AD70..0x11AE20, the next member being
+sifrpc.o's sceSifInitRpc at func_0011AE20), with the hand-written local labels
+`loop1`, `eight`, `loop8` and `last`; `last:` is the `jr $31; nop` at 0x11AE14,
+and the stray `jr $31` follows it inside the function.
+
 ### Hand-written level functions
 
 Level code also has functions written as assembly. `config/overlays/handwritten_asm.txt`
@@ -125,6 +145,13 @@ converts in place in `$f12` where every ee-gcc truncation picks its own scratch 
 Also listed then: func_00125380 (Sony libvu0's `_sceVu0ecossin`, a stand-alone asm routine taking
 its input in `$vf6`/`$7`) and func_001F7DD8 (drawquad: MMI packing, a never-taken `bnez $0`,
 hand-placed nops), the same shape as its level copies listed upstream.
+
+On 2026-10-21, func_L00_002001D8 (24 bytes, the level programs' fastfunc.o copy, between the
+listed func_L00_001FFED8 and func_L00_00200210) was listed by hand: it splits a float into
+its whole part (stored through `$4`) and fraction with `cvt.w.s` and `cvt.s.w` both in `$f0`,
+where ee-gcc 2.95.3 and 2.9-ee move the truncated value through a GPR (`mfc1`/`mtc1`), and it
+leaves the `jr $31` slot empty with `sub.s` right before it, a slot both compilers fill (they
+put the store there). Lombyte keeps its NTSC-U copy (FUN_L00_00200228) as assembly too.
 
 On 2026-10-19, twelve more level functions were listed by hand: the VU0 leaf helpers of the
 level copies of fastfunc (`shared/fastfunc_001FEF78.c` and level 6's `fastfunc_002172B0.c`) and
