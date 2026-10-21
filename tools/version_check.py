@@ -193,6 +193,28 @@ class Table:
                     hi_p.pop(rt, None)
                     hi_x.pop(rt, None)
 
+    def inverse(self, ctx, x):
+        """The primary's address that this version's X translates from, in CTX, or None."""
+        if not hasattr(self, "inv"):
+            self.inv = {}
+            for sp, (keys, deltas) in self.sorted_obs.items():
+                pairs = sorted((k + d, d) for k, d in zip(keys, deltas))
+                self.inv[sp] = ([a for a, _ in pairs], [d for _, d in pairs])
+            for sp, lst in self.funcs.items():
+                pass
+        for sp in ([ctx, "boot"] if ctx != "boot" else ["boot"]):
+            for pa, size, xa in self.funcs.get(sp, []):
+                if xa <= x < xa + max(size, 4) and self(ctx, pa + (x - xa)) == x:
+                    return pa + (x - xa)
+            xs, ds = self.inv.get(sp, ([], []))
+            k = bisect.bisect_left(xs, x)
+            for j in (k, k - 1, k + 1):
+                if 0 <= j < len(xs):
+                    p = x - ds[j]
+                    if self(ctx, p) == x:
+                        return p
+        return None
+
     def same_function(self, ctx, a, b):
         """Whether A and B (this version's addresses) are two places of one function."""
         if not hasattr(self, "owners"):
@@ -355,8 +377,14 @@ def relocate(obj, name, ctx, pal_addr, xlate, x_gp, theirs=None):
                 return named(s.name, near) + (toff - s["st_value"])
         return P.base_text + toff
 
+    tag = getattr(getattr(xlate, "v", None), "tag", "")
+    direct = re.compile(r"^(?:func|D|jtbl)_%s_(?:L\d\d_)?([0-9A-F]{8})$" % tag) if tag else None
+
     def value_of(sym, near):
         sec = oc.section_name(elf, sym["st_shndx"])
+        if direct and sym.name and direct.match(sym.name):
+            # code or data only this version has (func_<TAG>_..., D_<TAG>_...): its own address
+            return ("direct", int(direct.match(sym.name).group(1), 16))
         conv = sym.name and (oc.FUNC_L.match(sym.name) or oc.DATA_L.match(sym.name) or oc.JTBL_L.match(sym.name)
                              or oc.FUNC.match(sym.name) or oc.DATA.match(sym.name))
         if sym["st_info"]["type"] == "STT_SECTION" or (isinstance(sym["st_shndx"], int) and not conv):
@@ -369,6 +397,8 @@ def relocate(obj, name, ctx, pal_addr, xlate, x_gp, theirs=None):
 
     def target(sym, addend, near):
         kind, val = value_of(sym, near)
+        if kind == "direct":
+            return (val + addend) & 0xFFFFFFFF
         pal = owner_offset(val + addend, near) if kind == "text" else val + addend
         x = xlate(ctx, pal & 0xFFFFFFFF)
         if x is None:
@@ -377,6 +407,7 @@ def relocate(obj, name, ctx, pal_addr, xlate, x_gp, theirs=None):
 
     word = lambda o: int.from_bytes(orig[o:o + 4], "little")
     touched = set()
+    fields = []           # (kind, offsets, symbol name, this version's address it gets): version_clone.py
 
     def put(o, w):
         ours[o:o + 4] = (w & 0xFFFFFFFF).to_bytes(4, "little")
@@ -401,6 +432,8 @@ def relocate(obj, name, ctx, pal_addr, xlate, x_gp, theirs=None):
             rv = ((r_hi << 16) + sext(r_lo)) & 0xFFFFFFFF
             if rv != value and xlate.same_function(ctx, value, rv):
                 value = rv
+        fields.append(("hilo", (ho - P.off, (named_lo["r_offset"] - P.off) if named_lo is not None else None),
+                       P.sym_of(hi_rel).name, value, value - target(P.sym_of(hi_rel), 0, P.base_text + ho)))
         lo = value & 0xFFFF
         put(ho, (word(ho) & 0xFFFF0000) | (((value - sext(lo)) >> 16) & 0xFFFF))
         if lo_rel is not None:
@@ -434,8 +467,10 @@ def relocate(obj, name, ctx, pal_addr, xlate, x_gp, theirs=None):
                     if rt != tg and xlate.same_function(ctx, tg, rt):
                         tg = rt
                 put(o, (w & 0xFC000000) | ((tg >> 2) & 0x03FFFFFF))
+                fields.append(("j", (o - P.off,), P.sym_of(rel).name, tg, 0))
             elif t == oc.R_MIPS_GPREL16:
                 tg = target(P.sym_of(rel), sext(w & 0xFFFF), near)
+                fields.append(("gp", (o - P.off,), P.sym_of(rel).name, tg, tg - target(P.sym_of(rel), 0, near)))
                 put(o, (w & 0xFFFF0000) | ((tg - x_gp) & 0xFFFF))
             elif t == oc.R_MIPS_32:
                 put(o, target(P.sym_of(rel), w, near))
@@ -446,6 +481,7 @@ def relocate(obj, name, ctx, pal_addr, xlate, x_gp, theirs=None):
         except oc.Unresolved as e:
             unresolved.append(str(e.what))
     relocate.touched = {m - P.off for m in touched}
+    relocate.fields = fields
     return bytes(ours[P.off:P.off + P.size]), {m - P.off for m in masked}, P.size, unresolved
 
 
